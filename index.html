@@ -240,6 +240,511 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/22/%E4%BB%BB%E5%8A%A1006%EF%BC%9AKali%20Linux%E5%AE%89%E8%A3%85Java%E3%80%81%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8%E3%80%81%E5%AE%89%E8%A3%85%E7%BD%91%E5%8D%A1%E8%A1%A5%E4%B8%81%E3%80%81%E5%B9%B6%E5%8F%91%E7%BA%BF%E7%A8%8B%E9%99%90%E5%88%B6%E3%80%81%E7%94%B5%E6%BA%90%E4%BC%98%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/22/%E4%BB%BB%E5%8A%A1006%EF%BC%9AKali%20Linux%E5%AE%89%E8%A3%85Java%E3%80%81%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8%E3%80%81%E5%AE%89%E8%A3%85%E7%BD%91%E5%8D%A1%E8%A1%A5%E4%B8%81%E3%80%81%E5%B9%B6%E5%8F%91%E7%BA%BF%E7%A8%8B%E9%99%90%E5%88%B6%E3%80%81%E7%94%B5%E6%BA%90%E4%BC%98%E5%8C%96/" itemprop="url">006：Kali Linux安装Java、安装显卡驱动、安装网卡补丁、并发线程控制、电源优化</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-22T22:44:28+08:00">
+                2019-11-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li><p>安装JAVA-1</p>
+<ul>
+<li>下载（<a href="https://www.oracle.com/technetwork/java/javase/downloads/index.html）" target="_blank" rel="noopener">https://www.oracle.com/technetwork/java/javase/downloads/index.html）</a></li>
+<li>解压缩包（需要下载jdk和jre两者合并的包，2019.11.22用的是jdk-8u231包）<ul>
+<li><strong><code>🔺命令：tar -xzvf java路径</code></strong></li>
+<li><strong><code>🔺命令：mv jdk版本 /opt</code></strong></li>
+<li><strong><code>🔺命令：cd /opt/jdk版本</code></strong>（路径）</li>
+</ul>
+</li>
+<li>安装注册<ul>
+<li><strong><code>🔺命令：update-alternatives --install /usr/bin/java java /opt/jdk版本/bin/java 1</code></strong></li>
+<li><strong><code>🔺命令：update-alternatives --install /usr/bin/javac javac /opt/jdk版本/bin/javac 1</code></strong></li>
+<li><strong><code>🔺命令：update-alternatives --install /usr/lib/mozilla/plugins/libjavaplugin.so mozilla-javaplugin.so /opt/jdk路径/jre/lib/amd64/libnpjp2.so 1</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>安装JAVA-2</p>
+<ul>
+<li>默认设置<ul>
+<li><strong><code>🔺命令：update-alternatives --set java /opt/jdk版本/bin/java</code></strong></li>
+<li><strong><code>🔺命令：update-alternatives --set javac /opt/jdk版本/bin/javac</code></strong></li>
+<li><strong><code>🔺命令：update-alternatives --set mozilla-javaplugin.so /opt/jdk版本/jre/lib/amd64/libnpjp2.so</code></strong></li>
+</ul>
+</li>
+<li>验证<ul>
+<li><strong><code>🔺命令：java -version</code></strong>（主机验证java安装）</li>
+<li><a href="http://www.java.com/en/download/installed.jsp" target="_blank" rel="noopener">http://www.java.com/en/download/installed.jsp</a> (网页验证java安装，firefox Version 52之后不提供plugins的验证)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>安装显卡驱动</p>
+<ul>
+<li>GPU的用途<ul>
+<li>Nvidia</li>
+<li>Ati</li>
+</ul>
+</li>
+<li>Nvidia显卡驱动安装<ul>
+<li><strong><code>🔺命令：apt-get update</code></strong></li>
+<li><strong><code>🔺命令：apt-get dist-upgrade</code></strong></li>
+<li><strong><code>🔺命令：apt-get install -y（直接安装） linux-headers-$(uname -r)</code></strong></li>
+<li><strong><code>🔺命令：apt-get install nvidia-kernel-dkms</code></strong>(Nvidia架构库)</li>
+<li><strong><code>🔺命令：sed &#39;s/quiet/quiet nouveau.modeset=0/g&#39; -i /etc/default/grub</code></strong></li>
+<li><strong><code>🔺命令：update-grub</code></strong></li>
+<li><strong><code>🔺命令：reboot</code></strong></li>
+</ul>
+</li>
+<li>验证<ul>
+<li><strong><code>🔺命令：glxinfo | grep -i &quot;direct rendering&quot;</code></strong>(需apt-get install mesa-utils，不然会报glxinfo commond not found)<ul>
+<li>direct rendering:Yes</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>无线网卡补丁</p>
+<ul>
+<li>最新版内核已经集成无线驱动补丁（版本1.09之前，包括1.09）</li>
+<li>如果你在使用老版本内核（<strong><code>🔺命令：uname -a</code></strong>查看版本）▲未验证<ul>
+<li><strong><code>🔺命令：cd /usr/src/</code></strong></li>
+<li><strong><code>🔺命令：wget https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v kali的版本/backports-kali的版本-1.tar.bz2</code></strong></li>
+<li><strong><code>🔺命令：tar xvf backports-kali的版本-1.tar.gz</code></strong></li>
+<li><strong><code>🔺命令：cd backports-kali的版本-1</code></strong></li>
+<li><strong><code>🔺命令：apt-get install patch</code></strong></li>
+<li><strong><code>🔺命令：wget http://patches.aircrack-ng.org/mac80211.compat08082009.wt_frag+ack_v1.patch</code></strong></li>
+<li><strong><code>🔺命令：patch -p1 &lt; mac80211.compat08082009.wt_frag+ack_v1.patch</code></strong>`**</li>
+<li><strong><code>🔺命令：apt-get install libncurses5-dev</code></strong>(安装开发库文件)</li>
+<li><strong><code>🔺命令：airmon-ng</code></strong>(查看驱动)</li>
+<li><strong><code>🔺命令：make defconfig-ath9k</code></strong>（替换芯片驱动）</li>
+<li><strong><code>🔺命令：make &amp;&amp; make install</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>并发线程限制</p>
+<ul>
+<li>ulimit用于限制当前shell内进程的资源使用</li>
+<li>查看默认值<ul>
+<li><strong><code>🔺命令：ulimit -a</code></strong></li>
+</ul>
+</li>
+<li>全局配置文件：/etc/security/limits<ul>
+<li><domain><type><item><value></li>
+</ul>
+</li>
+<li>用途距离<ul>
+<li>限制堆栈大小：<strong><code>🔺命令：ulimit -s 100</code></strong>（文件大小）</li>
+<li>限制shell内存使用：<strong><code>🔺命令：ulimit -m（最大内存大小） 5000 -v（虚拟内存大小） 5000</code></strong></li>
+<li>限制并发次数，openfile ：<strong><code>🔺命令：ulimit -n 900000</code></strong>（次数）</li>
+</ul>
+</li>
+<li>没有直接对socket数量的限制参数<ul>
+<li>Linux系统中一切都是文件，运行中的文件叫做进程</li>
+<li><strong><code>🔺命令：vi /.bashrc→ulimit -n 900000</code></strong>（持久化ulimit）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>电源优化（kali耗电非常大）</p>
+<ul>
+<li>渗透测试系统耗电较大</li>
+<li>延长电池寿命<ul>
+<li>无操作挂起，关闭显示器(系统设置中的电源，选择操作)</li>
+<li>降低显示器亮度（系统设置中的电源，降低亮度）</li>
+<li>不使用时关闭无线网卡</li>
+<li>开启硬盘省电选项<ul>
+<li><strong><code>🔺命令：hdparm -i /dev/sdx if AdvancedPM=yes then hdparm -B 1 -S 12 /dev/sdx</code></strong></li>
+</ul>
+</li>
+<li>启动笔记本模式(<strong><code>🔺命令：chmod a+x 脚本</code></strong>)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">currentMode=$(cat /proc/sys/vm/laptop_mode)</span><br><span class="line">if [ $currentMode -eq 0 ]</span><br><span class="line">then</span><br><span class="line">echo &quot;5&quot;&gt;/proc/sys/vm/laptop_mode</span><br><span class="line">echo &quot;Laptop Mode Enabled&quot;</span><br><span class="line">else</span><br><span class="line">echo &quot;0&quot;&gt;/proc/sys/vm/laptop_mode</span><br><span class="line">echo &quot;Laptop Mode Disabled&quot;</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>服务开关</p>
+<ul>
+<li>Kali Linux默认未启动所有网络服务</li>
+<li><strong><code>🔺命令：update-rc.d ssh defaults</code></strong>（持久化启动服务）<ul>
+<li><strong><code>🔺命令：update-rc.d ssh start 20 2 3 4 5 .stop 20 0 1 6.</code></strong></li>
+<li><strong><code>🔺命令：update-rc.d A defaults 80（启动优先级） 20（关闭优先级）</code></strong></li>
+<li><strong><code>🔺命令：update-rc.d B defaults 90（启动优先级） 10（关闭优先级）</code></strong></li>
+</ul>
+</li>
+<li><strong><code>🔺命令：/etc/init.d/ssh start</code></strong>(临时开启服务)</li>
+<li>重启操作系统 <strong><code>🔺命令：init 6</code></strong></li>
+<li>关闭操作系统 <strong><code>🔺命令：init 0</code></strong></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>运行级别：
+0：关机
+1：单用户模式
+2.3.4.5：多用户模式
+6：重启</code></pre></blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/22/%E4%BB%BB%E5%8A%A1005%EF%BC%9AKali%20Linux%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE%E3%80%81%E6%9B%B4%E6%96%B0%E5%8D%87%E7%BA%A7%E3%80%81%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6%E5%8C%85%E3%80%81%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8F%92%E4%BB%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/22/%E4%BB%BB%E5%8A%A1005%EF%BC%9AKali%20Linux%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE%E3%80%81%E6%9B%B4%E6%96%B0%E5%8D%87%E7%BA%A7%E3%80%81%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6%E5%8C%85%E3%80%81%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8F%92%E4%BB%B6/" itemprop="url">任务005：Kali Linux网络配置、更新升级、安装软件包、浏览器插件</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-22T22:44:28+08:00">
+                2019-11-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li><p>网路配置-1</p>
+<ul>
+<li>临时IP地址（重启后不生效,在临时设置有时间限制，大约30s连接时间）<ul>
+<li><strong><code>🔺命令：dhclient eth0</code></strong>（自动获取IP地址）</li>
+<li><strong><code>🔺命令：ifconfig eth0 192.168.100.x/24</code></strong>（指定一个IP地址）</li>
+<li><strong><code>🔺命令：route add default gw 192.168.100.1</code></strong>（添加默认网关，缺省网关）</li>
+<li><strong><code>🔺命令：netstat -pantu</code></strong>（查看IP网关信息）</li>
+<li><strong><code>🔺命令：route add -net 172.16.0.0/24（vlan的ip地址） gw 192.168.100.x eth0</code></strong>（vlan 配置）</li>
+<li><strong><code>🔺命令：echo nameserver 8.8.8.8&gt;/etc/resolv.conf</code></strong>（vi /etc/resolv.conf修改域名服务器）</li>
+</ul>
+</li>
+<li>固定IP地址（重启后生效）<ul>
+<li>cat /etc/network/interfaces</li>
+<li>auto eth0</li>
+<li>iface eth0 inet static</li>
+<li>address 192.168.100.x（本机IP地址）</li>
+<li>netmask 255.255.255.0（子网掩码）</li>
+<li>network 192.168.100.0（网络地址，可不配置）</li>
+<li>broadcast 192.168.100.255（广播地址，可不配置）</li>
+<li>gateway 192.168.100.x（网关地址）</li>
+<li>dns-nameservers 192.168.100.x（可写多个）</li>
+<li>uproute add-net 172.16.2.0/24 gw 192.168.100.x eth1 （添加内部地址，静态路由）</li>
+<li>down route del-net 172.168.2.x/24（电脑关闭的时候，关闭静态理由）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>更新升级</p>
+<ul>
+<li><strong><code>🔺命令：apt-get update --fix-missing</code></strong>（不是更新工具包，是更新软件包的网络索引，通过后面的参数可以把有问题的索引删除）<ul>
+<li>科技大学更新源（vi /etc/apt/source.list）▲源的地址无法找到</li>
+<li>deb <a href="http://mirrors.ustc.edu.cn/kali" target="_blank" rel="noopener">http://mirrors.ustc.edu.cn/kali</a> kali main non-free contrib</li>
+<li>deb-src <a href="http://mirrors.ustc.edu.cn/kali" target="_blank" rel="noopener">http://mirrors.ustc.edu.cn/kali</a> kali main non-free contrib</li>
+<li>deb <a href="http://mirrors.ustc.edu.cn/kali-security" target="_blank" rel="noopener">http://mirrors.ustc.edu.cn/kali-security</a> kali/updates main contrib non-free</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：apt-get upgrade</code></strong>(更新实际软件包文件)</li>
+<li><strong><code>🔺命令：apt-get dist-upgrade</code></strong>(大版本的更新)</li>
+<li>重复执行</li>
+</ul>
+</li>
+<li><p>安装软件包</p>
+<ul>
+<li>库<ul>
+<li>Apt-get命令（也可通过–fix-missing）</li>
+</ul>
+</li>
+<li>安装适合自己的工具软件<ul>
+<li>smplayer（媒体播放器）</li>
+<li>ibus ibus-pinyin（中文输入法）</li>
+<li>flashplugin-nonfree（浏览器flash插件）▲2019.11.22浏览器自带，2020年底将淘汰</li>
+<li>gdebi（方便使用图形化界面安装deb）</li>
+<li>amule、qbittorrent（磁力下载）</li>
+<li>geany（程序开发环境）</li>
+<li>stardict（英文字典，翻译软件）</li>
+<li>meld（用来文件差异比较的软件）</li>
+<li>ttf-wqy-microhei（字体）</li>
+<li>kchmviewer（打开chm文件，微软帮助文件）</li>
+<li>freemind（头脑风暴软件，思维导图）</li>
+<li>netspeed（网络连接速度监视小工具）</li>
+<li>mtr（路由追踪，图形化界面，同traceroute，<strong>🔺命令：mtr ip地址</strong>）</li>
+<li>file-zilla、file-zilla-common(ftp客户端)</li>
+<li>chromium（谷歌浏览器）</li>
+<li>monodevelop、mono-gmcs-y（.net开发环境）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>库中不存在的工具列表（2019.11.22）
+flashplugin-nonfree
+stardict
+amule
+stardict
+monodevelop
+mono-gmcs-y</code></pre></blockquote>
+<ol start="4">
+<li><p>浏览器插件</p>
+<ul>
+<li>firefox浏览器插件<ul>
+<li>AutoProxy（翻墙指定代理）▲2019.11.22未找到</li>
+<li>Cookie Importer（导入Cookie）▲2019.11.22替换为Cookie Import Export</li>
+<li>Cookies Manager（管理Cookie信息）</li>
+<li>Download YouTube Videos as MP4（下载MP4视频）▲2019.11.22替换为YouTube Download plus</li>
+<li>Firebug（基于Web调试）▲2019.11.22替换为Firebug Persona</li>
+<li>Flagfox（网页国家服务器）</li>
+<li>FlashGot（允许视频文件下载）</li>
+<li>HackBar（Web渗透测试重要工具）</li>
+<li>hashr（计算哈希值）▲2019.11.22替换为PwdHash</li>
+<li>Live HTTP headers（对HTTP header进行拦截，查看）</li>
+<li>SQL Inject Me（SQL注入攻击）▲2019.11.22未找到</li>
+<li>Tamper Data（浏览器向服务器的HTTP进行查看，修改数据包头）▲2019.11.22未找到</li>
+<li>User Agent Switcher（修改特征字符串，firefox→IE）</li>
+<li>XSS Me（跨站脚本攻击）▲2019.11.22替换为EasyXSS</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>浏览器（alt键）→Tools→Add-ons
+XSS-Me（https://addons.mozilla.org/en-US/firefox/addon/xss-me）
+SQL-Inject-Me(https://addons.mozilla.org/en-US/firefox/addon/sql-inject-me/$src=ss)</code></pre></blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/22/%E7%AC%AC%E4%B8%89%E7%AB%A0%E3%80%81%E5%86%85%E5%AD%98%E6%8A%80%E6%9C%AF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2321,260 +2826,13 @@ Java API用于JAVA虚拟机（JVM）</code></pre></blockquote>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/20/Hello-World-0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/20/Hello-World-0/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-20T10:43:45+08:00">
-                2019-11-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/20/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/20/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-20T10:12:29+08:00">
-                2019-11-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">&lt;i class=&quot;fa fa-angle-right&quot;&gt;&lt;&#x2F;i&gt;</a>
+  </nav>
+
 
 
           </div>
@@ -2622,7 +2880,7 @@ Java API用于JAVA虚拟机（JVM）</code></pre></blockquote>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

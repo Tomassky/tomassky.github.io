@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="安全问题的根源  分层（固守层面，在一个固定的圈子里） 软件工程师，软件开发 数据库管理师，数据库管理以及数据库管理软件的安装与实现 运维   只追求功能的实现 最大的危险还是人   安全目标  先于攻击者发现和防止漏洞出现 攻击型安全（攻击手段探测漏洞，主动） 防护型安全（投入巨大，周期很大，安全层度脆碎）      3.渗透测试  尝试挫败安全防御机制，发现系统安全弱点 从攻击者的角度思考，">
+<meta name="description" content="安装JAVA-1  下载（https:&#x2F;&#x2F;www.oracle.com&#x2F;technetwork&#x2F;java&#x2F;javase&#x2F;downloads&#x2F;index.html） 解压缩包（需要下载jdk和jre两者合并的包，2019.11.22用的是jdk-8u231包） 🔺命令：tar -xzvf java路径 🔺命令：mv jdk版本 &#x2F;opt 🔺命令：cd &#x2F;opt&#x2F;jdk版本（路径）   安装注">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="001：Kali Linux渗透测试介绍">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;20&#x2F;%E4%BB%BB%E5%8A%A1001%EF%BC%9AKali%20Linux%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%BB%8B%E7%BB%8D&#x2F;index.html">
+<meta property="og:title" content="006：Kali Linux安装Java、安装显卡驱动、安装网卡补丁、并发线程控制、电源优化">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;22&#x2F;%E4%BB%BB%E5%8A%A1006%EF%BC%9AKali%20Linux%E5%AE%89%E8%A3%85Java%E3%80%81%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8%E3%80%81%E5%AE%89%E8%A3%85%E7%BD%91%E5%8D%A1%E8%A1%A5%E4%B8%81%E3%80%81%E5%B9%B6%E5%8F%91%E7%BA%BF%E7%A8%8B%E9%99%90%E5%88%B6%E3%80%81%E7%94%B5%E6%BA%90%E4%BC%98%E5%8C%96&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="安全问题的根源  分层（固守层面，在一个固定的圈子里） 软件工程师，软件开发 数据库管理师，数据库管理以及数据库管理软件的安装与实现 运维   只追求功能的实现 最大的危险还是人   安全目标  先于攻击者发现和防止漏洞出现 攻击型安全（攻击手段探测漏洞，主动） 防护型安全（投入巨大，周期很大，安全层度脆碎）      3.渗透测试  尝试挫败安全防御机制，发现系统安全弱点 从攻击者的角度思考，">
+<meta property="og:description" content="安装JAVA-1  下载（https:&#x2F;&#x2F;www.oracle.com&#x2F;technetwork&#x2F;java&#x2F;javase&#x2F;downloads&#x2F;index.html） 解压缩包（需要下载jdk和jre两者合并的包，2019.11.22用的是jdk-8u231包） 🔺命令：tar -xzvf java路径 🔺命令：mv jdk版本 &#x2F;opt 🔺命令：cd &#x2F;opt&#x2F;jdk版本（路径）   安装注">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-20T05:29:59.652Z">
+<meta property="og:updated_time" content="2019-11-22T14:45:58.577Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/11/20/任务001：Kali Linux渗透测试介绍/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/11/22/任务006：Kali Linux安装Java、安装显卡驱动、安装网卡补丁、并发线程限制、电源优化/"/>
 
 
 
 
 
-  <title>001：Kali Linux渗透测试介绍 | Tomas'Blog</title>
+  <title>006：Kali Linux安装Java、安装显卡驱动、安装网卡补丁、并发线程控制、电源优化 | Tomas'Blog</title>
   
 
 
@@ -243,7 +243,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/20/%E4%BB%BB%E5%8A%A1001%EF%BC%9AKali%20Linux%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%BB%8B%E7%BB%8D/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/22/%E4%BB%BB%E5%8A%A1006%EF%BC%9AKali%20Linux%E5%AE%89%E8%A3%85Java%E3%80%81%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8%E3%80%81%E5%AE%89%E8%A3%85%E7%BD%91%E5%8D%A1%E8%A1%A5%E4%B8%81%E3%80%81%E5%B9%B6%E5%8F%91%E7%BA%BF%E7%A8%8B%E9%99%90%E5%88%B6%E3%80%81%E7%94%B5%E6%BA%90%E4%BC%98%E5%8C%96/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -260,7 +260,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">001：Kali Linux渗透测试介绍</h1>
+          <h1 class="post-title" itemprop="name headline">006：Kali Linux安装Java、安装显卡驱动、安装网卡补丁、并发线程控制、电源优化</h1>
         
 
         <div class="post-meta">
@@ -272,8 +272,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-20T10:52:02+08:00">
-                2019-11-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-22T22:44:28+08:00">
+                2019-11-22
               </time>
             
 
@@ -333,81 +333,145 @@
 
       
         <ol>
-<li><p>安全问题的根源</p>
+<li><p>安装JAVA-1</p>
 <ul>
-<li>分层（固守层面，在一个固定的圈子里）<ul>
-<li>软件工程师，软件开发</li>
-<li>数据库管理师，数据库管理以及数据库管理软件的安装与实现</li>
-<li>运维</li>
+<li>下载（<a href="https://www.oracle.com/technetwork/java/javase/downloads/index.html）" target="_blank" rel="noopener">https://www.oracle.com/technetwork/java/javase/downloads/index.html）</a></li>
+<li>解压缩包（需要下载jdk和jre两者合并的包，2019.11.22用的是jdk-8u231包）<ul>
+<li><strong><code>🔺命令：tar -xzvf java路径</code></strong></li>
+<li><strong><code>🔺命令：mv jdk版本 /opt</code></strong></li>
+<li><strong><code>🔺命令：cd /opt/jdk版本</code></strong>（路径）</li>
 </ul>
 </li>
-<li>只追求功能的实现</li>
-<li>最大的危险还是人</li>
+<li>安装注册<ul>
+<li><strong><code>🔺命令：update-alternatives --install /usr/bin/java java /opt/jdk版本/bin/java 1</code></strong></li>
+<li><strong><code>🔺命令：update-alternatives --install /usr/bin/javac javac /opt/jdk版本/bin/javac 1</code></strong></li>
+<li><strong><code>🔺命令：update-alternatives --install /usr/lib/mozilla/plugins/libjavaplugin.so mozilla-javaplugin.so /opt/jdk路径/jre/lib/amd64/libnpjp2.so 1</code></strong></li>
 </ul>
 </li>
-<li><p>安全目标</p>
+</ul>
+</li>
+<li><p>安装JAVA-2</p>
 <ul>
-<li>先于攻击者发现和防止漏洞出现<ul>
-<li>攻击型安全（攻击手段探测漏洞，主动）</li>
-<li>防护型安全（投入巨大，周期很大，安全层度脆碎）</li>
+<li>默认设置<ul>
+<li><strong><code>🔺命令：update-alternatives --set java /opt/jdk版本/bin/java</code></strong></li>
+<li><strong><code>🔺命令：update-alternatives --set javac /opt/jdk版本/bin/javac</code></strong></li>
+<li><strong><code>🔺命令：update-alternatives --set mozilla-javaplugin.so /opt/jdk版本/jre/lib/amd64/libnpjp2.so</code></strong></li>
 </ul>
 </li>
+<li>验证<ul>
+<li><strong><code>🔺命令：java -version</code></strong>（主机验证java安装）</li>
+<li><a href="http://www.java.com/en/download/installed.jsp" target="_blank" rel="noopener">http://www.java.com/en/download/installed.jsp</a> (网页验证java安装，firefox Version 52之后不提供plugins的验证)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>安装显卡驱动</p>
+<ul>
+<li>GPU的用途<ul>
+<li>Nvidia</li>
+<li>Ati</li>
+</ul>
+</li>
+<li>Nvidia显卡驱动安装<ul>
+<li><strong><code>🔺命令：apt-get update</code></strong></li>
+<li><strong><code>🔺命令：apt-get dist-upgrade</code></strong></li>
+<li><strong><code>🔺命令：apt-get install -y（直接安装） linux-headers-$(uname -r)</code></strong></li>
+<li><strong><code>🔺命令：apt-get install nvidia-kernel-dkms</code></strong>(Nvidia架构库)</li>
+<li><strong><code>🔺命令：sed &#39;s/quiet/quiet nouveau.modeset=0/g&#39; -i /etc/default/grub</code></strong></li>
+<li><strong><code>🔺命令：update-grub</code></strong></li>
+<li><strong><code>🔺命令：reboot</code></strong></li>
+</ul>
+</li>
+<li>验证<ul>
+<li><strong><code>🔺命令：glxinfo | grep -i &quot;direct rendering&quot;</code></strong>(需apt-get install mesa-utils，不然会报glxinfo commond not found)<ul>
+<li>direct rendering:Yes</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>无线网卡补丁</p>
+<ul>
+<li>最新版内核已经集成无线驱动补丁（版本1.09之前，包括1.09）</li>
+<li>如果你在使用老版本内核（<strong><code>🔺命令：uname -a</code></strong>查看版本）▲未验证<ul>
+<li><strong><code>🔺命令：cd /usr/src/</code></strong></li>
+<li><strong><code>🔺命令：wget https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v kali的版本/backports-kali的版本-1.tar.bz2</code></strong></li>
+<li><strong><code>🔺命令：tar xvf backports-kali的版本-1.tar.gz</code></strong></li>
+<li><strong><code>🔺命令：cd backports-kali的版本-1</code></strong></li>
+<li><strong><code>🔺命令：apt-get install patch</code></strong></li>
+<li><strong><code>🔺命令：wget http://patches.aircrack-ng.org/mac80211.compat08082009.wt_frag+ack_v1.patch</code></strong></li>
+<li><strong><code>🔺命令：patch -p1 &lt; mac80211.compat08082009.wt_frag+ack_v1.patch</code></strong>`**</li>
+<li><strong><code>🔺命令：apt-get install libncurses5-dev</code></strong>(安装开发库文件)</li>
+<li><strong><code>🔺命令：airmon-ng</code></strong>(查看驱动)</li>
+<li><strong><code>🔺命令：make defconfig-ath9k</code></strong>（替换芯片驱动）</li>
+<li><strong><code>🔺命令：make &amp;&amp; make install</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>并发线程限制</p>
+<ul>
+<li>ulimit用于限制当前shell内进程的资源使用</li>
+<li>查看默认值<ul>
+<li><strong><code>🔺命令：ulimit -a</code></strong></li>
+</ul>
+</li>
+<li>全局配置文件：/etc/security/limits<ul>
+<li><domain><type><item><value></li>
+</ul>
+</li>
+<li>用途距离<ul>
+<li>限制堆栈大小：<strong><code>🔺命令：ulimit -s 100</code></strong>（文件大小）</li>
+<li>限制shell内存使用：<strong><code>🔺命令：ulimit -m（最大内存大小） 5000 -v（虚拟内存大小） 5000</code></strong></li>
+<li>限制并发次数，openfile ：<strong><code>🔺命令：ulimit -n 900000</code></strong>（次数）</li>
+</ul>
+</li>
+<li>没有直接对socket数量的限制参数<ul>
+<li>Linux系统中一切都是文件，运行中的文件叫做进程</li>
+<li><strong><code>🔺命令：vi /.bashrc→ulimit -n 900000</code></strong>（持久化ulimit）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>电源优化（kali耗电非常大）</p>
+<ul>
+<li>渗透测试系统耗电较大</li>
+<li>延长电池寿命<ul>
+<li>无操作挂起，关闭显示器(系统设置中的电源，选择操作)</li>
+<li>降低显示器亮度（系统设置中的电源，降低亮度）</li>
+<li>不使用时关闭无线网卡</li>
+<li>开启硬盘省电选项<ul>
+<li><strong><code>🔺命令：hdparm -i /dev/sdx if AdvancedPM=yes then hdparm -B 1 -S 12 /dev/sdx</code></strong></li>
+</ul>
+</li>
+<li>启动笔记本模式(<strong><code>🔺命令：chmod a+x 脚本</code></strong>)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">currentMode=$(cat /proc/sys/vm/laptop_mode)</span><br><span class="line">if [ $currentMode -eq 0 ]</span><br><span class="line">then</span><br><span class="line">echo &quot;5&quot;&gt;/proc/sys/vm/laptop_mode</span><br><span class="line">echo &quot;Laptop Mode Enabled&quot;</span><br><span class="line">else</span><br><span class="line">echo &quot;0&quot;&gt;/proc/sys/vm/laptop_mode</span><br><span class="line">echo &quot;Laptop Mode Disabled&quot;</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>服务开关</p>
+<ul>
+<li>Kali Linux默认未启动所有网络服务</li>
+<li><strong><code>🔺命令：update-rc.d ssh defaults</code></strong>（持久化启动服务）<ul>
+<li><strong><code>🔺命令：update-rc.d ssh start 20 2 3 4 5 .stop 20 0 1 6.</code></strong></li>
+<li><strong><code>🔺命令：update-rc.d A defaults 80（启动优先级） 20（关闭优先级）</code></strong></li>
+<li><strong><code>🔺命令：update-rc.d B defaults 90（启动优先级） 10（关闭优先级）</code></strong></li>
+</ul>
+</li>
+<li><strong><code>🔺命令：/etc/init.d/ssh start</code></strong>(临时开启服务)</li>
+<li>重启操作系统 <strong><code>🔺命令：init 6</code></strong></li>
+<li>关闭操作系统 <strong><code>🔺命令：init 0</code></strong></li>
 </ul>
 </li>
 </ol>
-<p>3.渗透测试</p>
-<ul>
-<li>尝试挫败安全防御机制，发现系统安全弱点</li>
-<li>从攻击者的角度思考，测量安全防护有效性</li>
-<li>证明安全问题的存在，而非破坏（深入了解漏洞价值）</li>
-<li>道德约束</li>
-<li>法律</li>
-</ul>
-<p>4.渗透测试标准</p>
-<ul>
-<li>PETS（<a href="http://www.pentest-standard.org）" target="_blank" rel="noopener">http://www.pentest-standard.org）</a></li>
-<li>前期交互交互阶段（渗透测试范围，每次一个子系统的渗透测试，子系统可以为一个应用系统，要进行简单的信息交互）</li>
-<li>情报收集阶段（目标系统，邮箱地址，联系人，DNS，ip，公司动态等，对目标系统进行主动的探测，端口探测，主机探测）</li>
-<li>威胁建模阶段（轮廓性认识确定一条两条效率最高的途径）</li>
-<li>漏洞分析阶段（软件版本是否存在漏洞，软件逆向，形成针对性代码）</li>
-<li>渗透攻击阶段（阶段不一定顺利）</li>
-<li>后渗透测试阶段（拿到服务器后，进一步的渗透，获取有价值的信息，很重要，危害大）</li>
-<li>渗透测试报告</li>
-</ul>
-<p>5.渗透测试标准</p>
-<ul>
-<li>渗透测试范围</li>
-<li>获得授权</li>
-<li>渗透测试方法<ul>
-<li>是否允许社会工程学</li>
-<li>是否允许拒绝服务攻击</li>
-</ul>
-</li>
-</ul>
-<p>6.渗透测试误区</p>
-<ul>
-<li>扫描器就是一切<ul>
-<li>忽视业务逻辑重的逻辑（普通员工有获取经历级别的信息的权限）</li>
-</ul>
-</li>
-</ul>
-<p>7.KALI Linux介绍</p>
-<ul>
-<li>基于Debian的Linux发行版本</li>
-<li>前身是BackTrack，2013年3月发布</li>
-<li>用于渗透测试和安全审计</li>
-<li>包含600+安全工具</li>
-<li>FHS标准目录结构（/etc，/bin，/dev，/var等,BT改版的主要原因）</li>
-<li>定制内核</li>
-<li>支持ARM和手机平台（for ARM树莓派CD卡烧录）</li>
-<li>开源免费</li>
-</ul>
-<p>8.KALI Linux策略</p>
-<ul>
-<li>Root策略（大量渗透测试需要root权限，不同于其他Linux平台）</li>
-<li>网络服务策略（网络服务默认是关闭的，无自动启动脚本）</li>
-<li>更新升级策略（同Debian漏洞升级一样）</li>
-</ul>
+<blockquote>
+<pre><code>运行级别：
+0：关机
+1：单用户模式
+2.3.4.5：多用户模式
+6：重启</code></pre></blockquote>
 
       
     </div>
@@ -438,8 +502,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/11/20/Hello-World-0/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
+              <a href="/2019/11/22/%E4%BB%BB%E5%8A%A1005%EF%BC%9AKali%20Linux%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE%E3%80%81%E6%9B%B4%E6%96%B0%E5%8D%87%E7%BA%A7%E3%80%81%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6%E5%8C%85%E3%80%81%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8F%92%E4%BB%B6/" rel="next" title="任务005：Kali Linux网络配置、更新升级、安装软件包、浏览器插件">
+                <i class="fa fa-chevron-left"></i> 任务005：Kali Linux网络配置、更新升级、安装软件包、浏览器插件
               </a>
             
           </div>
@@ -447,10 +511,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/11/20/%E4%BB%BB%E5%8A%A1002%EF%BC%9AKali%20Linux%E5%AE%89%E8%A3%85-%E7%A1%AC%E7%9B%98%E5%AE%89%E8%A3%85%E3%80%81%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85/" rel="prev" title="002：Kali Linux安装-硬盘安装、虚拟机安装">
-                002：Kali Linux安装-硬盘安装、虚拟机安装 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>

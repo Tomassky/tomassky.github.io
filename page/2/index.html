@@ -240,6 +240,707 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/24/%E4%BB%BB%E5%8A%A1008%EF%BC%9AKali%20Linux%E6%B4%8B%E8%91%B1%E6%B5%8F%E8%A7%88%E5%99%A8Tor/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/24/%E4%BB%BB%E5%8A%A1008%EF%BC%9AKali%20Linux%E6%B4%8B%E8%91%B1%E6%B5%8F%E8%A7%88%E5%99%A8Tor/" itemprop="url">008：Kali Linux洋葱浏览器</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-24T18:41:27+08:00">
+                2019-11-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li><p>Tor</p>
+<ul>
+<li>保护隐私防止被追踪</li>
+<li>志愿者组成节点网络</li>
+<li>长期在天朝完全无法使用<ul>
+<li>感谢云（海量的IP地址）</li>
+</ul>
+</li>
+<li>暗网<ul>
+<li>互联网搜索引擎无法发现</li>
+<li>互联网黑市</li>
+<li>比特币交易</li>
+<li>至少3跳路由包装</li>
+</ul>
+</li>
+<li>下载和看视频是不道德的行为</li>
+<li>下载（Kali Linux可apt-get，但安装复杂）<ul>
+<li><a href="https://www.torproject.org/download/" target="_blank" rel="noopener">https://www.torproject.org/download/</a></li>
+<li><a href="http://pan.baidu.com/s/1sjkdPO5" target="_blank" rel="noopener">http://pan.baidu.com/s/1sjkdPO5</a> ▲2019.11.23链接不可用</li>
+</ul>
+</li>
+<li>问题1：should not be run as root（文件夹中start-tor-browser修改root，0 → 1）</li>
+<li>问题2：服务启动错误（权限造成，修改所有者和组 <strong><code>🔺命令：chown -R root:root tor目录</code></strong>）</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>集成网桥的连接：meek-amazon、meek-google、meek-azure</code></pre></blockquote>
+<ul>
+<li>暗网wiki<ul>
+<li><a href="http://wiki5kauuihowqi5.onion/" target="_blank" rel="noopener">http://wiki5kauuihowqi5.onion/</a></li>
+</ul>
+</li>
+</ul>
+<ol start="2">
+<li><p>代理设置</p>
+<ul>
+<li>/etc/apt/apt.conf<ul>
+<li>Acquire::http::Proxy “<a href="http://127.0.0.1:8087&quot;" target="_blank" rel="noopener">http://127.0.0.1:8087&quot;</a>;</li>
+<li>Acquire::https::Proxy “<a href="https://127.0.0.1:8087&quot;" target="_blank" rel="noopener">https://127.0.0.1:8087&quot;</a>;</li>
+<li>Acquire::ftp::Proxy “<a href="ftp://127.0.0.1:8087&quot;" target="_blank" rel="noopener">ftp://127.0.0.1:8087&quot;</a>;</li>
+<li>Acuqire::socks::Proxy “<a href="https://127.0.0.1:8087&quot;" target="_blank" rel="noopener">https://127.0.0.1:8087&quot;</a>;</li>
+</ul>
+</li>
+<li>/etc/bash.bashrc<ul>
+<li>export http_proxy=”<a href="http://username:password@proxyIP:port&quot;" target="_blank" rel="noopener">http://username:password@proxyIP:port&quot;</a></li>
+<li>export ftp_proxy=”<a href="ftp://username:password@proxyIP:port&quot;" target="_blank" rel="noopener">ftp://username:password@proxyIP:port&quot;</a></li>
+<li>export https_proxy=”<a href="https://username:password@proxyIP:port&quot;" target="_blank" rel="noopener">https://username:password@proxyIP:port&quot;</a></li>
+<li>export socks_proxy=”<a href="https://username:password@proxyIP:port&quot;" target="_blank" rel="noopener">https://username:password@proxyIP:port&quot;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>代理链</p>
+<ul>
+<li>公开的代理服务器</li>
+<li>配置代理链<ul>
+<li><strong><code>🔺命令：vi /etc/proxychains.conf</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>strict_chain（静态链，1-5级，不会自动剔除不通的代理链）
+dynamic_chain（动态链，1-5级，自动剔除不通的代理链)
+random_chain（随机链，1-5级随机选级）
+chain_len = 2 （只适用于dynamic_chain）
+proxy_dns（域名代理链解析）
+【ProxyList】 （代理列表，在下面修改）</code></pre></blockquote>
+<ul>
+<li>配置代理链<ul>
+<li><strong><code>🔺命令：proxychains nmap -p80 网段/24</code></strong>（可以用于不支持代理的软件）</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/24/%E4%BB%BB%E5%8A%A1007%EF%BC%9AKali%20Linux%E7%BF%BB%E5%A2%99%E4%BB%A3%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/24/%E4%BB%BB%E5%8A%A1007%EF%BC%9AKali%20Linux%E7%BF%BB%E5%A2%99%E4%BB%A3%E7%90%86/" itemprop="url">007：Kali Linux翻墙代理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-24T18:41:27+08:00">
+                2019-11-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li><p>翻墙&amp;代理</p>
+<ul>
+<li>GFW长城防火墙<ul>
+<li>Facebook、youtube</li>
+</ul>
+</li>
+<li>翻墙（VPN connection、Tunnel，前提需要一台可通过GFW过滤的服务器）<ul>
+<li>http代理（搭建简单，纯http传输为明文传输，易被GFW发现）</li>
+<li>socks代理</li>
+<li>ssh隧道（加密隧道）</li>
+<li>VPN</li>
+</ul>
+</li>
+<li>Goagent（谷歌官方提供服务）</li>
+<li>Tor</li>
+</ul>
+</li>
+<li><p>代理的意以所在</p>
+<ul>
+<li>加密通信</li>
+<li>隐藏来源</li>
+<li>突破网络封锁</li>
+<li>注意事项<ul>
+<li>不要触及敏感地带</li>
+<li>不要从事非法行为</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>GOAGENT（2019.11.23GoAgent基本被墙）</p>
+<ul>
+<li><a href="https://code.google.com/p/goagent/" target="_blank" rel="noopener">https://code.google.com/p/goagent/</a> ▲2019.11.23网址不可用<ul>
+<li>注册：appengine.google.com</li>
+</ul>
+</li>
+<li><a href="https://github.com/goagent/gpagent" target="_blank" rel="noopener">https://github.com/goagent/gpagent</a> ▲2019.11.23goagent delete</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>IE → goagent（本地代理）→ GAE → 目标网络</code></pre></blockquote>
+<ol start="4">
+<li><p>GOAGENT安装 （2019.11.23GoAgent基本被墙）</p>
+<ul>
+<li><a href="http://pan.baidu.com/s/1jG3USAU" target="_blank" rel="noopener">http://pan.baidu.com/s/1jG3USAU</a> （goagent软件）▲2019.11.23链接不可用</li>
+<li><a href="http://pan.baidu.com/s/1dDlYw05" target="_blank" rel="noopener">http://pan.baidu.com/s/1dDlYw05</a> （goagent配置指导书）▲2019.11.23链接不可用</li>
+<li><strong><code>🔺命令：Apt-get install python-dev python-greenlet python-gevent python-vte python-openssl python-crypto python-appindicator python-pip libnss3-tools</code></strong></li>
+<li><strong><code>🔺命令：pip install pyOpenSSL</code></strong></li>
+<li><strong><code>🔺命令：pip install gevent --upgrade</code></strong></li>
+<li><strong><code>🔺命令：mkdir -p ~/.pki/nssdb</code></strong>(-p 层级创建目录)</li>
+<li><strong><code>🔺命令：certutil -d sql:$HOME/.pki/nssdb -N</code></strong></li>
+<li>导入证书</li>
+<li>设置浏览器代理</li>
+<li>使用</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>设置浏览器代理
+浏览器（alt+t）→ Edit → Preferences → Advanced → Certificates → View certificates → Authorities → Import → CA.crt（3 trust）</code></pre></blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/22/%E4%BB%BB%E5%8A%A1006%EF%BC%9AKali%20Linux%E5%AE%89%E8%A3%85Java%E3%80%81%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8%E3%80%81%E5%AE%89%E8%A3%85%E7%BD%91%E5%8D%A1%E8%A1%A5%E4%B8%81%E3%80%81%E5%B9%B6%E5%8F%91%E7%BA%BF%E7%A8%8B%E9%99%90%E5%88%B6%E3%80%81%E7%94%B5%E6%BA%90%E4%BC%98%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/22/%E4%BB%BB%E5%8A%A1006%EF%BC%9AKali%20Linux%E5%AE%89%E8%A3%85Java%E3%80%81%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8%E3%80%81%E5%AE%89%E8%A3%85%E7%BD%91%E5%8D%A1%E8%A1%A5%E4%B8%81%E3%80%81%E5%B9%B6%E5%8F%91%E7%BA%BF%E7%A8%8B%E9%99%90%E5%88%B6%E3%80%81%E7%94%B5%E6%BA%90%E4%BC%98%E5%8C%96/" itemprop="url">006：Kali Linux安装Java、安装显卡驱动、安装网卡补丁、并发线程控制、电源优化</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-22T22:44:28+08:00">
+                2019-11-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li><p>安装JAVA-1</p>
+<ul>
+<li>下载(<a href="https://www.oracle.com/technetwork/java/javase/downloads）" target="_blank" rel="noopener">https://www.oracle.com/technetwork/java/javase/downloads）</a></li>
+<li>解压缩包（需要下载jdk和jre两者合并的包，2019.11.22用的是jdk-8u231包）<ul>
+<li><strong><code>🔺命令：tar -xzvf java路径</code></strong></li>
+<li><strong><code>🔺命令：mv jdk版本 /opt</code></strong></li>
+<li><strong><code>🔺命令：cd /opt/jdk版本</code></strong>（路径）</li>
+</ul>
+</li>
+<li>安装注册<ul>
+<li><strong><code>🔺命令：update-alternatives --install /usr/bin/java java /opt/jdk版本/bin/java 1</code></strong></li>
+<li><strong><code>🔺命令：update-alternatives --install /usr/bin/javac javac /opt/jdk版本/bin/javac 1</code></strong></li>
+<li><strong><code>🔺命令：update-alternatives --install /usr/lib/mozilla/plugins/libjavaplugin.so mozilla-javaplugin.so /opt/jdk路径/jre/lib/amd64/libnpjp2.so 1</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>安装JAVA-2</p>
+<ul>
+<li>默认设置<ul>
+<li><strong><code>🔺命令：update-alternatives --set java /opt/jdk版本/bin/java</code></strong></li>
+<li><strong><code>🔺命令：update-alternatives --set javac /opt/jdk版本/bin/javac</code></strong></li>
+<li><strong><code>🔺命令：update-alternatives --set mozilla-javaplugin.so /opt/jdk版本/jre/lib/amd64/libnpjp2.so</code></strong></li>
+</ul>
+</li>
+<li>验证<ul>
+<li><strong><code>🔺命令：java -version</code></strong>（主机验证java安装）</li>
+<li><a href="http://www.java.com/en/download/installed.jsp" target="_blank" rel="noopener">http://www.java.com/en/download/installed.jsp</a> (网页验证java安装，firefox Version 52之后不提供plugins的验证)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>安装显卡驱动</p>
+<ul>
+<li>GPU的用途<ul>
+<li>Nvidia</li>
+<li>Ati</li>
+</ul>
+</li>
+<li>Nvidia显卡驱动安装<ul>
+<li><strong><code>🔺命令：apt-get update</code></strong></li>
+<li><strong><code>🔺命令：apt-get dist-upgrade</code></strong></li>
+<li><strong><code>🔺命令：apt-get install -y（直接安装） linux-headers-$(uname -r)</code></strong></li>
+<li><strong><code>🔺命令：apt-get install nvidia-kernel-dkms</code></strong>(Nvidia架构库)</li>
+<li><strong><code>🔺命令：sed &#39;s/quiet/quiet nouveau.modeset=0/g&#39; -i /etc/default/grub</code></strong></li>
+<li><strong><code>🔺命令：update-grub</code></strong></li>
+<li><strong><code>🔺命令：reboot</code></strong></li>
+</ul>
+</li>
+<li>验证<ul>
+<li><strong><code>🔺命令：glxinfo | grep -i &quot;direct rendering&quot;</code></strong>(需apt-get install mesa-utils，不然会报glxinfo commond not found)<ul>
+<li>direct rendering:Yes</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>无线网卡补丁</p>
+<ul>
+<li>最新版内核已经集成无线驱动补丁（版本1.09之前，包括1.09）</li>
+<li>如果你在使用老版本内核（<strong><code>🔺命令：uname -a</code></strong>查看版本）▲未验证<ul>
+<li><strong><code>🔺命令：cd /usr/src/</code></strong></li>
+<li><strong><code>🔺命令：wget https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v kali的版本/backports-kali的版本-1.tar.bz2</code></strong></li>
+<li><strong><code>🔺命令：tar xvf backports-kali的版本-1.tar.gz</code></strong></li>
+<li><strong><code>🔺命令：cd backports-kali的版本-1</code></strong></li>
+<li><strong><code>🔺命令：apt-get install patch</code></strong></li>
+<li><strong><code>🔺命令：wget http://patches.aircrack-ng.org/mac80211.compat08082009.wt_frag+ack_v1.patch</code></strong></li>
+<li><strong><code>🔺命令：patch -p1 &lt; mac80211.compat08082009.wt_frag+ack_v1.patch</code></strong>`**</li>
+<li><strong><code>🔺命令：apt-get install libncurses5-dev</code></strong>(安装开发库文件)</li>
+<li><strong><code>🔺命令：airmon-ng</code></strong>(查看驱动)</li>
+<li><strong><code>🔺命令：make defconfig-ath9k</code></strong>（替换芯片驱动）</li>
+<li><strong><code>🔺命令：make &amp;&amp; make install</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>并发线程限制</p>
+<ul>
+<li>ulimit用于限制当前shell内进程的资源使用</li>
+<li>查看默认值<ul>
+<li><strong><code>🔺命令：ulimit -a</code></strong></li>
+</ul>
+</li>
+<li>全局配置文件：/etc/security/limits<ul>
+<li><domain><type><item><value></li>
+</ul>
+</li>
+<li>用途距离<ul>
+<li>限制堆栈大小：<strong><code>🔺命令：ulimit -s 100</code></strong>（文件大小）</li>
+<li>限制shell内存使用：<strong><code>🔺命令：ulimit -m（最大内存大小） 5000 -v（虚拟内存大小） 5000</code></strong></li>
+<li>限制并发次数，openfile ：<strong><code>🔺命令：ulimit -n 900000</code></strong>（次数）</li>
+</ul>
+</li>
+<li>没有直接对socket数量的限制参数<ul>
+<li>Linux系统中一切都是文件，运行中的文件叫做进程</li>
+<li><strong><code>🔺命令：vi /.bashrc→ulimit -n 900000</code></strong>（持久化ulimit）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>电源优化（kali耗电非常大）</p>
+<ul>
+<li>渗透测试系统耗电较大</li>
+<li>延长电池寿命<ul>
+<li>无操作挂起，关闭显示器(系统设置中的电源，选择操作)</li>
+<li>降低显示器亮度（系统设置中的电源，降低亮度）</li>
+<li>不使用时关闭无线网卡</li>
+<li>开启硬盘省电选项<ul>
+<li><strong><code>🔺命令：hdparm -i /dev/sdx if AdvancedPM=yes then hdparm -B 1 -S 12 /dev/sdx</code></strong></li>
+</ul>
+</li>
+<li>启动笔记本模式(<strong><code>🔺命令：chmod a+x 脚本</code></strong>)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">currentMode=$(cat /proc/sys/vm/laptop_mode)</span><br><span class="line">if [ $currentMode -eq 0 ]</span><br><span class="line">then</span><br><span class="line">echo &quot;5&quot;&gt;/proc/sys/vm/laptop_mode</span><br><span class="line">echo &quot;Laptop Mode Enabled&quot;</span><br><span class="line">else</span><br><span class="line">echo &quot;0&quot;&gt;/proc/sys/vm/laptop_mode</span><br><span class="line">echo &quot;Laptop Mode Disabled&quot;</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>服务开关</p>
+<ul>
+<li>Kali Linux默认未启动所有网络服务</li>
+<li><strong><code>🔺命令：update-rc.d ssh defaults</code></strong>（持久化启动服务）<ul>
+<li><strong><code>🔺命令：update-rc.d ssh start 20 2 3 4 5 .stop 20 0 1 6.</code></strong></li>
+<li><strong><code>🔺命令：update-rc.d A defaults 80（启动优先级） 20（关闭优先级）</code></strong></li>
+<li><strong><code>🔺命令：update-rc.d B defaults 90（启动优先级） 10（关闭优先级）</code></strong></li>
+</ul>
+</li>
+<li><strong><code>🔺命令：/etc/init.d/ssh start</code></strong>(临时开启服务)</li>
+<li>重启操作系统 <strong><code>🔺命令：init 6</code></strong></li>
+<li>关闭操作系统 <strong><code>🔺命令：init 0</code></strong></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>运行级别：
+0：关机
+1：单用户模式
+2.3.4.5：多用户模式
+6：重启</code></pre></blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/22/%E4%BB%BB%E5%8A%A1005%EF%BC%9AKali%20Linux%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE%E3%80%81%E6%9B%B4%E6%96%B0%E5%8D%87%E7%BA%A7%E3%80%81%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6%E5%8C%85%E3%80%81%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8F%92%E4%BB%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2164,528 +2865,6 @@ Java API用于JAVA虚拟机（JVM）</code></pre></blockquote>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/20/%E4%BB%BB%E5%8A%A1002%EF%BC%9AKali%20Linux%E5%AE%89%E8%A3%85-%E7%A1%AC%E7%9B%98%E5%AE%89%E8%A3%85%E3%80%81%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/20/%E4%BB%BB%E5%8A%A1002%EF%BC%9AKali%20Linux%E5%AE%89%E8%A3%85-%E7%A1%AC%E7%9B%98%E5%AE%89%E8%A3%85%E3%80%81%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85/" itemprop="url">002：Kali Linux安装-硬盘安装、虚拟机安装</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-20T12:36:57+08:00">
-                2019-11-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li><p>硬盘安装</p>
-<ul>
-<li>下载安装镜像（<a href="http://www.kail.org/Downloads/" target="_blank" rel="noopener">http://www.kail.org/Downloads/</a>  (arm,mini)）</li>
-<li>验证hash值（排除文件损失造成的故障，保证文件完整性）</li>
-<li>制作启动光盘（live）（推荐UNetbootin启动光盘软件）</li>
-<li>制作启动U盘（live-不可安装新软件，live-usb-可安装新软件）</li>
-<li>设置BIOS启动顺序</li>
-<li>启动安装</li>
-</ul>
-</li>
-</ol>
-<p>2.Docker</p>
-<ul>
-<li><p>虚拟化和Docker(容器–运行所需要的组件)</p>
-</li>
-<li><p>Kail Docker image</p>
-<p><a href="https://www.kail.org/news/official-kail-linux-docker-images/" target="_blank" rel="noopener">https://www.kail.org/news/official-kail-linux-docker-images/</a></p>
-<p><a href="https://github.com/offensive-security/kail-linux-docker" target="_blank" rel="noopener">https://github.com/offensive-security/kail-linux-docker</a></p>
-</li>
-</ul>
-<p>3.虚拟机安装</p>
-<ul>
-<li>官方VM镜像<br> <a href="https://www.offensive-security.com/kail-linux-vmware-arm-image-download/" target="_blank" rel="noopener">https://www.offensive-security.com/kail-linux-vmware-arm-image-download/</a></li>
-<li>VMware workstation（插件多，文件比较大）</li>
-<li>VirtualBox<ul>
-<li>下载、安装、扩展工具、基本使用</li>
-<li>Win8系统</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>(卸载kb3045999，通过powershell，get-hotfix-id+固件，wsa /install /bb：+id）</p>
-</blockquote>
-<ul>
-<li>VirtualBox<ul>
-<li>安装kail</li>
-<li>安装tools</li>
-</ul>
-</li>
-</ul>
-<p><strong><code>🔺命令：uname -r 查看linux版本</code></strong></p>
-<blockquote>
-<p>要安装最新版的linux-heads才能安装vmware-tools，再者可以通过apt-get install</p>
-</blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/20/%E4%BB%BB%E5%8A%A1001%EF%BC%9AKali%20Linux%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%BB%8B%E7%BB%8D/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/20/%E4%BB%BB%E5%8A%A1001%EF%BC%9AKali%20Linux%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%BB%8B%E7%BB%8D/" itemprop="url">001：Kali Linux渗透测试介绍</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-20T10:52:02+08:00">
-                2019-11-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li><p>安全问题的根源</p>
-<ul>
-<li>分层（固守层面，在一个固定的圈子里）<ul>
-<li>软件工程师，软件开发</li>
-<li>数据库管理师，数据库管理以及数据库管理软件的安装与实现</li>
-<li>运维</li>
-</ul>
-</li>
-<li>只追求功能的实现</li>
-<li>最大的危险还是人</li>
-</ul>
-</li>
-<li><p>安全目标</p>
-<ul>
-<li>先于攻击者发现和防止漏洞出现<ul>
-<li>攻击型安全（攻击手段探测漏洞，主动）</li>
-<li>防护型安全（投入巨大，周期很大，安全层度脆碎）</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<p>3.渗透测试</p>
-<ul>
-<li>尝试挫败安全防御机制，发现系统安全弱点</li>
-<li>从攻击者的角度思考，测量安全防护有效性</li>
-<li>证明安全问题的存在，而非破坏（深入了解漏洞价值）</li>
-<li>道德约束</li>
-<li>法律</li>
-</ul>
-<p>4.渗透测试标准</p>
-<ul>
-<li>PETS（<a href="http://www.pentest-standard.org）" target="_blank" rel="noopener">http://www.pentest-standard.org）</a></li>
-<li>前期交互交互阶段（渗透测试范围，每次一个子系统的渗透测试，子系统可以为一个应用系统，要进行简单的信息交互）</li>
-<li>情报收集阶段（目标系统，邮箱地址，联系人，DNS，ip，公司动态等，对目标系统进行主动的探测，端口探测，主机探测）</li>
-<li>威胁建模阶段（轮廓性认识确定一条两条效率最高的途径）</li>
-<li>漏洞分析阶段（软件版本是否存在漏洞，软件逆向，形成针对性代码）</li>
-<li>渗透攻击阶段（阶段不一定顺利）</li>
-<li>后渗透测试阶段（拿到服务器后，进一步的渗透，获取有价值的信息，很重要，危害大）</li>
-<li>渗透测试报告</li>
-</ul>
-<p>5.渗透测试标准</p>
-<ul>
-<li>渗透测试范围</li>
-<li>获得授权</li>
-<li>渗透测试方法<ul>
-<li>是否允许社会工程学</li>
-<li>是否允许拒绝服务攻击</li>
-</ul>
-</li>
-</ul>
-<p>6.渗透测试误区</p>
-<ul>
-<li>扫描器就是一切<ul>
-<li>忽视业务逻辑重的逻辑（普通员工有获取经历级别的信息的权限）</li>
-</ul>
-</li>
-</ul>
-<p>7.KALI Linux介绍</p>
-<ul>
-<li>基于Debian的Linux发行版本</li>
-<li>前身是BackTrack，2013年3月发布</li>
-<li>用于渗透测试和安全审计</li>
-<li>包含600+安全工具</li>
-<li>FHS标准目录结构（/etc，/bin，/dev，/var等,BT改版的主要原因）</li>
-<li>定制内核</li>
-<li>支持ARM和手机平台（for ARM树莓派CD卡烧录）</li>
-<li>开源免费</li>
-</ul>
-<p>8.KALI Linux策略</p>
-<ul>
-<li>Root策略（大量渗透测试需要root权限，不同于其他Linux平台）</li>
-<li>网络服务策略（网络服务默认是关闭的，无自动启动脚本）</li>
-<li>更新升级策略（同Debian漏洞升级一样）</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/20/Hello-World-0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/20/Hello-World-0/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-20T10:43:45+08:00">
-                2019-11-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2740,7 +2919,7 @@ Java API用于JAVA虚拟机（JVM）</code></pre></blockquote>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

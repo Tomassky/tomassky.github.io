@@ -240,6 +240,569 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/27/%E4%BB%BB%E5%8A%A1018%EF%BC%9AKali%20Linux%20DNS%E5%8C%BA%E5%9F%9F%E4%BC%A0%E8%BE%93%E3%80%81DNS%E5%AD%97%E5%85%B8%E7%88%86%E7%A0%B4%E3%80%81DNS%E6%B3%A8%E5%86%8C%E4%BF%A1%E6%81%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/27/%E4%BB%BB%E5%8A%A1018%EF%BC%9AKali%20Linux%20DNS%E5%8C%BA%E5%9F%9F%E4%BC%A0%E8%BE%93%E3%80%81DNS%E5%AD%97%E5%85%B8%E7%88%86%E7%A0%B4%E3%80%81DNS%E6%B3%A8%E5%86%8C%E4%BF%A1%E6%81%AF/" itemprop="url">018：Kali Linux DNS区域传输、DNS字典爆破、DNS注册信息</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-27T11:17:49+08:00">
+                2019-11-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li><p>DNS区域传输（DNS的同步机制）</p>
+<ul>
+<li><strong><code>🔺命令：dig ns1.example.com example.com axfr（差异化传输方法Request for full zone transfer）</code></strong></li>
+<li><strong><code>🔺命令：host -T（用TCP传输方式） -l（axfr） sina.com ns3.sina.com</code></strong></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>TCP用于DNS之间的域名传输
+UDP用于DNS之间的查询</code></pre></blockquote>
+<ol start="2">
+<li><p>DNS字典爆破</p>
+<ul>
+<li><strong><code>🔺命令：fierce -dnsserver（指定DNS服务器） 8.8.8.8 -dns（要查询的域） sina.com.cn -wordlist（字典，明确字典路径） a.txt</code></strong></li>
+<li><strong><code>🔺命令：dnsdict6 -d（显示IPV6）4（显示IPV4） -t（并发线程数） 16 -x（不同级别） sina.com  （-D 自己指定字典，-U 最大的字典）</code></strong></li>
+<li><strong><code>🔺命令：dnsenum -f（字典，明确字典路径） dnsbig.txt -dnsserver 8.8.8.8 sina.com -o（导出成一个文件） sina.xml</code></strong></li>
+<li><strong><code>🔺命令：dnsmap sina.com -w（字典，明确字典路径） dns.txt</code></strong></li>
+<li><strong><code>🔺命令：dnsrecon -d（指定域名服务器） sina.com --lifetime（超时时间）10 -t（查询强度） brt（暴力爆破） -D（字典，明确字典路径） dnsbig.txt</code></strong></li>
+<li><strong><code>🔺命令：dnsrecon -t std（标准爆破） -d sina.com -D（字典，明确字典路径） dnsbig.txt</code></strong></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>查看程序相关文件
+dpkg -L fierce
+find / -name dnsenum</code></pre></blockquote>
+<ol start="3">
+<li><p>DNS注册信息</p>
+<ul>
+<li><strong><code>🔺命令：whois 域名</code></strong></li>
+<li><strong><code>🔺命令：whois IP地址</code></strong></li>
+<li><strong><code>🔺命令：whois -h whois.apnic.net IP地址</code></strong></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>网页查询
+AFRINIC  http://www.afrinic.net
+APNIC    http://www.apnic.net
+ARIN     http://whois.arin.net
+IANA     http://www.iana.com 
+ICANN    http://www.icann.org
+LACNIC   http://www.lacnic.net
+NRO      http://www.nro.net
+RIPE     http://www.ripe.net
+InterNic http://www.internic.net</code></pre></blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/27/%E4%BB%BB%E5%8A%A1017%EF%BC%9AKali%20Linux%20DNS%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-DIG/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/27/%E4%BB%BB%E5%8A%A1017%EF%BC%9AKali%20Linux%20DNS%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-DIG/" itemprop="url">017：Kali Linux DNS信息收集-DIG</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-27T11:17:49+08:00">
+                2019-11-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li><p>DNS信息收集-DIG</p>
+<ul>
+<li><strong><code>🔺命令：dig 8.8.8.8 域名 mx</code></strong></li>
+<li><strong><code>🔺命令：dig 域名 any</code></strong></li>
+<li>带参数：<strong><code>🔺命令：dig +noall +answer 域名 any | awk &#39;{print $5}&#39;</code></strong>▲2019.11.27难以查到</li>
+<li>反向查询：<strong><code>🔺命令：dig -x ip地址（PTR）</code></strong></li>
+<li>bind版本信息：<strong><code>🔺命令：dig +noall +answer txt chaos（class类） VERSION BIND 域名</code></strong> ▲2019.11.27难以查到</li>
+<li>DNS追踪：<strong><code>🔺命令：dig +trace 域名</code></strong>（迭代查询）、<strong><code>🔺命令：dig 域名（递归查询）</code></strong></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>指定域名服务器查询域名
+1.nslooup www.sina.com -type=a 8.8.8.8
+2.dig www.sina.com any @8.8.8.8
+trace追踪域名
+本机（随机挑选root的IP地址） → root（随机挑选com的IP地址） → com（随机挑选sina.com的IP地址） → sina.com（随机挑选IP地址） → www.sina.com（挑选A记录）
+▲抓包分析递归查询和迭代查询的区别
+▲域名解析服务器跟域名后缀可以不同（top. → d.zdnscloud.com.）</code></pre></blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/27/%E4%BB%BB%E5%8A%A1016%EF%BC%9AKali%20Linux%E8%A2%AB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%EF%BC%9A%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E5%86%85%E5%AE%B9%E3%80%81%E4%BF%A1%E6%81%AF%E7%94%A8%E9%80%94%E3%80%81%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86DNS%E3%80%81DNS%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-NSLOOKUP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/27/%E4%BB%BB%E5%8A%A1016%EF%BC%9AKali%20Linux%E8%A2%AB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%EF%BC%9A%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E5%86%85%E5%AE%B9%E3%80%81%E4%BF%A1%E6%81%AF%E7%94%A8%E9%80%94%E3%80%81%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86DNS%E3%80%81DNS%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-NSLOOKUP/" itemprop="url">016：Kali Linux被动信息收集：信息收集内容、信息用途、信息收集DNS、DNS信息收集-NSLOOKUP</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-27T11:17:49+08:00">
+                2019-11-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li><p>被动信息收集</p>
+<ul>
+<li>公开渠道可获得的信息（互联网媒体方式、搜索网站）</li>
+<li>与目标系统不产生直接交互（不对目标系统进行大量的探测）</li>
+<li>尽量避免留下一切痕迹</li>
+<li>OSINT：<ul>
+<li>美国军方：<a href="http://www.fas.org/lirp/doddir/army/atp2-229.pdf" target="_blank" rel="noopener">http://www.fas.org/lirp/doddir/army/atp2-229.pdf</a> ▲2019.11.27未找到文件</li>
+<li>北大西洋公约组织：<a href="http://information-retrieval.info/docs/NATO-OSINT.html" target="_blank" rel="noopener">http://information-retrieval.info/docs/NATO-OSINT.html</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>Passive reconnaissance(no direct interaction) → 被动侦察
+Normal interaction 
+Active reconnaissance  → 主动侦察
+More infomation greater chance of detection</code></pre></blockquote>
+<ol start="2">
+<li><p>信息收集内容</p>
+<ul>
+<li>IP地址</li>
+<li>域名信息</li>
+<li>邮件地址（定位邮件服务器，后期社会工程学）</li>
+<li>文档图片数据（网络结构，内网交互）</li>
+<li>公司地址</li>
+<li>公司组织架构</li>
+<li>联系电话/传真号码</li>
+<li>人员姓名/职务</li>
+<li>目标系统使用的技术架构（搜索引擎技术可以发现一部分信息）</li>
+<li>公开的商业信息</li>
+</ul>
+</li>
+<li><p>信息用途</p>
+<ul>
+<li>用信息描述目标（重构）</li>
+<li>发现（目标主机）</li>
+<li>社会工程学攻击</li>
+<li>物理缺口</li>
+</ul>
+</li>
+<li><p>信息收集-DNS</p>
+<ul>
+<li>域名解析成IP地址<ul>
+<li>域名（qq.com）与FQDN（完全限定域名<a href="http://www.qq.com）的区别" target="_blank" rel="noopener">www.qq.com）的区别</a></li>
+<li>域名记录：A（IPV4主机记录）、C name（别名记录）、NS（域名服务器地址对域解析）、MX（邮件服务器地址对域解析）、ptr（通过IP地址反向解析域名）、text（spf反向垃圾邮件域名）、SOA（启始授权）、AAAA（IPV6地址）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>DNS客户端 → 本地DNS服务器 → 根域服务器 → com服务器 → example.com服务器
+1.递归查询（一轮一轮递归） 2.迭代查询（从顶至下）
+缓存DNS服务器本身并不包含DNS记录（常用于本地DNS服务器）
+spf 反向垃圾域名服务，判断邮件的域名是否伪造</code></pre></blockquote>
+<ol start="5">
+<li><p>DNS信息收集-NSLOOKUP</p>
+<ul>
+<li><strong><code>🔺命令：nslookup 域名</code></strong></li>
+<li><strong><code>🔺命令：nslookup set type=mx（查询类型） 域名</code></strong> （数值越小，优先级越高）</li>
+<li><strong><code>🔺命令：nslookup set type=ns 域名</code></strong></li>
+<li><strong><code>🔺命令：nslookup set type=ptr ip地址</code></strong> ▲2019.11.27反向域名解析大概率查不到</li>
+<li><strong><code>🔺命令：nslookup server 202.106.0.20（其他ISP域名服务器的ip地址）</code></strong></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>网络为智能DNS，选取最近的DNS服务器，不同地址的DNS服务器是不一样的，边缘网络</code></pre></blockquote>
+<ul>
+<li><strong><code>🔺命令：nslookup set type=any（任何域名）域名</code></strong></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/26/%E4%BB%BB%E5%8A%A1015%EF%BC%9AKali%20Linux%E5%9F%BA%E6%9C%AC%E5%B7%A5%E5%85%B7-TCPDUMP-%E6%8A%93%E5%8C%85%E3%80%81%E7%AD%9B%E9%80%89%E3%80%81%E9%AB%98%E7%BA%A7%E7%AD%9B%E9%80%89%E3%80%81%E8%BF%87%E7%A8%8B%E6%96%87%E6%A1%A3%E8%AE%B0%E5%BD%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1636,707 +2199,6 @@ nc-nv 1.1.1.1 80</code></pre></blockquote>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/24/%E4%BB%BB%E5%8A%A1008%EF%BC%9AKali%20Linux%E6%B4%8B%E8%91%B1%E6%B5%8F%E8%A7%88%E5%99%A8Tor/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/24/%E4%BB%BB%E5%8A%A1008%EF%BC%9AKali%20Linux%E6%B4%8B%E8%91%B1%E6%B5%8F%E8%A7%88%E5%99%A8Tor/" itemprop="url">008：Kali Linux洋葱浏览器</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-24T18:41:27+08:00">
-                2019-11-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li><p>Tor</p>
-<ul>
-<li>保护隐私防止被追踪</li>
-<li>志愿者组成节点网络</li>
-<li>长期在天朝完全无法使用<ul>
-<li>感谢云（海量的IP地址）</li>
-</ul>
-</li>
-<li>暗网<ul>
-<li>互联网搜索引擎无法发现</li>
-<li>互联网黑市</li>
-<li>比特币交易</li>
-<li>至少3跳路由包装</li>
-</ul>
-</li>
-<li>下载和看视频是不道德的行为</li>
-<li>下载（Kali Linux可apt-get，但安装复杂）<ul>
-<li><a href="https://www.torproject.org/download/" target="_blank" rel="noopener">https://www.torproject.org/download/</a></li>
-<li><a href="http://pan.baidu.com/s/1sjkdPO5" target="_blank" rel="noopener">http://pan.baidu.com/s/1sjkdPO5</a> ▲2019.11.23链接不可用</li>
-</ul>
-</li>
-<li>问题1：should not be run as root（文件夹中start-tor-browser修改root，0 → 1）</li>
-<li>问题2：服务启动错误（权限造成，修改所有者和组 <strong><code>🔺命令：chown -R root:root tor目录</code></strong>）</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>集成网桥的连接：meek-amazon、meek-google、meek-azure</code></pre></blockquote>
-<ul>
-<li>暗网wiki<ul>
-<li><a href="http://wiki5kauuihowqi5.onion/" target="_blank" rel="noopener">http://wiki5kauuihowqi5.onion/</a></li>
-</ul>
-</li>
-</ul>
-<ol start="2">
-<li><p>代理设置</p>
-<ul>
-<li>/etc/apt/apt.conf<ul>
-<li>Acquire::http::Proxy “<a href="http://127.0.0.1:8087&quot;" target="_blank" rel="noopener">http://127.0.0.1:8087&quot;</a>;</li>
-<li>Acquire::https::Proxy “<a href="https://127.0.0.1:8087&quot;" target="_blank" rel="noopener">https://127.0.0.1:8087&quot;</a>;</li>
-<li>Acquire::ftp::Proxy “<a href="ftp://127.0.0.1:8087&quot;" target="_blank" rel="noopener">ftp://127.0.0.1:8087&quot;</a>;</li>
-<li>Acuqire::socks::Proxy “<a href="https://127.0.0.1:8087&quot;" target="_blank" rel="noopener">https://127.0.0.1:8087&quot;</a>;</li>
-</ul>
-</li>
-<li>/etc/bash.bashrc<ul>
-<li>export http_proxy=”<a href="http://username:password@proxyIP:port&quot;" target="_blank" rel="noopener">http://username:password@proxyIP:port&quot;</a></li>
-<li>export ftp_proxy=”<a href="ftp://username:password@proxyIP:port&quot;" target="_blank" rel="noopener">ftp://username:password@proxyIP:port&quot;</a></li>
-<li>export https_proxy=”<a href="https://username:password@proxyIP:port&quot;" target="_blank" rel="noopener">https://username:password@proxyIP:port&quot;</a></li>
-<li>export socks_proxy=”<a href="https://username:password@proxyIP:port&quot;" target="_blank" rel="noopener">https://username:password@proxyIP:port&quot;</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>代理链</p>
-<ul>
-<li>公开的代理服务器</li>
-<li>配置代理链<ul>
-<li><strong><code>🔺命令：vi /etc/proxychains.conf</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>strict_chain（静态链，1-5级，不会自动剔除不通的代理链）
-dynamic_chain（动态链，1-5级，自动剔除不通的代理链)
-random_chain（随机链，1-5级随机选级）
-chain_len = 2 （只适用于dynamic_chain）
-proxy_dns（域名代理链解析）
-【ProxyList】 （代理列表，在下面修改）</code></pre></blockquote>
-<ul>
-<li>配置代理链<ul>
-<li><strong><code>🔺命令：proxychains nmap -p80 网段/24</code></strong>（可以用于不支持代理的软件）</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/24/%E4%BB%BB%E5%8A%A1007%EF%BC%9AKali%20Linux%E7%BF%BB%E5%A2%99%E4%BB%A3%E7%90%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/24/%E4%BB%BB%E5%8A%A1007%EF%BC%9AKali%20Linux%E7%BF%BB%E5%A2%99%E4%BB%A3%E7%90%86/" itemprop="url">007：Kali Linux翻墙代理</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-24T18:41:27+08:00">
-                2019-11-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li><p>翻墙&amp;代理</p>
-<ul>
-<li>GFW长城防火墙<ul>
-<li>Facebook、youtube</li>
-</ul>
-</li>
-<li>翻墙（VPN connection、Tunnel，前提需要一台可通过GFW过滤的服务器）<ul>
-<li>http代理（搭建简单，纯http传输为明文传输，易被GFW发现）</li>
-<li>socks代理</li>
-<li>ssh隧道（加密隧道）</li>
-<li>VPN</li>
-</ul>
-</li>
-<li>Goagent（谷歌官方提供服务）</li>
-<li>Tor</li>
-</ul>
-</li>
-<li><p>代理的意以所在</p>
-<ul>
-<li>加密通信</li>
-<li>隐藏来源</li>
-<li>突破网络封锁</li>
-<li>注意事项<ul>
-<li>不要触及敏感地带</li>
-<li>不要从事非法行为</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>GOAGENT（2019.11.23GoAgent基本被墙）</p>
-<ul>
-<li><a href="https://code.google.com/p/goagent/" target="_blank" rel="noopener">https://code.google.com/p/goagent/</a> ▲2019.11.23网址不可用<ul>
-<li>注册：appengine.google.com</li>
-</ul>
-</li>
-<li><a href="https://github.com/goagent/gpagent" target="_blank" rel="noopener">https://github.com/goagent/gpagent</a> ▲2019.11.23goagent delete</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>IE → goagent（本地代理）→ GAE → 目标网络</code></pre></blockquote>
-<ol start="4">
-<li><p>GOAGENT安装 （2019.11.23GoAgent基本被墙）</p>
-<ul>
-<li><a href="http://pan.baidu.com/s/1jG3USAU" target="_blank" rel="noopener">http://pan.baidu.com/s/1jG3USAU</a> （goagent软件）▲2019.11.23链接不可用</li>
-<li><a href="http://pan.baidu.com/s/1dDlYw05" target="_blank" rel="noopener">http://pan.baidu.com/s/1dDlYw05</a> （goagent配置指导书）▲2019.11.23链接不可用</li>
-<li><strong><code>🔺命令：Apt-get install python-dev python-greenlet python-gevent python-vte python-openssl python-crypto python-appindicator python-pip libnss3-tools</code></strong></li>
-<li><strong><code>🔺命令：pip install pyOpenSSL</code></strong></li>
-<li><strong><code>🔺命令：pip install gevent --upgrade</code></strong></li>
-<li><strong><code>🔺命令：mkdir -p ~/.pki/nssdb</code></strong>(-p 层级创建目录)</li>
-<li><strong><code>🔺命令：certutil -d sql:$HOME/.pki/nssdb -N</code></strong></li>
-<li>导入证书</li>
-<li>设置浏览器代理</li>
-<li>使用</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>设置浏览器代理
-浏览器（alt+t）→ Edit → Preferences → Advanced → Certificates → View certificates → Authorities → Import → CA.crt（3 trust）</code></pre></blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/22/%E4%BB%BB%E5%8A%A1006%EF%BC%9AKali%20Linux%E5%AE%89%E8%A3%85Java%E3%80%81%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8%E3%80%81%E5%AE%89%E8%A3%85%E7%BD%91%E5%8D%A1%E8%A1%A5%E4%B8%81%E3%80%81%E5%B9%B6%E5%8F%91%E7%BA%BF%E7%A8%8B%E9%99%90%E5%88%B6%E3%80%81%E7%94%B5%E6%BA%90%E4%BC%98%E5%8C%96/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/22/%E4%BB%BB%E5%8A%A1006%EF%BC%9AKali%20Linux%E5%AE%89%E8%A3%85Java%E3%80%81%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8%E3%80%81%E5%AE%89%E8%A3%85%E7%BD%91%E5%8D%A1%E8%A1%A5%E4%B8%81%E3%80%81%E5%B9%B6%E5%8F%91%E7%BA%BF%E7%A8%8B%E9%99%90%E5%88%B6%E3%80%81%E7%94%B5%E6%BA%90%E4%BC%98%E5%8C%96/" itemprop="url">006：Kali Linux安装Java、安装显卡驱动、安装网卡补丁、并发线程控制、电源优化</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-22T22:44:28+08:00">
-                2019-11-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li><p>安装JAVA-1</p>
-<ul>
-<li>下载(<a href="https://www.oracle.com/technetwork/java/javase/downloads）" target="_blank" rel="noopener">https://www.oracle.com/technetwork/java/javase/downloads）</a></li>
-<li>解压缩包（需要下载jdk和jre两者合并的包，2019.11.22用的是jdk-8u231包）<ul>
-<li><strong><code>🔺命令：tar -xzvf java路径</code></strong></li>
-<li><strong><code>🔺命令：mv jdk版本 /opt</code></strong></li>
-<li><strong><code>🔺命令：cd /opt/jdk版本</code></strong>（路径）</li>
-</ul>
-</li>
-<li>安装注册<ul>
-<li><strong><code>🔺命令：update-alternatives --install /usr/bin/java java /opt/jdk版本/bin/java 1</code></strong></li>
-<li><strong><code>🔺命令：update-alternatives --install /usr/bin/javac javac /opt/jdk版本/bin/javac 1</code></strong></li>
-<li><strong><code>🔺命令：update-alternatives --install /usr/lib/mozilla/plugins/libjavaplugin.so mozilla-javaplugin.so /opt/jdk路径/jre/lib/amd64/libnpjp2.so 1</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>安装JAVA-2</p>
-<ul>
-<li>默认设置<ul>
-<li><strong><code>🔺命令：update-alternatives --set java /opt/jdk版本/bin/java</code></strong></li>
-<li><strong><code>🔺命令：update-alternatives --set javac /opt/jdk版本/bin/javac</code></strong></li>
-<li><strong><code>🔺命令：update-alternatives --set mozilla-javaplugin.so /opt/jdk版本/jre/lib/amd64/libnpjp2.so</code></strong></li>
-</ul>
-</li>
-<li>验证<ul>
-<li><strong><code>🔺命令：java -version</code></strong>（主机验证java安装）</li>
-<li><a href="http://www.java.com/en/download/installed.jsp" target="_blank" rel="noopener">http://www.java.com/en/download/installed.jsp</a> (网页验证java安装，firefox Version 52之后不提供plugins的验证)</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>安装显卡驱动</p>
-<ul>
-<li>GPU的用途<ul>
-<li>Nvidia</li>
-<li>Ati</li>
-</ul>
-</li>
-<li>Nvidia显卡驱动安装<ul>
-<li><strong><code>🔺命令：apt-get update</code></strong></li>
-<li><strong><code>🔺命令：apt-get dist-upgrade</code></strong></li>
-<li><strong><code>🔺命令：apt-get install -y（直接安装） linux-headers-$(uname -r)</code></strong></li>
-<li><strong><code>🔺命令：apt-get install nvidia-kernel-dkms</code></strong>(Nvidia架构库)</li>
-<li><strong><code>🔺命令：sed &#39;s/quiet/quiet nouveau.modeset=0/g&#39; -i /etc/default/grub</code></strong></li>
-<li><strong><code>🔺命令：update-grub</code></strong></li>
-<li><strong><code>🔺命令：reboot</code></strong></li>
-</ul>
-</li>
-<li>验证<ul>
-<li><strong><code>🔺命令：glxinfo | grep -i &quot;direct rendering&quot;</code></strong>(需apt-get install mesa-utils，不然会报glxinfo commond not found)<ul>
-<li>direct rendering:Yes</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>无线网卡补丁</p>
-<ul>
-<li>最新版内核已经集成无线驱动补丁（版本1.09之前，包括1.09）</li>
-<li>如果你在使用老版本内核（<strong><code>🔺命令：uname -a</code></strong>查看版本）▲未验证<ul>
-<li><strong><code>🔺命令：cd /usr/src/</code></strong></li>
-<li><strong><code>🔺命令：wget https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v kali的版本/backports-kali的版本-1.tar.bz2</code></strong></li>
-<li><strong><code>🔺命令：tar xvf backports-kali的版本-1.tar.gz</code></strong></li>
-<li><strong><code>🔺命令：cd backports-kali的版本-1</code></strong></li>
-<li><strong><code>🔺命令：apt-get install patch</code></strong></li>
-<li><strong><code>🔺命令：wget http://patches.aircrack-ng.org/mac80211.compat08082009.wt_frag+ack_v1.patch</code></strong></li>
-<li><strong><code>🔺命令：patch -p1 &lt; mac80211.compat08082009.wt_frag+ack_v1.patch</code></strong>`**</li>
-<li><strong><code>🔺命令：apt-get install libncurses5-dev</code></strong>(安装开发库文件)</li>
-<li><strong><code>🔺命令：airmon-ng</code></strong>(查看驱动)</li>
-<li><strong><code>🔺命令：make defconfig-ath9k</code></strong>（替换芯片驱动）</li>
-<li><strong><code>🔺命令：make &amp;&amp; make install</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>并发线程限制</p>
-<ul>
-<li>ulimit用于限制当前shell内进程的资源使用</li>
-<li>查看默认值<ul>
-<li><strong><code>🔺命令：ulimit -a</code></strong></li>
-</ul>
-</li>
-<li>全局配置文件：/etc/security/limits<ul>
-<li><domain><type><item><value></li>
-</ul>
-</li>
-<li>用途距离<ul>
-<li>限制堆栈大小：<strong><code>🔺命令：ulimit -s 100</code></strong>（文件大小）</li>
-<li>限制shell内存使用：<strong><code>🔺命令：ulimit -m（最大内存大小） 5000 -v（虚拟内存大小） 5000</code></strong></li>
-<li>限制并发次数，openfile ：<strong><code>🔺命令：ulimit -n 900000</code></strong>（次数）</li>
-</ul>
-</li>
-<li>没有直接对socket数量的限制参数<ul>
-<li>Linux系统中一切都是文件，运行中的文件叫做进程</li>
-<li><strong><code>🔺命令：vi /.bashrc→ulimit -n 900000</code></strong>（持久化ulimit）</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>电源优化（kali耗电非常大）</p>
-<ul>
-<li>渗透测试系统耗电较大</li>
-<li>延长电池寿命<ul>
-<li>无操作挂起，关闭显示器(系统设置中的电源，选择操作)</li>
-<li>降低显示器亮度（系统设置中的电源，降低亮度）</li>
-<li>不使用时关闭无线网卡</li>
-<li>开启硬盘省电选项<ul>
-<li><strong><code>🔺命令：hdparm -i /dev/sdx if AdvancedPM=yes then hdparm -B 1 -S 12 /dev/sdx</code></strong></li>
-</ul>
-</li>
-<li>启动笔记本模式(<strong><code>🔺命令：chmod a+x 脚本</code></strong>)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">currentMode=$(cat /proc/sys/vm/laptop_mode)</span><br><span class="line">if [ $currentMode -eq 0 ]</span><br><span class="line">then</span><br><span class="line">echo &quot;5&quot;&gt;/proc/sys/vm/laptop_mode</span><br><span class="line">echo &quot;Laptop Mode Enabled&quot;</span><br><span class="line">else</span><br><span class="line">echo &quot;0&quot;&gt;/proc/sys/vm/laptop_mode</span><br><span class="line">echo &quot;Laptop Mode Disabled&quot;</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>服务开关</p>
-<ul>
-<li>Kali Linux默认未启动所有网络服务</li>
-<li><strong><code>🔺命令：update-rc.d ssh defaults</code></strong>（持久化启动服务）<ul>
-<li><strong><code>🔺命令：update-rc.d ssh start 20 2 3 4 5 .stop 20 0 1 6.</code></strong></li>
-<li><strong><code>🔺命令：update-rc.d A defaults 80（启动优先级） 20（关闭优先级）</code></strong></li>
-<li><strong><code>🔺命令：update-rc.d B defaults 90（启动优先级） 10（关闭优先级）</code></strong></li>
-</ul>
-</li>
-<li><strong><code>🔺命令：/etc/init.d/ssh start</code></strong>(临时开启服务)</li>
-<li>重启操作系统 <strong><code>🔺命令：init 6</code></strong></li>
-<li>关闭操作系统 <strong><code>🔺命令：init 0</code></strong></li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>运行级别：
-0：关机
-1：单用户模式
-2.3.4.5：多用户模式
-6：重启</code></pre></blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2391,7 +2253,7 @@ proxy_dns（域名代理链解析）
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

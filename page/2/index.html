@@ -240,6 +240,431 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/25/%E4%BB%BB%E5%8A%A1010%EF%BC%9AKali%20Linux%E5%9F%BA%E6%9C%AC%E5%B7%A5%E5%85%B7-NETCAT%EF%BC%88telnet-banner%E3%80%81%E4%BC%A0%E8%BE%93%E6%96%87%E6%9C%AC%E4%BF%A1%E6%81%AF%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/25/%E4%BB%BB%E5%8A%A1010%EF%BC%9AKali%20Linux%E5%9F%BA%E6%9C%AC%E5%B7%A5%E5%85%B7-NETCAT%EF%BC%88telnet-banner%E3%80%81%E4%BC%A0%E8%BE%93%E6%96%87%E6%9C%AC%E4%BF%A1%E6%81%AF%EF%BC%89/" itemprop="url">010：Kali Linux基本工具-NETCAT（telnet-banner、传输文本信息）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-25T21:22:48+08:00">
+                2019-11-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li><p>常使用工具</p>
+<ul>
+<li>经常使用且功能强大</li>
+<li>安全从业者必不可少的帮手</li>
+<li>Nc/ncat</li>
+<li>Wireshark</li>
+<li>Tcp dump</li>
+</ul>
+</li>
+<li><p>NETCAT-NC</p>
+<ul>
+<li>网络工具中的瑞士军刀-小身材，大智慧</li>
+<li>侦听模式/传输模式</li>
+<li>telnet/获取banner信息（比telnet稳定）</li>
+<li>传输文本信息</li>
+<li>传输文件/目录（ftp服务器）</li>
+<li>加密传输文件</li>
+<li>远程控制/木马</li>
+<li>加密所有流量</li>
+<li>流媒体服务器</li>
+<li>远程克隆硬盘</li>
+</ul>
+</li>
+<li><p>NC-TELNET/BANNER</p>
+</li>
+</ol>
+<blockquote>
+<pre><code>nc-nv 1.1.1.1 110
+nc-nv 1.1.1.1 25
+nc-nv 1.1.1.1 80</code></pre></blockquote>
+<ul>
+<li><strong><code>🔺命令：ping smtp.163.com、pop3.163.com</code></strong>（测试网络）</li>
+<li><strong><code>🔺命令：netstat -rn</code></strong>（查看网络连接）</li>
+<li>nc -vn（域名相关详细信息，建议将域名解析出来）</li>
+<li><strong><code>🔺命令：nc -nv ip地址 110</code></strong>（pop3服务器）</li>
+<li><strong><code>🔺命令：USER</code></strong> （base64 邮箱地址）</li>
+<li><strong><code>🔺命令：nc -nv ip地址 25</code></strong>（smtp服务器）</li>
+<li><strong><code>🔺命令：ehlo 名字</code></strong>（可看到命令行选项）</li>
+<li><strong><code>🔺命令：nc -nv ip地址 80</code></strong>（http服务器，metasploitable）</li>
+<li><strong><code>🔺命令：get head/</code></strong>（两者不可重复使用，一样的效果）</li>
+</ul>
+<blockquote>
+<pre><code>Kali base64命令的使用
+1.启动终端
+2.输入base64
+3.输入需要编码的字符串
+4.CTRL+D，结束输入，在屏幕上会显示出结果</code></pre></blockquote>
+<ol start="4">
+<li><p>NC-传输文本信息</p>
+<ul>
+<li>A： <strong><code>🔺命令：nc -l -p 端口号</code></strong>（开放一个端口，作为服务端）</li>
+<li>B： <strong><code>🔺命令：nc -nv IP地址 端口号</code></strong>（连接对方端口，作为客户端）</li>
+<li>远程电子取证收集<ul>
+<li><strong><code>🔺命令：ls -l | nc -nv IP地址 端口号</code></strong>（服务端）</li>
+<li><strong><code>🔺命令：nc -l -p 333 &gt; ps.txt</code></strong>（服务端） <strong><code>🔺命令：ps aux | nc -nv IP地址 端口 -q（有结束标志EOF） 1</code></strong>（客户端）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/25/%E4%BB%BB%E5%8A%A1009%EF%BC%9AKali%20Linux%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/25/%E4%BB%BB%E5%8A%A1009%EF%BC%9AKali%20Linux%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/" itemprop="url">009：Kali Linux实验环境</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-25T21:22:48+08:00">
+                2019-11-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li><p>准备实验环境</p>
+<ul>
+<li>渗透非授权系统的弊端</li>
+<li>搭建自己的实验环境</li>
+</ul>
+</li>
+<li><p>安装虚拟机</p>
+<ul>
+<li>微软最新版软件<ul>
+<li><a href="https://msdn.itellyou.cn" target="_blank" rel="noopener">https://msdn.itellyou.cn</a></li>
+</ul>
+</li>
+<li>windows虚拟机<ul>
+<li><a href="http://dev.modern.ie/tools/vms/" target="_blank" rel="noopener">http://dev.modern.ie/tools/vms/</a></li>
+</ul>
+</li>
+<li>安装自己的虚拟机<ul>
+<li>win XP</li>
+<li>win 7</li>
+<li>win 2003</li>
+</ul>
+</li>
+<li>Linux虚拟机<ul>
+<li><a href="http://www.turnkeylinux.org" target="_blank" rel="noopener">http://www.turnkeylinux.org</a></li>
+<li>Ubuntu（Lamp安装）▲2019.11.25数据库无法登陆</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>Ubuntu Server（netstat -anol）
+1.apt-get install ssh 
+2.apt-get install apache2 apache2-utils（若报错，则vi /etc/阿帕che/conf-available/fqdn.conf → ServerName localhost → a2enconf fqdn）
+3.apt-get install mysql-sever libapache2-mod-auth-mysql php5-mysql ▲2019.11.25未找到php5-mysql  ▲2019.11.25数据库无法登陆
+4.mysql install_db（创建数据库）
+5.mysql_security_installation（数据库安全设置）
+6.apt-get install php5 php-mysql php-pear php-mcrypt php-curl ▲2019.11.25未找到php5，替换为php7；未找到php-mcrypt。
+由于mcrypt扩展开发的结束，扩展也从PHP 7.2中删除，并转移到一个非官方的PECL存储库中。但是，你仍然可以在PHP 5.4到PHP 7.1中找到mcrypt扩展。PHP 7.2已经发布，但是它不包含mcrypt扩展。对于PHP 7.2+， PHP使用libsodium作为加密库。</code></pre></blockquote>
+<ul>
+<li>Metasploitable2<ul>
+<li><a href="https://sourceforge.net/projects/metasploitable/metasploitable-linux-2.0.0.zip" target="_blank" rel="noopener">https://sourceforge.net/projects/metasploitable/metasploitable-linux-2.0.0.zip</a></li>
+<li>问题：/var/www/mutilltdae/config.inc（配置文件：dbname=owasp10）</li>
+</ul>
+</li>
+</ul>
+<ol start="3">
+<li><p>模拟真实网络</p>
+<ul>
+<li><p>M0n0wall防火墙（需要三个Host-only网卡，一个桥接网卡，10.1.1.1/24 and 10.1.2.1/24）</p>
+<ul>
+<li><a href="https://distrowatch.com/?newsid=08257" target="_blank" rel="noopener">https://distrowatch.com/?newsid=08257</a></li>
+<li>需要三个Host-only网卡，10.1.1.1/24 and 10.1.2.1/24</li>
+<li>一个桥接网卡，连接外网使用</li>
+<li>配置</li>
+</ul>
+<ol>
+<li>1接口指令</li>
+<li>设置vlan</li>
+<li>em0（网卡）→ 10 valan，em1（网卡）→ 11 valan，em2（网卡）→ 13 valan</li>
+<li>指定网卡连接LAN（em1），指定网卡连接WAN（em0），指定网卡连接Option（em2）</li>
+<li>重启后2指令给LAN指定ip，掩码24</li>
+<li>启动dhcp，分配dhcp地址</li>
+<li>3指令给WebGui设置密码 → mono（默认）</li>
+<li>Kali开启Host-only，需要跟LAN口同在一个网络连接上</li>
+<li>WebGUI配置Optional接口，开启，配置IP地址</li>
+<li>设置网络防火墙规则，PASS,WAN,ANY,LAN subnet,ANY</li>
+<li>WAN设置，Block privat networks去掉勾选</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>背靠背防火墙（双层异构）</p>
+<ul>
+<li>Pfsense<ul>
+<li><a href="https://pfsense.org/" target="_blank" rel="noopener">https://pfsense.org/</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/24/%E4%BB%BB%E5%8A%A1008%EF%BC%9AKali%20Linux%E6%B4%8B%E8%91%B1%E6%B5%8F%E8%A7%88%E5%99%A8Tor/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2405,466 +2830,6 @@ uniq--把重复的内容只显示一次</code></pre></blockquote>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/20/%E7%AC%AC%E4%BA%8C%E7%AB%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/20/%E7%AC%AC%E4%BA%8C%E7%AB%A0/" itemprop="url">第二章</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-20T20:40:46+08:00">
-                2019-11-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Operating-System-Principle/" itemprop="url" rel="index">
-                    <span itemprop="name">Operating System Principle</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="第二章"><a href="#第二章" class="headerlink" title="第二章"></a>第二章</h2><hr>
-<ol>
-<li><p><strong>各大设置</strong></p>
-<ul>
-<li>DISK:存放OS，Bootloader</li>
-<li>BIOS（basic input output system）：基本I/O处理系统</li>
-<li>Bootloader：加载OS，放在硬盘的第一个主引导扇区</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<p>（加电，一个高电平给CPU，CPU默认各引脚状态会将ROM里面的的BIOS及其相关设置放到内存，然后执行BIOS程序）</p>
-</blockquote>
-<p>2.<strong>开机</strong></p>
-<ul>
-<li>POST（加电自检），寻找显卡和执行BIOS</li>
-<li>将Bootloader从硬盘引导扇区（512字节）加载到地址（0x7c00）</li>
-<li>BIOS:跳转到CS:IP=地址（0x7c00）</li>
-<li>Bootloader:将操作系统的代码和数据从硬盘加载到内存，跳转到操作系统的起始地址</li>
-</ul>
-<p>3.<strong>interface：系统调用、异常、中断</strong></p>
-<ul>
-<li>系统调用（来源于应用程序system call）：应用程序主动向操作系统发出服务请求</li>
-<li>异常（来源于不良的应用程序exception）：非法指令或者其他坏的处理状态（如：内存出错）</li>
-<li>中断（来源于外设interrupt）：来自不同的硬件设备的计时器和网络的中断</li>
-</ul>
-<blockquote>
-<p>只有内核可以执行特权指令</p>
-</blockquote>
-<p>  -三者的区别</p>
-<pre><code>1.源头
-- 中断：外设
-- 异常：应用程序意想不到的行为
-- 系统调用：应用程序请求操作系统提供服务 
-2.处理时间
-- 中断：异步（不受控制）
-- 异常：同步
-- 系统调用：异步或同步
-3.响应
-- 中断：持续，对用户应用程序是透明
-- 异常：杀死或者重新执行意想不到的应用程序指令
-- 系统调用：等待和持续</code></pre><p>4.<strong>中断（对应用程序透明）</strong></p>
-<ul>
-<li>硬件（设置中断标记【CPU初始化】<ul>
-<li>将内部、外部事件设置中断标记</li>
-<li>中断事件的ID</li>
-</ul>
-</li>
-<li>软件<ul>
-<li>保存当前处理状态（保存现场）</li>
-<li>中断服务程序处理</li>
-<li>清理中断标记</li>
-<li>恢复之前保存的处理状态</li>
-</ul>
-</li>
-</ul>
-<p>5.<strong>异常</strong></p>
-<ul>
-<li>保存现场</li>
-<li>异常处理 <ul>
-<li>杀死产生了异常的程序</li>
-<li>重新执行异常指令</li>
-</ul>
-</li>
-<li>恢复现场</li>
-</ul>
-<p>6.<strong>系统调用</strong></p>
-<blockquote>
-<pre><code>应用程序调用printf（）时，会触发系统调用write（）
-程序访问主要是通过高层次的API接口而不是直接进行系统调用  
-Win32 API用于Windows
-POSIX API应用于POSIX-based systems（包括UNIX,Linux,Mac OS X的所有版本)
-Java API用于JAVA虚拟机（JVM）</code></pre></blockquote>
-<blockquote>
-<pre><code>用户态和内核态
-函数调用：一个相同堆栈空间实现
-系统调用：两个不同的堆栈空间实现</code></pre></blockquote>
-<p>7.<strong>跨越操作系统边界的开销</strong></p>
-<ul>
-<li>在执行时间上的开销超过程序调用</li>
-<li>开销<ul>
-<li>建立中断/异常/系统调用号与对应服务例程映射关系的初始化开销</li>
-<li>建立内核堆栈</li>
-<li>验证参数</li>
-<li>内核态映射到用户态的地址空间，更新页面映射权限，内存拷贝（不是指针传递，需从内核态拷贝到用户态</li>
-<li>内核态独立地址空间TLsB</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/20/%E7%AC%AC%E4%B8%80%E7%AB%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/20/%E7%AC%AC%E4%B8%80%E7%AB%A0/" itemprop="url">第一章</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-20T20:40:40+08:00">
-                2019-11-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Operating-System-Principle/" itemprop="url" rel="index">
-                    <span itemprop="name">Operating System Principle</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="第一章"><a href="#第一章" class="headerlink" title="第一章"></a>第一章</h2><hr>
-<ol>
-<li><p><strong>操作系统架层次结构</strong></p>
-<ul>
-<li>硬件之上</li>
-<li>应用程序之下</li>
-</ul>
-</li>
-<li><p><u>Linux、Window、Android的界面属于外壳（shell），而不是内核（kernel），重点是kernel</u></p>
-</li>
-<li><p><strong>并发与并行</strong></p>
-<ul>
-<li>并行: 一个时间点上多个进程（需要多个CPU）</li>
-<li>并发：一段时间上多个进程</li>
-</ul>
-</li>
-<li><p><strong>OS Kernel的特征</strong></p>
-<ul>
-<li>并发，计算机系统中同时存在多个运行的程序，需要OS管理和调度</li>
-<li>共享，“同时”访问，互斥共享</li>
-<li>虚拟，利用多道程序设计技术，让每个用户都觉得有一个计算机专门为他服务</li>
-<li>异步，程序的执行不是一贯而底，而是走走停停，向前推进的速度是不可预知的，但只要运行的环境相同，OS需要保证程序运行的结果也要相同</li>
-</ul>
-</li>
-<li><p><strong>综合课程–结合许多不同的课程</strong></p>
-<ul>
-<li>程序设计语言</li>
-<li>数据结构</li>
-<li>算法</li>
-<li>计算机体系结构</li>
-<li>材料</li>
-<li>操作系统概念和原理，源代码</li>
-<li>技能</li>
-<li>操作系统的设计和实现</li>
-</ul>
-</li>
-<li><p><strong>顶级会议–SOSP,USENIX(每两年一次会议)</strong></p>
-<p><u>IPv6没有GFW</u></p>
-</li>
-<li><p><strong>操作系统需要权衡：</strong></p>
-<ul>
-<li>空间与时间</li>
-<li>性能和可预测性</li>
-<li>公平和性能</li>
-</ul>
-</li>
-<li><p><strong>硬件方面</strong></p>
-<ul>
-<li>良好得硬件资源</li>
-<li>合理的资源分配（例如：硬盘速度跟CPU、内存相差很多，操作系统需要去调节）</li>
-</ul>
-</li>
-</ol>
-<ol start="9">
-<li><p><strong>操作系统实例</strong></p>
-<ul>
-<li>Unix家族：Unix  BSD</li>
-<li>Linux家族：redhat、debian、ubuntu、fedoro</li>
-<li>Window家族：Window7、Window10</li>
-</ul>
-</li>
-<li><p><strong>操作系统的历史</strong></p>
-<ul>
-<li>早期计算机使用纸带传输程序和数据（操作系统只起到加载作用）</li>
-<li>批处理阶段（CPU等硬件快速发展，计算机速度得到提升）</li>
-<li>多道程序设计（内存的容量越来越大、CPU执行多个程序）操作系统中断调度 </li>
-<li>分时系统（为了更好的利用计算机资源，并且更好的和用户交互），分时时间片，1/1000s终中断调度（时钟）</li>
-<li>个人电脑操作系统PC（提高I/O交互性） </li>
-<li>网络的快速发展，出现了分布式的操作系统（Internet传输、数据中心计算）</li>
-<li>历代计算机 </li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>主机型计算机AIX/HP-UX（Mainframe compiting） 
-个人计算机Window/Linux/BSD（Person computing）
-网络计算IOS/Android（Internet computing）
-普适计算（Pervasive computing）</code></pre></blockquote>
-<ol start="11">
-<li><p><strong>操作系统的结构</strong></p>
-<ul>
-<li>简单操作系统，MS-DOS,不分模块的单体内核（模具化是通过函数去调用的）</li>
-<li>微内核的设计，尽可能把内核功能移到用户中间（通过模块之间的消息传递机制）</li>
-<li>“外核”，极端的架构，EX kernel作为外核，访问kernel</li>
-<li>虚拟机（VMs），VMM虚拟监控机，VMM将单独的机器接口转换成很多的幻象，每个这些接口（虚拟机）是一个原始计算机系统的有效副本，并完成所有的处理器指令</li>
-</ul>
-</li>
-</ol>
-<hr>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2919,7 +2884,7 @@ Java API用于JAVA虚拟机（JVM）</code></pre></blockquote>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

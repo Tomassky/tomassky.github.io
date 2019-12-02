@@ -240,6 +240,441 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/27/%E4%BB%BB%E5%8A%A1016%EF%BC%9AKali%20Linux%E8%A2%AB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%EF%BC%9A%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E5%86%85%E5%AE%B9%E3%80%81%E4%BF%A1%E6%81%AF%E7%94%A8%E9%80%94%E3%80%81%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86DNS%E3%80%81DNS%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-NSLOOKUP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/27/%E4%BB%BB%E5%8A%A1016%EF%BC%9AKali%20Linux%E8%A2%AB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%EF%BC%9A%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E5%86%85%E5%AE%B9%E3%80%81%E4%BF%A1%E6%81%AF%E7%94%A8%E9%80%94%E3%80%81%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86DNS%E3%80%81DNS%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-NSLOOKUP/" itemprop="url">016：Kali Linux被动信息收集：信息收集内容、信息用途、信息收集DNS、DNS信息收集-NSLOOKUP</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-27T11:17:49+08:00">
+                2019-11-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li><p>被动信息收集</p>
+<ul>
+<li>公开渠道可获得的信息（互联网媒体方式、搜索网站）</li>
+<li>与目标系统不产生直接交互（不对目标系统进行大量的探测）</li>
+<li>尽量避免留下一切痕迹</li>
+<li>OSINT：<ul>
+<li>美国军方：<a href="http://www.fas.org/lirp/doddir/army/atp2-229.pdf" target="_blank" rel="noopener">http://www.fas.org/lirp/doddir/army/atp2-229.pdf</a> ▲2019.11.27未找到文件</li>
+<li>北大西洋公约组织：<a href="http://information-retrieval.info/docs/NATO-OSINT.html" target="_blank" rel="noopener">http://information-retrieval.info/docs/NATO-OSINT.html</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>Passive reconnaissance(no direct interaction) → 被动侦察
+Normal interaction 
+Active reconnaissance  → 主动侦察
+More infomation greater chance of detection</code></pre></blockquote>
+<ol start="2">
+<li><p>信息收集内容</p>
+<ul>
+<li>IP地址</li>
+<li>域名信息</li>
+<li>邮件地址（定位邮件服务器，后期社会工程学）</li>
+<li>文档图片数据（网络结构，内网交互）</li>
+<li>公司地址</li>
+<li>公司组织架构</li>
+<li>联系电话/传真号码</li>
+<li>人员姓名/职务</li>
+<li>目标系统使用的技术架构（搜索引擎技术可以发现一部分信息）</li>
+<li>公开的商业信息</li>
+</ul>
+</li>
+<li><p>信息用途</p>
+<ul>
+<li>用信息描述目标（重构）</li>
+<li>发现（目标主机）</li>
+<li>社会工程学攻击</li>
+<li>物理缺口</li>
+</ul>
+</li>
+<li><p>信息收集-DNS</p>
+<ul>
+<li>域名解析成IP地址<ul>
+<li>域名（qq.com）与FQDN（完全限定域名<a href="http://www.qq.com）的区别" target="_blank" rel="noopener">www.qq.com）的区别</a></li>
+<li>域名记录：A（IPV4主机记录）、C name（别名记录）、NS（域名服务器地址对域解析）、MX（邮件服务器地址对域解析）、ptr（通过IP地址反向解析域名）、text（spf反向垃圾邮件域名）、SOA（启始授权）、AAAA（IPV6地址）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>DNS客户端 → 本地DNS服务器 → 根域服务器 → com服务器 → example.com服务器
+1.递归查询（一轮一轮递归） 2.迭代查询（从顶至下）
+缓存DNS服务器本身并不包含DNS记录（常用于本地DNS服务器）
+spf 反向垃圾域名服务，判断邮件的域名是否伪造</code></pre></blockquote>
+<ol start="5">
+<li><p>DNS信息收集-NSLOOKUP</p>
+<ul>
+<li><strong><code>🔺命令：nslookup 域名</code></strong></li>
+<li><strong><code>🔺命令：nslookup set type=mx（查询类型） 域名</code></strong> （数值越小，优先级越高）</li>
+<li><strong><code>🔺命令：nslookup set type=ns 域名</code></strong></li>
+<li><strong><code>🔺命令：nslookup set type=ptr ip地址</code></strong> ▲2019.11.27反向域名解析大概率查不到</li>
+<li><strong><code>🔺命令：nslookup server 202.106.0.20（其他ISP域名服务器的ip地址）</code></strong></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>网络为智能DNS，选取最近的DNS服务器，不同地址的DNS服务器是不一样的，边缘网络</code></pre></blockquote>
+<ul>
+<li><strong><code>🔺命令：nslookup set type=any（任何域名）域名</code></strong></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/26/%E4%BB%BB%E5%8A%A1015%EF%BC%9AKali%20Linux%E5%9F%BA%E6%9C%AC%E5%B7%A5%E5%85%B7-TCPDUMP-%E6%8A%93%E5%8C%85%E3%80%81%E7%AD%9B%E9%80%89%E3%80%81%E9%AB%98%E7%BA%A7%E7%AD%9B%E9%80%89%E3%80%81%E8%BF%87%E7%A8%8B%E6%96%87%E6%A1%A3%E8%AE%B0%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/26/%E4%BB%BB%E5%8A%A1015%EF%BC%9AKali%20Linux%E5%9F%BA%E6%9C%AC%E5%B7%A5%E5%85%B7-TCPDUMP-%E6%8A%93%E5%8C%85%E3%80%81%E7%AD%9B%E9%80%89%E3%80%81%E9%AB%98%E7%BA%A7%E7%AD%9B%E9%80%89%E3%80%81%E8%BF%87%E7%A8%8B%E6%96%87%E6%A1%A3%E8%AE%B0%E5%BD%95/" itemprop="url">015：Kali Linux基本工具-TCPDUMP-抓包、筛选、高级筛选、过程文档记录</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-26T20:20:19+08:00">
+                2019-11-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li><p>TCPDUMP</p>
+<ul>
+<li>NO-GUI的抓包分析工具</li>
+<li>Linux、Unix系统默认安装</li>
+</ul>
+</li>
+<li><p>TCPDUMP-抓包</p>
+<ul>
+<li>抓包<ul>
+<li>默认只抓每个数据包的68个字节（一般是数据包头）</li>
+<li><strong><code>🔺命令：tcpdump -h（--help选项）</code></strong></li>
+<li><strong><code>🔺命令：tcpdump -i（网卡） eth0 -s（size） 0 -w（保存） x.pcap</code></strong></li>
+<li><strong><code>🔺命令：tcpdump -A（以ASCII码的形式） -r（读取） x.pcap</code></strong></li>
+<li><strong><code>🔺命令：tcpdump -X（以十六进制的形式）-r x.pcap</code></strong></li>
+<li><strong><code>🔺命令：tcpdump -i eth0 tcp（协议类型） port（端口） x</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>TCPDUMP-筛选</p>
+<ul>
+<li>筛选<ul>
+<li><strong><code>🔺命令：tcpdump -n（不做域名解析）-r x.pcap | awk &#39;{print $3} &#39;| sort -u</code></strong></li>
+<li><strong><code>🔺命令：tcpdump -n src（源地址） host ip地址 -r x.pcap</code></strong></li>
+<li><strong><code>🔺命令：tcpdump -n dst（目标地址） host ip地址 -r x.pcap</code></strong></li>
+<li><strong><code>🔺命令：tcpdump -n tcp port x -r x.pcap</code></strong></li>
+<li><strong><code>🔺命令：tcpdump -nX（不做域名解析，十六进制形式）tcp port x -r x.pcap</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>TCPDUMP-高级筛选</p>
+</li>
+</ol>
+<blockquote>
+<pre><code>ACK+PSH数据同时为1，即为数据传输真正开始的位置
+ACK为1，确认位 → A
+FIN为1，结束位 → F
+SYN为1，同步位 → S
+PSH为1，推送位 → P
+RST为1，复位位 → R
+URG为1，紧急位 → U
+CWR、ECE（暂未知）
+CEUAPRSF 0001100 = 24 in decimal</code></pre></blockquote>
+<ul>
+<li>高级筛选<ul>
+<li><strong><code>🔺命令：tcpdump -A -n &#39;tcp[13]=24&#39;（tcp的第十三字节为ACK+PSH）-r x.pcap</code></strong></li>
+</ul>
+</li>
+</ul>
+<ol start="5">
+<li><p>过程文档记录</p>
+<ul>
+<li>Dradis ▲2019.11.26软件启动失败<ul>
+<li>短期临时小团队资源共享</li>
+<li>各种插件导入文件</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>Dradis:开启 → http://127.0.0.1:3000 → 只需要输入密码即可 → import from file
+导入：namp -p IP地址 -oX x.xml → import from file → upload file
+导出：右键 → columns → catagory → HTML Export ready</code></pre></blockquote>
+<ul>
+<li>Keepnote（层级结构）▲2019.11.26新版本无此软件</li>
+</ul>
+<blockquote>
+<pre><code>Keepnote:开启 → file → notebook 
+导出：Export notebook → HTML</code></pre></blockquote>
+<ul>
+<li>Truecrypt（加密工具）▲2019.11.26新版本无此软件，换为VeraCrypt</li>
+</ul>
+<blockquote>
+<pre><code>生成一个文件夹 → 挂载系统 → 拷贝到文件 → 卸载文件（全盘加密时间很长）
+Truecrypt:创建 → create Volume（可文件或者硬盘分区）→  Standard Truecrypt volume（Hidden Truecrypt volume隐藏加密，标准加密打开卷里面什么都没用）→ Select file → Encryption Algorithm（加密算法）+Hash Algorithm（哈希算法）→ Volume size → Volume Password → Format option → Cross-Platform Support（挂载支持）→ Volume Format（鼠标滑动生成随机密码）
+Truecrypt:使用 → select file → mount → Dismount All
+Hidden Truecrypt volume:存在outer volume和Hidden volume</code></pre></blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/26/%E4%BB%BB%E5%8A%A1014%EF%BC%9AKali%20Linux%E5%9F%BA%E6%9C%AC%E5%B7%A5%E5%85%B7-WIRESHARK%E4%BF%A1%E6%81%AF%E7%BB%9F%E8%AE%A1%E3%80%81%E5%AE%9E%E8%B7%B5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1835,537 +2270,11 @@ proxy_dns（域名代理链解析）
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/22/%E4%BB%BB%E5%8A%A1006%EF%BC%9AKali%20Linux%E5%AE%89%E8%A3%85Java%E3%80%81%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8%E3%80%81%E5%AE%89%E8%A3%85%E7%BD%91%E5%8D%A1%E8%A1%A5%E4%B8%81%E3%80%81%E5%B9%B6%E5%8F%91%E7%BA%BF%E7%A8%8B%E9%99%90%E5%88%B6%E3%80%81%E7%94%B5%E6%BA%90%E4%BC%98%E5%8C%96/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/22/%E4%BB%BB%E5%8A%A1006%EF%BC%9AKali%20Linux%E5%AE%89%E8%A3%85Java%E3%80%81%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8%E3%80%81%E5%AE%89%E8%A3%85%E7%BD%91%E5%8D%A1%E8%A1%A5%E4%B8%81%E3%80%81%E5%B9%B6%E5%8F%91%E7%BA%BF%E7%A8%8B%E9%99%90%E5%88%B6%E3%80%81%E7%94%B5%E6%BA%90%E4%BC%98%E5%8C%96/" itemprop="url">006：Kali Linux安装Java、安装显卡驱动、安装网卡补丁、并发线程控制、电源优化</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-22T22:44:28+08:00">
-                2019-11-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li><p>安装JAVA-1</p>
-<ul>
-<li>下载(<a href="https://www.oracle.com/technetwork/java/javase/downloads）" target="_blank" rel="noopener">https://www.oracle.com/technetwork/java/javase/downloads）</a></li>
-<li>解压缩包（需要下载jdk和jre两者合并的包，2019.11.22用的是jdk-8u231包）<ul>
-<li><strong><code>🔺命令：tar -xzvf java路径</code></strong></li>
-<li><strong><code>🔺命令：mv jdk版本 /opt</code></strong></li>
-<li><strong><code>🔺命令：cd /opt/jdk版本（路径）</code></strong></li>
-</ul>
-</li>
-<li>安装注册<ul>
-<li><strong><code>🔺命令：update-alternatives --install /usr/bin/java java /opt/jdk版本/bin/java 1</code></strong></li>
-<li><strong><code>🔺命令：update-alternatives --install /usr/bin/javac javac /opt/jdk版本/bin/javac 1</code></strong></li>
-<li><strong><code>🔺命令：update-alternatives --install /usr/lib/mozilla/plugins/libjavaplugin.so mozilla-javaplugin.so /opt/jdk路径/jre/lib/amd64/libnpjp2.so 1</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>安装JAVA-2</p>
-<ul>
-<li>默认设置<ul>
-<li><strong><code>🔺命令：update-alternatives --set java /opt/jdk版本/bin/java</code></strong></li>
-<li><strong><code>🔺命令：update-alternatives --set javac /opt/jdk版本/bin/javac</code></strong></li>
-<li><strong><code>🔺命令：update-alternatives --set mozilla-javaplugin.so /opt/jdk版本/jre/lib/amd64/libnpjp2.so</code></strong></li>
-</ul>
-</li>
-<li>验证<ul>
-<li><strong><code>🔺命令：java -version</code></strong>（主机验证java安装）</li>
-<li><a href="http://www.java.com/en/download/installed.jsp" target="_blank" rel="noopener">http://www.java.com/en/download/installed.jsp</a> (网页验证java安装，firefox Version 52之后不提供plugins的验证)</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>安装显卡驱动</p>
-<ul>
-<li>GPU的用途<ul>
-<li>Nvidia</li>
-<li>Ati</li>
-</ul>
-</li>
-<li>Nvidia显卡驱动安装<ul>
-<li><strong><code>🔺命令：apt-get update</code></strong></li>
-<li><strong><code>🔺命令：apt-get dist-upgrade</code></strong></li>
-<li><strong><code>🔺命令：apt-get install -y（直接安装） linux-headers-$(uname -r)</code></strong></li>
-<li><strong><code>🔺命令：apt-get install nvidia-kernel-dkms(Nvidia架构库)</code></strong></li>
-<li><strong><code>🔺命令：sed &#39;s/quiet/quiet nouveau.modeset=0/g&#39; -i /etc/default/grub</code></strong></li>
-<li><strong><code>🔺命令：update-grub</code></strong></li>
-<li><strong><code>🔺命令：reboot</code></strong></li>
-</ul>
-</li>
-<li>验证<ul>
-<li><strong><code>🔺命令：glxinfo | grep -i &quot;direct rendering&quot;</code></strong>(需apt-get install mesa-utils，不然会报glxinfo commond not found)<ul>
-<li>direct rendering:Yes</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>无线网卡补丁</p>
-<ul>
-<li>最新版内核已经集成无线驱动补丁（版本1.09之前，包括1.09）</li>
-<li>如果你在使用老版本内核（<strong><code>🔺命令：uname -a</code></strong>查看版本）▲未验证<ul>
-<li><strong><code>🔺命令：cd /usr/src/</code></strong></li>
-<li><strong><code>🔺命令：wget https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v kali的版本/backports-kali的版本-1.tar.bz2</code></strong></li>
-<li><strong><code>🔺命令：tar xvf backports-kali的版本-1.tar.gz</code></strong></li>
-<li><strong><code>🔺命令：cd backports-kali的版本-1</code></strong></li>
-<li><strong><code>🔺命令：apt-get install patch</code></strong></li>
-<li><strong><code>🔺命令：wget http://patches.aircrack-ng.org/mac80211.compat08082009.wt_frag+ack_v1.patch</code></strong></li>
-<li><strong><code>🔺命令：patch -p1 &lt; mac80211.compat08082009.wt_frag+ack_v1.patch</code></strong>`**</li>
-<li><strong><code>🔺命令：apt-get install libncurses5-dev</code></strong>(安装开发库文件)</li>
-<li><strong><code>🔺命令：airmon-ng</code></strong>(查看驱动)</li>
-<li><strong><code>🔺命令：make defconfig-ath9k</code></strong>（替换芯片驱动）</li>
-<li><strong><code>🔺命令：make &amp;&amp; make install</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>并发线程限制</p>
-<ul>
-<li>ulimit用于限制当前shell内进程的资源使用</li>
-<li>查看默认值<ul>
-<li><strong><code>🔺命令：ulimit -a</code></strong></li>
-</ul>
-</li>
-<li>全局配置文件：/etc/security/limits<ul>
-<li><domain><type><item><value></li>
-</ul>
-</li>
-<li>用途距离<ul>
-<li>限制堆栈大小：<strong><code>🔺命令：ulimit -s 100（文件大小）</code></strong></li>
-<li>限制shell内存使用：<strong><code>🔺命令：ulimit -m（最大内存大小） 5000 -v（虚拟内存大小） 5000</code></strong></li>
-<li>限制并发次数，openfile ：<strong><code>🔺命令：ulimit -n 900000（次数）</code></strong></li>
-</ul>
-</li>
-<li>没有直接对socket数量的限制参数<ul>
-<li>Linux系统中一切都是文件，运行中的文件叫做进程</li>
-<li><strong><code>🔺命令：vi /.bashrc→ulimit -n 900000</code></strong>（持久化ulimit）</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>电源优化（kali耗电非常大）</p>
-<ul>
-<li>渗透测试系统耗电较大</li>
-<li>延长电池寿命<ul>
-<li>无操作挂起，关闭显示器(系统设置中的电源，选择操作)</li>
-<li>降低显示器亮度（系统设置中的电源，降低亮度）</li>
-<li>不使用时关闭无线网卡</li>
-<li>开启硬盘省电选项<ul>
-<li><strong><code>🔺命令：hdparm -i /dev/sdx if AdvancedPM=yes then hdparm -B 1 -S 12 /dev/sdx</code></strong></li>
-</ul>
-</li>
-<li>启动笔记本模式(<strong><code>🔺命令：chmod a+x 脚本</code></strong>)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">currentMode=$(cat /proc/sys/vm/laptop_mode)</span><br><span class="line">if [ $currentMode -eq 0 ]</span><br><span class="line">then</span><br><span class="line">echo &quot;5&quot;&gt;/proc/sys/vm/laptop_mode</span><br><span class="line">echo &quot;Laptop Mode Enabled&quot;</span><br><span class="line">else</span><br><span class="line">echo &quot;0&quot;&gt;/proc/sys/vm/laptop_mode</span><br><span class="line">echo &quot;Laptop Mode Disabled&quot;</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>服务开关</p>
-<ul>
-<li>Kali Linux默认未启动所有网络服务</li>
-<li><strong><code>🔺命令：update-rc.d ssh defaults</code></strong>（持久化启动服务）<ul>
-<li><strong><code>🔺命令：update-rc.d ssh start 20 2 3 4 5 .stop 20 0 1 6.</code></strong></li>
-<li><strong><code>🔺命令：update-rc.d A defaults 80（启动优先级） 20（关闭优先级）</code></strong></li>
-<li><strong><code>🔺命令：update-rc.d B defaults 90（启动优先级） 10（关闭优先级）</code></strong></li>
-</ul>
-</li>
-<li><strong><code>🔺命令：/etc/init.d/ssh start</code></strong>(临时开启服务)</li>
-<li>重启操作系统 <strong><code>🔺命令：init 6</code></strong></li>
-<li>关闭操作系统 <strong><code>🔺命令：init 0</code></strong></li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>运行级别：
-0：关机
-1：单用户模式
-2.3.4.5：多用户模式
-6：重启</code></pre></blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/22/%E4%BB%BB%E5%8A%A1005%EF%BC%9AKali%20Linux%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE%E3%80%81%E6%9B%B4%E6%96%B0%E5%8D%87%E7%BA%A7%E3%80%81%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6%E5%8C%85%E3%80%81%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8F%92%E4%BB%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/22/%E4%BB%BB%E5%8A%A1005%EF%BC%9AKali%20Linux%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE%E3%80%81%E6%9B%B4%E6%96%B0%E5%8D%87%E7%BA%A7%E3%80%81%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6%E5%8C%85%E3%80%81%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8F%92%E4%BB%B6/" itemprop="url">005：Kali Linux网络配置、更新升级、安装软件包、浏览器插件</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-22T22:44:28+08:00">
-                2019-11-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li><p>网路配置-1</p>
-<ul>
-<li>临时IP地址（重启后不生效,在临时设置有时间限制，大约30s连接时间）<ul>
-<li><strong><code>🔺命令：dhclient eth0</code></strong>（自动获取IP地址）</li>
-<li><strong><code>🔺命令：ifconfig eth0 192.168.100.x/24</code></strong>（指定一个IP地址）</li>
-<li><strong><code>🔺命令：route add default gw 192.168.100.1</code></strong>（添加默认网关，缺省网关）</li>
-<li><strong><code>🔺命令：netstat -pantu</code></strong>（查看IP网关信息）</li>
-<li><strong><code>🔺命令：route add -net 172.16.0.0/24（vlan的ip地址） gw 192.168.100.x eth0</code></strong>（vlan 配置）</li>
-<li><strong><code>🔺命令：echo nameserver 8.8.8.8&gt;/etc/resolv.conf</code></strong>（vi /etc/resolv.conf修改域名服务器）</li>
-</ul>
-</li>
-<li>固定IP地址（重启后生效）<ul>
-<li>cat /etc/network/interfaces</li>
-<li>auto eth0</li>
-<li>iface eth0 inet static</li>
-<li>address 192.168.100.x（本机IP地址）</li>
-<li>netmask 255.255.255.0（子网掩码）</li>
-<li>network 192.168.100.0（网络地址，可不配置）</li>
-<li>broadcast 192.168.100.255（广播地址，可不配置）</li>
-<li>gateway 192.168.100.x（网关地址）</li>
-<li>dns-nameservers 192.168.100.x（可写多个）</li>
-<li>uproute add-net 172.16.2.0/24 gw 192.168.100.x eth1 （添加内部地址，静态路由）</li>
-<li>down route del-net 172.168.2.x/24（电脑关闭的时候，关闭静态理由）</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>更新升级</p>
-<ul>
-<li><strong><code>🔺命令：apt-get update --fix-missing</code></strong>（不是更新工具包，是更新软件包的网络索引，通过后面的参数可以把有问题的索引删除）<ul>
-<li>科技大学更新源（vi /etc/apt/source.list）▲源的地址无法找到</li>
-<li>deb <a href="http://mirrors.ustc.edu.cn/kali" target="_blank" rel="noopener">http://mirrors.ustc.edu.cn/kali</a> kali main non-free contrib</li>
-<li>deb-src <a href="http://mirrors.ustc.edu.cn/kali" target="_blank" rel="noopener">http://mirrors.ustc.edu.cn/kali</a> kali main non-free contrib</li>
-<li>deb <a href="http://mirrors.ustc.edu.cn/kali-security" target="_blank" rel="noopener">http://mirrors.ustc.edu.cn/kali-security</a> kali/updates main contrib non-free</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：apt-get upgrade</code></strong>(更新实际软件包文件)</li>
-<li><strong><code>🔺命令：apt-get dist-upgrade</code></strong>(大版本的更新)</li>
-<li>重复执行</li>
-</ul>
-</li>
-<li><p>安装软件包</p>
-<ul>
-<li>库<ul>
-<li>Apt-get命令（也可通过–fix-missing）</li>
-</ul>
-</li>
-<li>安装适合自己的工具软件<ul>
-<li>smplayer（媒体播放器）</li>
-<li>ibus ibus-pinyin（中文输入法）</li>
-<li>flashplugin-nonfree（浏览器flash插件）▲2019.11.22浏览器自带，2020年底将淘汰</li>
-<li>gdebi（方便使用图形化界面安装deb）</li>
-<li>amule、qbittorrent（磁力下载）</li>
-<li>geany（程序开发环境）</li>
-<li>stardict（英文字典，翻译软件）</li>
-<li>meld（用来文件差异比较的软件）</li>
-<li>ttf-wqy-microhei（字体）</li>
-<li>kchmviewer（打开chm文件，微软帮助文件）</li>
-<li>freemind（头脑风暴软件，思维导图）</li>
-<li>netspeed（网络连接速度监视小工具）</li>
-<li>mtr（路由追踪，图形化界面，同traceroute，<strong>🔺命令：mtr ip地址</strong>）</li>
-<li>file-zilla、file-zilla-common(ftp客户端)</li>
-<li>chromium（谷歌浏览器）</li>
-<li>monodevelop、mono-gmcs-y（.net开发环境）</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>库中不存在的工具列表（2019.11.22）
-flashplugin-nonfree
-stardict
-amule
-monodevelop
-mono-gmcs-y</code></pre></blockquote>
-<ol start="4">
-<li><p>浏览器插件</p>
-<ul>
-<li>firefox浏览器插件<ul>
-<li>AutoProxy（翻墙指定代理）▲2019.11.22未找到</li>
-<li>Cookie Importer（导入Cookie）▲2019.11.22替换为Cookie Import Export</li>
-<li>Cookies Manager（管理Cookie信息）</li>
-<li>Download YouTube Videos as MP4（下载MP4视频）▲2019.11.22替换为YouTube Download plus</li>
-<li>Firebug（基于Web调试）▲2019.11.22替换为Firebug Persona</li>
-<li>Flagfox（网页国家服务器）</li>
-<li>FlashGot（允许视频文件下载）</li>
-<li>HackBar（Web渗透测试重要工具）</li>
-<li>hashr（计算哈希值）▲2019.11.22替换为PwdHash</li>
-<li>Live HTTP headers（对HTTP header进行拦截，查看）</li>
-<li>SQL Inject Me（SQL注入攻击）▲2019.11.22未找到</li>
-<li>Tamper Data（浏览器向服务器的HTTP进行查看，修改数据包头）▲2019.11.22未找到</li>
-<li>User Agent Switcher（修改特征字符串，firefox→IE）</li>
-<li>XSS Me（跨站脚本攻击）▲2019.11.22替换为EasyXSS</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>浏览器（alt键）→Tools→Add-ons
-XSS-Me（https://addons.mozilla.org/en-US/firefox/addon/xss-me）
-SQL-Inject-Me(https://addons.mozilla.org/en-US/firefox/addon/sql-inject-me/$src=ss)</code></pre></blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/">&lt;i class=&quot;fa fa-angle-left&quot;&gt;&lt;&#x2F;i&gt;</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">&lt;i class=&quot;fa fa-angle-right&quot;&gt;&lt;&#x2F;i&gt;</a>
+    <a class="extend prev" rel="prev" href="/">&lt;i class=&quot;fa fa-angle-left&quot;&gt;&lt;&#x2F;i&gt;</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">&lt;i class=&quot;fa fa-angle-right&quot;&gt;&lt;&#x2F;i&gt;</a>
   </nav>
 
 
@@ -2415,7 +2324,7 @@ SQL-Inject-Me(https://addons.mozilla.org/en-US/firefox/addon/sql-inject-me/$src=
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

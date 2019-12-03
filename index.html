@@ -240,6 +240,485 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/03/%E4%BB%BB%E5%8A%A1028%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E4%BA%94%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/03/%E4%BB%BB%E5%8A%A1028%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E4%BA%94%EF%BC%89/" itemprop="url">028：Kali Linux主动信息收集-发现（五）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-03T21:56:12+08:00">
+                2019-12-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li><p>发现-四层发现（Nmap）</p>
+<ul>
+<li>nmap IP地址-254 -PU53（对于UDP53端口） -sn</li>
+<li>nmap IP地址-254 -PA80（对于TCP80端口） -sn</li>
+<li>nmap -iL iplist.txt -PA80 -sn</li>
+</ul>
+</li>
+</ol>
+<p>▲ 2019.12.3 Nmap局域网，无论是TCP还是UDP，发送的都是DNS的包，局域网内是发给网关<br>▲ 2019.12.3 Nmap外网，UDP查询时发送DNS包，TCP发送TCP包</p>
+<blockquote>
+<pre><code>nmap IP地址 -P0 -sn Ping层的发现
+nmap IP地址 -PS -sn SCTP发现
+nmap IP地址 -PE -sn ICMP echo
+nmap IP地址 -PP -sn 时间戳
+namp IP地址 -PM -sn 子网掩码发现
+nmap 192.168.100.1-254 -PA80 -sn | grep &quot;Nmap&quot; | grep -v &quot;Starting&quot; | grep -v &quot;done&quot;| cut -d &quot; &quot; -f 6 | cut -d &quot;(&quot; -f 2| cut -d &quot;)&quot; -f 1 &gt; iplist.txt</code></pre></blockquote>
+<ol start="2">
+<li><p>发现-四层发现（hping3）</p>
+<ul>
+<li>hping3 –udp IP地址 -c 1</li>
+<li>for addr in $(seq 1 254);do hping3 –udp 1.1.1.$addr -c 1 &gt;&gt;r.txt;done<ul>
+<li>grep Unreachable r.txt | cut -d “” -f 5 | cut -d “=” -f 2</li>
+<li>./udp_hping.sh IP网段</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#！/bin/bash</span><br><span class="line">if [ &quot;$#&quot; -ne 1 ];then</span><br><span class="line">    echo &quot;USAGE - ./udp_hping.sh [/24 network address]&quot;</span><br><span class="line">    echo &quot;Example - ./udp_hping.sh 192.168.100.0&quot;</span><br><span class="line">    echo &quot;Example will perform an UDP scan of the 192.168.100.0/24 network and output.txt file&quot;</span><br><span class="line">    exit</span><br><span class="line">fi</span><br><span class="line">prefix=$(echo $1 | cut -d &quot;.&quot; -f 1-3)</span><br><span class="line">for addr in $(seq 1 254);do</span><br><span class="line">    hping3 $prefix.$addr --udp -c 1 &gt;&gt; r.txt;</span><br><span class="line">done</span><br><span class="line">grep Unreachable r.txt | cut -d &quot;&quot; -f 5 | cut -d &quot;=&quot; -f 2 &gt;&gt; output.txt</span><br><span class="line">rm r.txt</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>hping3 IP地址 -c 1（TCP，Flag 0–ACK、RST）<ul>
+<li>hping3 IP地址</li>
+<li>./tcp_hping.sh IP网段</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#！/bin/bash</span><br><span class="line">if [ &quot;$#&quot; -ne 1 ];then</span><br><span class="line">    echo &quot;USAGE - ./tcp_hping.sh [/24 network address]&quot;</span><br><span class="line">    echo &quot;Example - ./tcp_hping.sh 192.168.100.0&quot;</span><br><span class="line">    echo &quot;Example will perform an TCP scan of the 192.168.100.0/24 network and output.txt file&quot;</span><br><span class="line">    exit</span><br><span class="line">fi</span><br><span class="line">prefix=$(echo $1 | cut -d &quot;.&quot; -f 1-3)</span><br><span class="line">for addr in $(seq 1 254);do</span><br><span class="line">    hping3 $prefix.$addr -c 1 &gt;&gt; r.txt;</span><br><span class="line">done</span><br><span class="line">grep Unreachable r.txt | cut -d &quot;&quot; -f 5 | cut -d &quot;=&quot; -f 2 &gt;&gt; output.txt</span><br><span class="line">rm r.txt</span><br></pre></td></tr></table></figure>
+
+
+<blockquote>
+<pre><code>hping3不是发ACK的TCP包，是flag0的TCP包，需要收回ACK、RST的TCP包
+nmap和Scapy发的是ACK的TCP包，是flag16的TCP包，需要收回RST的TCP包</code></pre></blockquote>
+<ol start="3">
+<li><p>端口扫描（UDP）</p>
+<ul>
+<li>端口对应网络服务及应用端程序</li>
+<li>服务端程序的漏洞通过端口攻入</li>
+<li>发现开放的端口</li>
+<li>更具体的攻击面</li>
+<li>UDP端口<ul>
+<li>假设ICMP port-unreachable 响应代表端口关闭（没有响应，即为端口开放）</li>
+<li>目标系统不响应ICMP port-unreachable时，可能产生误判</li>
+</ul>
+</li>
+<li>完整的UDP应用层请求<ul>
+<li>准确性高</li>
+<li>耗时巨大</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>端口扫描（Scapy-UDP）</p>
+<ul>
+<li>Scapy UDP Scan<ul>
+<li>端口关闭：ICMP port-unreachable</li>
+<li>端口开放：没有回包</li>
+<li>了解每一种基于UDP的应用包结构很有帮助</li>
+<li>与三层相同的技术</li>
+<li>误判</li>
+</ul>
+</li>
+<li>Scapy<ul>
+<li>sr1(IP(dst=”IP地址”)/UDP(dport=53),timeout=1,verbose=1)</li>
+</ul>
+</li>
+<li>./udp_scan.py IP地址 起始端口 结束端口</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line">import time</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=4:</span><br><span class="line">    print &quot;Usage - ./udp_scan.py [Target IP] [First IP] [Last IP] &quot;</span><br><span class="line">    print &quot;Example - ./udp_scan.py 192.168.100.1 1 200&quot;</span><br><span class="line">    print &quot;Example will perform a TCP ACK scan of the 192.168.100.0/24 range&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">ip=sys.argv[1]</span><br><span class="line">start=int(sys.argv[2])</span><br><span class="line">end=int(sys.argv[3])</span><br><span class="line"></span><br><span class="line">for port in range(start end):</span><br><span class="line">    a=sr1(IP(dst=ip)/UDP(dport=port),timeout=5,verbose=0)</span><br><span class="line">    time.sleep(1)</span><br><span class="line">    if a==None:</span><br><span class="line">      print port</span><br><span class="line">    else:</span><br><span class="line">      pass</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li><p>端口扫描（Nmap-UDP）</p>
+<ul>
+<li>Nmap</li>
+<li>nmap -sU（端口扫描） IP地址<ul>
+<li>默认的1000个参数（不指定端口的情况下）</li>
+<li>ICMP host-unreachable</li>
+</ul>
+</li>
+<li>nmap IP地址 -sU -p（指定端口） 53</li>
+<li>nmap -iL iplist.txt -sU -p（指定端口范围） 1-200</li>
+</ul>
+</li>
+<li><p>端口扫描（TCP）</p>
+<ul>
+<li><p>TCP端口扫描（SYN–SYN/ACK–ACK）</p>
+<ul>
+<li>基于连接的协议</li>
+<li>三次握手（ACK包连接）</li>
+<li>隐蔽扫描（隐藏与目标进程的会话）–SYN（开放 →SYN/ACK，不开放 → RST）</li>
+</ul>
+<ol>
+<li>不建立完整连接（SYN（开放 →SYN/ACK，不开放 → RST））</li>
+<li>应用日志不记录扫描行为–隐蔽（但审计网络层，还是可以发现）</li>
+</ol>
+<ul>
+<li>僵尸扫描（几乎不和目标进程尝试会话）</li>
+</ul>
+<ol>
+<li>极度隐蔽</li>
+<li>实施条件苛刻</li>
+<li>可伪造源地址（▲扫描者与目标主机必须可以实现地址伪造）</li>
+<li>选择僵尸机（▲必须要有，网络中闲置的机子，不同于僵尸网络的机子）<ul>
+<li>闲置系统</li>
+<li>系统使用递增的IPID：（1）不能为0 （2）不能为随机</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li>全连接扫描（三次握手连接）</li>
+<li>所有的TCP扫描方式都是基于三次握手的变化来判断目标端口状态</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>IPID:IP报头里面的Identification字段
+1.僵尸扫描过程（端口开放）：</code></pre><p>   （1）Scanner【SYN/ACK】 – Zombie【RST IPID=X】<br>   （2）Scanner【SYN IPSRC=zombie】 – target【SYN/ACK】 – Zombie【RST IPID=x+1,(僵尸机需要足够空闲)】<br>   （3）Scanner【SYN/ACK】 – Zombie【RST IPID=x+2】<br>   2.僵尸扫描进程（端口未开放）：<br>   （1）Scanner【SYN/ACK】 – Zombie【RST IPID=X】<br>   （2）Scanner【SYN IPSRC=zombie】 – target【RST】 – Zombie<br>   （3）Scanner【SYN/ACK】 – Zombie【RST IPID=x+1】</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/03/%E4%BB%BB%E5%8A%A1027%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E5%9B%9B%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/03/%E4%BB%BB%E5%8A%A1027%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E5%9B%9B%EF%BC%89/" itemprop="url">027：Kali Linux主动信息收集-发现（四）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-03T21:56:12+08:00">
+                2019-12-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li><p>发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别）</p>
+<ul>
+<li>优点<ul>
+<li>可路由且结果可靠</li>
+<li>不太可能被防火墙过滤</li>
+<li>甚至可以发现所有端口都被过滤的主机</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>基于状态过滤的防火墙可能过滤扫描</li>
+<li>全端口扫描速度慢</li>
+</ul>
+</li>
+<li>TCP（正常过程：SYN–SYN/ACK–ACK）<ul>
+<li>未经请求的ACK–RST</li>
+<li>SYN–SYN/ACK、RST</li>
+</ul>
+</li>
+<li>UDP<ul>
+<li>ICMP端口不可达、一去不复返（被识别主机端口未开放UDP服务）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>发现-四层发现（Scapy-TCP）</p>
+<ul>
+<li>ACK–TCP Port–RST</li>
+<li>Scapy<ul>
+<li>i=IP()</li>
+<li>i.dst=”IP地址”</li>
+<li>t=TCP()</li>
+<li>t.flags=”A”</li>
+<li>r=(i/f)</li>
+<li>a=sr1(r)</li>
+<li>a.display()</li>
+</ul>
+</li>
+<li>a=sr1(IP(dst=”IP地址”)/TCP(dport=80,flags=”A”),timeout=1)</li>
+<li>./ACK_Ping.py</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./ACK_Ping.py [/24 network address]&quot;</span><br><span class="line">    print &quot;Example - ./ACK_Ping.py 192.168.100.0&quot;</span><br><span class="line">    print &quot;Example will perform a TCP ACK scan of the 192.168.100.0/24 range&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">address=str(sys.argv[1])</span><br><span class="line">prefix=address.split(&quot;.&quot;)[0]+&quot;.&quot;+address.split(&quot;.&quot;)[1]+&quot;.&quot;+address.split(&quot;.&quot;)[2]+&quot;.&quot;</span><br><span class="line"></span><br><span class="line">for addr in range(1,254):</span><br><span class="line">    response=sr1(IP(dst=prefix+str(addr))/TCP(dport=2222,flags=&apos;A&apos;),timeout=0.1,verbose=0)</span><br><span class="line">    try:</span><br><span class="line">      if int(response[TCP].flags)==4:</span><br><span class="line">        print prefix+str(addr)</span><br><span class="line">    except:</span><br><span class="line">        pass</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><p>发现-四层发现（Scapy-UDP）</p>
+<ul>
+<li>UDP–UDP Port–ICMP</li>
+<li>Scapy<ul>
+<li>i=IP()</li>
+<li>u=UDP()</li>
+<li>i.dst=”IP地址”</li>
+<li>u.dport=33333</li>
+<li>r=(i/u)</li>
+<li>a=sr1(r,timeout=1,verbose=1)</li>
+<li>a.display()</li>
+</ul>
+</li>
+<li>./UDP_Ping.py（UDP发现不可靠）</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./UDP_Ping.py [/24 network address]&quot;</span><br><span class="line">    print &quot;Example - ./UDP_Ping.py 192.168.100.0&quot;</span><br><span class="line">    print &quot;Example will perform a UDP ICMP scan of the 192.168.100.0/24 range&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">address=str(sys.argv[1])</span><br><span class="line">prefix=address.split(&quot;.&quot;)[0]+&quot;.&quot;+address.split(&quot;.&quot;)[1]+&quot;.&quot;+address.split(&quot;.&quot;)[2]+&quot;.&quot;</span><br><span class="line"></span><br><span class="line">for addr in range(1,254):</span><br><span class="line">    response=sr1(IP(dst=prefix+str(addr))/UDP(dport=33333),timeout=0.1,verbose=0)</span><br><span class="line">    try:</span><br><span class="line">      if int(response[IP].proto)==1:</span><br><span class="line">        print prefix+str(addr)</span><br><span class="line">    except:</span><br><span class="line">        pass</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/02/%E4%BB%BB%E5%8A%A1026%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E4%B8%89%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -259,7 +738,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/12/02/%E4%BB%BB%E5%8A%A1026%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E4%B8%89%EF%BC%89/" itemprop="url">024：Kali Linux主动信息收集-发现（三）</a></h1>
+                <a class="post-title-link" href="/2019/12/02/%E4%BB%BB%E5%8A%A1026%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E4%B8%89%EF%BC%89/" itemprop="url">026：Kali Linux主动信息收集-发现（三）</a></h1>
         
 
         <div class="post-meta">
@@ -356,14 +835,14 @@ ICMP协议，发送端的报文类型是询问报文，Type字段为8，接收�
 网络上默认禁止ICMP的探测数据包，所以导致扫描结果不准确，存在误报，漏报，错报</code></pre></blockquote>
 <ul>
 <li><strong><code>🔺命令：Ping IP地址 -c 2</code></strong></li>
-<li><strong><code>🔺命令：Ping -R IP地址 / traceroute IP地址</code></strong></li>
+<li><strong><code>🔺命令：Ping -R（路由追踪） IP地址 / traceroute IP地址</code></strong></li>
 <li><strong><code>🔺命令：ping  IP地址 -c 1 | grep &quot;bytes from&quot; | awk &#39;{print $4}&#39;</code></strong></li>
 <li>脚本<ul>
 <li><strong><code>🔺命令：./pinger.sh IP网段</code></strong>  ▲2019.12.2 iplist文档中ip地址后面有：，还无法去除</li>
 </ul>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">if [ &quot;$#&quot; -ne 1 ];then</span><br><span class="line">    echo &quot;Usage - ./pinger.sh [/24 network address]&quot;</span><br><span class="line">    echo &quot;Example - ./pinger.sh 192.168.100.0&quot;</span><br><span class="line">    echo &quot;Example will perform an ICMP ping sweep of the 192.168.100.1/24 network&quot;</span><br><span class="line">    exit</span><br><span class="line">fi</span><br><span class="line">prefix=$(echo $1 | cut -d &quot;.&quot; -f 1-3)</span><br><span class="line">for add in $(seq 1 254);do</span><br><span class="line">  ping -c 1 $prefix.$addr | grep &quot;bytes from&quot; | awk &apos;&#123;print $4&#125;&apos;  &amp;</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">if [ &quot;$#&quot; -ne 1 ];then</span><br><span class="line">    echo &quot;Usage - ./pinger.sh [/24 network address]&quot;</span><br><span class="line">    echo &quot;Example - ./pinger.sh 192.168.100.0&quot;</span><br><span class="line">    echo &quot;Example will perform an ICMP ping scan of the 192.168.100.0/24 network&quot;</span><br><span class="line">    exit</span><br><span class="line">fi</span><br><span class="line">prefix=$(echo $1 | cut -d &quot;.&quot; -f 1-3)</span><br><span class="line">for add in $(seq 1 254);do</span><br><span class="line">  ping -c 1 $prefix.$addr | grep &quot;bytes from&quot; | awk &apos;&#123;print $4&#125;&apos;  &amp;</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 
 
 <blockquote>
@@ -389,12 +868,12 @@ traceroute 请求离主机比较近的网卡的IP地址（同个路由器）</co
 </ul>
 </li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./pinger1.py [/24 network address]&quot;</span><br><span class="line">    print &quot;Example - ./pinger1.py 192.168.100.0&quot;</span><br><span class="line">    print &quot;Example will perform an ICMP ping sweep of the 192.168.100.1/24 network&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">address=str(sys.argv[1])</span><br><span class="line">prefix=address.split(&quot;.&quot;)[0]+&quot;.&quot;+address.split(&quot;.&quot;)[1]+&quot;.&quot;+address.split(&quot;.&quot;)[2]+&quot;.&quot;</span><br><span class="line"></span><br><span class="line">for addr in range(1,254):</span><br><span class="line">     a=sr1(IP(dst=prefix+str(addr))/ICMP(),timeout=1,verbose=0)</span><br><span class="line">     if a==None:</span><br><span class="line">       pass</span><br><span class="line">     else:</span><br><span class="line">       print prefix+str(addr)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./pinger1.py [/24 network address]&quot;</span><br><span class="line">    print &quot;Example - ./pinger1.py 192.168.100.0&quot;</span><br><span class="line">    print &quot;Example will perform an ICMP ping scan of the 192.168.100.0/24 network&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">address=str(sys.argv[1])</span><br><span class="line">prefix=address.split(&quot;.&quot;)[0]+&quot;.&quot;+address.split(&quot;.&quot;)[1]+&quot;.&quot;+address.split(&quot;.&quot;)[2]+&quot;.&quot;</span><br><span class="line"></span><br><span class="line">for addr in range(1,254):</span><br><span class="line">     a=sr1(IP(dst=prefix+str(addr))/ICMP(),timeout=1,verbose=0)</span><br><span class="line">     if a==None:</span><br><span class="line">       pass</span><br><span class="line">     else:</span><br><span class="line">       print prefix+str(addr)</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><strong><code>🔺命令：./pinger2.py iplist.txt</code></strong></li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./pinger2.pyh [/24 network address]&quot;</span><br><span class="line">    print &quot;Example - ./pinger2.py 192.168.100.0&quot;</span><br><span class="line">    print &quot;Example will perform an ICMP ping sweep of the 192.168.100.1/24 network&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">filename=str(sys.argv[1])</span><br><span class="line">file=open(filename,&quot;r&quot;)</span><br><span class="line"></span><br><span class="line">for addr in file:</span><br><span class="line">    a=sr1(IP(dst=addr.strip())/ICMP(),timeout=0.1,verbose=0)</span><br><span class="line">    if a==None:</span><br><span class="line">      pass</span><br><span class="line">    else:</span><br><span class="line">      print addr.strip()</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./pinger2.py [iplist.txt]&quot;</span><br><span class="line">    print &quot;Example - ./pinger2.py iplist.txt&quot;</span><br><span class="line">    print &quot;Example will perform an ICMP ping scan of the 192.168.100.0/24 network&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">filename=str(sys.argv[1])</span><br><span class="line">file=open(filename,&quot;r&quot;)</span><br><span class="line"></span><br><span class="line">for addr in file:</span><br><span class="line">    a=sr1(IP(dst=addr.strip())/ICMP(),timeout=0.1,verbose=0)</span><br><span class="line">    if a==None:</span><br><span class="line">      pass</span><br><span class="line">    else:</span><br><span class="line">      print addr.strip()</span><br></pre></td></tr></table></figure>
 
 <ol start="3">
 <li><p>发现-三层发现（nmap）</p>
@@ -495,7 +974,7 @@ traceroute 请求离主机比较近的网卡的IP地址（同个路由器）</co
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/12/02/%E4%BB%BB%E5%8A%A1025%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E4%BA%8C%EF%BC%89/" itemprop="url">024：Kali Linux主动信息收集-发现（二）</a></h1>
+                <a class="post-title-link" href="/2019/12/02/%E4%BB%BB%E5%8A%A1025%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E4%BA%8C%EF%BC%89/" itemprop="url">025：Kali Linux主动信息收集-发现（二）</a></h1>
         
 
         <div class="post-meta">
@@ -611,7 +1090,7 @@ traceroute 请求离主机比较近的网卡的IP地址（同个路由器）</co
 </ol>
 <blockquote>
 <pre><code>ARP().dispaly()（定制一个ARP的数据包，只需要添加属性字段，ARP的包头结构）
-sr1()（发生数据包）</code></pre></blockquote>
+sr1()（发送数据包）</code></pre></blockquote>
 <ul>
 <li>python脚本（用Scapy写的python脚本）<ul>
 <li><strong><code>🔺命令：./Arp1.py 接口</code></strong> ▲2019.12.1 strip()函数报错</li>
@@ -619,9 +1098,9 @@ sr1()（发生数据包）</code></pre></blockquote>
 </ul>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./arp_disc.py [interface]&quot;</span><br><span class="line">    print &quot;Example - .arp_disc.py eth0&quot;</span><br><span class="line">    print &quot;Example will perform an ARP scan of the local subnet to which eth0 is assigned&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">interface=str(sys.argv[1])</span><br><span class="line"></span><br><span class="line">ip=subprocess.check_output(&quot;ifconfig &quot;+interface+&quot; | grep &quot;inet&quot; | egrep -v &quot;inet6&quot; | cut -d &quot;.&quot; -f 1-3 | awk &apos;&#123;print $2&#125;&apos;&quot;,shell=True).strip()</span><br><span class="line">prefix=ip.split(&quot;.&quot;)[0]+&quot;.&quot;+ip.split(&quot;.&quot;)[1]+&quot;.&quot;+ip.split(&quot;.&quot;)[2]+&quot;.&quot;</span><br><span class="line">for addr in range(0,254):</span><br><span class="line">    answer=sr1(ARP(pdst=addr.strip()),timeout=0.1,verbose=1)</span><br><span class="line">    if answer==None:</span><br><span class="line">      pass</span><br><span class="line">    else:</span><br><span class="line">      print prefix+str(addr)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./Arp1.py [interface]&quot;</span><br><span class="line">    print &quot;Example - ./Arp1.py eth0&quot;</span><br><span class="line">    print &quot;Example will perform an ARP scan of the local subnet to which eth0 is assigned&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">interface=str(sys.argv[1])</span><br><span class="line"></span><br><span class="line">ip=subprocess.check_output(&quot;ifconfig &quot;+interface+&quot; | grep &quot;inet&quot; | egrep -v &quot;inet6&quot; | cut -d &quot;.&quot; -f 1-3 | awk &apos;&#123;print $2&#125;&apos;&quot;,shell=True).strip()</span><br><span class="line">prefix=ip.split(&quot;.&quot;)[0]+&quot;.&quot;+ip.split(&quot;.&quot;)[1]+&quot;.&quot;+ip.split(&quot;.&quot;)[2]+&quot;.&quot;</span><br><span class="line">for addr in range(0,254):</span><br><span class="line">    answer=sr1(ARP(pdst=addr.strip()),timeout=0.1,verbose=1)</span><br><span class="line">    if answer==None:</span><br><span class="line">      pass</span><br><span class="line">    else:</span><br><span class="line">      print prefix+str(addr)</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./arp_disc.py [interface]&quot;</span><br><span class="line">    print &quot;Example - .arp_disc.py eth0&quot;</span><br><span class="line">    print &quot;Example will perform an ARP scan of the local subnet to which eth0 is assigned&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">filename=str(sys.argv[1])</span><br><span class="line">file=open(filename,&quot;r&quot;)</span><br><span class="line"></span><br><span class="line">for addr in file:</span><br><span class="line">    answer=sr1(ARP(pdst=addr.strip()),timeout=0.1,verbose=1)</span><br><span class="line">    if answer==None:</span><br><span class="line">      pass</span><br><span class="line">    else:</span><br><span class="line">      print addr.strip()</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./Arp2.py [iplist.txt]&quot;</span><br><span class="line">    print &quot;Example - ./Arp2.py iplist.txt&quot;</span><br><span class="line">    print &quot;Example will perform an ARP scan of the local subnet to which eth0 is assigned&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">filename=str(sys.argv[1])</span><br><span class="line">file=open(filename,&quot;r&quot;)</span><br><span class="line"></span><br><span class="line">for addr in file:</span><br><span class="line">    answer=sr1(ARP(pdst=addr.strip()),timeout=0.1,verbose=1)</span><br><span class="line">    if answer==None:</span><br><span class="line">      pass</span><br><span class="line">    else:</span><br><span class="line">      print addr.strip()</span><br></pre></td></tr></table></figure>
 
           
         
@@ -828,7 +1307,7 @@ Layer7 Application     HTTP,FTP,and Telnet</code></pre></blockquote>
 </ul>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#！/bin/bash</span><br><span class="line">if [ &quot;$#&quot; -ne 1 ];then</span><br><span class="line">    echo &quot;USAGE - ./arping.sh [interface]&quot;</span><br><span class="line">    echo &quot;Example - ./arping.sh eth0&quot;</span><br><span class="line">    echo &quot;Example will perform an ARP scan of the local subnet to which eth0 is assigned&quot;</span><br><span class="line">fi</span><br><span class="line">file=$1</span><br><span class="line">for addr in $(cat $file); do</span><br><span class="line">    arping -c 1 $addr | grep &quot;bytes from&quot; | cut -d &quot; &quot; -f 5 | cut -d &quot;(&quot; -f 2 | cut -d &quot;)&quot; -f 1</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#！/bin/bash</span><br><span class="line">if [ &quot;$#&quot; -ne 1 ];then</span><br><span class="line">    echo &quot;USAGE - ./arping.sh [iplist.txt]&quot;</span><br><span class="line">    echo &quot;Example - ./arping.sh iplist.txt&quot;</span><br><span class="line">    echo &quot;Example will perform an ARP scan of the local subnet to which eth0 is assigned&quot;</span><br><span class="line">fi</span><br><span class="line">file=$1</span><br><span class="line">for addr in $(cat $file); do</span><br><span class="line">    arping -c 1 $addr | grep &quot;bytes from&quot; | cut -d &quot; &quot; -f 5 | cut -d &quot;(&quot; -f 2 | cut -d &quot;)&quot; -f 1</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 
 <ol start="4">
 <li><p>发现-二层发现（nmap）</p>
@@ -1899,355 +2378,6 @@ Google、Bing等搜索引擎对来自同一个IP地址的搜索数量进行限�
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/27/%E4%BB%BB%E5%8A%A1018%EF%BC%9AKali%20Linux%20DNS%E5%8C%BA%E5%9F%9F%E4%BC%A0%E8%BE%93%E3%80%81DNS%E5%AD%97%E5%85%B8%E7%88%86%E7%A0%B4%E3%80%81DNS%E6%B3%A8%E5%86%8C%E4%BF%A1%E6%81%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/27/%E4%BB%BB%E5%8A%A1018%EF%BC%9AKali%20Linux%20DNS%E5%8C%BA%E5%9F%9F%E4%BC%A0%E8%BE%93%E3%80%81DNS%E5%AD%97%E5%85%B8%E7%88%86%E7%A0%B4%E3%80%81DNS%E6%B3%A8%E5%86%8C%E4%BF%A1%E6%81%AF/" itemprop="url">018：Kali Linux DNS区域传输、DNS字典爆破、DNS注册信息</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-27T11:17:49+08:00">
-                2019-11-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li><p>DNS区域传输（DNS的同步机制）</p>
-<ul>
-<li><strong><code>🔺命令：dig ns1.example.com example.com axfr（差异化传输方法Request for full zone transfer）</code></strong></li>
-<li><strong><code>🔺命令：host -T（用TCP传输方式） -l（axfr） sina.com ns3.sina.com</code></strong></li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>TCP用于DNS之间的域名传输
-UDP用于DNS之间的查询</code></pre></blockquote>
-<ol start="2">
-<li><p>DNS字典爆破</p>
-<ul>
-<li><strong><code>🔺命令：fierce -dnsserver（指定DNS服务器） 8.8.8.8 -dns（要查询的域） sina.com.cn -wordlist（字典，明确字典路径） a.txt</code></strong></li>
-<li><strong><code>🔺命令：dnsdict6 -d（显示IPV6）4（显示IPV4） -t（并发线程数） 16 -x（不同级别） sina.com  （-D 自己指定字典，-U 最大的字典）</code></strong></li>
-<li><strong><code>🔺命令：dnsenum -f（字典，明确字典路径） dnsbig.txt -dnsserver 8.8.8.8 sina.com -o（导出成一个文件） sina.xml</code></strong></li>
-<li><strong><code>🔺命令：dnsmap sina.com -w（字典，明确字典路径） dns.txt</code></strong></li>
-<li><strong><code>🔺命令：dnsrecon -d（指定域名服务器） sina.com --lifetime（超时时间）10 -t（查询强度） brt（暴力爆破） -D（字典，明确字典路径） dnsbig.txt</code></strong></li>
-<li><strong><code>🔺命令：dnsrecon -t std（标准爆破） -d sina.com -D（字典，明确字典路径） dnsbig.txt</code></strong></li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>查看程序相关文件
-dpkg -L fierce
-find / -name dnsenum</code></pre></blockquote>
-<ol start="3">
-<li><p>DNS注册信息</p>
-<ul>
-<li><strong><code>🔺命令：whois 域名</code></strong></li>
-<li><strong><code>🔺命令：whois IP地址</code></strong></li>
-<li><strong><code>🔺命令：whois -h whois.apnic.net IP地址</code></strong></li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>网页查询
-AFRINIC  http://www.afrinic.net
-APNIC    http://www.apnic.net
-ARIN     http://whois.arin.net
-IANA     http://www.iana.com 
-ICANN    http://www.icann.org
-LACNIC   http://www.lacnic.net
-NRO      http://www.nro.net
-RIPE     http://www.ripe.net
-InterNic http://www.internic.net</code></pre></blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/27/%E4%BB%BB%E5%8A%A1017%EF%BC%9AKali%20Linux%20DNS%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-DIG/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/27/%E4%BB%BB%E5%8A%A1017%EF%BC%9AKali%20Linux%20DNS%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-DIG/" itemprop="url">017：Kali Linux DNS信息收集-DIG</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-27T11:17:49+08:00">
-                2019-11-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li><p>DNS信息收集-DIG</p>
-<ul>
-<li><strong><code>🔺命令：dig 8.8.8.8 域名 mx</code></strong></li>
-<li><strong><code>🔺命令：dig 域名 any</code></strong></li>
-<li>带参数：<strong><code>🔺命令：dig +noall +answer 域名 any | awk &#39;{print $5}&#39;</code></strong>▲2019.11.27难以查到</li>
-<li>反向查询：<strong><code>🔺命令：dig -x ip地址（PTR）</code></strong></li>
-<li>bind版本信息：<strong><code>🔺命令：dig +noall +answer txt chaos（class类） VERSION BIND 域名</code></strong> ▲2019.11.27难以查到</li>
-<li>DNS追踪：<strong><code>🔺命令：dig +trace 域名</code></strong>（迭代查询）、<strong><code>🔺命令：dig 域名（递归查询）</code></strong></li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>指定域名服务器查询域名
-1.nslooup www.sina.com -type=a 8.8.8.8
-2.dig www.sina.com any @8.8.8.8
-trace追踪域名
-本机（随机挑选root的IP地址） → root（随机挑选com的IP地址） → com（随机挑选sina.com的IP地址） → sina.com（随机挑选IP地址） → www.sina.com（挑选A记录）
-▲抓包分析递归查询和迭代查询的区别
-▲域名解析服务器跟域名后缀可以不同（top. → d.zdnscloud.com.）</code></pre></blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2302,7 +2432,7 @@ trace追踪域名
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">34</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

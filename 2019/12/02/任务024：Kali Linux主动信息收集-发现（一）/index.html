@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Tomas&#39;Blog">
 <meta property="og:description" content="主动信息收集  直接与目标系统交互通信 无法避免留下访问的痕迹（可能被封杀，强的流量分析，强的代码审计） 使用受控的第三方电脑进行探测 使用代理或已被控制的主机 做好被封杀的准本 使用噪声迷惑目标，淹没真实的探测流量（伪造IP发送大量垃圾信息）   扫描（IP层 → 端口层 → 服务级别的扫描） 发送不同的探测，根据结果判断目标状态     发现（IP层 → 端口层 → 服务级别的扫描）  识别">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-02T15:16:25.978Z">
+<meta property="og:updated_time" content="2019-12-03T00:34:59.658Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -397,7 +397,7 @@ Layer7 Application     HTTP,FTP,and Telnet</code></pre></blockquote>
 </ul>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#！/bin/bash</span><br><span class="line">if [ &quot;$#&quot; -ne 1 ];then</span><br><span class="line">    echo &quot;USAGE - ./arping.sh [interface]&quot;</span><br><span class="line">    echo &quot;Example - ./arping.sh eth0&quot;</span><br><span class="line">    echo &quot;Example will perform an ARP scan of the local subnet to which eth0 is assigned&quot;</span><br><span class="line">fi</span><br><span class="line">file=$1</span><br><span class="line">for addr in $(cat $file); do</span><br><span class="line">    arping -c 1 $addr | grep &quot;bytes from&quot; | cut -d &quot; &quot; -f 5 | cut -d &quot;(&quot; -f 2 | cut -d &quot;)&quot; -f 1</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#！/bin/bash</span><br><span class="line">if [ &quot;$#&quot; -ne 1 ];then</span><br><span class="line">    echo &quot;USAGE - ./arping.sh [iplist.txt]&quot;</span><br><span class="line">    echo &quot;Example - ./arping.sh iplist.txt&quot;</span><br><span class="line">    echo &quot;Example will perform an ARP scan of the local subnet to which eth0 is assigned&quot;</span><br><span class="line">fi</span><br><span class="line">file=$1</span><br><span class="line">for addr in $(cat $file); do</span><br><span class="line">    arping -c 1 $addr | grep &quot;bytes from&quot; | cut -d &quot; &quot; -f 5 | cut -d &quot;(&quot; -f 2 | cut -d &quot;)&quot; -f 1</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 
 <ol start="4">
 <li><p>发现-二层发现（nmap）</p>
@@ -450,8 +450,8 @@ nmap的-sn参数，除了会ARP发现之外，还会进行DNS的反向域名解�
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/12/02/%E4%BB%BB%E5%8A%A1025%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E4%BA%8C%EF%BC%89/" rel="prev" title="024：Kali Linux主动信息收集-发现（二）">
-                024：Kali Linux主动信息收集-发现（二） <i class="fa fa-chevron-right"></i>
+              <a href="/2019/12/02/%E4%BB%BB%E5%8A%A1025%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E4%BA%8C%EF%BC%89/" rel="prev" title="025：Kali Linux主动信息收集-发现（二）">
+                025：Kali Linux主动信息收集-发现（二） <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -524,7 +524,7 @@ nmap的-sn参数，除了会ARP发现之外，还会进行DNS的反向域名解�
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">34</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别）  优点 可路由且结果可靠 不太可能被防火墙过滤 甚至可以发现所有端口都被过滤的主机   缺点 基于状态过滤的防火墙可能过滤扫描 全端口扫描速度慢   TCP（正常过程：SYN–SYN&#x2F;ACK–ACK） 未经请求的ACK–RST SYN–SYN&#x2F;ACK、RST   UDP ICMP端口不可达、一去不复返（被识别主机端口未开放U">
+<meta name="description" content="隐蔽端口扫描  syn–syn&#x2F;ack–rst（本机操作系统内核产生的） Scapy sr1(IP(dst=”IP地址”)&#x2F;TCP(dport=80,flags=”S”),timeout=1,verbose=0) 🔺命令：.&#x2F;syn_scan.py 目标IP地址 起始端口 结束端口      1234567891011121314151617181920212223242526#!&#x2F;usr&#x2F;">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="027：Kali Linux主动信息收集-发现（四）">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;03&#x2F;%E4%BB%BB%E5%8A%A1027%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E5%9B%9B%EF%BC%89&#x2F;index.html">
+<meta property="og:title" content="029：Kali Linux端口扫描（一）">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;%E4%BB%BB%E5%8A%A1029%EF%BC%9AKali%20Linux%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%EF%BC%88%E4%B8%80%EF%BC%89&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别）  优点 可路由且结果可靠 不太可能被防火墙过滤 甚至可以发现所有端口都被过滤的主机   缺点 基于状态过滤的防火墙可能过滤扫描 全端口扫描速度慢   TCP（正常过程：SYN–SYN&#x2F;ACK–ACK） 未经请求的ACK–RST SYN–SYN&#x2F;ACK、RST   UDP ICMP端口不可达、一去不复返（被识别主机端口未开放U">
+<meta property="og:description" content="隐蔽端口扫描  syn–syn&#x2F;ack–rst（本机操作系统内核产生的） Scapy sr1(IP(dst=”IP地址”)&#x2F;TCP(dport=80,flags=”S”),timeout=1,verbose=0) 🔺命令：.&#x2F;syn_scan.py 目标IP地址 起始端口 结束端口      1234567891011121314151617181920212223242526#!&#x2F;usr&#x2F;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-03T14:32:05.473Z">
+<meta property="og:updated_time" content="2019-12-04T11:29:32.341Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/12/03/任务027：Kali Linux主动信息收集-发现（四）/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/12/04/任务029：Kali Linux端口扫描（一）/"/>
 
 
 
 
 
-  <title>027：Kali Linux主动信息收集-发现（四） | Tomas'Blog</title>
+  <title>029：Kali Linux端口扫描（一） | Tomas'Blog</title>
   
 
 
@@ -243,7 +243,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/03/%E4%BB%BB%E5%8A%A1027%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E5%9B%9B%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/04/%E4%BB%BB%E5%8A%A1029%EF%BC%9AKali%20Linux%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%EF%BC%88%E4%B8%80%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -260,7 +260,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">027：Kali Linux主动信息收集-发现（四）</h1>
+          <h1 class="post-title" itemprop="name headline">029：Kali Linux端口扫描（一）</h1>
         
 
         <div class="post-meta">
@@ -272,8 +272,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-03T21:56:12+08:00">
-                2019-12-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-04T19:30:23+08:00">
+                2019-12-04
               </time>
             
 
@@ -334,69 +334,96 @@
       
         <hr>
 <ol>
-<li><p>发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别）</p>
+<li><p>隐蔽端口扫描</p>
 <ul>
-<li>优点<ul>
-<li>可路由且结果可靠</li>
-<li>不太可能被防火墙过滤</li>
-<li>甚至可以发现所有端口都被过滤的主机</li>
-</ul>
-</li>
-<li>缺点<ul>
-<li>基于状态过滤的防火墙可能过滤扫描</li>
-<li>全端口扫描速度慢</li>
-</ul>
-</li>
-<li>TCP（正常过程：SYN–SYN/ACK–ACK）<ul>
-<li>未经请求的ACK–RST</li>
-<li>SYN–SYN/ACK、RST</li>
-</ul>
-</li>
-<li>UDP<ul>
-<li>ICMP端口不可达、一去不复返（被识别主机端口未开放UDP服务）</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>发现-四层发现（Scapy-TCP）</p>
-<ul>
-<li>ACK–TCP Port–RST</li>
+<li>syn–syn/ack–rst（本机操作系统内核产生的）</li>
 <li>Scapy<ul>
-<li>i=IP()</li>
-<li>i.dst=”IP地址”</li>
-<li>t=TCP()</li>
-<li>t.flags=”A”</li>
-<li>r=(i/f)</li>
-<li>a=sr1(r)</li>
-<li>a.display()</li>
+<li>sr1(IP(dst=”IP地址”)/TCP(dport=80,flags=”S”),timeout=1,verbose=0)</li>
+<li><strong><code>🔺命令：./syn_scan.py 目标IP地址 起始端口 结束端口</code></strong></li>
 </ul>
 </li>
-<li>a=sr1(IP(dst=”IP地址”)/TCP(dport=80,flags=”A”),timeout=1)</li>
-<li><strong><code>🔺命令：./ACK_Ping.py IP网段</code></strong></li>
 </ul>
 </li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./ACK_Ping.py [/24 network address]&quot;</span><br><span class="line">    print &quot;Example - ./ACK_Ping.py 192.168.100.0&quot;</span><br><span class="line">    print &quot;Example will perform a TCP ACK scan of the 192.168.100.0/24 range&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">address=str(sys.argv[1])</span><br><span class="line">prefix=address.split(&quot;.&quot;)[0]+&quot;.&quot;+address.split(&quot;.&quot;)[1]+&quot;.&quot;+address.split(&quot;.&quot;)[2]+&quot;.&quot;</span><br><span class="line"></span><br><span class="line">for addr in range(1,254):</span><br><span class="line">    response=sr1(IP(dst=prefix+str(addr))/TCP(dport=2222,flags=&apos;A&apos;),timeout=0.1,verbose=0)</span><br><span class="line">    try:</span><br><span class="line">      if int(response[TCP].flags)==4:</span><br><span class="line">        print prefix+str(addr)</span><br><span class="line">    except:</span><br><span class="line">        pass</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line">import time</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=4:</span><br><span class="line">    print &quot;Usage - ./syn_scan.py [Target IP] [First IP] [Last IP] &quot;</span><br><span class="line">    print &quot;Example - ./syn_scan.py 192.168.100.1 1 200&quot;</span><br><span class="line">    print &quot;Example will perform a TCP SYN scan of the 192.168.100.0/24 range&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">ip=sys.argv[1]</span><br><span class="line">start=int(sys.argv[2])</span><br><span class="line">end=int(sys.argv[3])</span><br><span class="line"></span><br><span class="line">for port in range(start,end):</span><br><span class="line">    a=sr1(IP(dst=ip)/TCP(dport=port),timeout=1,verbose=0)</span><br><span class="line">    if a==None:</span><br><span class="line">      pass</span><br><span class="line">    else:</span><br><span class="line">      if int(a[TCP].flags)==18:</span><br><span class="line">        print port</span><br><span class="line">      else:</span><br><span class="line">        pass</span><br></pre></td></tr></table></figure>
 
-<ol start="3">
-<li><p>发现-四层发现（Scapy-UDP）</p>
+<blockquote>
+<pre><code>正常情况下：
+端口开放：syn--syn/ack
+端口未开放：syn--rst/ack</code></pre></blockquote>
+<ol start="2">
+<li><p>隐蔽端口扫描</p>
 <ul>
-<li>UDP–UDP Port–ICMP</li>
-<li>Scapy<ul>
-<li>i=IP()</li>
-<li>u=UDP()</li>
-<li>i.dst=”IP地址”</li>
-<li>u.dport=33333</li>
-<li>r=(i/u)</li>
-<li>a=sr1(r,timeout=1,verbose=1)</li>
-<li>a.display()</li>
+<li><strong><code>🔺命令：nmap -sS IP地址 -p 80,21,25,110,443</code></strong></li>
+<li><strong><code>🔺命令：nmap -sS IP地址 -p 1-65535 --open</code></strong></li>
+<li><strong><code>🔺命令：nmap -sS IP地址 --open</code></strong></li>
+<li><strong><code>🔺命令：nmap -sS -iL iplist.txt -p 80,21,22,23</code></strong></li>
 </ul>
 </li>
-<li><strong><code>🔺命令：./UDP_Ping.py IP网段</code></strong>（UDP发现不可靠）</li>
+<li><p>隐蔽端口扫描</p>
+<ul>
+<li>hping3（发包习惯是顺序端口）</li>
+<li><strong><code>🔺命令：hping3 IP地址 --scan 80 -S</code></strong></li>
+<li><strong><code>🔺命令：hping3 IP地址 --scan 80,21,25,443 -S</code></strong>（syn包）</li>
+<li><strong><code>🔺命令：hping3 IP地址 --scan 0-65535 -S</code></strong></li>
+<li><strong><code>🔺命令：hping3 -c 10 -S --spoof（伪造源地址） IP地址 -p ++1（端口递增） IP地址</code></strong></li>
+</ul>
+</li>
+<li><p>全连接端口扫描</p>
+<ul>
+<li>Scapy（容易触发目标主机的报警系统）<ul>
+<li>syn扫描不需要raw packets</li>
+<li>内核认为syn/ack是非法包，直接发rst终断连接</li>
+<li>全连接扫描对scapy比较困难</li>
+</ul>
+</li>
+<li>sr1(IP(dst=”IP地址”)/TCP(dport=22,flags=”S”))</li>
+<li><strong><code>🔺命令：./tcp_scan1.py（代码内指定IP地址）</code></strong></li>
 </ul>
 </li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./UDP_Ping.py [/24 network address]&quot;</span><br><span class="line">    print &quot;Example - ./UDP_Ping.py 192.168.100.0&quot;</span><br><span class="line">    print &quot;Example will perform a UDP ICMP scan of the 192.168.100.0/24 range&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">address=str(sys.argv[1])</span><br><span class="line">prefix=address.split(&quot;.&quot;)[0]+&quot;.&quot;+address.split(&quot;.&quot;)[1]+&quot;.&quot;+address.split(&quot;.&quot;)[2]+&quot;.&quot;</span><br><span class="line"></span><br><span class="line">for addr in range(1,254):</span><br><span class="line">    response=sr1(IP(dst=prefix+str(addr))/UDP(dport=33333),timeout=0.1,verbose=0)</span><br><span class="line">    try:</span><br><span class="line">      if int(response[IP].proto)==1:</span><br><span class="line">        print prefix+str(addr)</span><br><span class="line">    except:</span><br><span class="line">        pass</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy,runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import*</span><br><span class="line"></span><br><span class="line">response=sr1(IP(dst=&quot;IP地址&quot;)/TCP(dport=80,flags=&quot;S&quot;))</span><br><span class="line">reply=sr1(IP(dst=&quot;IP地址&quot;)/TCP(dport=80,flags=&quot;A&quot;,ack=(response[TCP].seq+1)))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong><code>🔺命令：./tcp_scan2.py（代码内指定IP地址）</code></strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy,runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import*</span><br><span class="line"></span><br><span class="line">SYN=IP(dst=&quot;IP地址&quot;)/TCP(dport=25,flags=&quot;S&quot;)</span><br><span class="line"></span><br><span class="line">print &quot;--SENT--&quot;</span><br><span class="line">SYN.display()</span><br><span class="line"></span><br><span class="line">print &quot;\n\n--RECEIVED--&quot;</span><br><span class="line">response=sr1(SYN,timeout=1,verbose=0)</span><br><span class="line">response.display()</span><br><span class="line"></span><br><span class="line">if int(response[TCP].flags)==18:</span><br><span class="line">    print &quot;\n\n--SENT--&quot;</span><br><span class="line">    A=IP(dst=&quot;IP地址&quot;)/TCP(dport=25,flags=&quot;A&quot;,ack=(response[TCP].seq+1))</span><br><span class="line">    A.display()</span><br><span class="line">    print &quot;\n\n--RECEIVED--&quot;</span><br><span class="line">    response2=sr1(A,timeout=1,verbose=0)</span><br><span class="line">    response2.display()</span><br><span class="line">else:</span><br><span class="line">    print &quot;SYN-ACK not returned&quot;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong><code>🔺命令：iptables -A OUTPUT -p tcp --tcp-flags RST RST -d 目标IP地址 -j DROP</code></strong></li>
+</ul>
+<blockquote>
+<pre><code>iptables是工作在底层的防火墙，在内核之前过滤数据
+iptables -L查看当前防火墙规则</code></pre></blockquote>
+<ol start="5">
+<li><p>全连接端口扫描</p>
+<ul>
+<li><strong><code>🔺命令：nmap IP地址 -sT -p 80</code></strong></li>
+<li><strong><code>🔺命令：nmap IP地址 -sT -p 80,21,25</code></strong></li>
+<li><strong><code>🔺命令：nmap IP地址 -sT -p 1-65535</code></strong></li>
+<li><strong><code>🔺命令：nmap -sT -iL iplist.txt -p 80</code></strong></li>
+<li>默认1000个常用端口</li>
+</ul>
+</li>
+<li><p>全连接端口扫描</p>
+<ul>
+<li>dmitry<ul>
+<li>功能简单，但使用简便</li>
+<li>默认150个常用端口</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：dmitry -p IP地址</code></strong></li>
+<li><strong><code>🔺命令：dmitry -p IP地址 -o output</code></strong></li>
+</ul>
+</li>
+<li><p>全连接端口扫描</p>
+<ul>
+<li><strong><code>🔺命令：nc -nv -w（连接的超时时间）1 -z IP地址 1-65535</code></strong>（倒序发送）</li>
+<li><strong><code>🔺命令：for x in $(seq 20 30);do nc -nv -w 1 -z IP地址 $x;done | grep open</code></strong></li>
+<li><strong><code>🔺命令：for x in $(seq 1 254);do nc -nv -w 1 -z 1.1.1.$x 80;done</code></strong></li>
+</ul>
+</li>
+</ol>
 
       
     </div>
@@ -427,8 +454,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/12/02/%E4%BB%BB%E5%8A%A1026%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E4%B8%89%EF%BC%89/" rel="next" title="026：Kali Linux主动信息收集-发现（三）">
-                <i class="fa fa-chevron-left"></i> 026：Kali Linux主动信息收集-发现（三）
+              <a href="/2019/12/03/%E4%BB%BB%E5%8A%A1028%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E4%BA%94%EF%BC%89/" rel="next" title="028：Kali Linux主动信息收集-发现（五）">
+                <i class="fa fa-chevron-left"></i> 028：Kali Linux主动信息收集-发现（五）
               </a>
             
           </div>
@@ -437,8 +464,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/12/03/%E4%BB%BB%E5%8A%A1028%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E4%BA%94%EF%BC%89/" rel="prev" title="028：Kali Linux主动信息收集-发现（五）">
-                028：Kali Linux主动信息收集-发现（五） <i class="fa fa-chevron-right"></i>
+              <a href="/2019/12/04/%E4%BB%BB%E5%8A%A1030%EF%BC%9AKali%20Linux%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%EF%BC%88%E4%BA%8C%EF%BC%89/" rel="prev" title="030：Kali Linux端口扫描（二）">
+                030：Kali Linux端口扫描（二） <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>

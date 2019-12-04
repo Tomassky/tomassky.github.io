@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别）  优点 可路由且结果可靠 不太可能被防火墙过滤 甚至可以发现所有端口都被过滤的主机   缺点 基于状态过滤的防火墙可能过滤扫描 全端口扫描速度慢   TCP（正常过程：SYN–SYN&#x2F;ACK–ACK） 未经请求的ACK–RST SYN–SYN&#x2F;ACK、RST   UDP ICMP端口不可达、一去不复返（被识别主机端口未开放U">
+<meta name="description" content="僵尸扫描   早期的Window系统，包括XP,2003,98系统的IPID是递增的  Scapy–zomebie.py i=IP() t=TCP() rz=(i&#x2F;t) rt=(i&#x2F;t) rz[IP].dst=”zombie IP地址” rz[TCP].dport=445 rz[TCP].flags=”SA” rt[IP].src=”zombie IP地址” rt[IP].dst=”targe">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="027：Kali Linux主动信息收集-发现（四）">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;03&#x2F;%E4%BB%BB%E5%8A%A1027%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E5%9B%9B%EF%BC%89&#x2F;index.html">
+<meta property="og:title" content="030：Kali Linux端口扫描（二）">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;%E4%BB%BB%E5%8A%A1030%EF%BC%9AKali%20Linux%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%EF%BC%88%E4%BA%8C%EF%BC%89&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别）  优点 可路由且结果可靠 不太可能被防火墙过滤 甚至可以发现所有端口都被过滤的主机   缺点 基于状态过滤的防火墙可能过滤扫描 全端口扫描速度慢   TCP（正常过程：SYN–SYN&#x2F;ACK–ACK） 未经请求的ACK–RST SYN–SYN&#x2F;ACK、RST   UDP ICMP端口不可达、一去不复返（被识别主机端口未开放U">
+<meta property="og:description" content="僵尸扫描   早期的Window系统，包括XP,2003,98系统的IPID是递增的  Scapy–zomebie.py i=IP() t=TCP() rz=(i&#x2F;t) rt=(i&#x2F;t) rz[IP].dst=”zombie IP地址” rz[TCP].dport=445 rz[TCP].flags=”SA” rt[IP].src=”zombie IP地址” rt[IP].dst=”targe">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-03T14:32:05.473Z">
+<meta property="og:updated_time" content="2019-12-04T11:29:30.789Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/12/03/任务027：Kali Linux主动信息收集-发现（四）/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/12/04/任务030：Kali Linux端口扫描（二）/"/>
 
 
 
 
 
-  <title>027：Kali Linux主动信息收集-发现（四） | Tomas'Blog</title>
+  <title>030：Kali Linux端口扫描（二） | Tomas'Blog</title>
   
 
 
@@ -243,7 +243,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/03/%E4%BB%BB%E5%8A%A1027%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E5%9B%9B%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/04/%E4%BB%BB%E5%8A%A1030%EF%BC%9AKali%20Linux%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%EF%BC%88%E4%BA%8C%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -260,7 +260,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">027：Kali Linux主动信息收集-发现（四）</h1>
+          <h1 class="post-title" itemprop="name headline">030：Kali Linux端口扫描（二）</h1>
         
 
         <div class="post-meta">
@@ -272,8 +272,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-03T21:56:12+08:00">
-                2019-12-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-04T19:30:23+08:00">
+                2019-12-04
               </time>
             
 
@@ -334,69 +334,48 @@
       
         <hr>
 <ol>
-<li><p>发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别）</p>
+<li>僵尸扫描</li>
+</ol>
+<blockquote>
+<pre><code>早期的Window系统，包括XP,2003,98系统的IPID是递增的</code></pre></blockquote>
 <ul>
-<li>优点<ul>
-<li>可路由且结果可靠</li>
-<li>不太可能被防火墙过滤</li>
-<li>甚至可以发现所有端口都被过滤的主机</li>
-</ul>
-</li>
-<li>缺点<ul>
-<li>基于状态过滤的防火墙可能过滤扫描</li>
-<li>全端口扫描速度慢</li>
-</ul>
-</li>
-<li>TCP（正常过程：SYN–SYN/ACK–ACK）<ul>
-<li>未经请求的ACK–RST</li>
-<li>SYN–SYN/ACK、RST</li>
-</ul>
-</li>
-<li>UDP<ul>
-<li>ICMP端口不可达、一去不复返（被识别主机端口未开放UDP服务）</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>发现-四层发现（Scapy-TCP）</p>
-<ul>
-<li>ACK–TCP Port–RST</li>
-<li>Scapy<ul>
+<li>Scapy–zomebie.py<ul>
 <li>i=IP()</li>
-<li>i.dst=”IP地址”</li>
 <li>t=TCP()</li>
-<li>t.flags=”A”</li>
-<li>r=(i/f)</li>
-<li>a=sr1(r)</li>
-<li>a.display()</li>
+<li>rz=(i/t)</li>
+<li>rt=(i/t)</li>
+<li>rz[IP].dst=”zombie IP地址”</li>
+<li>rz[TCP].dport=445</li>
+<li>rz[TCP].flags=”SA”</li>
+<li>rt[IP].src=”zombie IP地址”</li>
+<li>rt[IP].dst=”target IP地址”</li>
+<li>rt[TCP].dport=22</li>
+<li>rt[TCP].flags=”S”</li>
+<li>az1=sr1(rz) / at=sr1(rt,timeout=1) / az2=sr1(rz)</li>
+<li>az1.display() / az2.display()</li>
 </ul>
 </li>
-<li>a=sr1(IP(dst=”IP地址”)/TCP(dport=80,flags=”A”),timeout=1)</li>
-<li><strong><code>🔺命令：./ACK_Ping.py IP网段</code></strong></li>
+<li><strong><code>🔺命令：./zombie.py</code></strong></li>
 </ul>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./ACK_Ping.py [/24 network address]&quot;</span><br><span class="line">    print &quot;Example - ./ACK_Ping.py 192.168.100.0&quot;</span><br><span class="line">    print &quot;Example will perform a TCP ACK scan of the 192.168.100.0/24 range&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">address=str(sys.argv[1])</span><br><span class="line">prefix=address.split(&quot;.&quot;)[0]+&quot;.&quot;+address.split(&quot;.&quot;)[1]+&quot;.&quot;+address.split(&quot;.&quot;)[2]+&quot;.&quot;</span><br><span class="line"></span><br><span class="line">for addr in range(1,254):</span><br><span class="line">    response=sr1(IP(dst=prefix+str(addr))/TCP(dport=2222,flags=&apos;A&apos;),timeout=0.1,verbose=0)</span><br><span class="line">    try:</span><br><span class="line">      if int(response[TCP].flags)==4:</span><br><span class="line">        print prefix+str(addr)</span><br><span class="line">    except:</span><br><span class="line">        pass</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy,runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import*</span><br><span class="line"></span><br><span class="line">def ipid(zombie):</span><br><span class="line">    reply1=sr1(IP(dst=zombie)/TCP(flags=&quot;SA&quot;),timeout=2,verbose=0)</span><br><span class="line">    send(IP(dst=zombie)/TCP(flags=&quot;SA&quot;),verbose=0)</span><br><span class="line">    reply2=sr1(IP(dst=zombie)/TCP(flags=&quot;SA&quot;),timeout=2,verbose=0)</span><br><span class="line">    if reply2[IP].id==(reply1[IP].id+2):</span><br><span class="line">      print &quot;IPID sequence is incremental and target appears to be idle.ZOMBIE LOCATED&quot;</span><br><span class="line">      response=raw_input(&quot;DO you want to use this zombie to perfore scan?(Y or N):&quot;)</span><br><span class="line">      if response==&quot;Y&quot;:</span><br><span class="line">        target=raw_input(&quot;Enter the IP Address of the target system:&quot;)</span><br><span class="line">        zombiescant(target,zombie)</span><br><span class="line">    else:</span><br><span class="line">      print &quot;Either the IPID sequence is not incremental or the target is not idle.NOT A GOOD ZOMBIE&quot;</span><br><span class="line"></span><br><span class="line">def zombiescan(target,zombie):</span><br><span class="line">    print &quot;\nScanning target &quot;+target+&quot; with zombie &quot;+zombie</span><br><span class="line">    print &quot;\n-----------Open Ports On Target-------------\n &quot;</span><br><span class="line">    for port in range(1,100):</span><br><span class="line">      try:</span><br><span class="line">        start_val=sr1(IP(dst=zombie)/TCP(flags=&quot;SA&quot;,dport=port),timeout=2,verbose=0)</span><br><span class="line">        send(IP(src=zombie,dst=target)/TCP(flags=&quot;S&quot;,dport=port),verbose=0)</span><br><span class="line">        end_val=sr1(IP(dst=zombie)/TCP(flags=&quot;SA&quot;,dport=port),timeout=2,verbose=0)</span><br><span class="line">        if end_val[IP].id==(start_val[IP].id+2):</span><br><span class="line">          print port</span><br><span class="line">      except:</span><br><span class="line">        pass</span><br><span class="line"></span><br><span class="line">print &quot;----------------Zombie Scan Suite-----------\n&quot;</span><br><span class="line">print &quot;1 - Identify Zombie Host\n&quot;</span><br><span class="line">print &quot;2 - Perform Zombie Scan\n&quot;</span><br><span class="line">ans=raw_input(&quot;Select an Option (1 or 2):&quot;)</span><br><span class="line">if ans==&quot;1&quot;:</span><br><span class="line">    zombie=raw_input(&quot;Enter IP Address to test IPID sequence&quot;)</span><br><span class="line">    ipid(zombie)</span><br><span class="line">else:</span><br><span class="line">    if ans==&quot;2&quot;:</span><br><span class="line">      zombie=raw_input(&quot;Enter IP Address for zombie sysytem:&quot;)</span><br><span class="line">      target=raw_input(&quot;Enter IP Address for scan target:&quot;)</span><br><span class="line">      zombiescan(target,zombie)</span><br></pre></td></tr></table></figure>
 
-<ol start="3">
-<li><p>发现-四层发现（Scapy-UDP）</p>
+<blockquote>
+<pre><code>sr1 发包只收一个数据包
+send 发包不收数据包</code></pre></blockquote>
+<ol start="2">
+<li><p>僵尸扫描</p>
 <ul>
-<li>UDP–UDP Port–ICMP</li>
-<li>Scapy<ul>
-<li>i=IP()</li>
-<li>u=UDP()</li>
-<li>i.dst=”IP地址”</li>
-<li>u.dport=33333</li>
-<li>r=(i/u)</li>
-<li>a=sr1(r,timeout=1,verbose=1)</li>
-<li>a.display()</li>
+<li>发现僵尸机<ul>
+<li><strong><code>🔺命令：nmap -p445 IP地址 --script=ipidseq.nse</code></strong></li>
 </ul>
 </li>
-<li><strong><code>🔺命令：./UDP_Ping.py IP网段</code></strong>（UDP发现不可靠）</li>
+<li>扫描目标<ul>
+<li><strong><code>🔺命令：nmap target的IP地址 -sI（指定zombie） zomboe的IP地址 -Pn -p 0-100</code></strong></li>
+</ul>
+</li>
 </ul>
 </li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./UDP_Ping.py [/24 network address]&quot;</span><br><span class="line">    print &quot;Example - ./UDP_Ping.py 192.168.100.0&quot;</span><br><span class="line">    print &quot;Example will perform a UDP ICMP scan of the 192.168.100.0/24 range&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">address=str(sys.argv[1])</span><br><span class="line">prefix=address.split(&quot;.&quot;)[0]+&quot;.&quot;+address.split(&quot;.&quot;)[1]+&quot;.&quot;+address.split(&quot;.&quot;)[2]+&quot;.&quot;</span><br><span class="line"></span><br><span class="line">for addr in range(1,254):</span><br><span class="line">    response=sr1(IP(dst=prefix+str(addr))/UDP(dport=33333),timeout=0.1,verbose=0)</span><br><span class="line">    try:</span><br><span class="line">      if int(response[IP].proto)==1:</span><br><span class="line">        print prefix+str(addr)</span><br><span class="line">    except:</span><br><span class="line">        pass</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -427,8 +406,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/12/02/%E4%BB%BB%E5%8A%A1026%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E4%B8%89%EF%BC%89/" rel="next" title="026：Kali Linux主动信息收集-发现（三）">
-                <i class="fa fa-chevron-left"></i> 026：Kali Linux主动信息收集-发现（三）
+              <a href="/2019/12/04/%E4%BB%BB%E5%8A%A1029%EF%BC%9AKali%20Linux%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%EF%BC%88%E4%B8%80%EF%BC%89/" rel="next" title="029：Kali Linux端口扫描（一）">
+                <i class="fa fa-chevron-left"></i> 029：Kali Linux端口扫描（一）
               </a>
             
           </div>
@@ -436,10 +415,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/12/03/%E4%BB%BB%E5%8A%A1028%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E4%BA%94%EF%BC%89/" rel="prev" title="028：Kali Linux主动信息收集-发现（五）">
-                028：Kali Linux主动信息收集-发现（五） <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>

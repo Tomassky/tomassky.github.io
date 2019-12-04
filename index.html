@@ -240,6 +240,424 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/04/%E4%BB%BB%E5%8A%A1030%EF%BC%9AKali%20Linux%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%EF%BC%88%E4%BA%8C%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/04/%E4%BB%BB%E5%8A%A1030%EF%BC%9AKali%20Linux%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%EF%BC%88%E4%BA%8C%EF%BC%89/" itemprop="url">030：Kali Linux端口扫描（二）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-04T19:30:23+08:00">
+                2019-12-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<ol>
+<li>僵尸扫描</li>
+</ol>
+<blockquote>
+<pre><code>早期的Window系统，包括XP,2003,98系统的IPID是递增的</code></pre></blockquote>
+<ul>
+<li>Scapy–zomebie.py<ul>
+<li>i=IP()</li>
+<li>t=TCP()</li>
+<li>rz=(i/t)</li>
+<li>rt=(i/t)</li>
+<li>rz[IP].dst=”zombie IP地址”</li>
+<li>rz[TCP].dport=445</li>
+<li>rz[TCP].flags=”SA”</li>
+<li>rt[IP].src=”zombie IP地址”</li>
+<li>rt[IP].dst=”target IP地址”</li>
+<li>rt[TCP].dport=22</li>
+<li>rt[TCP].flags=”S”</li>
+<li>az1=sr1(rz) / at=sr1(rt,timeout=1) / az2=sr1(rz)</li>
+<li>az1.display() / az2.display()</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：./zombie.py</code></strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy,runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import*</span><br><span class="line"></span><br><span class="line">def ipid(zombie):</span><br><span class="line">    reply1=sr1(IP(dst=zombie)/TCP(flags=&quot;SA&quot;),timeout=2,verbose=0)</span><br><span class="line">    send(IP(dst=zombie)/TCP(flags=&quot;SA&quot;),verbose=0)</span><br><span class="line">    reply2=sr1(IP(dst=zombie)/TCP(flags=&quot;SA&quot;),timeout=2,verbose=0)</span><br><span class="line">    if reply2[IP].id==(reply1[IP].id+2):</span><br><span class="line">      print &quot;IPID sequence is incremental and target appears to be idle.ZOMBIE LOCATED&quot;</span><br><span class="line">      response=raw_input(&quot;DO you want to use this zombie to perfore scan?(Y or N):&quot;)</span><br><span class="line">      if response==&quot;Y&quot;:</span><br><span class="line">        target=raw_input(&quot;Enter the IP Address of the target system:&quot;)</span><br><span class="line">        zombiescant(target,zombie)</span><br><span class="line">    else:</span><br><span class="line">      print &quot;Either the IPID sequence is not incremental or the target is not idle.NOT A GOOD ZOMBIE&quot;</span><br><span class="line"></span><br><span class="line">def zombiescan(target,zombie):</span><br><span class="line">    print &quot;\nScanning target &quot;+target+&quot; with zombie &quot;+zombie</span><br><span class="line">    print &quot;\n-----------Open Ports On Target-------------\n &quot;</span><br><span class="line">    for port in range(1,100):</span><br><span class="line">      try:</span><br><span class="line">        start_val=sr1(IP(dst=zombie)/TCP(flags=&quot;SA&quot;,dport=port),timeout=2,verbose=0)</span><br><span class="line">        send(IP(src=zombie,dst=target)/TCP(flags=&quot;S&quot;,dport=port),verbose=0)</span><br><span class="line">        end_val=sr1(IP(dst=zombie)/TCP(flags=&quot;SA&quot;,dport=port),timeout=2,verbose=0)</span><br><span class="line">        if end_val[IP].id==(start_val[IP].id+2):</span><br><span class="line">          print port</span><br><span class="line">      except:</span><br><span class="line">        pass</span><br><span class="line"></span><br><span class="line">print &quot;----------------Zombie Scan Suite-----------\n&quot;</span><br><span class="line">print &quot;1 - Identify Zombie Host\n&quot;</span><br><span class="line">print &quot;2 - Perform Zombie Scan\n&quot;</span><br><span class="line">ans=raw_input(&quot;Select an Option (1 or 2):&quot;)</span><br><span class="line">if ans==&quot;1&quot;:</span><br><span class="line">    zombie=raw_input(&quot;Enter IP Address to test IPID sequence&quot;)</span><br><span class="line">    ipid(zombie)</span><br><span class="line">else:</span><br><span class="line">    if ans==&quot;2&quot;:</span><br><span class="line">      zombie=raw_input(&quot;Enter IP Address for zombie sysytem:&quot;)</span><br><span class="line">      target=raw_input(&quot;Enter IP Address for scan target:&quot;)</span><br><span class="line">      zombiescan(target,zombie)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<pre><code>sr1 发包只收一个数据包
+send 发包不收数据包</code></pre></blockquote>
+<ol start="2">
+<li><p>僵尸扫描</p>
+<ul>
+<li>发现僵尸机<ul>
+<li><strong><code>🔺命令：nmap -p445 IP地址 --script=ipidseq.nse</code></strong></li>
+</ul>
+</li>
+<li>扫描目标<ul>
+<li><strong><code>🔺命令：nmap target的IP地址 -sI（指定zombie） zomboe的IP地址 -Pn -p 0-100</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/04/%E4%BB%BB%E5%8A%A1029%EF%BC%9AKali%20Linux%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%EF%BC%88%E4%B8%80%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/04/%E4%BB%BB%E5%8A%A1029%EF%BC%9AKali%20Linux%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%EF%BC%88%E4%B8%80%EF%BC%89/" itemprop="url">029：Kali Linux端口扫描（一）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-04T19:30:23+08:00">
+                2019-12-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<ol>
+<li><p>隐蔽端口扫描</p>
+<ul>
+<li>syn–syn/ack–rst（本机操作系统内核产生的）</li>
+<li>Scapy<ul>
+<li>sr1(IP(dst=”IP地址”)/TCP(dport=80,flags=”S”),timeout=1,verbose=0)</li>
+<li><strong><code>🔺命令：./syn_scan.py 目标IP地址 起始端口 结束端口</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line">import time</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=4:</span><br><span class="line">    print &quot;Usage - ./syn_scan.py [Target IP] [First IP] [Last IP] &quot;</span><br><span class="line">    print &quot;Example - ./syn_scan.py 192.168.100.1 1 200&quot;</span><br><span class="line">    print &quot;Example will perform a TCP SYN scan of the 192.168.100.0/24 range&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">ip=sys.argv[1]</span><br><span class="line">start=int(sys.argv[2])</span><br><span class="line">end=int(sys.argv[3])</span><br><span class="line"></span><br><span class="line">for port in range(start,end):</span><br><span class="line">    a=sr1(IP(dst=ip)/TCP(dport=port),timeout=1,verbose=0)</span><br><span class="line">    if a==None:</span><br><span class="line">      pass</span><br><span class="line">    else:</span><br><span class="line">      if int(a[TCP].flags)==18:</span><br><span class="line">        print port</span><br><span class="line">      else:</span><br><span class="line">        pass</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<pre><code>正常情况下：
+端口开放：syn--syn/ack
+端口未开放：syn--rst/ack</code></pre></blockquote>
+<ol start="2">
+<li><p>隐蔽端口扫描</p>
+<ul>
+<li><strong><code>🔺命令：nmap -sS IP地址 -p 80,21,25,110,443</code></strong></li>
+<li><strong><code>🔺命令：nmap -sS IP地址 -p 1-65535 --open</code></strong></li>
+<li><strong><code>🔺命令：nmap -sS IP地址 --open</code></strong></li>
+<li><strong><code>🔺命令：nmap -sS -iL iplist.txt -p 80,21,22,23</code></strong></li>
+</ul>
+</li>
+<li><p>隐蔽端口扫描</p>
+<ul>
+<li>hping3（发包习惯是顺序端口）</li>
+<li><strong><code>🔺命令：hping3 IP地址 --scan 80 -S</code></strong></li>
+<li><strong><code>🔺命令：hping3 IP地址 --scan 80,21,25,443 -S</code></strong>（syn包）</li>
+<li><strong><code>🔺命令：hping3 IP地址 --scan 0-65535 -S</code></strong></li>
+<li><strong><code>🔺命令：hping3 -c 10 -S --spoof（伪造源地址） IP地址 -p ++1（端口递增） IP地址</code></strong></li>
+</ul>
+</li>
+<li><p>全连接端口扫描</p>
+<ul>
+<li>Scapy（容易触发目标主机的报警系统）<ul>
+<li>syn扫描不需要raw packets</li>
+<li>内核认为syn/ack是非法包，直接发rst终断连接</li>
+<li>全连接扫描对scapy比较困难</li>
+</ul>
+</li>
+<li>sr1(IP(dst=”IP地址”)/TCP(dport=22,flags=”S”))</li>
+<li><strong><code>🔺命令：./tcp_scan1.py（代码内指定IP地址）</code></strong></li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy,runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import*</span><br><span class="line"></span><br><span class="line">response=sr1(IP(dst=&quot;IP地址&quot;)/TCP(dport=80,flags=&quot;S&quot;))</span><br><span class="line">reply=sr1(IP(dst=&quot;IP地址&quot;)/TCP(dport=80,flags=&quot;A&quot;,ack=(response[TCP].seq+1)))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong><code>🔺命令：./tcp_scan2.py（代码内指定IP地址）</code></strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy,runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import*</span><br><span class="line"></span><br><span class="line">SYN=IP(dst=&quot;IP地址&quot;)/TCP(dport=25,flags=&quot;S&quot;)</span><br><span class="line"></span><br><span class="line">print &quot;--SENT--&quot;</span><br><span class="line">SYN.display()</span><br><span class="line"></span><br><span class="line">print &quot;\n\n--RECEIVED--&quot;</span><br><span class="line">response=sr1(SYN,timeout=1,verbose=0)</span><br><span class="line">response.display()</span><br><span class="line"></span><br><span class="line">if int(response[TCP].flags)==18:</span><br><span class="line">    print &quot;\n\n--SENT--&quot;</span><br><span class="line">    A=IP(dst=&quot;IP地址&quot;)/TCP(dport=25,flags=&quot;A&quot;,ack=(response[TCP].seq+1))</span><br><span class="line">    A.display()</span><br><span class="line">    print &quot;\n\n--RECEIVED--&quot;</span><br><span class="line">    response2=sr1(A,timeout=1,verbose=0)</span><br><span class="line">    response2.display()</span><br><span class="line">else:</span><br><span class="line">    print &quot;SYN-ACK not returned&quot;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong><code>🔺命令：iptables -A OUTPUT -p tcp --tcp-flags RST RST -d 目标IP地址 -j DROP</code></strong></li>
+</ul>
+<blockquote>
+<pre><code>iptables是工作在底层的防火墙，在内核之前过滤数据
+iptables -L查看当前防火墙规则</code></pre></blockquote>
+<ol start="5">
+<li><p>全连接端口扫描</p>
+<ul>
+<li><strong><code>🔺命令：nmap IP地址 -sT -p 80</code></strong></li>
+<li><strong><code>🔺命令：nmap IP地址 -sT -p 80,21,25</code></strong></li>
+<li><strong><code>🔺命令：nmap IP地址 -sT -p 1-65535</code></strong></li>
+<li><strong><code>🔺命令：nmap -sT -iL iplist.txt -p 80</code></strong></li>
+<li>默认1000个常用端口</li>
+</ul>
+</li>
+<li><p>全连接端口扫描</p>
+<ul>
+<li>dmitry<ul>
+<li>功能简单，但使用简便</li>
+<li>默认150个常用端口</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：dmitry -p IP地址</code></strong></li>
+<li><strong><code>🔺命令：dmitry -p IP地址 -o output</code></strong></li>
+</ul>
+</li>
+<li><p>全连接端口扫描</p>
+<ul>
+<li><strong><code>🔺命令：nc -nv -w（连接的超时时间）1 -z IP地址 1-65535</code></strong>（倒序发送）</li>
+<li><strong><code>🔺命令：for x in $(seq 20 30);do nc -nv -w 1 -z IP地址 $x;done | grep open</code></strong></li>
+<li><strong><code>🔺命令：for x in $(seq 1 254);do nc -nv -w 1 -z 1.1.1.$x 80;done</code></strong></li>
+</ul>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/03/%E4%BB%BB%E5%8A%A1028%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E4%BA%94%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2044,356 +2462,6 @@ tor可进行代理翻墙</code></pre></blockquote>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/28/%E4%BB%BB%E5%8A%A1020%EF%BC%9AKali%20Linux%20SHODAN/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/28/%E4%BB%BB%E5%8A%A1020%EF%BC%9AKali%20Linux%20SHODAN/" itemprop="url">020：Kali Linux SHODAN</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-28T10:31:01+08:00">
-                2019-11-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<ol>
-<li><p>SHODAN</p>
-<ul>
-<li>200 OK cisco country：JP</li>
-<li>user:admin   pass:password</li>
-<li>linux upnp avtech</li>
-<li><a href="https://account.shodan.io/" target="_blank" rel="noopener">https://account.shodan.io/</a> （API Key为调用的API接口）</li>
-<li><a href="https://www.shodan.io/explore" target="_blank" rel="noopener">https://www.shodan.io/explore</a> （搜索方式提供）</li>
-<li>Add-Ons（Firefox的shadon插件）</li>
-</ul>
-</li>
-<li><p>GOOGLE搜索</p>
-<ul>
-<li>+充值-支付（含有充值，不含有支付的页面）</li>
-<li>北京的电子商务公司–北京 intitle（标题部分）:电子商务 intext（页面正文部分）:法人 intext（页面正文部分）:电话</li>
-<li>阿里网站上的北京公司联系人–北京 site:alibaba.com inurl:contact</li>
-<li>塞班司法案的PDF文档–SOX filetype:pdf（doc,html等）</li>
-<li>法国的支付相关页面–payment site（同country）:fr</li>
-</ul>
-</li>
-<li><p>GOOGLE搜索–实例</p>
-<ul>
-<li>inurl:”level/15/exec/~/show”（网络设备开启http服务，15级服务，show服务）</li>
-<li>intitle:”netbotz appliance” “ok”（机架设备，cameras APC公司，主要是机房）</li>
-<li>inurl:/admin/login.php</li>
-<li>inurl:qq.txt</li>
-<li>filetype:xls “usename | password”</li>
-<li>inurl:ftp “password” filetype:xls site:baidu.com（url是ftp）</li>
-<li>inurl:service.pwd（FrontPage存在漏洞 → service.pwd）</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>Google Hacking DataBase：http://exploit-db.com/google-dorks
-Google、Bing等搜索引擎对来自同一个IP地址的搜索数量进行限制，进行自我保护</code></pre></blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/28/%E4%BB%BB%E5%8A%A1019%EF%BC%9AKali%20Linux%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E3%80%81SHODAN/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/28/%E4%BB%BB%E5%8A%A1019%EF%BC%9AKali%20Linux%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E3%80%81SHODAN/" itemprop="url">019：Kali Linux搜索引擎</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-28T10:31:01+08:00">
-                2019-11-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<ol>
-<li><p>搜索引擎（爬虫机器人爬取信息）</p>
-<ul>
-<li>公司新闻动态</li>
-<li>重要雇员信息</li>
-<li>机密文档/网络拓扑</li>
-<li>用户名密码</li>
-<li>目标系统软硬件技术架构（Banner信息）</li>
-</ul>
-</li>
-<li><p>SHODAN</p>
-<ul>
-<li>搜索联网的设备（只搜索设备）</li>
-<li>Banner：http、ftp、ssh、telnet</li>
-<li><a href="https://www.shodan.io/" target="_blank" rel="noopener">https://www.shodan.io/</a></li>
-<li>常见filter（冒号作为定界符,空格为分节符）：<ul>
-<li>net（192.168.20.1）</li>
-<li>city</li>
-<li>country（CN、US）</li>
-<li>port（80、21、22、23）</li>
-<li>OS</li>
-<li>Hostname（主机或域名）</li>
-<li>server</li>
-<li>200 OK cisco country：JP</li>
-<li>user：admin pass：password</li>
-<li>linux upnp avtech</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2448,7 +2516,7 @@ Google、Bing等搜索引擎对来自同一个IP地址的搜索数量进行限�
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-count">36</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

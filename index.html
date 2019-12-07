@@ -240,6 +240,655 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/07/%E4%BB%BB%E5%8A%A1036%EF%BC%9AKali%20Linux%20NMAP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/07/%E4%BB%BB%E5%8A%A1036%EF%BC%9AKali%20Linux%20NMAP/" itemprop="url">036：Kali Linux NMAP</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-07T19:14:18+08:00">
+                2019-12-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<ol>
+<li><p>Nmap</p>
+<ul>
+<li>nmap扫描脚本<ul>
+<li>400+</li>
+<li>分类</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：cat /usr/share/nmap/scripts/script.db</code></strong>（存放nmap脚本名称路径）</li>
+<li><strong><code>🔺命令：grep vuln /usr/share/nmap/scripts/script.db | cut -d &quot;\&quot; -f 2</code></strong></li>
+<li><strong><code>🔺命令：cat /usr/share/nmap/scripts/smb-check-vuln.nse</code></strong></li>
+<li><strong><code>🔺命令：smb-check-vulns.nse</code></strong><ul>
+<li>**`🔺命令：nmap -sU -sS –script=smb-check-vulns.nse –script=args=unsafe=1 -p U:137,T:139,446 IP地址</li>
+<li>MS08-067</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>中文输入法：桌面的设置，删除本机自带的汉语，然后apt-get install ibus ibus-pinyin，添加汉语</code></pre></blockquote>
+<ol start="2">
+<li><p>Nmap</p>
+<ul>
+<li><p>smb-vuln-ms10-061.nse</p>
+<ul>
+<li>Stuxnet蠕虫利用的4个漏洞之一（美国军方打击伊朗核设施攻击的阵亡病毒）</li>
+<li>Print Spooler权限不当，打印请求可在系统目录可创建文件、执行任意代码</li>
+<li>LANMAN API枚举共享打印机</li>
+<li>远程共享打印机名称</li>
+<li>smb-enum-shares枚举共享</li>
+</ul>
+<ol>
+<li>身份认证参数–smbuser、smbpassword</li>
+<li><strong><code>🔺命令：nmap -p445 --script=smb-enum-shares.nse --script-args=smbuser=admin,smbpassword=pass IP地址</code></strong></li>
+</ol>
+<ul>
+<li>Windows XP，Server 2003 SP2，Vista，Server 2008，win 7</li>
+</ul>
+</li>
+<li><p>影响扫描结果的因素</p>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>不同扫描器对于漏洞的判断是不同的，有些是基于补丁是否安装，有些是基于端口是否开放</code></pre></blockquote>
+<ol start="3">
+<li><p>扫描结果确认</p>
+<ul>
+<li>目标系统版本</li>
+<li>补丁是否安装</li>
+<li>是否可被入侵</li>
+</ul>
+</li>
+<li><p>OPENVAS</p>
+<ul>
+<li>Openvas<ul>
+<li>Nessus项目分支</li>
+<li>管理目标系统的漏洞</li>
+<li>免费开源</li>
+<li>Kali默认安装，但未配置和启动</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>OPENVAS</p>
+<ul>
+<li>安装</li>
+<li>创建证书</li>
+<li>同步弱点数据库NVT</li>
+<li>创建客户端证书</li>
+<li>重建数据库</li>
+<li>备份数据库</li>
+<li>启动服务装入插件</li>
+<li>创建管理员账户</li>
+<li>创建普通用户账号</li>
+<li>配置服务侦听端口</li>
+<li>安装验证</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>Kali Linux配置OPENVAS，openvas-setup，现在一条命令即可
+OPENVAS每天会发布feed，里面包含由一个或多个NVT</code></pre></blockquote>
+<ol start="6">
+<li><p>OPENVAS</p>
+<ul>
+<li>OpenVAS Manager（负责把其他的组件连接）<ul>
+<li>控制Scanner和其他Manager的中心组件</li>
+<li>控制中心数据库，保存用户配置及扫描结果</li>
+<li>客户端使用基于XML的无状态OMP协议与其通信</li>
+<li>集中排序筛选，使客户端获得一致展现</li>
+</ul>
+</li>
+<li>OpenVAS Scanner（扫描器，可以多个scanner，多级部署）<ul>
+<li>具体执行Network Vulnerability Tests（NVTs）</li>
+<li>NVTs 每天通过更新Feed更新</li>
+<li>受Manager控制</li>
+</ul>
+</li>
+<li>OSP Scanner（scanner扫描器组）<ul>
+<li>可以统一管理多个Scanner</li>
+<li>将一组Scanner作为一个对象交给manager管理</li>
+</ul>
+</li>
+<li>Greenbone Security Assistant（相当于一个服务器端，访问OpenVASManage）<ul>
+<li>提高Web Service</li>
+</ul>
+</li>
+<li>OMP Clients（支持通过API的方式去调用OpenVAS Manager）</li>
+<li>Web Browser（通过GreenBone去访问OpenVAS Manager）</li>
+<li>Feed（NVTS，SCAP CERT,User Data） </li>
+<li>Target System</li>
+<li>OpenVAS CLI<ul>
+<li>omp命令行工具，可实现批处理控制manager</li>
+</ul>
+</li>
+<li>更新很快<ul>
+<li>所有找得到的资料几乎都已不同程度的过时了</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>OPENVAS</p>
+<ul>
+<li>初始化安装<ul>
+<li><strong><code>🔺命令：openvas-setup</code></strong></li>
+</ul>
+</li>
+<li>检查安装结果<ul>
+<li><strong><code>🔺命令：openvas-check-setup</code></strong>（出问题会出现FIX错误项）</li>
+</ul>
+</li>
+<li>查看当前账号<ul>
+<li><strong><code>🔺命令：openvasmd --list-users</code></strong> ▲2019.12.7 无此参数</li>
+</ul>
+</li>
+<li>修改账户密码<ul>
+<li><strong><code>🔺命令：openvas --user=admin --new-password=Password</code></strong></li>
+</ul>
+</li>
+<li>升级<ul>
+<li><strong><code>🔺命令：openvas-feed-update</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>openvasmd -h 可修改账户密码，可增加账户
+9390端口：openvas manager
+9391端口：默认第一scanner
+9392端口：web登陆（https）
+openvas-check-setup | grep Fix 可查看报错的组件
+证书报错的原因：（1）名称与URL地址不一致（2）证书为自签名证书</code></pre></blockquote>
+<ol start="8">
+<li><p>OPENVAS</p>
+<ul>
+<li><strong><code>🔺命令：vi /usr/bin/openvas-start</code></strong>（调整启动服务顺序，对于kali2.0版本以下）<ul>
+<li>Starting OpenVas Services</li>
+<li>3\Starting OpenVas Manager.openvasmd</li>
+<li>2\Starting OpenVas Scanner.openvassd</li>
+<li>1\Starting Greenbone Security Assistant:gsad</li>
+</ul>
+</li>
+<li>openvas-start</li>
+</ul>
+</li>
+<li><p>OPENVAS</p>
+<ul>
+<li>Configration<ul>
+<li>scan configs → windows_server_scan_configration</li>
+<li>target → windows_xp（Alive Test → Consider Alive，Port List）</li>
+<li>Port List → windows_xp_ports （or OpenVAS Default）</li>
+<li>Schedules → weekly_scan（Period，Duration）</li>
+</ul>
+</li>
+<li>Scan Management<ul>
+<li>Tasks → weekly_windows_scan_task（Scan Target，Schedule，Add results to Asset Management，OpenVAS Scanner，Scan config，Slave，Network Sourece Interface，Order for target hosts，Maximum concurrently executed NVTs per host，Maximum concurrently scanner host）</li>
+</ul>
+</li>
+<li>Configration<ul>
+<li>scan configs → linux_unix_scan_configration</li>
+</ul>
+</li>
+<li>start a short scan（full and fast，需要一个IP） ▲2019.12.7新版在Task Wizard中</li>
+</ul>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/07/%E4%BB%BB%E5%8A%A1035%EF%BC%9AKali%20Linux%E5%BC%B1%E7%82%B9%E6%89%AB%E6%8F%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/07/%E4%BB%BB%E5%8A%A1035%EF%BC%9AKali%20Linux%E5%BC%B1%E7%82%B9%E6%89%AB%E6%8F%8F/" itemprop="url">035：Kali 弱点扫描</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-07T19:14:18+08:00">
+                2019-12-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<ol>
+<li><p>发现弱点</p>
+<ul>
+<li>发现漏洞<ul>
+<li>基于端口服务扫描结果版本信息（速度慢）</li>
+<li>搜索已公开的漏洞数据库（数量大）</li>
+<li>使用弱点扫描器实现漏洞管理</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>（1）https://www.exploit-db.com Kali 官方公布的漏洞代码
+（2）searchsploit 服务类型  查找相关漏洞利用代码 （相干文件放在usr/share/exploitdb/platforms）
+（3）Kali自带工具 sandi-gui  ▲2019.12.7暂无此工具</code></pre></blockquote>
+<ol start="2">
+<li><p>从信息的维度定义漏洞管理</p>
+<ul>
+<li>信息收集：<ul>
+<li>扫描发现网络IP、OS、服务、配置、漏洞</li>
+<li>能力要求：定义扫描方式内容和目标</li>
+</ul>
+</li>
+<li>信息管理<ul>
+<li>格式化信息，并进行筛选、分组、定义优先级</li>
+<li>能力要求：资产分组、指定所有者、向所有者报告漏洞</li>
+</ul>
+</li>
+<li>信息输出<ul>
+<li>向不同层级的人群展示足够的信息量</li>
+<li>能力需求：生成报告、导出数据、与SIEM集成</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>弱点扫描类型</p>
+<ul>
+<li>主动扫描<ul>
+<li>有身份验证</li>
+<li>无身份验证</li>
+</ul>
+</li>
+<li>被动扫描<ul>
+<li>镜像端口抓包</li>
+<li>其他来源输入</li>
+</ul>
+</li>
+<li>基于Agent的扫描<ul>
+<li>支持平台有限</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>漏洞概念</p>
+<ul>
+<li>CVSS（Common Vulnerability Scoring System）<ul>
+<li>通用漏洞评分系统–工业标准</li>
+<li>扫描安全漏洞严重程度的统一评分方案</li>
+<li>V3版本–2015年6月10日</li>
+<li>Basic Metric：基础的恒定不变的弱点权重</li>
+<li>Temporal Metric：依赖时间因素的弱点权重</li>
+<li>Enviromental Metric：利用弱点的环境要求和实施难度的权重</li>
+<li>CVSS是安全内容自动化协议（SCAP）的一部分</li>
+<li>通常CVSS与CVE一同由美国国家漏洞库（NVD）发布并保持数据的更新</li>
+<li>分值范围：0–10</li>
+<li>不同机构按CVSS分值定义威胁的中、高、低威胁级别</li>
+<li>CVSS体现弱点的风险，威胁级别（severity）表示弱点风险对企业的影响</li>
+<li>CVSS分值是工业标准，但威胁级别不是</li>
+</ul>
+</li>
+<li>Vulnerability Reference</li>
+<li>CVE（Common Vulnerability and Exposures）<ul>
+<li>已公开的信息安全漏洞字典，统一的漏洞编号标准</li>
+<li>MITRE公司负责维护（非盈利机构）</li>
+<li>扫描器的大部分扫描项都对应一个CVE编号</li>
+<li>实现不同产商之间信息交换的统一标准</li>
+</ul>
+</li>
+<li>CVE发布流程<ul>
+<li>发现漏洞</li>
+<li>CAN负责指定CVE ID</li>
+<li>发布到CVE List–CVE-2008-4250</li>
+<li>MITRE负责对内容进行编辑维护</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>漏洞基本概念</p>
+<ul>
+<li><p>很多产商维护自己的Vulnerability Reference</p>
+<ul>
+<li>MS</li>
+<li>MSKB</li>
+</ul>
+</li>
+<li><p>其他Vulnerability Reference</p>
+<ul>
+<li>CERT TA08-297A</li>
+<li>BID 31874</li>
+<li>IAVM 2008-A-0081</li>
+<li>OVAL OVAL6093</li>
+</ul>
+</li>
+<li><p>OVAL（Open Vulnerability and Assessment Language）</p>
+<ul>
+<li>描述漏洞检测方法的机器可识别语言</li>
+<li>详细的描述漏洞检测的技术细节，可导入自动化检测工具实施漏洞检测工具</li>
+<li>OVAL使用XML语言描述，包含了严密的语法逻辑</li>
+</ul>
+</li>
+<li><p>CCE</p>
+<ul>
+<li>描述软件配置缺陷的一种标准化格式</li>
+<li>在信息安全风险评估，配置缺陷的检测是一项重要内容，使用CCE可以配置缺陷以标准的方式展现出来，便于配置缺陷评估的可量化操作</li>
+</ul>
+</li>
+<li><p>CPE（Common Product Enumeration）</p>
+<ul>
+<li>信息技术产品、系统、软件包的结构化命令规范，分类命名</li>
+</ul>
+</li>
+<li><p>CWE（Common Weakness Enumeration）</p>
+<ul>
+<li>常见漏洞类型的字典，描述不同类型漏洞的特征（访问控制、信息泄露、拒绝服务）</li>
+</ul>
+</li>
+<li><p>Security Content Automation Protocal（SCAP）</p>
+<ul>
+<li>SCAP是一个集合了多种安全标准框架</li>
+<li>六个元素：CVE、OVAL、CCE、CPE、CVSS、XCCDF</li>
+<li>目的是以标准的方法展示和操作安全数据</li>
+<li>由NIST负责维护</li>
+</ul>
+</li>
+<li><p>SCAP主要解决三个问题</p>
+<ul>
+<li>实现高层政策法规等到底层实施的落地（如FISMA，ISO27000系列）</li>
+<li>将信息安全所涉及的各个要素标准化（如统一漏洞的命名及严重性度量）</li>
+<li>将复杂的系统配置检查工作自动化</li>
+</ul>
+</li>
+<li><p>SCAP是当前美国比较成熟的一套信息安全评估标准体系，其标准化、自动化的思想对信息安全行业产生了深远的影响</p>
+</li>
+<li><p>NVD（National Vulnerability Database）</p>
+<ul>
+<li>美国政府的漏洞管理标准数据</li>
+<li>完全基于SCAP框架</li>
+<li>实现自动化漏洞管理、安全测量、合规要求</li>
+<li>包含以下库(<a href="https://nvd.nist.gov/)：" target="_blank" rel="noopener">https://nvd.nist.gov/)：</a></li>
+</ul>
+<ol>
+<li>安全检查列表</li>
+<li>软件安全漏洞</li>
+<li>配置错误</li>
+<li>产品名称</li>
+<li>影响程度</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>漏洞管理</p>
+<ul>
+<li>周期性扫描跟踪漏洞</li>
+<li>高危漏洞优先处理</li>
+<li>扫描注意事项</li>
+<li>漏洞管理三要素<ul>
+<li>准确性</li>
+<li>时间</li>
+<li>资源</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/06/%E4%BB%BB%E5%8A%A1034%EF%BC%9AKali%20Linux%20SMTP%E6%89%AB%E6%8F%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2166,443 +2815,11 @@ nmap和Scapy发的是ACK的TCP包，是flag16的TCP包，需要收回RST的TCP�
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/02/%E4%BB%BB%E5%8A%A1026%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E4%B8%89%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/02/%E4%BB%BB%E5%8A%A1026%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E4%B8%89%EF%BC%89/" itemprop="url">026：Kali Linux主动信息收集-发现（三）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-02T23:17:45+08:00">
-                2019-12-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<ol>
-<li><p>发现-三层发现（ping）</p>
-<ul>
-<li>优点<ul>
-<li>可路由</li>
-<li>速度比较快</li>
-</ul>
-</li>
-<li>缺点<ul>
-<li>速度比二层慢</li>
-<li>经常被边界防火墙过滤（目标系统的过滤机制）</li>
-</ul>
-</li>
-<li>IP、ICMP协议</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>ICMP协议，网络控制管理协议，路径发现，探测，根据相应结果来反应目标主机的状态
-ICMP协议，发送端的报文类型是询问报文，Type字段为8，接收端为0
-网络上默认禁止ICMP的探测数据包，所以导致扫描结果不准确，存在误报，漏报，错报</code></pre></blockquote>
-<ul>
-<li><strong><code>🔺命令：Ping IP地址 -c 2</code></strong></li>
-<li><strong><code>🔺命令：Ping -R（路由追踪） IP地址 / traceroute IP地址</code></strong></li>
-<li><strong><code>🔺命令：ping  IP地址 -c 1 | grep &quot;bytes from&quot; | awk &#39;{print $4}&#39;</code></strong></li>
-<li>脚本<ul>
-<li><strong><code>🔺命令：./pinger.sh IP网段</code></strong>  ▲2019.12.2 iplist文档中ip地址后面有：，还无法去除</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">if [ &quot;$#&quot; -ne 1 ];then</span><br><span class="line">    echo &quot;Usage - ./pinger.sh [/24 network address]&quot;</span><br><span class="line">    echo &quot;Example - ./pinger.sh 192.168.100.0&quot;</span><br><span class="line">    echo &quot;Example will perform an ICMP ping scan of the 192.168.100.0/24 network&quot;</span><br><span class="line">    exit</span><br><span class="line">fi</span><br><span class="line">prefix=$(echo $1 | cut -d &quot;.&quot; -f 1-3)</span><br><span class="line">for add in $(seq 1 254);do</span><br><span class="line">  ping -c 1 $prefix.$addr | grep &quot;bytes from&quot; | awk &apos;&#123;print $4&#125;&apos;  &amp;</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
-
-
-<blockquote>
-<pre><code>Linux/Unix数据包的TTL值默认为64
-ping -R 请求离主机比较远的网卡的IP地址（同个路由器）
-traceroute 请求离主机比较近的网卡的IP地址（同个路由器）</code></pre></blockquote>
-<ol start="2">
-<li><p>发现-三层发现（Scapy）</p>
-<ul>
-<li>Scapy<ul>
-<li>OSI多层堆叠手工声称ICMP包-IP/ICMP包</li>
-<li>ip=IP()</li>
-<li>icmp=ICMP()</li>
-<li>ping=(ip/icmp)</li>
-<li>ping[IP].dst=”IP地址”</li>
-<li>a=sr1(ping)</li>
-<li>a.dispaly</li>
-<li>Ping不存在的地址：a=sr1(ip/icmp,timeout=1)</li>
-<li>a=sr1(IP(dst=”IP地址”)/ICMP(),timeout=1)  //一句话实现</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：./pinger1.py IP网段&gt;iplist.txt</code></strong></li>
-</ul>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./pinger1.py [/24 network address]&quot;</span><br><span class="line">    print &quot;Example - ./pinger1.py 192.168.100.0&quot;</span><br><span class="line">    print &quot;Example will perform an ICMP ping scan of the 192.168.100.0/24 network&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">address=str(sys.argv[1])</span><br><span class="line">prefix=address.split(&quot;.&quot;)[0]+&quot;.&quot;+address.split(&quot;.&quot;)[1]+&quot;.&quot;+address.split(&quot;.&quot;)[2]+&quot;.&quot;</span><br><span class="line"></span><br><span class="line">for addr in range(1,254):</span><br><span class="line">     a=sr1(IP(dst=prefix+str(addr))/ICMP(),timeout=1,verbose=0)</span><br><span class="line">     if a==None:</span><br><span class="line">       pass</span><br><span class="line">     else:</span><br><span class="line">       print prefix+str(addr)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong><code>🔺命令：./pinger2.py iplist.txt</code></strong></li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./pinger2.py [iplist.txt]&quot;</span><br><span class="line">    print &quot;Example - ./pinger2.py iplist.txt&quot;</span><br><span class="line">    print &quot;Example will perform an ICMP ping scan of the 192.168.100.0/24 network&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">filename=str(sys.argv[1])</span><br><span class="line">file=open(filename,&quot;r&quot;)</span><br><span class="line"></span><br><span class="line">for addr in file:</span><br><span class="line">    a=sr1(IP(dst=addr.strip())/ICMP(),timeout=0.1,verbose=0)</span><br><span class="line">    if a==None:</span><br><span class="line">      pass</span><br><span class="line">    else:</span><br><span class="line">      print addr.strip()</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li><p>发现-三层发现（nmap）</p>
-<ul>
-<li><strong><code>🔺命令：nmap IP地址-254 -sn</code></strong>（同网段是发ARP包，不同网段是发ICMP包）</li>
-<li><strong><code>🔺命令：nmap -iL iplist.txt -sn</code></strong></li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>namp -sn对于同网段是发ARP包和DNS包，不同网段是发ICMP包（请求字段为时间戳13和请求包8）、DNS包和TCP包 </code></pre></blockquote>
-<ol start="4">
-<li><p>发现-三层发现（fping）</p>
-<ul>
-<li><strong><code>🔺命令：fping IP地址 -c 1</code></strong></li>
-<li><strong><code>🔺命令：fping -g 起始IP地址 最后IP地址（IP地址段）-c 1</code></strong></li>
-<li><strong><code>🔺命令：fping -g IP网段/24</code></strong>  ▲2019.12.2过滤输出格式不对</li>
-<li><strong><code>🔺命令：fping -f iplist.txt</code></strong></li>
-</ul>
-</li>
-<li><p>发现-三层发现（Hping）</p>
-<ul>
-<li>Hping（几乎可以完成所以IP、TCP协议包头的组合，也可对于基于TCP服务器进行压力测试）<ul>
-<li>能够发生几乎所有任意TCP/IP包</li>
-<li>功能强大但每次只能扫描一个目标</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：hping3 IP地址 --icmp -c 2</code></strong></li>
-<li><strong><code>🔺命令：for addr in $(seq 1 254); do hping3 1.1.1.$addr --icmp -c 1 &gt;&gt; handle.txt &amp; done</code></strong></li>
-<li><strong><code>🔺命令：cat handle.txt |  grep ^len</code></strong></li>
-</ul>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/02/%E4%BB%BB%E5%8A%A1025%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E4%BA%8C%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/02/%E4%BB%BB%E5%8A%A1025%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E4%BA%8C%EF%BC%89/" itemprop="url">025：Kali Linux主动信息收集-发现（二）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-02T23:17:45+08:00">
-                2019-12-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<ol>
-<li><p>发现-二层发现（Netdiscover）</p>
-<ul>
-<li>Netdiscover（支持CIDR地址段显示）▲2019.12.2可抓到包，但界面不显示<ul>
-<li>专门用于二层发现</li>
-<li>可用于无线和交换网络环境</li>
-<li>主动和被动探测</li>
-</ul>
-</li>
-<li>主动<ul>
-<li><strong><code>🔺命令：netdiscover -i eth0 -r IP地址/24</code></strong></li>
-<li><strong><code>🔺命令：netdiscover -l iplist.txt</code></strong></li>
-</ul>
-</li>
-<li>被动（把网卡制成混杂模式进行监听）<ul>
-<li><strong><code>🔺命令：netdiscover -p</code></strong></li>
-<li>主动arp容易触发报警</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>发现-二层发现（Scapy）</p>
-<ul>
-<li>Scapy<ul>
-<li>作为Python库进行调用</li>
-<li>也可以作为单独的工具使用</li>
-<li>抓包、分析、创建、修改、注入网络流量</li>
-</ul>
-</li>
-<li>apt-get install python3-gnuplot（报错可安装）▲2019.12.2依然会报错，但不影响使用</li>
-<li>Scapy<ul>
-<li>arp=ARP（）</li>
-<li>arp.pdst=”IP地址”（进行赋值）</li>
-<li>answer=sr1(arp)（发生数据包）</li>
-<li>answer.display() （显示数据包的结构，分层）</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>ARP().dispaly()（定制一个ARP的数据包，只需要添加属性字段，ARP的包头结构）
-sr1()（发送数据包）</code></pre></blockquote>
-<ul>
-<li>python脚本（用Scapy写的python脚本）<ul>
-<li><strong><code>🔺命令：./Arp1.py 接口</code></strong> ▲2019.12.1 strip()函数报错</li>
-<li><strong><code>🔺命令：./Arp2.py iplist.txt</code></strong></li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./Arp1.py [interface]&quot;</span><br><span class="line">    print &quot;Example - ./Arp1.py eth0&quot;</span><br><span class="line">    print &quot;Example will perform an ARP scan of the local subnet to which eth0 is assigned&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">interface=str(sys.argv[1])</span><br><span class="line"></span><br><span class="line">ip=subprocess.check_output(&quot;ifconfig &quot;+interface+&quot; | grep &quot;inet&quot; | egrep -v &quot;inet6&quot; | cut -d &quot;.&quot; -f 1-3 | awk &apos;&#123;print $2&#125;&apos;&quot;,shell=True).strip()</span><br><span class="line">prefix=ip.split(&quot;.&quot;)[0]+&quot;.&quot;+ip.split(&quot;.&quot;)[1]+&quot;.&quot;+ip.split(&quot;.&quot;)[2]+&quot;.&quot;</span><br><span class="line">for addr in range(0,254):</span><br><span class="line">    answer=sr1(ARP(pdst=addr.strip()),timeout=0.1,verbose=1)</span><br><span class="line">    if answer==None:</span><br><span class="line">      pass</span><br><span class="line">    else:</span><br><span class="line">      print prefix+str(addr)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./Arp2.py [iplist.txt]&quot;</span><br><span class="line">    print &quot;Example - ./Arp2.py iplist.txt&quot;</span><br><span class="line">    print &quot;Example will perform an ARP scan of the local subnet to which eth0 is assigned&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">filename=str(sys.argv[1])</span><br><span class="line">file=open(filename,&quot;r&quot;)</span><br><span class="line"></span><br><span class="line">for addr in file:</span><br><span class="line">    answer=sr1(ARP(pdst=addr.strip()),timeout=0.1,verbose=1)</span><br><span class="line">    if answer==None:</span><br><span class="line">      pass</span><br><span class="line">    else:</span><br><span class="line">      print addr.strip()</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">&lt;i class=&quot;fa fa-angle-right&quot;&gt;&lt;&#x2F;i&gt;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">&lt;i class=&quot;fa fa-angle-right&quot;&gt;&lt;&#x2F;i&gt;</a>
   </nav>
 
 
@@ -2652,7 +2869,7 @@ sr1()（发送数据包）</code></pre></blockquote>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-count">42</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

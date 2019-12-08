@@ -240,6 +240,475 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/08/%E4%BB%BB%E5%8A%A1038%EF%BC%9AKali%20Linux%20NEXPOSE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/08/%E4%BB%BB%E5%8A%A1038%EF%BC%9AKali%20Linux%20NEXPOSE/" itemprop="url">038：Kali Linux NEXPOSE</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-08T23:12:42+08:00">
+                2019-12-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<ol>
+<li><p>NEXPOSE</p>
+<ul>
+<li>Rapid7<ul>
+<li>Nexpose</li>
+<li>完整的漏洞管理实现</li>
+</ul>
+</li>
+<li>环境准备<ul>
+<li>建议VM 4G内存</li>
+<li><a href="https://www.rapid7.com/products/nexpose/download/" target="_blank" rel="noopener">https://www.rapid7.com/products/nexpose/download/</a></li>
+<li><a href="https://IP_ADDR:3780（nxadmin/nxpassword,后改为Rapid7@mazhentao）" target="_blank" rel="noopener">https://IP_ADDR:3780（nxadmin/nxpassword,后改为Rapid7@mazhentao）</a></li>
+<li>操作系统账号密码：nexpose</li>
+<li><a href="https://www.rapid7.com/try/nexpose/" target="_blank" rel="noopener">https://www.rapid7.com/try/nexpose/</a></li>
+<li>QHWT-72GT-BHDS-FQLH（激活码进行注册，30天有效期）</li>
+<li>service nexposeconsole.cc restart（重启命令，但初始化时间非常长）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>概念：用扫描器去发现漏洞，用渗透框架去验证漏洞
+▲ 2019.12.8可以注册一个企业邮箱，可申请多个（腾讯。网易等）
+▲ 2019.12.8需要修改密码，至少一个数字，一个大写字母，一个字符，长度大于14位，多次不成功会锁账号 Rapid7@mazhentao
+▲ 2019.12.8只有注册后，才可下载到ova文件</code></pre></blockquote>
+<ol start="2">
+<li><p>Administrator</p>
+<ul>
+<li>Scan Templates<ul>
+<li>Exhaustive → Copy</li>
+<li>General → Name → Types of Checks（Assert Discovery、Vulnerability、WebSpldering、Policies）</li>
+<li>Asset Discovery（主机发现）</li>
+<li>Service Discovery（服务发现）</li>
+<li>Discovery Performance（发现选项）</li>
+<li>Vulnerability Checks（unsafe or safe，<strong>！Select Checks！</strong>）</li>
+<li>File Searching（文件搜索）</li>
+<li>Spam Relaying（垃圾邮件）</li>
+<li>Database Servers（数据库）</li>
+<li>Mail Server（邮件服务器）</li>
+<li>CVS Serverr（版本管理服务器）</li>
+<li>DHCP Server</li>
+<li>Telnet Server</li>
+<li>Web Spldering（网页爬网，有可能造成CC攻击）</li>
+<li>Oracle Policy（Oracle 策略）</li>
+<li>Lotus Domino Policy（Lotus Domino 策略）</li>
+<li>Windows Group Policy（window 组策略）</li>
+<li>CIFS/SMB Account Policy（CIFS/SMB 账号策略）</li>
+<li>AS/400 Policy（AS/400 机型策略）</li>
+<li>Unix Policy（Unix 策略）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>企业在美国上市需要过塞班思发案，也即404法案，Sarbans-Oxley compliance
+支付行业要过PCI ASV Extemal Audit/PCI Internal Aduit</code></pre></blockquote>
+<ul>
+<li>Sites（在home）<ul>
+<li>Create sites</li>
+<li>INFO &amp; SECURITY</li>
+<li>ASSETS</li>
+<li>AUTHENTICATION（Web Application → HTML FORM/HTTP HEADERS（SEESIONID））</li>
+<li>TEMPLATES</li>
+<li>ENGINES（扫描引擎）</li>
+<li>ALERTS（到点，可以用于发送mail）</li>
+<li>SCHEDULE</li>
+</ul>
+</li>
+</ul>
+<ol start="3">
+<li><p>扫描结果分析</p>
+<ul>
+<li>False Positive：误报</li>
+<li>False negative：漏报</li>
+</ul>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/08/%E4%BB%BB%E5%8A%A1037%EF%BC%9AKali%20Linux%20NESSUS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/08/%E4%BB%BB%E5%8A%A1037%EF%BC%9AKali%20Linux%20NESSUS/" itemprop="url">037：Kali Linux NESSUS</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-08T23:12:42+08:00">
+                2019-12-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<ol>
+<li><p>NESSUS</p>
+<ul>
+<li>家庭版<ul>
+<li>免费</li>
+</ul>
+</li>
+<li>专业版<ul>
+<li>收费，无限的并发连接</li>
+</ul>
+</li>
+<li>下载<ul>
+<li><a href="https://www.tenable.com/downloads/nessus" target="_blank" rel="noopener">https://www.tenable.com/downloads/nessus</a></li>
+</ul>
+</li>
+<li>安装<ul>
+<li><strong><code>🔺命令：dpkg -i 文件dbg</code></strong></li>
+<li>安装路径：/opt/nessus</li>
+</ul>
+</li>
+<li>启动服务<ul>
+<li><strong><code>🔺命令：/etc/init.d/nessusd start</code></strong></li>
+<li><strong><code>🔺命令：/etc/init.d/nessusd status</code></strong>（查看状态）</li>
+</ul>
+</li>
+<li>管理地址<ul>
+<li><a href="https://127.0.0.1:8834" target="_blank" rel="noopener">https://127.0.0.1:8834</a></li>
+</ul>
+</li>
+<li>注册激活码<ul>
+<li><a href="https://www.tenable.com/products/nessus/nessus-essentials" target="_blank" rel="noopener">https://www.tenable.com/products/nessus/nessus-essentials</a></li>
+</ul>
+</li>
+<li>管理账号<ul>
+<li>更新插件</li>
+</ul>
+</li>
+<li>基本配置（setting）<ul>
+<li>升级</li>
+<li>账号</li>
+<li>SMTP</li>
+<li>代理</li>
+</ul>
+</li>
+<li>Policy Library<ul>
+<li>Advanced Scan（高级扫描）</li>
+<li>Basic Shellshock Detection（检测破壳漏洞，系统的环境变量）</li>
+<li>Basic Network Scan（基本网络扫描，for any host）</li>
+<li>Credentialed Patch Audit（身份验证补丁）</li>
+<li>GHOST（glibc）Detection（底层C语言模块漏洞）</li>
+<li>Host Discovery（主机发现）</li>
+<li>Web Applicattion Test（针对Web的漏洞，XSS,CSRF,SQL注入等）</li>
+<li>Windows Mainware Scan（扫描恶意软件，计算恶意程序的哈希值，生成列表，来匹配）</li>
+</ul>
+</li>
+</ul>
+<ol start="2">
+<li>NESSUS扫描（window）</li>
+</ol>
+<ul>
+<li>Advanced Scan → Setting<ul>
+<li>Basic → General（Name → window_vuln_scan_policy）</li>
+<li>Basic → Permissions</li>
+<li>Discovery → Host Discovery（Use fast network discovery，Add File（添加MAC地址））</li>
+<li>Discovery → Prot Scanning（Ports → defult，TCP → SYN）</li>
+<li>Discovery → Service Discovery（All Ports，Enable all SSL ciphers，Enable CRL checking）</li>
+<li>Assessment → Web Application（open）</li>
+<li>Advanced（not safe）</li>
+</ul>
+</li>
+<li>Advanced Scan → Credentials（证书，证明提高）</li>
+<li>Advanced Scan → Compliance（合规性）</li>
+<li>Advanced Scan → Plugins（类似于openvas的family，插件）</li>
+<li>New Scan → window_vuln_scan_policy  ▲ 2019.12.8 SMTP 25端口无法连接socket<ul>
+<li>setting → send Email（SMTP Server）</li>
+<li>Host：<a href="mailto:smtp@163.com" target="_blank" rel="noopener">smtp@163.com</a></li>
+<li>Port：25</li>
+<li>From：<a href="mailto:nessus@163.com" target="_blank" rel="noopener">nessus@163.com</a></li>
+<li>Encryption：Use TLS if available</li>
+<li>Hostname：localhost：8834</li>
+<li>Auth Method：PLAIN</li>
+<li>Username/Password   </li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>windows增加用户密码：net user 用户 -
+可添加一个针对Linux系统的Advabced Scan（linux_vuln_scan_policy）
+可通过设置User Profile → API Keys来设置Access Key和Secret Key</code></pre></blockquote>
+<ol start="3">
+<li><p>NESSUS</p>
+<ul>
+<li>策略</li>
+<li>扫描</li>
+<li>扫描本机</li>
+<li>扫描windows</li>
+<li>扫描Linux</li>
+<li>扫描网络设备</li>
+<li>扫描web server</li>
+<li>报告</li>
+<li>调度</li>
+</ul>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/07/%E4%BB%BB%E5%8A%A1036%EF%BC%9AKali%20Linux%20NMAP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2328,493 +2797,6 @@ iptables -L查看当前防火墙规则</code></pre></blockquote>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/03/%E4%BB%BB%E5%8A%A1028%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E4%BA%94%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/03/%E4%BB%BB%E5%8A%A1028%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E4%BA%94%EF%BC%89/" itemprop="url">028：Kali Linux主动信息收集-发现（五）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-03T21:56:12+08:00">
-                2019-12-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<ol>
-<li><p>发现-四层发现（Nmap）</p>
-<ul>
-<li><strong><code>🔺命令：nmap IP地址-254 -PU53（对于UDP53端口） -sn</code></strong></li>
-<li><strong><code>🔺命令：nmap IP地址-254 -PA80（对于TCP80端口） -sn</code></strong></li>
-<li><strong><code>🔺命令：nmap -iL iplist.txt -PA80 -sn</code></strong></li>
-</ul>
-</li>
-</ol>
-<p>▲ 2019.12.3 Nmap局域网，无论是TCP还是UDP，发送的都是DNS的包，局域网内是发给网关<br>▲ 2019.12.3 Nmap外网，UDP查询时发送DNS包，TCP发送TCP包</p>
-<blockquote>
-<pre><code>nmap IP地址 -P0 -sn Ping层的发现
-nmap IP地址 -PS -sn SCTP发现
-nmap IP地址 -PE -sn ICMP echo
-nmap IP地址 -PP -sn 时间戳
-namp IP地址 -PM -sn 子网掩码发现
-nmap 192.168.100.1-254 -PA80 -sn | grep &quot;Nmap&quot; | grep -v &quot;Starting&quot; | grep -v &quot;done&quot;| cut -d &quot; &quot; -f 6 | cut -d &quot;(&quot; -f 2| cut -d &quot;)&quot; -f 1 &gt; iplist.txt</code></pre></blockquote>
-<ol start="2">
-<li><p>发现-四层发现（hping3）</p>
-<ul>
-<li><strong><code>🔺命令：hping3 --udp IP地址 -c 1</code></strong></li>
-<li><strong><code>🔺命令：for addr in $(seq 1 254);do hping3 --udp 1.1.1.$addr -c 1 &gt;&gt;r.txt;done</code></strong><ul>
-<li><strong><code>🔺命令：grep Unreachable r.txt | cut -d &quot;&quot; -f 5 | cut -d &quot;=&quot; -f 2</code></strong></li>
-<li><strong><code>🔺命令：./udp_hping.sh IP网段</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#！/bin/bash</span><br><span class="line">if [ &quot;$#&quot; -ne 1 ];then</span><br><span class="line">    echo &quot;USAGE - ./udp_hping.sh [/24 network address]&quot;</span><br><span class="line">    echo &quot;Example - ./udp_hping.sh 192.168.100.0&quot;</span><br><span class="line">    echo &quot;Example will perform an UDP scan of the 192.168.100.0/24 network and output.txt file&quot;</span><br><span class="line">    exit</span><br><span class="line">fi</span><br><span class="line">prefix=$(echo $1 | cut -d &quot;.&quot; -f 1-3)</span><br><span class="line">for addr in $(seq 1 254);do</span><br><span class="line">    hping3 $prefix.$addr --udp -c 1 &gt;&gt; r.txt;</span><br><span class="line">done</span><br><span class="line">grep Unreachable r.txt | cut -d &quot;&quot; -f 5 | cut -d &quot;=&quot; -f 2 &gt;&gt; output.txt</span><br><span class="line">rm r.txt</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong><code>🔺命令：hping3 IP地址 -c 1</code></strong>（TCP，Flag 0–ACK、RST）<ul>
-<li><strong><code>🔺命令：hping3 IP地址</code></strong></li>
-<li><strong><code>🔺命令：./tcp_hping.sh IP网段</code></strong></li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#！/bin/bash</span><br><span class="line">if [ &quot;$#&quot; -ne 1 ];then</span><br><span class="line">    echo &quot;USAGE - ./tcp_hping.sh [/24 network address]&quot;</span><br><span class="line">    echo &quot;Example - ./tcp_hping.sh 192.168.100.0&quot;</span><br><span class="line">    echo &quot;Example will perform an TCP scan of the 192.168.100.0/24 network and output.txt file&quot;</span><br><span class="line">    exit</span><br><span class="line">fi</span><br><span class="line">prefix=$(echo $1 | cut -d &quot;.&quot; -f 1-3)</span><br><span class="line">for addr in $(seq 1 254);do</span><br><span class="line">    hping3 $prefix.$addr -c 1 &gt;&gt; r.txt;</span><br><span class="line">done</span><br><span class="line">grep Unreachable r.txt | cut -d &quot;&quot; -f 5 | cut -d &quot;=&quot; -f 2 &gt;&gt; output.txt</span><br><span class="line">rm r.txt</span><br></pre></td></tr></table></figure>
-
-
-<blockquote>
-<pre><code>hping3不是发ACK的TCP包，是flag0的TCP包，需要收回ACK、RST的TCP包
-nmap和Scapy发的是ACK的TCP包，是flag16的TCP包，需要收回RST的TCP包</code></pre></blockquote>
-<ol start="3">
-<li><p>端口扫描（UDP）</p>
-<ul>
-<li>端口对应网络服务及应用端程序</li>
-<li>服务端程序的漏洞通过端口攻入</li>
-<li>发现开放的端口</li>
-<li>更具体的攻击面</li>
-<li>UDP端口<ul>
-<li>假设ICMP port-unreachable 响应代表端口关闭（没有响应，即为端口开放）</li>
-<li>目标系统不响应ICMP port-unreachable时，可能产生误判</li>
-</ul>
-</li>
-<li>完整的UDP应用层请求<ul>
-<li>准确性高</li>
-<li>耗时巨大</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>端口扫描（Scapy-UDP）</p>
-<ul>
-<li>Scapy UDP Scan<ul>
-<li>端口关闭：ICMP port-unreachable</li>
-<li>端口开放：没有回包</li>
-<li>了解每一种基于UDP的应用包结构很有帮助</li>
-<li>与三层相同的技术</li>
-<li>误判</li>
-</ul>
-</li>
-<li>Scapy<ul>
-<li>sr1(IP(dst=”IP地址”)/UDP(dport=53),timeout=1,verbose=1)</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：./udp_scan.py IP地址 起始端口 结束端口</code></strong></li>
-</ul>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line">import time</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=4:</span><br><span class="line">    print &quot;Usage - ./udp_scan.py [Target IP] [First IP] [Last IP] &quot;</span><br><span class="line">    print &quot;Example - ./udp_scan.py 192.168.100.1 1 200&quot;</span><br><span class="line">    print &quot;Example will perform a TCP ACK scan of the 192.168.100.0/24 range&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">ip=sys.argv[1]</span><br><span class="line">start=int(sys.argv[2])</span><br><span class="line">end=int(sys.argv[3])</span><br><span class="line"></span><br><span class="line">for port in range(start end):</span><br><span class="line">    a=sr1(IP(dst=ip)/UDP(dport=port),timeout=5,verbose=0)</span><br><span class="line">    time.sleep(1)</span><br><span class="line">    if a==None:</span><br><span class="line">      print port</span><br><span class="line">    else:</span><br><span class="line">      pass</span><br></pre></td></tr></table></figure>
-
-<ol start="5">
-<li><p>端口扫描（Nmap-UDP）</p>
-<ul>
-<li>Nmap</li>
-<li><strong><code>🔺命令：nmap -sU（端口扫描） IP地址</code></strong><ul>
-<li>默认的1000个参数（不指定端口的情况下）</li>
-<li>ICMP host-unreachable</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：nmap IP地址 -sU -p（指定端口） 53</code></strong></li>
-<li><strong><code>🔺命令：nmap -iL iplist.txt -sU -p（指定端口范围） 1-200</code></strong></li>
-</ul>
-</li>
-<li><p>端口扫描（TCP）</p>
-<ul>
-<li><p>TCP端口扫描（SYN–SYN/ACK–ACK）</p>
-<ul>
-<li>基于连接的协议</li>
-<li>三次握手（ACK包连接）</li>
-<li>隐蔽扫描（隐藏与目标进程的会话）–SYN（开放 →SYN/ACK，不开放 → RST）</li>
-</ul>
-<ol>
-<li>不建立完整连接（SYN（开放 →SYN/ACK，不开放 → RST））</li>
-<li>应用日志不记录扫描行为–隐蔽（但审计网络层，还是可以发现）</li>
-</ol>
-<ul>
-<li>僵尸扫描（几乎不和目标进程尝试会话）</li>
-</ul>
-<ol>
-<li>极度隐蔽</li>
-<li>实施条件苛刻</li>
-<li>可伪造源地址（▲扫描者与目标主机必须可以实现地址伪造）</li>
-<li>选择僵尸机（▲必须要有，网络中闲置的机子，不同于僵尸网络的机子）<ul>
-<li>闲置系统</li>
-<li>系统使用递增的IPID：（1）不能为0 （2）不能为随机</li>
-</ul>
-</li>
-</ol>
-<ul>
-<li>全连接扫描（三次握手连接）</li>
-<li>所有的TCP扫描方式都是基于三次握手的变化来判断目标端口状态</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>IPID:IP报头里面的Identification字段
-1.僵尸扫描过程（端口开放）：
-（1）Scanner【SYN/ACK】 -- Zombie【RST IPID=X】
-（2）Scanner【SYN IPSRC=zombie】 -- target【SYN/ACK】 -- Zombie【RST IPID=x+1,(僵尸机需要足够空闲)】
-（3）Scanner【SYN/ACK】 -- Zombie【RST IPID=x+2】
-2.僵尸扫描进程（端口未开放）：
-（1）Scanner【SYN/ACK】 -- Zombie【RST IPID=X】
-（2）Scanner【SYN IPSRC=zombie】 -- target【RST】 -- Zombie
-（3）Scanner【SYN/ACK】 -- Zombie【RST IPID=x+1】</code></pre></blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/03/%E4%BB%BB%E5%8A%A1027%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E5%9B%9B%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/03/%E4%BB%BB%E5%8A%A1027%EF%BC%9AKali%20Linux%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-%E5%8F%91%E7%8E%B0%EF%BC%88%E5%9B%9B%EF%BC%89/" itemprop="url">027：Kali Linux主动信息收集-发现（四）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-03T21:56:12+08:00">
-                2019-12-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<ol>
-<li><p>发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别）</p>
-<ul>
-<li>优点<ul>
-<li>可路由且结果可靠</li>
-<li>不太可能被防火墙过滤</li>
-<li>甚至可以发现所有端口都被过滤的主机</li>
-</ul>
-</li>
-<li>缺点<ul>
-<li>基于状态过滤的防火墙可能过滤扫描</li>
-<li>全端口扫描速度慢</li>
-</ul>
-</li>
-<li>TCP（正常过程：SYN–SYN/ACK–ACK）<ul>
-<li>未经请求的ACK–RST</li>
-<li>SYN–SYN/ACK、RST</li>
-</ul>
-</li>
-<li>UDP<ul>
-<li>ICMP端口不可达、一去不复返（被识别主机端口未开放UDP服务）</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>发现-四层发现（Scapy-TCP）</p>
-<ul>
-<li>ACK–TCP Port–RST</li>
-<li>Scapy<ul>
-<li>i=IP()</li>
-<li>i.dst=”IP地址”</li>
-<li>t=TCP()</li>
-<li>t.flags=”A”</li>
-<li>r=(i/f)</li>
-<li>a=sr1(r)</li>
-<li>a.display()</li>
-</ul>
-</li>
-<li>a=sr1(IP(dst=”IP地址”)/TCP(dport=80,flags=”A”),timeout=1)</li>
-<li><strong><code>🔺命令：./ACK_Ping.py IP网段</code></strong></li>
-</ul>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./ACK_Ping.py [/24 network address]&quot;</span><br><span class="line">    print &quot;Example - ./ACK_Ping.py 192.168.100.0&quot;</span><br><span class="line">    print &quot;Example will perform a TCP ACK scan of the 192.168.100.0/24 range&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">address=str(sys.argv[1])</span><br><span class="line">prefix=address.split(&quot;.&quot;)[0]+&quot;.&quot;+address.split(&quot;.&quot;)[1]+&quot;.&quot;+address.split(&quot;.&quot;)[2]+&quot;.&quot;</span><br><span class="line"></span><br><span class="line">for addr in range(1,254):</span><br><span class="line">    response=sr1(IP(dst=prefix+str(addr))/TCP(dport=2222,flags=&apos;A&apos;),timeout=0.1,verbose=0)</span><br><span class="line">    try:</span><br><span class="line">      if int(response[TCP].flags)==4:</span><br><span class="line">        print prefix+str(addr)</span><br><span class="line">    except:</span><br><span class="line">        pass</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li><p>发现-四层发现（Scapy-UDP）</p>
-<ul>
-<li>UDP–UDP Port–ICMP</li>
-<li>Scapy<ul>
-<li>i=IP()</li>
-<li>u=UDP()</li>
-<li>i.dst=”IP地址”</li>
-<li>u.dport=33333</li>
-<li>r=(i/u)</li>
-<li>a=sr1(r,timeout=1,verbose=1)</li>
-<li>a.display()</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：./UDP_Ping.py IP网段</code></strong>（UDP发现不可靠）</li>
-</ul>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./UDP_Ping.py [/24 network address]&quot;</span><br><span class="line">    print &quot;Example - ./UDP_Ping.py 192.168.100.0&quot;</span><br><span class="line">    print &quot;Example will perform a UDP ICMP scan of the 192.168.100.0/24 range&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">address=str(sys.argv[1])</span><br><span class="line">prefix=address.split(&quot;.&quot;)[0]+&quot;.&quot;+address.split(&quot;.&quot;)[1]+&quot;.&quot;+address.split(&quot;.&quot;)[2]+&quot;.&quot;</span><br><span class="line"></span><br><span class="line">for addr in range(1,254):</span><br><span class="line">    response=sr1(IP(dst=prefix+str(addr))/UDP(dport=33333),timeout=0.1,verbose=0)</span><br><span class="line">    try:</span><br><span class="line">      if int(response[IP].proto)==1:</span><br><span class="line">        print prefix+str(addr)</span><br><span class="line">    except:</span><br><span class="line">        pass</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2869,7 +2851,7 @@ nmap和Scapy发的是ACK的TCP包，是flag16的TCP包，需要收回RST的TCP�
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-count">44</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

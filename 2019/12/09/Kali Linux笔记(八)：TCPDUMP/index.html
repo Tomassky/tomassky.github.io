@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="操作系统," />
+  <meta name="keywords" content="安全," />
 
 
 
@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="第一章  操作系统架层次结构  硬件之上 应用程序之下   Linux、Window、Android的界面属于外壳（shell），而不是内核（kernel），重点是kernel  并发与并行  并行: 一个时间点上多个进程（需要多个CPU） 并发：一段时间上多个进程   OS Kernel的特征  并发，计算机系统中同时存在多个运行的程序，需要OS管理和调度 共享，“同时”访问，互斥共享 虚拟，利">
-<meta name="keywords" content="操作系统">
+<meta name="description" content="TCPDUMP  NO-GUI的抓包分析工具 Linux、Unix系统默认安装   TCPDUMP-抓包  抓包 默认只抓每个数据包的68个字节（一般是数据包头） 🔺命令：tcpdump -h（--help选项） 🔺命令：tcpdump -i（网卡） eth0 -s（size） 0 -w（保存） x.pcap 🔺命令：tcpdump -A（以ASCII码的形式） -r（读取） x.pca">
+<meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="第一章">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;20&#x2F;%E7%AC%AC%E4%B8%80%E7%AB%A0&#x2F;index.html">
+<meta property="og:title" content="Kali Linux笔记(八)：TCPDUMP">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;09&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB)%EF%BC%9ATCPDUMP&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="第一章  操作系统架层次结构  硬件之上 应用程序之下   Linux、Window、Android的界面属于外壳（shell），而不是内核（kernel），重点是kernel  并发与并行  并行: 一个时间点上多个进程（需要多个CPU） 并发：一段时间上多个进程   OS Kernel的特征  并发，计算机系统中同时存在多个运行的程序，需要OS管理和调度 共享，“同时”访问，互斥共享 虚拟，利">
+<meta property="og:description" content="TCPDUMP  NO-GUI的抓包分析工具 Linux、Unix系统默认安装   TCPDUMP-抓包  抓包 默认只抓每个数据包的68个字节（一般是数据包头） 🔺命令：tcpdump -h（--help选项） 🔺命令：tcpdump -i（网卡） eth0 -s（size） 0 -w（保存） x.pcap 🔺命令：tcpdump -A（以ASCII码的形式） -r（读取） x.pca">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-03T14:30:27.082Z">
+<meta property="og:updated_time" content="2019-12-09T11:28:49.586Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/11/20/第一章/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/12/09/Kali Linux笔记(八)：TCPDUMP/"/>
 
 
 
 
 
-  <title>第一章 | Tomas'Blog</title>
+  <title>Kali Linux笔记(八)：TCPDUMP | Tomas'Blog</title>
   
 
 
@@ -243,7 +243,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/20/%E7%AC%AC%E4%B8%80%E7%AB%A0/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB)%EF%BC%9ATCPDUMP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -260,7 +260,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">第一章</h1>
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(八)：TCPDUMP</h1>
         
 
         <div class="post-meta">
@@ -272,8 +272,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-20T20:40:40+08:00">
-                2019-11-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-09T19:29:25+08:00">
+                2019-12-09
               </time>
             
 
@@ -295,8 +295,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Operating-System-Priciple/" itemprop="url" rel="index">
-                    <span itemprop="name">Operating System Priciple</span>
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
                   </a>
                 </span>
 
@@ -332,95 +332,87 @@
       
 
       
-        <h2 id="第一章"><a href="#第一章" class="headerlink" title="第一章"></a>第一章</h2><hr>
+        <hr>
 <ol>
-<li><p><strong>操作系统架层次结构</strong></p>
+<li><p>TCPDUMP</p>
 <ul>
-<li>硬件之上</li>
-<li>应用程序之下</li>
+<li>NO-GUI的抓包分析工具</li>
+<li>Linux、Unix系统默认安装</li>
 </ul>
 </li>
-<li><p><u>Linux、Window、Android的界面属于外壳（shell），而不是内核（kernel），重点是kernel</u></p>
-</li>
-<li><p><strong>并发与并行</strong></p>
+<li><p>TCPDUMP-抓包</p>
 <ul>
-<li>并行: 一个时间点上多个进程（需要多个CPU）</li>
-<li>并发：一段时间上多个进程</li>
+<li>抓包<ul>
+<li>默认只抓每个数据包的68个字节（一般是数据包头）</li>
+<li><strong><code>🔺命令：tcpdump -h（--help选项）</code></strong></li>
+<li><strong><code>🔺命令：tcpdump -i（网卡） eth0 -s（size） 0 -w（保存） x.pcap</code></strong></li>
+<li><strong><code>🔺命令：tcpdump -A（以ASCII码的形式） -r（读取） x.pcap</code></strong></li>
+<li><strong><code>🔺命令：tcpdump -X（以十六进制的形式）-r x.pcap</code></strong></li>
+<li><strong><code>🔺命令：tcpdump -i eth0 tcp（协议类型） port（端口） x</code></strong></li>
 </ul>
 </li>
-<li><p><strong>OS Kernel的特征</strong></p>
-<ul>
-<li>并发，计算机系统中同时存在多个运行的程序，需要OS管理和调度</li>
-<li>共享，“同时”访问，互斥共享</li>
-<li>虚拟，利用多道程序设计技术，让每个用户都觉得有一个计算机专门为他服务</li>
-<li>异步，程序的执行不是一贯而底，而是走走停停，向前推进的速度是不可预知的，但只要运行的环境相同，OS需要保证程序运行的结果也要相同</li>
 </ul>
 </li>
-<li><p><strong>综合课程–结合许多不同的课程</strong></p>
+<li><p>TCPDUMP-筛选</p>
 <ul>
-<li>程序设计语言</li>
-<li>数据结构</li>
-<li>算法</li>
-<li>计算机体系结构</li>
-<li>材料</li>
-<li>操作系统概念和原理，源代码</li>
-<li>技能</li>
-<li>操作系统的设计和实现</li>
+<li>筛选<ul>
+<li><strong><code>🔺命令：tcpdump -n（不做域名解析）-r x.pcap | awk &#39;{print $3} &#39;| sort -u</code></strong></li>
+<li><strong><code>🔺命令：tcpdump -n src（源地址） host ip地址 -r x.pcap</code></strong></li>
+<li><strong><code>🔺命令：tcpdump -n dst（目标地址） host ip地址 -r x.pcap</code></strong></li>
+<li><strong><code>🔺命令：tcpdump -n tcp port x -r x.pcap</code></strong></li>
+<li><strong><code>🔺命令：tcpdump -nX（不做域名解析，十六进制形式）tcp port x -r x.pcap</code></strong></li>
 </ul>
 </li>
-<li><p><strong>顶级会议–SOSP,USENIX(每两年一次会议)</strong></p>
-<p><u>IPv6没有GFW</u></p>
-</li>
-<li><p><strong>操作系统需要权衡：</strong></p>
-<ul>
-<li>空间与时间</li>
-<li>性能和可预测性</li>
-<li>公平和性能</li>
 </ul>
 </li>
-<li><p><strong>硬件方面</strong></p>
-<ul>
-<li>良好得硬件资源</li>
-<li>合理的资源分配（例如：硬盘速度跟CPU、内存相差很多，操作系统需要去调节）</li>
-</ul>
+<li><p>TCPDUMP-高级筛选</p>
 </li>
 </ol>
-<ol start="9">
-<li><p><strong>操作系统实例</strong></p>
+<blockquote>
+<pre><code>ACK+PSH数据同时为1，即为数据传输真正开始的位置
+ACK为1，确认位 → A
+FIN为1，结束位 → F
+SYN为1，同步位 → S
+PSH为1，推送位 → P
+RST为1，复位位 → R
+URG为1，紧急位 → U
+CWR、ECE（暂未知）
+CEUAPRSF 0001100 = 24 in decimal</code></pre></blockquote>
 <ul>
-<li>Unix家族：Unix  BSD</li>
-<li>Linux家族：redhat、debian、ubuntu、fedoro</li>
-<li>Window家族：Window7、Window10</li>
+<li>高级筛选<ul>
+<li><strong><code>🔺命令：tcpdump -A -n &#39;tcp[13]=24&#39;（tcp的第十三字节为ACK+PSH）-r x.pcap</code></strong></li>
 </ul>
 </li>
-<li><p><strong>操作系统的历史</strong></p>
+</ul>
+<ol start="5">
+<li><p>过程文档记录</p>
 <ul>
-<li>早期计算机使用纸带传输程序和数据（操作系统只起到加载作用）</li>
-<li>批处理阶段（CPU等硬件快速发展，计算机速度得到提升）</li>
-<li>多道程序设计（内存的容量越来越大、CPU执行多个程序）操作系统中断调度 </li>
-<li>分时系统（为了更好的利用计算机资源，并且更好的和用户交互），分时时间片，1/1000s终中断调度（时钟）</li>
-<li>个人电脑操作系统PC（提高I/O交互性） </li>
-<li>网络的快速发展，出现了分布式的操作系统（Internet传输、数据中心计算）</li>
-<li>历代计算机 </li>
+<li>Dradis ▲2019.11.26软件启动失败<ul>
+<li>短期临时小团队资源共享</li>
+<li>各种插件导入文件</li>
+</ul>
+</li>
 </ul>
 </li>
 </ol>
 <blockquote>
-<pre><code>主机型计算机AIX/HP-UX（Mainframe compiting） 
-个人计算机Window/Linux/BSD（Person computing）
-网络计算IOS/Android（Internet computing）
-普适计算（Pervasive computing）</code></pre></blockquote>
-<ol start="11">
-<li><p><strong>操作系统的结构</strong></p>
+<pre><code>Dradis:开启 → http://127.0.0.1:3000 → 只需要输入密码即可 → import from file
+导入：namp -p IP地址 -oX x.xml → import from file → upload file
+导出：右键 → columns → catagory → HTML Export ready</code></pre></blockquote>
 <ul>
-<li>简单操作系统，MS-DOS,不分模块的单体内核（模具化是通过函数去调用的）</li>
-<li>微内核的设计，尽可能把内核功能移到用户中间（通过模块之间的消息传递机制）</li>
-<li>“外核”，极端的架构，EX kernel作为外核，访问kernel</li>
-<li>虚拟机（VMs），VMM虚拟监控机，VMM将单独的机器接口转换成很多的幻象，每个这些接口（虚拟机）是一个原始计算机系统的有效副本，并完成所有的处理器指令</li>
+<li>Keepnote（层级结构）▲2019.11.26新版本无此软件</li>
 </ul>
-</li>
-</ol>
-<hr>
+<blockquote>
+<pre><code>Keepnote:开启 → file → notebook 
+导出：Export notebook → HTML</code></pre></blockquote>
+<ul>
+<li>Truecrypt（加密工具）▲2019.11.26新版本无此软件，换为VeraCrypt</li>
+</ul>
+<blockquote>
+<pre><code>生成一个文件夹 → 挂载系统 → 拷贝到文件 → 卸载文件（全盘加密时间很长）
+Truecrypt:创建 → create Volume（可文件或者硬盘分区）→  Standard Truecrypt volume（Hidden Truecrypt volume隐藏加密，标准加密打开卷里面什么都没用）→ Select file → Encryption Algorithm（加密算法）+Hash Algorithm（哈希算法）→ Volume size → Volume Password → Format option → Cross-Platform Support（挂载支持）→ Volume Format（鼠标滑动生成随机密码）
+Truecrypt:使用 → select file → mount → Dismount All
+Hidden Truecrypt volume:存在outer volume和Hidden volume</code></pre></blockquote>
 
       
     </div>
@@ -438,7 +430,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag"># 操作系统</a>
+            <a href="/tags/%E5%AE%89%E5%85%A8/" rel="tag"># 安全</a>
           
         </div>
       
@@ -451,8 +443,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/11/20/Hello-World-0/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
+              <a href="/2019/11/22/%E7%AC%AC%E4%B8%89%E7%AB%A0%E3%80%81%E5%86%85%E5%AD%98%E6%8A%80%E6%9C%AF/" rel="next" title="第三章、内存技术">
+                <i class="fa fa-chevron-left"></i> 第三章、内存技术
               </a>
             
           </div>
@@ -461,8 +453,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/11/20/%E7%AC%AC%E4%BA%8C%E7%AB%A0/" rel="prev" title="第二章">
-                第二章 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/12/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C)%EF%BC%9AKali%20Linux%E5%AE%89%E8%A3%85/" rel="prev" title="Kali Linux笔记(二)：Kali Linux安装">
+                Kali Linux笔记(二)：Kali Linux安装 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -515,17 +507,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -605,22 +588,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一章"><span class="nav-number">1.</span> <span class="nav-text">第一章</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

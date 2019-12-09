@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="操作系统," />
+  <meta name="keywords" content="安全," />
 
 
 
@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="第一章  操作系统架层次结构  硬件之上 应用程序之下   Linux、Window、Android的界面属于外壳（shell），而不是内核（kernel），重点是kernel  并发与并行  并行: 一个时间点上多个进程（需要多个CPU） 并发：一段时间上多个进程   OS Kernel的特征  并发，计算机系统中同时存在多个运行的程序，需要OS管理和调度 共享，“同时”访问，互斥共享 虚拟，利">
-<meta name="keywords" content="操作系统">
+<meta name="description" content="信息收集-DNS  域名解析成IP地址 域名（qq.com）与FQDN（完全限定域名www.qq.com）的区别 域名记录：A（IPV4主机记录）、C name（别名记录）、NS（域名服务器地址对域解析）、MX（邮件服务器地址对域解析）、ptr（通过IP地址反向解析域名）、text（spf反向垃圾邮件域名）、SOA（启始授权）、AAAA（IPV6地址）       DNS客户端 → 本地DNS">
+<meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="第一章">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;20&#x2F;%E7%AC%AC%E4%B8%80%E7%AB%A0&#x2F;index.html">
+<meta property="og:title" content="Kali Linux笔记(十)：DNS信息收集">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;09&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81)%EF%BC%9ADNS%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="第一章  操作系统架层次结构  硬件之上 应用程序之下   Linux、Window、Android的界面属于外壳（shell），而不是内核（kernel），重点是kernel  并发与并行  并行: 一个时间点上多个进程（需要多个CPU） 并发：一段时间上多个进程   OS Kernel的特征  并发，计算机系统中同时存在多个运行的程序，需要OS管理和调度 共享，“同时”访问，互斥共享 虚拟，利">
+<meta property="og:description" content="信息收集-DNS  域名解析成IP地址 域名（qq.com）与FQDN（完全限定域名www.qq.com）的区别 域名记录：A（IPV4主机记录）、C name（别名记录）、NS（域名服务器地址对域解析）、MX（邮件服务器地址对域解析）、ptr（通过IP地址反向解析域名）、text（spf反向垃圾邮件域名）、SOA（启始授权）、AAAA（IPV6地址）       DNS客户端 → 本地DNS">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-03T14:30:27.082Z">
+<meta property="og:updated_time" content="2019-12-09T11:28:47.720Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/11/20/第一章/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/12/09/Kali Linux笔记(十)：DNS信息收集/"/>
 
 
 
 
 
-  <title>第一章 | Tomas'Blog</title>
+  <title>Kali Linux笔记(十)：DNS信息收集 | Tomas'Blog</title>
   
 
 
@@ -243,7 +243,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/20/%E7%AC%AC%E4%B8%80%E7%AB%A0/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81)%EF%BC%9ADNS%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -260,7 +260,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">第一章</h1>
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(十)：DNS信息收集</h1>
         
 
         <div class="post-meta">
@@ -272,8 +272,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-20T20:40:40+08:00">
-                2019-11-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-09T19:29:25+08:00">
+                2019-12-09
               </time>
             
 
@@ -295,8 +295,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Operating-System-Priciple/" itemprop="url" rel="index">
-                    <span itemprop="name">Operating System Priciple</span>
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
                   </a>
                 </span>
 
@@ -332,95 +332,106 @@
       
 
       
-        <h2 id="第一章"><a href="#第一章" class="headerlink" title="第一章"></a>第一章</h2><hr>
+        <hr>
 <ol>
-<li><p><strong>操作系统架层次结构</strong></p>
+<li><p>信息收集-DNS</p>
 <ul>
-<li>硬件之上</li>
-<li>应用程序之下</li>
+<li>域名解析成IP地址<ul>
+<li>域名（qq.com）与FQDN（完全限定域名<a href="http://www.qq.com）的区别" target="_blank" rel="noopener">www.qq.com）的区别</a></li>
+<li>域名记录：A（IPV4主机记录）、C name（别名记录）、NS（域名服务器地址对域解析）、MX（邮件服务器地址对域解析）、ptr（通过IP地址反向解析域名）、text（spf反向垃圾邮件域名）、SOA（启始授权）、AAAA（IPV6地址）</li>
 </ul>
 </li>
-<li><p><u>Linux、Window、Android的界面属于外壳（shell），而不是内核（kernel），重点是kernel</u></p>
-</li>
-<li><p><strong>并发与并行</strong></p>
-<ul>
-<li>并行: 一个时间点上多个进程（需要多个CPU）</li>
-<li>并发：一段时间上多个进程</li>
-</ul>
-</li>
-<li><p><strong>OS Kernel的特征</strong></p>
-<ul>
-<li>并发，计算机系统中同时存在多个运行的程序，需要OS管理和调度</li>
-<li>共享，“同时”访问，互斥共享</li>
-<li>虚拟，利用多道程序设计技术，让每个用户都觉得有一个计算机专门为他服务</li>
-<li>异步，程序的执行不是一贯而底，而是走走停停，向前推进的速度是不可预知的，但只要运行的环境相同，OS需要保证程序运行的结果也要相同</li>
-</ul>
-</li>
-<li><p><strong>综合课程–结合许多不同的课程</strong></p>
-<ul>
-<li>程序设计语言</li>
-<li>数据结构</li>
-<li>算法</li>
-<li>计算机体系结构</li>
-<li>材料</li>
-<li>操作系统概念和原理，源代码</li>
-<li>技能</li>
-<li>操作系统的设计和实现</li>
-</ul>
-</li>
-<li><p><strong>顶级会议–SOSP,USENIX(每两年一次会议)</strong></p>
-<p><u>IPv6没有GFW</u></p>
-</li>
-<li><p><strong>操作系统需要权衡：</strong></p>
-<ul>
-<li>空间与时间</li>
-<li>性能和可预测性</li>
-<li>公平和性能</li>
-</ul>
-</li>
-<li><p><strong>硬件方面</strong></p>
-<ul>
-<li>良好得硬件资源</li>
-<li>合理的资源分配（例如：硬盘速度跟CPU、内存相差很多，操作系统需要去调节）</li>
-</ul>
-</li>
-</ol>
-<ol start="9">
-<li><p><strong>操作系统实例</strong></p>
-<ul>
-<li>Unix家族：Unix  BSD</li>
-<li>Linux家族：redhat、debian、ubuntu、fedoro</li>
-<li>Window家族：Window7、Window10</li>
-</ul>
-</li>
-<li><p><strong>操作系统的历史</strong></p>
-<ul>
-<li>早期计算机使用纸带传输程序和数据（操作系统只起到加载作用）</li>
-<li>批处理阶段（CPU等硬件快速发展，计算机速度得到提升）</li>
-<li>多道程序设计（内存的容量越来越大、CPU执行多个程序）操作系统中断调度 </li>
-<li>分时系统（为了更好的利用计算机资源，并且更好的和用户交互），分时时间片，1/1000s终中断调度（时钟）</li>
-<li>个人电脑操作系统PC（提高I/O交互性） </li>
-<li>网络的快速发展，出现了分布式的操作系统（Internet传输、数据中心计算）</li>
-<li>历代计算机 </li>
 </ul>
 </li>
 </ol>
 <blockquote>
-<pre><code>主机型计算机AIX/HP-UX（Mainframe compiting） 
-个人计算机Window/Linux/BSD（Person computing）
-网络计算IOS/Android（Internet computing）
-普适计算（Pervasive computing）</code></pre></blockquote>
-<ol start="11">
-<li><p><strong>操作系统的结构</strong></p>
+<pre><code>DNS客户端 → 本地DNS服务器 → 根域服务器 → com服务器 → example.com服务器
+1.递归查询（一轮一轮递归） 2.迭代查询（从顶至下）
+缓存DNS服务器本身并不包含DNS记录（常用于本地DNS服务器）
+spf 反向垃圾域名服务，判断邮件的域名是否伪造</code></pre></blockquote>
+<ol start="2">
+<li><p>DNS信息收集-NSLOOKUP</p>
 <ul>
-<li>简单操作系统，MS-DOS,不分模块的单体内核（模具化是通过函数去调用的）</li>
-<li>微内核的设计，尽可能把内核功能移到用户中间（通过模块之间的消息传递机制）</li>
-<li>“外核”，极端的架构，EX kernel作为外核，访问kernel</li>
-<li>虚拟机（VMs），VMM虚拟监控机，VMM将单独的机器接口转换成很多的幻象，每个这些接口（虚拟机）是一个原始计算机系统的有效副本，并完成所有的处理器指令</li>
+<li><strong><code>🔺命令：nslookup 域名</code></strong></li>
+<li><strong><code>🔺命令：nslookup set type=mx（查询类型） 域名</code></strong> （数值越小，优先级越高）</li>
+<li><strong><code>🔺命令：nslookup set type=ns 域名</code></strong></li>
+<li><strong><code>🔺命令：nslookup set type=ptr ip地址</code></strong> ▲2019.11.27反向域名解析大概率查不到</li>
+<li><strong><code>🔺命令：nslookup server 202.106.0.20（其他ISP域名服务器的ip地址）</code></strong></li>
 </ul>
 </li>
 </ol>
-<hr>
+<blockquote>
+<pre><code>网络为智能DNS，选取最近的DNS服务器，不同地址的DNS服务器是不一样的，边缘网络</code></pre></blockquote>
+<ul>
+<li><strong><code>🔺命令：nslookup set type=any（任何域名）域名</code></strong></li>
+</ul>
+<ol start="2">
+<li><p>DNS信息收集-DIG</p>
+<ul>
+<li><strong><code>🔺命令：dig 8.8.8.8 域名 mx</code></strong></li>
+<li><strong><code>🔺命令：dig 域名 any</code></strong></li>
+<li>带参数：<strong><code>🔺命令：dig +noall +answer 域名 any | awk &#39;{print $5}&#39;</code></strong>▲2019.11.27难以查到</li>
+<li>反向查询：<strong><code>🔺命令：dig -x ip地址（PTR）</code></strong></li>
+<li>bind版本信息：<strong><code>🔺命令：dig +noall +answer txt chaos（class类） VERSION BIND 域名</code></strong> ▲2019.11.27难以查到</li>
+<li>DNS追踪：<strong><code>🔺命令：dig +trace 域名</code></strong>（迭代查询）、<strong><code>🔺命令：dig 域名（递归查询）</code></strong></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>指定域名服务器查询域名
+1.nslooup www.sina.com -type=a 8.8.8.8
+2.dig www.sina.com any @8.8.8.8
+trace追踪域名
+本机（随机挑选root的IP地址） → root（随机挑选com的IP地址） → com（随机挑选sina.com的IP地址） → sina.com（随机挑选IP地址） → www.sina.com（挑选A记录）
+▲抓包分析递归查询和迭代查询的区别
+▲域名解析服务器跟域名后缀可以不同（top. → d.zdnscloud.com.）</code></pre></blockquote>
+<ol start="3">
+<li><p>DNS区域传输（DNS的同步机制）</p>
+<ul>
+<li><strong><code>🔺命令：dig ns1.example.com example.com axfr（差异化传输方法Request for full zone transfer）</code></strong></li>
+<li><strong><code>🔺命令：host -T（用TCP传输方式） -l（axfr） sina.com ns3.sina.com</code></strong></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>TCP用于DNS之间的域名传输
+UDP用于DNS之间的查询</code></pre></blockquote>
+<ol start="4">
+<li><p>DNS字典爆破</p>
+<ul>
+<li><strong><code>🔺命令：fierce -dnsserver（指定DNS服务器） 8.8.8.8 -dns（要查询的域） sina.com.cn -wordlist（字典，明确字典路径） a.txt</code></strong></li>
+<li><strong><code>🔺命令：dnsdict6 -d（显示IPV6）4（显示IPV4） -t（并发线程数） 16 -x（不同级别） sina.com  （-D 自己指定字典，-U 最大的字典）</code></strong></li>
+<li><strong><code>🔺命令：dnsenum -f（字典，明确字典路径） dnsbig.txt -dnsserver 8.8.8.8 sina.com -o（导出成一个文件） sina.xml</code></strong></li>
+<li><strong><code>🔺命令：dnsmap sina.com -w（字典，明确字典路径） dns.txt</code></strong></li>
+<li><strong><code>🔺命令：dnsrecon -d（指定域名服务器） sina.com --lifetime（超时时间）10 -t（查询强度） brt（暴力爆破） -D（字典，明确字典路径） dnsbig.txt</code></strong></li>
+<li><strong><code>🔺命令：dnsrecon -t std（标准爆破） -d sina.com -D（字典，明确字典路径） dnsbig.txt</code></strong></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>查看程序相关文件
+dpkg -L fierce
+find / -name dnsenum</code></pre></blockquote>
+<ol start="5">
+<li><p>DNS注册信息</p>
+<ul>
+<li><strong><code>🔺命令：whois 域名</code></strong></li>
+<li><strong><code>🔺命令：whois IP地址</code></strong></li>
+<li><strong><code>🔺命令：whois -h whois.apnic.net IP地址</code></strong></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>网页查询
+AFRINIC  http://www.afrinic.net
+APNIC    http://www.apnic.net
+ARIN     http://whois.arin.net
+IANA     http://www.iana.com 
+ICANN    http://www.icann.org
+LACNIC   http://www.lacnic.net
+NRO      http://www.nro.net
+RIPE     http://www.ripe.net
+InterNic http://www.internic.net</code></pre></blockquote>
 
       
     </div>
@@ -438,7 +449,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag"># 操作系统</a>
+            <a href="/tags/%E5%AE%89%E5%85%A8/" rel="tag"># 安全</a>
           
         </div>
       
@@ -451,8 +462,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/11/20/Hello-World-0/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
+              <a href="/2019/12/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89)%EF%BC%9A%E7%8E%AF%E5%A2%83%E3%80%81%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" rel="next" title="Kali Linux笔记(三)：环境、环境配置">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(三)：环境、环境配置
               </a>
             
           </div>
@@ -461,8 +472,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/11/20/%E7%AC%AC%E4%BA%8C%E7%AB%A0/" rel="prev" title="第二章">
-                第二章 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/12/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81%E4%BA%8C)%EF%BC%9ARECON-NG/" rel="prev" title="Kali Linux笔记(十二)：RECON-NG">
+                Kali Linux笔记(十二)：RECON-NG <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -515,17 +526,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -605,22 +607,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一章"><span class="nav-number">1.</span> <span class="nav-text">第一章</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

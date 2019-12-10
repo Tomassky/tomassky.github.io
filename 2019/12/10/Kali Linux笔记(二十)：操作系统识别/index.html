@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="安全," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="操作系统识别  操作系统识别技术（默认开放的系统开放端口） 种类繁多 好产品采用多种技术组合   TTL起始值 Windows：128（65-128） Linux&#x2F;Unix：64（1-64） 某些Unix：255       TTL值劫持路由器，使不同地区的人访问到网页不一样  操作系统识别  Python form scapy.all import* win=”IP地址” linx=”IP地">
+<meta name="keywords" content="安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kali Linux笔记(二十)：操作系统识别">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;10&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81)%EF%BC%9A%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%AF%86%E5%88%AB&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="操作系统识别  操作系统识别技术（默认开放的系统开放端口） 种类繁多 好产品采用多种技术组合   TTL起始值 Windows：128（65-128） Linux&#x2F;Unix：64（1-64） 某些Unix：255       TTL值劫持路由器，使不同地区的人访问到网页不一样  操作系统识别  Python form scapy.all import* win=”IP地址” linx=”IP地">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-12-10T00:08:33.256Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/12/10/Kali Linux笔记(二十)：操作系统识别/"/>
+
+
+
+
+
+  <title>Kali Linux笔记(二十)：操作系统识别 | Tomas'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tomas'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81)%EF%BC%9A%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%AF%86%E5%88%AB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(二十)：操作系统识别</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-10T08:13:38+08:00">
+                2019-12-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<ol>
+<li><p>操作系统识别</p>
+<ul>
+<li>操作系统识别技术（默认开放的系统开放端口）<ul>
+<li>种类繁多</li>
+<li>好产品采用多种技术组合</li>
+</ul>
+</li>
+<li>TTL起始值<ul>
+<li>Windows：128（65-128）</li>
+<li>Linux/Unix：64（1-64）</li>
+<li>某些Unix：255</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>TTL值劫持路由器，使不同地区的人访问到网页不一样</code></pre></blockquote>
+<ol start="2">
+<li><p>操作系统识别</p>
+<ul>
+<li>Python<ul>
+<li>form scapy.all import*</li>
+<li>win=”IP地址”</li>
+<li>linx=”IP地址”</li>
+<li>aw=sr1(IP(dst=win)/ICMP())</li>
+<li>al=sr1(IP(dst=linu)/ICMP())</li>
+<li>if al[IP].ttl&lt;=64:</li>
+<li>print “host is linux”</li>
+<li>else:</li>
+<li>print “host is windows”</li>
+</ul>
+</li>
+<li>./ttl_os.py IP地址</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">from scapy.all import*</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy,runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./ttl_os.py [IP Address]&quot;</span><br><span class="line">    print &quot;Example - ./ttl_os.py 192.168.100.1&quot;</span><br><span class="line">    print &quot;Example will perform ttl analysize to attempt to determine whether the system is Windows or Linux/Unix&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">ip=sys.argv[1]</span><br><span class="line">ans=sr1(IP(dst=&quot;str(ip)&quot;)/ICMP(),timeout=1,verbose=0)</span><br><span class="line">if ans==None:</span><br><span class="line">    print &quot;No response was returned&quot;</span><br><span class="line">elif int(ans[IP].ttl)&lt;=64:</span><br><span class="line">    print &quot;Host is Linux/Unix&quot;</span><br><span class="line">else:</span><br><span class="line">    print &quot;Host is Windows&quot;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><p>操作系统识别</p>
+<ul>
+<li>nmap使用多种技术识别操作系统<ul>
+<li><strong><code>🔺命令：nmap IP地址 -O</code></strong></li>
+<li>系统服务特征</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>CPE国际标准化组织进行的标准化操作系统，设备类型分类</code></pre></blockquote>
+<ol start="4">
+<li><p>操作系统识别</p>
+<ul>
+<li><strong><code>🔺命令：xprobe2 IP地址</code></strong></li>
+<li>结果有误差</li>
+</ul>
+</li>
+<li><p>操作系统识别</p>
+<ul>
+<li>被动操作系统识别<ul>
+<li>IDS</li>
+<li>抓包分析</li>
+</ul>
+</li>
+<li>被动扫描（不主动向目标主机发包，部署在网络出口的地方）</li>
+<li><strong><code>🔺命令：p0f</code></strong><ul>
+<li>结合ARP地址欺骗识别全网OS</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>防火墙识别（尽量隐蔽）</p>
+<ul>
+<li>通过检查回包，可能识别端口是否经过防火墙过滤</li>
+<li>设备多种多样，结果过存在一定误差</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>（1）防火墙内部对外部的访问连接  （2）防火墙对源地址的过滤
+防火墙几种情况：
+Send         Response           Type
+SYN          NO              
+ACK          RST                Filtered
+
+SYN          SYN+ACK/SYN+RST 
+ACK          NO                 Filtered
+
+SYN          SYN+ACK/SYN+RST
+ACK          RST                Unfiltered/Open
+
+SYN          NO             
+ACK          NO                 Closed</code></pre></blockquote>
+<ol start="7">
+<li><p>防火墙识别</p>
+<ul>
+<li>Scapy</li>
+<li>Python<ul>
+<li><strong><code>🔺命令：fw_detect.py IP地址 端口</code></strong> ▲ 2019.12.6 脚本实验不成功，逻辑报错</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">from scapy.all import*</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy,runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=3:</span><br><span class="line">    print &quot;Usage - ./fw_detect.py [Target IP] [Target Port] &quot;</span><br><span class="line">    print &quot;Example - ./syn_scan.py 192.168.100.1 445&quot;</span><br><span class="line">    print &quot;Example will determine if filtering exists on port 443 of host 192.168.100.1&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">ip=sys.argv[1]</span><br><span class="line">port=sys.argv[2]</span><br><span class="line"></span><br><span class="line">ACK_response=sr1(IP(dst=ip)/TCP(dport=port,flags=&apos;A&apos;),timeout=1,verbose=0)</span><br><span class="line">SYN_response=sr1(IP(dst=ip)/TCP(dport=port,flags=&apos;S&apos;),timeout=1,verbose=0)</span><br><span class="line">if (ACK_respnonse==None) and (SYN_response==None):</span><br><span class="line">    print &quot;Port is either unstatefully filered or host is down&quot;</span><br><span class="line">elif (ACK_respnonse==None) and ((SYN_response[flags]==18) or (SYN_response[flags==6])):</span><br><span class="line">    print &quot;Stateful filtering in place&quot;</span><br><span class="line">elif (SYN_response==None) and (ACK_response[flags]==4):</span><br><span class="line">    print &quot;Stateful filtering in place&quot;</span><br><span class="line">elif ((SYN_response[flags]==18) or (SYN_response[flags==6])) and (ACK_response[flags]==4):</span><br><span class="line">    print &quot;Port is unfiltered and open&quot;</span><br><span class="line">else:</span><br><span class="line">    print &quot;Unable to determine if the port is filtered&quot;</span><br></pre></td></tr></table></figure>
+
+<ol start="8">
+<li><p>防火墙识别</p>
+<ul>
+<li>Nmap有系列防火墙过滤检测功能</li>
+<li><strong><code>🔺命令：nmap IP地址 端口</code></strong>（默认SYN包）</li>
+<li><strong><code>🔺命令：nmap -sA（ACK包） IP地址 端口</code></strong></li>
+</ul>
+</li>
+<li><p>负载均衡识别</p>
+<ul>
+<li>广域网负载均衡<ul>
+<li>DNS</li>
+<li>智能DNS（不同地区不同DNS回应）</li>
+</ul>
+</li>
+<li>服务器负载均衡<ul>
+<li>基于Web的服务器</li>
+</ul>
+</li>
+<li>组件级负载均衡</li>
+<li>HTTP-Loadbalancing<ul>
+<li>Nginx</li>
+<li>Apache</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：lbd www.baidu.com</code></strong></li>
+<li><strong><code>🔺命令：lbd mail.163.com</code></strong></li>
+</ul>
+</li>
+<li><p>WAF识别</p>
+<ul>
+<li>WEB应用防火墙（基于规则的过滤 → 基于机器学习，特征识别，语法词法的过滤）</li>
+<li><strong><code>🔺命令：wafw00f -l</code></strong></li>
+<li><strong><code>🔺命令：wafw00f http://www.microsoft.com</code></strong></li>
+<li><strong><code>🔺命令：nmap www.microsoft.com --script=http-waf-detect.nse</code></strong></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>WAF产品
+Profense
+Barracuda
+F5 Trafficshield
+Citrix NetScalor
+IBM Web Application Security
+webApp.secure
+BIG IP
+ISA Server
+AkamaiGHost</code></pre></blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%AE%89%E5%85%A8/" rel="tag"># 安全</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80)%EF%BC%9A%E6%B8%97%E9%80%8F%E7%8E%AF%E5%A2%83%E4%BB%8B%E7%BB%8D/" rel="next" title="Kali Linux笔记(一)：渗透环境介绍">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(一)：渗透环境介绍
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E4%BA%8C)%EF%BC%9A%E5%BC%B1%E7%82%B9%E6%89%AB%E6%8F%8F/" rel="prev" title="Kali Linux笔记(二十二)：弱点扫描">
+                Kali Linux笔记(二十二)：弱点扫描 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/photo.jpg"
+                alt="Tomas" />
+            
+              <p class="site-author-name" itemprop="name">Tomas</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Tomassky" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:643008933@qq.com" target="_blank" title="QQ邮箱">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tomas</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

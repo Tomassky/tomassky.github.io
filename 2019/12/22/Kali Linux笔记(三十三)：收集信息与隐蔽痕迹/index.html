@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="NEXPOSE  Rapid7 Nexpose 完整的漏洞管理实现   环境准备 建议VM 4G内存 https:&#x2F;&#x2F;www.rapid7.com&#x2F;products&#x2F;nexpose&#x2F;download&#x2F; https:&#x2F;&#x2F;IP_ADDR:3780（nxadmin&#x2F;nxpassword,后改为Rapid7@mazhentao） 操作系统账号密码：nexpose https:&#x2F;&#x2F;www.rapid7.">
+<meta name="description" content="信息收集  应用系统的配置文件 应用连接数据库的配置文件 后台服务运行账户     基本信息收集  Linux &#x2F;etc&#x2F;resolv.conf（DNS信息） &#x2F;etc&#x2F;passwd（存了用户账号和密码） &#x2F;etc&#x2F;shadow（存放的密码信息） 🔺命令：whoami,who -a 🔺命令：ifconfig -a，iptables -L -n，netstat -rn 🔺命令：uname">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kali Linux笔记(二十五)：NEXPOSE">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;10&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E4%BA%94)%EF%BC%9ANEXPOSE&#x2F;index.html">
+<meta property="og:title" content="Kali Linux笔记(三十三)：收集信息与隐蔽痕迹">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;22&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B8%89)%EF%BC%9A%E6%94%B6%E9%9B%86%E4%BF%A1%E6%81%AF%E4%B8%8E%E9%9A%90%E8%94%BD%E7%97%95%E8%BF%B9&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="NEXPOSE  Rapid7 Nexpose 完整的漏洞管理实现   环境准备 建议VM 4G内存 https:&#x2F;&#x2F;www.rapid7.com&#x2F;products&#x2F;nexpose&#x2F;download&#x2F; https:&#x2F;&#x2F;IP_ADDR:3780（nxadmin&#x2F;nxpassword,后改为Rapid7@mazhentao） 操作系统账号密码：nexpose https:&#x2F;&#x2F;www.rapid7.">
+<meta property="og:description" content="信息收集  应用系统的配置文件 应用连接数据库的配置文件 后台服务运行账户     基本信息收集  Linux &#x2F;etc&#x2F;resolv.conf（DNS信息） &#x2F;etc&#x2F;passwd（存了用户账号和密码） &#x2F;etc&#x2F;shadow（存放的密码信息） 🔺命令：whoami,who -a 🔺命令：ifconfig -a，iptables -L -n，netstat -rn 🔺命令：uname">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-10T00:09:38.772Z">
+<meta property="og:updated_time" content="2019-12-22T12:56:37.943Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/12/10/Kali Linux笔记(二十五)：NEXPOSE/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/12/22/Kali Linux笔记(三十三)：收集信息与隐蔽痕迹/"/>
 
 
 
 
 
-  <title>Kali Linux笔记(二十五)：NEXPOSE | Tomas'Blog</title>
+  <title>Kali Linux笔记(三十三)：收集信息与隐蔽痕迹 | Tomas'Blog</title>
   
 
 
@@ -243,7 +243,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E4%BA%94)%EF%BC%9ANEXPOSE/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/22/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B8%89)%EF%BC%9A%E6%94%B6%E9%9B%86%E4%BF%A1%E6%81%AF%E4%B8%8E%E9%9A%90%E8%94%BD%E7%97%95%E8%BF%B9/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -260,7 +260,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(二十五)：NEXPOSE</h1>
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(三十三)：收集信息与隐蔽痕迹</h1>
         
 
         <div class="post-meta">
@@ -272,8 +272,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-10T08:13:38+08:00">
-                2019-12-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-22T20:58:11+08:00">
+                2019-12-22
               </time>
             
 
@@ -334,84 +334,125 @@
       
         <hr>
 <ol>
-<li><p>NEXPOSE</p>
+<li><p>信息收集</p>
 <ul>
-<li>Rapid7<ul>
-<li>Nexpose</li>
-<li>完整的漏洞管理实现</li>
+<li>应用系统的配置文件<ul>
+<li>应用连接数据库的配置文件</li>
+<li>后台服务运行账户</li>
 </ul>
 </li>
-<li>环境准备<ul>
-<li>建议VM 4G内存</li>
-<li><a href="https://www.rapid7.com/products/nexpose/download/" target="_blank" rel="noopener">https://www.rapid7.com/products/nexpose/download/</a></li>
-<li><a href="https://IP_ADDR:3780（nxadmin/nxpassword,后改为Rapid7@mazhentao）" target="_blank" rel="noopener">https://IP_ADDR:3780（nxadmin/nxpassword,后改为Rapid7@mazhentao）</a></li>
-<li>操作系统账号密码：nexpose</li>
-<li><a href="https://www.rapid7.com/try/nexpose/" target="_blank" rel="noopener">https://www.rapid7.com/try/nexpose/</a></li>
-<li>QHWT-72GT-BHDS-FQLH（激活码进行注册，30天有效期）</li>
-<li>service nexposeconsole.cc restart（重启命令，但初始化时间非常长）</li>
+</ul>
+</li>
+<li><p>基本信息收集</p>
+<ul>
+<li>Linux<ul>
+<li>/etc/resolv.conf（DNS信息）</li>
+<li>/etc/passwd（存了用户账号和密码）</li>
+<li>/etc/shadow（存放的密码信息）</li>
+<li><strong><code>🔺命令：whoami,who -a</code></strong></li>
+<li><strong><code>🔺命令：ifconfig -a，iptables -L -n，netstat -rn</code></strong></li>
+<li><strong><code>🔺命令：uname -a，ps aux</code></strong></li>
+<li><strong><code>🔺命令：dpkg -l | head</code></strong>（rc–remove+配置文件保存）</li>
 </ul>
 </li>
 </ul>
 </li>
 </ol>
 <blockquote>
-<pre><code>概念：用扫描器去发现漏洞，用渗透框架去验证漏洞
-▲ 2019.12.8可以注册一个企业邮箱，可申请多个（腾讯。网易等）
-▲ 2019.12.8需要修改密码，至少一个数字，一个大写字母，一个字符，长度大于14位，多次不成功会锁账号 Rapid7@mazhentao
-▲ 2019.12.8只有注册后，才可下载到ova文件</code></pre></blockquote>
-<ol start="2">
-<li><p>Administrator</p>
+<pre><code>/etc/passwd   -rw-r--r--
+/etc/shadow   -rw-r-----</code></pre></blockquote>
 <ul>
-<li>Scan Templates<ul>
-<li>Exhaustive → Copy</li>
-<li>General → Name → Types of Checks（Assert Discovery、Vulnerability、WebSpldering、Policies）</li>
-<li>Asset Discovery（主机发现）</li>
-<li>Service Discovery（服务发现）</li>
-<li>Discovery Performance（发现选项）</li>
-<li>Vulnerability Checks（unsafe or safe，<strong>！Select Checks！</strong>）</li>
-<li>File Searching（文件搜索）</li>
-<li>Spam Relaying（垃圾邮件）</li>
-<li>Database Servers（数据库）</li>
-<li>Mail Server（邮件服务器）</li>
-<li>CVS Serverr（版本管理服务器）</li>
-<li>DHCP Server</li>
-<li>Telnet Server</li>
-<li>Web Spldering（网页爬网，有可能造成CC攻击）</li>
-<li>Oracle Policy（Oracle 策略）</li>
-<li>Lotus Domino Policy（Lotus Domino 策略）</li>
-<li>Windows Group Policy（window 组策略）</li>
-<li>CIFS/SMB Account Policy（CIFS/SMB 账号策略）</li>
-<li>AS/400 Policy（AS/400 机型策略）</li>
-<li>Unix Policy（Unix 策略）</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>企业在美国上市需要过塞班思发案，也即404法案，Sarbans-Oxley compliance
-支付行业要过PCI ASV Extemal Audit/PCI Internal Aduit</code></pre></blockquote>
-<ul>
-<li>Sites（在home）<ul>
-<li>Create sites</li>
-<li>INFO &amp; SECURITY</li>
-<li>ASSETS</li>
-<li>AUTHENTICATION（Web Application → HTML FORM/HTTP HEADERS（SEESIONID））</li>
-<li>TEMPLATES</li>
-<li>ENGINES（扫描引擎）</li>
-<li>ALERTS（到点，可以用于发送mail）</li>
-<li>SCHEDULE</li>
+<li>Windows<ul>
+<li><strong><code>🔺命令：ipconfig /all,ipconfig /displaydns（DNS缓存）,netstat -bnao,netstat -r（查询路由）</code></strong></li>
+<li><strong><code>🔺命令：net view,net view /domain（网络共享信息）</code></strong></li>
+<li><strong><code>🔺命令：net user /domain,net user %username% /domain</code></strong>（域环境的信息）</li>
+<li><strong><code>🔺命令：net accounts,net share</code></strong>（机器开的共享）</li>
+<li><strong><code>🔺命令：net localgroup administrator username /add</code></strong>（加入管理员组）</li>
+<li><strong><code>🔺命令：net group &quot;Domain Controllers&quot; /domain</code></strong>（查看域控制器的主机账号）</li>
+<li><strong><code>🔺命令：net share name$=C:\ /unlimited</code></strong>（域控制器的共享）</li>
+<li><strong><code>🔺命令：net user username /active:yes /domain</code></strong>（域管理员启动锁定的账号）</li>
 </ul>
 </li>
 </ul>
 <ol start="3">
-<li><p>扫描结果分析</p>
+<li><p>WMIC（WINDOWS MANAGEMENT INSTRUMENTATION）</p>
 <ul>
-<li>False Positive：误报</li>
-<li>False negative：漏报</li>
+<li><strong><code>🔺命令：wmic nicconfig get ipaddress,macaddress</code></strong>（读取IP地址，MAC地址）</li>
+<li><strong><code>🔺命令：wmic computersystem get username</code></strong>（当前登陆用户账号）</li>
+<li><strong><code>🔺命令：wmic netlogin get name,lastcalclogon</code></strong>（查看用户登陆记录，通过网络login）</li>
+<li><strong><code>🔺命令：wmic process get caption,executablepath,commandline</code></strong>（查看当前进程信息，由哪些命令执行，执行程序的路径）</li>
+<li><strong><code>🔺命令：wmic process where name=&quot;calc.exe&quot; call terminate</code></strong>（结束一个进程）</li>
+<li><strong><code>🔺命令：wmic os get name,servicepackmajorversion</code></strong>（提取操作系统版本，补丁）</li>
+<li><strong><code>🔺命令：wmic product get name,version</code></strong>（查看当前操作系统安装的软件）</li>
+<li><strong><code>🔺命令：wmic product where name=&quot;name&quot; call uninstall /nointeractive</code></strong>（删除软件，静默的去删除）</li>
+<li><strong><code>🔺命令：wmic share get /ALL</code></strong>（查看共享文件夹）</li>
+<li><strong><code>🔺命令：wmic /node:&quot;machinename&quot; path Win32_TerminalServiceSetting where AllowTSConnections=&quot;0&quot; call SetAllowTSConnections &quot;1&quot;</code></strong>（开启远程桌面） ▲ 2019.12.21 Win10的RPC服务器不可用，可在系统属性 → 远程中开启远程协助</li>
+<li><strong><code>🔺命令：wmic nteventlog get</code></strong> path,filename,writeable（查看当前系统日志对应操作系统文件）</li>
 </ul>
 </li>
 </ol>
+<blockquote>
+<pre><code>查看操作系统日志：运行 → eventvwr</code></pre></blockquote>
+<ol start="5">
+<li><p>收集敏感信息</p>
+<ul>
+<li>商业信息</li>
+<li>系统信息</li>
+<li>Linux<ul>
+<li>/etc；/usr/local/etc</li>
+<li>/etc/passwd；/etc/shadow</li>
+<li>.ssh；.gnupg 公私钥（默认隐藏文件）</li>
+<li>The e-mail and data files</li>
+<li>业务数据库：身份认证服务数据库</li>
+<li>/tmp</li>
+</ul>
+</li>
+<li>Windows<ul>
+<li>SAM数据库；注册表文件</li>
+<li>%SYSTEMROOT%\repair\SAM（SAM数据库备份）</li>
+<li>%SYSTEMROOT%\System32\config\RegBack\SAM（SAM数据库备份）</li>
+<li>业务数据库：身份认证数据库</li>
+<li>临时文件目录<ul>
+<li>UserProfile\AppData\Local\Microsoft\Windows\Temporary Internet Files\</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>隐藏痕迹</p>
+<ul>
+<li>Windows<ul>
+<li>禁止在登陆界面显示新建账号</li>
+<li><strong><code>🔺命令：REG ADD &quot;HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindosNT\CurrentVersion\WinLogon\SpecialAccounts\UserList&quot; /v uname（要隐藏的账号名）/T REG_DWORD /D 0</code></strong> ▲ 2019.12.21 Win10命令可以执行，但未禁止</li>
+<li>del %WINDIR%*.log /a/s/q/f（强制安静不留痕迹删除）</li>
+</ul>
+</li>
+<li>Linux<ul>
+<li><strong><code>🔺命令：history</code></strong>（重点关注，查看曾经运行的命令）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>   history -c（擦除history之前的命令）<br>   lsattr（查看权限相关文件的属性）</p>
+<ul>
+<li>rm .bash_history &amp;&amp; chattr +i .bash_history（文件名）（文件不能再写入）</li>
+</ul>
+</blockquote>
+<blockquote>
+<pre><code>history存在内存中，关机即删除
+.bash_history存在硬盘，关机不删除</code></pre></blockquote>
+<ul>
+<li>日志（/var/log）<ul>
+<li>auth.log/secure</li>
+<li>btmp/wtmp（数据文件，不能直接查看，通过<strong><code>🔺命令：lastb/last</code></strong>查看文件）</li>
+<li><strong><code>🔺命令：lastlog/faillog</code></strong></li>
+</ul>
+</li>
+<li>其他日志和HIDS等 </li>
+</ul>
 
       
     </div>
@@ -442,8 +483,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E5%9B%9B)%EF%BC%9ANESSUS/" rel="next" title="Kali Linux笔记(二十四)：NESSUS">
-                <i class="fa fa-chevron-left"></i> Kali Linux笔记(二十四)：NESSUS
+              <a href="/2019/12/22/Kali%20Linnx%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%BA%8C)%EF%BC%9A%E9%85%8D%E7%BD%AE%E4%B8%8D%E5%BD%93%E6%8F%90%E6%9D%83/" rel="next" title="Kali Linux笔记(三十二)：配置不当提权">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(三十二)：配置不当提权
               </a>
             
           </div>
@@ -452,8 +493,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E4%B8%80)%EF%BC%9ANAMP/" rel="prev" title="Kali Linux笔记(二十一)：NMAP">
-                Kali Linux笔记(二十一)：NMAP <i class="fa fa-chevron-right"></i>
+              <a href="/2019/12/22/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B8%80)%EF%BC%9A%E5%88%A9%E7%94%A8%E6%BC%8F%E6%B4%9E%E6%8F%90%E6%9D%83/" rel="prev" title="Kali Linux笔记(三十一)：漏洞提权">
+                Kali Linux笔记(三十一)：漏洞提权 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>

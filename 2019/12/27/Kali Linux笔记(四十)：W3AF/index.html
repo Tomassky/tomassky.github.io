@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="安全," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="w3af   ▲ 2019.12.26 Kali未带此软件，通过github下载安装过于复杂，还未成功  Web Application Attack and Audit Framework，基于python语言开发 此框架的目标是帮助你发现和利用所有WEB应用程序漏洞（和msf框架结合） 9大类近150个plugin audit（审计，扫描发现漏洞） infrastructure（基础架构，">
+<meta name="keywords" content="安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kali Linux笔记(四十)：W3AF">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;27&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81)%EF%BC%9AW3AF&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="w3af   ▲ 2019.12.26 Kali未带此软件，通过github下载安装过于复杂，还未成功  Web Application Attack and Audit Framework，基于python语言开发 此框架的目标是帮助你发现和利用所有WEB应用程序漏洞（和msf框架结合） 9大类近150个plugin audit（审计，扫描发现漏洞） infrastructure（基础架构，">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-12-27T02:57:49.260Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/12/27/Kali Linux笔记(四十)：W3AF/"/>
+
+
+
+
+
+  <title>Kali Linux笔记(四十)：W3AF | Tomas'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tomas'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81)%EF%BC%9AW3AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(四十)：W3AF</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-27T10:59:16+08:00">
+                2019-12-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<ol>
+<li>w3af</li>
+</ol>
+<blockquote>
+<pre><code>▲ 2019.12.26 Kali未带此软件，通过github下载安装过于复杂，还未成功</code></pre></blockquote>
+<ul>
+<li>Web Application Attack and Audit Framework，基于python语言开发</li>
+<li>此框架的目标是帮助你发现和利用所有WEB应用程序漏洞（和msf框架结合）</li>
+<li>9大类近150个plugin<ul>
+<li><strong>audit</strong>（审计，扫描发现漏洞）</li>
+<li>infrastructure（基础架构，扫描操作系统，Web Server，是否使用waf）</li>
+<li>grep（被动扫描插件类型，根据audit扫描发回的信息进行信息搜索）</li>
+<li>evasion（逃避目标IDS，IBS，WAF的检测）</li>
+<li>mangle（做一些基于正则表达式的计算）</li>
+<li>auth（身份认证）</li>
+<li>bruteforce（暴力破解，fuzz隐藏路径或文件名）</li>
+<li>output（扫描结果output为一种可被其他工具调用的文件）</li>
+<li><strong>crawl</strong>（爬网，通过超链接）</li>
+<li>attack（唯一不可以进行人工修改，已经固定）</li>
+</ul>
+</li>
+</ul>
+<ol start="2">
+<li><p>w3af</p>
+<ul>
+<li>安装（Kali自带版本执行扫描时挂死）<ul>
+<li>cd ~</li>
+<li>apt-get update</li>
+<li>apt-get install -y python-pip w3af</li>
+<li>pip install –upgrade pip</li>
+<li>git clone <a href="https://github.com/andresriancho/w3af.git" target="_blank" rel="noopener">https://github.com/andresriancho/w3af.git</a></li>
+<li>cd w3af</li>
+<li>./w3af_console（./w3af_gui）</li>
+<li>apt-get build-dep python-lxml</li>
+<li>./tmp/w3af_dependency_install.sh</li>
+</ul>
+</li>
+<li>升级<ul>
+<li>git pull</li>
+</ul>
+</li>
+<li>创建快捷方式<ul>
+<li>cp /usr/share/application/w3af.desktop /root/Desktop</li>
+<li>gedit w3af.desktop（修改Exec路径）</li>
+<li>chmod +x w3af</li>
+</ul>
+</li>
+<li>用户接口<ul>
+<li>Console</li>
+<li>Gui</li>
+<li>API</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>w3af_console</p>
+<ul>
+<li>help（显示可用指令）</li>
+<li>plugin（进入plugin子命令）<ul>
+<li>Help（显示可用指令）</li>
+<li>list audit（列出audit类所有的插件）</li>
+<li>audit sqli xss（选择使用的audit类所有的插件）</li>
+<li>grep all</li>
+<li>crawl web_spider</li>
+<li>back</li>
+</ul>
+</li>
+<li>profile（对扫描目标的集成选项）<ul>
+<li>list</li>
+<li>save as self-contained（保存当前配置）</li>
+<li>save as test self-contained</li>
+<li>use（调用）</li>
+</ul>
+</li>
+<li>http-settings（全局性）<ul>
+<li>help</li>
+<li>view（可查看http-settings的设置）</li>
+<li>set（设置）</li>
+<li>save（保存）</li>
+</ul>
+</li>
+<li>misc-settings（全局性）</li>
+<li>target<ul>
+<li>help</li>
+<li>view</li>
+<li>set taget</li>
+</ul>
+</li>
+<li>start</li>
+<li>script<ul>
+<li>script/* .w3af</li>
+</ul>
+</li>
+<li>./w3af_console -s script/sqli.w3af</li>
+</ul>
+</li>
+<li><p>w3af–身份认证</p>
+<ul>
+<li>HTTP Basic</li>
+<li>NTLM</li>
+<li>Form</li>
+<li>Cookie（双因素身份认证/anti-CSRF tokens U盘令牌格式）</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>▲ 安装IIS：运行 → appwiz.cpl → 添加/删除组件 → 应用程序服务器 → IIS
+▲ 设置IIS：开始 → 管理工具 → Internet信息服务（IIS）管理器 → 网站 → 默认网站 → 右键 → 属性 → 目录安全性 → 身份验证和访问控制 → 去掉匿名身份认证</code></pre></blockquote>
+<ol start="5">
+<li><p>w3af–基本身份认证</p>
+<ul>
+<li>设置HTTP Basic，设置账号密码</li>
+<li>配置Configuration</li>
+<li>设置Plugin</li>
+<li>可通过抓包，follow TCP流，解码Base64得出用户名密码</li>
+</ul>
+</li>
+<li><p>w3af–NTLM身份认证</p>
+<ul>
+<li>集成Windows身份认证</li>
+<li>配置Configuration</li>
+<li>设置Plugin</li>
+<li>抓包可看到加密的NTLM信息</li>
+</ul>
+</li>
+<li><p>w3af–Form身份认证</p>
+<ul>
+<li>不能配置Configuration</li>
+<li>设置Plugin → Auth（detalied/generic）<ul>
+<li>check-string（登陆成功的字符串）</li>
+<li>data_format（数据源代码，格式）</li>
+</ul>
+</li>
+<li>设置Plugin → crawl → Web_spider → only_forward（限定扫描子目录）</li>
+<li>设置Plugin</li>
+</ul>
+</li>
+<li><p>w3af–Cookie身份认证（绕过令牌ID认证的方式）</p>
+<ul>
+<li>找到网站的Cookie</li>
+<li>w3af只接受严格Cookie格式的文件</li>
+<li>配置Configuration（严格Cookie格式，需要添加时间，最后加00，用TAB键跳转）</li>
+<li>设置Plugin</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>Cookie文件
+.netscape.com    TRUE    /   FALSE   946684799   NETSCAPE_ID 100103
+Each line represents a single piece of stored information.A tab is inserted between each of the fields
+
+From left-to-right,here is what each field represents:
+domain--The domain that created AND that can read the variable.
+flag--A TRUE/FALSE value indicating if all machines within a given domain can access the variable.This value is set automatically by the browser,depending on the value you set for domain
+Path--The path within the domain that the variable is valid for.
+Secure--A TRUE/FALSE value indicating if a secure connection with the domain is needed to access the variable
+Expiration--The UNIX time that variable will expire on.UNIX time is  as the number of seconds since Jan 1,1970 00:00:00 GMT
+Name--The name of the variable
+Value--The values of the variable</code></pre></blockquote>
+<ol start="9">
+<li><p>w3af–身份认证（截断代理）</p>
+<ul>
+<li>截断代理（▲ 手动Web漏洞挖掘最基础步骤，提交数据代码）</li>
+<li>HTTP header file（另类的身份认证方法）</li>
+<li>保存头文件中不变的变量为一个txt文件，用于Configuration</li>
+<li>Configuration → General → headers_file</li>
+<li>Proxies the HTTP requests,allowing their modification → History → Send Request to Manual Editor（自编辑）</li>
+<li>Proxies the HTTP requests,allowing their modification →History → Fuzzy Request（正则表达式表达）<ul>
+<li>$10$（数字）</li>
+<li>$string.lowercas[:26]$（字母）</li>
+<li>$[‘spam’,’eggss’]$（查找特定字符串）</li>
+<li>$[l.strip() for l in file (‘input.txt’).readline()]$</li>
+</ul>
+</li>
+<li>Proxies the HTTP requests,allowing their modification →History → Compare（比较请求的结果）</li>
+<li>Proxies the HTTP requests,allowing their modification →History → Export Request（导出）</li>
+<li>Proxies the HTTP requests,allowing their modification →History → History → Audit Request with…（调整修改请求内容）</li>
+<li>Cluster responses（ID视图查看）</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>大部分不变的头部请求：
+Accept-language: en-US,en;q=0.5
+Accept-encoding: gzip,deflate
+Connection: keep-alive
+Accept:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+User Agent: MOT-V177/0.1.75 UP.Browser/6.2.3.9.c.12(GUI) MMP/2.0 UP.Link/6.3.1.13.0
+Host: 192.168.20.7
+Referer: http://192.168.20.7/dvwa/vulnerabilities/sqli/
+Cookie: Security=low; PHPSESSID=f8c40e5267bfbb04a6053e9ec8e6293
+Content-type: application/x-www-form-urlencoded
+
+▲ skipfish的fuzz.txt:/usr/share/wfuzz/wordlist/fuzzdb/Discovery/FilenameBruteforce/wordlistSkipfish.fuzz.txt</code></pre></blockquote>
+<ol start="10">
+<li><p>w3af–截断代理技术</p>
+<ul>
+<li>w3af不支持客户端技术（Javascript，Flash，Java applet等）</li>
+<li>截断代理手动爬网（Proxy）<ul>
+<li>crawl → spider_man（Plugin）</li>
+<li>output → export_requests（Output插件）（~/output.b64 64编码）</li>
+<li><a href="http://127.7.7.7/spider_man?terminate（终止spider_man）" target="_blank" rel="noopener">http://127.7.7.7/spider_man?terminate（终止spider_man）</a></li>
+</ul>
+</li>
+<li>crawl → import_results（base64）</li>
+</ul>
+</li>
+<li><p>w3af–exploit</p>
+<ul>
+<li>Proxies the HTTP requests,allowing their modification（抓取有SQL I njection路径）</li>
+<li>Configuration → General → headers_file（指定头文件）</li>
+<li>Target（设置Plugin → sqli）</li>
+<li>Start</li>
+<li>Results → Request/Response navigator（查看是否有SQL 语法报错）</li>
+<li>Exploit → Linux命令<ul>
+<li>payload（用法：payload users）</li>
+<li>users</li>
+<li>dbs</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%AE%89%E5%85%A8/" rel="tag"># 安全</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%BA%94)%EF%BC%9AHTTP%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/" rel="next" title="Kali Linux笔记(三十五)：HTTP协议基础">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(三十五)：HTTP协议基础
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/photo.jpg"
+                alt="Tomas" />
+            
+              <p class="site-author-name" itemprop="name">Tomas</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Tomassky" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:643008933@qq.com" target="_blank" title="QQ邮箱">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tomas</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

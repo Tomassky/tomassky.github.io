@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="安全," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="NIKTO  Perl语言开发的开源web安全扫描器 扫描软件版本 扫描搜索存在安全隐患的文件（压缩包留下的未压缩文件） 扫描服务器配置漏洞（默认配置文件存在的漏洞） WEB Application层面的安全隐患 避免404误判 很多服务器不遵守RFC标准，对于不存在的对象返回200响应码 依据响应文件内容判断，不同扩展名的文件404响应内容不同 去除时间信息后的内容取MD5值哈希摘要（对于4">
+<meta name="keywords" content="安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kali Linux笔记(三十七)：Nikto">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;27&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B8%83)%EF%BC%9ANikto&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="NIKTO  Perl语言开发的开源web安全扫描器 扫描软件版本 扫描搜索存在安全隐患的文件（压缩包留下的未压缩文件） 扫描服务器配置漏洞（默认配置文件存在的漏洞） WEB Application层面的安全隐患 避免404误判 很多服务器不遵守RFC标准，对于不存在的对象返回200响应码 依据响应文件内容判断，不同扩展名的文件404响应内容不同 去除时间信息后的内容取MD5值哈希摘要（对于4">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-12-27T02:56:36.541Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/12/27/Kali Linux笔记(三十七)：Nikto/"/>
+
+
+
+
+
+  <title>Kali Linux笔记(三十七)：Nikto | Tomas'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tomas'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B8%83)%EF%BC%9ANikto/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(三十七)：Nikto</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-27T10:59:15+08:00">
+                2019-12-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<ol>
+<li><p>NIKTO</p>
+<ul>
+<li>Perl语言开发的开源web安全扫描器</li>
+<li>扫描软件版本</li>
+<li>扫描搜索存在安全隐患的文件（压缩包留下的未压缩文件）</li>
+<li>扫描服务器配置漏洞（默认配置文件存在的漏洞）</li>
+<li>WEB Application层面的安全隐患</li>
+<li>避免404误判<ul>
+<li>很多服务器不遵守RFC标准，对于不存在的对象返回200响应码</li>
+<li>依据响应文件内容判断，不同扩展名的文件404响应内容不同</li>
+<li>去除时间信息后的内容取MD5值哈希摘要（对于404响应内容）</li>
+<li>-no404（每次扫描前不会尝试扩展名的判断，考虑性能可使用）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>改进后的NIKTO：在扫描之前，会从软件数据库中，提取各自扩展名组成随机页面请求，判断是否存在，然后根据不存在的页面去除时间信息后的静态内容取MD5哈希摘要，作为扫描结果404的比对，来进行一定程度的规避404的误判，提高扫描准确性</code></pre></blockquote>
+<ol start="2">
+<li><p>NIKTO</p>
+<ul>
+<li><strong><code>🔺命令：nikto -list -plugins</code></strong>（插件列表）</li>
+<li><strong><code>🔺命令：nikto -update</code></strong>（官方网站对插件的更新，可能需要代理）▲ 2019.12.23 需要通过pull directly from git<ul>
+<li>cirt.net</li>
+<li><a href="http://cirt.net/nikto/UPDATES" target="_blank" rel="noopener">http://cirt.net/nikto/UPDATES</a></li>
+<li>Plugins：shellshock（破壳漏洞注意）</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：nikto -host http://1.1.1.1 -output</code></strong></li>
+<li><strong><code>🔺命令：nikto -host 192.168.1.1 -ssl -port 443,8443,995</code></strong></li>
+<li><strong><code>🔺命令：nikto -host host.txt</code></strong>（一行表示一个要扫描的主机）</li>
+<li><strong><code>🔺命令：nmap -p80 192.168.1.0/24 -oG（grep输出）-（输出结果）| nikto -host - ▲ 2019.12.23</code></strong> 语句通过管道连接报错，单独语句可以执行</li>
+<li><strong><code>🔺命令：nikto -host 192.168.1.1 -userproxy</code></strong> <a href="http://localhost:22716（本机代理）" target="_blank" rel="noopener">http://localhost:22716（本机代理）</a></li>
+<li>-vhost（虚拟主机，一个IP多个主机，通过主机头判断，扫描需要域名，不可IP地址）</li>
+</ul>
+</li>
+<li><p>NIKTO–interactive（扫描过程的交互，停止可以再次按命令）</p>
+<ul>
+<li>Space–report current scan status（报告当前扫描状态）</li>
+<li>v–verbose mode on/off（显示详细信息）</li>
+<li>d–debug mode on/off（最详细信息，调试信息，发送的http请求）</li>
+<li>e–error reporting on/off（错误报告显示）</li>
+<li>p–progress reporting on/off（进程信息显示）</li>
+<li>r–redirect display on/off（重定向显示）</li>
+<li>c–cookie display on/off（服务器所给的cookie显示）</li>
+<li>a–auth display on/off（身份认证过程显示）</li>
+<li>q–quit（退出扫描）</li>
+<li>N–next host（下一个主机）</li>
+<li>P–Pauser（暂停扫描）</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>NIKTO不支持表单账号密码身份认证，只支持https身份认证（id+，id:pass:realm），但可以通过设置指定Cookie进行扫描Web Applicattion，需要设置配置文件</code></pre></blockquote>
+<ol start="4">
+<li><p>NIKTO 配置</p>
+<ul>
+<li>默认配置文件（/etc/nikto.conf）</li>
+<li>需要注意的参数<ul>
+<li>USERAGENT（客户端代理，默认设置Nikto/@VERSION）</li>
+<li>RFIURL（远程文件包含默认文件，可自己修建自己的URL）</li>
+<li>CIRT（默认更新的IP地址）</li>
+<li>PROXYHOST/PROXYPORT/PROXYUSER/PROXYPASS（代理，可以修改代理）</li>
+<li>STATIC-COOKIE=”cookie1”=”cookie value”;”cookie2”=”cooke val”（设置cookie）</li>
+</ul>
+</li>
+<li>-evasion：使用LibWhisker对IDS的躲避技术，可使用以下几种类型（可指定多种）：<ul>
+<li>Random URL encoding(non-UTF8)–随机URL编码（非UTF-8方式 ）</li>
+<li>Directory self-reference(/./)–自选择路径（/./）</li>
+<li>Premature URL ending– 过早结束的URL</li>
+<li>Prepend long random string–优先考虑长随机字符串</li>
+<li>Fake parameter–参数欺骗</li>
+<li>TAB as request space–使用TAB作为命令的分隔符</li>
+<li>Change the case of the URL–使用变化的URL</li>
+<li>Use Windows directory separator()–使用Windows路径分隔符”&quot;</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>Cookie获取：
+Firefox浏览器，可以通过Firbug option网络抓包，Net，然后Cookie，可通过d-debug mod查看设置的cookie是否生效
+User Agent：
+Firefox的默认UserAgent：Default User Agent → Default User Agent（每个浏览器可以进行独立设置）</code></pre></blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%AE%89%E5%85%A8/" rel="tag"># 安全</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E5%85%AD)%EF%BC%9AWeb%E6%B8%97%E9%80%8F%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E5%8F%8A%E5%B7%A5%E5%85%B7/" rel="next" title="Kali Linux笔记(三十六)：Web渗透实验环境及工具">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(三十六)：Web渗透实验环境及工具
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%BA%94)%EF%BC%9AHTTP%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/" rel="prev" title="Kali Linux笔记(三十五)：HTTP协议基础">
+                Kali Linux笔记(三十五)：HTTP协议基础 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/photo.jpg"
+                alt="Tomas" />
+            
+              <p class="site-author-name" itemprop="name">Tomas</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Tomassky" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:643008933@qq.com" target="_blank" title="QQ邮箱">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tomas</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

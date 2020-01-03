@@ -240,6 +240,280 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81%E5%9B%9B)%EF%BC%9A%E4%B8%BB%E6%9C%BA%E5%8F%91%E7%8E%B0--%E4%BA%8C%E5%B1%82%E5%8F%91%E7%8E%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81%E5%9B%9B)%EF%BC%9A%E4%B8%BB%E6%9C%BA%E5%8F%91%E7%8E%B0--%E4%BA%8C%E5%B1%82%E5%8F%91%E7%8E%B0/" itemprop="url">Kali Linux笔记(十四)：主机发现--二层发现</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-10T08:13:38+08:00">
+                2019-12-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<ol>
+<li><p>主动信息收集</p>
+<ul>
+<li>直接与目标系统交互通信</li>
+<li>无法避免留下访问的痕迹（可能被封杀，强的流量分析，强的代码审计）</li>
+<li>使用受控的第三方电脑进行探测<ul>
+<li>使用代理或已被控制的主机</li>
+<li>做好被封杀的准本</li>
+<li>使用噪声迷惑目标，淹没真实的探测流量（伪造IP发送大量垃圾信息）</li>
+</ul>
+</li>
+<li>扫描（IP层 → 端口层 → 服务级别的扫描）<ul>
+<li>发送不同的探测，根据结果判断目标状态</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>发现（IP层 → 端口层 → 服务级别的扫描）</p>
+<ul>
+<li>识别活着的主机<ul>
+<li>潜在的被攻击目标（存在的漏洞来进行利用）</li>
+</ul>
+</li>
+<li>输出一个IP地址列表（在线IP地址）</li>
+<li>2、3、4层发现</li>
+</ul>
+</li>
+<li><p>发现-二层发现（arping）</p>
+<ul>
+<li>优点：扫描速度快、可靠</li>
+<li>缺点：不可路由（只可发现本网段的主机发现）</li>
+<li>Arp协议<ul>
+<li>抓包</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>OSI模型
+Layer1 Physical
+Layer2 Data Link       ARP
+Layer3 Network         IPv4,IPv6,ICMP,and IPSec
+Layer4 Transport       TCP and UDP
+Layer5 Session         NetBIOS,PPTP,RPC,and SOCKS
+Layer6 Presentation    ASCII,JPEG,PDF,PNG,and DOCX
+Layer7 Application     HTTP,FTP,and Telnet</code></pre></blockquote>
+<ul>
+<li><strong><code>🔺命令：arping</code></strong></li>
+<li><strong><code>🔺命令：arping IP地址 -c 1</code></strong>（发送一个ARP包）</li>
+<li><strong><code>🔺命令：arping IP地址 -d</code></strong>（发现重复IP地址拥有一个MAC地址，可以发现arp地址欺骗）</li>
+<li><strong><code>🔺命令：arping -c 1 Ip地址 | grep &quot;bytes from&quot; | cut -d &quot; &quot; -f 5 | cut -d &quot;(&quot; -f 2 | cut -d &quot;)&quot; -f 1</code></strong></li>
+<li>脚本 ▲2019.12.2新版ifconfig命令显示不同，对相应脚本进行修改<ul>
+<li><strong><code>🔺命令：./arping1.sh eth0 &gt;iplist.txt</code></strong>（检查网内”存活”的计算机）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#！/bin/bash</span><br><span class="line">if [ &quot;$#&quot; -ne 1 ];then</span><br><span class="line">    echo &quot;USAGE - ./arping.sh [interface]&quot;</span><br><span class="line">    echo &quot;Example - ./arping.sh eth0&quot;</span><br><span class="line">    echo &quot;Example will perform an ARP scan of the local subnet to which eth0 is assigned&quot;</span><br><span class="line">    exit</span><br><span class="line">fi</span><br><span class="line">interface=$1</span><br><span class="line">prefix=$(ifconfig $interface | grep &quot;inet&quot; | egrep -v &quot;inet6&quot; | cut -d &quot;.&quot; -f 1-3 | awk &apos;&#123;print $2&#125;&apos;)</span><br><span class="line">for addr in $(seq 1 254);do</span><br><span class="line">    arping -c 1 $prefix.$addr | grep &quot;bytes from&quot; | cut -d &quot; &quot; -f 5 | cut -d &quot;(&quot; -f 2 | cut -d &quot;)&quot; -f 1</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>脚本 <ul>
+<li><strong><code>🔺命令：./arping2.sh iplist.txt</code></strong>（重新检查”存活”的主机）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#！/bin/bash</span><br><span class="line">if [ &quot;$#&quot; -ne 1 ];then</span><br><span class="line">    echo &quot;USAGE - ./arping.sh [iplist.txt]&quot;</span><br><span class="line">    echo &quot;Example - ./arping.sh iplist.txt&quot;</span><br><span class="line">    echo &quot;Example will perform an ARP scan of the local subnet to which eth0 is assigned&quot;</span><br><span class="line">fi</span><br><span class="line">file=$1</span><br><span class="line">for addr in $(cat $file); do</span><br><span class="line">    arping -c 1 $addr | grep &quot;bytes from&quot; | cut -d &quot; &quot; -f 5 | cut -d &quot;(&quot; -f 2 | cut -d &quot;)&quot; -f 1</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li><p>发现-二层发现（Netdiscover）</p>
+<ul>
+<li>Netdiscover（支持CIDR地址段显示）▲2019.12.2可抓到包，但界面不显示<ul>
+<li>专门用于二层发现</li>
+<li>可用于无线和交换网络环境</li>
+<li>主动和被动探测</li>
+</ul>
+</li>
+<li>主动<ul>
+<li><strong><code>🔺命令：netdiscover -i eth0 -r IP地址/24</code></strong></li>
+<li><strong><code>🔺命令：netdiscover -l iplist.txt</code></strong></li>
+</ul>
+</li>
+<li>被动（把网卡制成混杂模式进行监听）<ul>
+<li><strong><code>🔺命令：netdiscover -p</code></strong></li>
+<li>主动arp容易触发报警</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>发现-二层发现（Scapy）</p>
+<ul>
+<li>Scapy<ul>
+<li>作为Python库进行调用</li>
+<li>也可以作为单独的工具使用</li>
+<li>抓包、分析、创建、修改、注入网络流量</li>
+</ul>
+</li>
+<li>apt-get install python3-gnuplot（报错可安装）▲2019.12.2依然会报错，但不影响使用</li>
+<li>Scapy<ul>
+<li>arp=ARP（）</li>
+<li>arp.pdst=”IP地址”（进行赋值）</li>
+<li>answer=sr1(arp)（发生数据包）</li>
+<li>answer.display() （显示数据包的结构，分层）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>ARP().dispaly()（定制一个ARP的数据包，只需要添加属性字段，ARP的包头结构）
+sr1()（发送数据包）</code></pre></blockquote>
+<ul>
+<li>python脚本（用Scapy写的python脚本）<ul>
+<li><strong><code>🔺命令：./Arp1.py 接口</code></strong> ▲2019.12.1 strip()函数报错</li>
+<li><strong><code>🔺命令：./Arp2.py iplist.txt</code></strong></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./Arp1.py [interface]&quot;</span><br><span class="line">    print &quot;Example - ./Arp1.py eth0&quot;</span><br><span class="line">    print &quot;Example will perform an ARP scan of the local subnet to which eth0 is assigned&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">interface=str(sys.argv[1])</span><br><span class="line"></span><br><span class="line">ip=subprocess.check_output(&quot;ifconfig &quot;+interface+&quot; | grep &quot;inet&quot; | egrep -v &quot;inet6&quot; | cut -d &quot;.&quot; -f 1-3 | awk &apos;&#123;print $2&#125;&apos;&quot;,shell=True).strip()</span><br><span class="line">prefix=ip.split(&quot;.&quot;)[0]+&quot;.&quot;+ip.split(&quot;.&quot;)[1]+&quot;.&quot;+ip.split(&quot;.&quot;)[2]+&quot;.&quot;</span><br><span class="line">for addr in range(0,254):</span><br><span class="line">    answer=sr1(ARP(pdst=addr.strip()),timeout=0.1,verbose=1)</span><br><span class="line">    if answer==None:</span><br><span class="line">      pass</span><br><span class="line">    else:</span><br><span class="line">      print prefix+str(addr)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./Arp2.py [iplist.txt]&quot;</span><br><span class="line">    print &quot;Example - ./Arp2.py iplist.txt&quot;</span><br><span class="line">    print &quot;Example will perform an ARP scan of the local subnet to which eth0 is assigned&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">filename=str(sys.argv[1])</span><br><span class="line">file=open(filename,&quot;r&quot;)</span><br><span class="line"></span><br><span class="line">for addr in file:</span><br><span class="line">    answer=sr1(ARP(pdst=addr.strip()),timeout=0.1,verbose=1)</span><br><span class="line">    if answer==None:</span><br><span class="line">      pass</span><br><span class="line">    else:</span><br><span class="line">      print addr.strip()</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li><p>发现-二层发现（nmap）</p>
+<ul>
+<li><strong><code>🔺命令：nmap IP地址-254（IP地址/24） -sn</code></strong> </li>
+<li><strong><code>🔺命令：namp -iL（调用地址列表的文本文件） iplist.txt -sn | grep ^Namp</code></strong></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>强大的NMAP软件，需要非常熟练
+nmap的-sn参数，除了会ARP发现之外，还会进行DNS的反向域名解析</code></pre></blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81%E4%B8%83)%EF%BC%9A%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F--UDP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2702,306 +2976,6 @@ openvas-check-setup | grep Fix 可查看报错的组件
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81)%EF%BC%9A%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%AF%86%E5%88%AB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81)%EF%BC%9A%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%AF%86%E5%88%AB/" itemprop="url">Kali Linux笔记(二十)：操作系统识别</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-10T08:13:38+08:00">
-                2019-12-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<ol>
-<li><p>操作系统识别</p>
-<ul>
-<li>操作系统识别技术（默认开放的系统开放端口）<ul>
-<li>种类繁多</li>
-<li>好产品采用多种技术组合</li>
-</ul>
-</li>
-<li>TTL起始值<ul>
-<li>Windows：128（65-128）</li>
-<li>Linux/Unix：64（1-64）</li>
-<li>某些Unix：255</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>TTL值劫持路由器，使不同地区的人访问到网页不一样</code></pre></blockquote>
-<ol start="2">
-<li><p>操作系统识别</p>
-<ul>
-<li>Python<ul>
-<li>form scapy.all import*</li>
-<li>win=”IP地址”</li>
-<li>linx=”IP地址”</li>
-<li>aw=sr1(IP(dst=win)/ICMP())</li>
-<li>al=sr1(IP(dst=linu)/ICMP())</li>
-<li>if al[IP].ttl&lt;=64:</li>
-<li>print “host is linux”</li>
-<li>else:</li>
-<li>print “host is windows”</li>
-</ul>
-</li>
-<li>./ttl_os.py IP地址</li>
-</ul>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">from scapy.all import*</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy,runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./ttl_os.py [IP Address]&quot;</span><br><span class="line">    print &quot;Example - ./ttl_os.py 192.168.100.1&quot;</span><br><span class="line">    print &quot;Example will perform ttl analysize to attempt to determine whether the system is Windows or Linux/Unix&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">ip=sys.argv[1]</span><br><span class="line">ans=sr1(IP(dst=&quot;str(ip)&quot;)/ICMP(),timeout=1,verbose=0)</span><br><span class="line">if ans==None:</span><br><span class="line">    print &quot;No response was returned&quot;</span><br><span class="line">elif int(ans[IP].ttl)&lt;=64:</span><br><span class="line">    print &quot;Host is Linux/Unix&quot;</span><br><span class="line">else:</span><br><span class="line">    print &quot;Host is Windows&quot;</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li><p>操作系统识别</p>
-<ul>
-<li>nmap使用多种技术识别操作系统<ul>
-<li><strong><code>🔺命令：nmap IP地址 -O</code></strong></li>
-<li>系统服务特征</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>CPE国际标准化组织进行的标准化操作系统，设备类型分类</code></pre></blockquote>
-<ol start="4">
-<li><p>操作系统识别</p>
-<ul>
-<li><strong><code>🔺命令：xprobe2 IP地址</code></strong></li>
-<li>结果有误差</li>
-</ul>
-</li>
-<li><p>操作系统识别</p>
-<ul>
-<li>被动操作系统识别<ul>
-<li>IDS</li>
-<li>抓包分析</li>
-</ul>
-</li>
-<li>被动扫描（不主动向目标主机发包，部署在网络出口的地方）</li>
-<li><strong><code>🔺命令：p0f</code></strong><ul>
-<li>结合ARP地址欺骗识别全网OS</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>防火墙识别（尽量隐蔽）</p>
-<ul>
-<li>通过检查回包，可能识别端口是否经过防火墙过滤</li>
-<li>设备多种多样，结果过存在一定误差</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>（1）防火墙内部对外部的访问连接  （2）防火墙对源地址的过滤
-防火墙几种情况：
-Send         Response           Type
-SYN          NO              
-ACK          RST                Filtered
-
-SYN          SYN+ACK/SYN+RST 
-ACK          NO                 Filtered
-
-SYN          SYN+ACK/SYN+RST
-ACK          RST                Unfiltered/Open
-
-SYN          NO             
-ACK          NO                 Closed</code></pre></blockquote>
-<ol start="7">
-<li><p>防火墙识别</p>
-<ul>
-<li>Scapy</li>
-<li>Python<ul>
-<li><strong><code>🔺命令：fw_detect.py IP地址 端口</code></strong> ▲ 2019.12.6 脚本实验不成功，逻辑报错</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">from scapy.all import*</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy,runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=3:</span><br><span class="line">    print &quot;Usage - ./fw_detect.py [Target IP] [Target Port] &quot;</span><br><span class="line">    print &quot;Example - ./syn_scan.py 192.168.100.1 445&quot;</span><br><span class="line">    print &quot;Example will determine if filtering exists on port 443 of host 192.168.100.1&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">ip=sys.argv[1]</span><br><span class="line">port=sys.argv[2]</span><br><span class="line"></span><br><span class="line">ACK_response=sr1(IP(dst=ip)/TCP(dport=port,flags=&apos;A&apos;),timeout=1,verbose=0)</span><br><span class="line">SYN_response=sr1(IP(dst=ip)/TCP(dport=port,flags=&apos;S&apos;),timeout=1,verbose=0)</span><br><span class="line">if (ACK_respnonse==None) and (SYN_response==None):</span><br><span class="line">    print &quot;Port is either unstatefully filered or host is down&quot;</span><br><span class="line">elif (ACK_respnonse==None) and ((SYN_response[flags]==18) or (SYN_response[flags==6])):</span><br><span class="line">    print &quot;Stateful filtering in place&quot;</span><br><span class="line">elif (SYN_response==None) and (ACK_response[flags]==4):</span><br><span class="line">    print &quot;Stateful filtering in place&quot;</span><br><span class="line">elif ((SYN_response[flags]==18) or (SYN_response[flags==6])) and (ACK_response[flags]==4):</span><br><span class="line">    print &quot;Port is unfiltered and open&quot;</span><br><span class="line">else:</span><br><span class="line">    print &quot;Unable to determine if the port is filtered&quot;</span><br></pre></td></tr></table></figure>
-
-<ol start="8">
-<li><p>防火墙识别</p>
-<ul>
-<li>Nmap有系列防火墙过滤检测功能</li>
-<li><strong><code>🔺命令：nmap IP地址 端口</code></strong>（默认SYN包）</li>
-<li><strong><code>🔺命令：nmap -sA（ACK包） IP地址 端口</code></strong></li>
-</ul>
-</li>
-<li><p>负载均衡识别</p>
-<ul>
-<li>广域网负载均衡<ul>
-<li>DNS</li>
-<li>智能DNS（不同地区不同DNS回应）</li>
-</ul>
-</li>
-<li>服务器负载均衡<ul>
-<li>基于Web的服务器</li>
-</ul>
-</li>
-<li>组件级负载均衡</li>
-<li>HTTP-Loadbalancing<ul>
-<li>Nginx</li>
-<li>Apache</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：lbd www.baidu.com</code></strong></li>
-<li><strong><code>🔺命令：lbd mail.163.com</code></strong></li>
-</ul>
-</li>
-<li><p>WAF识别</p>
-<ul>
-<li>WEB应用防火墙（基于规则的过滤 → 基于机器学习，特征识别，语法词法的过滤）</li>
-<li><strong><code>🔺命令：wafw00f -l</code></strong></li>
-<li><strong><code>🔺命令：wafw00f http://www.microsoft.com</code></strong></li>
-<li><strong><code>🔺命令：nmap www.microsoft.com --script=http-waf-detect.nse</code></strong></li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>WAF产品
-Profense
-Barracuda
-F5 Trafficshield
-Citrix NetScalor
-IBM Web Application Security
-webApp.secure
-BIG IP
-ISA Server
-AkamaiGHost</code></pre></blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3056,7 +3030,7 @@ AkamaiGHost</code></pre></blockquote>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-count">50</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3131,7 +3105,7 @@ AkamaiGHost</code></pre></blockquote>
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

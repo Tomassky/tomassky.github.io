@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="安全," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Burpsuite  Web安全工具中的瑞士军刀 统一的集成工具发现全部现代WEB安全漏洞 PortSwigger公司开发（基于JAVA） Burp Free Burp Professional http:&#x2F;&#x2F;www.portswigger.net       ▲ Free版本和Professional版本之间的区别是，Free版本没有主动扫描功能  所有的工具共享一个能处理并显示HTTP消息">
+<meta name="keywords" content="安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kali Linux笔记(四十三)：Burpsuite">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;01&#x2F;03&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%89)%EF%BC%9ABurpsuite&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="Burpsuite  Web安全工具中的瑞士军刀 统一的集成工具发现全部现代WEB安全漏洞 PortSwigger公司开发（基于JAVA） Burp Free Burp Professional http:&#x2F;&#x2F;www.portswigger.net       ▲ Free版本和Professional版本之间的区别是，Free版本没有主动扫描功能  所有的工具共享一个能处理并显示HTTP消息">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-01-03T10:47:44.067Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/01/03/Kali Linux笔记(四十三)：Burpsuite/"/>
+
+
+
+
+
+  <title>Kali Linux笔记(四十三)：Burpsuite | Tomas'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tomas'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%89)%EF%BC%9ABurpsuite/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(四十三)：Burpsuite</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-03T18:50:46+08:00">
+                2020-01-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<ol>
+<li><p>Burpsuite</p>
+<ul>
+<li>Web安全工具中的瑞士军刀</li>
+<li>统一的集成工具发现全部现代WEB安全漏洞</li>
+<li>PortSwigger公司开发（基于JAVA）<ul>
+<li>Burp Free</li>
+<li>Burp Professional</li>
+<li><a href="http://www.portswigger.net" target="_blank" rel="noopener">http://www.portswigger.net</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>▲ Free版本和Professional版本之间的区别是，Free版本没有主动扫描功能</code></pre></blockquote>
+<ul>
+<li>所有的工具共享一个能处理并显示HTTP消息的可扩展框架，模块之间无缝交换信息</li>
+<li>字体（首次启动修改字体）<ul>
+<li>Options → Display → HTTP Message Dispaly → 中文字体</li>
+</ul>
+</li>
+</ul>
+<ol start="2">
+<li><p>Burpsuite Proxy</p>
+<ul>
+<li>Options<ul>
+<li>Proxy Listeners（默认监听8080）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>⭐Banding 监听的端口，可以修改IP作为代理转发   
+⭐Request handing 转发到其他主机，非真正目的地址（Redirect to host/port） 
+▲ Invisible proxy 对于客户端程序不支持代理但走HTTPS协议代理功能的程序。
+1.其原理是欺骗本机的DNS服务器，将所要发送的域名解析成Burpsuite的IP地址，然后通过Burpsuit本机的DNS服务器或者局域网内的解析成对公网的IP地址
+2.但若本机和Burpsuit在同一台机器上，会陷入欺骗，解析本地地址的死循环
+3.需要通过Options → Hostname Resolution去增加解析地址
+▲ Invisible Proxy主机头问题 
+1.When using plain HTTP,a proxy-style request looks like this:
+GET http://example.org/foo.php HTTP/1.1
+Host:example.org
+2.Whereas the corresponding non-proxy-style request looks like this:
+GET:/foo.php HTTP/1.1
+Host:example.org
+不支持代理的Web Application可能多为第二种情况的请求，不包含完整头部的HTTP头部请求，此时可开启环回网卡的Invisible Proxy功能，然后通过Redirect to host/port重定向到需要访问真正的目标地址
+▲ Invisible Proxy多目标域名问题
+可以创建多个环回网卡Lookback，监听多个端口，每个环回网卡都开启Invisible Proxy，然后通过Redirect to host/port重定向到需要访问真正的目标地址
+⭐CA certificate（导入导出）
+1.Export → certificate in DER format
+2.在Proxy情况下，访问http://burp，生成CA certificate</code></pre></blockquote>
+<ul>
+<li>Options<ul>
+<li>Intercept Client Request（默认截断）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>▲ 默认情况下只有一条规则：File extension
+▲ 请求头发生变化：Automatically uodate Content-Length header when the request is edited</code></pre></blockquote>
+<ul>
+<li>Options<ul>
+<li>Intercept Server Responses（默认不截断）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>默认情况下只有一条规则：Content type header</code></pre></blockquote>
+<ul>
+<li>Options<ul>
+<li>Intercept WeSockets Messages</li>
+<li>Response Modification</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>▲ 常用的Modification
+Unhide hidden from fields（显示隐藏表单）
+Enable disabled form fields（激活被禁止的表单）
+Remove input field length limits（去除输入限制长度）
+Remove JavaScript from validation（去除JavaScript的验证）
+Remove All JavaScript（去除所有的JavaScript）
+Remove secure flag from cookies（去掉cookies的安全标签）</code></pre></blockquote>
+<ul>
+<li>Options<ul>
+<li>Match and Replace（匹配和替换，Request header match就repalce）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>▲ 提交数据的自动修改
+Original reequest 原始的请求
+Auto-modified request 修改后的请求</code></pre></blockquote>
+<ul>
+<li>Options<ul>
+<li>SSL Pass Through（加密流量直接通过，不截获代理）</li>
+</ul>
+</li>
+<li>Intercept（截断请求代理，默认不截断返回的流量）<ul>
+<li>Intercept is on（截断代理开启）</li>
+<li>Froward（单步发送信息）</li>
+<li>Drop（丢弃包数据，不发送）</li>
+</ul>
+</li>
+<li>HTTP history（截断代理历史）<ul>
+<li>Request</li>
+<li>Response</li>
+</ul>
+</li>
+<li>Web Socket history（无界面的Web Application，SOCKET长连接） </li>
+</ul>
+<ol start="3">
+<li><p>Burpsuite Target</p>
+<ul>
+<li>Site map<ul>
+<li>黑色链接：真正访问的链接/灰色链接：通过爬网爬出来的链接，无进行真正访问</li>
+<li>过滤功能：选择站点 → 右键 → Add to Scope（上方白色横条为过滤功能）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>▲  过滤：
+过滤在Scope中的内容：Filter by request type → Show only in-scope items
+过滤真正发生请求：Filter by request type → Show only requests items
+过滤有参数的请求:Filter by request type → Show only oarameterised requests
+指定参数进行过滤：Filter by search term → 输入字符串
+过滤网页类型：Filter by MIME type
+过滤访问请求码:Filter by status code
+过滤文件扩展名：Filter by file extension
+过滤高亮显示的网页： 右键高亮选中选项（Highlight） → Filter by abotation → Show only highlighted ietms
+过滤有注释的网页：右键注释选中选项（Add Comment）→ Filter by abotation → Show only commented items</code></pre></blockquote>
+<ul>
+<li>Scope<ul>
+<li>Add to Scope会生成过滤的正则表达式</li>
+<li>Include in Scope（加入Scope）</li>
+<li>Exclude from Scope（排除Scope）</li>
+</ul>
+</li>
+</ul>
+<ol start="4">
+<li><p>Burpsuite Spider ▲ 2020.1.3 新版暂无此扩展</p>
+<ul>
+<li>手动爬网</li>
+<li>自动爬网<ul>
+<li>站点目录 → 右键 → Spider this branch</li>
+</ul>
+</li>
+<li>Control<ul>
+<li>Spider Status（Spider is pause自动爬网暂停/Clear queues清理要爬网队列）</li>
+</ul>
+</li>
+<li>Options<ul>
+<li>Application Login（Prompt for guidance提示）</li>
+<li>Passive Spidering（对手动爬网进行分析）</li>
+<li>Request Headers（请求头格式）</li>
+</ul>
+</li>
+<li>比较不同账号或配置，爬网的内容<ul>
+<li>站点目录 → 右键 → Compare site map</li>
+<li>Use current site map（Site map 1）</li>
+<li>Use all items with resposes/Include in-scope items only</li>
+<li>Load from Burp state file（Site map 2）</li>
+<li>Use all items with resposes/Include in-scope items only</li>
+<li>Request Matching（可以默认）</li>
+<li>Response Comparation（可以默认）</li>
+<li>Sync selection（同步两次选中）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Burpsuite Scanner ▲ 2020.1.3 新版暂无此扩展</p>
+<ul>
+<li>主动扫描：站点目录 → 右键 → Actively scan this branch</li>
+<li>Options<ul>
+<li>Attack Insertion Points</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>⭐Place attacks into the following location within requests:
+1.URL parameter values
+2.Body parameter values
+3.Cookies parameter values
+4.parameter name
+5.HTTP headers
+6.AMF string parameter（Adobe Flash脚本注入）
+7.REST-STYLE URL parameters
+⭐Change parameter locations（causes many more scan requests）:
+⭐Skip all tests for these parameters（Add）</code></pre></blockquote>
+<ul>
+<li>Options<ul>
+<li>Active Scanning Engine（主动扫描）</li>
+<li>Active Scanning Optimization（主动扫描选项：Speed（扫描速度）/accuracy（准确性））</li>
+<li>Actvie Scanning Areas（主动扫描类型，默认全选）</li>
+<li>Passive Scanning Areas（被动扫描类型，默认全选）</li>
+</ul>
+</li>
+<li>Scan queue（扫描队列）</li>
+<li>Results（扫描结果）</li>
+</ul>
+<ol start="6">
+<li><p>Burpsuite Extender</p>
+<ul>
+<li>BApp Store（商店扩展）</li>
+<li>Entensions（安装的扩展）▲ jython（java访问python的中间组件）</li>
+<li>Options<ul>
+<li>Python Environment/jython Standalone Jar（<a href="http://www.jython.og/downloads.html）" target="_blank" rel="noopener">http://www.jython.og/downloads.html）</a></li>
+<li>cp jython Standalone Jar /root/Desktop</li>
+<li>推荐j2EEScan、CO2（图形化SQLMap）插件</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Burpsuite Intruder</p>
+<ul>
+<li>选取爬取的站点选项Request右键 → Send to Intrude（发送模块）</li>
+<li>Positiors<ul>
+<li>Attcak type</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>⭐Attcak type攻击类型（n比m大）
+1.Sniper：先在第一个变量位置逐一插入，第二个位置不变；再在第二个变量位置逐一插入，第一个变量的位置不变（从指定的字典进行破解，只需要一个字典，总替换次数为m+n次）
+2.Battering ram：在变量的位置上，都放上同样的值，变量上的值是一样的（从指定的字典进行破解，只需要一个字典，总替换次数为m+n次）
+3.Pitchfork：从两个字典中各取出同序号的项目放入到变量的位置，若有一个字典的值结束，则此次破解结束（从指定的字典进行破解，需要两个字典，总替换次数为n次）
+4.Cluster bomb：从第一个字典的第一项开始，尝试第二个字典的所有选项，再从第一个字典的第二项开始，尝试第二个字典的所有选项，以此类推（从指定的字典进行破解，需要两个字典，总替换次数为m*n次）</code></pre></blockquote>
+<ul>
+<li>Positiors<ul>
+<li>打上$$作为变量</li>
+<li>Clear $</li>
+<li>选择变量Add $$</li>
+<li>指定Attcak typ以及字典</li>
+</ul>
+</li>
+<li>Payloads<ul>
+<li>Payload Sets（字典类型）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐Payload Sets:
+1.Simple list 简单字典
+2.Runtime file 指定字典文件路径
+3.Case modification 大小写的替换
+4.Character blocks 字符块
+5.Number 数字
+6.Datas 日期
+7.Brute force 暴力破解（Character set）
+8.Username generator 用户名生成器（Add fanghong:yuan）
+9.Copy other payload 复制字典文件</code></pre></blockquote>
+<ul>
+<li>Payloads<ul>
+<li>Payload Options【Payload Sets】（选择密码字典文件）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐Add from list:
+1.Fuzzing-full 常用fuzz字典</code></pre></blockquote>
+<ul>
+<li>Payloads<ul>
+<li>Payload Processing（对Payload进行加工）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐Add:
+1.Add prefix 添加字典前缀
+2.Add suiffix 添加字典后缀
+3.Match/replace 匹配就替换
+4.Reverse substring 反转字符串
+5.Modify case 修改大小写
+6.Encode 编码
+7.Decode 解码
+8.Hash 哈希</code></pre></blockquote>
+<ul>
+<li>Payloads<ul>
+<li>Payload Encoding（URL-encode these character编码字符）</li>
+</ul>
+</li>
+<li>Options<ul>
+<li>Grap Match（Add Match，默认是Exclude HTTP header，需要去除）</li>
+</ul>
+</li>
+<li>在指定完所有的Intrude选项后，开始Intrude<ul>
+<li>顶部 → Intruder → Start attack</li>
+<li>可选择上方白色横条进行filter/或通过Options中的Grap Match进行匹配</li>
+<li>▲ 基于此项Intruder功能，可以进行页面存在性的Fuzz（指定字典）</li>
+</ul>
+</li>
+</ul>
+<ol start="8">
+<li><p>Burpsuit Repeater</p>
+<ul>
+<li>站点目录网页 → 右键 → Send to Repeater</li>
+<li>重放：Request → Go → Response</li>
+<li>更改请求方式：Request/Raw → 右键 → Change request method</li>
+<li>更改body编码：Request/Raw → 右键 → Change body encoding</li>
+<li>转换为curl命令形式：Request/Raw → 右键 → Copy as curl command</li>
+<li>如果为CSRF漏洞存在页面（Request/Raw → 右键）<ul>
+<li>Generate CSRF Poc（生成一份Poc代码文件）</li>
+</ul>
+</li>
+<li>菜单栏 → Reperter<ul>
+<li>Update Content-Length（默认自动调整）</li>
+<li>Unpack gzip/deflate（默认自动解压）</li>
+<li>Follow redirections（重定向）</li>
+<li>Process cookies in redirections（处理Cookies重定向，带取Cookie）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>⭐Follow redirections:
+1.Never 不跟随重定向（默认）
+2.One-site only 一个站点重定向
+3.In-scope only 一个scope重定向
+4.Always 总是重定向</code></pre></blockquote>
+<ol start="9">
+<li><p>Burpsuit Sequence</p>
+<ul>
+<li>删除浏览器的Cookies信息（抓取生成Cookies的过程）</li>
+<li>站点目录网页 → 右键 → Send to Sequence</li>
+<li>Token Location Within Response（令牌选择）<ul>
+<li>如果自动识别：Cookies保存在Cookie中</li>
+<li>如果未自动识别：可通过Custom location进行手动选择序列</li>
+</ul>
+</li>
+<li>Select Live Capture Request<ul>
+<li>Start live caputre（不断请求服务器，请求新生成SessionID进行分析）</li>
+<li>收集SessionID → Analyze now </li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>⭐Analyze（伪随机算法的分析）
+1.Summary → Overall result
+2.Character-level analysis 基于字符层面的分析
+3.Bit-level analysis 基于位层面的分析
+▲ FIPS--美国联邦信息处理标准（Federal Information Processing Standard）</code></pre></blockquote>
+<ol start="10">
+<li><p>Burpsuit Encode/Decode</p>
+<ul>
+<li>多层复杂编码，可以绕过过滤机制</li>
+<li>Smart decode（只能解码）</li>
+</ul>
+</li>
+<li><p>Burpsuit Compare</p>
+<ul>
+<li>同之前的Compare</li>
+</ul>
+</li>
+<li><p>Burpsuit Options</p>
+<ul>
+<li>Connections<ul>
+<li>Platform Authentication（表单/Http身份认证等其他认证）</li>
+<li>Upstream Proxy Servers（上游代理服务器）</li>
+<li>SOCKS proxy</li>
+<li>Timeouts（超时时间）</li>
+</ul>
+</li>
+<li>HTTP</li>
+<li>SSL<ul>
+<li>Client SSL Certificates（Web Application需要客户端证书，比如软银）</li>
+<li>Server SSL Certificates（服务器代理，导入证书）</li>
+</ul>
+</li>
+<li>Sessions</li>
+<li>Dispaly</li>
+<li>Misc<ul>
+<li>Logging（记录所有操作过程）</li>
+<li>Scheduled Tasks（定期日期表）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Burpsuit Alerts</p>
+</li>
+<li><p>截断代理工具</p>
+<ul>
+<li>Paros（最早的截断代理工具）</li>
+<li>Webscrab</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%AE%89%E5%85%A8/" rel="tag"># 安全</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/29/Kali%20linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%80)%EF%BC%9AArachni/" rel="next" title="Kali Linux笔记(四十一)：Arachni">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(四十一)：Arachni
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/photo.jpg"
+                alt="Tomas" />
+            
+              <p class="site-author-name" itemprop="name">Tomas</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">50</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Tomassky" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:643008933@qq.com" target="_blank" title="QQ邮箱">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tomas</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

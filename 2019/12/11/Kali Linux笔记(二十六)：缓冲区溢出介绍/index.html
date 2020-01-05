@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="程序漏洞从哪里来（程序的动态，变量）  罪恶的根源：变量 数据与代码边界不清（输入数据或者代码） 最简漏洞原理–shell脚本漏洞 🔺命令：.&#x2F;a.sh 参数（; | &amp;amp;&amp;amp; &amp;amp;）      12#!&#x2F;bin&#x2F;bashecho $1   .&#x2F;a.sh ; pwd →  &#x2F;root  缓存区溢出  当缓冲区边界限制不严格时，由于变量传入畸形数据或程序运行错误，导致缓存区“">
+<meta name="description" content="1. 程序漏洞从哪里来（程序的动态，变量） 罪恶的根源：变量 数据与代码边界不清（输入数据或者代码） 最简漏洞原理–shell脚本漏洞 🔺命令：.&#x2F;a.sh 参数（; | &amp;amp;&amp;amp; &amp;amp;）    12#!&#x2F;bin&#x2F;bashecho $1   .&#x2F;a.sh ; pwd →  &#x2F;root 2. 缓存区溢出 当缓冲区边界限制不严格时，由于变量传入畸形数据或程序运行错误，导致缓存区“">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kali Linux笔记(二十六)：缓冲区溢出介绍">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;11&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E5%85%AD)%EF%BC%9A%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E4%BB%8B%E7%BB%8D&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="程序漏洞从哪里来（程序的动态，变量）  罪恶的根源：变量 数据与代码边界不清（输入数据或者代码） 最简漏洞原理–shell脚本漏洞 🔺命令：.&#x2F;a.sh 参数（; | &amp;amp;&amp;amp; &amp;amp;）      12#!&#x2F;bin&#x2F;bashecho $1   .&#x2F;a.sh ; pwd →  &#x2F;root  缓存区溢出  当缓冲区边界限制不严格时，由于变量传入畸形数据或程序运行错误，导致缓存区“">
+<meta property="og:description" content="1. 程序漏洞从哪里来（程序的动态，变量） 罪恶的根源：变量 数据与代码边界不清（输入数据或者代码） 最简漏洞原理–shell脚本漏洞 🔺命令：.&#x2F;a.sh 参数（; | &amp;amp;&amp;amp; &amp;amp;）    12#!&#x2F;bin&#x2F;bashecho $1   .&#x2F;a.sh ; pwd →  &#x2F;root 2. 缓存区溢出 当缓冲区边界限制不严格时，由于变量传入畸形数据或程序运行错误，导致缓存区“">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-13T11:54:00.641Z">
+<meta property="og:updated_time" content="2020-01-05T02:52:34.966Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -333,9 +333,7 @@
 
       
         <hr>
-<ol>
-<li><p>程序漏洞从哪里来（程序的动态，变量）</p>
-<ul>
+<h4 id="1-程序漏洞从哪里来（程序的动态，变量）"><a href="#1-程序漏洞从哪里来（程序的动态，变量）" class="headerlink" title="1. 程序漏洞从哪里来（程序的动态，变量）"></a>1. 程序漏洞从哪里来（程序的动态，变量）</h4><ul>
 <li>罪恶的根源：变量</li>
 <li>数据与代码边界不清（输入数据或者代码）</li>
 <li>最简漏洞原理–shell脚本漏洞<ul>
@@ -343,21 +341,15 @@
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">echo $1</span><br></pre></td></tr></table></figure>
 
 <blockquote>
 <pre><code>./a.sh ; pwd →  /root</code></pre></blockquote>
-<ol start="2">
-<li><p>缓存区溢出</p>
-<ul>
+<h4 id="2-缓存区溢出"><a href="#2-缓存区溢出" class="headerlink" title="2. 缓存区溢出"></a>2. 缓存区溢出</h4><ul>
 <li>当缓冲区边界限制不严格时，由于变量传入畸形数据或程序运行错误，导致缓存区“撑爆”，从而覆盖了相邻内存区域的数据；</li>
 <li>成功修改内存数据，可造成进程劫持，执行恶意代码，获取服务器控制权限等后果</li>
 </ul>
-</li>
-<li><p>如何发现漏洞</p>
-<ul>
+<h4 id="3-如何发现漏洞"><a href="#3-如何发现漏洞" class="headerlink" title="3. 如何发现漏洞"></a>3. 如何发现漏洞</h4><ul>
 <li>源码审计（源码 → 使用了不安全的函数，对用户数据进行过滤，编码）</li>
 <li>逆向工程（打包后的程序 → 反汇编 ）</li>
 <li>模糊测试（在新的OS环境中，在OS中进行安装，用工具进行监视，调试，插入）<ul>
@@ -367,8 +359,6 @@
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 
       
     </div>
@@ -463,8 +453,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -544,6 +543,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-程序漏洞从哪里来（程序的动态，变量）"><span class="nav-number">1.</span> <span class="nav-text">1. 程序漏洞从哪里来（程序的动态，变量）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-缓存区溢出"><span class="nav-number">2.</span> <span class="nav-text">2. 缓存区溢出</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-如何发现漏洞"><span class="nav-number">3.</span> <span class="nav-text">3. 如何发现漏洞</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

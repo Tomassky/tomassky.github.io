@@ -334,9 +334,7 @@
         
           
             <hr>
-<ol>
-<li><p>主动信息收集</p>
-<ul>
+<h4 id="1-主动信息收集"><a href="#1-主动信息收集" class="headerlink" title="1. 主动信息收集"></a>1. 主动信息收集</h4><ul>
 <li>直接与目标系统交互通信</li>
 <li>无法避免留下访问的痕迹（可能被封杀，强的流量分析，强的代码审计）</li>
 <li>使用受控的第三方电脑进行探测<ul>
@@ -350,9 +348,7 @@
 </ul>
 </li>
 </ul>
-</li>
-<li><p>发现（IP层 → 端口层 → 服务级别的扫描）</p>
-<ul>
+<h4 id="2-发现（IP层-→-端口层-→-服务级别的扫描）"><a href="#2-发现（IP层-→-端口层-→-服务级别的扫描）" class="headerlink" title="2. 发现（IP层 → 端口层 → 服务级别的扫描）"></a>2. 发现（IP层 → 端口层 → 服务级别的扫描）</h4><ul>
 <li>识别活着的主机<ul>
 <li>潜在的被攻击目标（存在的漏洞来进行利用）</li>
 </ul>
@@ -360,9 +356,7 @@
 <li>输出一个IP地址列表（在线IP地址）</li>
 <li>2、3、4层发现</li>
 </ul>
-</li>
-<li><p>发现-二层发现（arping）</p>
-<ul>
+<h4 id="3-发现-二层发现（arping）"><a href="#3-发现-二层发现（arping）" class="headerlink" title="3. 发现-二层发现（arping）"></a>3. 发现-二层发现（arping）</h4><ul>
 <li>优点：扫描速度快、可靠</li>
 <li>缺点：不可路由（只可发现本网段的主机发现）</li>
 <li>Arp协议<ul>
@@ -370,8 +364,6 @@
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>OSI模型
 Layer1 Physical
@@ -401,9 +393,7 @@ Layer7 Application     HTTP,FTP,and Telnet</code></pre></blockquote>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#！/bin/bash</span><br><span class="line">if [ &quot;$#&quot; -ne 1 ];then</span><br><span class="line">    echo &quot;USAGE - ./arping.sh [iplist.txt]&quot;</span><br><span class="line">    echo &quot;Example - ./arping.sh iplist.txt&quot;</span><br><span class="line">    echo &quot;Example will perform an ARP scan of the local subnet to which eth0 is assigned&quot;</span><br><span class="line">fi</span><br><span class="line">file=$1</span><br><span class="line">for addr in $(cat $file); do</span><br><span class="line">    arping -c 1 $addr | grep &quot;bytes from&quot; | cut -d &quot; &quot; -f 5 | cut -d &quot;(&quot; -f 2 | cut -d &quot;)&quot; -f 1</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 
-<ol start="4">
-<li><p>发现-二层发现（Netdiscover）</p>
-<ul>
+<h4 id="4-发现-二层发现（Netdiscover）"><a href="#4-发现-二层发现（Netdiscover）" class="headerlink" title="4. 发现-二层发现（Netdiscover）"></a>4. 发现-二层发现（Netdiscover）</h4><ul>
 <li>Netdiscover（支持CIDR地址段显示）▲2019.12.2可抓到包，但界面不显示<ul>
 <li>专门用于二层发现</li>
 <li>可用于无线和交换网络环境</li>
@@ -421,9 +411,7 @@ Layer7 Application     HTTP,FTP,and Telnet</code></pre></blockquote>
 </ul>
 </li>
 </ul>
-</li>
-<li><p>发现-二层发现（Scapy）</p>
-<ul>
+<h4 id="5-发现-二层发现（Scapy）"><a href="#5-发现-二层发现（Scapy）" class="headerlink" title="5. 发现-二层发现（Scapy）"></a>5. 发现-二层发现（Scapy）</h4><ul>
 <li>Scapy<ul>
 <li>作为Python库进行调用</li>
 <li>也可以作为单独的工具使用</li>
@@ -439,8 +427,6 @@ Layer7 Application     HTTP,FTP,and Telnet</code></pre></blockquote>
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>ARP().dispaly()（定制一个ARP的数据包，只需要添加属性字段，ARP的包头结构）
 sr1()（发送数据包）</code></pre></blockquote>
@@ -455,14 +441,10 @@ sr1()（发送数据包）</code></pre></blockquote>
 
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./Arp2.py [iplist.txt]&quot;</span><br><span class="line">    print &quot;Example - ./Arp2.py iplist.txt&quot;</span><br><span class="line">    print &quot;Example will perform an ARP scan of the local subnet to which eth0 is assigned&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">filename=str(sys.argv[1])</span><br><span class="line">file=open(filename,&quot;r&quot;)</span><br><span class="line"></span><br><span class="line">for addr in file:</span><br><span class="line">    answer=sr1(ARP(pdst=addr.strip()),timeout=0.1,verbose=1)</span><br><span class="line">    if answer==None:</span><br><span class="line">      pass</span><br><span class="line">    else:</span><br><span class="line">      print addr.strip()</span><br></pre></td></tr></table></figure>
 
-<ol start="6">
-<li><p>发现-二层发现（nmap）</p>
-<ul>
+<h4 id="6-发现-二层发现（nmap）"><a href="#6-发现-二层发现（nmap）" class="headerlink" title="6. 发现-二层发现（nmap）"></a>6. 发现-二层发现（nmap）</h4><ul>
 <li><strong><code>🔺命令：nmap IP地址-254（IP地址/24） -sn</code></strong> </li>
 <li><strong><code>🔺命令：namp -iL（调用地址列表的文本文件） iplist.txt -sn | grep ^Namp</code></strong></li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>强大的NMAP软件，需要非常熟练
 nmap的-sn参数，除了会ARP发现之外，还会进行DNS的反向域名解析</code></pre></blockquote>
@@ -608,9 +590,7 @@ nmap的-sn参数，除了会ARP发现之外，还会进行DNS的反向域名解�
         
           
             <hr>
-<ol>
-<li><p>端口扫描（UDP）</p>
-<ul>
+<h4 id="1-端口扫描（UDP）"><a href="#1-端口扫描（UDP）" class="headerlink" title="1. 端口扫描（UDP）"></a>1. 端口扫描（UDP）</h4><ul>
 <li>端口对应网络服务及应用端程序</li>
 <li>服务端程序的漏洞通过端口攻入</li>
 <li>发现开放的端口</li>
@@ -626,9 +606,7 @@ nmap的-sn参数，除了会ARP发现之外，还会进行DNS的反向域名解�
 </ul>
 </li>
 </ul>
-</li>
-<li><p>端口扫描（Scapy-UDP）</p>
-<ul>
+<h4 id="2-端口扫描（Scapy-UDP）"><a href="#2-端口扫描（Scapy-UDP）" class="headerlink" title="2. 端口扫描（Scapy-UDP）"></a>2. 端口扫描（Scapy-UDP）</h4><ul>
 <li>Scapy UDP Scan<ul>
 <li>端口关闭：ICMP port-unreachable</li>
 <li>端口开放：没有回包</li>
@@ -643,13 +621,9 @@ nmap的-sn参数，除了会ARP发现之外，还会进行DNS的反向域名解�
 </li>
 <li><strong><code>🔺命令：./udp_scan.py IP地址 起始端口 结束端口</code></strong></li>
 </ul>
-</li>
-</ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line">import time</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=4:</span><br><span class="line">    print &quot;Usage - ./udp_scan.py [Target IP] [First IP] [Last IP] &quot;</span><br><span class="line">    print &quot;Example - ./udp_scan.py 192.168.100.1 1 200&quot;</span><br><span class="line">    print &quot;Example will perform a TCP ACK scan of the 192.168.100.0/24 range&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">ip=sys.argv[1]</span><br><span class="line">start=int(sys.argv[2])</span><br><span class="line">end=int(sys.argv[3])</span><br><span class="line"></span><br><span class="line">for port in range(start end):</span><br><span class="line">    a=sr1(IP(dst=ip)/UDP(dport=port),timeout=5,verbose=0)</span><br><span class="line">    time.sleep(1)</span><br><span class="line">    if a==None:</span><br><span class="line">      print port</span><br><span class="line">    else:</span><br><span class="line">      pass</span><br></pre></td></tr></table></figure>
 
-<ol start="3">
-<li><p>端口扫描（Nmap-UDP）</p>
-<ul>
+<h4 id="3-端口扫描（Nmap-UDP）"><a href="#3-端口扫描（Nmap-UDP）" class="headerlink" title="3. 端口扫描（Nmap-UDP）"></a>3. 端口扫描（Nmap-UDP）</h4><ul>
 <li>Nmap</li>
 <li><strong><code>🔺命令：nmap -sU（端口扫描） IP地址</code></strong><ul>
 <li>默认的1000个参数（不指定端口的情况下）</li>
@@ -659,8 +633,6 @@ nmap的-sn参数，除了会ARP发现之外，还会进行DNS的反向域名解�
 <li><strong><code>🔺命令：nmap IP地址 -sU -p（指定端口） 53</code></strong></li>
 <li><strong><code>🔺命令：nmap -iL iplist.txt -sU -p（指定端口范围） 1-200</code></strong></li>
 </ul>
-</li>
-</ol>
 
           
         
@@ -803,9 +775,7 @@ nmap的-sn参数，除了会ARP发现之外，还会进行DNS的反向域名解�
         
           
             <hr>
-<ol>
-<li><p>发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别）</p>
-<ul>
+<h4 id="1-发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别）"><a href="#1-发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别）" class="headerlink" title="1. 发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别）"></a>1. 发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别）</h4><ul>
 <li>优点<ul>
 <li>可路由且结果可靠</li>
 <li>不太可能被防火墙过滤</li>
@@ -827,9 +797,7 @@ nmap的-sn参数，除了会ARP发现之外，还会进行DNS的反向域名解�
 </ul>
 </li>
 </ul>
-</li>
-<li><p>发现-四层发现（Scapy-TCP）</p>
-<ul>
+<h4 id="2-发现-四层发现（Scapy-TCP）"><a href="#2-发现-四层发现（Scapy-TCP）" class="headerlink" title="2. 发现-四层发现（Scapy-TCP）"></a>2. 发现-四层发现（Scapy-TCP）</h4><ul>
 <li>ACK–TCP Port–RST</li>
 <li>Scapy<ul>
 <li>i=IP()</li>
@@ -844,13 +812,9 @@ nmap的-sn参数，除了会ARP发现之外，还会进行DNS的反向域名解�
 <li>a=sr1(IP(dst=”IP地址”)/TCP(dport=80,flags=”A”),timeout=1)</li>
 <li><strong><code>🔺命令：./ACK_Ping.py IP网段</code></strong></li>
 </ul>
-</li>
-</ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./ACK_Ping.py [/24 network address]&quot;</span><br><span class="line">    print &quot;Example - ./ACK_Ping.py 192.168.100.0&quot;</span><br><span class="line">    print &quot;Example will perform a TCP ACK scan of the 192.168.100.0/24 range&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">address=str(sys.argv[1])</span><br><span class="line">prefix=address.split(&quot;.&quot;)[0]+&quot;.&quot;+address.split(&quot;.&quot;)[1]+&quot;.&quot;+address.split(&quot;.&quot;)[2]+&quot;.&quot;</span><br><span class="line"></span><br><span class="line">for addr in range(1,254):</span><br><span class="line">    response=sr1(IP(dst=prefix+str(addr))/TCP(dport=2222,flags=&apos;A&apos;),timeout=0.1,verbose=0)</span><br><span class="line">    try:</span><br><span class="line">      if int(response[TCP].flags)==4:</span><br><span class="line">        print prefix+str(addr)</span><br><span class="line">    except:</span><br><span class="line">        pass</span><br></pre></td></tr></table></figure>
 
-<ol start="3">
-<li><p>发现-四层发现（Scapy-UDP）</p>
-<ul>
+<h4 id="3-发现-四层发现（Scapy-UDP）"><a href="#3-发现-四层发现（Scapy-UDP）" class="headerlink" title="3. 发现-四层发现（Scapy-UDP）"></a>3. 发现-四层发现（Scapy-UDP）</h4><ul>
 <li>UDP–UDP Port–ICMP</li>
 <li>Scapy<ul>
 <li>i=IP()</li>
@@ -864,19 +828,13 @@ nmap的-sn参数，除了会ARP发现之外，还会进行DNS的反向域名解�
 </li>
 <li><strong><code>🔺命令：./UDP_Ping.py IP网段</code></strong>（UDP发现不可靠）</li>
 </ul>
-</li>
-</ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./UDP_Ping.py [/24 network address]&quot;</span><br><span class="line">    print &quot;Example - ./UDP_Ping.py 192.168.100.0&quot;</span><br><span class="line">    print &quot;Example will perform a UDP ICMP scan of the 192.168.100.0/24 range&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">address=str(sys.argv[1])</span><br><span class="line">prefix=address.split(&quot;.&quot;)[0]+&quot;.&quot;+address.split(&quot;.&quot;)[1]+&quot;.&quot;+address.split(&quot;.&quot;)[2]+&quot;.&quot;</span><br><span class="line"></span><br><span class="line">for addr in range(1,254):</span><br><span class="line">    response=sr1(IP(dst=prefix+str(addr))/UDP(dport=33333),timeout=0.1,verbose=0)</span><br><span class="line">    try:</span><br><span class="line">      if int(response[IP].proto)==1:</span><br><span class="line">        print prefix+str(addr)</span><br><span class="line">    except:</span><br><span class="line">        pass</span><br></pre></td></tr></table></figure>
 
-<ol start="4">
-<li><p>发现-四层发现（Nmap）</p>
-<ul>
+<h4 id="4-发现-四层发现（Nmap）"><a href="#4-发现-四层发现（Nmap）" class="headerlink" title="4. 发现-四层发现（Nmap）"></a>4. 发现-四层发现（Nmap）</h4><ul>
 <li><strong><code>🔺命令：nmap IP地址-254 -PU53（对于UDP53端口）-sn</code></strong></li>
 <li><strong><code>🔺命令：nmap IP地址-254 -PA80（对于TCP80端口）-sn</code></strong></li>
 <li><strong><code>🔺命令：nmap -iL iplist.txt -PA80 -sn</code></strong></li>
 </ul>
-</li>
-</ol>
 <p>▲ 2019.12.3 Nmap局域网，无论是TCP还是UDP，发送的都是DNS的包，局域网内是发给网关<br>▲ 2019.12.3 Nmap外网，UDP查询时发送DNS包，TCP发送TCP包</p>
 <blockquote>
 <pre><code>nmap IP地址 -P0 -sn Ping层的发现
@@ -885,9 +843,7 @@ nmap IP地址 -PE -sn ICMP echo
 nmap IP地址 -PP -sn 时间戳
 namp IP地址 -PM -sn 子网掩码发现
 nmap 192.168.100.1-254 -PA80 -sn | grep &quot;Nmap&quot; | grep -v &quot;Starting&quot; | grep -v &quot;done&quot;| cut -d &quot; &quot; -f 6 | cut -d &quot;(&quot; -f 2| cut -d &quot;)&quot; -f 1 &gt; iplist.txt</code></pre></blockquote>
-<ol start="5">
-<li><p>发现-四层发现（hping3）</p>
-<ul>
+<h4 id="5-发现-四层发现（hping3）"><a href="#5-发现-四层发现（hping3）" class="headerlink" title="5. 发现-四层发现（hping3）"></a>5. 发现-四层发现（hping3）</h4><ul>
 <li><strong><code>🔺命令：hping3 --udp IP地址 -c 1</code></strong></li>
 <li><strong><code>🔺命令：for addr in $(seq 1 254);do hping3 --udp 1.1.1.$addr -c 1 &gt;&gt;r.txt;done</code></strong><ul>
 <li><strong><code>🔺命令：grep Unreachable r.txt | cut -d &quot;&quot; -f 5 | cut -d &quot;=&quot; -f 2</code></strong></li>
@@ -895,8 +851,6 @@ nmap 192.168.100.1-254 -PA80 -sn | grep &quot;Nmap&quot; | grep -v &quot;Startin
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#！/bin/bash</span><br><span class="line">if [ &quot;$#&quot; -ne 1 ];then</span><br><span class="line">    echo &quot;USAGE - ./udp_hping.sh [/24 network address]&quot;</span><br><span class="line">    echo &quot;Example - ./udp_hping.sh 192.168.100.0&quot;</span><br><span class="line">    echo &quot;Example will perform an UDP scan of the 192.168.100.0/24 network and output.txt file&quot;</span><br><span class="line">    exit</span><br><span class="line">fi</span><br><span class="line">prefix=$(echo $1 | cut -d &quot;.&quot; -f 1-3)</span><br><span class="line">for addr in $(seq 1 254);do</span><br><span class="line">    hping3 $prefix.$addr --udp -c 1 &gt;&gt; r.txt;</span><br><span class="line">done</span><br><span class="line">grep Unreachable r.txt | cut -d &quot;&quot; -f 5 | cut -d &quot;=&quot; -f 2 &gt;&gt; output.txt</span><br><span class="line">rm r.txt</span><br></pre></td></tr></table></figure>
 
 <ul>
@@ -1054,9 +1008,7 @@ nmap和Scapy发的是ACK的TCP包，是flag16的TCP包，需要收回RST的TCP�
         
           
             <hr>
-<ol>
-<li><p>服务扫描（不能简单通过端口号来判断端口上的服务）</p>
-<ul>
+<h4 id="1-服务扫描（不能简单通过端口号来判断端口上的服务）"><a href="#1-服务扫描（不能简单通过端口号来判断端口上的服务）" class="headerlink" title="1. 服务扫描（不能简单通过端口号来判断端口上的服务）"></a>1. 服务扫描（不能简单通过端口号来判断端口上的服务）</h4><ul>
 <li>识别开放端口上运行的应用</li>
 <li>识别目标操作系统</li>
 <li>提高攻击效率<ul>
@@ -1088,14 +1040,10 @@ nmap和Scapy发的是ACK的TCP包，是flag16的TCP包，需要收回RST的TCP�
 </li>
 <li>识别和绕过防火墙筛选</li>
 </ul>
-</li>
-<li><p>服务扫描-Banner</p>
-<ul>
+<h4 id="2-服务扫描-Banner"><a href="#2-服务扫描-Banner" class="headerlink" title="2. 服务扫描-Banner"></a>2. 服务扫描-Banner</h4><ul>
 <li><strong><code>🔺命令：nc -nv IP地址 端口号</code></strong>（查看端口banner信息）</li>
 </ul>
-</li>
-<li><p>服务扫描-Banner</p>
-<ul>
+<h4 id="3-服务扫描-Banner"><a href="#3-服务扫描-Banner" class="headerlink" title="3. 服务扫描-Banner"></a>3. 服务扫描-Banner</h4><ul>
 <li>Python socket（socket缺乏对应用层数据包的定义，无法建立完整会话）<ul>
 <li>socket模块用于连接网络服务</li>
 </ul>
@@ -1110,33 +1058,21 @@ nmap和Scapy发的是ACK的TCP包，是flag16的TCP包，需要收回RST的TCP�
 <li>Banner不允许抓取，recv函数无返回将挂起！！</li>
 <li><strong><code>🔺命令：./ban_grab.py IP地址 起始端口 结束端口</code></strong>  ▲2019.12.6 暂时扫不出服务</li>
 </ul>
-</li>
-</ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import socket</span><br><span class="line">import select</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=4:</span><br><span class="line">    print &quot;Usage - ./ban_grab.py [Target IP] [First Port] [Last Port] &quot;</span><br><span class="line">    print &quot;Example - ./ban_grab.py 192.168.100.1 1 200&quot;</span><br><span class="line">    print &quot;Example will grab banners for TCP ports 1 through 100 on 192.168.100.1&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">ip=sys.argv[1]</span><br><span class="line">start=int(sys.argv[2])</span><br><span class="line">end=int(sys.argv[3])</span><br><span class="line"></span><br><span class="line">for port in range(start,end):</span><br><span class="line">    try:</span><br><span class="line">      bangrab=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">      bangrab.connect((ip,port))</span><br><span class="line">      ready=select.select((bangrab),[],[],1)</span><br><span class="line">      if ready[0]:</span><br><span class="line">        print &quot;TCP Port &quot;+str[port]+&quot;-&quot;+bangrab.recv[4096]</span><br><span class="line">        bangrab.close()</span><br><span class="line">    except:</span><br><span class="line">      pass</span><br></pre></td></tr></table></figure>
 
-<ol start="4">
-<li><p>服务扫描-Banner</p>
-<ul>
+<h4 id="4-服务扫描-Banner"><a href="#4-服务扫描-Banner" class="headerlink" title="4. 服务扫描-Banner"></a>4. 服务扫描-Banner</h4><ul>
 <li><strong><code>🔺命令：dmitry -p（TCP扫描）IP地址</code></strong></li>
 <li><strong><code>🔺命令：dmitry -pb（TCP扫描banner信息） IP地址</code></strong></li>
 </ul>
-</li>
-<li><p>服务扫描-Banner</p>
-<ul>
+<h4 id="5-服务扫描-Banner"><a href="#5-服务扫描-Banner" class="headerlink" title="5. 服务扫描-Banner"></a>5. 服务扫描-Banner</h4><ul>
 <li><strong><code>🔺命令：nmap -sT（完整的TCP连接） IP地址 -p 端口 --script=banner.nse</code></strong></li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>nmap扫描脚本：/usr/share/nmap/script</code></pre></blockquote>
-<ol start="6">
-<li><p>服务扫描-Banner</p>
-<ul>
+<h4 id="6-服务扫描-Banner"><a href="#6-服务扫描-Banner" class="headerlink" title="6. 服务扫描-Banner"></a>6. 服务扫描-Banner</h4><ul>
 <li><strong><code>🔺命令：amap -B（专门发现指定端口上的banner信息） IP地址 端口</code></strong></li>
 </ul>
-</li>
-<li><p>服务扫描-服务识别</p>
-<ul>
+<h4 id="7-服务扫描-服务识别"><a href="#7-服务扫描-服务识别" class="headerlink" title="7. 服务扫描-服务识别"></a>7. 服务扫描-服务识别</h4><ul>
 <li>Banner信息抓取能力有限</li>
 <li>nmap响应特征分析识别服务<ul>
 <li>发现系列复杂的探测</li>
@@ -1146,18 +1082,14 @@ nmap和Scapy发的是ACK的TCP包，是flag16的TCP包，需要收回RST的TCP�
 <li><strong><code>🔺命令：nv -nv IP地址 端口</code></strong></li>
 <li><strong><code>🔺命令：nmap IP地址 -p 端口</code></strong>-sV（识别端口后面服务，通过指纹匹配的方式，不单是banner信息）</li>
 </ul>
-</li>
-<li><p>服务扫描-服务识别</p>
-<ul>
+<h4 id="8-服务扫描-服务识别"><a href="#8-服务扫描-服务识别" class="headerlink" title="8. 服务扫描-服务识别"></a>8. 服务扫描-服务识别</h4><ul>
 <li><strong><code>🔺命令：Amap</code></strong>（还是基于banner信息进行识别）</li>
 <li><strong><code>🔺命令：amap IP地址</code></strong></li>
 <li><strong><code>🔺命令：amap IP地址 端口号</code></strong></li>
 <li><strong><code>🔺命令：amap IP地址 端口号 -q</code></strong></li>
 <li><strong><code>🔺命令：amap IP地址 端口号 -qb</code></strong></li>
 </ul>
-</li>
-<li><p>SNMP扫描（通信：101和102，被查询的服务端：161，客户端：162 → udp）</p>
-<ul>
+<h4 id="9-SNMP扫描（通信：101和102，被查询的服务端：161，客户端：162-→-udp）"><a href="#9-SNMP扫描（通信：101和102，被查询的服务端：161，客户端：162-→-udp）" class="headerlink" title="9. SNMP扫描（通信：101和102，被查询的服务端：161，客户端：162 → udp）"></a>9. SNMP扫描（通信：101和102，被查询的服务端：161，客户端：162 → udp）</h4><ul>
 <li>snmp（明文传输，可被嗅探到）<ul>
 <li>信息的金矿（设备的详细内容）</li>
 <li>经常被错误配置（特征字符，community）</li>
@@ -1173,14 +1105,10 @@ nmap和Scapy发的是ACK的TCP包，是flag16的TCP包，需要收回RST的TCP�
 <li><strong><code>🔺命令：onesixtyone IP地址 public</code></strong></li>
 <li><strong><code>🔺命令：onesixtyone -c（字典） dict.txt -i（多个主机列表） host -o my.log -w 100</code></strong></li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>Window XP安装 → 程序软件安装 → 添加组件 → 管理和监视（有可能需要安装光盘）
 services.msc snmp服务，可添加代理，陷阱（snmp作为客户端），默认安装public作为commuity，然后接受来自任何主机的SNMP查询包</code></pre></blockquote>
-<ol start="10">
-<li><p>SNMP扫描</p>
-<ul>
+<h4 id="10-SNMP扫描"><a href="#10-SNMP扫描" class="headerlink" title="10. SNMP扫描"></a>10. SNMP扫描</h4><ul>
 <li><strong><code>🔺命令：snmpwalk IP地址 -c public -v（snmp版本） 2c</code></strong></li>
 <li>用户<ul>
 <li><strong><code>🔺命令：snmp -c publuc -v 2c IP地址 1.3.6.1.4.1.77.1.2.25</code></strong>（MIB All ID）</li>
@@ -1190,13 +1118,9 @@ services.msc snmp服务，可添加代理，陷阱（snmp作为客户端），�
 <li><strong><code>🔺命令：snmpcheck -t IP地址 -c private -v 2</code></strong></li>
 <li><strong><code>🔺命令：snmpcheck -t IP地址 -p agent w</code></strong>（检测是否有可写权限）</li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>SNMP版本：v1，v2c，v3（大量安全机制）</code></pre></blockquote>
-<ol start="11">
-<li><p>SMB扫描</p>
-<ul>
+<h4 id="11-SMB扫描"><a href="#11-SMB扫描" class="headerlink" title="11. SMB扫描"></a>11. SMB扫描</h4><ul>
 <li><p>Server Message Block 协议</p>
 <ul>
 <li>微软历史上出现安全问题最多的协议</li>
@@ -1224,8 +1148,6 @@ services.msc snmp服务，可添加代理，陷阱（snmp作为客户端），�
 <li><p><strong><code>🔺命令：enum4linux -a IP地址</code></strong></p>
 </li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>SMB Vulns（针对的是Window系统）
 MS08-067，a windpws RPC vulnerability
@@ -1243,9 +1165,7 @@ MS09-001，a windows Code execution from remote</code></pre></blockquote>
 &lt;1e&gt;   Browser Service Elections（浏览器服务）
 ▲ window下主机的SID  用户的RID
 ▲ linux下主机 uid，gid，groups</code></pre></blockquote>
-<ol start="12">
-<li><p>SMTP扫描（发现目标系统的邮件账号，也可以通过被动信息收集）</p>
-<ul>
+<h4 id="12-SMTP扫描（发现目标系统的邮件账号，也可以通过被动信息收集）"><a href="#12-SMTP扫描（发现目标系统的邮件账号，也可以通过被动信息收集）" class="headerlink" title="12. SMTP扫描（发现目标系统的邮件账号，也可以通过被动信息收集）"></a>12. SMTP扫描（发现目标系统的邮件账号，也可以通过被动信息收集）</h4><ul>
 <li><strong><code>🔺命令：nc -nv IP地址 端口</code></strong><ul>
 <li>VRFY root（确认有无root账号）</li>
 </ul>
@@ -1254,8 +1174,6 @@ MS09-001，a windows Code execution from remote</code></pre></blockquote>
 <li><strong><code>🔺命令：nmap smtp.163.com -p 25 --script=smtp-open-relay.nse --script=smtp-user-enum -M VRFY -U（指定字典） user.txt -t IP地址</code></strong></li>
 <li><strong><code>🔺命令：./smtp.py &lt;username&gt;</code></strong></li>
 </ul>
-</li>
-</ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line"></span><br><span class="line">import socket</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage: smtp.py &lt;username&gt;&quot;</span><br><span class="line">    sys.exit(0)</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">connect=s.connect((&quot;IP地址&quot;,端口))</span><br><span class="line">banner=s.recv(4096)</span><br><span class="line">print banner+&quot;aaaaa&quot;</span><br><span class="line">s.send(&apos;VRFY&apos;+sys.argv[1]+&apos;\r\n&apos;)</span><br><span class="line">result=s.recv(4096)</span><br><span class="line">print result</span><br><span class="line">s.close</span><br></pre></td></tr></table></figure>
 
 <blockquote>
@@ -1402,9 +1320,7 @@ MS09-001，a windows Code execution from remote</code></pre></blockquote>
         
           
             <hr>
-<ol>
-<li><p>端口扫描（TCP）</p>
-<ul>
+<h4 id="1-端口扫描（TCP）"><a href="#1-端口扫描（TCP）" class="headerlink" title="1. 端口扫描（TCP）"></a>1. 端口扫描（TCP）</h4><ul>
 <li><p>TCP端口扫描（SYN–SYN/ACK–ACK）</p>
 <ul>
 <li>基于连接的协议</li>
@@ -1434,8 +1350,6 @@ MS09-001，a windows Code execution from remote</code></pre></blockquote>
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>IPID:IP报头里面的Identification字段
 1.僵尸扫描过程（端口开放）：
@@ -1446,9 +1360,7 @@ MS09-001，a windows Code execution from remote</code></pre></blockquote>
 （1）Scanner【SYN/ACK】 -- Zombie【RST IPID=X】
 （2）Scanner【SYN IPSRC=zombie】 -- target【RST】 -- Zombie
 （3）Scanner【SYN/ACK】 -- Zombie【RST IPID=x+1】</code></pre></blockquote>
-<ol start="2">
-<li><p>隐蔽端口扫描</p>
-<ul>
+<h4 id="2-隐蔽端口扫描"><a href="#2-隐蔽端口扫描" class="headerlink" title="2. 隐蔽端口扫描"></a>2. 隐蔽端口扫描</h4><ul>
 <li>syn–syn/ack–rst（本机操作系统内核产生的）</li>
 <li>Scapy<ul>
 <li>sr1(IP(dst=”IP地址”)/TCP(dport=80,flags=”S”),timeout=1,verbose=0)</li>
@@ -1456,34 +1368,26 @@ MS09-001，a windows Code execution from remote</code></pre></blockquote>
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line">import time</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=4:</span><br><span class="line">    print &quot;Usage - ./syn_scan.py [Target IP] [First IP] [Last IP] &quot;</span><br><span class="line">    print &quot;Example - ./syn_scan.py 192.168.100.1 1 200&quot;</span><br><span class="line">    print &quot;Example will perform a TCP SYN scan of the 192.168.100.0/24 range&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">ip=sys.argv[1]</span><br><span class="line">start=int(sys.argv[2])</span><br><span class="line">end=int(sys.argv[3])</span><br><span class="line"></span><br><span class="line">for port in range(start,end):</span><br><span class="line">    a=sr1(IP(dst=ip)/TCP(dport=port),timeout=1,verbose=0)</span><br><span class="line">    if a==None:</span><br><span class="line">      pass</span><br><span class="line">    else:</span><br><span class="line">      if int(a[TCP].flags)==18:</span><br><span class="line">        print port</span><br><span class="line">      else:</span><br><span class="line">        pass</span><br></pre></td></tr></table></figure>
 
 <blockquote>
 <pre><code>正常情况下：
 端口开放：syn--syn/ack
 端口未开放：syn--rst/ack</code></pre></blockquote>
-<ol start="3">
-<li><p>隐蔽端口扫描</p>
-<ul>
+<h4 id="3-隐蔽端口扫描"><a href="#3-隐蔽端口扫描" class="headerlink" title="3. 隐蔽端口扫描"></a>3. 隐蔽端口扫描</h4><ul>
 <li><strong><code>🔺命令：nmap -sS IP地址 -p 80,21,25,110,443</code></strong></li>
 <li><strong><code>🔺命令：nmap -sS IP地址 -p 1-65535 --open</code></strong></li>
 <li><strong><code>🔺命令：nmap -sS IP地址 --open</code></strong></li>
 <li><strong><code>🔺命令：nmap -sS -iL iplist.txt -p 80,21,22,23</code></strong></li>
 </ul>
-</li>
-<li><p>隐蔽端口扫描</p>
-<ul>
+<h4 id="4-隐蔽端口扫描"><a href="#4-隐蔽端口扫描" class="headerlink" title="4. 隐蔽端口扫描"></a>4. 隐蔽端口扫描</h4><ul>
 <li>hping3（发包习惯是顺序端口）</li>
 <li><strong><code>🔺命令：hping3 IP地址 --scan 80 -S</code></strong></li>
 <li><strong><code>🔺命令：hping3 IP地址 --scan 80,21,25,443 -S</code></strong>（syn包）</li>
 <li><strong><code>🔺命令：hping3 IP地址 --scan 0-65535 -S</code></strong></li>
 <li><strong><code>🔺命令：hping3 -c 10 -S --spoof（伪造源地址） IP地址 -p ++1（端口递增） IP地址</code></strong></li>
 </ul>
-</li>
-<li><p>全连接端口扫描</p>
-<ul>
+<h4 id="5-全连接端口扫描"><a href="#5-全连接端口扫描" class="headerlink" title="5. 全连接端口扫描"></a>5. 全连接端口扫描</h4><ul>
 <li>Scapy（容易触发目标主机的报警系统）<ul>
 <li>syn扫描不需要raw packets</li>
 <li>内核认为syn/ack是非法包，直接发rst终断连接</li>
@@ -1493,8 +1397,6 @@ MS09-001，a windows Code execution from remote</code></pre></blockquote>
 <li>sr1(IP(dst=”IP地址”)/TCP(dport=22,flags=”S”))</li>
 <li><strong><code>🔺命令：./tcp_scan1.py（代码内指定IP地址）</code></strong></li>
 </ul>
-</li>
-</ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy,runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import*</span><br><span class="line"></span><br><span class="line">response=sr1(IP(dst=&quot;IP地址&quot;)/TCP(dport=80,flags=&quot;S&quot;))</span><br><span class="line">reply=sr1(IP(dst=&quot;IP地址&quot;)/TCP(dport=80,flags=&quot;A&quot;,ack=(response[TCP].seq+1)))</span><br></pre></td></tr></table></figure>
 
 <ul>
@@ -1508,18 +1410,14 @@ MS09-001，a windows Code execution from remote</code></pre></blockquote>
 <blockquote>
 <pre><code>iptables是工作在底层的防火墙，在内核之前过滤数据
 iptables -L查看当前防火墙规则</code></pre></blockquote>
-<ol start="6">
-<li><p>全连接端口扫描</p>
-<ul>
+<h4 id="6-全连接端口扫描"><a href="#6-全连接端口扫描" class="headerlink" title="6. 全连接端口扫描"></a>6. 全连接端口扫描</h4><ul>
 <li><strong><code>🔺命令：nmap IP地址 -sT -p 80</code></strong></li>
 <li><strong><code>🔺命令：nmap IP地址 -sT -p 80,21,25</code></strong></li>
 <li><strong><code>🔺命令：nmap IP地址 -sT -p 1-65535</code></strong></li>
 <li><strong><code>🔺命令：nmap -sT -iL iplist.txt -p 80</code></strong></li>
 <li>默认1000个常用端口</li>
 </ul>
-</li>
-<li><p>全连接端口扫描</p>
-<ul>
+<h4 id="7-全连接端口扫描"><a href="#7-全连接端口扫描" class="headerlink" title="7. 全连接端口扫描"></a>7. 全连接端口扫描</h4><ul>
 <li>dmitry<ul>
 <li>功能简单，但使用简便</li>
 <li>默认150个常用端口</li>
@@ -1528,18 +1426,12 @@ iptables -L查看当前防火墙规则</code></pre></blockquote>
 <li><strong><code>🔺命令：dmitry -p IP地址</code></strong></li>
 <li><strong><code>🔺命令：dmitry -p IP地址 -o output</code></strong></li>
 </ul>
-</li>
-<li><p>全连接端口扫描</p>
-<ul>
+<h4 id="8-全连接端口扫描"><a href="#8-全连接端口扫描" class="headerlink" title="8. 全连接端口扫描"></a>8. 全连接端口扫描</h4><ul>
 <li><strong><code>🔺命令：nc -nv -w（连接的超时时间）1 -z IP地址 1-65535</code></strong>（倒序发送）</li>
 <li><strong><code>🔺命令：for x in $(seq 20 30);do nc -nv -w 1 -z IP地址 $x;done | grep open</code></strong></li>
 <li><strong><code>🔺命令：for x in $(seq 1 254);do nc -nv -w 1 -z 1.1.1.$x 80;done</code></strong></li>
 </ul>
-</li>
-<li><p>僵尸扫描</p>
-</li>
-</ol>
-<blockquote>
+<h4 id="9-僵尸扫描"><a href="#9-僵尸扫描" class="headerlink" title="9. 僵尸扫描"></a>9. 僵尸扫描</h4><blockquote>
 <pre><code>早期的Window系统，包括XP,2003,98系统的IPID是递增的</code></pre></blockquote>
 <ul>
 <li>Scapy–zomebie.py<ul>
@@ -1565,9 +1457,7 @@ iptables -L查看当前防火墙规则</code></pre></blockquote>
 <blockquote>
 <pre><code>sr1 发包只收一个数据包
 send 发包不收数据包</code></pre></blockquote>
-<ol start="10">
-<li><p>僵尸扫描</p>
-<ul>
+<h4 id="10-僵尸扫描"><a href="#10-僵尸扫描" class="headerlink" title="10. 僵尸扫描"></a>10. 僵尸扫描</h4><ul>
 <li>发现僵尸机<ul>
 <li><strong><code>🔺命令：nmap -p445 IP地址 --script=ipidseq.nse</code></strong></li>
 </ul>
@@ -1577,8 +1467,6 @@ send 发包不收数据包</code></pre></blockquote>
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 
           
         
@@ -1721,9 +1609,7 @@ send 发包不收数据包</code></pre></blockquote>
         
           
             <hr>
-<ol>
-<li><p>NMAP</p>
-<ul>
+<h4 id="1-NMAP"><a href="#1-NMAP" class="headerlink" title="1. NMAP"></a>1. NMAP</h4><ul>
 <li>所有参数</li>
 <li>目标发现<ul>
 <li>-iL <inputfilename>（列表文件作为输入）</li>
@@ -1821,8 +1707,6 @@ send 发包不收数据包</code></pre></blockquote>
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 
           
         
@@ -1965,9 +1849,7 @@ send 发包不收数据包</code></pre></blockquote>
         
           
             <hr>
-<ol>
-<li><p>NEXPOSE</p>
-<ul>
+<h4 id="1-NEXPOSE"><a href="#1-NEXPOSE" class="headerlink" title="1. NEXPOSE"></a>1. NEXPOSE</h4><ul>
 <li>Rapid7<ul>
 <li>Nexpose</li>
 <li>完整的漏洞管理实现</li>
@@ -1984,16 +1866,12 @@ send 发包不收数据包</code></pre></blockquote>
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>概念：用扫描器去发现漏洞，用渗透框架去验证漏洞
 ▲ 2019.12.8可以注册一个企业邮箱，可申请多个（腾讯。网易等）
 ▲ 2019.12.8需要修改密码，至少一个数字，一个大写字母，一个字符，长度大于14位，多次不成功会锁账号 Rapid7@mazhentao
 ▲ 2019.12.8只有注册后，才可下载到ova文件</code></pre></blockquote>
-<ol start="2">
-<li><p>Administrator</p>
-<ul>
+<h4 id="2-Administrator"><a href="#2-Administrator" class="headerlink" title="2. Administrator"></a>2. Administrator</h4><ul>
 <li>Scan Templates<ul>
 <li>Exhaustive → Copy</li>
 <li>General → Name → Types of Checks（Assert Discovery、Vulnerability、WebSpldering、Policies）</li>
@@ -2018,8 +1896,6 @@ send 发包不收数据包</code></pre></blockquote>
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>企业在美国上市需要过塞班思发案，也即404法案，Sarbans-Oxley compliance
 支付行业要过PCI ASV Extemal Audit/PCI Internal Aduit</code></pre></blockquote>
@@ -2036,14 +1912,10 @@ send 发包不收数据包</code></pre></blockquote>
 </ul>
 </li>
 </ul>
-<ol start="3">
-<li><p>扫描结果分析</p>
-<ul>
+<h4 id="3-扫描结果分析"><a href="#3-扫描结果分析" class="headerlink" title="3. 扫描结果分析"></a>3. 扫描结果分析</h4><ul>
 <li>False Positive：误报</li>
 <li>False negative：漏报</li>
 </ul>
-</li>
-</ol>
 
           
         
@@ -2186,9 +2058,7 @@ send 发包不收数据包</code></pre></blockquote>
         
           
             <hr>
-<ol>
-<li><p>NESSUS</p>
-<ul>
+<h4 id="1-NESSUS"><a href="#1-NESSUS" class="headerlink" title="1. NESSUS"></a>1. NESSUS</h4><ul>
 <li>家庭版<ul>
 <li>免费</li>
 </ul>
@@ -2242,10 +2112,7 @@ send 发包不收数据包</code></pre></blockquote>
 </ul>
 </li>
 </ul>
-<ol start="2">
-<li>NESSUS扫描（window）</li>
-</ol>
-<ul>
+<h4 id="2-NESSUS扫描（window）"><a href="#2-NESSUS扫描（window）" class="headerlink" title="2. NESSUS扫描（window）"></a>2. NESSUS扫描（window）</h4><ul>
 <li>Advanced Scan → Setting<ul>
 <li>Basic → General（Name → window_vuln_scan_policy）</li>
 <li>Basic → Permissions</li>
@@ -2271,15 +2138,11 @@ send 发包不收数据包</code></pre></blockquote>
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>windows增加用户密码：net user 用户 -
 可添加一个针对Linux系统的Advabced Scan（linux_vuln_scan_policy）
 可通过设置User Profile → API Keys来设置Access Key和Secret Key</code></pre></blockquote>
-<ol start="3">
-<li><p>NESSUS</p>
-<ul>
+<h4 id="3-NESSUS"><a href="#3-NESSUS" class="headerlink" title="3. NESSUS"></a>3. NESSUS</h4><ul>
 <li>策略</li>
 <li>扫描</li>
 <li>扫描本机</li>
@@ -2290,8 +2153,6 @@ send 发包不收数据包</code></pre></blockquote>
 <li>报告</li>
 <li>调度</li>
 </ul>
-</li>
-</ol>
 
           
         
@@ -2434,9 +2295,7 @@ send 发包不收数据包</code></pre></blockquote>
         
           
             <hr>
-<ol>
-<li><p>OPENVAS</p>
-<ul>
+<h4 id="1-OPENVAS"><a href="#1-OPENVAS" class="headerlink" title="1. OPENVAS"></a>1. OPENVAS</h4><ul>
 <li>Openvas<ul>
 <li>Nessus项目分支</li>
 <li>管理目标系统的漏洞</li>
@@ -2445,9 +2304,7 @@ send 发包不收数据包</code></pre></blockquote>
 </ul>
 </li>
 </ul>
-</li>
-<li><p>OPENVAS</p>
-<ul>
+<h4 id="2-OPENVAS"><a href="#2-OPENVAS" class="headerlink" title="2. OPENVAS"></a>2. OPENVAS</h4><ul>
 <li>安装</li>
 <li>创建证书</li>
 <li>同步弱点数据库NVT</li>
@@ -2460,14 +2317,10 @@ send 发包不收数据包</code></pre></blockquote>
 <li>配置服务侦听端口</li>
 <li>安装验证</li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>Kali Linux配置OPENVAS，openvas-setup，现在一条命令即可
 OPENVAS每天会发布feed，里面包含由一个或多个NVT</code></pre></blockquote>
-<ol start="3">
-<li><p>OPENVAS</p>
-<ul>
+<h4 id="3-OPENVAS"><a href="#3-OPENVAS" class="headerlink" title="3. OPENVAS"></a>3. OPENVAS</h4><ul>
 <li>OpenVAS Manager（负责把其他的组件连接）<ul>
 <li>控制Scanner和其他Manager的中心组件</li>
 <li>控制中心数据库，保存用户配置及扫描结果</li>
@@ -2503,9 +2356,7 @@ OPENVAS每天会发布feed，里面包含由一个或多个NVT</code></pre></blo
 </ul>
 </li>
 </ul>
-</li>
-<li><p>OPENVAS</p>
-<ul>
+<h4 id="4-OPENVAS"><a href="#4-OPENVAS" class="headerlink" title="4. OPENVAS"></a>4. OPENVAS</h4><ul>
 <li>初始化安装<ul>
 <li><strong><code>🔺命令：openvas-setup</code></strong></li>
 </ul>
@@ -2527,8 +2378,6 @@ OPENVAS每天会发布feed，里面包含由一个或多个NVT</code></pre></blo
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>openvasmd -h 可修改账户密码，可增加账户
 9390端口：openvas manager
@@ -2536,9 +2385,7 @@ OPENVAS每天会发布feed，里面包含由一个或多个NVT</code></pre></blo
 9392端口：web登陆（https）
 openvas-check-setup | grep Fix 可查看报错的组件
 证书报错的原因：（1）名称与URL地址不一致（2）证书为自签名证书</code></pre></blockquote>
-<ol start="5">
-<li><p>OPENVAS</p>
-<ul>
+<h4 id="5-OPENVAS"><a href="#5-OPENVAS" class="headerlink" title="5. OPENVAS"></a>5. OPENVAS</h4><ul>
 <li><strong><code>🔺命令：vi /usr/bin/openvas-start</code></strong>（调整启动服务顺序，对于kali2.0版本以下）<ul>
 <li>Starting OpenVas Services</li>
 <li>3\Starting OpenVas Manager.openvasmd</li>
@@ -2548,9 +2395,7 @@ openvas-check-setup | grep Fix 可查看报错的组件
 </li>
 <li>openvas-start</li>
 </ul>
-</li>
-<li><p>OPENVAS</p>
-<ul>
+<h4 id="6-OPENVAS"><a href="#6-OPENVAS" class="headerlink" title="6. OPENVAS"></a>6. OPENVAS</h4><ul>
 <li>Configration<ul>
 <li>scan configs → windows_server_scan_configration</li>
 <li>target → windows_xp（Alive Test → Consider Alive，Port List）</li>
@@ -2568,8 +2413,6 @@ openvas-check-setup | grep Fix 可查看报错的组件
 </li>
 <li>start a short scan（full and fast，需要一个IP） ▲2019.12.7新版在Task Wizard中</li>
 </ul>
-</li>
-</ol>
 
           
         
@@ -2712,9 +2555,7 @@ openvas-check-setup | grep Fix 可查看报错的组件
         
           
             <hr>
-<ol>
-<li><p>发现弱点</p>
-<ul>
+<h4 id="1-发现弱点"><a href="#1-发现弱点" class="headerlink" title="1. 发现弱点"></a>1. 发现弱点</h4><ul>
 <li>发现漏洞<ul>
 <li>基于端口服务扫描结果版本信息（速度慢）</li>
 <li>搜索已公开的漏洞数据库（数量大）</li>
@@ -2722,15 +2563,11 @@ openvas-check-setup | grep Fix 可查看报错的组件
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>（1）https://www.exploit-db.com Kali 官方公布的漏洞代码
 （2）searchsploit 服务类型  查找相关漏洞利用代码 （相干文件放在usr/share/exploitdb/platforms）
 （3）Kali自带工具 sandi-gui  ▲2019.12.7暂无此工具</code></pre></blockquote>
-<ol start="2">
-<li><p>从信息的维度定义漏洞管理</p>
-<ul>
+<h4 id="2-从信息的维度定义漏洞管理"><a href="#2-从信息的维度定义漏洞管理" class="headerlink" title="2. 从信息的维度定义漏洞管理"></a>2. 从信息的维度定义漏洞管理</h4><ul>
 <li>信息收集：<ul>
 <li>扫描发现网络IP、OS、服务、配置、漏洞</li>
 <li>能力要求：定义扫描方式内容和目标</li>
@@ -2747,9 +2584,7 @@ openvas-check-setup | grep Fix 可查看报错的组件
 </ul>
 </li>
 </ul>
-</li>
-<li><p>弱点扫描类型</p>
-<ul>
+<h4 id="3-弱点扫描类型"><a href="#3-弱点扫描类型" class="headerlink" title="3. 弱点扫描类型"></a>3. 弱点扫描类型</h4><ul>
 <li>主动扫描<ul>
 <li>有身份验证</li>
 <li>无身份验证</li>
@@ -2765,9 +2600,7 @@ openvas-check-setup | grep Fix 可查看报错的组件
 </ul>
 </li>
 </ul>
-</li>
-<li><p>漏洞概念</p>
-<ul>
+<h4 id="4-漏洞概念"><a href="#4-漏洞概念" class="headerlink" title="4. 漏洞概念"></a>4. 漏洞概念</h4><ul>
 <li>CVSS（Common Vulnerability Scoring System）<ul>
 <li>通用漏洞评分系统–工业标准</li>
 <li>扫描安全漏洞严重程度的统一评分方案</li>
@@ -2799,9 +2632,7 @@ openvas-check-setup | grep Fix 可查看报错的组件
 </ul>
 </li>
 </ul>
-</li>
-<li><p>漏洞基本概念</p>
-<ul>
+<h4 id="5-漏洞基本概念"><a href="#5-漏洞基本概念" class="headerlink" title="5. 漏洞基本概念"></a>5. 漏洞基本概念</h4><ul>
 <li><p>很多产商维护自己的Vulnerability Reference</p>
 <ul>
 <li>MS</li>
@@ -2872,9 +2703,7 @@ openvas-check-setup | grep Fix 可查看报错的组件
 </ol>
 </li>
 </ul>
-</li>
-<li><p>漏洞管理</p>
-<ul>
+<h4 id="6-漏洞管理"><a href="#6-漏洞管理" class="headerlink" title="6. 漏洞管理"></a>6. 漏洞管理</h4><ul>
 <li>周期性扫描跟踪漏洞</li>
 <li>高危漏洞优先处理</li>
 <li>扫描注意事项</li>
@@ -2885,9 +2714,7 @@ openvas-check-setup | grep Fix 可查看报错的组件
 </ul>
 </li>
 </ul>
-</li>
-<li><p>Nmap</p>
-<ul>
+<h4 id="7-Nmap"><a href="#7-Nmap" class="headerlink" title="7. Nmap"></a>7. Nmap</h4><ul>
 <li>nmap扫描脚本<ul>
 <li>600+</li>
 <li>分类</li>
@@ -2902,13 +2729,9 @@ openvas-check-setup | grep Fix 可查看报错的组件
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>中文输入法：桌面的设置，删除本机自带的汉语，然后apt-get install ibus ibus-pinyin，添加汉语</code></pre></blockquote>
-<ol start="8">
-<li><p>Nmap</p>
-<ul>
+<h4 id="8-Nmap"><a href="#8-Nmap" class="headerlink" title="8. Nmap"></a>8. Nmap</h4><ul>
 <li><p>smb-vuln-ms10-061.nse</p>
 <ul>
 <li>Stuxnet蠕虫利用的4个漏洞之一（美国军方打击伊朗核设施攻击的阵亡病毒）</li>
@@ -2928,19 +2751,13 @@ openvas-check-setup | grep Fix 可查看报错的组件
 <li><p>影响扫描结果的因素</p>
 </li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>不同扫描器对于漏洞的判断是不同的，有些是基于补丁是否安装，有些是基于端口是否开放</code></pre></blockquote>
-<ol start="9">
-<li><p>扫描结果确认</p>
-<ul>
+<h4 id="9-扫描结果确认"><a href="#9-扫描结果确认" class="headerlink" title="9. 扫描结果确认"></a>9. 扫描结果确认</h4><ul>
 <li>目标系统版本</li>
 <li>补丁是否安装</li>
 <li>是否可被入侵</li>
 </ul>
-</li>
-</ol>
 
           
         

@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="信息收集-DNS  域名解析成IP地址 域名（qq.com）与FQDN（完全限定域名www.qq.com）的区别 域名记录：A（IPV4主机记录）、C name（别名记录）、NS（域名服务器地址对域解析）、MX（邮件服务器地址对域解析）、ptr（通过IP地址反向解析域名）、text（spf反向垃圾邮件域名）、SOA（启始授权）、AAAA（IPV6地址）       DNS客户端 → 本地DNS">
+<meta name="description" content="1. 信息收集-DNS 域名解析成IP地址 域名（qq.com）与FQDN（完全限定域名www.qq.com）的区别 域名记录：A（IPV4主机记录）、C name（别名记录）、NS（域名服务器地址对域解析）、MX（邮件服务器地址对域解析）、ptr（通过IP地址反向解析域名）、text（spf反向垃圾邮件域名）、SOA（启始授权）、AAAA（IPV6地址）     DNS客户端 → 本地DNS服">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kali Linux笔记(十)：DNS信息收集">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;09&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81)%EF%BC%9ADNS%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="信息收集-DNS  域名解析成IP地址 域名（qq.com）与FQDN（完全限定域名www.qq.com）的区别 域名记录：A（IPV4主机记录）、C name（别名记录）、NS（域名服务器地址对域解析）、MX（邮件服务器地址对域解析）、ptr（通过IP地址反向解析域名）、text（spf反向垃圾邮件域名）、SOA（启始授权）、AAAA（IPV6地址）       DNS客户端 → 本地DNS">
+<meta property="og:description" content="1. 信息收集-DNS 域名解析成IP地址 域名（qq.com）与FQDN（完全限定域名www.qq.com）的区别 域名记录：A（IPV4主机记录）、C name（别名记录）、NS（域名服务器地址对域解析）、MX（邮件服务器地址对域解析）、ptr（通过IP地址反向解析域名）、text（spf反向垃圾邮件域名）、SOA（启始授权）、AAAA（IPV6地址）     DNS客户端 → 本地DNS服">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-09T11:28:47.720Z">
+<meta property="og:updated_time" content="2020-01-05T02:53:50.266Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -333,41 +333,31 @@
 
       
         <hr>
-<ol>
-<li><p>信息收集-DNS</p>
-<ul>
+<h4 id="1-信息收集-DNS"><a href="#1-信息收集-DNS" class="headerlink" title="1. 信息收集-DNS"></a>1. 信息收集-DNS</h4><ul>
 <li>域名解析成IP地址<ul>
 <li>域名（qq.com）与FQDN（完全限定域名<a href="http://www.qq.com）的区别" target="_blank" rel="noopener">www.qq.com）的区别</a></li>
 <li>域名记录：A（IPV4主机记录）、C name（别名记录）、NS（域名服务器地址对域解析）、MX（邮件服务器地址对域解析）、ptr（通过IP地址反向解析域名）、text（spf反向垃圾邮件域名）、SOA（启始授权）、AAAA（IPV6地址）</li>
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>DNS客户端 → 本地DNS服务器 → 根域服务器 → com服务器 → example.com服务器
 1.递归查询（一轮一轮递归） 2.迭代查询（从顶至下）
 缓存DNS服务器本身并不包含DNS记录（常用于本地DNS服务器）
 spf 反向垃圾域名服务，判断邮件的域名是否伪造</code></pre></blockquote>
-<ol start="2">
-<li><p>DNS信息收集-NSLOOKUP</p>
-<ul>
+<h4 id="2-DNS信息收集-NSLOOKUP"><a href="#2-DNS信息收集-NSLOOKUP" class="headerlink" title="2. DNS信息收集-NSLOOKUP"></a>2. DNS信息收集-NSLOOKUP</h4><ul>
 <li><strong><code>🔺命令：nslookup 域名</code></strong></li>
 <li><strong><code>🔺命令：nslookup set type=mx（查询类型） 域名</code></strong> （数值越小，优先级越高）</li>
 <li><strong><code>🔺命令：nslookup set type=ns 域名</code></strong></li>
 <li><strong><code>🔺命令：nslookup set type=ptr ip地址</code></strong> ▲2019.11.27反向域名解析大概率查不到</li>
 <li><strong><code>🔺命令：nslookup server 202.106.0.20（其他ISP域名服务器的ip地址）</code></strong></li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>网络为智能DNS，选取最近的DNS服务器，不同地址的DNS服务器是不一样的，边缘网络</code></pre></blockquote>
 <ul>
 <li><strong><code>🔺命令：nslookup set type=any（任何域名）域名</code></strong></li>
 </ul>
-<ol start="2">
-<li><p>DNS信息收集-DIG</p>
-<ul>
+<h4 id="3-DNS信息收集-DIG"><a href="#3-DNS信息收集-DIG" class="headerlink" title="3. DNS信息收集-DIG"></a>3. DNS信息收集-DIG</h4><ul>
 <li><strong><code>🔺命令：dig 8.8.8.8 域名 mx</code></strong></li>
 <li><strong><code>🔺命令：dig 域名 any</code></strong></li>
 <li>带参数：<strong><code>🔺命令：dig +noall +answer 域名 any | awk &#39;{print $5}&#39;</code></strong>▲2019.11.27难以查到</li>
@@ -375,8 +365,6 @@ spf 反向垃圾域名服务，判断邮件的域名是否伪造</code></pre></b
 <li>bind版本信息：<strong><code>🔺命令：dig +noall +answer txt chaos（class类） VERSION BIND 域名</code></strong> ▲2019.11.27难以查到</li>
 <li>DNS追踪：<strong><code>🔺命令：dig +trace 域名</code></strong>（迭代查询）、<strong><code>🔺命令：dig 域名（递归查询）</code></strong></li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>指定域名服务器查询域名
 1.nslooup www.sina.com -type=a 8.8.8.8
@@ -385,20 +373,14 @@ trace追踪域名
 本机（随机挑选root的IP地址） → root（随机挑选com的IP地址） → com（随机挑选sina.com的IP地址） → sina.com（随机挑选IP地址） → www.sina.com（挑选A记录）
 ▲抓包分析递归查询和迭代查询的区别
 ▲域名解析服务器跟域名后缀可以不同（top. → d.zdnscloud.com.）</code></pre></blockquote>
-<ol start="3">
-<li><p>DNS区域传输（DNS的同步机制）</p>
-<ul>
+<h4 id="4-DNS区域传输（DNS的同步机制）"><a href="#4-DNS区域传输（DNS的同步机制）" class="headerlink" title="4. DNS区域传输（DNS的同步机制）"></a>4. DNS区域传输（DNS的同步机制）</h4><ul>
 <li><strong><code>🔺命令：dig ns1.example.com example.com axfr（差异化传输方法Request for full zone transfer）</code></strong></li>
 <li><strong><code>🔺命令：host -T（用TCP传输方式） -l（axfr） sina.com ns3.sina.com</code></strong></li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>TCP用于DNS之间的域名传输
 UDP用于DNS之间的查询</code></pre></blockquote>
-<ol start="4">
-<li><p>DNS字典爆破</p>
-<ul>
+<h4 id="5-DNS字典爆破"><a href="#5-DNS字典爆破" class="headerlink" title="5. DNS字典爆破"></a>5. DNS字典爆破</h4><ul>
 <li><strong><code>🔺命令：fierce -dnsserver（指定DNS服务器） 8.8.8.8 -dns（要查询的域） sina.com.cn -wordlist（字典，明确字典路径） a.txt</code></strong></li>
 <li><strong><code>🔺命令：dnsdict6 -d（显示IPV6）4（显示IPV4） -t（并发线程数） 16 -x（不同级别） sina.com  （-D 自己指定字典，-U 最大的字典）</code></strong></li>
 <li><strong><code>🔺命令：dnsenum -f（字典，明确字典路径） dnsbig.txt -dnsserver 8.8.8.8 sina.com -o（导出成一个文件） sina.xml</code></strong></li>
@@ -406,21 +388,15 @@ UDP用于DNS之间的查询</code></pre></blockquote>
 <li><strong><code>🔺命令：dnsrecon -d（指定域名服务器） sina.com --lifetime（超时时间）10 -t（查询强度） brt（暴力爆破） -D（字典，明确字典路径） dnsbig.txt</code></strong></li>
 <li><strong><code>🔺命令：dnsrecon -t std（标准爆破） -d sina.com -D（字典，明确字典路径） dnsbig.txt</code></strong></li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>查看程序相关文件
 dpkg -L fierce
 find / -name dnsenum</code></pre></blockquote>
-<ol start="5">
-<li><p>DNS注册信息</p>
-<ul>
+<h4 id="6-DNS注册信息"><a href="#6-DNS注册信息" class="headerlink" title="6. DNS注册信息"></a>6. DNS注册信息</h4><ul>
 <li><strong><code>🔺命令：whois 域名</code></strong></li>
 <li><strong><code>🔺命令：whois IP地址</code></strong></li>
 <li><strong><code>🔺命令：whois -h whois.apnic.net IP地址</code></strong></li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>网页查询
 AFRINIC  http://www.afrinic.net
@@ -526,8 +502,17 @@ InterNic http://www.internic.net</code></pre></blockquote>
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -607,6 +592,22 @@ InterNic http://www.internic.net</code></pre></blockquote>
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-信息收集-DNS"><span class="nav-number">1.</span> <span class="nav-text">1. 信息收集-DNS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-DNS信息收集-NSLOOKUP"><span class="nav-number">2.</span> <span class="nav-text">2. DNS信息收集-NSLOOKUP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-DNS信息收集-DIG"><span class="nav-number">3.</span> <span class="nav-text">3. DNS信息收集-DIG</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-DNS区域传输（DNS的同步机制）"><span class="nav-number">4.</span> <span class="nav-text">4. DNS区域传输（DNS的同步机制）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-DNS字典爆破"><span class="nav-number">5.</span> <span class="nav-text">5. DNS字典爆破</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-DNS注册信息"><span class="nav-number">6.</span> <span class="nav-text">6. DNS注册信息</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

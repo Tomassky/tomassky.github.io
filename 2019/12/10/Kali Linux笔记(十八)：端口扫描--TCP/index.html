@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="端口扫描（TCP）  TCP端口扫描（SYN–SYN&#x2F;ACK–ACK）  基于连接的协议 三次握手（ACK包连接） 隐蔽扫描（隐藏与目标进程的会话）–SYN（开放 →SYN&#x2F;ACK，不开放 → RST）   不建立完整连接（SYN（开放 →SYN&#x2F;ACK，不开放 → RST）） 应用日志不记录扫描行为–隐蔽（但审计网络层，还是可以发现）   僵尸扫描（几乎不和目标进程尝试会话）   极度隐蔽">
+<meta name="description" content="1. 端口扫描（TCP） TCP端口扫描（SYN–SYN&#x2F;ACK–ACK）  基于连接的协议 三次握手（ACK包连接） 隐蔽扫描（隐藏与目标进程的会话）–SYN（开放 →SYN&#x2F;ACK，不开放 → RST）   不建立完整连接（SYN（开放 →SYN&#x2F;ACK，不开放 → RST）） 应用日志不记录扫描行为–隐蔽（但审计网络层，还是可以发现）   僵尸扫描（几乎不和目标进程尝试会话）   极度隐蔽">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kali Linux笔记(十八)：端口扫描--TCP">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;10&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81%E5%85%AB)%EF%BC%9A%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F--TCP&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="端口扫描（TCP）  TCP端口扫描（SYN–SYN&#x2F;ACK–ACK）  基于连接的协议 三次握手（ACK包连接） 隐蔽扫描（隐藏与目标进程的会话）–SYN（开放 →SYN&#x2F;ACK，不开放 → RST）   不建立完整连接（SYN（开放 →SYN&#x2F;ACK，不开放 → RST）） 应用日志不记录扫描行为–隐蔽（但审计网络层，还是可以发现）   僵尸扫描（几乎不和目标进程尝试会话）   极度隐蔽">
+<meta property="og:description" content="1. 端口扫描（TCP） TCP端口扫描（SYN–SYN&#x2F;ACK–ACK）  基于连接的协议 三次握手（ACK包连接） 隐蔽扫描（隐藏与目标进程的会话）–SYN（开放 →SYN&#x2F;ACK，不开放 → RST）   不建立完整连接（SYN（开放 →SYN&#x2F;ACK，不开放 → RST）） 应用日志不记录扫描行为–隐蔽（但审计网络层，还是可以发现）   僵尸扫描（几乎不和目标进程尝试会话）   极度隐蔽">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-10T00:12:00.977Z">
+<meta property="og:updated_time" content="2020-01-05T02:55:29.339Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -333,9 +333,7 @@
 
       
         <hr>
-<ol>
-<li><p>端口扫描（TCP）</p>
-<ul>
+<h4 id="1-端口扫描（TCP）"><a href="#1-端口扫描（TCP）" class="headerlink" title="1. 端口扫描（TCP）"></a>1. 端口扫描（TCP）</h4><ul>
 <li><p>TCP端口扫描（SYN–SYN/ACK–ACK）</p>
 <ul>
 <li>基于连接的协议</li>
@@ -365,8 +363,6 @@
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>IPID:IP报头里面的Identification字段
 1.僵尸扫描过程（端口开放）：
@@ -377,9 +373,7 @@
 （1）Scanner【SYN/ACK】 -- Zombie【RST IPID=X】
 （2）Scanner【SYN IPSRC=zombie】 -- target【RST】 -- Zombie
 （3）Scanner【SYN/ACK】 -- Zombie【RST IPID=x+1】</code></pre></blockquote>
-<ol start="2">
-<li><p>隐蔽端口扫描</p>
-<ul>
+<h4 id="2-隐蔽端口扫描"><a href="#2-隐蔽端口扫描" class="headerlink" title="2. 隐蔽端口扫描"></a>2. 隐蔽端口扫描</h4><ul>
 <li>syn–syn/ack–rst（本机操作系统内核产生的）</li>
 <li>Scapy<ul>
 <li>sr1(IP(dst=”IP地址”)/TCP(dport=80,flags=”S”),timeout=1,verbose=0)</li>
@@ -387,34 +381,26 @@
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line">import time</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=4:</span><br><span class="line">    print &quot;Usage - ./syn_scan.py [Target IP] [First IP] [Last IP] &quot;</span><br><span class="line">    print &quot;Example - ./syn_scan.py 192.168.100.1 1 200&quot;</span><br><span class="line">    print &quot;Example will perform a TCP SYN scan of the 192.168.100.0/24 range&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">ip=sys.argv[1]</span><br><span class="line">start=int(sys.argv[2])</span><br><span class="line">end=int(sys.argv[3])</span><br><span class="line"></span><br><span class="line">for port in range(start,end):</span><br><span class="line">    a=sr1(IP(dst=ip)/TCP(dport=port),timeout=1,verbose=0)</span><br><span class="line">    if a==None:</span><br><span class="line">      pass</span><br><span class="line">    else:</span><br><span class="line">      if int(a[TCP].flags)==18:</span><br><span class="line">        print port</span><br><span class="line">      else:</span><br><span class="line">        pass</span><br></pre></td></tr></table></figure>
 
 <blockquote>
 <pre><code>正常情况下：
 端口开放：syn--syn/ack
 端口未开放：syn--rst/ack</code></pre></blockquote>
-<ol start="3">
-<li><p>隐蔽端口扫描</p>
-<ul>
+<h4 id="3-隐蔽端口扫描"><a href="#3-隐蔽端口扫描" class="headerlink" title="3. 隐蔽端口扫描"></a>3. 隐蔽端口扫描</h4><ul>
 <li><strong><code>🔺命令：nmap -sS IP地址 -p 80,21,25,110,443</code></strong></li>
 <li><strong><code>🔺命令：nmap -sS IP地址 -p 1-65535 --open</code></strong></li>
 <li><strong><code>🔺命令：nmap -sS IP地址 --open</code></strong></li>
 <li><strong><code>🔺命令：nmap -sS -iL iplist.txt -p 80,21,22,23</code></strong></li>
 </ul>
-</li>
-<li><p>隐蔽端口扫描</p>
-<ul>
+<h4 id="4-隐蔽端口扫描"><a href="#4-隐蔽端口扫描" class="headerlink" title="4. 隐蔽端口扫描"></a>4. 隐蔽端口扫描</h4><ul>
 <li>hping3（发包习惯是顺序端口）</li>
 <li><strong><code>🔺命令：hping3 IP地址 --scan 80 -S</code></strong></li>
 <li><strong><code>🔺命令：hping3 IP地址 --scan 80,21,25,443 -S</code></strong>（syn包）</li>
 <li><strong><code>🔺命令：hping3 IP地址 --scan 0-65535 -S</code></strong></li>
 <li><strong><code>🔺命令：hping3 -c 10 -S --spoof（伪造源地址） IP地址 -p ++1（端口递增） IP地址</code></strong></li>
 </ul>
-</li>
-<li><p>全连接端口扫描</p>
-<ul>
+<h4 id="5-全连接端口扫描"><a href="#5-全连接端口扫描" class="headerlink" title="5. 全连接端口扫描"></a>5. 全连接端口扫描</h4><ul>
 <li>Scapy（容易触发目标主机的报警系统）<ul>
 <li>syn扫描不需要raw packets</li>
 <li>内核认为syn/ack是非法包，直接发rst终断连接</li>
@@ -424,8 +410,6 @@
 <li>sr1(IP(dst=”IP地址”)/TCP(dport=22,flags=”S”))</li>
 <li><strong><code>🔺命令：./tcp_scan1.py（代码内指定IP地址）</code></strong></li>
 </ul>
-</li>
-</ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy,runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import*</span><br><span class="line"></span><br><span class="line">response=sr1(IP(dst=&quot;IP地址&quot;)/TCP(dport=80,flags=&quot;S&quot;))</span><br><span class="line">reply=sr1(IP(dst=&quot;IP地址&quot;)/TCP(dport=80,flags=&quot;A&quot;,ack=(response[TCP].seq+1)))</span><br></pre></td></tr></table></figure>
 
 <ul>
@@ -439,18 +423,14 @@
 <blockquote>
 <pre><code>iptables是工作在底层的防火墙，在内核之前过滤数据
 iptables -L查看当前防火墙规则</code></pre></blockquote>
-<ol start="6">
-<li><p>全连接端口扫描</p>
-<ul>
+<h4 id="6-全连接端口扫描"><a href="#6-全连接端口扫描" class="headerlink" title="6. 全连接端口扫描"></a>6. 全连接端口扫描</h4><ul>
 <li><strong><code>🔺命令：nmap IP地址 -sT -p 80</code></strong></li>
 <li><strong><code>🔺命令：nmap IP地址 -sT -p 80,21,25</code></strong></li>
 <li><strong><code>🔺命令：nmap IP地址 -sT -p 1-65535</code></strong></li>
 <li><strong><code>🔺命令：nmap -sT -iL iplist.txt -p 80</code></strong></li>
 <li>默认1000个常用端口</li>
 </ul>
-</li>
-<li><p>全连接端口扫描</p>
-<ul>
+<h4 id="7-全连接端口扫描"><a href="#7-全连接端口扫描" class="headerlink" title="7. 全连接端口扫描"></a>7. 全连接端口扫描</h4><ul>
 <li>dmitry<ul>
 <li>功能简单，但使用简便</li>
 <li>默认150个常用端口</li>
@@ -459,18 +439,12 @@ iptables -L查看当前防火墙规则</code></pre></blockquote>
 <li><strong><code>🔺命令：dmitry -p IP地址</code></strong></li>
 <li><strong><code>🔺命令：dmitry -p IP地址 -o output</code></strong></li>
 </ul>
-</li>
-<li><p>全连接端口扫描</p>
-<ul>
+<h4 id="8-全连接端口扫描"><a href="#8-全连接端口扫描" class="headerlink" title="8. 全连接端口扫描"></a>8. 全连接端口扫描</h4><ul>
 <li><strong><code>🔺命令：nc -nv -w（连接的超时时间）1 -z IP地址 1-65535</code></strong>（倒序发送）</li>
 <li><strong><code>🔺命令：for x in $(seq 20 30);do nc -nv -w 1 -z IP地址 $x;done | grep open</code></strong></li>
 <li><strong><code>🔺命令：for x in $(seq 1 254);do nc -nv -w 1 -z 1.1.1.$x 80;done</code></strong></li>
 </ul>
-</li>
-<li><p>僵尸扫描</p>
-</li>
-</ol>
-<blockquote>
+<h4 id="9-僵尸扫描"><a href="#9-僵尸扫描" class="headerlink" title="9. 僵尸扫描"></a>9. 僵尸扫描</h4><blockquote>
 <pre><code>早期的Window系统，包括XP,2003,98系统的IPID是递增的</code></pre></blockquote>
 <ul>
 <li>Scapy–zomebie.py<ul>
@@ -496,9 +470,7 @@ iptables -L查看当前防火墙规则</code></pre></blockquote>
 <blockquote>
 <pre><code>sr1 发包只收一个数据包
 send 发包不收数据包</code></pre></blockquote>
-<ol start="10">
-<li><p>僵尸扫描</p>
-<ul>
+<h4 id="10-僵尸扫描"><a href="#10-僵尸扫描" class="headerlink" title="10. 僵尸扫描"></a>10. 僵尸扫描</h4><ul>
 <li>发现僵尸机<ul>
 <li><strong><code>🔺命令：nmap -p445 IP地址 --script=ipidseq.nse</code></strong></li>
 </ul>
@@ -508,8 +480,6 @@ send 发包不收数据包</code></pre></blockquote>
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 
       
     </div>
@@ -604,8 +574,17 @@ send 发包不收数据包</code></pre></blockquote>
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -685,6 +664,22 @@ send 发包不收数据包</code></pre></blockquote>
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-端口扫描（TCP）"><span class="nav-number">1.</span> <span class="nav-text">1. 端口扫描（TCP）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-隐蔽端口扫描"><span class="nav-number">2.</span> <span class="nav-text">2. 隐蔽端口扫描</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-隐蔽端口扫描"><span class="nav-number">3.</span> <span class="nav-text">3. 隐蔽端口扫描</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-隐蔽端口扫描"><span class="nav-number">4.</span> <span class="nav-text">4. 隐蔽端口扫描</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-全连接端口扫描"><span class="nav-number">5.</span> <span class="nav-text">5. 全连接端口扫描</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-全连接端口扫描"><span class="nav-number">6.</span> <span class="nav-text">6. 全连接端口扫描</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-全连接端口扫描"><span class="nav-number">7.</span> <span class="nav-text">7. 全连接端口扫描</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-全连接端口扫描"><span class="nav-number">8.</span> <span class="nav-text">8. 全连接端口扫描</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-僵尸扫描"><span class="nav-number">9.</span> <span class="nav-text">9. 僵尸扫描</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#10-僵尸扫描"><span class="nav-number">10.</span> <span class="nav-text">10. 僵尸扫描</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

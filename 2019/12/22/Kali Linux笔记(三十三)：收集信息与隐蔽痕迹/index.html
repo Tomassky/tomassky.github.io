@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="信息收集  应用系统的配置文件 应用连接数据库的配置文件 后台服务运行账户     基本信息收集  Linux &#x2F;etc&#x2F;resolv.conf（DNS信息） &#x2F;etc&#x2F;passwd（存了用户账号和密码） &#x2F;etc&#x2F;shadow（存放的密码信息） 🔺命令：whoami,who -a 🔺命令：ifconfig -a，iptables -L -n，netstat -rn 🔺命令：uname">
+<meta name="description" content="1. 信息收集 应用系统的配置文件 应用连接数据库的配置文件 后台服务运行账户    2. 基本信息收集 Linux &#x2F;etc&#x2F;resolv.conf（DNS信息） &#x2F;etc&#x2F;passwd（存了用户账号和密码） &#x2F;etc&#x2F;shadow（存放的密码信息） 🔺命令：whoami,who -a 🔺命令：ifconfig -a，iptables -L -n，netstat -rn 🔺命令：unam">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kali Linux笔记(三十三)：收集信息与隐蔽痕迹">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;22&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B8%89)%EF%BC%9A%E6%94%B6%E9%9B%86%E4%BF%A1%E6%81%AF%E4%B8%8E%E9%9A%90%E8%94%BD%E7%97%95%E8%BF%B9&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="信息收集  应用系统的配置文件 应用连接数据库的配置文件 后台服务运行账户     基本信息收集  Linux &#x2F;etc&#x2F;resolv.conf（DNS信息） &#x2F;etc&#x2F;passwd（存了用户账号和密码） &#x2F;etc&#x2F;shadow（存放的密码信息） 🔺命令：whoami,who -a 🔺命令：ifconfig -a，iptables -L -n，netstat -rn 🔺命令：uname">
+<meta property="og:description" content="1. 信息收集 应用系统的配置文件 应用连接数据库的配置文件 后台服务运行账户    2. 基本信息收集 Linux &#x2F;etc&#x2F;resolv.conf（DNS信息） &#x2F;etc&#x2F;passwd（存了用户账号和密码） &#x2F;etc&#x2F;shadow（存放的密码信息） 🔺命令：whoami,who -a 🔺命令：ifconfig -a，iptables -L -n，netstat -rn 🔺命令：unam">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-22T12:56:37.943Z">
+<meta property="og:updated_time" content="2020-01-05T02:46:47.719Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -333,18 +333,14 @@
 
       
         <hr>
-<ol>
-<li><p>信息收集</p>
-<ul>
+<h4 id="1-信息收集"><a href="#1-信息收集" class="headerlink" title="1. 信息收集"></a>1. 信息收集</h4><ul>
 <li>应用系统的配置文件<ul>
 <li>应用连接数据库的配置文件</li>
 <li>后台服务运行账户</li>
 </ul>
 </li>
 </ul>
-</li>
-<li><p>基本信息收集</p>
-<ul>
+<h4 id="2-基本信息收集"><a href="#2-基本信息收集" class="headerlink" title="2. 基本信息收集"></a>2. 基本信息收集</h4><ul>
 <li>Linux<ul>
 <li>/etc/resolv.conf（DNS信息）</li>
 <li>/etc/passwd（存了用户账号和密码）</li>
@@ -356,8 +352,6 @@
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>/etc/passwd   -rw-r--r--
 /etc/shadow   -rw-r-----</code></pre></blockquote>
@@ -374,9 +368,7 @@
 </ul>
 </li>
 </ul>
-<ol start="3">
-<li><p>WMIC（WINDOWS MANAGEMENT INSTRUMENTATION）</p>
-<ul>
+<h4 id="3-WMIC（WINDOWS-MANAGEMENT-INSTRUMENTATION）"><a href="#3-WMIC（WINDOWS-MANAGEMENT-INSTRUMENTATION）" class="headerlink" title="3. WMIC（WINDOWS MANAGEMENT INSTRUMENTATION）"></a>3. WMIC（WINDOWS MANAGEMENT INSTRUMENTATION）</h4><ul>
 <li><strong><code>🔺命令：wmic nicconfig get ipaddress,macaddress</code></strong>（读取IP地址，MAC地址）</li>
 <li><strong><code>🔺命令：wmic computersystem get username</code></strong>（当前登陆用户账号）</li>
 <li><strong><code>🔺命令：wmic netlogin get name,lastcalclogon</code></strong>（查看用户登陆记录，通过网络login）</li>
@@ -389,13 +381,9 @@
 <li><strong><code>🔺命令：wmic /node:&quot;machinename&quot; path Win32_TerminalServiceSetting where AllowTSConnections=&quot;0&quot; call SetAllowTSConnections &quot;1&quot;</code></strong>（开启远程桌面） ▲ 2019.12.21 Win10的RPC服务器不可用，可在系统属性 → 远程中开启远程协助</li>
 <li><strong><code>🔺命令：wmic nteventlog get</code></strong> path,filename,writeable（查看当前系统日志对应操作系统文件）</li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>查看操作系统日志：运行 → eventvwr</code></pre></blockquote>
-<ol start="5">
-<li><p>收集敏感信息</p>
-<ul>
+<h4 id="5-收集敏感信息"><a href="#5-收集敏感信息" class="headerlink" title="5. 收集敏感信息"></a>5. 收集敏感信息</h4><ul>
 <li>商业信息</li>
 <li>系统信息</li>
 <li>Linux<ul>
@@ -419,9 +407,7 @@
 </ul>
 </li>
 </ul>
-</li>
-<li><p>隐藏痕迹</p>
-<ul>
+<h4 id="6-隐藏痕迹"><a href="#6-隐藏痕迹" class="headerlink" title="6. 隐藏痕迹"></a>6. 隐藏痕迹</h4><ul>
 <li>Windows<ul>
 <li>禁止在登陆界面显示新建账号</li>
 <li><strong><code>🔺命令：REG ADD &quot;HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindosNT\CurrentVersion\WinLogon\SpecialAccounts\UserList&quot; /v uname（要隐藏的账号名）/T REG_DWORD /D 0</code></strong> ▲ 2019.12.21 Win10命令可以执行，但未禁止</li>
@@ -433,8 +419,6 @@
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <p>   history -c（擦除history之前的命令）<br>   lsattr（查看权限相关文件的属性）</p>
 <ul>
@@ -547,8 +531,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -628,6 +621,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-信息收集"><span class="nav-number">1.</span> <span class="nav-text">1. 信息收集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-基本信息收集"><span class="nav-number">2.</span> <span class="nav-text">2. 基本信息收集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-WMIC（WINDOWS-MANAGEMENT-INSTRUMENTATION）"><span class="nav-number">3.</span> <span class="nav-text">3. WMIC（WINDOWS MANAGEMENT INSTRUMENTATION）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-收集敏感信息"><span class="nav-number">4.</span> <span class="nav-text">5. 收集敏感信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-隐藏痕迹"><span class="nav-number">5.</span> <span class="nav-text">6. 隐藏痕迹</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

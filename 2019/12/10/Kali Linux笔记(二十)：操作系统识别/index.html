@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="操作系统识别  操作系统识别技术（默认开放的系统开放端口） 种类繁多 好产品采用多种技术组合   TTL起始值 Windows：128（65-128） Linux&#x2F;Unix：64（1-64） 某些Unix：255       TTL值劫持路由器，使不同地区的人访问到网页不一样  操作系统识别  Python form scapy.all import* win=”IP地址” linx=”IP地">
+<meta name="description" content="1. 操作系统识别 操作系统识别技术（默认开放的系统开放端口） 种类繁多 好产品采用多种技术组合   TTL起始值 Windows：128（65-128） Linux&#x2F;Unix：64（1-64） 某些Unix：255     TTL值劫持路由器，使不同地区的人访问到网页不一样 2. 操作系统识别 Python form scapy.all import* win=”IP地址” linx=”IP地">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kali Linux笔记(二十)：操作系统识别">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;10&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81)%EF%BC%9A%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%AF%86%E5%88%AB&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="操作系统识别  操作系统识别技术（默认开放的系统开放端口） 种类繁多 好产品采用多种技术组合   TTL起始值 Windows：128（65-128） Linux&#x2F;Unix：64（1-64） 某些Unix：255       TTL值劫持路由器，使不同地区的人访问到网页不一样  操作系统识别  Python form scapy.all import* win=”IP地址” linx=”IP地">
+<meta property="og:description" content="1. 操作系统识别 操作系统识别技术（默认开放的系统开放端口） 种类繁多 好产品采用多种技术组合   TTL起始值 Windows：128（65-128） Linux&#x2F;Unix：64（1-64） 某些Unix：255     TTL值劫持路由器，使不同地区的人访问到网页不一样 2. 操作系统识别 Python form scapy.all import* win=”IP地址” linx=”IP地">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-10T00:08:33.256Z">
+<meta property="og:updated_time" content="2020-01-05T02:50:13.874Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -333,9 +333,7 @@
 
       
         <hr>
-<ol>
-<li><p>操作系统识别</p>
-<ul>
+<h4 id="1-操作系统识别"><a href="#1-操作系统识别" class="headerlink" title="1. 操作系统识别"></a>1. 操作系统识别</h4><ul>
 <li>操作系统识别技术（默认开放的系统开放端口）<ul>
 <li>种类繁多</li>
 <li>好产品采用多种技术组合</li>
@@ -348,13 +346,9 @@
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>TTL值劫持路由器，使不同地区的人访问到网页不一样</code></pre></blockquote>
-<ol start="2">
-<li><p>操作系统识别</p>
-<ul>
+<h4 id="2-操作系统识别"><a href="#2-操作系统识别" class="headerlink" title="2. 操作系统识别"></a>2. 操作系统识别</h4><ul>
 <li>Python<ul>
 <li>form scapy.all import*</li>
 <li>win=”IP地址”</li>
@@ -369,32 +363,22 @@
 </li>
 <li>./ttl_os.py IP地址</li>
 </ul>
-</li>
-</ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">from scapy.all import*</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy,runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./ttl_os.py [IP Address]&quot;</span><br><span class="line">    print &quot;Example - ./ttl_os.py 192.168.100.1&quot;</span><br><span class="line">    print &quot;Example will perform ttl analysize to attempt to determine whether the system is Windows or Linux/Unix&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">ip=sys.argv[1]</span><br><span class="line">ans=sr1(IP(dst=&quot;str(ip)&quot;)/ICMP(),timeout=1,verbose=0)</span><br><span class="line">if ans==None:</span><br><span class="line">    print &quot;No response was returned&quot;</span><br><span class="line">elif int(ans[IP].ttl)&lt;=64:</span><br><span class="line">    print &quot;Host is Linux/Unix&quot;</span><br><span class="line">else:</span><br><span class="line">    print &quot;Host is Windows&quot;</span><br></pre></td></tr></table></figure>
 
-<ol start="3">
-<li><p>操作系统识别</p>
-<ul>
+<h4 id="3-操作系统识别"><a href="#3-操作系统识别" class="headerlink" title="3. 操作系统识别"></a>3. 操作系统识别</h4><ul>
 <li>nmap使用多种技术识别操作系统<ul>
 <li><strong><code>🔺命令：nmap IP地址 -O</code></strong></li>
 <li>系统服务特征</li>
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>CPE国际标准化组织进行的标准化操作系统，设备类型分类</code></pre></blockquote>
-<ol start="4">
-<li><p>操作系统识别</p>
-<ul>
+<h4 id="4-操作系统识别"><a href="#4-操作系统识别" class="headerlink" title="4. 操作系统识别"></a>4. 操作系统识别</h4><ul>
 <li><strong><code>🔺命令：xprobe2 IP地址</code></strong></li>
 <li>结果有误差</li>
 </ul>
-</li>
-<li><p>操作系统识别</p>
-<ul>
+<h4 id="5-操作系统识别"><a href="#5-操作系统识别" class="headerlink" title="5. 操作系统识别"></a>5. 操作系统识别</h4><ul>
 <li>被动操作系统识别<ul>
 <li>IDS</li>
 <li>抓包分析</li>
@@ -406,14 +390,10 @@
 </ul>
 </li>
 </ul>
-</li>
-<li><p>防火墙识别（尽量隐蔽）</p>
-<ul>
+<h4 id="6-防火墙识别（尽量隐蔽）"><a href="#6-防火墙识别（尽量隐蔽）" class="headerlink" title="6. 防火墙识别（尽量隐蔽）"></a>6. 防火墙识别（尽量隐蔽）</h4><ul>
 <li>通过检查回包，可能识别端口是否经过防火墙过滤</li>
 <li>设备多种多样，结果过存在一定误差</li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>（1）防火墙内部对外部的访问连接  （2）防火墙对源地址的过滤
 防火墙几种情况：
@@ -429,29 +409,21 @@ ACK          RST                Unfiltered/Open
 
 SYN          NO             
 ACK          NO                 Closed</code></pre></blockquote>
-<ol start="7">
-<li><p>防火墙识别</p>
-<ul>
+<h4 id="7-防火墙识别"><a href="#7-防火墙识别" class="headerlink" title="7. 防火墙识别"></a>7. 防火墙识别</h4><ul>
 <li>Scapy</li>
 <li>Python<ul>
 <li><strong><code>🔺命令：fw_detect.py IP地址 端口</code></strong> ▲ 2019.12.6 脚本实验不成功，逻辑报错</li>
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">from scapy.all import*</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy,runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=3:</span><br><span class="line">    print &quot;Usage - ./fw_detect.py [Target IP] [Target Port] &quot;</span><br><span class="line">    print &quot;Example - ./syn_scan.py 192.168.100.1 445&quot;</span><br><span class="line">    print &quot;Example will determine if filtering exists on port 443 of host 192.168.100.1&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">ip=sys.argv[1]</span><br><span class="line">port=sys.argv[2]</span><br><span class="line"></span><br><span class="line">ACK_response=sr1(IP(dst=ip)/TCP(dport=port,flags=&apos;A&apos;),timeout=1,verbose=0)</span><br><span class="line">SYN_response=sr1(IP(dst=ip)/TCP(dport=port,flags=&apos;S&apos;),timeout=1,verbose=0)</span><br><span class="line">if (ACK_respnonse==None) and (SYN_response==None):</span><br><span class="line">    print &quot;Port is either unstatefully filered or host is down&quot;</span><br><span class="line">elif (ACK_respnonse==None) and ((SYN_response[flags]==18) or (SYN_response[flags==6])):</span><br><span class="line">    print &quot;Stateful filtering in place&quot;</span><br><span class="line">elif (SYN_response==None) and (ACK_response[flags]==4):</span><br><span class="line">    print &quot;Stateful filtering in place&quot;</span><br><span class="line">elif ((SYN_response[flags]==18) or (SYN_response[flags==6])) and (ACK_response[flags]==4):</span><br><span class="line">    print &quot;Port is unfiltered and open&quot;</span><br><span class="line">else:</span><br><span class="line">    print &quot;Unable to determine if the port is filtered&quot;</span><br></pre></td></tr></table></figure>
 
-<ol start="8">
-<li><p>防火墙识别</p>
-<ul>
+<h4 id="8-防火墙识别"><a href="#8-防火墙识别" class="headerlink" title="8. 防火墙识别"></a>8. 防火墙识别</h4><ul>
 <li>Nmap有系列防火墙过滤检测功能</li>
 <li><strong><code>🔺命令：nmap IP地址 端口</code></strong>（默认SYN包）</li>
 <li><strong><code>🔺命令：nmap -sA（ACK包） IP地址 端口</code></strong></li>
 </ul>
-</li>
-<li><p>负载均衡识别</p>
-<ul>
+<h4 id="9-负载均衡识别"><a href="#9-负载均衡识别" class="headerlink" title="9. 负载均衡识别"></a>9. 负载均衡识别</h4><ul>
 <li>广域网负载均衡<ul>
 <li>DNS</li>
 <li>智能DNS（不同地区不同DNS回应）</li>
@@ -470,16 +442,12 @@ ACK          NO                 Closed</code></pre></blockquote>
 <li><strong><code>🔺命令：lbd www.baidu.com</code></strong></li>
 <li><strong><code>🔺命令：lbd mail.163.com</code></strong></li>
 </ul>
-</li>
-<li><p>WAF识别</p>
-<ul>
+<h4 id="10-WAF识别"><a href="#10-WAF识别" class="headerlink" title="10. WAF识别"></a>10. WAF识别</h4><ul>
 <li>WEB应用防火墙（基于规则的过滤 → 基于机器学习，特征识别，语法词法的过滤）</li>
 <li><strong><code>🔺命令：wafw00f -l</code></strong></li>
 <li><strong><code>🔺命令：wafw00f http://www.microsoft.com</code></strong></li>
 <li><strong><code>🔺命令：nmap www.microsoft.com --script=http-waf-detect.nse</code></strong></li>
 </ul>
-</li>
-</ol>
 <blockquote>
 <pre><code>WAF产品
 Profense
@@ -585,8 +553,17 @@ AkamaiGHost</code></pre></blockquote>
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -666,6 +643,22 @@ AkamaiGHost</code></pre></blockquote>
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-操作系统识别"><span class="nav-number">1.</span> <span class="nav-text">1. 操作系统识别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-操作系统识别"><span class="nav-number">2.</span> <span class="nav-text">2. 操作系统识别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-操作系统识别"><span class="nav-number">3.</span> <span class="nav-text">3. 操作系统识别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-操作系统识别"><span class="nav-number">4.</span> <span class="nav-text">4. 操作系统识别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-操作系统识别"><span class="nav-number">5.</span> <span class="nav-text">5. 操作系统识别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-防火墙识别（尽量隐蔽）"><span class="nav-number">6.</span> <span class="nav-text">6. 防火墙识别（尽量隐蔽）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-防火墙识别"><span class="nav-number">7.</span> <span class="nav-text">7. 防火墙识别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-防火墙识别"><span class="nav-number">8.</span> <span class="nav-text">8. 防火墙识别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-负载均衡识别"><span class="nav-number">9.</span> <span class="nav-text">9. 负载均衡识别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#10-WAF识别"><span class="nav-number">10.</span> <span class="nav-text">10. WAF识别</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

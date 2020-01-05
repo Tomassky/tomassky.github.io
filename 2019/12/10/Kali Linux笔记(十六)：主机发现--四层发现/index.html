@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别）  优点 可路由且结果可靠 不太可能被防火墙过滤 甚至可以发现所有端口都被过滤的主机   缺点 基于状态过滤的防火墙可能过滤扫描 全端口扫描速度慢   TCP（正常过程：SYN–SYN&#x2F;ACK–ACK） 未经请求的ACK–RST SYN–SYN&#x2F;ACK、RST   UDP ICMP端口不可达、一去不复返（被识别主机端口未开放U">
+<meta name="description" content="1. 发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别） 优点 可路由且结果可靠 不太可能被防火墙过滤 甚至可以发现所有端口都被过滤的主机   缺点 基于状态过滤的防火墙可能过滤扫描 全端口扫描速度慢   TCP（正常过程：SYN–SYN&#x2F;ACK–ACK） 未经请求的ACK–RST SYN–SYN&#x2F;ACK、RST   UDP ICMP端口不可达、一去不复返（被识别主机端口未开放">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kali Linux笔记(十六)：主机发现--四层发现">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;10&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81%E5%85%AD)%EF%BC%9A%E4%B8%BB%E6%9C%BA%E5%8F%91%E7%8E%B0--%E5%9B%9B%E5%B1%82%E5%8F%91%E7%8E%B0&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别）  优点 可路由且结果可靠 不太可能被防火墙过滤 甚至可以发现所有端口都被过滤的主机   缺点 基于状态过滤的防火墙可能过滤扫描 全端口扫描速度慢   TCP（正常过程：SYN–SYN&#x2F;ACK–ACK） 未经请求的ACK–RST SYN–SYN&#x2F;ACK、RST   UDP ICMP端口不可达、一去不复返（被识别主机端口未开放U">
+<meta property="og:description" content="1. 发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别） 优点 可路由且结果可靠 不太可能被防火墙过滤 甚至可以发现所有端口都被过滤的主机   缺点 基于状态过滤的防火墙可能过滤扫描 全端口扫描速度慢   TCP（正常过程：SYN–SYN&#x2F;ACK–ACK） 未经请求的ACK–RST SYN–SYN&#x2F;ACK、RST   UDP ICMP端口不可达、一去不复返（被识别主机端口未开放">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-10T00:12:30.782Z">
+<meta property="og:updated_time" content="2020-01-05T02:55:42.818Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -333,9 +333,7 @@
 
       
         <hr>
-<ol>
-<li><p>发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别）</p>
-<ul>
+<h4 id="1-发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别）"><a href="#1-发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别）" class="headerlink" title="1. 发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别）"></a>1. 发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别）</h4><ul>
 <li>优点<ul>
 <li>可路由且结果可靠</li>
 <li>不太可能被防火墙过滤</li>
@@ -357,9 +355,7 @@
 </ul>
 </li>
 </ul>
-</li>
-<li><p>发现-四层发现（Scapy-TCP）</p>
-<ul>
+<h4 id="2-发现-四层发现（Scapy-TCP）"><a href="#2-发现-四层发现（Scapy-TCP）" class="headerlink" title="2. 发现-四层发现（Scapy-TCP）"></a>2. 发现-四层发现（Scapy-TCP）</h4><ul>
 <li>ACK–TCP Port–RST</li>
 <li>Scapy<ul>
 <li>i=IP()</li>
@@ -374,13 +370,9 @@
 <li>a=sr1(IP(dst=”IP地址”)/TCP(dport=80,flags=”A”),timeout=1)</li>
 <li><strong><code>🔺命令：./ACK_Ping.py IP网段</code></strong></li>
 </ul>
-</li>
-</ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./ACK_Ping.py [/24 network address]&quot;</span><br><span class="line">    print &quot;Example - ./ACK_Ping.py 192.168.100.0&quot;</span><br><span class="line">    print &quot;Example will perform a TCP ACK scan of the 192.168.100.0/24 range&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">address=str(sys.argv[1])</span><br><span class="line">prefix=address.split(&quot;.&quot;)[0]+&quot;.&quot;+address.split(&quot;.&quot;)[1]+&quot;.&quot;+address.split(&quot;.&quot;)[2]+&quot;.&quot;</span><br><span class="line"></span><br><span class="line">for addr in range(1,254):</span><br><span class="line">    response=sr1(IP(dst=prefix+str(addr))/TCP(dport=2222,flags=&apos;A&apos;),timeout=0.1,verbose=0)</span><br><span class="line">    try:</span><br><span class="line">      if int(response[TCP].flags)==4:</span><br><span class="line">        print prefix+str(addr)</span><br><span class="line">    except:</span><br><span class="line">        pass</span><br></pre></td></tr></table></figure>
 
-<ol start="3">
-<li><p>发现-四层发现（Scapy-UDP）</p>
-<ul>
+<h4 id="3-发现-四层发现（Scapy-UDP）"><a href="#3-发现-四层发现（Scapy-UDP）" class="headerlink" title="3. 发现-四层发现（Scapy-UDP）"></a>3. 发现-四层发现（Scapy-UDP）</h4><ul>
 <li>UDP–UDP Port–ICMP</li>
 <li>Scapy<ul>
 <li>i=IP()</li>
@@ -394,19 +386,13 @@
 </li>
 <li><strong><code>🔺命令：./UDP_Ping.py IP网段</code></strong>（UDP发现不可靠）</li>
 </ul>
-</li>
-</ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./UDP_Ping.py [/24 network address]&quot;</span><br><span class="line">    print &quot;Example - ./UDP_Ping.py 192.168.100.0&quot;</span><br><span class="line">    print &quot;Example will perform a UDP ICMP scan of the 192.168.100.0/24 range&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">address=str(sys.argv[1])</span><br><span class="line">prefix=address.split(&quot;.&quot;)[0]+&quot;.&quot;+address.split(&quot;.&quot;)[1]+&quot;.&quot;+address.split(&quot;.&quot;)[2]+&quot;.&quot;</span><br><span class="line"></span><br><span class="line">for addr in range(1,254):</span><br><span class="line">    response=sr1(IP(dst=prefix+str(addr))/UDP(dport=33333),timeout=0.1,verbose=0)</span><br><span class="line">    try:</span><br><span class="line">      if int(response[IP].proto)==1:</span><br><span class="line">        print prefix+str(addr)</span><br><span class="line">    except:</span><br><span class="line">        pass</span><br></pre></td></tr></table></figure>
 
-<ol start="4">
-<li><p>发现-四层发现（Nmap）</p>
-<ul>
+<h4 id="4-发现-四层发现（Nmap）"><a href="#4-发现-四层发现（Nmap）" class="headerlink" title="4. 发现-四层发现（Nmap）"></a>4. 发现-四层发现（Nmap）</h4><ul>
 <li><strong><code>🔺命令：nmap IP地址-254 -PU53（对于UDP53端口）-sn</code></strong></li>
 <li><strong><code>🔺命令：nmap IP地址-254 -PA80（对于TCP80端口）-sn</code></strong></li>
 <li><strong><code>🔺命令：nmap -iL iplist.txt -PA80 -sn</code></strong></li>
 </ul>
-</li>
-</ol>
 <p>▲ 2019.12.3 Nmap局域网，无论是TCP还是UDP，发送的都是DNS的包，局域网内是发给网关<br>▲ 2019.12.3 Nmap外网，UDP查询时发送DNS包，TCP发送TCP包</p>
 <blockquote>
 <pre><code>nmap IP地址 -P0 -sn Ping层的发现
@@ -415,9 +401,7 @@ nmap IP地址 -PE -sn ICMP echo
 nmap IP地址 -PP -sn 时间戳
 namp IP地址 -PM -sn 子网掩码发现
 nmap 192.168.100.1-254 -PA80 -sn | grep &quot;Nmap&quot; | grep -v &quot;Starting&quot; | grep -v &quot;done&quot;| cut -d &quot; &quot; -f 6 | cut -d &quot;(&quot; -f 2| cut -d &quot;)&quot; -f 1 &gt; iplist.txt</code></pre></blockquote>
-<ol start="5">
-<li><p>发现-四层发现（hping3）</p>
-<ul>
+<h4 id="5-发现-四层发现（hping3）"><a href="#5-发现-四层发现（hping3）" class="headerlink" title="5. 发现-四层发现（hping3）"></a>5. 发现-四层发现（hping3）</h4><ul>
 <li><strong><code>🔺命令：hping3 --udp IP地址 -c 1</code></strong></li>
 <li><strong><code>🔺命令：for addr in $(seq 1 254);do hping3 --udp 1.1.1.$addr -c 1 &gt;&gt;r.txt;done</code></strong><ul>
 <li><strong><code>🔺命令：grep Unreachable r.txt | cut -d &quot;&quot; -f 5 | cut -d &quot;=&quot; -f 2</code></strong></li>
@@ -425,8 +409,6 @@ nmap 192.168.100.1-254 -PA80 -sn | grep &quot;Nmap&quot; | grep -v &quot;Startin
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#！/bin/bash</span><br><span class="line">if [ &quot;$#&quot; -ne 1 ];then</span><br><span class="line">    echo &quot;USAGE - ./udp_hping.sh [/24 network address]&quot;</span><br><span class="line">    echo &quot;Example - ./udp_hping.sh 192.168.100.0&quot;</span><br><span class="line">    echo &quot;Example will perform an UDP scan of the 192.168.100.0/24 network and output.txt file&quot;</span><br><span class="line">    exit</span><br><span class="line">fi</span><br><span class="line">prefix=$(echo $1 | cut -d &quot;.&quot; -f 1-3)</span><br><span class="line">for addr in $(seq 1 254);do</span><br><span class="line">    hping3 $prefix.$addr --udp -c 1 &gt;&gt; r.txt;</span><br><span class="line">done</span><br><span class="line">grep Unreachable r.txt | cut -d &quot;&quot; -f 5 | cut -d &quot;=&quot; -f 2 &gt;&gt; output.txt</span><br><span class="line">rm r.txt</span><br></pre></td></tr></table></figure>
 
 <ul>
@@ -536,8 +518,17 @@ nmap和Scapy发的是ACK的TCP包，是flag16的TCP包，需要收回RST的TCP�
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -617,6 +608,22 @@ nmap和Scapy发的是ACK的TCP包，是flag16的TCP包，需要收回RST的TCP�
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别）"><span class="nav-number">1.</span> <span class="nav-text">1. 发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-发现-四层发现（Scapy-TCP）"><span class="nav-number">2.</span> <span class="nav-text">2. 发现-四层发现（Scapy-TCP）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-发现-四层发现（Scapy-UDP）"><span class="nav-number">3.</span> <span class="nav-text">3. 发现-四层发现（Scapy-UDP）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-发现-四层发现（Nmap）"><span class="nav-number">4.</span> <span class="nav-text">4. 发现-四层发现（Nmap）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-发现-四层发现（hping3）"><span class="nav-number">5.</span> <span class="nav-text">5. 发现-四层发现（hping3）</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

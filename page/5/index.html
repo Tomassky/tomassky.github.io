@@ -240,6 +240,452 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E4%BA%94)%EF%BC%9ANEXPOSE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E4%BA%94)%EF%BC%9ANEXPOSE/" itemprop="url">Kali Linux笔记(二十五)：NEXPOSE</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-10T08:13:38+08:00">
+                2019-12-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-NEXPOSE"><a href="#1-NEXPOSE" class="headerlink" title="1. NEXPOSE"></a>1. NEXPOSE</h4><ul>
+<li>Rapid7<ul>
+<li>Nexpose</li>
+<li>完整的漏洞管理实现</li>
+</ul>
+</li>
+<li>环境准备<ul>
+<li>建议VM 4G内存</li>
+<li><a href="https://www.rapid7.com/products/nexpose/download/" target="_blank" rel="noopener">https://www.rapid7.com/products/nexpose/download/</a></li>
+<li><a href="https://IP_ADDR:3780（nxadmin/nxpassword,后改为Rapid7@mazhentao）" target="_blank" rel="noopener">https://IP_ADDR:3780（nxadmin/nxpassword,后改为Rapid7@mazhentao）</a></li>
+<li>操作系统账号密码：nexpose</li>
+<li><a href="https://www.rapid7.com/try/nexpose/" target="_blank" rel="noopener">https://www.rapid7.com/try/nexpose/</a></li>
+<li>QHWT-72GT-BHDS-FQLH（激活码进行注册，30天有效期）</li>
+<li>service nexposeconsole.cc restart（重启命令，但初始化时间非常长）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>概念：用扫描器去发现漏洞，用渗透框架去验证漏洞
+▲ 2019.12.8可以注册一个企业邮箱，可申请多个（腾讯。网易等）
+▲ 2019.12.8需要修改密码，至少一个数字，一个大写字母，一个字符，长度大于14位，多次不成功会锁账号 Rapid7@mazhentao
+▲ 2019.12.8只有注册后，才可下载到ova文件</code></pre></blockquote>
+<h4 id="2-Administrator"><a href="#2-Administrator" class="headerlink" title="2. Administrator"></a>2. Administrator</h4><ul>
+<li>Scan Templates<ul>
+<li>Exhaustive → Copy</li>
+<li>General → Name → Types of Checks（Assert Discovery、Vulnerability、WebSpldering、Policies）</li>
+<li>Asset Discovery（主机发现）</li>
+<li>Service Discovery（服务发现）</li>
+<li>Discovery Performance（发现选项）</li>
+<li>Vulnerability Checks（unsafe or safe，<strong>！Select Checks！</strong>）</li>
+<li>File Searching（文件搜索）</li>
+<li>Spam Relaying（垃圾邮件）</li>
+<li>Database Servers（数据库）</li>
+<li>Mail Server（邮件服务器）</li>
+<li>CVS Serverr（版本管理服务器）</li>
+<li>DHCP Server</li>
+<li>Telnet Server</li>
+<li>Web Spldering（网页爬网，有可能造成CC攻击）</li>
+<li>Oracle Policy（Oracle 策略）</li>
+<li>Lotus Domino Policy（Lotus Domino 策略）</li>
+<li>Windows Group Policy（window 组策略）</li>
+<li>CIFS/SMB Account Policy（CIFS/SMB 账号策略）</li>
+<li>AS/400 Policy（AS/400 机型策略）</li>
+<li>Unix Policy（Unix 策略）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>企业在美国上市需要过塞班思发案，也即404法案，Sarbans-Oxley compliance
+支付行业要过PCI ASV Extemal Audit/PCI Internal Aduit</code></pre></blockquote>
+<ul>
+<li>Sites（在home）<ul>
+<li>Create sites</li>
+<li>INFO &amp; SECURITY</li>
+<li>ASSETS</li>
+<li>AUTHENTICATION（Web Application → HTML FORM/HTTP HEADERS（SEESIONID））</li>
+<li>TEMPLATES</li>
+<li>ENGINES（扫描引擎）</li>
+<li>ALERTS（到点，可以用于发送mail）</li>
+<li>SCHEDULE</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-扫描结果分析"><a href="#3-扫描结果分析" class="headerlink" title="3. 扫描结果分析"></a>3. 扫描结果分析</h4><ul>
+<li>False Positive：误报</li>
+<li>False negative：漏报</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E5%9B%9B)%EF%BC%9ANESSUS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E5%9B%9B)%EF%BC%9ANESSUS/" itemprop="url">Kali Linux笔记(二十四)：NESSUS</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-10T08:13:38+08:00">
+                2019-12-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-NESSUS"><a href="#1-NESSUS" class="headerlink" title="1. NESSUS"></a>1. NESSUS</h4><ul>
+<li>家庭版<ul>
+<li>免费</li>
+</ul>
+</li>
+<li>专业版<ul>
+<li>收费，无限的并发连接</li>
+</ul>
+</li>
+<li>下载<ul>
+<li><a href="https://www.tenable.com/downloads/nessus" target="_blank" rel="noopener">https://www.tenable.com/downloads/nessus</a></li>
+</ul>
+</li>
+<li>安装<ul>
+<li><strong><code>🔺命令：dpkg -i 文件dbg</code></strong></li>
+<li>安装路径：/opt/nessus</li>
+</ul>
+</li>
+<li>启动服务<ul>
+<li><strong><code>🔺命令：/etc/init.d/nessusd start</code></strong></li>
+<li><strong><code>🔺命令：/etc/init.d/nessusd status</code></strong>（查看状态）</li>
+</ul>
+</li>
+<li>管理地址<ul>
+<li><a href="https://127.0.0.1:8834" target="_blank" rel="noopener">https://127.0.0.1:8834</a></li>
+</ul>
+</li>
+<li>注册激活码<ul>
+<li><a href="https://www.tenable.com/products/nessus/nessus-essentials" target="_blank" rel="noopener">https://www.tenable.com/products/nessus/nessus-essentials</a></li>
+</ul>
+</li>
+<li>管理账号<ul>
+<li>更新插件</li>
+</ul>
+</li>
+<li>基本配置（setting）<ul>
+<li>升级</li>
+<li>账号</li>
+<li>SMTP</li>
+<li>代理</li>
+</ul>
+</li>
+<li>Policy Library<ul>
+<li>Advanced Scan（高级扫描）</li>
+<li>Basic Shellshock Detection（检测破壳漏洞，系统的环境变量）</li>
+<li>Basic Network Scan（基本网络扫描，for any host）</li>
+<li>Credentialed Patch Audit（身份验证补丁）</li>
+<li>GHOST（glibc）Detection（底层C语言模块漏洞）</li>
+<li>Host Discovery（主机发现）</li>
+<li>Web Applicattion Test（针对Web的漏洞，XSS,CSRF,SQL注入等）</li>
+<li>Windows Mainware Scan（扫描恶意软件，计算恶意程序的哈希值，生成列表，来匹配）</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-NESSUS扫描（window）"><a href="#2-NESSUS扫描（window）" class="headerlink" title="2. NESSUS扫描（window）"></a>2. NESSUS扫描（window）</h4><ul>
+<li>Advanced Scan → Setting<ul>
+<li>Basic → General（Name → window_vuln_scan_policy）</li>
+<li>Basic → Permissions</li>
+<li>Discovery → Host Discovery（Use fast network discovery，Add File（添加MAC地址））</li>
+<li>Discovery → Prot Scanning（Ports → defult，TCP → SYN）</li>
+<li>Discovery → Service Discovery（All Ports，Enable all SSL ciphers，Enable CRL checking）</li>
+<li>Assessment → Web Application（open）</li>
+<li>Advanced（not safe）</li>
+</ul>
+</li>
+<li>Advanced Scan → Credentials（证书，证明提高）</li>
+<li>Advanced Scan → Compliance（合规性）</li>
+<li>Advanced Scan → Plugins（类似于openvas的family，插件）</li>
+<li>New Scan → window_vuln_scan_policy  ▲ 2019.12.8 SMTP 25端口无法连接socket<ul>
+<li>setting → send Email（SMTP Server）</li>
+<li>Host：<a href="mailto:smtp@163.com" target="_blank" rel="noopener">smtp@163.com</a></li>
+<li>Port：25</li>
+<li>From：<a href="mailto:nessus@163.com" target="_blank" rel="noopener">nessus@163.com</a></li>
+<li>Encryption：Use TLS if available</li>
+<li>Hostname：localhost：8834</li>
+<li>Auth Method：PLAIN</li>
+<li>Username/Password   </li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>windows增加用户密码：net user 用户 -
+可添加一个针对Linux系统的Advabced Scan（linux_vuln_scan_policy）
+可通过设置User Profile → API Keys来设置Access Key和Secret Key</code></pre></blockquote>
+<h4 id="3-NESSUS"><a href="#3-NESSUS" class="headerlink" title="3. NESSUS"></a>3. NESSUS</h4><ul>
+<li>策略</li>
+<li>扫描</li>
+<li>扫描本机</li>
+<li>扫描windows</li>
+<li>扫描Linux</li>
+<li>扫描网络设备</li>
+<li>扫描web server</li>
+<li>报告</li>
+<li>调度</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E4%B8%89)%EF%BC%9AOPENVAS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2158,549 +2604,6 @@ tor可进行代理翻墙</code></pre></blockquote>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81%E4%BA%8C)%EF%BC%9ARECON-NG/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81%E4%BA%8C)%EF%BC%9ARECON-NG/" itemprop="url">Kali Linux笔记(十二)：RECON-NG</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-09T19:29:25+08:00">
-                2019-12-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-RECON-NG（▲2019-11-30需自行安装moudles）"><a href="#1-RECON-NG（▲2019-11-30需自行安装moudles）" class="headerlink" title="1. RECON-NG（▲2019.11.30需自行安装moudles）"></a>1. RECON-NG（▲2019.11.30需自行安装moudles）</h4><ul>
-<li><p>全特性的web侦擦框架（综合工具，模块去完成）</p>
-</li>
-<li><p>基于Python开发</p>
-</li>
-<li><p>Web信息搜索框架（通过google搜索引擎）</p>
-</li>
-<li><p>命令格式与msf一致（需熟练使用）</p>
-</li>
-<li><p>基于python开发</p>
-</li>
-<li><p>使用方法：</p>
-<ul>
-<li>模块（不同模块调用不同的搜索引擎，调用API接口）</li>
-<li>数据库</li>
-<li>报告</li>
-</ul>
-</li>
-<li><p>全局选项</p>
-<ul>
-<li>recon-ng （进入default模块）</li>
-<li>back（退回上一个模块）、exit（退出recon-ng）</li>
-<li>add（向数据库插入表）、del   ▲2019.11.30 集成于keys</li>
-<li>keys（framework API keys，搜索引擎的API）</li>
-<li>load（自己编写的模块可以load进来） ▲2019.11.30 集成于modules</li>
-<li>pdb（python的debug模式进行调试）</li>
-<li>query（查询数据库，跟上标准SQL语言） ▲2019.11.30 集成于db</li>
-<li>record（在recon-ng下的命令进行记录，-r参数进行调用） ▲2019.11.30 修改为script</li>
-<li>reload（修改模块后可以reload） ▲2019.11.30 集成于modules</li>
-<li>resourece（在框架下可以用-r调用recond文件）▲2019.11.30删除此模块</li>
-<li>search（seach相关的模块有哪些） ▲2019.11.30 集成于marketplace</li>
-<li>set（设置选项） ▲2019.11.30 集成于options</li>
-<li>shell（在框架下执行shell 命令）</li>
-<li>show（显示当前框架的各种信息）</li>
-<li>snapshots（快照）</li>
-<li>spool（资源池划分，也可以导出）</li>
-<li>unset（清楚设置） ▲2019.11.30 集成于options</li>
-<li>use（使用各种模块） ▲2019.11.30 删除此模块</li>
-<li>workspaces（管理工作区）</li>
-</ul>
-</li>
-<li><p>recon-ng -h</p>
-<ul>
-<li>-h（help选项）</li>
-<li>-v（version版本）</li>
-<li>-w（load/create a workspace）</li>
-<li>-r filename（workspace，创建一个工作区）</li>
-<li>–no-check（disable version check）</li>
-<li>–no-analytics（disable analytics reporting，不检查报告模块）</li>
-</ul>
-</li>
-<li><p>recon-ng -w（创建工作区） sina</p>
-</li>
-<li><p>workspaces list（查看工作区）</p>
-</li>
-<li><p>keys list（支持网站api）</p>
-</li>
-<li><p>keys add API类型 具体API</p>
-</li>
-<li><p>marketplace search google</p>
-</li>
-<li><p>shell ls</p>
-</li>
-<li><p>show options（当前可以option选项）</p>
-</li>
-<li><p>options set PROXY 127.0.0.1 8087（设置代理）</p>
-</li>
-<li><p>options set USER-AGETN “某一浏览器的字段”</p>
-</li>
-<li><p>unset USER-AGENT（清空设置）</p>
-</li>
-<li><p>snapshots take（作一次snapshots快照）</p>
-</li>
-<li><p>snapshots load（使用以前的快照）</p>
-</li>
-</ul>
-<blockquote>
-<pre><code>recon-ng两下Tab键可以看到所有的命令
-全局模式下的options：DEBUG、NAMESERVER、PROXY、THREADS、TIMEOUT、USER-AGENT、VERBOSE
-DEBUG--python的debug调试
-NAMESERVER--域名解析服务器
-PROXY--代理 ▲2019.11.30代理暂无法使用
-THREADS--线程，搜索引擎有保护机制
-TIMEOUT--超时
-USER-AGENT--需要进行伪装，user-agent字段</code></pre></blockquote>
-<ul>
-<li><p>use 模块（harketarget模块可用）</p>
-<ul>
-<li>DNS查询</li>
-</ul>
-<ol>
-<li>Google</li>
-<li>Baidu</li>
-<li>Bing</li>
-<li>Yahoo</li>
-<li>Brute force</li>
-</ol>
-</li>
-</ul>
-<blockquote>
-<p>   Google模式 ▲2019.11.30模块暂不可用</p>
-<ol>
-<li>marketplace search google</li>
-<li>modules load recon/domains-hosts/google_site_web（也可以使用api）</li>
-<li>show options</li>
-<li>show info</li>
-<li>options set SOURCE 域名</li>
-<li>run</li>
-<li>show hosts/query select * from hosts</li>
-</ol>
-</blockquote>
-<blockquote>
-<p>   bing模式 ▲2019.11.30模块暂不可用</p>
-<ol>
-<li>marketplace search bing</li>
-<li>modules load recon/domains-hosts/bing_site_web</li>
-<li>show options</li>
-<li>options set SOURCE 域名</li>
-<li>run</li>
-<li>query select * from hosts where host like ‘%www%’（复杂sql查询）</li>
-</ol>
-</blockquote>
-<blockquote>
-<p>   brute模式（不解析IP地址）</p>
-<ol>
-<li>marketplace search brute</li>
-<li>modules load recon/domains-hosts/brute_hosts</li>
-<li>show options</li>
-<li>options set SOURCE/WORDLIST  </li>
-<li>run</li>
-</ol>
-</blockquote>
-<ul>
-<li>use 模块（harketarget模块可用）<ul>
-<li>解析IP地址（查询数据库，存在负载均衡）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<ol>
-<li>marketplace search resolve</li>
-<li>modules load recon/hosts-hosts/resolve</li>
-<li>show options</li>
-<li>show info</li>
-<li>options set SOURCE query select host from hosts where host like ‘%sina.com.cn%’</li>
-<li>show hosts</li>
-<li>options set SOURCE query select host from hosts</li>
-<li>show hosts</li>
-</ol>
-</blockquote>
-<ul>
-<li>use 模块（harketarget模块可用）<ul>
-<li>联系人</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<ol>
-<li>marketplace search contact</li>
-</ol>
-</blockquote>
-<ul>
-<li>use 模块（harketarget模块可用）<ul>
-<li>报告</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<ol>
-<li>marketplace search report</li>
-<li>modules load reporting/html</li>
-<li>show options</li>
-<li>options set CREATOR 创建者</li>
-<li>options set CUSTOMER 客户</li>
-<li>options set FILENAME 路径</li>
-<li>options set SANITIZE TRUE（是否对私密消息进行mask）</li>
-</ol>
-</blockquote>
-<ul>
-<li>use 模块（harketarget模块可用）<ul>
-<li>API</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81)%EF%BC%9ADNS%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81)%EF%BC%9ADNS%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" itemprop="url">Kali Linux笔记(十)：DNS信息收集</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-09T19:29:25+08:00">
-                2019-12-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-信息收集-DNS"><a href="#1-信息收集-DNS" class="headerlink" title="1. 信息收集-DNS"></a>1. 信息收集-DNS</h4><ul>
-<li>域名解析成IP地址<ul>
-<li>域名（qq.com）与FQDN（完全限定域名<a href="http://www.qq.com）的区别" target="_blank" rel="noopener">www.qq.com）的区别</a></li>
-<li>域名记录：A（IPV4主机记录）、C name（别名记录）、NS（域名服务器地址对域解析）、MX（邮件服务器地址对域解析）、ptr（通过IP地址反向解析域名）、text（spf反向垃圾邮件域名）、SOA（启始授权）、AAAA（IPV6地址）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>DNS客户端 → 本地DNS服务器 → 根域服务器 → com服务器 → example.com服务器
-1.递归查询（一轮一轮递归） 2.迭代查询（从顶至下）
-缓存DNS服务器本身并不包含DNS记录（常用于本地DNS服务器）
-spf 反向垃圾域名服务，判断邮件的域名是否伪造</code></pre></blockquote>
-<h4 id="2-DNS信息收集-NSLOOKUP"><a href="#2-DNS信息收集-NSLOOKUP" class="headerlink" title="2. DNS信息收集-NSLOOKUP"></a>2. DNS信息收集-NSLOOKUP</h4><ul>
-<li><strong><code>🔺命令：nslookup 域名</code></strong></li>
-<li><strong><code>🔺命令：nslookup set type=mx（查询类型） 域名</code></strong> （数值越小，优先级越高）</li>
-<li><strong><code>🔺命令：nslookup set type=ns 域名</code></strong></li>
-<li><strong><code>🔺命令：nslookup set type=ptr ip地址</code></strong> ▲2019.11.27反向域名解析大概率查不到</li>
-<li><strong><code>🔺命令：nslookup server 202.106.0.20（其他ISP域名服务器的ip地址）</code></strong></li>
-</ul>
-<blockquote>
-<pre><code>网络为智能DNS，选取最近的DNS服务器，不同地址的DNS服务器是不一样的，边缘网络</code></pre></blockquote>
-<ul>
-<li><strong><code>🔺命令：nslookup set type=any（任何域名）域名</code></strong></li>
-</ul>
-<h4 id="3-DNS信息收集-DIG"><a href="#3-DNS信息收集-DIG" class="headerlink" title="3. DNS信息收集-DIG"></a>3. DNS信息收集-DIG</h4><ul>
-<li><strong><code>🔺命令：dig 8.8.8.8 域名 mx</code></strong></li>
-<li><strong><code>🔺命令：dig 域名 any</code></strong></li>
-<li>带参数：<strong><code>🔺命令：dig +noall +answer 域名 any | awk &#39;{print $5}&#39;</code></strong>▲2019.11.27难以查到</li>
-<li>反向查询：<strong><code>🔺命令：dig -x ip地址（PTR）</code></strong></li>
-<li>bind版本信息：<strong><code>🔺命令：dig +noall +answer txt chaos（class类） VERSION BIND 域名</code></strong> ▲2019.11.27难以查到</li>
-<li>DNS追踪：<strong><code>🔺命令：dig +trace 域名</code></strong>（迭代查询）、<strong><code>🔺命令：dig 域名（递归查询）</code></strong></li>
-</ul>
-<blockquote>
-<pre><code>指定域名服务器查询域名
-1.nslooup www.sina.com -type=a 8.8.8.8
-2.dig www.sina.com any @8.8.8.8
-trace追踪域名
-本机（随机挑选root的IP地址） → root（随机挑选com的IP地址） → com（随机挑选sina.com的IP地址） → sina.com（随机挑选IP地址） → www.sina.com（挑选A记录）
-▲抓包分析递归查询和迭代查询的区别
-▲域名解析服务器跟域名后缀可以不同（top. → d.zdnscloud.com.）</code></pre></blockquote>
-<h4 id="4-DNS区域传输（DNS的同步机制）"><a href="#4-DNS区域传输（DNS的同步机制）" class="headerlink" title="4. DNS区域传输（DNS的同步机制）"></a>4. DNS区域传输（DNS的同步机制）</h4><ul>
-<li><strong><code>🔺命令：dig ns1.example.com example.com axfr（差异化传输方法Request for full zone transfer）</code></strong></li>
-<li><strong><code>🔺命令：host -T（用TCP传输方式） -l（axfr） sina.com ns3.sina.com</code></strong></li>
-</ul>
-<blockquote>
-<pre><code>TCP用于DNS之间的域名传输
-UDP用于DNS之间的查询</code></pre></blockquote>
-<h4 id="5-DNS字典爆破"><a href="#5-DNS字典爆破" class="headerlink" title="5. DNS字典爆破"></a>5. DNS字典爆破</h4><ul>
-<li><strong><code>🔺命令：fierce -dnsserver（指定DNS服务器） 8.8.8.8 -dns（要查询的域） sina.com.cn -wordlist（字典，明确字典路径） a.txt</code></strong></li>
-<li><strong><code>🔺命令：dnsdict6 -d（显示IPV6）4（显示IPV4） -t（并发线程数） 16 -x（不同级别） sina.com  （-D 自己指定字典，-U 最大的字典）</code></strong></li>
-<li><strong><code>🔺命令：dnsenum -f（字典，明确字典路径） dnsbig.txt -dnsserver 8.8.8.8 sina.com -o（导出成一个文件） sina.xml</code></strong></li>
-<li><strong><code>🔺命令：dnsmap sina.com -w（字典，明确字典路径） dns.txt</code></strong></li>
-<li><strong><code>🔺命令：dnsrecon -d（指定域名服务器） sina.com --lifetime（超时时间）10 -t（查询强度） brt（暴力爆破） -D（字典，明确字典路径） dnsbig.txt</code></strong></li>
-<li><strong><code>🔺命令：dnsrecon -t std（标准爆破） -d sina.com -D（字典，明确字典路径） dnsbig.txt</code></strong></li>
-</ul>
-<blockquote>
-<pre><code>查看程序相关文件
-dpkg -L fierce
-find / -name dnsenum</code></pre></blockquote>
-<h4 id="6-DNS注册信息"><a href="#6-DNS注册信息" class="headerlink" title="6. DNS注册信息"></a>6. DNS注册信息</h4><ul>
-<li><strong><code>🔺命令：whois 域名</code></strong></li>
-<li><strong><code>🔺命令：whois IP地址</code></strong></li>
-<li><strong><code>🔺命令：whois -h whois.apnic.net IP地址</code></strong></li>
-</ul>
-<blockquote>
-<pre><code>网页查询
-AFRINIC  http://www.afrinic.net
-APNIC    http://www.apnic.net
-ARIN     http://whois.arin.net
-IANA     http://www.iana.com 
-ICANN    http://www.icann.org
-LACNIC   http://www.lacnic.net
-NRO      http://www.nro.net
-RIPE     http://www.ripe.net
-InterNic http://www.internic.net</code></pre></blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2755,7 +2658,7 @@ InterNic http://www.internic.net</code></pre></blockquote>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">62</span>
+                  <span class="site-state-item-count">64</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

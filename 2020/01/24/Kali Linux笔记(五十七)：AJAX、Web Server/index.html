@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="1. skipfish C语言编写（Google开发） 实验性的主动web安全评估工具（相比于商业扫描器不遑相让） 基于Web Application进行扫描 递归爬网 基于字典的探测 速度较快 多路单线程，全异步网络I&#x2F;O，消除内存管理和调度开销 启发式自动内容识别   误报较低  2. skipfish 🔺命令：skipfish -o（存放工作目录） test http:&#x2F;&#x2F;1.1.1.1">
+<meta name="description" content="1. AJAX Asynchronous JavaScript and XML 是一个概念，而非一种新的编程语言，是一组现有技术的组合 通过客户端脚本动态更新页面部分内容，而非整个页面 降低带宽使用，提高速度 提升用户体验 后台异步访问  2. AJAX、DHTML、DOM AJAX组件 JavaScript：ajax的核心组件，使用XMLHTTPRequest对象接口向服务器发起请求，接收并处">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kali Linux笔记(三十九)：Skipfish">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;27&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B9%9D)%EF%BC%9ASkipfish&#x2F;index.html">
+<meta property="og:title" content="Kali Linux笔记(五十七)：AJAX、Web Server">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;01&#x2F;24&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%B8%83)%EF%BC%9AAJAX%E3%80%81Web%20Server&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="1. skipfish C语言编写（Google开发） 实验性的主动web安全评估工具（相比于商业扫描器不遑相让） 基于Web Application进行扫描 递归爬网 基于字典的探测 速度较快 多路单线程，全异步网络I&#x2F;O，消除内存管理和调度开销 启发式自动内容识别   误报较低  2. skipfish 🔺命令：skipfish -o（存放工作目录） test http:&#x2F;&#x2F;1.1.1.1">
+<meta property="og:description" content="1. AJAX Asynchronous JavaScript and XML 是一个概念，而非一种新的编程语言，是一组现有技术的组合 通过客户端脚本动态更新页面部分内容，而非整个页面 降低带宽使用，提高速度 提升用户体验 后台异步访问  2. AJAX、DHTML、DOM AJAX组件 JavaScript：ajax的核心组件，使用XMLHTTPRequest对象接口向服务器发起请求，接收并处">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-01-05T02:46:55.222Z">
+<meta property="og:updated_time" content="2020-01-24T00:34:22.038Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/12/27/Kali Linux笔记(三十九)：Skipfish/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/01/24/Kali Linux笔记(五十七)：AJAX、Web Server/"/>
 
 
 
 
 
-  <title>Kali Linux笔记(三十九)：Skipfish | Tomas'Blog</title>
+  <title>Kali Linux笔记(五十七)：AJAX、Web Server | Tomas'Blog</title>
   
 
 
@@ -243,7 +243,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B9%9D)%EF%BC%9ASkipfish/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%B8%83)%EF%BC%9AAJAX%E3%80%81Web%20Server/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -260,7 +260,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(三十九)：Skipfish</h1>
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(五十七)：AJAX、Web Server</h1>
         
 
         <div class="post-meta">
@@ -272,8 +272,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-27T10:59:15+08:00">
-                2019-12-27
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-24T08:34:39+08:00">
+                2020-01-24
               </time>
             
 
@@ -333,57 +333,99 @@
 
       
         <hr>
-<h4 id="1-skipfish"><a href="#1-skipfish" class="headerlink" title="1. skipfish"></a>1. skipfish</h4><ul>
-<li>C语言编写（Google开发）</li>
-<li>实验性的主动web安全评估工具（相比于商业扫描器不遑相让）</li>
-<li>基于Web Application进行扫描</li>
-<li>递归爬网</li>
-<li>基于字典的探测</li>
-<li>速度较快<ul>
-<li>多路单线程，全异步网络I/O，消除内存管理和调度开销</li>
-<li>启发式自动内容识别</li>
+<h4 id="1-AJAX"><a href="#1-AJAX" class="headerlink" title="1. AJAX"></a>1. AJAX</h4><ul>
+<li>Asynchronous JavaScript and XML</li>
+<li>是一个概念，而非一种新的编程语言，是一组现有技术的组合</li>
+<li>通过客户端脚本动态更新页面部分内容，而非整个页面</li>
+<li>降低带宽使用，提高速度</li>
+<li>提升用户体验</li>
+<li>后台异步访问</li>
+</ul>
+<h4 id="2-AJAX、DHTML、DOM"><a href="#2-AJAX、DHTML、DOM" class="headerlink" title="2. AJAX、DHTML、DOM"></a>2. AJAX、DHTML、DOM</h4><ul>
+<li>AJAX组件<ul>
+<li>JavaScript：ajax的核心组件，使用XMLHTTPRequest对象接口向服务器发起请求，接收并处理服务器响应数据</li>
 </ul>
 </li>
-<li>误报较低</li>
-</ul>
-<h4 id="2-skipfish"><a href="#2-skipfish" class="headerlink" title="2. skipfish"></a>2. skipfish</h4><ul>
-<li><strong><code>🔺命令：skipfish -o（存放工作目录） test http://1.1.1.1</code></strong></li>
-<li><strong><code>🔺命令：skipfish -o test @url.txt</code></strong></li>
-<li><strong><code>🔺命令：skipfish -o test -S（指定只读字典）complet.wl -W（写成新的字典） a.wl http://1.1.1.1  #字典</code></strong></li>
-<li>参数<ul>
-<li>-I：只检查包含’string’的URL</li>
-<li>-X：不检查包含’string’的URL  #logout</li>
-<li>-K：不对指定参数进行Fuzz测试</li>
-<li>-D：跨站点爬取另外一个域（有连接则会跳过去爬取 ）</li>
-<li>-l：每秒最大请求数</li>
-<li>-m：每IP最大并发连接数</li>
-<li>–config：指定配置文件</li>
+<li>Dynamic HTML（DHTML）<ul>
+<li>早于AJAX出现，通过javascript、CSS等在客户端修改HTML页面element，缺点是完全依赖客户端代码修改页面，与服务器的交互由javascript applets完成，AJAX的XHR弥补了他的缺点（注册用户）</li>
 </ul>
 </li>
-<li>身份认证（http认证）<ul>
-<li><strong><code>🔺命令：skipfish -A（http身份认证信息） user:pass -o test http://1.1.1.1</code></strong></li>
+<li>Document Object Model（DOM）<ul>
+<li>处理html、xml文档对象的框架，DHTML是一个浏览器，DOM作为其一个实现的接口，定义和管理每个页面元素obj的Properties、method、event</li>
 </ul>
 </li>
-<li>身份认证（Cookie认证）    <ul>
-<li><strong><code>🔺命令：skipfish -C（Cookie信息）&quot;name=var&quot; -o test http://1.1.1.1</code></strong></li>
 </ul>
-</li>
-<li>身份认证参数（表单认证） <ul>
-<li>–auth-form <URL> </li>
-<li>–auth-user-field &lt;表单代码名&gt; （通过form里面的代码名）</li>
-<li>–auth-user <username> （提交表单的用户名）</li>
-<li>–auth-pass-field &lt;表单代码名&gt; （通过form里面的代码名）</li>
-<li>–auth-pass <password>  （提交表单的密码）</li>
-<li>–auth-verify-url <URL> （提交成功后显示的界面）</li>
-<li>–auth-form-target <URL>（通过form里面的action确定）</li>
+<h4 id="3-基于AJAX的WEB应用工作流程"><a href="#3-基于AJAX的WEB应用工作流程" class="headerlink" title="3. 基于AJAX的WEB应用工作流程"></a>3. 基于AJAX的WEB应用工作流程</h4><ul>
+<li>XMLHTTPRequest API创建对象xmlhttp进行访问</li>
+<li>Xml、json（默认首选）、html、文本、图片</li>
+<li>多个异步请求独立通信，互不依赖</li>
+<li>AJAX框架<ul>
+<li>JQuery</li>
+<li>Dojo Toolkit</li>
+<li>Google web toolkit（GWT）</li>
+<li>Microsoft AJAX library</li>
 </ul>
 </li>
 </ul>
 <blockquote>
-<pre><code>表单代码名可通过查看界面源代码元素去获得，查看表单设置的属性</code></pre></blockquote>
-<ul>
-<li>扫描结束太快<ul>
-<li>触发了目标站点的连接数限制，降低-m -l数值</li>
+<pre><code>⭐请求过程：User Interface →(JavaScript)→ AJAX Engine →(HTTP Request)→ Web Server → Database,backend server
+⭐响应过程：Databse,backend server → Web Server →(HTML\JSON\XML)→ AJAX Engine →(DHTML)→ User Interface</code></pre></blockquote>
+<h4 id="4-AJAX的安全问题"><a href="#4-AJAX的安全问题" class="headerlink" title="4. AJAX的安全问题"></a>4. AJAX的安全问题</h4><ul>
+<li>目前没有通用的AJAX安全最佳实践，其攻击面不为大多数人所知</li>
+<li>AJAX的安全问题<ul>
+<li>多种技术混合，增加了攻击面，每个参数都可能形成独立的攻击过程</li>
+<li>AJAX引擎是个全功能的脚本解释器，访问恶意站点可能后果严重，虽然浏览器有沙箱和SOP（同源策略），但可能绕过</li>
+<li>服务器、客户端代码结合使用产生混乱，服务器访问控制不当，将信息泄露、</li>
+<li>暴漏应用程序逻辑</li>
+</ul>
+</li>
+<li>AJAX对渗透测试的挑战<ul>
+<li>异步请求数量多且隐蔽</li>
+<li>触发AJAX请求的条件无规律</li>
+<li>手动和截断代理爬网可能产生大量遗漏</li>
+</ul>
+</li>
+<li>AJAX爬网工具<ul>
+<li>ZAP（Sites → 右键 → Attack → AJAX Spider）</li>
+</ul>
+</li>
+<li>客户端代码审计<ul>
+<li>源码</li>
+<li>Firebug</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-Web-Service（F12）"><a href="#5-Web-Service（F12）" class="headerlink" title="5. Web Service（F12）"></a>5. Web Service（F12）</h4><ul>
+<li>Web Service<ul>
+<li>面向服务的架构（service oriented architecture）便于不同系统集成共享数据和功能</li>
+<li>尤其适合不想要暴漏数据模型和程序逻辑而访问数据的场景</li>
+<li>无页面（最典型的类型）</li>
+</ul>
+</li>
+<li>两种类型的Web Service<ul>
+<li>Simple object access protocol（SOAP）<ul>
+<li>传统的Web Service开发方法，xml是唯一的数据交换格式</li>
+<li>要求安全性的应用更多采用</li>
+</ul>
+</li>
+<li>RESTful（Representational Transfer architecture–REST）<ul>
+<li>目前更多被采用的轻量的web service，JSON是首选数据交换格式</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Web Service安全考虑<ul>
+<li>使用API Key或session token实现和跟踪身份认证</li>
+<li>身份认证由服务器完成，而非客户端</li>
+<li>API Key、用户名、Session token永远不要通过URL发送</li>
+<li>RESTful默认不提供任何安全机制，需要使用SSL/TLS保护传输数据安全</li>
+<li>SOAP提供强于HTTPS的WS-security机制（传输层实现）</li>
+<li>使用OAuth或HMAC进行身份验证，HMAC身份认证使用C/S共享的密钥加密API KEY</li>
+<li>RESTful应只允许身份认证用户使用PUT、DELETE方法</li>
+<li>使用随机token防止CSRF攻击</li>
+<li>对用户提交参数过滤，建议布署基于严格白名单的方法</li>
+<li>报错信息消毒</li>
+<li>直接对象引用应严格身份验证（电商公司以ID作为主索引）</li>
 </ul>
 </li>
 </ul>
@@ -417,8 +459,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E5%85%AB)%EF%BC%9AVega/" rel="next" title="Kali Linux笔记(三十八)：Vega">
-                <i class="fa fa-chevron-left"></i> Kali Linux笔记(三十八)：Vega
+              <a href="/2020/01/22/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%BA%94)%EF%BC%9AHttps%E6%94%BB%E5%87%BB/" rel="next" title="Kali Linux笔记(五十五)：Https攻击">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(五十五)：Https攻击
               </a>
             
           </div>
@@ -427,8 +469,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E5%85%AD)%EF%BC%9AWeb%E6%B8%97%E9%80%8F%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E5%8F%8A%E5%B7%A5%E5%85%B7/" rel="prev" title="Kali Linux笔记(三十六)：Web渗透实验环境及工具">
-                Kali Linux笔记(三十六)：Web渗透实验环境及工具 <i class="fa fa-chevron-right"></i>
+              <a href="/2020/01/24/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%BA%8C)%EF%BC%9AXSS/" rel="prev" title="Kali Linux笔记(五十二)：XSS">
+                Kali Linux笔记(五十二)：XSS <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -599,7 +641,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-skipfish"><span class="nav-number">1.</span> <span class="nav-text">1. skipfish</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-skipfish"><span class="nav-number">2.</span> <span class="nav-text">2. skipfish</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-AJAX"><span class="nav-number">1.</span> <span class="nav-text">1. AJAX</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-AJAX、DHTML、DOM"><span class="nav-number">2.</span> <span class="nav-text">2. AJAX、DHTML、DOM</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-基于AJAX的WEB应用工作流程"><span class="nav-number">3.</span> <span class="nav-text">3. 基于AJAX的WEB应用工作流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-AJAX的安全问题"><span class="nav-number">4.</span> <span class="nav-text">4. AJAX的安全问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-Web-Service（F12）"><span class="nav-number">5.</span> <span class="nav-text">5. Web Service（F12）</span></a></li></ol></div>
             
 
           </div>

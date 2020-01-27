@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="安全," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. 密码嗅探 二、三层地址 IP网络到网络 MAC主机到主机（硬件固化地址，广播寻址） ▲ 路由器不转发广播 ▲ 局域网内MAC寻址，广域网IP寻址   交换机与HUB ▲ HUB是物理层的设备，非二层设备，不识别MAC地址 HUB全端口转发，只要有数据包就转发给本网络所有主机（不安全） 交换机根据学习地址转发，形成APR地址列表 混杂模式抓包   ARP协议（IP地址解析程MAC地址） 免费">
+<meta name="keywords" content="安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kali Linux笔记(六十二)：密码嗅探--ARP地址欺骗、DNS代理欺骗">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;01&#x2F;27&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%BA%8C)%EF%BC%9A%E5%AF%86%E7%A0%81%E5%97%85%E6%8E%A2--ARP%E5%9C%B0%E5%9D%80%E6%AC%BA%E9%AA%97%E3%80%81DNS%E4%BB%A3%E7%90%86%E6%AC%BA%E9%AA%97&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="1. 密码嗅探 二、三层地址 IP网络到网络 MAC主机到主机（硬件固化地址，广播寻址） ▲ 路由器不转发广播 ▲ 局域网内MAC寻址，广域网IP寻址   交换机与HUB ▲ HUB是物理层的设备，非二层设备，不识别MAC地址 HUB全端口转发，只要有数据包就转发给本网络所有主机（不安全） 交换机根据学习地址转发，形成APR地址列表 混杂模式抓包   ARP协议（IP地址解析程MAC地址） 免费">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-01-27T15:05:26.942Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/01/27/Kali Linux笔记(六十二)：密码嗅探--ARP地址欺骗、DNS代理欺骗/"/>
+
+
+
+
+
+  <title>Kali Linux笔记(六十二)：密码嗅探--ARP地址欺骗、DNS代理欺骗 | Tomas'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tomas'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%BA%8C)%EF%BC%9A%E5%AF%86%E7%A0%81%E5%97%85%E6%8E%A2--ARP%E5%9C%B0%E5%9D%80%E6%AC%BA%E9%AA%97%E3%80%81DNS%E4%BB%A3%E7%90%86%E6%AC%BA%E9%AA%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(六十二)：密码嗅探--ARP地址欺骗、DNS代理欺骗</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-27T23:12:02+08:00">
+                2020-01-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<h4 id="1-密码嗅探"><a href="#1-密码嗅探" class="headerlink" title="1. 密码嗅探"></a>1. 密码嗅探</h4><ul>
+<li>二、三层地址<ul>
+<li>IP网络到网络</li>
+<li>MAC主机到主机（硬件固化地址，广播寻址）</li>
+<li>▲ 路由器不转发广播</li>
+<li>▲ 局域网内MAC寻址，广域网IP寻址</li>
+</ul>
+</li>
+<li>交换机与HUB<ul>
+<li>▲ HUB是物理层的设备，非二层设备，不识别MAC地址</li>
+<li>HUB全端口转发，只要有数据包就转发给本网络所有主机（不安全）</li>
+<li>交换机根据学习地址转发，形成APR地址列表</li>
+<li>混杂模式抓包</li>
+</ul>
+</li>
+<li>ARP协议（IP地址解析程MAC地址）<ul>
+<li>免费ARP</li>
+<li>基于广播学习</li>
+<li>以太网头、ARP头</li>
+<li>▲ 请求、响应相对独立（不请求也可以响应，可以人为构造响应包）</li>
+<li>▲ 基于传闻的协议（无条件接受响应包，ARP地址欺骗根源）</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-ARP地址欺骗（Win-7-→-Kali，单向欺骗）"><a href="#2-ARP地址欺骗（Win-7-→-Kali，单向欺骗）" class="headerlink" title="2. ARP地址欺骗（Win 7 → Kali，单向欺骗）"></a>2. ARP地址欺骗（Win 7 → Kali，单向欺骗）</h4><ul>
+<li><strong><code>🔺命令：ping 网关</code></strong>（查看网络连通性）</li>
+<li><strong><code>🔺命令：arp -a</code></strong>（查看网关地址）</li>
+<li>使用OmniPeek构造ARP数据包，先抓取ARP的数据包</li>
+<li><strong><code>🔺命令：arp -d</code></strong>（清除ARP缓存）</li>
+<li><strong><code>🔺命令：ping 网关</code></strong>（重新发arp包）</li>
+<li>选取ARP Response的数据包，Send → Edit Send Packet</li>
+<li><strong><code>🔺命令：ping Kali的IP地址/arp -a</code></strong>（查看Kali的MAC地址）</li>
+<li>Ethernet → 修改目的地的MAC地址为Kali的MAC地址</li>
+<li>Ethernet → 修改源地址的MAC地址为Win7的MAC地址</li>
+<li>ARP → Target Hardware Addr → Kali的MAC地址</li>
+<li>ARP → Target Internet Addr → Kali的IP地址</li>
+<li>Send → Send Window → Transmit One（可能需要持续发包）</li>
+<li>Kali查看arp → <strong><code>🔺命令：arp -an</code></strong></li>
+<li>Win7/kali抓包都可以看到ARP地址欺骗效果（发送ping数据包）</li>
+<li>▲ 2020.1.27 Omnipeek need a Universal C Runtime</li>
+</ul>
+<h4 id="3-ARP地址欺骗（Kali-→-Win7）"><a href="#3-ARP地址欺骗（Kali-→-Win7）" class="headerlink" title="3. ARP地址欺骗（Kali → Win7）"></a>3. ARP地址欺骗（Kali → Win7）</h4><ul>
+<li>手动修改数据包实现ARP欺骗</li>
+<li>arpspoof（双向欺骗+路由转发）<ul>
+<li><strong><code>🔺命令：echo 1 &gt; /proc/sys/net/ipv4/ip_forward</code></strong> </li>
+<li><strong><code>🔺命令：arpspoof -t（目标） 1.1.1.12 -r（路由器） 1.1.1.1</code></strong>（发送的是arp的Rely）</li>
+</ul>
+</li>
+<li>网络嗅探<ul>
+<li>driftnet（传输图片的还原）<ul>
+<li>-i（选择端口）</li>
+<li>-a（存放保存）</li>
+<li>-d（存放的路径）</li>
+<li>-s（声音文件的保存）</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：driftnet -i eth0 -a -d /root/Desktop/tem -s</code></strong></li>
+<li><strong><code>🔺命令：webspy -i eth0 1.1.1.1</code></strong>（抓取网络url地址）▲ 2020.1.27只能一个一个进行截取</li>
+<li><strong><code>🔺命令：urlsnarf -i eth0</code></strong>（访问端口截断解析）</li>
+<li><strong><code>🔺命令：dsniff -i eth0 -m</code></strong>（密码嗅探截获）<ul>
+<li>/usr/share/dsniff/dsniff.services（支持协议解码类型）</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：dnsspoof -i eth0 -f /usr/lib/x86_64-linux-gnu/dnsspoof.hosts</code></strong>（DNS欺骗）<ul>
+<li><strong><code>🔺命令：vi /usr/lib/x86_64-linux-gnu/</code></strong>dnsspoof.hosts（侦听目标机器53端口）</li>
+<li>192.168.1.1 → *.taobao.com</li>
+<li>Win7访问<a href="http://www.taobao.com（发生重定向）" target="_blank" rel="noopener">www.taobao.com（发生重定向）</a></li>
+<li>▲ 2020.1.27 dnsspoof无法进行重定向，无法达到DNS欺骗的目的</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-DNS代理欺骗（Kali-→-Win7，实现流量的重定向）"><a href="#4-DNS代理欺骗（Kali-→-Win7，实现流量的重定向）" class="headerlink" title="4. DNS代理欺骗（Kali → Win7，实现流量的重定向）"></a>4. DNS代理欺骗（Kali → Win7，实现流量的重定向）</h4><ul>
+<li>前提：有能力修改客户端的网络参数的配置（DNS/Host修改配置）</li>
+<li>dnschef<ul>
+<li>–fakeip（欺骗解析到的IP地址）</li>
+<li>–fakedomains（伪造欺骗的域名）</li>
+<li>–interface（进行网卡欺骗的动作，DNS侦听动作）</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：dnschef --fakeip=1.1.1.10 --fakedomains=www.google.com,www.youtube.com --interface 1.1.1.2（Kali主机IP）-q</code></strong></li>
+<li>将被害者DNS指向伪造的DNS服务器（Win7修改DNS服务器）</li>
+<li>Win7和Kali进行抓包比对</li>
+<li>ping一个没有欺骗的域名看是否正常运作</li>
+<li>▲ 2020.1.27可进行正常运行，也能截获到数据包，但无法进行重定向</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%AE%89%E5%85%A8/" rel="tag"># 安全</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%B8%80)%EF%BC%9A%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/" rel="next" title="Kali Linux笔记(六十一)：离线密码破解">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(六十一)：离线密码破解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%B8%89)%EF%BC%9A%E5%AF%86%E7%A0%81%E5%97%85%E6%8E%A2--%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/" rel="prev" title="Kali Linux笔记(六十三)：密码嗅探--中间人攻击">
+                Kali Linux笔记(六十三)：密码嗅探--中间人攻击 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/photo.jpg"
+                alt="Tomas" />
+            
+              <p class="site-author-name" itemprop="name">Tomas</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">71</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Tomassky" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:643008933@qq.com" target="_blank" title="QQ邮箱">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://ylsword-cheat.top" title="LengSword" target="_blank">LengSword</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://neigeshoufu.github.io/ljy.github.io" title="neigeshoufu" target="_blank">neigeshoufu</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-密码嗅探"><span class="nav-number">1.</span> <span class="nav-text">1. 密码嗅探</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-ARP地址欺骗（Win-7-→-Kali，单向欺骗）"><span class="nav-number">2.</span> <span class="nav-text">2. ARP地址欺骗（Win 7 → Kali，单向欺骗）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-ARP地址欺骗（Kali-→-Win7）"><span class="nav-number">3.</span> <span class="nav-text">3. ARP地址欺骗（Kali → Win7）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-DNS代理欺骗（Kali-→-Win7，实现流量的重定向）"><span class="nav-number">4.</span> <span class="nav-text">4. DNS代理欺骗（Kali → Win7，实现流量的重定向）</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tomas</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

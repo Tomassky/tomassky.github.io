@@ -79,16 +79,18 @@
 
 
 
-<meta name="description" content="1. 程序漏洞从哪里来（程序的动态，变量） 罪恶的根源：变量 数据与代码边界不清（输入数据或者代码） 最简漏洞原理–shell脚本漏洞 🔺命令：.&#x2F;a.sh 参数（; | &amp;amp;&amp;amp; &amp;amp;）    12#!&#x2F;bin&#x2F;bashecho $1   .&#x2F;a.sh ; pwd →  &#x2F;root 2. 缓存区溢出 当缓冲区边界限制不严格时，由于变量传入畸形数据或程序运行错误，导致缓存区“">
+<meta name="description" content="1. ptunnle Ping tunnel ICMP隧道工具 通过ICMP echo（ping requests，8）和reply（ping reply，0）实现隧道 适用于防火墙只允许ping出站流量的环境 支持多并发连接、性能优 支持身份验证 需要root权限 支持抓包 Win：winpcap Linux：libpcap   工作过程（指定Proxy的时候，需要指定目的地，客户端指定） P">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kali Linux笔记(二十六)：缓冲区溢出介绍">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;11&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E5%85%AD)%EF%BC%9A%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E4%BB%8B%E7%BB%8D&#x2F;index.html">
+<meta property="og:title" content="Kali Linux笔记(七十三)：ICMP隧道--ptunnel">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;02&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%B8%89)%EF%BC%9AICMP%E9%9A%A7%E9%81%93--ptunnel&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="1. 程序漏洞从哪里来（程序的动态，变量） 罪恶的根源：变量 数据与代码边界不清（输入数据或者代码） 最简漏洞原理–shell脚本漏洞 🔺命令：.&#x2F;a.sh 参数（; | &amp;amp;&amp;amp; &amp;amp;）    12#!&#x2F;bin&#x2F;bashecho $1   .&#x2F;a.sh ; pwd →  &#x2F;root 2. 缓存区溢出 当缓冲区边界限制不严格时，由于变量传入畸形数据或程序运行错误，导致缓存区“">
+<meta property="og:description" content="1. ptunnle Ping tunnel ICMP隧道工具 通过ICMP echo（ping requests，8）和reply（ping reply，0）实现隧道 适用于防火墙只允许ping出站流量的环境 支持多并发连接、性能优 支持身份验证 需要root权限 支持抓包 Win：winpcap Linux：libpcap   工作过程（指定Proxy的时候，需要指定目的地，客户端指定） P">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-01-05T02:52:34.966Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;www.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=8ba4_1t-c8RHceWGXkik2ykLxyWEAjf4TnqoBi1zNfQVEBnHS9tbhe5OUuKYQrJUxXj3mkDJmjX3ZxXSZMWEtq5jNn6k0yiKkppgwTjp3MatPGpboLWVGw&amp;file_name=&#x2F;ptunnle.PNG">
+<meta property="og:updated_time" content="2020-02-02T12:51:10.871Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;www.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=8ba4_1t-c8RHceWGXkik2ykLxyWEAjf4TnqoBi1zNfQVEBnHS9tbhe5OUuKYQrJUxXj3mkDJmjX3ZxXSZMWEtq5jNn6k0yiKkppgwTjp3MatPGpboLWVGw&amp;file_name=&#x2F;ptunnle.PNG">
 
 
 
@@ -118,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/12/11/Kali Linux笔记(二十六)：缓冲区溢出介绍/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/02/02/Kali Linux笔记(七十三)：ICMP隧道--ptunnel/"/>
 
 
 
 
 
-  <title>Kali Linux笔记(二十六)：缓冲区溢出介绍 | Tomas'Blog</title>
+  <title>Kali Linux笔记(七十三)：ICMP隧道--ptunnel | Tomas'Blog</title>
   
 
 
@@ -243,7 +245,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/11/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E5%85%AD)%EF%BC%9A%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E4%BB%8B%E7%BB%8D/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%B8%89)%EF%BC%9AICMP%E9%9A%A7%E9%81%93--ptunnel/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -260,7 +262,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(二十六)：缓冲区溢出介绍</h1>
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(七十三)：ICMP隧道--ptunnel</h1>
         
 
         <div class="post-meta">
@@ -272,8 +274,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-11T13:03:16+08:00">
-                2019-12-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-02T20:51:22+08:00">
+                2020-02-02
               </time>
             
 
@@ -326,7 +328,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  293 字
+                  427 字
                 </span>
               
 
@@ -364,29 +366,90 @@
 
       
         <hr>
-<h4 id="1-程序漏洞从哪里来（程序的动态，变量）"><a href="#1-程序漏洞从哪里来（程序的动态，变量）" class="headerlink" title="1. 程序漏洞从哪里来（程序的动态，变量）"></a>1. 程序漏洞从哪里来（程序的动态，变量）</h4><ul>
-<li>罪恶的根源：变量</li>
-<li>数据与代码边界不清（输入数据或者代码）</li>
-<li>最简漏洞原理–shell脚本漏洞<ul>
-<li><strong><code>🔺命令：./a.sh 参数</code></strong>（; | &amp;&amp; &amp;）</li>
+<h4 id="1-ptunnle"><a href="#1-ptunnle" class="headerlink" title="1. ptunnle"></a>1. ptunnle</h4><ul>
+<li>Ping tunnel ICMP隧道工具<ul>
+<li>通过ICMP echo（ping requests，8）和reply（ping reply，0）实现隧道</li>
+<li>适用于防火墙只允许ping出站流量的环境</li>
+<li>支持多并发连接、性能优</li>
+<li>支持身份验证</li>
+<li>需要root权限</li>
+<li>支持抓包<ul>
+<li>Win：winpcap</li>
+<li>Linux：libpcap</li>
+</ul>
+</li>
+<li>工作过程（指定Proxy的时候，需要指定目的地，客户端指定）<ul>
+<li>Proxy、Client、Destination</li>
 </ul>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">echo $1</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<pre><code>./a.sh ; pwd →  /root</code></pre></blockquote>
-<h4 id="2-缓存区溢出"><a href="#2-缓存区溢出" class="headerlink" title="2. 缓存区溢出"></a>2. 缓存区溢出</h4><ul>
-<li>当缓冲区边界限制不严格时，由于变量传入畸形数据或程序运行错误，导致缓存区“撑爆”，从而覆盖了相邻内存区域的数据；</li>
-<li>成功修改内存数据，可造成进程劫持，执行恶意代码，获取服务器控制权限等后果</li>
+</li>
+<li>服务器<ul>
+<li><strong><code>🔺命令：ptunnel -x 1234</code></strong>  </li>
 </ul>
-<h4 id="3-如何发现漏洞"><a href="#3-如何发现漏洞" class="headerlink" title="3. 如何发现漏洞"></a>3. 如何发现漏洞</h4><ul>
-<li>源码审计（源码 → 使用了不安全的函数，对用户数据进行过滤，编码）</li>
-<li>逆向工程（打包后的程序 → 反汇编 ）</li>
-<li>模糊测试（在新的OS环境中，在OS中进行安装，用工具进行监视，调试，插入）<ul>
-<li>向程序堆栈半随机的数据，根据内存变化判断溢出</li>
-<li>数据生成器：生成随机，半随机数据（编程语言实现打向程序）</li>
-<li>测试工具：识别溢出漏洞（动态调试工具）</li>
+</li>
+<li>客户端<ul>
+<li><strong><code>🔺命令：sudo ptunnel -p proxy -lp 2222 -da destination -dp 22 -x 1234</code></strong>  </li>
+</ul>
+</li>
+<li>嵌套SSH隧道<ul>
+<li><strong><code>🔺命令：ssh -CNfg -D 7000 root@127.0.0.1 -p 2222</code></strong>  </li>
+</ul>
+</li>
+<li>▲ ptunnel直到目前的最新版仍存在拒绝服务漏洞<ul>
+<li>0.72</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://www.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=8ba4_1t-c8RHceWGXkik2ykLxyWEAjf4TnqoBi1zNfQVEBnHS9tbhe5OUuKYQrJUxXj3mkDJmjX3ZxXSZMWEtq5jNn6k0yiKkppgwTjp3MatPGpboLWVGw&file_name=/ptunnle.PNG" alt="ptunnel工作过程"></p>
+<h4 id="2-实验环境准备"><a href="#2-实验环境准备" class="headerlink" title="2. 实验环境准备"></a>2. 实验环境准备</h4><ul>
+<li>Kali（Proxy&amp;Destinatiom）<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+</ul>
+</li>
+<li>Mono防火墙<ul>
+<li>第一个网卡为Hosy-only方式，第二个网卡为Bridge桥接方式，桥接到无线网络，检查</li>
+</ul>
+</li>
+<li>Kali（内网）<ul>
+<li>网卡方式为Host-only方式，检查网络</li>
+<li>浏览器访问mono，检查防火墙规则<ul>
+<li>Protocol → ICMP</li>
+<li>Sourece → LAN subnet</li>
+<li>LAN DNS -&gt; WAM PING</li>
+</ul>
+</li>
+<li>ping/上网尝试</li>
+</ul>
+</li>
+<li>Window XP SP3<ul>
+<li>网卡方式为Host-only方式，检查网络</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-实验"><a href="#3-实验" class="headerlink" title="3. 实验"></a>3. 实验</h4><ul>
+<li>Kali（Proxy&amp;Destinatiom）<ul>
+<li>服务器：<strong><code>🔺命令：ptunnel -x 1234</code></strong> </li>
+<li>启动Wireshark抓包，查看发送的数据包内容（ICMP数据包）</li>
+</ul>
+</li>
+<li>Kali（内网）<ul>
+<li><strong><code>🔺命令：sudo ptunnel -h</code></strong> </li>
+<li>客户端：<strong><code>🔺命令：sudo ptunnel -p Kali的IP -lp 2222 -da 192.168.0.1 -dp 80 -x 1234</code></strong>  </li>
+<li>浏览器访问127.0.0.1:2222进行尝试</li>
+</ul>
+</li>
+<li>Kali（Proxy&amp;Destinatiom）<ul>
+<li>开启SSH（修改SSH配置文件）</li>
+</ul>
+</li>
+<li>Kali（内网）<ul>
+<li><strong><code>🔺命令：sudo ptunnel -p Kali的IP -lp 2222 -da Kali的IP -dp 22 -x 1234</code></strong> </li>
+<li><strong><code>🔺命令：ssh -CNfg -D 7000 root@127.0.0.1 -p 2222</code></strong> </li>
+</ul>
+</li>
+<li>Window XP SP3<ul>
+<li>设置浏览器Internet代理，用内网Kali的IP:7000，上网尝试</li>
 </ul>
 </li>
 </ul>
@@ -420,8 +483,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81%E4%BA%94)%EF%BC%9A%E4%B8%BB%E6%9C%BA%E5%8F%91%E7%8E%B0--%E4%B8%89%E5%B1%82%E5%8F%91%E7%8E%B0/" rel="next" title="Kali Linux笔记(十五)：主机发现--三层发现">
-                <i class="fa fa-chevron-left"></i> Kali Linux笔记(十五)：主机发现--三层发现
+              <a href="/2020/02/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%BA%8C)%EF%BC%9A%E9%9A%A7%E9%81%93%E4%BC%A0%E8%BE%93%E5%B7%A5%E5%85%B7--SOCAT/" rel="next" title="Kali Linux笔记(七十二)：隧道传输工具--SOCAT">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(七十二)：隧道传输工具--SOCAT
               </a>
             
           </div>
@@ -429,10 +492,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/12/11/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E4%B8%83)%EF%BC%9AWindow%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA/" rel="prev" title="Kali Linux笔记(二十七)：Window缓冲区溢出">
-                Kali Linux笔记(二十七)：Window缓冲区溢出 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -602,7 +661,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-程序漏洞从哪里来（程序的动态，变量）"><span class="nav-number">1.</span> <span class="nav-text">1. 程序漏洞从哪里来（程序的动态，变量）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-缓存区溢出"><span class="nav-number">2.</span> <span class="nav-text">2. 缓存区溢出</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-如何发现漏洞"><span class="nav-number">3.</span> <span class="nav-text">3. 如何发现漏洞</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-ptunnle"><span class="nav-number">1.</span> <span class="nav-text">1. ptunnle</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-实验环境准备"><span class="nav-number">2.</span> <span class="nav-text">2. 实验环境准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-实验"><span class="nav-number">3.</span> <span class="nav-text">3. 实验</span></a></li></ol></div>
             
 
           </div>

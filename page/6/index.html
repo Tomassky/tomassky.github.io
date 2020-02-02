@@ -240,6 +240,270 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81%E5%85%AD)%EF%BC%9A%E4%B8%BB%E6%9C%BA%E5%8F%91%E7%8E%B0--%E5%9B%9B%E5%B1%82%E5%8F%91%E7%8E%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81%E5%85%AD)%EF%BC%9A%E4%B8%BB%E6%9C%BA%E5%8F%91%E7%8E%B0--%E5%9B%9B%E5%B1%82%E5%8F%91%E7%8E%B0/" itemprop="url">Kali Linux笔记(十六)：主机发现--四层发现</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-10T08:13:38+08:00">
+                2019-12-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  996 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  5 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别）"><a href="#1-发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别）" class="headerlink" title="1. 发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别）"></a>1. 发现-四层发现（不对端口状态进行识别，主要是对IP是否在线进行识别）</h4><ul>
+<li>优点<ul>
+<li>可路由且结果可靠</li>
+<li>不太可能被防火墙过滤</li>
+<li>甚至可以发现所有端口都被过滤的主机</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>基于状态过滤的防火墙可能过滤扫描</li>
+<li>全端口扫描速度慢</li>
+</ul>
+</li>
+<li>TCP（正常过程：SYN–SYN/ACK–ACK）<ul>
+<li>未经请求的ACK–RST</li>
+<li>SYN–SYN/ACK、RST</li>
+</ul>
+</li>
+<li>UDP<ul>
+<li>ICMP端口不可达、一去不复返（被识别主机端口未开放UDP服务）</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-发现-四层发现（Scapy-TCP）"><a href="#2-发现-四层发现（Scapy-TCP）" class="headerlink" title="2. 发现-四层发现（Scapy-TCP）"></a>2. 发现-四层发现（Scapy-TCP）</h4><ul>
+<li>ACK–TCP Port–RST</li>
+<li>Scapy<ul>
+<li>i=IP()</li>
+<li>i.dst=”IP地址”</li>
+<li>t=TCP()</li>
+<li>t.flags=”A”</li>
+<li>r=(i/f)</li>
+<li>a=sr1(r)</li>
+<li>a.display()</li>
+</ul>
+</li>
+<li>a=sr1(IP(dst=”IP地址”)/TCP(dport=80,flags=”A”),timeout=1)</li>
+<li><strong><code>🔺命令：./ACK_Ping.py IP网段</code></strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./ACK_Ping.py [/24 network address]&quot;</span><br><span class="line">    print &quot;Example - ./ACK_Ping.py 192.168.100.0&quot;</span><br><span class="line">    print &quot;Example will perform a TCP ACK scan of the 192.168.100.0/24 range&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">address=str(sys.argv[1])</span><br><span class="line">prefix=address.split(&quot;.&quot;)[0]+&quot;.&quot;+address.split(&quot;.&quot;)[1]+&quot;.&quot;+address.split(&quot;.&quot;)[2]+&quot;.&quot;</span><br><span class="line"></span><br><span class="line">for addr in range(1,254):</span><br><span class="line">    response=sr1(IP(dst=prefix+str(addr))/TCP(dport=2222,flags=&apos;A&apos;),timeout=0.1,verbose=0)</span><br><span class="line">    try:</span><br><span class="line">      if int(response[TCP].flags)==4:</span><br><span class="line">        print prefix+str(addr)</span><br><span class="line">    except:</span><br><span class="line">        pass</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-发现-四层发现（Scapy-UDP）"><a href="#3-发现-四层发现（Scapy-UDP）" class="headerlink" title="3. 发现-四层发现（Scapy-UDP）"></a>3. 发现-四层发现（Scapy-UDP）</h4><ul>
+<li>UDP–UDP Port–ICMP</li>
+<li>Scapy<ul>
+<li>i=IP()</li>
+<li>u=UDP()</li>
+<li>i.dst=”IP地址”</li>
+<li>u.dport=33333</li>
+<li>r=(i/u)</li>
+<li>a=sr1(r,timeout=1,verbose=1)</li>
+<li>a.display()</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：./UDP_Ping.py IP网段</code></strong>（UDP发现不可靠）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./UDP_Ping.py [/24 network address]&quot;</span><br><span class="line">    print &quot;Example - ./UDP_Ping.py 192.168.100.0&quot;</span><br><span class="line">    print &quot;Example will perform a UDP ICMP scan of the 192.168.100.0/24 range&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">address=str(sys.argv[1])</span><br><span class="line">prefix=address.split(&quot;.&quot;)[0]+&quot;.&quot;+address.split(&quot;.&quot;)[1]+&quot;.&quot;+address.split(&quot;.&quot;)[2]+&quot;.&quot;</span><br><span class="line"></span><br><span class="line">for addr in range(1,254):</span><br><span class="line">    response=sr1(IP(dst=prefix+str(addr))/UDP(dport=33333),timeout=0.1,verbose=0)</span><br><span class="line">    try:</span><br><span class="line">      if int(response[IP].proto)==1:</span><br><span class="line">        print prefix+str(addr)</span><br><span class="line">    except:</span><br><span class="line">        pass</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-发现-四层发现（Nmap）"><a href="#4-发现-四层发现（Nmap）" class="headerlink" title="4. 发现-四层发现（Nmap）"></a>4. 发现-四层发现（Nmap）</h4><ul>
+<li><strong><code>🔺命令：nmap IP地址-254 -PU53（对于UDP53端口）-sn</code></strong></li>
+<li><strong><code>🔺命令：nmap IP地址-254 -PA80（对于TCP80端口）-sn</code></strong></li>
+<li><strong><code>🔺命令：nmap -iL iplist.txt -PA80 -sn</code></strong></li>
+</ul>
+<p>▲ 2019.12.3 Nmap局域网，无论是TCP还是UDP，发送的都是DNS的包，局域网内是发给网关<br>▲ 2019.12.3 Nmap外网，UDP查询时发送DNS包，TCP发送TCP包</p>
+<blockquote>
+<pre><code>nmap IP地址 -P0 -sn Ping层的发现
+nmap IP地址 -PS -sn SCTP发现
+nmap IP地址 -PE -sn ICMP echo
+nmap IP地址 -PP -sn 时间戳
+namp IP地址 -PM -sn 子网掩码发现
+nmap 192.168.100.1-254 -PA80 -sn | grep &quot;Nmap&quot; | grep -v &quot;Starting&quot; | grep -v &quot;done&quot;| cut -d &quot; &quot; -f 6 | cut -d &quot;(&quot; -f 2| cut -d &quot;)&quot; -f 1 &gt; iplist.txt</code></pre></blockquote>
+<h4 id="5-发现-四层发现（hping3）"><a href="#5-发现-四层发现（hping3）" class="headerlink" title="5. 发现-四层发现（hping3）"></a>5. 发现-四层发现（hping3）</h4><ul>
+<li><strong><code>🔺命令：hping3 --udp IP地址 -c 1</code></strong></li>
+<li><strong><code>🔺命令：for addr in $(seq 1 254);do hping3 --udp 1.1.1.$addr -c 1 &gt;&gt;r.txt;done</code></strong><ul>
+<li><strong><code>🔺命令：grep Unreachable r.txt | cut -d &quot;&quot; -f 5 | cut -d &quot;=&quot; -f 2</code></strong></li>
+<li><strong><code>🔺命令：./udp_hping.sh IP网段</code></strong></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#！/bin/bash</span><br><span class="line">if [ &quot;$#&quot; -ne 1 ];then</span><br><span class="line">    echo &quot;USAGE - ./udp_hping.sh [/24 network address]&quot;</span><br><span class="line">    echo &quot;Example - ./udp_hping.sh 192.168.100.0&quot;</span><br><span class="line">    echo &quot;Example will perform an UDP scan of the 192.168.100.0/24 network and output.txt file&quot;</span><br><span class="line">    exit</span><br><span class="line">fi</span><br><span class="line">prefix=$(echo $1 | cut -d &quot;.&quot; -f 1-3)</span><br><span class="line">for addr in $(seq 1 254);do</span><br><span class="line">    hping3 $prefix.$addr --udp -c 1 &gt;&gt; r.txt;</span><br><span class="line">done</span><br><span class="line">grep Unreachable r.txt | cut -d &quot;&quot; -f 5 | cut -d &quot;=&quot; -f 2 &gt;&gt; output.txt</span><br><span class="line">rm r.txt</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong><code>🔺命令：hping3 IP地址 -c 1</code></strong>（TCP，Flag 0–ACK、RST）<ul>
+<li><strong><code>🔺命令：hping3 IP地址</code></strong></li>
+<li><strong><code>🔺命令：./tcp_hping.sh IP网段</code></strong></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#！/bin/bash</span><br><span class="line">if [ &quot;$#&quot; -ne 1 ];then</span><br><span class="line">    echo &quot;USAGE - ./tcp_hping.sh [/24 network address]&quot;</span><br><span class="line">    echo &quot;Example - ./tcp_hping.sh 192.168.100.0&quot;</span><br><span class="line">    echo &quot;Example will perform an TCP scan of the 192.168.100.0/24 network and output.txt file&quot;</span><br><span class="line">    exit</span><br><span class="line">fi</span><br><span class="line">prefix=$(echo $1 | cut -d &quot;.&quot; -f 1-3)</span><br><span class="line">for addr in $(seq 1 254);do</span><br><span class="line">    hping3 $prefix.$addr -c 1 &gt;&gt; r.txt;</span><br><span class="line">done</span><br><span class="line">grep Unreachable r.txt | cut -d &quot;&quot; -f 5 | cut -d &quot;=&quot; -f 2 &gt;&gt; output.txt</span><br><span class="line">rm r.txt</span><br></pre></td></tr></table></figure>
+
+
+<blockquote>
+<pre><code>hping3不是发ACK的TCP包，是flag0的TCP包，需要收回ACK、RST的TCP包
+nmap和Scapy发的是ACK的TCP包，是flag16的TCP包，需要收回RST的TCP包</code></pre></blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81%E4%B9%9D)%EF%BC%9A%E6%9C%8D%E5%8A%A1%E6%89%AB%E6%8F%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2872,249 +3136,6 @@ AkamaiGHost</code></pre></blockquote>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94)%EF%BC%9A%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94)%EF%BC%9A%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/" itemprop="url">Kali Linux笔记(五)：实验环境</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-09T19:29:25+08:00">
-                2019-12-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  524 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  2 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-准备实验环境"><a href="#1-准备实验环境" class="headerlink" title="1. 准备实验环境"></a>1. 准备实验环境</h4><ul>
-<li>渗透非授权系统的弊端</li>
-<li>搭建自己的实验环境</li>
-</ul>
-<h4 id="2-安装虚拟机"><a href="#2-安装虚拟机" class="headerlink" title="2. 安装虚拟机"></a>2. 安装虚拟机</h4><ul>
-<li>微软最新版软件<ul>
-<li><a href="https://msdn.itellyou.cn" target="_blank" rel="noopener">https://msdn.itellyou.cn</a></li>
-</ul>
-</li>
-<li>windows虚拟机<ul>
-<li><a href="http://dev.modern.ie/tools/vms/" target="_blank" rel="noopener">http://dev.modern.ie/tools/vms/</a>  </li>
-</ul>
-</li>
-<li>安装自己的虚拟机<ul>
-<li>win XP</li>
-<li>win 7</li>
-<li>win 2003</li>
-</ul>
-</li>
-<li>Linux虚拟机<ul>
-<li><a href="http://www.turnkeylinux.org" target="_blank" rel="noopener">http://www.turnkeylinux.org</a></li>
-<li>Ubuntu（Lamp安装）▲2019.11.25数据库无法登陆</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>Ubuntu Server（netstat -anol）
-1.apt-get install ssh 
-2.apt-get install apache2 apache2-utils（若报错，则vi /etc/apache/conf-available/fqdn.conf → ServerName localhost → a2enconf fqdn）
-3.apt-get install mysql-sever libapache2-mod-auth-mysql php5-mysql ▲2019.11.25未找到php5-mysql  ▲2019.11.25数据库无法登陆
-4.mysql install_db（创建数据库）
-5.mysql_security_installation（数据库安全设置）
-6.apt-get install php5 php-mysql php-pear php-mcrypt php-curl ▲2019.11.25未找到php5，替换为php7；未找到php-mcrypt。
-由于mcrypt扩展开发的结束，扩展也从PHP 7.2中删除，并转移到一个非官方的PECL存储库中。但是，你仍然可以在PHP 5.4到PHP 7.1中找到mcrypt扩展。PHP 7.2已经发布，但是它不包含mcrypt扩展。对于PHP 7.2+， PHP使用libsodium作为加密库。</code></pre></blockquote>
-<ul>
-<li>Metasploitable2<ul>
-<li><a href="https://sourceforge.net/projects/metasploitable/metasploitable-linux-2.0.0.zip" target="_blank" rel="noopener">https://sourceforge.net/projects/metasploitable/metasploitable-linux-2.0.0.zip</a></li>
-<li>问题：/var/www/mutilltdae/config.inc（配置文件：dbname=owasp10）</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-模拟真实网络"><a href="#3-模拟真实网络" class="headerlink" title="3. 模拟真实网络"></a>3. 模拟真实网络</h4><ul>
-<li><p>M0n0wall防火墙（需要三个Host-only网卡，一个桥接网卡，10.1.1.1/24 and 10.1.2.1/24）</p>
-<ul>
-<li><a href="https://distrowatch.com/?newsid=08257" target="_blank" rel="noopener">https://distrowatch.com/?newsid=08257</a></li>
-<li>需要三个Host-only网卡，10.1.1.1/24 and 10.1.2.1/24</li>
-<li>一个桥接网卡，连接外网使用</li>
-<li>配置</li>
-</ul>
-<ol>
-<li>1接口指令</li>
-<li>设置vlan</li>
-<li>em0（网卡）→ 10 valan，em1（网卡）→ 11 valan，em2（网卡）→ 13 valan</li>
-<li>指定网卡连接LAN（em1），指定网卡连接WAN（em0），指定网卡连接Option（em2）</li>
-<li>重启后2指令给LAN指定ip，掩码24</li>
-<li>启动dhcp，分配dhcp地址</li>
-<li>3指令给WebGui设置密码 → mono（默认）</li>
-<li>Kali开启Host-only，需要跟LAN口同在一个网络连接上</li>
-<li>WebGUI配置Optional接口，开启，配置IP地址</li>
-<li>设置网络防火墙规则，PASS,WAN,ANY,LAN subnet,ANY</li>
-<li>WAN设置，Block privat networks去掉勾选</li>
-</ol>
-</li>
-</ul>
-<h4 id="4-背靠背防火墙（双层异构）"><a href="#4-背靠背防火墙（双层异构）" class="headerlink" title="4. 背靠背防火墙（双层异构）"></a>4. 背靠背防火墙（双层异构）</h4><ul>
-<li>Pfsense<ul>
-<li><a href="https://pfsense.org/" target="_blank" rel="noopener">https://pfsense.org/</a></li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3169,7 +3190,7 @@ AkamaiGHost</code></pre></blockquote>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">77</span>
+                  <span class="site-state-item-count">78</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3276,7 +3297,7 @@ AkamaiGHost</code></pre></blockquote>
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">83k</span>
+    <span title="Site words total count">83.3k</span>
   
 </div>
 

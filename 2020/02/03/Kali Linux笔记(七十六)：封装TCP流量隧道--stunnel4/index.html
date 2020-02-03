@@ -79,16 +79,18 @@
 
 
 
-<meta name="description" content="1. skipfish C语言编写（Google开发） 实验性的主动web安全评估工具（相比于商业扫描器不遑相让） 基于Web Application进行扫描 递归爬网 基于字典的探测 速度较快 多路单线程，全异步网络I&#x2F;O，消除内存管理和调度开销 启发式自动内容识别   误报较低  2. skipfish 🔺命令：skipfish -o（存放工作目录） test http:&#x2F;&#x2F;1.1.1.1">
+<meta name="description" content="1. stunnel4 无需修改原代码的情况下将TCP流量封装于SSL通道内 适用于本身不支持加密传输的应用 支持openssl安全特性 跨平台 性能优   2. 实验 Mono防火墙 第一个网卡为Hosy-only方式，第二个网卡为Bridge桥接方式，桥接到无线网络，检查   bodhi（stunnel4 Server） 网卡方式为NAT方式，检查网络   metasploit（内网的应用服">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kali Linux笔记(三十九)：Skipfish">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;27&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B9%9D)%EF%BC%9ASkipfish&#x2F;index.html">
+<meta property="og:title" content="Kali Linux笔记(七十六)：封装TCP流量隧道--stunnel4">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;03&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E5%85%AD)%EF%BC%9A%E5%B0%81%E8%A3%85TCP%E6%B5%81%E9%87%8F%E9%9A%A7%E9%81%93--stunnel4&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="1. skipfish C语言编写（Google开发） 实验性的主动web安全评估工具（相比于商业扫描器不遑相让） 基于Web Application进行扫描 递归爬网 基于字典的探测 速度较快 多路单线程，全异步网络I&#x2F;O，消除内存管理和调度开销 启发式自动内容识别   误报较低  2. skipfish 🔺命令：skipfish -o（存放工作目录） test http:&#x2F;&#x2F;1.1.1.1">
+<meta property="og:description" content="1. stunnel4 无需修改原代码的情况下将TCP流量封装于SSL通道内 适用于本身不支持加密传输的应用 支持openssl安全特性 跨平台 性能优   2. 实验 Mono防火墙 第一个网卡为Hosy-only方式，第二个网卡为Bridge桥接方式，桥接到无线网络，检查   bodhi（stunnel4 Server） 网卡方式为NAT方式，检查网络   metasploit（内网的应用服">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-01-05T02:46:55.222Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;www.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=3f72W09Ypd4_m6RHZRqwRoRkZnmzeAu187W9ZcPJowoFAg0MJC4grBY12IBUcHbQnNJh_4gzoy_Wu-ZPj2FaFevlgbP_Dmtge6QNiQvTMbxe_uA00GlcNSA&amp;file_name=&#x2F;stunnel4.PNG">
+<meta property="og:updated_time" content="2020-02-03T12:03:04.049Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;www.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=3f72W09Ypd4_m6RHZRqwRoRkZnmzeAu187W9ZcPJowoFAg0MJC4grBY12IBUcHbQnNJh_4gzoy_Wu-ZPj2FaFevlgbP_Dmtge6QNiQvTMbxe_uA00GlcNSA&amp;file_name=&#x2F;stunnel4.PNG">
 
 
 
@@ -118,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/12/27/Kali Linux笔记(三十九)：Skipfish/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/02/03/Kali Linux笔记(七十六)：封装TCP流量隧道--stunnel4/"/>
 
 
 
 
 
-  <title>Kali Linux笔记(三十九)：Skipfish | Tomas'Blog</title>
+  <title>Kali Linux笔记(七十六)：封装TCP流量隧道--stunnel4 | Tomas'Blog</title>
   
 
 
@@ -243,7 +245,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B9%9D)%EF%BC%9ASkipfish/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E5%85%AD)%EF%BC%9A%E5%B0%81%E8%A3%85TCP%E6%B5%81%E9%87%8F%E9%9A%A7%E9%81%93--stunnel4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -260,7 +262,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(三十九)：Skipfish</h1>
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(七十六)：封装TCP流量隧道--stunnel4</h1>
         
 
         <div class="post-meta">
@@ -272,8 +274,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-27T10:59:15+08:00">
-                2019-12-27
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-03T20:05:20+08:00">
+                2020-02-03
               </time>
             
 
@@ -326,7 +328,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  427 字
+                  569 字
                 </span>
               
 
@@ -342,7 +344,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1 分钟
+                  2 分钟
                 </span>
               
             </div>
@@ -364,59 +366,111 @@
 
       
         <hr>
-<h4 id="1-skipfish"><a href="#1-skipfish" class="headerlink" title="1. skipfish"></a>1. skipfish</h4><ul>
-<li>C语言编写（Google开发）</li>
-<li>实验性的主动web安全评估工具（相比于商业扫描器不遑相让）</li>
-<li>基于Web Application进行扫描</li>
-<li>递归爬网</li>
-<li>基于字典的探测</li>
-<li>速度较快<ul>
-<li>多路单线程，全异步网络I/O，消除内存管理和调度开销</li>
-<li>启发式自动内容识别</li>
+<h4 id="1-stunnel4"><a href="#1-stunnel4" class="headerlink" title="1. stunnel4"></a>1. stunnel4</h4><ul>
+<li>无需修改原代码的情况下将TCP流量封装于SSL通道内</li>
+<li>适用于本身不支持加密传输的应用</li>
+<li>支持openssl安全特性</li>
+<li>跨平台</li>
+<li>性能优</li>
+</ul>
+<p><img src="http://www.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=3f72W09Ypd4_m6RHZRqwRoRkZnmzeAu187W9ZcPJowoFAg0MJC4grBY12IBUcHbQnNJh_4gzoy_Wu-ZPj2FaFevlgbP_Dmtge6QNiQvTMbxe_uA00GlcNSA&file_name=/stunnel4.PNG" alt="stunnel4"></p>
+<h4 id="2-实验"><a href="#2-实验" class="headerlink" title="2. 实验"></a>2. 实验</h4><ul>
+<li>Mono防火墙<ul>
+<li>第一个网卡为Hosy-only方式，第二个网卡为Bridge桥接方式，桥接到无线网络，检查</li>
 </ul>
 </li>
-<li>误报较低</li>
-</ul>
-<h4 id="2-skipfish"><a href="#2-skipfish" class="headerlink" title="2. skipfish"></a>2. skipfish</h4><ul>
-<li><strong><code>🔺命令：skipfish -o（存放工作目录） test http://1.1.1.1</code></strong></li>
-<li><strong><code>🔺命令：skipfish -o test @url.txt</code></strong></li>
-<li><strong><code>🔺命令：skipfish -o test -S（指定只读字典）complet.wl -W（写成新的字典） a.wl http://1.1.1.1  #字典</code></strong></li>
-<li>参数<ul>
-<li>-I：只检查包含’string’的URL</li>
-<li>-X：不检查包含’string’的URL  #logout</li>
-<li>-K：不对指定参数进行Fuzz测试</li>
-<li>-D：跨站点爬取另外一个域（有连接则会跳过去爬取 ）</li>
-<li>-l：每秒最大请求数</li>
-<li>-m：每IP最大并发连接数</li>
-<li>–config：指定配置文件</li>
+<li>bodhi（stunnel4 Server）<ul>
+<li>网卡方式为NAT方式，检查网络</li>
 </ul>
 </li>
-<li>身份认证（http认证）<ul>
-<li><strong><code>🔺命令：skipfish -A（http身份认证信息） user:pass -o test http://1.1.1.1</code></strong></li>
+<li>metasploit（内网的应用服务器，mysql）<ul>
+<li>网卡方式为Host-only方式，检查网络</li>
 </ul>
 </li>
-<li>身份认证（Cookie认证）    <ul>
-<li><strong><code>🔺命令：skipfish -C（Cookie信息）&quot;name=var&quot; -o test http://1.1.1.1</code></strong></li>
+<li>bodhi（stunnel4 Server）<ul>
+<li><strong><code>🔺命令：apt-get install stunnel4</code></strong></li>
+<li>网卡方式修改为Host-only方式，检查网络</li>
+<li>浏览器访问mono防火墙</li>
+<li>编辑上一个小节的NAT规则<ul>
+<li>Protocol → TCP</li>
+<li>External port range → from:3306</li>
+<li>NAT IP → Metasploit的IP地址</li>
+<li>Local port → 3306</li>
+<li>保存更改的应用</li>
 </ul>
 </li>
-<li>身份认证参数（表单认证） <ul>
-<li>–auth-form <URL> </li>
-<li>–auth-user-field &lt;表单代码名&gt; （通过form里面的代码名）</li>
-<li>–auth-user <username> （提交表单的用户名）</li>
-<li>–auth-pass-field &lt;表单代码名&gt; （通过form里面的代码名）</li>
-<li>–auth-pass <password>  （提交表单的密码）</li>
-<li>–auth-verify-url <URL> （提交成功后显示的界面）</li>
-<li>–auth-form-target <URL>（通过form里面的action确定）</li>
+<li>编辑上一小节的Rules规则（WAN口）<ul>
+<li>Destination port range → from:other 3306/to:3306</li>
+<li>保存更改的应用</li>
 </ul>
 </li>
 </ul>
-<blockquote>
-<pre><code>表单代码名可通过查看界面源代码元素去获得，查看表单设置的属性</code></pre></blockquote>
-<ul>
-<li>扫描结束太快<ul>
-<li>触发了目标站点的连接数限制，降低-m -l数值</li>
+</li>
+<li>Kali（stunnel4 Client）<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>开启Wireshark抓包（ip.address=mono的WAN的IP）</li>
+<li><strong><code>🔺命令：mysql -u root -h mono的WAN的IP</code></strong></li>
+<li><strong><code>🔺命令：show databases;</code></strong></li>
+<li>▲ Wireshark的TCP Stream可以查看到为明文信息</li>
 </ul>
 </li>
+<li>bodhi（stunnel4 Server）<ul>
+<li>生成证书：<strong><code>🔺命令：openssl req -new –days 365 -nodes -x509 -out /etc/stunnel/ stunnel.pem -keyout /etc/stunnel/stunnel.pem</code></strong></li>
+<li>创建配置文件：/etc/stunnel/stunnel.conf<ul>
+<li>cert = /etc/stunnel/stunnel.pem </li>
+<li>setuid = stunnel4 </li>
+<li>setgid = stunnel4 </li>
+<li>pid = /var/run/stunnel4/stunnel4.pid </li>
+<li>[mysqls] </li>
+<li>accept  = 0.0.0.0:443</li>
+<li>connect = Metasploit的IP:3306</li>
+</ul>
+</li>
+<li>stunnel4自动启动<ul>
+<li>/etc/default/stunnel4 → ENABLED=1</li>
+</ul>
+</li>
+<li>启动stunnel4服务端<ul>
+<li><strong><code>🔺命令：service stunnel4 start</code></strong>（netstat -pantu进行查看是否开启）</li>
+</ul>
+</li>
+<li>浏览器登陆mono修改WAN的NAT<ul>
+<li>External port range → HTTPS/HTTPS</li>
+<li>NAT IP → bodhi的IP</li>
+<li>保存应用</li>
+</ul>
+</li>
+<li>浏览器登陆mono修改WAN的Rule规则<ul>
+<li>Destination → Address → bodhi的IP</li>
+<li>Destination port range → HTTPS/HTTPS</li>
+<li>保存应用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Kali（stunnel4 Client）<ul>
+<li>创建配置文件：/etc/stunnel/stunnel.conf<ul>
+<li>client = yes </li>
+<li>[mysqls]    </li>
+<li>accept = 3306  </li>
+<li>connect = mono的IP:443 </li>
+</ul>
+</li>
+<li>客户端自动启动<ul>
+<li>/etc/default/stunnel4 → ENABLED=1</li>
+</ul>
+</li>
+<li>启动stunnel4客户端<ul>
+<li><strong><code>🔺命令：service stunnel4 stop / start</code></strong>（netstat -pantu进行查看是否开启）</li>
+</ul>
+</li>
+<li>开启Wireshark抓包（ip.address=mono的IP）</li>
+<li><strong><code>🔺命令：mysql -u root -h 127.0.0.1</code></strong></li>
+<li><strong><code>🔺命令：show databases;</code></strong></li>
+<li>▲ Wireshark的TCP Stream可以查看到为加密信息</li>
+</ul>
+</li>
+<li>▲ 2020.2.3外网WAN访问防火墙WAN的IP，无法进行访问，进行ping防火墙WAN的IP也无法成功，猜测与防火墙规则有关，后面有关stunnel的实验都未作，猜测VMware自带网卡的问题</li>
 </ul>
 
       
@@ -448,8 +502,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E5%85%AB)%EF%BC%9AVega/" rel="next" title="Kali Linux笔记(三十八)：Vega">
-                <i class="fa fa-chevron-left"></i> Kali Linux笔记(三十八)：Vega
+              <a href="/2020/02/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%BA%94)%EF%BC%9A%E4%B8%80%E7%AB%AF%E5%8F%A3%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%9A%A7%E9%81%93--sslh/" rel="next" title="Kali Linux笔记(七十五)：一端口多服务隧道--sslh">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(七十五)：一端口多服务隧道--sslh
               </a>
             
           </div>
@@ -457,10 +511,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E5%85%AD)%EF%BC%9AWeb%E6%B8%97%E9%80%8F%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E5%8F%8A%E5%B7%A5%E5%85%B7/" rel="prev" title="Kali Linux笔记(三十六)：Web渗透实验环境及工具">
-                Kali Linux笔记(三十六)：Web渗透实验环境及工具 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -630,7 +680,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-skipfish"><span class="nav-number">1.</span> <span class="nav-text">1. skipfish</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-skipfish"><span class="nav-number">2.</span> <span class="nav-text">2. skipfish</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-stunnel4"><span class="nav-number">1.</span> <span class="nav-text">1. stunnel4</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-实验"><span class="nav-number">2.</span> <span class="nav-text">2. 实验</span></a></li></ol></div>
             
 
           </div>

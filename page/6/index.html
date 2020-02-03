@@ -240,6 +240,205 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/11/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E5%85%AD)%EF%BC%9A%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E4%BB%8B%E7%BB%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/11/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E5%85%AD)%EF%BC%9A%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E4%BB%8B%E7%BB%8D/" itemprop="url">Kali Linux笔记(二十六)：缓冲区溢出介绍</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-11T13:03:16+08:00">
+                2019-12-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  293 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-程序漏洞从哪里来（程序的动态，变量）"><a href="#1-程序漏洞从哪里来（程序的动态，变量）" class="headerlink" title="1. 程序漏洞从哪里来（程序的动态，变量）"></a>1. 程序漏洞从哪里来（程序的动态，变量）</h4><ul>
+<li>罪恶的根源：变量</li>
+<li>数据与代码边界不清（输入数据或者代码）</li>
+<li>最简漏洞原理–shell脚本漏洞<ul>
+<li><strong><code>🔺命令：./a.sh 参数</code></strong>（; | &amp;&amp; &amp;）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">echo $1</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<pre><code>./a.sh ; pwd →  /root</code></pre></blockquote>
+<h4 id="2-缓存区溢出"><a href="#2-缓存区溢出" class="headerlink" title="2. 缓存区溢出"></a>2. 缓存区溢出</h4><ul>
+<li>当缓冲区边界限制不严格时，由于变量传入畸形数据或程序运行错误，导致缓存区“撑爆”，从而覆盖了相邻内存区域的数据；</li>
+<li>成功修改内存数据，可造成进程劫持，执行恶意代码，获取服务器控制权限等后果</li>
+</ul>
+<h4 id="3-如何发现漏洞"><a href="#3-如何发现漏洞" class="headerlink" title="3. 如何发现漏洞"></a>3. 如何发现漏洞</h4><ul>
+<li>源码审计（源码 → 使用了不安全的函数，对用户数据进行过滤，编码）</li>
+<li>逆向工程（打包后的程序 → 反汇编 ）</li>
+<li>模糊测试（在新的OS环境中，在OS中进行安装，用工具进行监视，调试，插入）<ul>
+<li>向程序堆栈半随机的数据，根据内存变化判断溢出</li>
+<li>数据生成器：生成随机，半随机数据（编程语言实现打向程序）</li>
+<li>测试工具：识别溢出漏洞（动态调试工具）</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81%E4%BA%94)%EF%BC%9A%E4%B8%BB%E6%9C%BA%E5%8F%91%E7%8E%B0--%E4%B8%89%E5%B1%82%E5%8F%91%E7%8E%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2686,297 +2885,6 @@ send 发包不收数据包</code></pre></blockquote>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E4%B8%89)%EF%BC%9AOPENVAS/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E4%B8%89)%EF%BC%9AOPENVAS/" itemprop="url">Kali Linux笔记(二十三)：OPENVAS</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-10T08:13:38+08:00">
-                2019-12-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  638 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  2 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-OPENVAS"><a href="#1-OPENVAS" class="headerlink" title="1. OPENVAS"></a>1. OPENVAS</h4><ul>
-<li>Openvas<ul>
-<li>Nessus项目分支</li>
-<li>管理目标系统的漏洞</li>
-<li>免费开源</li>
-<li>Kali默认安装，但未配置和启动</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-OPENVAS"><a href="#2-OPENVAS" class="headerlink" title="2. OPENVAS"></a>2. OPENVAS</h4><ul>
-<li>安装</li>
-<li>创建证书</li>
-<li>同步弱点数据库NVT</li>
-<li>创建客户端证书</li>
-<li>重建数据库</li>
-<li>备份数据库</li>
-<li>启动服务装入插件</li>
-<li>创建管理员账户</li>
-<li>创建普通用户账号</li>
-<li>配置服务侦听端口</li>
-<li>安装验证</li>
-</ul>
-<blockquote>
-<pre><code>Kali Linux配置OPENVAS，openvas-setup，现在一条命令即可
-OPENVAS每天会发布feed，里面包含由一个或多个NVT</code></pre></blockquote>
-<h4 id="3-OPENVAS"><a href="#3-OPENVAS" class="headerlink" title="3. OPENVAS"></a>3. OPENVAS</h4><ul>
-<li>OpenVAS Manager（负责把其他的组件连接）<ul>
-<li>控制Scanner和其他Manager的中心组件</li>
-<li>控制中心数据库，保存用户配置及扫描结果</li>
-<li>客户端使用基于XML的无状态OMP协议与其通信</li>
-<li>集中排序筛选，使客户端获得一致展现</li>
-</ul>
-</li>
-<li>OpenVAS Scanner（扫描器，可以多个scanner，多级部署）<ul>
-<li>具体执行Network Vulnerability Tests（NVTs）</li>
-<li>NVTs 每天通过更新Feed更新</li>
-<li>受Manager控制</li>
-</ul>
-</li>
-<li>OSP Scanner（scanner扫描器组）<ul>
-<li>可以统一管理多个Scanner</li>
-<li>将一组Scanner作为一个对象交给manager管理</li>
-</ul>
-</li>
-<li>Greenbone Security Assistant（相当于一个服务器端，访问OpenVASManage）<ul>
-<li>提高Web Service</li>
-</ul>
-</li>
-<li>OMP Clients（支持通过API的方式去调用OpenVAS Manager）</li>
-<li>Web Browser（通过GreenBone去访问OpenVAS Manager）</li>
-<li>Feed（NVTS，SCAP CERT,User Data） </li>
-<li>Target System</li>
-<li>OpenVAS CLI<ul>
-<li>omp命令行工具，可实现批处理控制manager</li>
-</ul>
-</li>
-<li>更新很快<ul>
-<li>所有找得到的资料几乎都已不同程度的过时了</li>
-</ul>
-</li>
-</ul>
-<h4 id="4-OPENVAS"><a href="#4-OPENVAS" class="headerlink" title="4. OPENVAS"></a>4. OPENVAS</h4><ul>
-<li>初始化安装<ul>
-<li><strong><code>🔺命令：openvas-setup</code></strong></li>
-</ul>
-</li>
-<li>检查安装结果<ul>
-<li><strong><code>🔺命令：openvas-check-setup</code></strong>（出问题会出现FIX错误项）</li>
-</ul>
-</li>
-<li>查看当前账号<ul>
-<li><strong><code>🔺命令：openvasmd --list-users</code></strong> ▲2019.12.7 无此参数</li>
-</ul>
-</li>
-<li>修改账户密码<ul>
-<li><strong><code>🔺命令：openvas --user=admin --new-password=Password</code></strong></li>
-</ul>
-</li>
-<li>升级<ul>
-<li><strong><code>🔺命令：openvas-feed-update</code></strong></li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>openvasmd -h 可修改账户密码，可增加账户
-9390端口：openvas manager
-9391端口：默认第一scanner
-9392端口：web登陆（https）
-openvas-check-setup | grep Fix 可查看报错的组件
-证书报错的原因：（1）名称与URL地址不一致（2）证书为自签名证书</code></pre></blockquote>
-<h4 id="5-OPENVAS"><a href="#5-OPENVAS" class="headerlink" title="5. OPENVAS"></a>5. OPENVAS</h4><ul>
-<li><strong><code>🔺命令：vi /usr/bin/openvas-start</code></strong>（调整启动服务顺序，对于kali2.0版本以下）<ul>
-<li>Starting OpenVas Services</li>
-<li>3\Starting OpenVas Manager.openvasmd</li>
-<li>2\Starting OpenVas Scanner.openvassd</li>
-<li>1\Starting Greenbone Security Assistant:gsad</li>
-</ul>
-</li>
-<li>openvas-start</li>
-</ul>
-<h4 id="6-OPENVAS"><a href="#6-OPENVAS" class="headerlink" title="6. OPENVAS"></a>6. OPENVAS</h4><ul>
-<li>Configration<ul>
-<li>scan configs → windows_server_scan_configration</li>
-<li>target → windows_xp（Alive Test → Consider Alive，Port List）</li>
-<li>Port List → windows_xp_ports （or OpenVAS Default）</li>
-<li>Schedules → weekly_scan（Period，Duration）</li>
-</ul>
-</li>
-<li>Scan Management<ul>
-<li>Tasks → weekly_windows_scan_task（Scan Target，Schedule，Add results to Asset Management，OpenVAS Scanner，Scan config，Slave，Network Sourece Interface，Order for target hosts，Maximum concurrently executed NVTs per host，Maximum concurrently scanner host）</li>
-</ul>
-</li>
-<li>Configration<ul>
-<li>scan configs → linux_unix_scan_configration</li>
-</ul>
-</li>
-<li>start a short scan（full and fast，需要一个IP） ▲2019.12.7新版在Task Wizard中</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3031,7 +2939,7 @@ openvas-check-setup | grep Fix 可查看报错的组件
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">81</span>
+                  <span class="site-state-item-count">82</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3138,7 +3046,7 @@ openvas-check-setup | grep Fix 可查看报错的组件
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">85.6k</span>
+    <span title="Site words total count">86.5k</span>
   
 </div>
 

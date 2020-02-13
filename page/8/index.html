@@ -240,6 +240,246 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E4%BA%94)%EF%BC%9ANEXPOSE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E4%BA%94)%EF%BC%9ANEXPOSE/" itemprop="url">Kali Linux笔记(二十五)：NEXPOSE</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-10T08:13:38+08:00">
+                2019-12-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  410 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-NEXPOSE"><a href="#1-NEXPOSE" class="headerlink" title="1. NEXPOSE"></a>1. NEXPOSE</h4><ul>
+<li>Rapid7<ul>
+<li>Nexpose</li>
+<li>完整的漏洞管理实现</li>
+</ul>
+</li>
+<li>环境准备<ul>
+<li>建议VM 4G内存</li>
+<li><a href="https://www.rapid7.com/products/nexpose/download/" target="_blank" rel="noopener">https://www.rapid7.com/products/nexpose/download/</a></li>
+<li><a href="https://IP_ADDR:3780（nxadmin/nxpassword,后改为Rapid7@mazhentao）" target="_blank" rel="noopener">https://IP_ADDR:3780（nxadmin/nxpassword,后改为Rapid7@mazhentao）</a></li>
+<li>操作系统账号密码：nexpose</li>
+<li><a href="https://www.rapid7.com/try/nexpose/" target="_blank" rel="noopener">https://www.rapid7.com/try/nexpose/</a></li>
+<li>QHWT-72GT-BHDS-FQLH（激活码进行注册，30天有效期）</li>
+<li>service nexposeconsole.cc restart（重启命令，但初始化时间非常长）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>概念：用扫描器去发现漏洞，用渗透框架去验证漏洞
+▲ 2019.12.8可以注册一个企业邮箱，可申请多个（腾讯。网易等）
+▲ 2019.12.8需要修改密码，至少一个数字，一个大写字母，一个字符，长度大于14位，多次不成功会锁账号 Rapid7@mazhentao
+▲ 2019.12.8只有注册后，才可下载到ova文件</code></pre></blockquote>
+<h4 id="2-Administrator"><a href="#2-Administrator" class="headerlink" title="2. Administrator"></a>2. Administrator</h4><ul>
+<li>Scan Templates<ul>
+<li>Exhaustive → Copy</li>
+<li>General → Name → Types of Checks（Assert Discovery、Vulnerability、WebSpldering、Policies）</li>
+<li>Asset Discovery（主机发现）</li>
+<li>Service Discovery（服务发现）</li>
+<li>Discovery Performance（发现选项）</li>
+<li>Vulnerability Checks（unsafe or safe，<strong>！Select Checks！</strong>）</li>
+<li>File Searching（文件搜索）</li>
+<li>Spam Relaying（垃圾邮件）</li>
+<li>Database Servers（数据库）</li>
+<li>Mail Server（邮件服务器）</li>
+<li>CVS Serverr（版本管理服务器）</li>
+<li>DHCP Server</li>
+<li>Telnet Server</li>
+<li>Web Spldering（网页爬网，有可能造成CC攻击）</li>
+<li>Oracle Policy（Oracle 策略）</li>
+<li>Lotus Domino Policy（Lotus Domino 策略）</li>
+<li>Windows Group Policy（window 组策略）</li>
+<li>CIFS/SMB Account Policy（CIFS/SMB 账号策略）</li>
+<li>AS/400 Policy（AS/400 机型策略）</li>
+<li>Unix Policy（Unix 策略）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>企业在美国上市需要过塞班思发案，也即404法案，Sarbans-Oxley compliance
+支付行业要过PCI ASV Extemal Audit/PCI Internal Aduit</code></pre></blockquote>
+<ul>
+<li>Sites（在home）<ul>
+<li>Create sites</li>
+<li>INFO &amp; SECURITY</li>
+<li>ASSETS</li>
+<li>AUTHENTICATION（Web Application → HTML FORM/HTTP HEADERS（SEESIONID））</li>
+<li>TEMPLATES</li>
+<li>ENGINES（扫描引擎）</li>
+<li>ALERTS（到点，可以用于发送mail）</li>
+<li>SCHEDULE</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-扫描结果分析"><a href="#3-扫描结果分析" class="headerlink" title="3. 扫描结果分析"></a>3. 扫描结果分析</h4><ul>
+<li>False Positive：误报</li>
+<li>False negative：漏报</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E5%9B%9B)%EF%BC%9ANESSUS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2674,363 +2914,6 @@ tor可进行代理翻墙</code></pre></blockquote>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81%E4%BA%8C)%EF%BC%9ARECON-NG/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81%E4%BA%8C)%EF%BC%9ARECON-NG/" itemprop="url">Kali Linux笔记(十二)：RECON-NG</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-09T19:29:25+08:00">
-                2019-12-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  835 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-RECON-NG（▲2019-11-30需自行安装moudles）"><a href="#1-RECON-NG（▲2019-11-30需自行安装moudles）" class="headerlink" title="1. RECON-NG（▲2019.11.30需自行安装moudles）"></a>1. RECON-NG（▲2019.11.30需自行安装moudles）</h4><ul>
-<li><p>全特性的web侦擦框架（综合工具，模块去完成）</p>
-</li>
-<li><p>基于Python开发</p>
-</li>
-<li><p>Web信息搜索框架（通过google搜索引擎）</p>
-</li>
-<li><p>命令格式与msf一致（需熟练使用）</p>
-</li>
-<li><p>基于python开发</p>
-</li>
-<li><p>使用方法：</p>
-<ul>
-<li>模块（不同模块调用不同的搜索引擎，调用API接口）</li>
-<li>数据库</li>
-<li>报告</li>
-</ul>
-</li>
-<li><p>全局选项</p>
-<ul>
-<li>recon-ng （进入default模块）</li>
-<li>back（退回上一个模块）、exit（退出recon-ng）</li>
-<li>add（向数据库插入表）、del   ▲2019.11.30 集成于keys</li>
-<li>keys（framework API keys，搜索引擎的API）</li>
-<li>load（自己编写的模块可以load进来） ▲2019.11.30 集成于modules</li>
-<li>pdb（python的debug模式进行调试）</li>
-<li>query（查询数据库，跟上标准SQL语言） ▲2019.11.30 集成于db</li>
-<li>record（在recon-ng下的命令进行记录，-r参数进行调用） ▲2019.11.30 修改为script</li>
-<li>reload（修改模块后可以reload） ▲2019.11.30 集成于modules</li>
-<li>resourece（在框架下可以用-r调用recond文件）▲2019.11.30删除此模块</li>
-<li>search（seach相关的模块有哪些） ▲2019.11.30 集成于marketplace</li>
-<li>set（设置选项） ▲2019.11.30 集成于options</li>
-<li>shell（在框架下执行shell 命令）</li>
-<li>show（显示当前框架的各种信息）</li>
-<li>snapshots（快照）</li>
-<li>spool（资源池划分，也可以导出）</li>
-<li>unset（清楚设置） ▲2019.11.30 集成于options</li>
-<li>use（使用各种模块） ▲2019.11.30 删除此模块</li>
-<li>workspaces（管理工作区）</li>
-</ul>
-</li>
-<li><p>recon-ng -h</p>
-<ul>
-<li>-h（help选项）</li>
-<li>-v（version版本）</li>
-<li>-w（load/create a workspace）</li>
-<li>-r filename（workspace，创建一个工作区）</li>
-<li>–no-check（disable version check）</li>
-<li>–no-analytics（disable analytics reporting，不检查报告模块）</li>
-</ul>
-</li>
-<li><p>recon-ng -w（创建工作区） sina</p>
-</li>
-<li><p>workspaces list（查看工作区）</p>
-</li>
-<li><p>keys list（支持网站api）</p>
-</li>
-<li><p>keys add API类型 具体API</p>
-</li>
-<li><p>marketplace search google</p>
-</li>
-<li><p>shell ls</p>
-</li>
-<li><p>show options（当前可以option选项）</p>
-</li>
-<li><p>options set PROXY 127.0.0.1 8087（设置代理）</p>
-</li>
-<li><p>options set USER-AGETN “某一浏览器的字段”</p>
-</li>
-<li><p>unset USER-AGENT（清空设置）</p>
-</li>
-<li><p>snapshots take（作一次snapshots快照）</p>
-</li>
-<li><p>snapshots load（使用以前的快照）</p>
-</li>
-</ul>
-<blockquote>
-<pre><code>recon-ng两下Tab键可以看到所有的命令
-全局模式下的options：DEBUG、NAMESERVER、PROXY、THREADS、TIMEOUT、USER-AGENT、VERBOSE
-DEBUG--python的debug调试
-NAMESERVER--域名解析服务器
-PROXY--代理 ▲2019.11.30代理暂无法使用
-THREADS--线程，搜索引擎有保护机制
-TIMEOUT--超时
-USER-AGENT--需要进行伪装，user-agent字段</code></pre></blockquote>
-<ul>
-<li><p>use 模块（harketarget模块可用）</p>
-<ul>
-<li>DNS查询</li>
-</ul>
-<ol>
-<li>Google</li>
-<li>Baidu</li>
-<li>Bing</li>
-<li>Yahoo</li>
-<li>Brute force</li>
-</ol>
-</li>
-</ul>
-<blockquote>
-<p>   Google模式 ▲2019.11.30模块暂不可用</p>
-<ol>
-<li>marketplace search google</li>
-<li>modules load recon/domains-hosts/google_site_web（也可以使用api）</li>
-<li>show options</li>
-<li>show info</li>
-<li>options set SOURCE 域名</li>
-<li>run</li>
-<li>show hosts/query select * from hosts</li>
-</ol>
-</blockquote>
-<blockquote>
-<p>   bing模式 ▲2019.11.30模块暂不可用</p>
-<ol>
-<li>marketplace search bing</li>
-<li>modules load recon/domains-hosts/bing_site_web</li>
-<li>show options</li>
-<li>options set SOURCE 域名</li>
-<li>run</li>
-<li>query select * from hosts where host like ‘%www%’（复杂sql查询）</li>
-</ol>
-</blockquote>
-<blockquote>
-<p>   brute模式（不解析IP地址）</p>
-<ol>
-<li>marketplace search brute</li>
-<li>modules load recon/domains-hosts/brute_hosts</li>
-<li>show options</li>
-<li>options set SOURCE/WORDLIST  </li>
-<li>run</li>
-</ol>
-</blockquote>
-<ul>
-<li>use 模块（harketarget模块可用）<ul>
-<li>解析IP地址（查询数据库，存在负载均衡）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<ol>
-<li>marketplace search resolve</li>
-<li>modules load recon/hosts-hosts/resolve</li>
-<li>show options</li>
-<li>show info</li>
-<li>options set SOURCE query select host from hosts where host like ‘%sina.com.cn%’</li>
-<li>show hosts</li>
-<li>options set SOURCE query select host from hosts</li>
-<li>show hosts</li>
-</ol>
-</blockquote>
-<ul>
-<li>use 模块（harketarget模块可用）<ul>
-<li>联系人</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<ol>
-<li>marketplace search contact</li>
-</ol>
-</blockquote>
-<ul>
-<li>use 模块（harketarget模块可用）<ul>
-<li>报告</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<ol>
-<li>marketplace search report</li>
-<li>modules load reporting/html</li>
-<li>show options</li>
-<li>options set CREATOR 创建者</li>
-<li>options set CUSTOMER 客户</li>
-<li>options set FILENAME 路径</li>
-<li>options set SANITIZE TRUE（是否对私密消息进行mask）</li>
-</ol>
-</blockquote>
-<ul>
-<li>use 模块（harketarget模块可用）<ul>
-<li>API</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3085,7 +2968,7 @@ USER-AGENT--需要进行伪装，user-agent字段</code></pre></blockquote>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-count">94</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3192,7 +3075,7 @@ USER-AGENT--需要进行伪装，user-agent字段</code></pre></blockquote>
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">93.3k</span>
+    <span title="Site words total count">95.3k</span>
   
 </div>
 

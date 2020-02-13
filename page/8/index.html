@@ -240,6 +240,277 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E4%B8%80)%EF%BC%9ANAMP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E4%B8%80)%EF%BC%9ANAMP/" itemprop="url">Kali Linux笔记(二十一)：NMAP</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-10T08:13:38+08:00">
+                2019-12-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  681 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-NMAP"><a href="#1-NMAP" class="headerlink" title="1. NMAP"></a>1. NMAP</h4><ul>
+<li>所有参数</li>
+<li>目标发现<ul>
+<li>-iL <inputfilename>（列表文件作为输入）</li>
+<li>-iR <num hosts>（随机选择目标进行扫描）</li>
+<li>–exclude &lt;host1[,host2]&gt;（扫描网址段不包含）</li>
+<li>–excludefile <exclude_file>（排除文件）</li>
+</ul>
+</li>
+<li>主机发现<ul>
+<li>-sL（不做扫描，列出地址段）</li>
+<li>-sn（ping扫描，不做端口扫描）</li>
+<li>-Pn（彻底扫描地址段，不回包也进行扫描）</li>
+<li>-PS/PA/PU/PY （TCP SYN/ACK，UDP or SCTP发现）</li>
+<li>-P0/PS/PE/PP/PM （Ping层的发现/SCTP发现/ICMP echo/时间戳/子网掩码发现）</li>
+<li>-n/-R （不做DNS解析/自动做反向解析）</li>
+<li>–dns-servers &lt;serv1[,serv2]&gt;（指定DNS解析服务器）</li>
+<li>–system-dns（操作系统默认的DNS解析服务器）</li>
+<li>–traceroute（扫描进行路由追踪）</li>
+</ul>
+</li>
+<li>端口发现<ul>
+<li>sS/sT/sA/sW/sM （TCP SYN/Connect()/ACK/Window/Maimon scans）</li>
+<li>sU （UDP扫描）</li>
+<li>sN/sF/sX （TCP Null，Fin and xmas scans）</li>
+<li>–scanflags <flags> （选择要扫描的flags）</li>
+<li>-sI &lt;zombie host[:probeport]&gt;（僵尸扫描）</li>
+<li>-sY/sZ （SCTP协议参数）</li>
+<li>-s0（IP扫描）</li>
+<li>-b <FTP relay host>（FTP中继扫描）</li>
+</ul>
+</li>
+<li>指定扫描端口<ul>
+<li>-p <port number> U → UDP T → TCP</li>
+<li>–exclude-ports <port ranges> （排除端口）</li>
+<li>-F （快速模式，比较少数量端口）</li>
+<li>-r （连续扫描端口，少于1000个端口）</li>
+<li>–top-ports <number> （扫描1000端口的前面端口）</li>
+<li>–port-ratio <ratio> （扫描更常见的端口）</li>
+</ul>
+</li>
+<li>服务/版本识别<ul>
+<li>-sV （服务特征库匹配）</li>
+<li>-sV –version-intensity <level> （扫描的深度、强度）</li>
+<li>-sV –version-light （intensity=2）</li>
+<li>-sV –version-all （intensity=9）</li>
+<li>-sV –version-trace（扫描过程进行跟踪）</li>
+</ul>
+</li>
+<li>脚本扫描<ul>
+<li>-sC （脚本扫描，一般是–script=default）</li>
+<li>–script=<Lua script> （使用Lua脚本）</li>
+<li>–script-args=&lt;n1=v1[,n2=v2]&gt; （修改参数）</li>
+<li>–script-update （脚本库更新）</li>
+<li>–script-trace （进行路由追踪）</li>
+<li>–script-help=<Lua scripts> （脚本使用教程帮助）</li>
+</ul>
+</li>
+<li>OS 扫描<ul>
+<li>-O （检测OS）</li>
+<li>–osscan-limit （OS检测限制）</li>
+<li>–osscan-guess （OS猜测）</li>
+</ul>
+</li>
+<li>时间和性能<ul>
+<li>-‘s’,’m’,’h’,’ms’ （秒、分、时、毫秒）</li>
+<li>–min-hostgroup/max-hostgroup <size> （并行扫描主机组的数量）</li>
+<li>–min-parallelism/max-parallelism <numprobes> （并行探测数量）</li>
+<li>–min-rtt-timeout/max-rtt-timeout/initial-rtt-timeout <time> （rtt时间）</li>
+<li>–max-retries <tries> （最大回包时间）</li>
+<li>–host-timeout <time> （主机超时时间）</li>
+<li>–scan-delay/–max-scan-delay <time> （主机延迟发包时间）</li>
+<li>–min-rate <number> （最小发包速率）</li>
+<li>–max-rate <number> （最大发包速率）</li>
+</ul>
+</li>
+<li>防火墙/IDS躲避、欺骗<ul>
+<li>-f –mtu <val> （设置传输单元）</li>
+<li>-D &lt;decoy1,decoy2[,ME]&gt; （伪造源地址，增加噪声IP）</li>
+<li>-S <IP Address> （欺骗源地址）</li>
+<li>-e <iface> （指定使用的网卡）</li>
+<li>-g/–source-port <portnum> （指定源端口进行发包）</li>
+<li>–proxies &lt;url1,[url2]&gt; （指定代理服务器）</li>
+<li>–data <hex string> （指定十六进制字符串，在包的后面增加）</li>
+<li>–data-string <string> （增加ACSII码字符串）</li>
+<li>–data-length <num> （数据的长度）</li>
+<li>–ip-options <options> （修改IP的选项）</li>
+<li>–ttl <val> （设置IP的TTL值）</li>
+<li>–spoof-mac &lt;mac address/prefix/vendor name&gt; （欺骗MAC地址）</li>
+<li>–badsum （发送错误的TCP/UDP/SCTP 校验和）</li>
+</ul>
+</li>
+<li>MISC<ul>
+<li>-6 （可以扫IPv6地址）</li>
+<li>-A （OS，version，script，traceroute的组合命令）</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E4%BA%94)%EF%BC%9ANEXPOSE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2737,183 +3008,6 @@ tor可进行代理翻墙</code></pre></blockquote>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81%E4%B8%89)%EF%BC%9AMaltego/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81%E4%B8%89)%EF%BC%9AMaltego/" itemprop="url">Kali Linux笔记(十三)：Maltego</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-09T19:29:25+08:00">
-                2019-12-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  10 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-MELTAGO"><a href="#1-MELTAGO" class="headerlink" title="1. MELTAGO"></a>1. MELTAGO</h4><ul>
-<li>申请账号</li>
-<li>登陆使用</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2968,7 +3062,7 @@ tor可进行代理翻墙</code></pre></blockquote>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-count">95</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3075,7 +3169,7 @@ tor可进行代理翻墙</code></pre></blockquote>
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">95.3k</span>
+    <span title="Site words total count">95.9k</span>
   
 </div>
 

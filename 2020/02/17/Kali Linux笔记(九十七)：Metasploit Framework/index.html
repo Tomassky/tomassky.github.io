@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="操作系统," />
+  <meta name="keywords" content="安全," />
 
 
 
@@ -79,16 +79,21 @@
 
 
 
-<meta name="description" content="第三章、内存技术  覆盖技术  目标：是在较小的可用内存中运行较大的程序。常用于多道程序系统，与分区存储管理配合使用 原理：把程序按照自身逻辑结构，划分为若干个功能上相对独立的程序模块，那些不会同时执行的模块共享同一块内存区域，按时间先后来运行 必要部分（常用功能）的代码和数据常驻内存 可选部分（不常用功能）在其他程序模块中实现，平时存放在外存中，在需要用到时才装入内存 不存在调用关系的模块不必同">
-<meta name="keywords" content="操作系统">
+<meta name="description" content="1. Metasploit简介 目前最流行、最强大、最具扩展性的渗透测试平台软件 基于Metasploit进行渗透测试和漏洞分析的流程和方法 2003年由HD More发布第一版，2007年用ruby语言重写 框架继承了渗透测试标准（PETS）思想 一定程度上统一了渗透测试和漏洞研究的工作环境 新的攻击代码可以比较容易的加入框架   开发活跃版本更新频繁（每周） 早期版本基于社区力量维护，被Ra">
+<meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="第三章、内存技术">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;22&#x2F;%E7%AC%AC%E4%B8%89%E7%AB%A0%E3%80%81%E5%86%85%E5%AD%98%E6%8A%80%E6%9C%AF&#x2F;index.html">
+<meta property="og:title" content="Kali Linux笔记(九十七)：Metasploit Framework">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;17&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%B8%83)%EF%BC%9AMetasploit%20Framework&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="第三章、内存技术  覆盖技术  目标：是在较小的可用内存中运行较大的程序。常用于多道程序系统，与分区存储管理配合使用 原理：把程序按照自身逻辑结构，划分为若干个功能上相对独立的程序模块，那些不会同时执行的模块共享同一块内存区域，按时间先后来运行 必要部分（常用功能）的代码和数据常驻内存 可选部分（不常用功能）在其他程序模块中实现，平时存放在外存中，在需要用到时才装入内存 不存在调用关系的模块不必同">
+<meta property="og:description" content="1. Metasploit简介 目前最流行、最强大、最具扩展性的渗透测试平台软件 基于Metasploit进行渗透测试和漏洞分析的流程和方法 2003年由HD More发布第一版，2007年用ruby语言重写 框架继承了渗透测试标准（PETS）思想 一定程度上统一了渗透测试和漏洞研究的工作环境 新的攻击代码可以比较容易的加入框架   开发活跃版本更新频繁（每周） 早期版本基于社区力量维护，被Ra">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-03T14:30:29.512Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=144aVD96LCB_5xdUWmKebc7BkchWv2QVQtOqNq30xve4KObh2u7BhrX1JMqY0H1NUibxS0qASTL2uCv7gEALUQMlJlr4ndyXh4x71-rFR6DefFqkhxJy4gFHfFaqLzJEd0cAFbqPvAr5oLuNxRHTOlhMn_SjoA&amp;file_name=&#x2F;Metasploit%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%8C%87%E5%8D%97%E4%B8%AD%E6%96%87%E7%89%88.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=84fcBHLJJTY5FAluOqNf2Tw1IALdMGqUsf9wF1A0g3ihI1xneE6PAQmBU28jS3mcyPGMdXP_JkkVvO4d1ISJ8arU1B22FvM6IN2YNv7OH_dpHXF1U-F1AOTIkMpOLcWZNV4jXdNeVWw_PyE-1sAHflwaXdKDHA&amp;file_name=&#x2F;Metasploit%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%8C%87%E5%8D%97%E8%8B%B1%E6%96%87%E7%89%88.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=ea735c3HGYl5hKCwmuyFtToahfu60TTSlvWTOqfWWNafPKL2NPjb7i6KIEG67_ZKQ7h0EM7yCATB3PtW2gVy1CFw0EXvsy3an65x7EFTbtT3asqRSVWuJ4eb1tb_LwAin0zmqEU7OA&amp;file_name=&#x2F;Metasploit%E7%89%88%E6%9C%AC%E5%AF%B9%E6%AF%94.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=b235UCYkpqOIBeYNf7kc5HlxJ0eWYh1S2O-jFz2VRLpa6pUG6JUo5HyE8BT2tjxe_FwhwuCItZ2hfi_cTywJU1vg1h6fnntH3PG51uPW5-Pjs3UG2xl8JmTb&amp;file_name=&#x2F;MSF%E6%9E%B6%E6%9E%84.PNG">
+<meta property="og:updated_time" content="2020-02-17T15:02:29.003Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=144aVD96LCB_5xdUWmKebc7BkchWv2QVQtOqNq30xve4KObh2u7BhrX1JMqY0H1NUibxS0qASTL2uCv7gEALUQMlJlr4ndyXh4x71-rFR6DefFqkhxJy4gFHfFaqLzJEd0cAFbqPvAr5oLuNxRHTOlhMn_SjoA&amp;file_name=&#x2F;Metasploit%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%8C%87%E5%8D%97%E4%B8%AD%E6%96%87%E7%89%88.PNG">
 
 
 
@@ -118,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/11/22/第三章、内存技术/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/02/17/Kali Linux笔记(九十七)：Metasploit Framework/"/>
 
 
 
 
 
-  <title>第三章、内存技术 | Tomas'Blog</title>
+  <title>Kali Linux笔记(九十七)：Metasploit Framework | Tomas'Blog</title>
   
 
 
@@ -243,7 +248,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/22/%E7%AC%AC%E4%B8%89%E7%AB%A0%E3%80%81%E5%86%85%E5%AD%98%E6%8A%80%E6%9C%AF/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/17/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%B8%83)%EF%BC%9AMetasploit%20Framework/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -260,7 +265,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">第三章、内存技术</h1>
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(九十七)：Metasploit Framework</h1>
         
 
         <div class="post-meta">
@@ -272,8 +277,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-22T08:57:15+08:00">
-                2019-11-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-17T23:03:27+08:00">
+                2020-02-17
               </time>
             
 
@@ -295,8 +300,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Operating-System-Priciple/" itemprop="url" rel="index">
-                    <span itemprop="name">Operating System Priciple</span>
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
                   </a>
                 </span>
 
@@ -326,7 +331,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2.2k 字
+                  613 字
                 </span>
               
 
@@ -342,7 +347,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  7 分钟
+                  2 分钟
                 </span>
               
             </div>
@@ -363,143 +368,79 @@
       
 
       
-        <h2 id="第三章、内存技术"><a href="#第三章、内存技术" class="headerlink" title="第三章、内存技术"></a>第三章、内存技术</h2><hr>
-<ol>
-<li><p>覆盖技术</p>
+        <hr>
+<h4 id="1-Metasploit简介"><a href="#1-Metasploit简介" class="headerlink" title="1. Metasploit简介"></a>1. Metasploit简介</h4><ul>
+<li>目前最流行、最强大、最具扩展性的渗透测试平台软件</li>
+<li>基于Metasploit进行渗透测试和漏洞分析的流程和方法</li>
+<li>2003年由HD More发布第一版，2007年用ruby语言重写<ul>
+<li>框架继承了渗透测试标准（PETS）思想</li>
+<li>一定程度上统一了渗透测试和漏洞研究的工作环境</li>
+<li>新的攻击代码可以比较容易的加入框架</li>
+</ul>
+</li>
+<li>开发活跃版本更新频繁（每周）<ul>
+<li>早期版本基于社区力量维护，被Rapid 7收购后打造出其商业版产品</li>
+<li>目前分化为四个版本，社区版本依然十分活跃</li>
+<li>HD More说：为Metasploit写书是种自虐！</li>
+<li>2014年之后市场上没有再出现新的Metasploit教材</li>
+</ul>
+</li>
+<li>MSF默认集成与Kali Linux之中</li>
+<li>使用postgresql数据库存储数据<ul>
+<li>早期版本需要先启动数据库再启动msf</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-Offensive-security出版的Metasploit教材"><a href="#2-Offensive-security出版的Metasploit教材" class="headerlink" title="2. Offensive security出版的Metasploit教材"></a>2. Offensive security出版的Metasploit教材</h4><ul>
+<li>被HD More称之为当时最好的Metasploit教材（2011/2012）</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=144aVD96LCB_5xdUWmKebc7BkchWv2QVQtOqNq30xve4KObh2u7BhrX1JMqY0H1NUibxS0qASTL2uCv7gEALUQMlJlr4ndyXh4x71-rFR6DefFqkhxJy4gFHfFaqLzJEd0cAFbqPvAr5oLuNxRHTOlhMn_SjoA&file_name=/Metasploit%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%8C%87%E5%8D%97%E4%B8%AD%E6%96%87%E7%89%88.PNG" alt="Metasploit渗透测试指南中文版"></p>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=84fcBHLJJTY5FAluOqNf2Tw1IALdMGqUsf9wF1A0g3ihI1xneE6PAQmBU28jS3mcyPGMdXP_JkkVvO4d1ISJ8arU1B22FvM6IN2YNv7OH_dpHXF1U-F1AOTIkMpOLcWZNV4jXdNeVWw_PyE-1sAHflwaXdKDHA&file_name=/Metasploit%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%8C%87%E5%8D%97%E8%8B%B1%E6%96%87%E7%89%88.PNG" alt="Metasploit渗透测试指南英文版"></p>
+<h4 id="3-版本对比"><a href="#3-版本对比" class="headerlink" title="3. 版本对比"></a>3. 版本对比</h4><ul>
+<li>Pro版是企业级全功能的高级渗透测试平台</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=ea735c3HGYl5hKCwmuyFtToahfu60TTSlvWTOqfWWNafPKL2NPjb7i6KIEG67_ZKQ7h0EM7yCATB3PtW2gVy1CFw0EXvsy3an65x7EFTbtT3asqRSVWuJ4eb1tb_LwAin0zmqEU7OA&file_name=/Metasploit%E7%89%88%E6%9C%AC%E5%AF%B9%E6%AF%94.PNG" alt="Metasploit版本对比"></p>
+<h4 id="4-MSF架构"><a href="#4-MSF架构" class="headerlink" title="4. MSF架构"></a>4. MSF架构</h4><p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=b235UCYkpqOIBeYNf7kc5HlxJ0eWYh1S2O-jFz2VRLpa6pUG6JUo5HyE8BT2tjxe_FwhwuCItZ2hfi_cTywJU1vg1h6fnntH3PG51uPW5-Pjs3UG2xl8JmTb&file_name=/MSF%E6%9E%B6%E6%9E%84.PNG" alt="MSF架构"></p>
 <ul>
-<li>目标：是在较小的可用内存中运行较大的程序。常用于多道程序系统，与分区存储管理配合使用</li>
-<li>原理：把程序按照自身逻辑结构，划分为若干个功能上相对独立的程序模块，那些不会同时执行的模块共享同一块内存区域，按时间先后来运行<ul>
-<li>必要部分（常用功能）的代码和数据常驻内存</li>
-<li>可选部分（不常用功能）在其他程序模块中实现，平时存放在外存中，在需要用到时才装入内存</li>
-<li>不存在调用关系的模块不必同装入到内存，从而可以相互覆盖，即这些模块共用一个分区</li>
+<li>Rex<ul>
+<li>基本功能库，用于完成日常基本任务，无需人工手动编码实现</li>
+<li>处理socket连接访问、协议应答（http/SSL/SMB等）</li>
+<li>编码转换（XOR、Base64、Unicode）</li>
 </ul>
 </li>
-<li>缺点<ul>
-<li>由程序员来把一个大的程序划分为若干个小的功能模块，并确定各个模块之间的覆盖关系，费时费力，增加了编程的复杂度</li>
-<li>覆盖模块从外存装入内存，实际上是以时间延长来换取空间节省</li>
+<li>Msf::Core<ul>
+<li>提供Msf的核心基本API，是框架的核心能力实现库</li>
 </ul>
 </li>
+<li>Msf::Base<ul>
+<li>提供友好的API接口，便于模块调用的库</li>
 </ul>
 </li>
-</ol>
-<p>2.交换技术</p>
-<ul>
-<li>目标：多道程序在内存中时，让正在运行的程序或需要运行的程序获得更多的内存资源</li>
-<li>方法<ul>
-<li>可将暂时不能运行的程序送到外存，从而获得空闲内存空间</li>
-<li>操作系统把一个进程的整个地址空间的内存保存到外存中（换出swap out），而将外存中的某个进程的地址空间读入到内存中（换入swap in）。换入换出的内容的大小为整个程序的地址空间</li>
-</ul>
-</li>
-<li>问题<ul>
-<li>交换时机的确定：何时需要发生交换？只当内存空间不够或由不够的危险时换出</li>
-<li>交换区的大小：必须足够大以存放所有用户进程的所有内存映像的拷贝；必须能对这些内存映像进行直接存取</li>
-<li>程序换入时的重定位：换出后再换入内存的位置一定要在原来的位置上吗？最好采用动态地址映射的方法</li>
-</ul>
-</li>
-<li>覆盖与交换的区别<ul>
-<li>覆盖只能发生在那些相互之间没有调用关系的程序模块之间，因此程序员必须给出程序内的各个模块之间的逻辑覆盖结构</li>
-<li>交换技术是以在内存中的程序大小为单位来进行的，它不需要程序员给出各个模块之间的逻辑覆盖结构。换言之，交换发生在内存中程序与管理程序或操作系统之间，而覆盖则发生在运行程序的内部</li>
+<li>Plugin插件<ul>
+<li>连接和调用外部扩展功能和系统</li>
 </ul>
 </li>
 </ul>
-<ol start="3">
-<li><p>虚拟存储技术</p>
-<ul>
-<li>目标<ul>
-<li>像覆盖技术那样，不是把程序的所有内容都放到内存中，因而能够运行比当前的空闲空间还要大的程序。但做得更好，由操作系统自动来完成，无须程序员的干涉</li>
-<li>像交换技术那样，能够实现进程在内存与外存之间的交换，因而获得更多的空闲内存空间。但做得更好，只对进程的部分内容在内存和外存之间进行交换</li>
+<h4 id="5-MSF模块"><a href="#5-MSF模块" class="headerlink" title="5. MSF模块"></a>5. MSF模块</h4><ul>
+<li>/usr/share/metasploit-framework/modules/</li>
+<li>技术功能模块（非流程模块）<ul>
+<li>Exploit：利用系统漏洞进行攻击的动作，此模块对应每一个具体漏洞的攻击方法（主动、被动）</li>
+<li>Payload：成功exploit之后，真正在目标系统执行的代码或指令<ul>
+<li>Shellcode或系统命令</li>
+<li>三种Payload：/usr/share/metasploit-framework/modules/payloads/</li>
+<li>Single：all-in-one</li>
+<li>Stager：目标计算机内存有限时，先传输一个较小的payload用于建立连接</li>
+<li>Stagers：利用stager建立的连接下载的后续payload</li>
+<li>Stager、Stagers都有多种类型，适用于不同场景</li>
+<li>Shellcode是payload的一种，由于其建立正向/反向shell而得名</li>
 </ul>
 </li>
-<li>程序的局部性</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>程序的局部性（principle of locality）：指程序在执行过程中的一个较短时期，所执行的指令地址和指令的操作数地址，分别局限于一定的区域
-时间局限性：一条指令的一次执行和下次执行，一个数据的一次访问和下次访问都集中在一个较短时期内
-空间局部性：当前指令和邻近的几条指令，当前访问的数据和邻近的几个数据都集中在一个较小区域内</code></pre></blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">程序编写方法1：                        程序编写方法2：</span><br><span class="line">for(j=0;j&lt;1024;j++)                   for(i=0;i&lt;1024;i++)</span><br><span class="line">for(i=0;i&lt;1024;i++)                   for(j=0;j&lt;1024;j++) </span><br><span class="line">     A[i][j]=0;                           A[i][j]=0;</span><br><span class="line">结论：编写方法1在4K一页的内存中，共发生了1024*1024次缺页中断</span><br><span class="line">      编写方法2在4k一页的内存中，共发生了1024次缺页中断</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>基本概念：可以在页式或段式内存管理的基础上实现<ul>
-<li>在装入程序时，不必将全部装入到内存，而只需将当前需要执行的部分页面或段装入到内存，就可让程序开始执行</li>
-<li>在程序执行过程中，如果需要执行的指令或访问的数据尚未在内存（称位缺页或缺段），则由处理器通知操作系统将相应的页面或段调入到内存，然后继续执行程序</li>
-<li>另一方面，操作系统将内存中暂时不使用的页面或段调出保存在外存上，从而腾出更多空闲空间存放将要装入的程序以及将要调入的页面或段</li>
-</ul>
-</li>
-<li>基本特征<ul>
-<li>大的用户空间：通过把物理内存与外存相结合，提供给用户的虚拟内存空间通常大于实际的物理内存，即实现了这两者的分离。如32位的虚拟地址理论上可以访问4GB，而可能计算机上仅有的256MB的物理内存，但硬盘容量大于4GB</li>
-<li>部分交换：与交换技术相比较，虚拟存储的调入和调出是对部分虚拟地址空间进行的</li>
-<li>不连续性：物理内存分配的不连续，虚拟地址空间使用的不连续</li>
-</ul>
-</li>
-<li>虚拟页式内存管理</li>
-</ul>
-<blockquote>
-<pre><code>大部分虚拟存储系统都采用虚拟页式存储管理技术，即在页式存储管理的基础上，增加请求调页和页面置换功能</code></pre></blockquote>
-<ul>
-<li>虚拟页式内存管理<ul>
-<li>基本思路</li>
+<li>Auxiliary：执行信息收集、枚举、指纹探测、扫描等功能的辅助模块（没有payload的exploit模块）</li>
+<li>Encoders：对payload进行加密，躲避AV检查的模块</li>
+<li>Nops：提高payload稳定性及维持大小</li>
 </ul>
 </li>
 </ul>
-<blockquote>
-<ol>
-<li>当一个用户程序要调入内存运行时，不是将该程序的所有页面都装入内存，而是只装入部分的页面，就可启动程序运行</li>
-<li>在运行的过程中，如果发现要运行的程序或要访问数据不在内存，则向系统发出缺页中断请求，系统在处理这个中断时，将外存中相应的页面调入内存，使得该程序能够继续运行</li>
-<li>页表表项：逻辑页号+访问位+修改位+保护位+驻留位+物理页帧号</li>
-</ol>
-</blockquote>
-<blockquote>
-<pre><code>1.驻留位
-表示该页是在内存还是在外存。如果该位等于1，表示该页位于内存当中，即该页表项时有效的，可以使用；如果该位等于0，表示该页当前还在外存当中，如果访问该页表项，将导致缺页中断
-2.保护位
-表示允许对该页做何种类型的访问，如只读、可读写、可执行等
-3.修改位
-表明此页在内存中是否被修改过。当系统回收该物理页面时，根据此位来决定是否把它的内容写回外存
-4.访问位
-如果该页面被访问过（包括读操作或写操作），则设置此位，用于页面置换算法</code></pre></blockquote>
-<ul>
-<li><p>虚拟页式内存管理</p>
-<ul>
-<li>基本思路</li>
-</ul>
-<ol start="4">
-<li>缺页中断处理过程</li>
-</ol>
-<ul>
-<li>（1）如果在内存中有空闲的物理页面，则分配一物理页帧f，然后转第4步；否则转第2步</li>
-<li>（2）采用某种页面置换算法，选择一个将被替换的物理页帧f，它所对应的逻辑页为q。如果该页在内存期间被修改，则需把它写回外存</li>
-<li>（3）对q所对应的页表项进行修改，把驻留位置为0</li>
-<li>（4）将需要访问的页p装入到物理页面f当中</li>
-<li>（5）修改p所对应的页表项的内容，把驻留位置为1，把物理页面帧号置为f</li>
-<li>（6）重新运行被中断的指令</li>
-</ul>
-<ol start="5">
-<li><p>后备存储（backing store）</p>
-<ul>
-<li>在何处保存未被映射的页（交换空间（磁盘或者文件）：特殊格式，用于存储未被映射的页面）</li>
-<li>概念<ul>
-<li>一个虚拟地址空间的页面可以被映射到一个文件（在二级存储中）中的某个位置</li>
-<li>代码段：映射到可执行二进制文件</li>
-<li>动态加载的共享程序段：映射到动态调用的库文件</li>
-<li>其他段：可能被映射到交换文件（swap file）</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<ol start="4">
-<li>虚拟内存性能</li>
-</ol>
-</li>
-<li><p>为了便于理解分页的开销，使用有效存储器访问时间（EAT）</p>
-</li>
-<li><p>EAT=访问时间<em>页命中几率+page fault处理时间</em>page fault几率</p>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">例子：</span><br><span class="line">访存时间：10ns</span><br><span class="line">磁盘访问时间：5ms</span><br><span class="line">参数p=page fault几率</span><br><span class="line">参数q=dirty  fault几率（读写几率，修改位）</span><br><span class="line">EAT=10（1-p）+5000000p（q+1）</span><br></pre></td></tr></table></figure>
-
 
       
     </div>
@@ -517,7 +458,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag"># 操作系统</a>
+            <a href="/tags/%E5%AE%89%E5%85%A8/" rel="tag"># 安全</a>
           
         </div>
       
@@ -530,8 +471,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/11/22/%E7%AC%AC%E4%B8%89%E7%AB%A0%E3%80%81%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%BD%A2%E5%BC%8F/" rel="next" title="第三章、内存分配与形式">
-                <i class="fa fa-chevron-left"></i> 第三章、内存分配与形式
+              <a href="/2020/02/17/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E5%85%AD)%EF%BC%9AVeil-Catapult/" rel="next" title="Kali Linux笔记(九十六)：Veil-Catapult">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(九十六)：Veil-Catapult
               </a>
             
           </div>
@@ -539,10 +480,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/12/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB)%EF%BC%9ATCPDUMP/" rel="prev" title="Kali Linux笔记(八)：TCPDUMP">
-                Kali Linux笔记(八)：TCPDUMP <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -712,7 +649,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第三章、内存技术"><span class="nav-number">1.</span> <span class="nav-text">第三章、内存技术</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Metasploit简介"><span class="nav-number">1.</span> <span class="nav-text">1. Metasploit简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Offensive-security出版的Metasploit教材"><span class="nav-number">2.</span> <span class="nav-text">2. Offensive security出版的Metasploit教材</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-版本对比"><span class="nav-number">3.</span> <span class="nav-text">3. 版本对比</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-MSF架构"><span class="nav-number">4.</span> <span class="nav-text">4. MSF架构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-MSF模块"><span class="nav-number">5.</span> <span class="nav-text">5. MSF模块</span></a></li></ol></div>
             
 
           </div>

@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Git,Github," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. Git的分支 版本发布、功能增加、错误修改     分支发布合并   2. Git分支操作 创建分支：🔺命令：git branch 分支名 基于某个分支创建的分支，会复制其内容   查看分支：🔺命令：git branch 跳转分支：🔺命令：git checkout 分支名    创建分支并跳转：🔺命令：git checkout -b 分支名 删除分支：🔺命令：git branch">
+<meta name="keywords" content="Git,Github">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3.Git中的分支">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;20&#x2F;3.Git%E7%9A%84%E5%88%86%E6%94%AF&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="1. Git的分支 版本发布、功能增加、错误修改     分支发布合并   2. Git分支操作 创建分支：🔺命令：git branch 分支名 基于某个分支创建的分支，会复制其内容   查看分支：🔺命令：git branch 跳转分支：🔺命令：git checkout 分支名    创建分支并跳转：🔺命令：git checkout -b 分支名 删除分支：🔺命令：git branch">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=ace2SXmY4j2w431Za6bUmolska07iWjqYRn76YL3WvZR9aVpdTy5qQ-HN9rX9omN46NTFfzu5cGHb7lh_R8BoYvgFqqi3cMoEjywIoHsUNGu2J38Uw_VSq8ff6nX7xOYnfo&amp;file_name=&#x2F;3-Git%E5%88%86%E6%94%AF-1.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=a764bq-2RuR41FYAOFiemUOJvtelDBs1NrzXKTcayUV2Zqr50lpWlVmwcfThfKMbS8TQx6L_cIRUvmeEEA0FO26n1787BIK83e5LQXodBzq3Bb7Q4oxaSAuwfOcQ9kCRx20&amp;file_name=&#x2F;3-Git%E5%88%86%E6%94%AF-2.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=ae25caEmzRExQeYzws_s8ffQZlGnW5Q0U0DIPupQKMCZXwhW0VFDZJc6Za0K4uSatBIby5YEXQzaI9Nn7v4CNkOd9rJSdzZm3nQL4Aea4GC8YfqRsB46QPgNAfdcx7s025s&amp;file_name=&#x2F;3-Git%E5%88%86%E6%94%AF-3.PNG">
+<meta property="og:updated_time" content="2020-02-20T08:20:02.188Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=ace2SXmY4j2w431Za6bUmolska07iWjqYRn76YL3WvZR9aVpdTy5qQ-HN9rX9omN46NTFfzu5cGHb7lh_R8BoYvgFqqi3cMoEjywIoHsUNGu2J38Uw_VSq8ff6nX7xOYnfo&amp;file_name=&#x2F;3-Git%E5%88%86%E6%94%AF-1.PNG">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/02/20/3.Git的分支/"/>
+
+
+
+
+
+  <title>3.Git中的分支 | Tomas'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tomas'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/20/3.Git%E7%9A%84%E5%88%86%E6%94%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">3.Git中的分支</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-20T16:24:49+08:00">
+                2020-02-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Git/" itemprop="url" rel="index">
+                    <span itemprop="name">Git</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  280 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<h4 id="1-Git的分支"><a href="#1-Git的分支" class="headerlink" title="1. Git的分支"></a>1. Git的分支</h4><ul>
+<li>版本发布、功能增加、错误修改</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=ace2SXmY4j2w431Za6bUmolska07iWjqYRn76YL3WvZR9aVpdTy5qQ-HN9rX9omN46NTFfzu5cGHb7lh_R8BoYvgFqqi3cMoEjywIoHsUNGu2J38Uw_VSq8ff6nX7xOYnfo&file_name=/3-Git%E5%88%86%E6%94%AF-1.PNG" alt="3-Git分支-1"></p>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=a764bq-2RuR41FYAOFiemUOJvtelDBs1NrzXKTcayUV2Zqr50lpWlVmwcfThfKMbS8TQx6L_cIRUvmeEEA0FO26n1787BIK83e5LQXodBzq3Bb7Q4oxaSAuwfOcQ9kCRx20&file_name=/3-Git%E5%88%86%E6%94%AF-2.PNG" alt="3-Git分支-2"></p>
+<ul>
+<li>分支发布合并</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=ae25caEmzRExQeYzws_s8ffQZlGnW5Q0U0DIPupQKMCZXwhW0VFDZJc6Za0K4uSatBIby5YEXQzaI9Nn7v4CNkOd9rJSdzZm3nQL4Aea4GC8YfqRsB46QPgNAfdcx7s025s&file_name=/3-Git%E5%88%86%E6%94%AF-3.PNG" alt="3-Git分支-3"></p>
+<h4 id="2-Git分支操作"><a href="#2-Git分支操作" class="headerlink" title="2. Git分支操作"></a>2. Git分支操作</h4><ul>
+<li>创建分支：<strong><code>🔺命令：git branch 分支名</code></strong><ul>
+<li>基于某个分支创建的分支，会复制其内容</li>
+</ul>
+</li>
+<li>查看分支：<strong><code>🔺命令：git branch</code></strong></li>
+<li>跳转分支：<strong><code>🔺命令：git checkout 分支名</code></strong>   </li>
+<li>创建分支并跳转：<strong><code>🔺命令：git checkout -b 分支名</code></strong></li>
+<li>删除分支：<strong><code>🔺命令：git branch -d 分支名</code></strong><ul>
+<li>▲ 无合并到master的分支无法删除，或者使用-D参数`**</li>
+</ul>
+</li>
+<li>合并分支：<strong><code>🔺命令：git merge 分支名</code></strong></li>
+</ul>
+<h4 id="3-Git-tutorial-Repository"><a href="#3-Git-tutorial-Repository" class="headerlink" title="3. Git-tutorial Repository"></a>3. Git-tutorial Repository</h4><ul>
+<li>cd git-tutorial</li>
+<li>git branch feature1</li>
+<li>git branch</li>
+<li>git checkout feature1</li>
+<li>touch a.txt</li>
+<li>vim a.txt</li>
+<li>this is a.txt → wq</li>
+<li>git add a.txt</li>
+<li>git commit -m “a.txt”</li>
+<li>git branch feature2</li>
+<li>git checkout feature2</li>
+<li>git checkout -b feature3</li>
+<li>git branch</li>
+<li>git branch -d feature2</li>
+<li>touch b.txt</li>
+<li>vim b.txt</li>
+<li>this is b.txt → wq</li>
+<li>git add b.txt</li>
+<li>git commit -m “b.txt”</li>
+<li>git checkout master</li>
+<li>git branch -d feature3</li>
+<li>git merge feature3</li>
+<li>git push</li>
+<li>查看Github仓库是否有a.txt和b.txt，但无其他分支</li>
+<li>git branch feature1</li>
+<li>git push origin feature1</li>
+<li>查看Github仓库是否有feature1分支</li>
+<li>git push origin :feature1</li>
+<li>查看Github仓库是否无feature1分支</li>
+<li>git push origin feature1:f1</li>
+<li>查看Github仓库的feature1是否更改为f1</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Git/" rel="tag"># Git</a>
+          
+            <a href="/tags/Github/" rel="tag"># Github</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/20/2.Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" rel="next" title="2.Git基本操作">
+                <i class="fa fa-chevron-left"></i> 2.Git基本操作
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/02/20/4.Git%E7%9A%84%E5%90%88%E5%B9%B6/" rel="prev" title="4.Git的合并">
+                4.Git的合并 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/photo.jpg"
+                alt="Tomas" />
+            
+              <p class="site-author-name" itemprop="name">Tomas</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">114</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Tomassky" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:643008933@qq.com" target="_blank" title="QQ邮箱">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://ylsword-cheat.top" title="LengSword" target="_blank">LengSword</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://neigeshoufu.github.io/ljy.github.io" title="neigeshoufu" target="_blank">neigeshoufu</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Git的分支"><span class="nav-number">1.</span> <span class="nav-text">1. Git的分支</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Git分支操作"><span class="nav-number">2.</span> <span class="nav-text">2. Git分支操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Git-tutorial-Repository"><span class="nav-number">3.</span> <span class="nav-text">3. Git-tutorial Repository</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tomas</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">102.4k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

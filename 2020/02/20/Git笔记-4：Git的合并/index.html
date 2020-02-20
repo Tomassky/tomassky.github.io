@@ -79,20 +79,16 @@
 
 
 
-<meta name="description" content="1. Git的分支 版本发布、功能增加、错误修改     分支发布合并   2. Git分支操作 创建分支：🔺命令：git branch 分支名 基于某个分支创建的分支，会复制其内容   查看分支：🔺命令：git branch 跳转分支：🔺命令：git checkout 分支名    创建分支并跳转：🔺命令：git checkout -b 分支名 删除分支：🔺命令：git branch">
+<meta name="description" content="1. Git的合并 ▲ 可以在Stackoverflow上看git log多样格式 ▲ rebase的黄金法则：绝对不要在公共分支使用rebase 查看日志：git log –oneline：一行的提交信息 –oneline -3：只取前面3行   查看添加的内容：🔺命令：git show 哈希值 查看提交方式：🔺命令：git merge --help –ff（fast-forward）：默">
 <meta name="keywords" content="Git,Github">
 <meta property="og:type" content="article">
-<meta property="og:title" content="3.Git中的分支">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;20&#x2F;3.Git%E7%9A%84%E5%88%86%E6%94%AF&#x2F;index.html">
+<meta property="og:title" content="Git笔记-4：Git的合并">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;20&#x2F;Git%E7%AC%94%E8%AE%B0-4%EF%BC%9AGit%E7%9A%84%E5%90%88%E5%B9%B6&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="1. Git的分支 版本发布、功能增加、错误修改     分支发布合并   2. Git分支操作 创建分支：🔺命令：git branch 分支名 基于某个分支创建的分支，会复制其内容   查看分支：🔺命令：git branch 跳转分支：🔺命令：git checkout 分支名    创建分支并跳转：🔺命令：git checkout -b 分支名 删除分支：🔺命令：git branch">
+<meta property="og:description" content="1. Git的合并 ▲ 可以在Stackoverflow上看git log多样格式 ▲ rebase的黄金法则：绝对不要在公共分支使用rebase 查看日志：git log –oneline：一行的提交信息 –oneline -3：只取前面3行   查看添加的内容：🔺命令：git show 哈希值 查看提交方式：🔺命令：git merge --help –ff（fast-forward）：默">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=ace2SXmY4j2w431Za6bUmolska07iWjqYRn76YL3WvZR9aVpdTy5qQ-HN9rX9omN46NTFfzu5cGHb7lh_R8BoYvgFqqi3cMoEjywIoHsUNGu2J38Uw_VSq8ff6nX7xOYnfo&amp;file_name=&#x2F;3-Git%E5%88%86%E6%94%AF-1.PNG">
-<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=a764bq-2RuR41FYAOFiemUOJvtelDBs1NrzXKTcayUV2Zqr50lpWlVmwcfThfKMbS8TQx6L_cIRUvmeEEA0FO26n1787BIK83e5LQXodBzq3Bb7Q4oxaSAuwfOcQ9kCRx20&amp;file_name=&#x2F;3-Git%E5%88%86%E6%94%AF-2.PNG">
-<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=ae25caEmzRExQeYzws_s8ffQZlGnW5Q0U0DIPupQKMCZXwhW0VFDZJc6Za0K4uSatBIby5YEXQzaI9Nn7v4CNkOd9rJSdzZm3nQL4Aea4GC8YfqRsB46QPgNAfdcx7s025s&amp;file_name=&#x2F;3-Git%E5%88%86%E6%94%AF-3.PNG">
-<meta property="og:updated_time" content="2020-02-20T08:20:02.188Z">
+<meta property="og:updated_time" content="2020-02-20T11:49:57.425Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=ace2SXmY4j2w431Za6bUmolska07iWjqYRn76YL3WvZR9aVpdTy5qQ-HN9rX9omN46NTFfzu5cGHb7lh_R8BoYvgFqqi3cMoEjywIoHsUNGu2J38Uw_VSq8ff6nX7xOYnfo&amp;file_name=&#x2F;3-Git%E5%88%86%E6%94%AF-1.PNG">
 
 
 
@@ -122,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/02/20/3.Git的分支/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/02/20/Git笔记-4：Git的合并/"/>
 
 
 
 
 
-  <title>3.Git中的分支 | Tomas'Blog</title>
+  <title>Git笔记-4：Git的合并 | Tomas'Blog</title>
   
 
 
@@ -247,7 +243,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/20/3.Git%E7%9A%84%E5%88%86%E6%94%AF/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/20/Git%E7%AC%94%E8%AE%B0-4%EF%BC%9AGit%E7%9A%84%E5%90%88%E5%B9%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -264,7 +260,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">3.Git中的分支</h1>
+          <h1 class="post-title" itemprop="name headline">Git笔记-4：Git的合并</h1>
         
 
         <div class="post-meta">
@@ -330,7 +326,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  280 字
+                  409 字
                 </span>
               
 
@@ -346,7 +342,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1 分钟
+                  2 分钟
                 </span>
               
             </div>
@@ -368,61 +364,86 @@
 
       
         <hr>
-<h4 id="1-Git的分支"><a href="#1-Git的分支" class="headerlink" title="1. Git的分支"></a>1. Git的分支</h4><ul>
-<li>版本发布、功能增加、错误修改</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=ace2SXmY4j2w431Za6bUmolska07iWjqYRn76YL3WvZR9aVpdTy5qQ-HN9rX9omN46NTFfzu5cGHb7lh_R8BoYvgFqqi3cMoEjywIoHsUNGu2J38Uw_VSq8ff6nX7xOYnfo&file_name=/3-Git%E5%88%86%E6%94%AF-1.PNG" alt="3-Git分支-1"></p>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=a764bq-2RuR41FYAOFiemUOJvtelDBs1NrzXKTcayUV2Zqr50lpWlVmwcfThfKMbS8TQx6L_cIRUvmeEEA0FO26n1787BIK83e5LQXodBzq3Bb7Q4oxaSAuwfOcQ9kCRx20&file_name=/3-Git%E5%88%86%E6%94%AF-2.PNG" alt="3-Git分支-2"></p>
-<ul>
-<li>分支发布合并</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=ae25caEmzRExQeYzws_s8ffQZlGnW5Q0U0DIPupQKMCZXwhW0VFDZJc6Za0K4uSatBIby5YEXQzaI9Nn7v4CNkOd9rJSdzZm3nQL4Aea4GC8YfqRsB46QPgNAfdcx7s025s&file_name=/3-Git%E5%88%86%E6%94%AF-3.PNG" alt="3-Git分支-3"></p>
-<h4 id="2-Git分支操作"><a href="#2-Git分支操作" class="headerlink" title="2. Git分支操作"></a>2. Git分支操作</h4><ul>
-<li>创建分支：<strong><code>🔺命令：git branch 分支名</code></strong><ul>
-<li>基于某个分支创建的分支，会复制其内容</li>
+<h4 id="1-Git的合并"><a href="#1-Git的合并" class="headerlink" title="1. Git的合并"></a>1. Git的合并</h4><ul>
+<li>▲ 可以在Stackoverflow上看git log多样格式</li>
+<li>▲ rebase的黄金法则：绝对不要在公共分支使用rebase</li>
+<li>查看日志：git log<ul>
+<li>–oneline：一行的提交信息</li>
+<li>–oneline -3：只取前面3行</li>
 </ul>
 </li>
-<li>查看分支：<strong><code>🔺命令：git branch</code></strong></li>
-<li>跳转分支：<strong><code>🔺命令：git checkout 分支名</code></strong>   </li>
-<li>创建分支并跳转：<strong><code>🔺命令：git checkout -b 分支名</code></strong></li>
-<li>删除分支：<strong><code>🔺命令：git branch -d 分支名</code></strong><ul>
-<li>▲ 无合并到master的分支无法删除，或者使用-D参数`**</li>
+<li>查看添加的内容：<strong><code>🔺命令：git show 哈希值</code></strong></li>
+<li>查看提交方式：<strong><code>🔺命令：git merge --help</code></strong><ul>
+<li>–ff（fast-forward）：默认不产生一次commit</li>
+<li>–no-ff：产生一个commit</li>
 </ul>
 </li>
-<li>合并分支：<strong><code>🔺命令：git merge 分支名</code></strong></li>
+<li>移动分支，并将master分支的提交并入：<strong><code>🔺命令：git rebase</code></strong></li>
+<li>查看版本分支报错情况：<strong><code>🔺命令：git mergetool</code></strong><ul>
+<li>通过工具修改后，会生成一个x.txt.orig，保存冲突的现场</li>
 </ul>
-<h4 id="3-Git-tutorial-Repository"><a href="#3-Git-tutorial-Repository" class="headerlink" title="3. Git-tutorial Repository"></a>3. Git-tutorial Repository</h4><ul>
+</li>
+</ul>
+<blockquote>
+<p>   merge和rebase<br>   merge：两个分支的修改提交，默认不提交，关注点在合并操作上<br>   rebase：将当前分支做的修改，复制在目标分支的最后一次中，关注点在开发的过程上 </p>
+</blockquote>
+<h4 id="2-Git-tutorial-Repository"><a href="#2-Git-tutorial-Repository" class="headerlink" title="2. Git-tutorial Repository"></a>2. Git-tutorial Repository</h4><ul>
 <li>cd git-tutorial</li>
-<li>git branch feature1</li>
-<li>git branch</li>
-<li>git checkout feature1</li>
-<li>touch a.txt</li>
-<li>vim a.txt</li>
-<li>this is a.txt → wq</li>
-<li>git add a.txt</li>
-<li>git commit -m “a.txt”</li>
-<li>git branch feature2</li>
-<li>git checkout feature2</li>
-<li>git checkout -b feature3</li>
-<li>git branch</li>
-<li>git branch -d feature2</li>
-<li>touch b.txt</li>
-<li>vim b.txt</li>
-<li>this is b.txt → wq</li>
-<li>git add b.txt</li>
-<li>git commit -m “b.txt”</li>
+<li>git branch -d f1</li>
+<li>git push origin :f1</li>
+<li>git log</li>
+<li>q</li>
+<li>git log –oneline</li>
+<li>git log –oneline -3</li>
+<li>git show d156c23</li>
+<li>vi ~/.config → dog = log –all –decorate –oneline –graph</li>
+<li>git dog</li>
+<li>git checkout -b f1</li>
+<li>touch fa.txt</li>
+<li>git add fa.txt</li>
+<li>git commit -m “add fa”</li>
+<li>git dog</li>
 <li>git checkout master</li>
-<li>git branch -d feature3</li>
-<li>git merge feature3</li>
+<li>git merge f1</li>
+<li>git dog</li>
+<li>git checkout f1</li>
+<li>touch fb.txt</li>
+<li>git commit -m “add fb”</li>
+<li>git checkout f1</li>
+<li>git merge f1 –no-ff</li>
+<li>git dog</li>
 <li>git push</li>
-<li>查看Github仓库是否有a.txt和b.txt，但无其他分支</li>
-<li>git branch feature1</li>
-<li>git push origin feature1</li>
-<li>查看Github仓库是否有feature1分支</li>
-<li>git push origin :feature1</li>
-<li>查看Github仓库是否无feature1分支</li>
-<li>git push origin feature1:f1</li>
-<li>查看Github仓库的feature1是否更改为f1</li>
+<li>git push origin f1</li>
+<li>远程修改master中的a.txt</li>
+<li>git pull</li>
+<li>git checkout f1</li>
+<li>git merge master</li>
+<li>git dog</li>
+<li>git checkout master</li>
+<li>touch m1.txt</li>
+<li>git add m1.txt</li>
+<li>git commit -m “add m1”</li>
+<li>git checkout f1</li>
+<li>git dog</li>
+<li>git rebase</li>
+<li>git dog</li>
+<li>git checkout -b f2</li>
+<li>vim a.txt</li>
+<li>this is b.txt</li>
+<li>git add a.txt</li>
+<li>git commit -m “update a.txt”</li>
+<li>git checkout f1</li>
+<li>vi a.txt</li>
+<li>this is c.txt</li>
+<li>git add a.txt</li>
+<li>git commit -m “update c.txt”</li>
+<li>git checkout f2</li>
+<li>git merge f1</li>
+<li>cat a.txt</li>
+<li>git mergetool</li>
+<li>rm a.txt.orig</li>
+<li>git commit -m “update a.txt”</li>
+<li>git dog</li>
 </ul>
 
       
@@ -456,8 +477,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/02/20/2.Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" rel="next" title="2.Git基本操作">
-                <i class="fa fa-chevron-left"></i> 2.Git基本操作
+              <a href="/2020/02/20/Git%E7%AC%94%E8%AE%B0-3%EF%BC%9AGit%E7%9A%84%E5%88%86%E6%94%AF/" rel="next" title="Git笔记-3：Git的分支">
+                <i class="fa fa-chevron-left"></i> Git笔记-3：Git的分支
               </a>
             
           </div>
@@ -466,8 +487,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/02/20/4.Git%E7%9A%84%E5%90%88%E5%B9%B6/" rel="prev" title="4.Git的合并">
-                4.Git的合并 <i class="fa fa-chevron-right"></i>
+              <a href="/2020/02/20/Git%E7%AC%94%E8%AE%B0-5%EF%BC%9AGit%E7%9A%84%E5%9B%9E%E6%BB%9A%E6%92%A4%E9%94%80/" rel="prev" title="Git笔记-5：Git的回滚撤销">
+                Git笔记-5：Git的回滚撤销 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -549,7 +570,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">114</span>
+                  <span class="site-state-item-count">115</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -638,7 +659,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Git的分支"><span class="nav-number">1.</span> <span class="nav-text">1. Git的分支</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Git分支操作"><span class="nav-number">2.</span> <span class="nav-text">2. Git分支操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Git-tutorial-Repository"><span class="nav-number">3.</span> <span class="nav-text">3. Git-tutorial Repository</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Git的合并"><span class="nav-number">1.</span> <span class="nav-text">1. Git的合并</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Git-tutorial-Repository"><span class="nav-number">2.</span> <span class="nav-text">2. Git-tutorial Repository</span></a></li></ol></div>
             
 
           </div>
@@ -672,7 +693,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">102.4k</span>
+    <span title="Site words total count">102.5k</span>
   
 </div>
 

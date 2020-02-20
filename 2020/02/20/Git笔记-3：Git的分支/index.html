@@ -79,22 +79,20 @@
 
 
 
-<meta name="description" content="1. Git 分布式版本管理系统 最初是为了管理Linux的系统内核 同FTP相同的功能 非线性管文件 速度快 对待数据更像一个快照流 可以在无网络的情况下进行提交到本地服务器，在有网络的情况下提交给远端的服务器      方式：直接记录快照而非方式，每次修改需要一次Commit 保证完整性：计算校验和（哈希算法），Git存取的是哈希值    2. Git中的数据库 Git仓库–.git dir">
+<meta name="description" content="1. Git的分支 版本发布、功能增加、错误修改     分支发布合并   2. Git分支操作 创建分支：🔺命令：git branch 分支名 基于某个分支创建的分支，会复制其内容   查看分支：🔺命令：git branch 跳转分支：🔺命令：git checkout 分支名    创建分支并跳转：🔺命令：git checkout -b 分支名 删除分支：🔺命令：git branch">
 <meta name="keywords" content="Git,Github">
 <meta property="og:type" content="article">
-<meta property="og:title" content="1.什么是Git">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;20&#x2F;1.%E4%BB%80%E4%B9%88%E6%98%AFGit&#x2F;index.html">
+<meta property="og:title" content="Git笔记-3：Git的分支">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;20&#x2F;Git%E7%AC%94%E8%AE%B0-3%EF%BC%9AGit%E7%9A%84%E5%88%86%E6%94%AF&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="1. Git 分布式版本管理系统 最初是为了管理Linux的系统内核 同FTP相同的功能 非线性管文件 速度快 对待数据更像一个快照流 可以在无网络的情况下进行提交到本地服务器，在有网络的情况下提交给远端的服务器      方式：直接记录快照而非方式，每次修改需要一次Commit 保证完整性：计算校验和（哈希算法），Git存取的是哈希值    2. Git中的数据库 Git仓库–.git dir">
+<meta property="og:description" content="1. Git的分支 版本发布、功能增加、错误修改     分支发布合并   2. Git分支操作 创建分支：🔺命令：git branch 分支名 基于某个分支创建的分支，会复制其内容   查看分支：🔺命令：git branch 跳转分支：🔺命令：git checkout 分支名    创建分支并跳转：🔺命令：git checkout -b 分支名 删除分支：🔺命令：git branch">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=e6aepRdWeAydQaYjkAMNaUtjlmQb_doKJpvZ4JD7IdSWAGwhQ3dlKEezoGhpWeZtZ7El4nH5XCf7zr0M7S57vk-Rex-h9yZ7GNtLGSv9_hU6AK9Y2vtqLYDxYCyiRFgLxODz1dN4BZ1fQ361XII&amp;file_name=&#x2F;1-Git-Server%20and%20Computer.PNG">
-<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=8d99-MJEqcAX4DkhM_MvPjpDFeRcDq5L-99XUfsqSZj-pC5knZRbBGCG0yaixsZkiEbiYDU_bupTpNWI4mXMmHsK_b9SetpsoeeIkuOqE5sd29eqYgkIBPe1ssnAN3T7MCht0Q&amp;file_name=&#x2F;1-Git--Snaphost.PNG">
-<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=eac3DwtV2i2maGZSa6nOZElQOvTGyud07xCzYGiQsGjO7rfeNmZ5YZXdVVSyOdDqDVN5PQok9ln0c7QjSKDyYfwzpAPgXTaP9FAvB8YTUPxONv3UZpOC3_Roy3hkQ7Hg9MgCekI&amp;file_name=&#x2F;1-Git--%E5%AE%8C%E6%95%B4%E6%80%A7.PNG">
-<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=8e2fugpQn6Nzvwfnz1cCakTCbKfCKuMNFd6EBWvtRt0Y3Bvl7NeZvt4tjKVQ-cD9lrwPurnpT0OG8Wdif_Qgj3EWwPEYYN6DZCcsAXh-lRf-F_oI5GN58Bmhau_8b9TNxmk&amp;file_name=&#x2F;1-Git%E4%BB%93%E5%BA%93-1.PNG">
-<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=8743Y2PMLJLGpmYX2o5DgQ_EWPZCLE0-o6cPfpmmglHucfpjdQ0QMGFfEGsmYiDsYyTClu9dqJjo9NeIwaEE6OZyNd0iRzD_qXERgLhRXm3GqwaR7sLHjFSKdqnJMwKXoUo&amp;file_name=&#x2F;1-Git%E4%BB%93%E5%BA%93-2.PNG">
-<meta property="og:updated_time" content="2020-02-20T08:20:55.219Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=ace2SXmY4j2w431Za6bUmolska07iWjqYRn76YL3WvZR9aVpdTy5qQ-HN9rX9omN46NTFfzu5cGHb7lh_R8BoYvgFqqi3cMoEjywIoHsUNGu2J38Uw_VSq8ff6nX7xOYnfo&amp;file_name=&#x2F;3-Git%E5%88%86%E6%94%AF-1.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=a764bq-2RuR41FYAOFiemUOJvtelDBs1NrzXKTcayUV2Zqr50lpWlVmwcfThfKMbS8TQx6L_cIRUvmeEEA0FO26n1787BIK83e5LQXodBzq3Bb7Q4oxaSAuwfOcQ9kCRx20&amp;file_name=&#x2F;3-Git%E5%88%86%E6%94%AF-2.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=ae25caEmzRExQeYzws_s8ffQZlGnW5Q0U0DIPupQKMCZXwhW0VFDZJc6Za0K4uSatBIby5YEXQzaI9Nn7v4CNkOd9rJSdzZm3nQL4Aea4GC8YfqRsB46QPgNAfdcx7s025s&amp;file_name=&#x2F;3-Git%E5%88%86%E6%94%AF-3.PNG">
+<meta property="og:updated_time" content="2020-02-20T11:49:21.718Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=e6aepRdWeAydQaYjkAMNaUtjlmQb_doKJpvZ4JD7IdSWAGwhQ3dlKEezoGhpWeZtZ7El4nH5XCf7zr0M7S57vk-Rex-h9yZ7GNtLGSv9_hU6AK9Y2vtqLYDxYCyiRFgLxODz1dN4BZ1fQ361XII&amp;file_name=&#x2F;1-Git-Server%20and%20Computer.PNG">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=ace2SXmY4j2w431Za6bUmolska07iWjqYRn76YL3WvZR9aVpdTy5qQ-HN9rX9omN46NTFfzu5cGHb7lh_R8BoYvgFqqi3cMoEjywIoHsUNGu2J38Uw_VSq8ff6nX7xOYnfo&amp;file_name=&#x2F;3-Git%E5%88%86%E6%94%AF-1.PNG">
 
 
 
@@ -124,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/02/20/1.什么是Git/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/02/20/Git笔记-3：Git的分支/"/>
 
 
 
 
 
-  <title>1.什么是Git | Tomas'Blog</title>
+  <title>Git笔记-3：Git的分支 | Tomas'Blog</title>
   
 
 
@@ -249,7 +247,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/20/1.%E4%BB%80%E4%B9%88%E6%98%AFGit/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/20/Git%E7%AC%94%E8%AE%B0-3%EF%BC%9AGit%E7%9A%84%E5%88%86%E6%94%AF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -266,7 +264,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">1.什么是Git</h1>
+          <h1 class="post-title" itemprop="name headline">Git笔记-3：Git的分支</h1>
         
 
         <div class="post-meta">
@@ -332,7 +330,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  279 字
+                  280 字
                 </span>
               
 
@@ -370,38 +368,62 @@
 
       
         <hr>
-<h4 id="1-Git"><a href="#1-Git" class="headerlink" title="1. Git"></a>1. Git</h4><ul>
-<li>分布式版本管理系统<ul>
-<li>最初是为了管理Linux的系统内核</li>
-<li>同FTP相同的功能</li>
-<li>非线性管文件</li>
-<li>速度快</li>
-<li>对待数据更像一个快照流</li>
-<li>可以在无网络的情况下进行提交到本地服务器，在有网络的情况下提交给远端的服务器</li>
+<h4 id="1-Git的分支"><a href="#1-Git的分支" class="headerlink" title="1. Git的分支"></a>1. Git的分支</h4><ul>
+<li>版本发布、功能增加、错误修改</li>
 </ul>
-</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=e6aepRdWeAydQaYjkAMNaUtjlmQb_doKJpvZ4JD7IdSWAGwhQ3dlKEezoGhpWeZtZ7El4nH5XCf7zr0M7S57vk-Rex-h9yZ7GNtLGSv9_hU6AK9Y2vtqLYDxYCyiRFgLxODz1dN4BZ1fQ361XII&file_name=/1-Git-Server%20and%20Computer.PNG" alt="1-Git-Server and Computer"></p>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=ace2SXmY4j2w431Za6bUmolska07iWjqYRn76YL3WvZR9aVpdTy5qQ-HN9rX9omN46NTFfzu5cGHb7lh_R8BoYvgFqqi3cMoEjywIoHsUNGu2J38Uw_VSq8ff6nX7xOYnfo&file_name=/3-Git%E5%88%86%E6%94%AF-1.PNG" alt="3-Git分支-1"></p>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=a764bq-2RuR41FYAOFiemUOJvtelDBs1NrzXKTcayUV2Zqr50lpWlVmwcfThfKMbS8TQx6L_cIRUvmeEEA0FO26n1787BIK83e5LQXodBzq3Bb7Q4oxaSAuwfOcQ9kCRx20&file_name=/3-Git%E5%88%86%E6%94%AF-2.PNG" alt="3-Git分支-2"></p>
 <ul>
-<li>方式：直接记录快照而非方式，每次修改需要一次Commit</li>
-<li>保证完整性：计算校验和（哈希算法），Git存取的是哈希值</li>
+<li>分支发布合并</li>
 </ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=8d99-MJEqcAX4DkhM_MvPjpDFeRcDq5L-99XUfsqSZj-pC5knZRbBGCG0yaixsZkiEbiYDU_bupTpNWI4mXMmHsK_b9SetpsoeeIkuOqE5sd29eqYgkIBPe1ssnAN3T7MCht0Q&file_name=/1-Git--Snaphost.PNG" alt="1-Git--Snaphost"></p>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=eac3DwtV2i2maGZSa6nOZElQOvTGyud07xCzYGiQsGjO7rfeNmZ5YZXdVVSyOdDqDVN5PQok9ln0c7QjSKDyYfwzpAPgXTaP9FAvB8YTUPxONv3UZpOC3_Roy3hkQ7Hg9MgCekI&file_name=/1-Git--%E5%AE%8C%E6%95%B4%E6%80%A7.PNG" alt="1-Git--完整性"></p>
-<h4 id="2-Git中的数据库"><a href="#2-Git中的数据库" class="headerlink" title="2. Git中的数据库"></a>2. Git中的数据库</h4><ul>
-<li>Git仓库–.git directory：保存项目数据，元数据的地方，git自己维护的文件夹</li>
-<li>工作目录–Working Directory：内容自Git仓库，对当前项目某一版本独立提取出来的内容</li>
-<li>暂存区–Staging Area：保存下次提交的文件目录，也算是一个索引</li>
-<li>三个概念<ul>
-<li>已提交：Git目录中保存着的特定版本文件</li>
-<li>已暂存：做了修改并放在暂存区</li>
-<li>已修改：做了修改但还没有放到暂存区</li>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=ae25caEmzRExQeYzws_s8ffQZlGnW5Q0U0DIPupQKMCZXwhW0VFDZJc6Za0K4uSatBIby5YEXQzaI9Nn7v4CNkOd9rJSdzZm3nQL4Aea4GC8YfqRsB46QPgNAfdcx7s025s&file_name=/3-Git%E5%88%86%E6%94%AF-3.PNG" alt="3-Git分支-3"></p>
+<h4 id="2-Git分支操作"><a href="#2-Git分支操作" class="headerlink" title="2. Git分支操作"></a>2. Git分支操作</h4><ul>
+<li>创建分支：<strong><code>🔺命令：git branch 分支名</code></strong><ul>
+<li>基于某个分支创建的分支，会复制其内容</li>
 </ul>
 </li>
-<li>远程仓库–Remote：多人操作的仓库</li>
+<li>查看分支：<strong><code>🔺命令：git branch</code></strong></li>
+<li>跳转分支：<strong><code>🔺命令：git checkout 分支名</code></strong>   </li>
+<li>创建分支并跳转：<strong><code>🔺命令：git checkout -b 分支名</code></strong></li>
+<li>删除分支：<strong><code>🔺命令：git branch -d 分支名</code></strong><ul>
+<li>▲ 无合并到master的分支无法删除，或者使用-D参数`**</li>
 </ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=8e2fugpQn6Nzvwfnz1cCakTCbKfCKuMNFd6EBWvtRt0Y3Bvl7NeZvt4tjKVQ-cD9lrwPurnpT0OG8Wdif_Qgj3EWwPEYYN6DZCcsAXh-lRf-F_oI5GN58Bmhau_8b9TNxmk&file_name=/1-Git%E4%BB%93%E5%BA%93-1.PNG" alt="1-Git仓库-1"></p>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=8743Y2PMLJLGpmYX2o5DgQ_EWPZCLE0-o6cPfpmmglHucfpjdQ0QMGFfEGsmYiDsYyTClu9dqJjo9NeIwaEE6OZyNd0iRzD_qXERgLhRXm3GqwaR7sLHjFSKdqnJMwKXoUo&file_name=/1-Git%E4%BB%93%E5%BA%93-2.PNG" alt="1-Git仓库-2"></p>
+</li>
+<li>合并分支：<strong><code>🔺命令：git merge 分支名</code></strong></li>
+</ul>
+<h4 id="3-Git-tutorial-Repository"><a href="#3-Git-tutorial-Repository" class="headerlink" title="3. Git-tutorial Repository"></a>3. Git-tutorial Repository</h4><ul>
+<li>cd git-tutorial</li>
+<li>git branch feature1</li>
+<li>git branch</li>
+<li>git checkout feature1</li>
+<li>touch a.txt</li>
+<li>vim a.txt</li>
+<li>this is a.txt → wq</li>
+<li>git add a.txt</li>
+<li>git commit -m “a.txt”</li>
+<li>git branch feature2</li>
+<li>git checkout feature2</li>
+<li>git checkout -b feature3</li>
+<li>git branch</li>
+<li>git branch -d feature2</li>
+<li>touch b.txt</li>
+<li>vim b.txt</li>
+<li>this is b.txt → wq</li>
+<li>git add b.txt</li>
+<li>git commit -m “b.txt”</li>
+<li>git checkout master</li>
+<li>git branch -d feature3</li>
+<li>git merge feature3</li>
+<li>git push</li>
+<li>查看Github仓库是否有a.txt和b.txt，但无其他分支</li>
+<li>git branch feature1</li>
+<li>git push origin feature1</li>
+<li>查看Github仓库是否有feature1分支</li>
+<li>git push origin :feature1</li>
+<li>查看Github仓库是否无feature1分支</li>
+<li>git push origin feature1:f1</li>
+<li>查看Github仓库的feature1是否更改为f1</li>
+</ul>
 
       
     </div>
@@ -434,8 +456,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/02/18/%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7(%E4%B8%80)%EF%BC%9ADirsearch/" rel="next" title="渗透工具(一)：Dirsearch">
-                <i class="fa fa-chevron-left"></i> 渗透工具(一)：Dirsearch
+              <a href="/2020/02/20/Git%E7%AC%94%E8%AE%B0-2%EF%BC%9AGit%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" rel="next" title="Git笔记-2：Git基本操作">
+                <i class="fa fa-chevron-left"></i> Git笔记-2：Git基本操作
               </a>
             
           </div>
@@ -444,8 +466,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/02/20/2.Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" rel="prev" title="2.Git基本操作">
-                2.Git基本操作 <i class="fa fa-chevron-right"></i>
+              <a href="/2020/02/20/Git%E7%AC%94%E8%AE%B0-4%EF%BC%9AGit%E7%9A%84%E5%90%88%E5%B9%B6/" rel="prev" title="Git笔记-4：Git的合并">
+                Git笔记-4：Git的合并 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -527,7 +549,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">114</span>
+                  <span class="site-state-item-count">115</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -616,7 +638,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Git"><span class="nav-number">1.</span> <span class="nav-text">1. Git</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Git中的数据库"><span class="nav-number">2.</span> <span class="nav-text">2. Git中的数据库</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Git的分支"><span class="nav-number">1.</span> <span class="nav-text">1. Git的分支</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Git分支操作"><span class="nav-number">2.</span> <span class="nav-text">2. Git分支操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Git-tutorial-Repository"><span class="nav-number">3.</span> <span class="nav-text">3. Git-tutorial Repository</span></a></li></ol></div>
             
 
           </div>
@@ -650,7 +672,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">102.4k</span>
+    <span title="Site words total count">102.5k</span>
   
 </div>
 

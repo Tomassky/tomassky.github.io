@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="1. 安装Git 下载git OXS版本（一般为内置&#x2F;brew install git安装） 下载git WindowS版本（Git网页下载Git） 下载git Linux版本（apt-get install git-all&#x2F;yum -y install git）  2. Git的基本命令 ▲ 提交到远程仓库需要在Github上创建一个仓库 Git的版本 🔺命令：git version   G">
+<meta name="description" content="1. gitignore&#x2F;fork同步 创建一个.gitignore文件，保存要忽略的内容 忽略系统生成的文件，如IDE的配置 忽略编译生成的中间文件、可执行文件等 忽略敏感的配置文件和本地不想提交的脚本   常用参数 配置文件：.settings&#x2F; 脚本文件：*.sh 上次所有txt文件：!*.txt 某个目录：&#x2F;a&#x2F;*.class   gitignore网站：https:&#x2F;&#x2F;www.gitig">
 <meta name="keywords" content="Git,Github">
 <meta property="og:type" content="article">
-<meta property="og:title" content="2.Git基本操作">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;20&#x2F;2.Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;index.html">
+<meta property="og:title" content="Git笔记-6：gitignore和fork同步">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;20&#x2F;Git%E7%AC%94%E8%AE%B0-6%EF%BC%9Agitignore%E5%92%8Cfork%E5%90%8C%E6%AD%A5&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="1. 安装Git 下载git OXS版本（一般为内置&#x2F;brew install git安装） 下载git WindowS版本（Git网页下载Git） 下载git Linux版本（apt-get install git-all&#x2F;yum -y install git）  2. Git的基本命令 ▲ 提交到远程仓库需要在Github上创建一个仓库 Git的版本 🔺命令：git version   G">
+<meta property="og:description" content="1. gitignore&#x2F;fork同步 创建一个.gitignore文件，保存要忽略的内容 忽略系统生成的文件，如IDE的配置 忽略编译生成的中间文件、可执行文件等 忽略敏感的配置文件和本地不想提交的脚本   常用参数 配置文件：.settings&#x2F; 脚本文件：*.sh 上次所有txt文件：!*.txt 某个目录：&#x2F;a&#x2F;*.class   gitignore网站：https:&#x2F;&#x2F;www.gitig">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-02-20T08:20:37.894Z">
+<meta property="og:updated_time" content="2020-02-20T11:52:19.240Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/02/20/2.Git基本操作/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/02/20/Git笔记-6：gitignore和fork同步/"/>
 
 
 
 
 
-  <title>2.Git基本操作 | Tomas'Blog</title>
+  <title>Git笔记-6：gitignore和fork同步 | Tomas'Blog</title>
   
 
 
@@ -243,7 +243,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/20/2.Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/20/Git%E7%AC%94%E8%AE%B0-6%EF%BC%9Agitignore%E5%92%8Cfork%E5%90%8C%E6%AD%A5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -260,7 +260,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">2.Git基本操作</h1>
+          <h1 class="post-title" itemprop="name headline">Git笔记-6：gitignore和fork同步</h1>
         
 
         <div class="post-meta">
@@ -326,7 +326,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  481 字
+                  261 字
                 </span>
               
 
@@ -342,7 +342,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  2 分钟
+                  1 分钟
                 </span>
               
             </div>
@@ -363,88 +363,48 @@
       
 
       
-        <hr>
-<h4 id="1-安装Git"><a href="#1-安装Git" class="headerlink" title="1. 安装Git"></a>1. 安装Git</h4><ul>
-<li>下载git OXS版本（一般为内置/brew install git安装）</li>
-<li>下载git WindowS版本（Git网页下载Git）</li>
-<li>下载git Linux版本（apt-get install git-all/yum -y install git）</li>
-</ul>
-<h4 id="2-Git的基本命令"><a href="#2-Git的基本命令" class="headerlink" title="2. Git的基本命令"></a>2. Git的基本命令</h4><ul>
-<li>▲ 提交到远程仓库需要在Github上创建一个仓库</li>
-<li>Git的版本<ul>
-<li><strong><code>🔺命令：git version</code></strong></li>
+        <h4 id="1-gitignore-fork同步"><a href="#1-gitignore-fork同步" class="headerlink" title="1. gitignore/fork同步"></a>1. gitignore/fork同步</h4><ul>
+<li>创建一个.gitignore文件，保存要忽略的内容<ul>
+<li>忽略系统生成的文件，如IDE的配置</li>
+<li>忽略编译生成的中间文件、可执行文件等</li>
+<li>忽略敏感的配置文件和本地不想提交的脚本</li>
 </ul>
 </li>
-<li>Git的用户信息<ul>
-<li>名字：<strong><code>🔺命令：git config --global user.name &quot;tomas&quot;</code></strong></li>
-<li>邮箱：<strong><code>🔺命令：git config --global user.email &quot;643008933@qq.com&quot;</code></strong></li>
-<li>配置文件：~/.gitconfig（可设置代理，配置信息）</li>
+<li>常用参数<ul>
+<li>配置文件：.settings/</li>
+<li>脚本文件：*.sh</li>
+<li>上次所有txt文件：!*.txt</li>
+<li>某个目录：/a/*.class</li>
 </ul>
 </li>
-<li>Git的基本命令<ul>
-<li>初始化：<strong><code>🔺命令：git init</code></strong></li>
-<li>仓库状态：<strong><code>🔺命令：git status</code></strong></li>
-<li>添加文件到暂存区管理：<strong><code>🔺命令：git add 文件名</code></strong><ul>
-<li>-A，所有文件</li>
+<li>gitignore网站：<a href="https://www.gitignore.io" target="_blank" rel="noopener">https://www.gitignore.io</a></li>
+<li>查看远程的版本信息：<strong><code>🔺命令：git remote -v</code></strong></li>
+<li>增加一个远程仓库上传流：<strong><code>🔺命令：git remote add upstream https://...</code></strong></li>
+<li>更新远程仓库的版本：<strong><code>🔺命令：git fetch upstream 分支名</code></strong><ul>
+<li>分支名默认省略，则为master分支</li>
+<li>▲ pull = fetch + merge</li>
 </ul>
 </li>
-<li>从暂存区删除文件：<strong><code>🔺命令：git rm --cacahe 文件名</code></strong></li>
-<li>查看文件：<strong><code>🔺命令：..git → cat index</code></strong></li>
-<li>提交：<strong><code>🔺命令：git commit -m &quot;文件名&quot;</code></strong><ul>
-<li>-m：描述提交的内容</li>
+<li>查看远程原始仓库的分支：<strong><code>🔺命令：git branch -r</code></strong></li>
 </ul>
-</li>
-<li>建立连接：<strong><code>🔺命令：git remote add origin https://.....</code></strong></li>
-<li>查看远端信息：<strong><code>🔺命令：git remote -v</code></strong></li>
-<li>提交本地文件到远端服务器：<strong><code>🔺命令：git push origin master -u</code></strong><ul>
-<li>origin：远端仓库名称</li>
-<li>master：本地仓库名称</li>
-<li>-u：后续不需要输入名称</li>
-<li>:master ：删除远端的分支</li>
-<li>master:m1 ：更改远端分支名称为m1</li>
-</ul>
-</li>
-<li>克隆远程仓库到本地：<strong><code>🔺命令：git clone https://..... git-demo</code></strong><ul>
-<li>git-demo：为拉取到本地仓库的名称</li>
-</ul>
-</li>
-<li>拉取远端仓库修改数据到本地：<strong><code>🔺命令：git pull origin master</code></strong><ul>
-<li>origin：远端仓库名称</li>
-<li>master：本地仓库名称</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-Git-tutorial-Repository"><a href="#3-Git-tutorial-Repository" class="headerlink" title="3. Git-tutorial Repository"></a>3. Git-tutorial Repository</h4><ul>
-<li>mkdir git-tutorial</li>
+<h4 id="2-Git-tutorial-Repository"><a href="#2-Git-tutorial-Repository" class="headerlink" title="2. Git-tutorial Repository"></a>2. Git-tutorial Repository</h4><ul>
 <li>cd git-tutorial</li>
-<li>git init</li>
-<li>ll</li>
-<li>touch README.md</li>
-<li>git status</li>
-<li>git add README.md</li>
-<li>git status</li>
-<li>git rm –cacahe README.md</li>
-<li>git status</li>
-<li>git add README.md -A</li>
-<li>git status</li>
-<li>git commit -m “README.md”</li>
-<li>git remote add origin <a href="https://github.com/" target="_blank" rel="noopener">https://github.com/</a>..</li>
+<li>git add -A .</li>
+<li>git commit -m “add gitignore”</li>
+<li>git push -f</li>
+<li>git clone https://……awesome</li>
+<li>cd awesome</li>
 <li>git remote -v</li>
-<li>git push origin master -u</li>
-<li>查看Github是否有新建一个仓库并有README.md</li>
-<li>cd ..</li>
-<li>git clone https://… git-demo</li>
-<li>vim README.md</li>
-<li>Hello world → wq</li>
-<li>git status</li>
-<li>git add README.md</li>
-<li>git commit -m “modify README.md”</li>
-<li>cd ..</li>
-<li>cd git-tutorial</li>
-<li>git pull origin master</li>
-<li>查看Github建立的仓库中的README.md是否有内容</li>
+<li>git remote add upstream https://…</li>
+<li>git remote -v</li>
+<li>git fetch upstream </li>
+<li>git branch -r</li>
+<li>git rebase upstream/master<ul>
+<li>merge关注的是提交的历史，将两次操作合并，但无提交数据，rebase则足够</li>
+</ul>
+</li>
+<li>git push</li>
+<li>git log</li>
 </ul>
 
       
@@ -478,8 +438,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/02/20/1.%E4%BB%80%E4%B9%88%E6%98%AFGit/" rel="next" title="1.什么是Git">
-                <i class="fa fa-chevron-left"></i> 1.什么是Git
+              <a href="/2020/02/20/Git%E7%AC%94%E8%AE%B0-5%EF%BC%9AGit%E7%9A%84%E5%9B%9E%E6%BB%9A%E6%92%A4%E9%94%80/" rel="next" title="Git笔记-5：Git的回滚撤销">
+                <i class="fa fa-chevron-left"></i> Git笔记-5：Git的回滚撤销
               </a>
             
           </div>
@@ -488,8 +448,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/02/20/3.Git%E7%9A%84%E5%88%86%E6%94%AF/" rel="prev" title="3.Git中的分支">
-                3.Git中的分支 <i class="fa fa-chevron-right"></i>
+              <a href="/2020/02/20/Git%E7%AC%94%E8%AE%B0-7%EF%BC%9A%E5%AE%9E%E7%8E%B0Github%E5%85%8D%E5%AF%86%E6%8E%A8%E9%80%81/" rel="prev" title="Git笔记-7：实现Github免密推送">
+                Git笔记-7：实现Github免密推送 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -571,7 +531,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">114</span>
+                  <span class="site-state-item-count">115</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -660,7 +620,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-安装Git"><span class="nav-number">1.</span> <span class="nav-text">1. 安装Git</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Git的基本命令"><span class="nav-number">2.</span> <span class="nav-text">2. Git的基本命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Git-tutorial-Repository"><span class="nav-number">3.</span> <span class="nav-text">3. Git-tutorial Repository</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-gitignore-fork同步"><span class="nav-number">1.</span> <span class="nav-text">1. gitignore/fork同步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Git-tutorial-Repository"><span class="nav-number">2.</span> <span class="nav-text">2. Git-tutorial Repository</span></a></li></ol></div>
             
 
           </div>
@@ -694,7 +654,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">102.4k</span>
+    <span title="Site words total count">102.5k</span>
   
 </div>
 

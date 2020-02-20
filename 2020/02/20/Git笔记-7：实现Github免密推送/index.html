@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="1. Git的合并 ▲ 可以在Stackoverflow上看git log多样格式 ▲ rebase的黄金法则：绝对不要在公共分支使用rebase 查看日志：git log –oneline：一行的提交信息 –oneline -3：只取前面3行   查看添加的内容：🔺命令：git show 哈希值 查看提交方式：🔺命令：git merge --help –ff（fast-forward）：默">
+<meta name="description" content="1. Git传输的协议 local协议 HTTP(S)协议：需要输入账号密码 SSH协议：不需要输入账号密码 Git协议 Git免密推送  2. SSH协议登陆 在个人界面的Settings处 SSH and GPG keys generating SSH keys Generating a new SSH key and adding it to the ssh-agent Windows ss">
 <meta name="keywords" content="Git,Github">
 <meta property="og:type" content="article">
-<meta property="og:title" content="4.Git的合并">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;20&#x2F;4.Git%E7%9A%84%E5%90%88%E5%B9%B6&#x2F;index.html">
+<meta property="og:title" content="Git笔记-7：实现Github免密推送">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;20&#x2F;Git%E7%AC%94%E8%AE%B0-7%EF%BC%9A%E5%AE%9E%E7%8E%B0Github%E5%85%8D%E5%AF%86%E6%8E%A8%E9%80%81&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="1. Git的合并 ▲ 可以在Stackoverflow上看git log多样格式 ▲ rebase的黄金法则：绝对不要在公共分支使用rebase 查看日志：git log –oneline：一行的提交信息 –oneline -3：只取前面3行   查看添加的内容：🔺命令：git show 哈希值 查看提交方式：🔺命令：git merge --help –ff（fast-forward）：默">
+<meta property="og:description" content="1. Git传输的协议 local协议 HTTP(S)协议：需要输入账号密码 SSH协议：不需要输入账号密码 Git协议 Git免密推送  2. SSH协议登陆 在个人界面的Settings处 SSH and GPG keys generating SSH keys Generating a new SSH key and adding it to the ssh-agent Windows ss">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-02-20T08:17:56.256Z">
+<meta property="og:updated_time" content="2020-02-20T11:52:44.755Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/02/20/4.Git的合并/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/02/20/Git笔记-7：实现Github免密推送/"/>
 
 
 
 
 
-  <title>4.Git的合并 | Tomas'Blog</title>
+  <title>Git笔记-7：实现Github免密推送 | Tomas'Blog</title>
   
 
 
@@ -243,7 +243,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/20/4.Git%E7%9A%84%E5%90%88%E5%B9%B6/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/20/Git%E7%AC%94%E8%AE%B0-7%EF%BC%9A%E5%AE%9E%E7%8E%B0Github%E5%85%8D%E5%AF%86%E6%8E%A8%E9%80%81/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -260,7 +260,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">4.Git的合并</h1>
+          <h1 class="post-title" itemprop="name headline">Git笔记-7：实现Github免密推送</h1>
         
 
         <div class="post-meta">
@@ -326,7 +326,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  409 字
+                  168 字
                 </span>
               
 
@@ -342,7 +342,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  2 分钟
+                  1 分钟
                 </span>
               
             </div>
@@ -363,87 +363,36 @@
       
 
       
-        <hr>
-<h4 id="1-Git的合并"><a href="#1-Git的合并" class="headerlink" title="1. Git的合并"></a>1. Git的合并</h4><ul>
-<li>▲ 可以在Stackoverflow上看git log多样格式</li>
-<li>▲ rebase的黄金法则：绝对不要在公共分支使用rebase</li>
-<li>查看日志：git log<ul>
-<li>–oneline：一行的提交信息</li>
-<li>–oneline -3：只取前面3行</li>
+        <h4 id="1-Git传输的协议"><a href="#1-Git传输的协议" class="headerlink" title="1. Git传输的协议"></a>1. Git传输的协议</h4><ul>
+<li>local协议</li>
+<li>HTTP(S)协议：需要输入账号密码</li>
+<li>SSH协议：不需要输入账号密码</li>
+<li>Git协议</li>
+<li><a href="https://help.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent" target="_blank" rel="noopener">Git免密推送</a></li>
+</ul>
+<h4 id="2-SSH协议登陆"><a href="#2-SSH协议登陆" class="headerlink" title="2. SSH协议登陆"></a>2. SSH协议登陆</h4><ul>
+<li>在个人界面的Settings处</li>
+<li>SSH and GPG keys</li>
+<li>generating SSH keys</li>
+<li>Generating a new SSH key and adding it to the ssh-agent</li>
+<li>Windows<ul>
+<li>ssh-keygen -t rsa -b 4096 -C “<a href="mailto:643008933@qq.com" target="_blank" rel="noopener">643008933@qq.com</a>“<ul>
+<li>Enter a file in which to save the key (/c/Users/you/.ssh/id_rsa):[Press enter]</li>
+<li>Enter passphrase (empty for no passphrase): [Type a passphrase]</li>
+<li>Enter same passphrase again: [Type passphrase again]</li>
 </ul>
 </li>
-<li>查看添加的内容：<strong><code>🔺命令：git show 哈希值</code></strong></li>
-<li>查看提交方式：<strong><code>🔺命令：git merge --help</code></strong><ul>
-<li>–ff（fast-forward）：默认不产生一次commit</li>
-<li>–no-ff：产生一个commit</li>
+<li>eval $(ssh-agent -s)</li>
+<li>ssh-add ~/.ssh/id_rsa</li>
+<li>cat ~/.ssh/id_rsa.public</li>
+<li>复制公钥到New SSH Key</li>
 </ul>
 </li>
-<li>移动分支，并将master分支的提交并入：<strong><code>🔺命令：git rebase</code></strong></li>
-<li>查看版本分支报错情况：<strong><code>🔺命令：git mergetool</code></strong><ul>
-<li>通过工具修改后，会生成一个x.txt.orig，保存冲突的现场</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>   merge和rebase<br>   merge：两个分支的修改提交，默认不提交，关注点在合并操作上<br>   rebase：将当前分支做的修改，复制在目标分支的最后一次中，关注点在开发的过程上 </p>
-</blockquote>
-<h4 id="2-Git-tutorial-Repository"><a href="#2-Git-tutorial-Repository" class="headerlink" title="2. Git-tutorial Repository"></a>2. Git-tutorial Repository</h4><ul>
-<li>cd git-tutorial</li>
-<li>git branch -d f1</li>
-<li>git push origin :f1</li>
-<li>git log</li>
-<li>q</li>
-<li>git log –oneline</li>
-<li>git log –oneline -3</li>
-<li>git show d156c23</li>
-<li>vi ~/.config → dog = log –all –decorate –oneline –graph</li>
-<li>git dog</li>
-<li>git checkout -b f1</li>
-<li>touch fa.txt</li>
-<li>git add fa.txt</li>
-<li>git commit -m “add fa”</li>
-<li>git dog</li>
-<li>git checkout master</li>
-<li>git merge f1</li>
-<li>git dog</li>
-<li>git checkout f1</li>
-<li>touch fb.txt</li>
-<li>git commit -m “add fb”</li>
-<li>git checkout f1</li>
-<li>git merge f1 –no-ff</li>
-<li>git dog</li>
-<li>git push</li>
-<li>git push origin f1</li>
-<li>远程修改master中的a.txt</li>
-<li>git pull</li>
-<li>git checkout f1</li>
-<li>git merge master</li>
-<li>git dog</li>
-<li>git checkout master</li>
-<li>touch m1.txt</li>
-<li>git add m1.txt</li>
-<li>git commit -m “add m1”</li>
-<li>git checkout f1</li>
-<li>git dog</li>
-<li>git rebase</li>
-<li>git dog</li>
-<li>git checkout -b f2</li>
-<li>vim a.txt</li>
-<li>this is b.txt</li>
+<li>git clone with SSH</li>
+<li>touch a.txt</li>
 <li>git add a.txt</li>
-<li>git commit -m “update a.txt”</li>
-<li>git checkout f1</li>
-<li>vi a.txt</li>
-<li>this is c.txt</li>
-<li>git add a.txt</li>
-<li>git commit -m “update c.txt”</li>
-<li>git checkout f2</li>
-<li>git merge f1</li>
-<li>cat a.txt</li>
-<li>git mergetool</li>
-<li>rm a.txt.orig</li>
-<li>git commit -m “update a.txt”</li>
-<li>git dog</li>
+<li>git commit -m “add a.txt”</li>
+<li>git push（看是否需要账号密码登陆）</li>
 </ul>
 
       
@@ -477,8 +426,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/02/20/3.Git%E7%9A%84%E5%88%86%E6%94%AF/" rel="next" title="3.Git中的分支">
-                <i class="fa fa-chevron-left"></i> 3.Git中的分支
+              <a href="/2020/02/20/Git%E7%AC%94%E8%AE%B0-6%EF%BC%9Agitignore%E5%92%8Cfork%E5%90%8C%E6%AD%A5/" rel="next" title="Git笔记-6：gitignore和fork同步">
+                <i class="fa fa-chevron-left"></i> Git笔记-6：gitignore和fork同步
               </a>
             
           </div>
@@ -487,8 +436,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/02/20/5.Git%E7%9A%84%E5%9B%9E%E6%BB%9A%E6%92%A4%E9%94%80/" rel="prev" title="5.Git的回滚撤销">
-                5.Git的回滚撤销 <i class="fa fa-chevron-right"></i>
+              <a href="/2020/02/20/Git%E7%AC%94%E8%AE%B0-8%EF%BC%9AGit%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81/" rel="prev" title="Git笔记-8：Git的工作流">
+                Git笔记-8：Git的工作流 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -570,7 +519,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">114</span>
+                  <span class="site-state-item-count">115</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -659,7 +608,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Git的合并"><span class="nav-number">1.</span> <span class="nav-text">1. Git的合并</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Git-tutorial-Repository"><span class="nav-number">2.</span> <span class="nav-text">2. Git-tutorial Repository</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Git传输的协议"><span class="nav-number">1.</span> <span class="nav-text">1. Git传输的协议</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-SSH协议登陆"><span class="nav-number">2.</span> <span class="nav-text">2. SSH协议登陆</span></a></li></ol></div>
             
 
           </div>
@@ -693,7 +642,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">102.4k</span>
+    <span title="Site words total count">102.5k</span>
   
 </div>
 

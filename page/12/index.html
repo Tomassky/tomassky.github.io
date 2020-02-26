@@ -240,6 +240,246 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB)%EF%BC%9ATCPDUMP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB)%EF%BC%9ATCPDUMP/" itemprop="url">Kali Linux笔记(八)：TCPDUMP</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-09T19:29:25+08:00">
+                2019-12-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  545 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-TCPDUMP"><a href="#1-TCPDUMP" class="headerlink" title="1. TCPDUMP"></a>1. TCPDUMP</h4><ul>
+<li>NO-GUI的抓包分析工具</li>
+<li>Linux、Unix系统默认安装</li>
+</ul>
+<p>v2. TCPDUMP-抓包</p>
+<ul>
+<li>抓包<ul>
+<li>默认只抓每个数据包的68个字节（一般是数据包头）</li>
+<li><strong><code>🔺命令：tcpdump -h（--help选项）</code></strong></li>
+<li><strong><code>🔺命令：tcpdump -i（网卡） eth0 -s（size） 0 -w（保存） x.pcap</code></strong></li>
+<li><strong><code>🔺命令：tcpdump -A（以ASCII码的形式） -r（读取） x.pcap</code></strong></li>
+<li><strong><code>🔺命令：tcpdump -X（以十六进制的形式）-r x.pcap</code></strong></li>
+<li><strong><code>🔺命令：tcpdump -i eth0 tcp（协议类型） port（端口） x</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="3-TCPDUMP-筛选"><a href="#3-TCPDUMP-筛选" class="headerlink" title="3. TCPDUMP-筛选"></a>3. TCPDUMP-筛选</h4><ul>
+<li>筛选<ul>
+<li><strong><code>🔺命令：tcpdump -n（不做域名解析）-r x.pcap | awk &#39;{print $3} &#39;| sort -u</code></strong></li>
+<li><strong><code>🔺命令：tcpdump -n src（源地址） host ip地址 -r x.pcap</code></strong></li>
+<li><strong><code>🔺命令：tcpdump -n dst（目标地址） host ip地址 -r x.pcap</code></strong></li>
+<li><strong><code>🔺命令：tcpdump -n tcp port x -r x.pcap</code></strong></li>
+<li><strong><code>🔺命令：tcpdump -nX（不做域名解析，十六进制形式）tcp port x -r x.pcap</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="4-TCPDUMP-高级筛选"><a href="#4-TCPDUMP-高级筛选" class="headerlink" title="4. TCPDUMP-高级筛选"></a>4. TCPDUMP-高级筛选</h4><blockquote>
+<pre><code>ACK+PSH数据同时为1，即为数据传输真正开始的位置
+ACK为1，确认位 → A
+FIN为1，结束位 → F
+SYN为1，同步位 → S
+PSH为1，推送位 → P
+RST为1，复位位 → R
+URG为1，紧急位 → U
+CWR、ECE（暂未知）
+CEUAPRSF 0001100 = 24 in decimal</code></pre></blockquote>
+<ul>
+<li>高级筛选<ul>
+<li><strong><code>🔺命令：tcpdump -A -n &#39;tcp[13]=24&#39;（tcp的第十三字节为ACK+PSH）-r x.pcap</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="5-过程文档记录"><a href="#5-过程文档记录" class="headerlink" title="5. 过程文档记录"></a>5. 过程文档记录</h4><ul>
+<li>Dradis ▲2019.11.26软件启动失败<ul>
+<li>短期临时小团队资源共享</li>
+<li>各种插件导入文件</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>Dradis:开启 → http://127.0.0.1:3000 → 只需要输入密码即可 → import from file
+导入：namp -p IP地址 -oX x.xml → import from file → upload file
+导出：右键 → columns → catagory → HTML Export ready</code></pre></blockquote>
+<ul>
+<li>Keepnote（层级结构）▲2019.11.26新版本无此软件</li>
+</ul>
+<blockquote>
+<pre><code>Keepnote:开启 → file → notebook 
+导出：Export notebook → HTML</code></pre></blockquote>
+<ul>
+<li>Truecrypt（加密工具）▲2019.11.26新版本无此软件，换为VeraCrypt</li>
+</ul>
+<blockquote>
+<pre><code>生成一个文件夹 → 挂载系统 → 拷贝到文件 → 卸载文件（全盘加密时间很长）
+Truecrypt:创建 → create Volume（可文件或者硬盘分区）→  Standard Truecrypt volume（Hidden Truecrypt volume隐藏加密，标准加密打开卷里面什么都没用）→ Select file → Encryption Algorithm（加密算法）+Hash Algorithm（哈希算法）→ Volume size → Volume Password → Format option → Cross-Platform Support（挂载支持）→ Volume Format（鼠标滑动生成随机密码）
+Truecrypt:使用 → select file → mount → Dismount All
+Hidden Truecrypt volume:存在outer volume和Hidden volume</code></pre></blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/22/%E7%AC%AC%E4%B8%89%E7%AB%A0%E3%80%81%E5%86%85%E5%AD%98%E6%8A%80%E6%9C%AF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1862,7 +2102,7 @@ Java API用于JAVA虚拟机（JVM）</code></pre></blockquote>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">116</span>
+                  <span class="site-state-item-count">117</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1969,7 +2209,7 @@ Java API用于JAVA虚拟机（JVM）</code></pre></blockquote>
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">103.2k</span>
+    <span title="Site words total count">103.9k</span>
   
 </div>
 

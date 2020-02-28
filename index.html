@@ -413,6 +413,217 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/28/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E5%9B%9B)%EF%BC%9AMSF%E6%A8%A1%E5%9D%97--%E7%BB%93%E5%90%88%E5%A4%96%E9%83%A8%E5%BA%94%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/28/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E5%9B%9B)%EF%BC%9AMSF%E6%A8%A1%E5%9D%97--%E7%BB%93%E5%90%88%E5%A4%96%E9%83%A8%E5%BA%94%E7%94%A8/" itemprop="url">Kali Linux笔记(一百零四)：MSF模块--结合外部应用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-28T17:04:16+08:00">
+                2020-02-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  208 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-Msf–弱点扫描"><a href="#1-Msf–弱点扫描" class="headerlink" title="1. Msf–弱点扫描"></a>1. Msf–弱点扫描</h4><ul>
+<li>Openvas<ul>
+<li><strong><code>🔺命令：Load openvas</code></strong><ul>
+<li>命令行模式，需要配置，使用繁琐</li>
+</ul>
+</li>
+<li>导入nbe格式扫描日志</li>
+<li><strong><code>🔺命令：db_import openvas.nbe</code></strong></li>
+</ul>
+</li>
+<li>Nessus</li>
+<li>Nexpose<ul>
+<li>xml格式日志文件</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-实验（Openvas-→-Metasploit）"><a href="#2-实验（Openvas-→-Metasploit）" class="headerlink" title="2. 实验（Openvas → Metasploit）"></a>2. 实验（Openvas → Metasploit）</h4><ul>
+<li>开启Openvas，网页模式进行Quick start漏洞扫描，导出nbe日志格式</li>
+<li><strong><code>🔺命令：msfconsole -q</code></strong></li>
+<li><strong><code>🔺命令：Load openvas</code></strong></li>
+<li><strong><code>🔺命令：db_import openvas.nbe</code></strong></li>
+<li><strong><code>🔺命令：hosts</code></strong></li>
+<li><strong><code>🔺命令：services</code></strong></li>
+<li><strong><code>🔺命令：vulns</code></strong></li>
+</ul>
+<h4 id="3-实验（Nessuse-→-Metasploit）"><a href="#3-实验（Nessuse-→-Metasploit）" class="headerlink" title="3. 实验（Nessuse → Metasploit）"></a>3. 实验（Nessuse → Metasploit）</h4><ul>
+<li><strong><code>🔺命令：cd /etc/init.d</code></strong></li>
+<li><strong><code>🔺命令：./nessusd start</code></strong></li>
+<li>网页查询是否已经正常启动</li>
+<li><strong><code>🔺命令：msfconsole -q</code></strong></li>
+<li><strong><code>🔺命令：Load nessus</code></strong> </li>
+<li>扫描帮助：<strong><code>🔺命令：nessus_help</code></strong> </li>
+<li>扫描连接：<strong><code>🔺命令：nessus_connect admin:toor@127.0.0.1</code></strong></li>
+<li>扫描策略：<strong><code>🔺命令：nessus_policy_list</code></strong>（若无策略，则需网页建立一个新的策略）</li>
+<li>扫描任务：<strong><code>🔺命令：nessus_scan_new &lt;UUID&gt; &lt;Name&gt; &lt;Description&gt; &lt;Target&gt;</code></strong></li>
+<li>执行扫描任务：<strong><code>🔺命令：nessus_scan_launch &lt;ID&gt;</code></strong> </li>
+<li><strong><code>🔺命令：nessus_report_list</code></strong></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/28/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E4%B8%89)%EF%BC%9AMSF%E6%A8%A1%E5%9D%97--Auxiliary/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2650,209 +2861,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/20/Git%E7%AC%94%E8%AE%B0-7%EF%BC%9A%E5%AE%9E%E7%8E%B0Github%E5%85%8D%E5%AF%86%E6%8E%A8%E9%80%81/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/20/Git%E7%AC%94%E8%AE%B0-7%EF%BC%9A%E5%AE%9E%E7%8E%B0Github%E5%85%8D%E5%AF%86%E6%8E%A8%E9%80%81/" itemprop="url">Git笔记-7：实现Github免密推送</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-20T16:24:49+08:00">
-                2020-02-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Git/" itemprop="url" rel="index">
-                    <span itemprop="name">Git</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  168 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="1-Git传输的协议"><a href="#1-Git传输的协议" class="headerlink" title="1. Git传输的协议"></a>1. Git传输的协议</h4><ul>
-<li>local协议</li>
-<li>HTTP(S)协议：需要输入账号密码</li>
-<li>SSH协议：不需要输入账号密码</li>
-<li>Git协议</li>
-<li><a href="https://help.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent" target="_blank" rel="noopener">Git免密推送</a></li>
-</ul>
-<h4 id="2-SSH协议登陆"><a href="#2-SSH协议登陆" class="headerlink" title="2. SSH协议登陆"></a>2. SSH协议登陆</h4><ul>
-<li>在个人界面的Settings处</li>
-<li>SSH and GPG keys</li>
-<li>generating SSH keys</li>
-<li>Generating a new SSH key and adding it to the ssh-agent</li>
-<li>Windows<ul>
-<li>ssh-keygen -t rsa -b 4096 -C “<a href="mailto:643008933@qq.com" target="_blank" rel="noopener">643008933@qq.com</a>“<ul>
-<li>Enter a file in which to save the key (/c/Users/you/.ssh/id_rsa):[Press enter]</li>
-<li>Enter passphrase (empty for no passphrase): [Type a passphrase]</li>
-<li>Enter same passphrase again: [Type passphrase again]</li>
-</ul>
-</li>
-<li>eval $(ssh-agent -s)</li>
-<li>ssh-add ~/.ssh/id_rsa</li>
-<li>cat ~/.ssh/id_rsa.public</li>
-<li>复制公钥到New SSH Key</li>
-</ul>
-</li>
-<li>git clone with SSH</li>
-<li>touch a.txt</li>
-<li>git add a.txt</li>
-<li>git commit -m “add a.txt”</li>
-<li>git push（看是否需要账号密码登陆）</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2907,7 +2915,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">121</span>
+                  <span class="site-state-item-count">122</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3014,7 +3022,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">107.3k</span>
+    <span title="Site words total count">107.5k</span>
   
 </div>
 

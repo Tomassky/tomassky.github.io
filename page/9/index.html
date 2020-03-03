@@ -240,6 +240,290 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/29/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%BA%8C)%EF%BC%9AOWASP_ZAP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/29/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%BA%8C)%EF%BC%9AOWASP_ZAP/" itemprop="url">Kali Linux笔记(四十二)：OWASP_ZAP</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-29T10:51:56+08:00">
+                2019-12-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  715 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-OWASP-ZAP"><a href="#1-OWASP-ZAP" class="headerlink" title="1. OWASP_ZAP"></a>1. OWASP_ZAP</h4><ul>
+<li>Zed attack proxy</li>
+<li>WEB Application集成渗透测试和漏洞挖掘工具</li>
+<li>开源免费跨平台简单易用</li>
+<li>截断代理（自动配置端口）</li>
+<li>主动（Quick Start/站点目录 → 攻击 → Active Scan）</li>
+<li>被动扫描（手动爬网，截断代理）</li>
+<li>Fuzzy（工具 → Fuzz/Request → 选择 → 右键 → Fuzz）▲ 注意File Fuzzers</li>
+<li>暴力破解（站点目录 → Request → 选择 → 右键 → Fuzz → Payload(字典文件)）</li>
+<li>API（必须使用了OWASP_ZAP代理的情况下）<ul>
+<li><a href="http://zap/" target="_blank" rel="noopener">http://zap/</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="2-OWASP-ZAP"><a href="#2-OWASP-ZAP" class="headerlink" title="2. OWASP_ZAP"></a>2. OWASP_ZAP</h4><ul>
+<li>Persist Session</li>
+<li>Mode<ul>
+<li>Safe（安全扫描，不包含危险扫描）</li>
+<li>Protected（指定Web Application进行危险扫描）</li>
+<li>Standard（标准扫描，存在一些危险扫描，可能造成破坏）</li>
+<li>ATTACK（能扫就扫，能有多强烈就多强烈）</li>
+</ul>
+</li>
+<li>升级Add-ones</li>
+<li>Anti CSRF Tokens（每次访问，随机生成一个Token → 防止CSRF/重放攻击）</li>
+</ul>
+<blockquote>
+<pre><code>▲ 一般情况下，虽然Tokens是变化的，但Tokens的头部是一般是固定不变的，可以添加到OWASP_ZAP中，可以做到重放攻击
+设置Options → Anti CSRF Tokens → Add（Tokens的名字）</code></pre></blockquote>
+<ul>
+<li>https–CA（增加OWASP_ZAP自签名证书）</li>
+</ul>
+<blockquote>
+<pre><code>▲ 设置Options → Dynamic SSL Certificates → 保存（cet证书） → 安装证书</code></pre></blockquote>
+<ul>
+<li>Scope/Cpntexts/Filter</li>
+<li>Http Sessions–default session tokens &amp; site session tokes</li>
+<li>Note/tag</li>
+<li>Passive Scan</li>
+</ul>
+<h4 id="3-OWASP-ZAP-Session"><a href="#3-OWASP-ZAP-Session" class="headerlink" title="3. OWASP_ZAP Session"></a>3. OWASP_ZAP Session</h4><ul>
+<li>persist the ZAP Session（文件 → 打开会话）<ul>
+<li>current timestamp（保存默认的ZAP目录）</li>
+<li>specify the name and location（长久保存自定义目录）</li>
+<li>not persist the ZAP Session（不长久保存）</li>
+</ul>
+</li>
+<li>Request/Response</li>
+<li>手动爬网 → OWASP_ZAP分析 </li>
+</ul>
+<h4 id="4-OWASP-ZAP-Manage-Add-ones"><a href="#4-OWASP-ZAP-Manage-Add-ones" class="headerlink" title="4. OWASP_ZAP Manage Add-ones"></a>4. OWASP_ZAP Manage Add-ones</h4><ul>
+<li>Installed（版本更新可能需要到Github）<ul>
+<li>Uninstall Selected</li>
+<li>Update Selected</li>
+</ul>
+</li>
+<li>Marketplace<ul>
+<li>Release（长期使用，正式发布）</li>
+<li>Beta（测试使用，较正式发布）</li>
+<li>Alpha（不是成熟的版本，稳定性准备性不是很高）</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-OWASP-ZAP-policy"><a href="#5-OWASP-ZAP-policy" class="headerlink" title="5. OWASP_ZAP policy"></a>5. OWASP_ZAP policy</h4><ul>
+<li>General<ul>
+<li>添加策略</li>
+<li>Name</li>
+<li>Default Alert Threshold（报警阈值，一般选中等）</li>
+<li>Default Attack Strength（攻击强度）</li>
+</ul>
+</li>
+<li>信息收集</li>
+<li>客户端浏览器</li>
+<li>服务器安全</li>
+<li>杂项</li>
+<li>注入</li>
+</ul>
+<h4 id="6-OWASP-ZAP-Scope-Cpntexts-Filter（范围-上下文-筛选）"><a href="#6-OWASP-ZAP-Scope-Cpntexts-Filter（范围-上下文-筛选）" class="headerlink" title="6. OWASP_ZAP Scope/Cpntexts/Filter（范围/上下文/筛选）"></a>6. OWASP_ZAP Scope/Cpntexts/Filter（范围/上下文/筛选）</h4><ul>
+<li>站点目录 → Include in Context → New context</li>
+<li>Scope包含Context，可以删除一个Context</li>
+<li>同一个范围Scope同一个策略</li>
+</ul>
+<h4 id="7-OWASP-ZAP-Http-Session"><a href="#7-OWASP-ZAP-Http-Session" class="headerlink" title="7. OWASP_ZAP Http Session"></a>7. OWASP_ZAP Http Session</h4><ul>
+<li>工具栏 → Session Properties<ul>
+<li>针对不同Context有不同的Authentication</li>
+<li>默认Manual Authentication（记录访问过网站的Session，手动输入记录）</li>
+<li>支持表单、HTTP Basic、Sript-Base</li>
+</ul>
+</li>
+<li>站点 → 加号 → 新建脚本</li>
+<li>选项 → Http Session → 增加Web Application自定义的Session </li>
+</ul>
+<h4 id="8-OWASP-ZAP-编码解码哈希"><a href="#8-OWASP-ZAP-编码解码哈希" class="headerlink" title="8. OWASP_ZAP 编码解码哈希"></a>8. OWASP_ZAP 编码解码哈希</h4><ul>
+<li>选择编码的字段或要编码的字段 → 右键选择</li>
+</ul>
+<blockquote>
+<pre><code>SHA1 -- 彩虹表，统计哈希值对应的值</code></pre></blockquote>
+<h4 id="9-OWASP-ZAP-截断"><a href="#9-OWASP-ZAP-截断" class="headerlink" title="9. OWASP_ZAP 截断"></a>9. OWASP_ZAP 截断</h4><ul>
+<li>工具栏 → Set break on all requests and responses</li>
+<li>单步截断/一次截断</li>
+<li>▲ 显示隐藏域（小灯泡）– 代理服务器修改返回的内容后返回给浏览器</li>
+</ul>
+<h4 id="10-OWASP-ZAP"><a href="#10-OWASP-ZAP" class="headerlink" title="10. OWASP_ZAP"></a>10. OWASP_ZAP</h4><ul>
+<li>标准扫描工作流程<ul>
+<li>设置代理</li>
+<li>手动爬网</li>
+<li>自动爬网（OWASP_ZAP自动爬网，站点目录 → 右键攻击 → 爬网/Forced Browser site/Forced Browser directory/Forced Browser directory(and children)）</li>
+<li>主动扫描（OWASP_ZAP自动爬网，站点目录 → 右键攻击 → Active Scan）</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81)%EF%BC%9AW3AF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3015,283 +3299,6 @@ Ubuntu下：id查看当前用户信息
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/22/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B8%89)%EF%BC%9A%E6%94%B6%E9%9B%86%E4%BF%A1%E6%81%AF%E4%B8%8E%E9%9A%90%E8%94%BD%E7%97%95%E8%BF%B9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/22/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B8%89)%EF%BC%9A%E6%94%B6%E9%9B%86%E4%BF%A1%E6%81%AF%E4%B8%8E%E9%9A%90%E8%94%BD%E7%97%95%E8%BF%B9/" itemprop="url">Kali Linux笔记(三十三)：收集信息与隐蔽痕迹</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-22T20:58:11+08:00">
-                2019-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  800 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-信息收集"><a href="#1-信息收集" class="headerlink" title="1. 信息收集"></a>1. 信息收集</h4><ul>
-<li>应用系统的配置文件<ul>
-<li>应用连接数据库的配置文件</li>
-<li>后台服务运行账户</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-基本信息收集"><a href="#2-基本信息收集" class="headerlink" title="2. 基本信息收集"></a>2. 基本信息收集</h4><ul>
-<li>Linux<ul>
-<li>/etc/resolv.conf（DNS信息）</li>
-<li>/etc/passwd（存了用户账号和密码）</li>
-<li>/etc/shadow（存放的密码信息）</li>
-<li><strong><code>🔺命令：whoami,who -a</code></strong></li>
-<li><strong><code>🔺命令：ifconfig -a，iptables -L -n，netstat -rn</code></strong></li>
-<li><strong><code>🔺命令：uname -a，ps aux</code></strong></li>
-<li><strong><code>🔺命令：dpkg -l | head</code></strong>（rc–remove+配置文件保存）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>/etc/passwd   -rw-r--r--
-/etc/shadow   -rw-r-----</code></pre></blockquote>
-<ul>
-<li>Windows<ul>
-<li><strong><code>🔺命令：ipconfig /all,ipconfig /displaydns（DNS缓存）,netstat -bnao,netstat -r（查询路由）</code></strong></li>
-<li><strong><code>🔺命令：net view,net view /domain（网络共享信息）</code></strong></li>
-<li><strong><code>🔺命令：net user /domain,net user %username% /domain</code></strong>（域环境的信息）</li>
-<li><strong><code>🔺命令：net accounts,net share</code></strong>（机器开的共享）</li>
-<li><strong><code>🔺命令：net localgroup administrator username /add</code></strong>（加入管理员组）</li>
-<li><strong><code>🔺命令：net group &quot;Domain Controllers&quot; /domain</code></strong>（查看域控制器的主机账号）</li>
-<li><strong><code>🔺命令：net share name$=C:\ /unlimited</code></strong>（域控制器的共享）</li>
-<li><strong><code>🔺命令：net user username /active:yes /domain</code></strong>（域管理员启动锁定的账号）</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-WMIC（WINDOWS-MANAGEMENT-INSTRUMENTATION）"><a href="#3-WMIC（WINDOWS-MANAGEMENT-INSTRUMENTATION）" class="headerlink" title="3. WMIC（WINDOWS MANAGEMENT INSTRUMENTATION）"></a>3. WMIC（WINDOWS MANAGEMENT INSTRUMENTATION）</h4><ul>
-<li><strong><code>🔺命令：wmic nicconfig get ipaddress,macaddress</code></strong>（读取IP地址，MAC地址）</li>
-<li><strong><code>🔺命令：wmic computersystem get username</code></strong>（当前登陆用户账号）</li>
-<li><strong><code>🔺命令：wmic netlogin get name,lastcalclogon</code></strong>（查看用户登陆记录，通过网络login）</li>
-<li><strong><code>🔺命令：wmic process get caption,executablepath,commandline</code></strong>（查看当前进程信息，由哪些命令执行，执行程序的路径）</li>
-<li><strong><code>🔺命令：wmic process where name=&quot;calc.exe&quot; call terminate</code></strong>（结束一个进程）</li>
-<li><strong><code>🔺命令：wmic os get name,servicepackmajorversion</code></strong>（提取操作系统版本，补丁）</li>
-<li><strong><code>🔺命令：wmic product get name,version</code></strong>（查看当前操作系统安装的软件）</li>
-<li><strong><code>🔺命令：wmic product where name=&quot;name&quot; call uninstall /nointeractive</code></strong>（删除软件，静默的去删除）</li>
-<li><strong><code>🔺命令：wmic share get /ALL</code></strong>（查看共享文件夹）</li>
-<li><strong><code>🔺命令：wmic /node:&quot;machinename&quot; path Win32_TerminalServiceSetting where AllowTSConnections=&quot;0&quot; call SetAllowTSConnections &quot;1&quot;</code></strong>（开启远程桌面） ▲ 2019.12.21 Win10的RPC服务器不可用，可在系统属性 → 远程中开启远程协助</li>
-<li><strong><code>🔺命令：wmic nteventlog get</code></strong> path,filename,writeable（查看当前系统日志对应操作系统文件）</li>
-</ul>
-<blockquote>
-<pre><code>查看操作系统日志：运行 → eventvwr</code></pre></blockquote>
-<h4 id="5-收集敏感信息"><a href="#5-收集敏感信息" class="headerlink" title="5. 收集敏感信息"></a>5. 收集敏感信息</h4><ul>
-<li>商业信息</li>
-<li>系统信息</li>
-<li>Linux<ul>
-<li>/etc；/usr/local/etc</li>
-<li>/etc/passwd；/etc/shadow</li>
-<li>.ssh；.gnupg 公私钥（默认隐藏文件）</li>
-<li>The e-mail and data files</li>
-<li>业务数据库：身份认证服务数据库</li>
-<li>/tmp</li>
-</ul>
-</li>
-<li>Windows<ul>
-<li>SAM数据库；注册表文件</li>
-<li>%SYSTEMROOT%\repair\SAM（SAM数据库备份）</li>
-<li>%SYSTEMROOT%\System32\config\RegBack\SAM（SAM数据库备份）</li>
-<li>业务数据库：身份认证数据库</li>
-<li>临时文件目录<ul>
-<li>UserProfile\AppData\Local\Microsoft\Windows\Temporary Internet Files\</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="6-隐藏痕迹"><a href="#6-隐藏痕迹" class="headerlink" title="6. 隐藏痕迹"></a>6. 隐藏痕迹</h4><ul>
-<li>Windows<ul>
-<li>禁止在登陆界面显示新建账号</li>
-<li><strong><code>🔺命令：REG ADD &quot;HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindosNT\CurrentVersion\WinLogon\SpecialAccounts\UserList&quot; /v uname（要隐藏的账号名）/T REG_DWORD /D 0</code></strong> ▲ 2019.12.21 Win10命令可以执行，但未禁止</li>
-<li>del %WINDIR%*.log /a/s/q/f（强制安静不留痕迹删除）</li>
-</ul>
-</li>
-<li>Linux<ul>
-<li><strong><code>🔺命令：history</code></strong>（重点关注，查看曾经运行的命令）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>   history -c（擦除history之前的命令）<br>   lsattr（查看权限相关文件的属性）</p>
-<ul>
-<li>rm .bash_history &amp;&amp; chattr +i .bash_history（文件名）（文件不能再写入）</li>
-</ul>
-</blockquote>
-<blockquote>
-<pre><code>history存在内存中，关机即删除
-.bash_history存在硬盘，关机不删除</code></pre></blockquote>
-<ul>
-<li>日志（/var/log）<ul>
-<li>auth.log/secure</li>
-<li>btmp/wtmp（数据文件，不能直接查看，通过<strong><code>🔺命令：lastb/last</code></strong>查看文件）</li>
-<li><strong><code>🔺命令：lastlog/faillog</code></strong></li>
-</ul>
-</li>
-<li>其他日志和HIDS等 </li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3346,7 +3353,7 @@ Ubuntu下：id查看当前用户信息
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">127</span>
+                  <span class="site-state-item-count">128</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3453,7 +3460,7 @@ Ubuntu下：id查看当前用户信息
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">113.7k</span>
+    <span title="Site words total count">114.7k</span>
   
 </div>
 

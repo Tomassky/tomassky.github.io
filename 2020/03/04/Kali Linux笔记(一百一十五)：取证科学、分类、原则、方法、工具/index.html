@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="1. SSH动态端口转发 本地、远程端口转发都需要固定应用服务器IP、Port 应用端口繁多，逐个转发效率低 某些应用不固定端口 某些网站不支持IP直接访问，请求头需要域名 使用非受信网络上网保护流量不被嗅探   本地侦听socks4&#x2F;5代理端口 由SSH server决定如何转发 作为翻墙代理使用 使用proxychains支持无代理客户端（多个代理，多节点）   实验操作 bodhi 🔺命">
+<meta name="description" content="1. 取证科学简介 Forensic investigations 法庭取证调查 事件响应调查 黑客攻击、渗透测试痕迹     2. 取证科学 什么是Forensic科学 法医的、用于法庭的、辩论学、法医学 为了侦破案件还原事实真相，收集法庭证据的一系列科学方法 参考本地区法律要求 实践操作通用原则     CSI：物理取证 指纹、DNA、弹道、血迹 物理取证的理论基础是物质交换原则   本章关">
 <meta name="keywords" content="安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kali Linux笔记(六十八)：SSH隧道--动态端口转发及X协议转发">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;01&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E5%85%AB)%EF%BC%9ASSH%E9%9A%A7%E9%81%93--%E5%8A%A8%E6%80%81%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%E5%8F%8AX%E5%8D%8F%E8%AE%AE%E8%BD%AC%E5%8F%91&#x2F;index.html">
+<meta property="og:title" content="Kali Linux笔记(一百一十五)：取证科学、分类、原则、方法、工具">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;04&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81%E4%BA%94)%EF%BC%9A%E5%8F%96%E8%AF%81%E7%A7%91%E5%AD%A6%E3%80%81%E5%88%86%E7%B1%BB%E3%80%81%E5%8E%9F%E5%88%99%E3%80%81%E6%96%B9%E6%B3%95%E3%80%81%E5%B7%A5%E5%85%B7&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="1. SSH动态端口转发 本地、远程端口转发都需要固定应用服务器IP、Port 应用端口繁多，逐个转发效率低 某些应用不固定端口 某些网站不支持IP直接访问，请求头需要域名 使用非受信网络上网保护流量不被嗅探   本地侦听socks4&#x2F;5代理端口 由SSH server决定如何转发 作为翻墙代理使用 使用proxychains支持无代理客户端（多个代理，多节点）   实验操作 bodhi 🔺命">
+<meta property="og:description" content="1. 取证科学简介 Forensic investigations 法庭取证调查 事件响应调查 黑客攻击、渗透测试痕迹     2. 取证科学 什么是Forensic科学 法医的、用于法庭的、辩论学、法医学 为了侦破案件还原事实真相，收集法庭证据的一系列科学方法 参考本地区法律要求 实践操作通用原则     CSI：物理取证 指纹、DNA、弹道、血迹 物理取证的理论基础是物质交换原则   本章关">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=67ccCgTYY2xKjdBr5Soep4Lyb8kUFUVuR6pmJqKmJwDjoo_J2w7a5gO3tZJAE833fFRWjbyn9AZ7fA5W3AEvDoCfZDxHtwZ5ysvPpn60vshQhU_sP-kzjVPSMiK0_duozcf7ei79&amp;file_name=&#x2F;SSH%E5%8A%A8%E6%80%81%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91.PNG">
-<meta property="og:updated_time" content="2020-02-07T05:33:36.536Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=df66VAp0ztjMApaji8NM3rOZw0sBTyNRhFzgcicA2Oq4J9Wua5fFoEUx_-11NIVdARg-Lzt-xXCuJtHDvEj40JQve8iE7EPm_SJ3Z87lHKEbqAZrPDthpQ8ylZo5Lo-l6lqQvZ1HfqnFewObAmu4Rg&amp;file_name=&#x2F;CSI%EF%BC%9ACRIME%20SCENE%20INVESTIGATION.png">
+<meta property="og:updated_time" content="2020-03-04T03:37:35.386Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=67ccCgTYY2xKjdBr5Soep4Lyb8kUFUVuR6pmJqKmJwDjoo_J2w7a5gO3tZJAE833fFRWjbyn9AZ7fA5W3AEvDoCfZDxHtwZ5ysvPpn60vshQhU_sP-kzjVPSMiK0_duozcf7ei79&amp;file_name=&#x2F;SSH%E5%8A%A8%E6%80%81%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91.PNG">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=df66VAp0ztjMApaji8NM3rOZw0sBTyNRhFzgcicA2Oq4J9Wua5fFoEUx_-11NIVdARg-Lzt-xXCuJtHDvEj40JQve8iE7EPm_SJ3Z87lHKEbqAZrPDthpQ8ylZo5Lo-l6lqQvZ1HfqnFewObAmu4Rg&amp;file_name=&#x2F;CSI%EF%BC%9ACRIME%20SCENE%20INVESTIGATION.png">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/02/01/Kali Linux笔记(六十八)：SSH隧道--动态端口转发及X协议转发/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/03/04/Kali Linux笔记(一百一十五)：取证科学、分类、原则、方法、工具/"/>
 
 
 
 
 
-  <title>Kali Linux笔记(六十八)：SSH隧道--动态端口转发及X协议转发 | Tomas'Blog</title>
+  <title>Kali Linux笔记(一百一十五)：取证科学、分类、原则、方法、工具 | Tomas'Blog</title>
   
 
 
@@ -245,7 +245,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/01/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E5%85%AB)%EF%BC%9ASSH%E9%9A%A7%E9%81%93--%E5%8A%A8%E6%80%81%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%E5%8F%8AX%E5%8D%8F%E8%AE%AE%E8%BD%AC%E5%8F%91/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/04/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81%E4%BA%94)%EF%BC%9A%E5%8F%96%E8%AF%81%E7%A7%91%E5%AD%A6%E3%80%81%E5%88%86%E7%B1%BB%E3%80%81%E5%8E%9F%E5%88%99%E3%80%81%E6%96%B9%E6%B3%95%E3%80%81%E5%B7%A5%E5%85%B7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -262,7 +262,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(六十八)：SSH隧道--动态端口转发及X协议转发</h1>
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(一百一十五)：取证科学、分类、原则、方法、工具</h1>
         
 
         <div class="post-meta">
@@ -274,8 +274,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-01T21:39:12+08:00">
-                2020-02-01
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-04T11:52:55+08:00">
+                2020-03-04
               </time>
             
 
@@ -328,7 +328,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  253 字
+                  959 字
                 </span>
               
 
@@ -344,7 +344,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1 分钟
+                  3 分钟
                 </span>
               
             </div>
@@ -366,51 +366,125 @@
 
       
         <hr>
-<h4 id="1-SSH动态端口转发"><a href="#1-SSH动态端口转发" class="headerlink" title="1. SSH动态端口转发"></a>1. SSH动态端口转发</h4><ul>
-<li>本地、远程端口转发都需要固定应用服务器IP、Port<ul>
-<li>应用端口繁多，逐个转发效率低</li>
-<li>某些应用不固定端口</li>
-<li>某些网站不支持IP直接访问，请求头需要域名</li>
-<li>使用非受信网络上网保护流量不被嗅探</li>
+<h4 id="1-取证科学简介"><a href="#1-取证科学简介" class="headerlink" title="1. 取证科学简介"></a>1. 取证科学简介</h4><ul>
+<li>Forensic investigations</li>
+<li>法庭取证调查</li>
+<li>事件响应调查<ul>
+<li>黑客攻击、渗透测试痕迹</li>
 </ul>
 </li>
-<li>本地侦听socks4/5代理端口<ul>
-<li>由SSH server决定如何转发</li>
-<li>作为翻墙代理使用</li>
-<li>使用proxychains支持无代理客户端（多个代理，多节点）</li>
 </ul>
-</li>
-<li>实验操作<ul>
-<li>bodhi<ul>
-<li><strong><code>🔺命令：ssh -CfNg -D 7001 root@Kali的IP地址 -p 53</code></strong>（类似GoAgent的方式）</li>
-</ul>
-</li>
-<li>Window XP<ul>
-<li>配置客户端代理（浏览器）</li>
-<li>上网访问尝试（bing/baidu/taobao）</li>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=df66VAp0ztjMApaji8NM3rOZw0sBTyNRhFzgcicA2Oq4J9Wua5fFoEUx_-11NIVdARg-Lzt-xXCuJtHDvEj40JQve8iE7EPm_SJ3Z87lHKEbqAZrPDthpQ8ylZo5Lo-l6lqQvZ1HfqnFewObAmu4Rg&file_name=/CSI%EF%BC%9ACRIME%20SCENE%20INVESTIGATION.png" alt="CSI：CRIME SCENE INVESTIGATION"></p>
+<h4 id="2-取证科学"><a href="#2-取证科学" class="headerlink" title="2. 取证科学"></a>2. 取证科学</h4><ul>
+<li>什么是Forensic科学<ul>
+<li>法医的、用于法庭的、辩论学、法医学</li>
+<li>为了侦破案件还原事实真相，收集法庭证据的一系列科学方法<ul>
+<li>参考本地区法律要求</li>
+<li>实践操作通用原则</li>
 </ul>
 </li>
 </ul>
 </li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=67ccCgTYY2xKjdBr5Soep4Lyb8kUFUVuR6pmJqKmJwDjoo_J2w7a5gO3tZJAE833fFRWjbyn9AZ7fA5W3AEvDoCfZDxHtwZ5ysvPpn60vshQhU_sP-kzjVPSMiK0_duozcf7ei79&file_name=/SSH%E5%8A%A8%E6%80%81%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91.PNG" alt="SSH动态端口转发"></p>
-<h4 id="2-X协议转发"><a href="#2-X协议转发" class="headerlink" title="2. X协议转发"></a>2. X协议转发</h4><ul>
-<li>远程登陆Linux GUI运行图形化界面工具<ul>
-<li>VNC</li>
-<li>X Window</li>
+<li>CSI：物理取证<ul>
+<li>指纹、DNA、弹道、血迹</li>
+<li>物理取证的理论基础是物质交换原则</li>
 </ul>
 </li>
-<li>防火墙限制访问时<ul>
-<li>基于SSH的X转发</li>
-<li><strong><code>🔺命令：ssh -X user@1.1.1.1 -p 53</code></strong></li>
+<li>本章关注：数字取证 / 计算机取证 / 电子取证<ul>
+<li>智能设备、计算机、手机平板、IoT、有线及无线通信（Wireshark抓包分析）、数据存储</li>
 </ul>
 </li>
-<li>演示操作<ul>
-<li>bodhi<ul>
-<li><strong><code>🔺命令：ssh -X root@Kali的IP地址 -p 53</code></strong></li>
-<li><strong><code>🔺命令：shell → gedit/firefox</code></strong>（Kali机器上的映射）</li>
+</ul>
+<h4 id="3-通用原则"><a href="#3-通用原则" class="headerlink" title="3. 通用原则"></a>3. 通用原则</h4><ul>
+<li>维护证据完整性<ul>
+<li>数字取证比物理取证幸运的多，可以有无限数量的拷贝进行分析<ul>
+<li>▲ 对iphone手机芯片的复制，可以实现理论上的暴力破解</li>
 </ul>
 </li>
+<li>数字HASH值验证数据完整性</li>
+</ul>
+</li>
+<li>维护监管链<ul>
+<li>物理证物保存在证物袋中，每次取出使用严格记录，避免破坏污染</li>
+<li>数字证物原始版本写保护，使用拷贝进行分析</li>
+</ul>
+</li>
+<li>标准的操作步骤<ul>
+<li>证物使用严格按照规范流程，即使事后证明流程有误（免责）</li>
+</ul>
+</li>
+<li>取证分析全部过程记录文档</li>
+<li>数字取证者的座右铭<ul>
+<li>不要破坏数据现场（看似简单，实际几乎无法实现）<ul>
+<li>系统命令可能被植入木马，整个计算机都不可信 → 使用干净U盘的操作系统命令</li>
+<li>使用干净U盘的操作系统命令可能也会占用内存资源，破坏现场</li>
+<li>▲ 虚拟机一定程度上通过控制台可实现不破坏数据现场</li>
+</ul>
+</li>
+<li>寄存器、CPU缓存、I/O设备缓存等易失性数据几乎无法获取</li>
+<li>系统内存是主要的易失性存储介质取证对象，不修改无法获取其中数据<ul>
+<li>程序、操作系统指令会对内存进行修改</li>
+</ul>
+</li>
+<li>非易失性存储介质通常使用完整镜像拷贝保存<ul>
+<li>不同于文件拷贝，从磁道层面的复制（01代码的复制，可能包含已删除的文件）</li>
+</ul>
+</li>
+<li>正常关机还是直接拔掉电源（数据丢失破坏）<ul>
+<li>拔电源：存在于内存中的数据无法保存到硬盘</li>
+<li>正常关机：木马程序可能进行数据擦除破坏</li>
+<li>▲ 建议拔电源，Ext4日志型文件型系统直接拔电源，不会丢失日志</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>证据搜索<ul>
+<li>数据（数据提炼）</li>
+<li>信息（信息收集）</li>
+<li>证据（得出入侵的证据 → 法庭的呈堂证供/技术分析）</li>
+</ul>
+</li>
+<li>作为安全从业者<ul>
+<li>通过取证还原黑客入侵的轨迹</li>
+<li>作为渗透测试和黑客攻击区分标准<ul>
+<li>世纪佳缘事件</li>
+<li>印象笔记渗透测试事件</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-取证方法"><a href="#4-取证方法" class="headerlink" title="4. 取证方法"></a>4. 取证方法</h4><ul>
+<li>活取证（服务器未关机，可对内存和硬盘取证）<ul>
+<li>抓取文件metadata、创建时间线、命令历史、分析日志文件、哈希摘要、转存内存信息</li>
+<li>使用未受感染的干净程序执行取证</li>
+<li>U盘 / 网络存储收集到的数据</li>
+<li>▲ 新建用户取证</li>
+</ul>
+</li>
+<li>死取证（服务器关机、可对硬盘取证）<ul>
+<li>关机后制作硬盘镜像、分析镜像（MBR、GPT、LVM）<ul>
+<li>硬盘格式<ul>
+<li>大块MBR</li>
+<li>全局分区表GPT</li>
+<li>逻辑卷LVM</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-取证工具–Dumpit"><a href="#5-取证工具–Dumpit" class="headerlink" title="5. 取证工具–Dumpit"></a>5. 取证工具–Dumpit</h4><ul>
+<li>不考虑法律因素、法庭证据、监管链、文档记录等取证环节</li>
+<li>只介绍Kali当中部分取证工具的使用方法</li>
+<li>内存dump工具<ul>
+<li>Dumpit：<a href="http://www.moonsols.com/wp-content/uploads/downloads/2011/07/DumpIt.zip" target="_blank" rel="noopener">http://www.moonsols.com/wp-content/uploads/downloads/2011/07/DumpIt.zip</a></li>
+<li>内存文件与内存大小接近或者稍微大一点，raw格式</li>
+</ul>
+</li>
+<li>实验<ul>
+<li>Window 7</li>
 </ul>
 </li>
 </ul>
@@ -444,8 +518,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/02/01/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%B8%83)%EF%BC%9ASSH%E9%9A%A7%E9%81%93--%E8%BF%9C%E7%A8%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/" rel="next" title="Kali Linux笔记(六十七)：SSH隧道--远程端口转发">
-                <i class="fa fa-chevron-left"></i> Kali Linux笔记(六十七)：SSH隧道--远程端口转发
+              <a href="/2020/03/04/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81%E5%9B%9B)%EF%BC%9A%E7%A4%BE%E4%BC%9A%E5%B7%A5%E7%A8%8B%E5%AD%A6/" rel="next" title="Kali Linux笔记(一百一十四)：社会工程学">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(一百一十四)：社会工程学
               </a>
             
           </div>
@@ -453,10 +527,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/02/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%B9%9D)%EF%BC%9ADNS%E9%9A%A7%E9%81%93--dns2tcp/" rel="prev" title="Kali Linux笔记(六十九)：DNS隧道--dns2tcp">
-                Kali Linux笔记(六十九)：DNS隧道--dns2tcp <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -626,7 +696,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-SSH动态端口转发"><span class="nav-number">1.</span> <span class="nav-text">1. SSH动态端口转发</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-X协议转发"><span class="nav-number">2.</span> <span class="nav-text">2. X协议转发</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-取证科学简介"><span class="nav-number">1.</span> <span class="nav-text">1. 取证科学简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-取证科学"><span class="nav-number">2.</span> <span class="nav-text">2. 取证科学</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-通用原则"><span class="nav-number">3.</span> <span class="nav-text">3. 通用原则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-取证方法"><span class="nav-number">4.</span> <span class="nav-text">4. 取证方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-取证工具–Dumpit"><span class="nav-number">5.</span> <span class="nav-text">5. 取证工具–Dumpit</span></a></li></ol></div>
             
 
           </div>

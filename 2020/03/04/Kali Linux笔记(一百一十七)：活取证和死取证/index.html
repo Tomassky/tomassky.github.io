@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="安全," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. 活取证 ▲ 2020.03.04 因为Win7 暂时无法拷贝文件出来，所以将实验机器换为Window XP SP3 从内存还原文字 procdump：https:&#x2F;&#x2F;docs.microsoft.com&#x2F;zh-cn&#x2F;sysinternals&#x2F;downloads&#x2F;procdump  存在Linux版本，GitHub链接：https:&#x2F;&#x2F;github.com&#x2F;Microsoft&#x2F;ProcDum">
+<meta name="keywords" content="安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kali Linux笔记(一百一十七)：活取证和死取证">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;04&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81%E4%B8%83)%EF%BC%9A%E6%B4%BB%E5%8F%96%E8%AF%81%E5%92%8C%E6%AD%BB%E5%8F%96%E8%AF%81&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="1. 活取证 ▲ 2020.03.04 因为Win7 暂时无法拷贝文件出来，所以将实验机器换为Window XP SP3 从内存还原文字 procdump：https:&#x2F;&#x2F;docs.microsoft.com&#x2F;zh-cn&#x2F;sysinternals&#x2F;downloads&#x2F;procdump  存在Linux版本，GitHub链接：https:&#x2F;&#x2F;github.com&#x2F;Microsoft&#x2F;ProcDum">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=48e45Bke8q0F7yArsOLuB5_Yhnsd2bWW4p_mrI1lHPTmdWxeUjl8P05D19Ms78xY2oAQJAC8maImTmwiImGSelIJMfRreJTtDy4jHe-4zHz4sXGQ44AgABhcQWqwQi1OQPxlwcrzbw&amp;file_name=&#x2F;gimp%E6%89%93%E5%BC%80%E5%86%85%E5%AD%98%E5%9B%BE%E7%89%87.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=cc53U-yoem8lUfoxmFbu2wXynjsFjLnBwEC3Si4GrjvAMVZi0GehgaJnJJSuvMt_a-86ajRPPkZdq5V6hdfOsLik7IbdzMRDgcpHfelW-f6eQWU0YlWGthKivPxBASWwcl_CdYKKhurBl9LH0eE&amp;file_name=&#x2F;logonPasswords%E7%9A%84%E8%BA%AB%E4%BB%BD%E4%BF%A1%E6%81%AF.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=b530q0aJH5AM4mNQlrn-PR6sLYorGWiNy4-8AagL83_hKfdBeuyz-PbjcwbuRBCyTynYga6NWvnuXNew1n1lV8Y70cVCSlNJrhXlohJUe_HlBIqbMH2Jr0VUmDFNEk0&amp;file_name=&#x2F;Guymager%E5%8F%96%E8%AF%81.png">
+<meta property="og:updated_time" content="2020-03-04T15:42:58.992Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=48e45Bke8q0F7yArsOLuB5_Yhnsd2bWW4p_mrI1lHPTmdWxeUjl8P05D19Ms78xY2oAQJAC8maImTmwiImGSelIJMfRreJTtDy4jHe-4zHz4sXGQ44AgABhcQWqwQi1OQPxlwcrzbw&amp;file_name=&#x2F;gimp%E6%89%93%E5%BC%80%E5%86%85%E5%AD%98%E5%9B%BE%E7%89%87.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/04/Kali Linux笔记(一百一十七)：活取证和死取证/"/>
+
+
+
+
+
+  <title>Kali Linux笔记(一百一十七)：活取证和死取证 | Tomas'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tomas'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/04/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81%E4%B8%83)%EF%BC%9A%E6%B4%BB%E5%8F%96%E8%AF%81%E5%92%8C%E6%AD%BB%E5%8F%96%E8%AF%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(一百一十七)：活取证和死取证</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-04T23:45:00+08:00">
+                2020-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.4k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  5 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<h4 id="1-活取证"><a href="#1-活取证" class="headerlink" title="1. 活取证"></a>1. 活取证</h4><ul>
+<li>▲ 2020.03.04 因为Win7 暂时无法拷贝文件出来，所以将实验机器换为Window XP SP3</li>
+<li>从内存还原文字<ul>
+<li>procdump：<a href="https://docs.microsoft.com/zh-cn/sysinternals/downloads/procdump" target="_blank" rel="noopener">https://docs.microsoft.com/zh-cn/sysinternals/downloads/procdump</a> <ul>
+<li>存在Linux版本，GitHub链接：<a href="https://github.com/Microsoft/ProcDump-for-Linux" target="_blank" rel="noopener">https://github.com/Microsoft/ProcDump-for-Linux</a></li>
+</ul>
+</li>
+<li>strings：<a href="https://docs.microsoft.com/zh-cn/sysinternals/downloads/strings" target="_blank" rel="noopener">https://docs.microsoft.com/zh-cn/sysinternals/downloads/strings</a></li>
+<li><strong><code>🔺命令：procdump -ma notepad.exe notepad.dmp</code></strong>（记事本的进程）</li>
+<li><strong><code>🔺命令：strings notepad.dmp &gt; notepad.txt</code></strong>（只识别连续三个以上的ASCII码字符）</li>
+<li>其他文字处理程序也适用</li>
+</ul>
+</li>
+<li>从内存还原图片<ul>
+<li>远程桌面、画图工具、Virtualbox虚拟机（dump取虚拟机window XP SP3的图像）</li>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile=WinXPSP3x86 memdump -p 1456 -D test</code></strong> </li>
+<li><strong><code>🔺命令：mv mstsc.dmp mstsc.data</code></strong></li>
+<li>Gimp -&gt; open -&gt; Raw Image Data -&gt; 调整参数</li>
+</ul>
+</li>
+<li>从内存中提取明文密码<ul>
+<li><strong><code>🔺命令：procdump.exe -ma lsass.exe lsa.dmp</code></strong></li>
+<li><strong><code>🔺命令：Mimikatz</code></strong> </li>
+<li><strong><code>🔺命令：sekurlsa::minidump lsass.dmp</code></strong> </li>
+<li><strong><code>🔺命令：sekurlsa::logonPasswords</code></strong> </li>
+</ul>
+</li>
+<li>Volatility的mimikatz插件<ul>
+<li><a href="https://github.com/sans-dfir/sift-files/blob/master/volatility/mimikatz.py" target="_blank" rel="noopener">https://github.com/sans-dfir/sift-files/blob/master/volatility/mimikatz.py</a></li>
+</ul>
+</li>
+<li>Firefox浏览器审计工具<ul>
+<li><strong><code>🔺命令：dumpzilla /root/.mozilla/firefox/bvpenhsu.default/ --All</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="2-实验–从内存还原文字"><a href="#2-实验–从内存还原文字" class="headerlink" title="2. 实验–从内存还原文字"></a>2. 实验–从内存还原文字</h4><ul>
+<li>Window XP SP3<ul>
+<li>拷贝procdump到window XP SP3上</li>
+<li>找一段文字写入notepad中，<strong><code>🔺命令：netstat -nao</code></strong>查看进程是否有notepad.exe</li>
+<li><strong><code>🔺命令：procdump.exe -ma notepad.exe notepad.dmp</code></strong></li>
+<li><strong><code>🔺命令：strings.exe notepad.dmp &gt; notepad.txt</code></strong></li>
+<li>对比两个文件的内容，是否存在相同（搜索特征字符）</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-实验–从内存还原图片"><a href="#3-实验–从内存还原图片" class="headerlink" title="3. 实验–从内存还原图片"></a>3. 实验–从内存还原图片</h4><ul>
+<li>▲ 图片不同于图像，图像在软件中保存后，可以导出为图片</li>
+<li>Window XP SP3<ul>
+<li>截图工具 → 随意截取一张图片 → 保存图片到桌面 → 用画图工具打开</li>
+<li><strong><code>🔺命令：cmd → tasklist</code></strong><ul>
+<li>在Window XP SP3上暂不能执行此命令</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：procdump.exe -ma mspaint.exe mspaint.dmp</code></strong></li>
+<li>Win+R → mstsc → 远程连接一个机器</li>
+<li><strong><code>🔺命令：cmd → tasklist</code></strong></li>
+<li><strong><code>🔺命令：procdump.exe -ma mstsc.exe mstsc.dmp</code></strong></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>从共享文件中拷贝mspaint.dmp和mstsc.dmp文件</li>
+<li><strong><code>🔺命令：apt-get install gimp</code></strong></li>
+<li>打开gimp</li>
+<li><strong><code>🔺命令：mv mspaint.dump mspaint.data</code></strong></li>
+<li><strong><code>🔺命令：mv mstsc.dump mstsc.data</code></strong></li>
+<li>gimp打开mstsc.data/mspaint.data</li>
+<li>调整Offset、Width、Height（高度一般不起作用，宽度一般其决定作用）</li>
+<li>▲ 2020.03.04 gimp通过滑块去移动会导致软件崩溃，只能通过值输入</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=48e45Bke8q0F7yArsOLuB5_Yhnsd2bWW4p_mrI1lHPTmdWxeUjl8P05D19Ms78xY2oAQJAC8maImTmwiImGSelIJMfRreJTtDy4jHe-4zHz4sXGQ44AgABhcQWqwQi1OQPxlwcrzbw&file_name=/gimp%E6%89%93%E5%BC%80%E5%86%85%E5%AD%98%E5%9B%BE%E7%89%87.png" alt="gimp打开内存图片"></p>
+<h4 id="4-实验–从内存提取明文密码"><a href="#4-实验–从内存提取明文密码" class="headerlink" title="4. 实验–从内存提取明文密码"></a>4. 实验–从内存提取明文密码</h4><ul>
+<li>Window XP SP3<ul>
+<li><strong><code>🔺命令：procdump.exe -ma lsass.exe lsa.dmp</code></strong></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：cd /usr/share/mimikatz</code></strong></li>
+<li>压缩mimikatz x86为一个x86.zip文件</li>
+</ul>
+</li>
+<li>Window XP SP3<ul>
+<li>拷贝.x86到window XP SP3的机子上</li>
+<li>双击mimikatz打开</li>
+<li><strong><code>🔺命令：sekurlsa::</code></strong></li>
+<li><strong><code>🔺命令：sekurlsa::minidump lsa.dmp</code></strong></li>
+<li><strong><code>🔺命令：sekurlsa::logonPasswords</code></strong></li>
+<li>查看dump下来的身份信息</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=cc53U-yoem8lUfoxmFbu2wXynjsFjLnBwEC3Si4GrjvAMVZi0GehgaJnJJSuvMt_a-86ajRPPkZdq5V6hdfOsLik7IbdzMRDgcpHfelW-f6eQWU0YlWGthKivPxBASWwcl_CdYKKhurBl9LH0eE&file_name=/logonPasswords%E7%9A%84%E8%BA%AB%E4%BB%BD%E4%BF%A1%E6%81%AF.png" alt="logonPasswords的身份信息"></p>
+<h4 id="5-实验–Volatility的mimikatz插件"><a href="#5-实验–Volatility的mimikatz插件" class="headerlink" title="5. 实验–Volatility的mimikatz插件"></a>5. 实验–Volatility的mimikatz插件</h4><ul>
+<li>Kali<ul>
+<li>▲ 2020.03.04 Github的链接失效，暂无法找到mimikatz.py，此模块未实验</li>
+<li>从共享文件夹拷贝window XP SP3的内存映像xp.raw到Kali上</li>
+<li>从Github上下载mimikatz插件到volatility的plugins库中</li>
+<li><strong><code>🔺命令：volatility -f xp.raw imageinfo</code></strong></li>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile==WindowXPSP3x86 mimikatz</code></strong></li>
+<li>查看是否拿到密码</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-实验–Firefox浏览器审计工具"><a href="#6-实验–Firefox浏览器审计工具" class="headerlink" title="6. 实验–Firefox浏览器审计工具"></a>6. 实验–Firefox浏览器审计工具</h4><ul>
+<li>▲ 在未关机的情况下取证，找寻firefox使用的浏览信息</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：dumpzilla /root/.mozilla/firefox/bvpenhsu.default/ --Passwords</code></strong>（目录可能不一样）</li>
+<li>查看是否可看到浏览器信息</li>
+</ul>
+</li>
+<li>▲ 2020.03.04 –All参数被去除</li>
+</ul>
+<h4 id="7-死取证"><a href="#7-死取证" class="headerlink" title="7. 死取证"></a>7. 死取证</h4><ul>
+<li>硬盘镜像<ul>
+<li>使用Kali光盘启动计算机创建硬盘镜像文件（位镜像的拷贝）</li>
+<li>留足存储镜像文件的存储空间</li>
+<li>Dc3dd（来自美国空军计算机犯罪中心）</li>
+<li>Dcfldd</li>
+<li>Guymager</li>
+<li>计算机取证技术参考数据集<ul>
+<li><a href="http://www.cfreds.nist.gov/Controlv1_0/control.dd" target="_blank" rel="noopener">http://www.cfreds.nist.gov/Controlv1_0/control.dd</a></li>
+</ul>
+</li>
+<li>DFF（Digital Forensics Framework）<ul>
+<li>Open Evidence  #红色表示已经删除的文件</li>
+<li>▲ Kali官方已经剔除DFF软件，也无法手动安装，只能去官网手动安装包下载</li>
+</ul>
+</li>
+<li>Autopsy<ul>
+<li>非常流行的硬盘镜像分析工具</li>
+<li>WebServer+客户端架构</li>
+</ul>
+</li>
+<li>Extundelete<ul>
+<li>适用于ext3、ext4文件系统的反删除工具</li>
+<li><strong><code>🔺命令：Extundelete [device-file] --restore-file [restore location]</code></strong> </li>
+</ul>
+</li>
+<li>iPhone Backup Analyzer<ul>
+<li>分析iTunes生成的iPhone手机备份文件，并非电话image</li>
+</ul>
+</li>
+<li>Foremost（美国开发）<ul>
+<li>从内存dump中恢复文档图片，支持raw、dd、iso、vmem、excel、doc等格式（图片非图像）</li>
+<li><strong><code>🔺命令：foremost -t jpeg,gif,png,doc -i 7.raw</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="8-实验–Guymager"><a href="#8-实验–Guymager" class="headerlink" title="8. 实验–Guymager"></a>8. 实验–Guymager</h4><ul>
+<li>Window 7光盘挂载Kali Linux，forensic mode启动（取证模式）</li>
+<li>启动Guymager（可能无发现硬盘，可以进行选择扫描尝试）</li>
+<li>选择要取证的硬盘 → 右键 → Acquire images<ul>
+<li>Linux dd raw image/Expert Withess Format,sub-format Guymager</li>
+<li>▲ 可以分成多个文件，并设置MD5/SHA-1/SHA-256的哈希验证</li>
+<li>Case Number 999（钥匙数字）</li>
+<li>Evidence Number 001（证据编号）</li>
+<li>Examiner mzt（证据人）</li>
+<li>Description server（描述）</li>
+<li>Image directory（保存路径）</li>
+<li>image filename（文件名）</li>
+<li>info filename（信息文件名）</li>
+</ul>
+</li>
+<li>Start</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=b530q0aJH5AM4mNQlrn-PR6sLYorGWiNy4-8AagL83_hKfdBeuyz-PbjcwbuRBCyTynYga6NWvnuXNew1n1lV8Y70cVCSlNJrhXlohJUe_HlBIqbMH2Jr0VUmDFNEk0&file_name=/Guymager%E5%8F%96%E8%AF%81.png" alt="Guymager取证"></p>
+<h4 id="9-实验–Autopsy"><a href="#9-实验–Autopsy" class="headerlink" title="9. 实验–Autopsy"></a>9. 实验–Autopsy</h4><ul>
+<li>Kali<ul>
+<li>▲ 2020.03.04 无法拷贝到control.dd文件，输入网址出现乱码</li>
+<li>拷贝准备好的control.dd文件到/root目录下</li>
+<li>autopsy启动服务端</li>
+<li>浏览器访问：<a href="http://localhost:9999/autopsy" target="_blank" rel="noopener">http://localhost:9999/autopsy</a></li>
+<li>NEW CASE → 添加信息（Case Name、Description、Investigator）→ NEW CASE</li>
+<li>ADD HOST → 填写主机信息</li>
+<li>ADD IMAGE → 镜像文件信息（Location、Type(分区还是整盘)、Import Method(一般为copy，move怕断电，Symlink怕移动链接失效)）</li>
+<li>Next → Data Integrity（镜像文件的MD5的计算）→ File System Details → ADD</li>
+<li>OK</li>
+<li>ANALYZE（一般位FILE ANALYSNS）→ 可对文件进行一定的还原</li>
+</ul>
+</li>
+</ul>
+<h4 id="10-实验–Foremost"><a href="#10-实验–Foremost" class="headerlink" title="10. 实验–Foremost"></a>10. 实验–Foremost</h4><ul>
+<li>Kali<ul>
+<li>▲ 2020.03.04 因为Win7 暂时无法拷贝文件出来，所以将实验机器换为Window XP SP3</li>
+<li>从共享文件夹拷贝window XP SP3的内存映像xp.raw到Kali上</li>
+<li><strong><code>🔺命令：foremost -t jpeg,gif,png,doc -i xp.raw</code></strong></li>
+<li>output文件夹中查看提取的文件</li>
+</ul>
+</li>
+</ul>
+<h4 id="11-网络取证"><a href="#11-网络取证" class="headerlink" title="11. 网络取证"></a>11. 网络取证</h4><ul>
+<li>▲ 网络取证请看&lt;&lt;协议分析&gt;&gt;<ul>
+<li>全流量镜像可以还原历史</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%AE%89%E5%85%A8/" rel="tag"># 安全</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/04/IPS%E7%AC%94%E8%AE%B0-3%EF%BC%9AIME--IPS%E4%BD%BF%E7%94%A8%EF%BC%88%E4%B8%80%EF%BC%89/" rel="next" title="IPS笔记-3：IME--IPS使用（一）">
+                <i class="fa fa-chevron-left"></i> IPS笔记-3：IME--IPS使用（一）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/photo.jpg"
+                alt="Tomas" />
+            
+              <p class="site-author-name" itemprop="name">Tomas</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">138</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Tomassky" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:tomassky7@gmail.com" target="_blank" title="Gmail邮箱">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>Gmail邮箱</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://ylsword-cheat.top" title="LengSword" target="_blank">LengSword</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://neigeshoufu.github.io/ljy.github.io" title="neigeshoufu" target="_blank">neigeshoufu</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-活取证"><span class="nav-number">1.</span> <span class="nav-text">1. 活取证</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-实验–从内存还原文字"><span class="nav-number">2.</span> <span class="nav-text">2. 实验–从内存还原文字</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-实验–从内存还原图片"><span class="nav-number">3.</span> <span class="nav-text">3. 实验–从内存还原图片</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-实验–从内存提取明文密码"><span class="nav-number">4.</span> <span class="nav-text">4. 实验–从内存提取明文密码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-实验–Volatility的mimikatz插件"><span class="nav-number">5.</span> <span class="nav-text">5. 实验–Volatility的mimikatz插件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-实验–Firefox浏览器审计工具"><span class="nav-number">6.</span> <span class="nav-text">6. 实验–Firefox浏览器审计工具</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-死取证"><span class="nav-number">7.</span> <span class="nav-text">7. 死取证</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-实验–Guymager"><span class="nav-number">8.</span> <span class="nav-text">8. 实验–Guymager</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-实验–Autopsy"><span class="nav-number">9.</span> <span class="nav-text">9. 实验–Autopsy</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#10-实验–Foremost"><span class="nav-number">10.</span> <span class="nav-text">10. 实验–Foremost</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#11-网络取证"><span class="nav-number">11.</span> <span class="nav-text">11. 网络取证</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tomas</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">124.2k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

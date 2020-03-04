@@ -240,6 +240,262 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/17/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81)%EF%BC%9A%E6%9C%AC%E5%9C%B0%E6%8F%90%E6%9D%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/17/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81)%EF%BC%9A%E6%9C%AC%E5%9C%B0%E6%8F%90%E6%9D%83/" itemprop="url">Kali Linux笔记(三十)：本地提权（WINDOWS）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-17T20:06:10+08:00">
+                2019-12-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  462 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-本地提权"><a href="#1-本地提权" class="headerlink" title="1. 本地提权"></a>1. 本地提权</h4><ul>
+<li>已实现本地低权限账号登录<ul>
+<li>远程溢出</li>
+<li>直接获得账号密码</li>
+</ul>
+</li>
+<li>希望获取更高权限<ul>
+<li>实现对目标进一步控制</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-本地提权"><a href="#2-本地提权" class="headerlink" title="2. 本地提权"></a>2. 本地提权</h4><ul>
+<li>系统账号之间权限隔离（系统账号和应用程序账号）<ul>
+<li>操作系统安全的基础</li>
+<li>用户空间</li>
+<li>内核空间</li>
+</ul>
+</li>
+<li>系统账号<ul>
+<li>用户账号登陆时获取权限令牌（每次生成的令牌都有随机数）</li>
+<li>服务账号无需用户登陆已在后台启动服务</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-本地提权"><a href="#4-本地提权" class="headerlink" title="4. 本地提权"></a>4. 本地提权</h4><ul>
+<li>Windows<ul>
+<li>User</li>
+<li>Administrator</li>
+<li>System（启动运行系统内核级别的权限，真正有最大权限的账号）</li>
+</ul>
+</li>
+<li>Linux<ul>
+<li>User</li>
+<li>Root</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>Windows下，User权限包含在Administrator，System有Administrator所没有的权限，Administrator有System所没有的权限</code></pre></blockquote>
+<h4 id="5-ADMIN提权为SYSTEM"><a href="#5-ADMIN提权为SYSTEM" class="headerlink" title="5. ADMIN提权为SYSTEM"></a>5. ADMIN提权为SYSTEM</h4><ul>
+<li>Windows system账号<ul>
+<li>系统设置管理功能</li>
+<li>SysInternal Suit</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>   <a href="https://docs.microsoft.com/en-us/sysinternals/downloads/" target="_blank" rel="noopener">https://docs.microsoft.com/en-us/sysinternals/downloads/</a><br>   psexec.exe -i -s -d taskmgr<br>   psexec.exe -i -s cmd<br>   需要一个whoami的工具，需要放到Window下的System32根目录下</p>
+</blockquote>
+<ul>
+<li>Windows XP下   <ul>
+<li><strong><code>🔺命令：at 稍后的时间 /interactive cmd</code></strong></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>在Windows XP下：
+切换权限：taskmgr → explorer（图形化kill）→ 文件 → explorer</code></pre></blockquote>
+<ul>
+<li>Windows 7 or 8下 ▲ 2019.12.17 [SC] OpenSCManager失败：5<ul>
+<li><strong><code>🔺命令：sc Create syscmd（服务名称） binPath=&quot;cmd /K start&quot; type=own type=interact</code></strong></li>
+<li><strong><code>🔺命令：sc start syscmd</code></strong></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>在Windows 7 or 8下：
+service.msc，创建System服务进程
+需要一个whoami的工具，需要放到Window下的System32根目录下</code></pre></blockquote>
+<blockquote>
+<pre><code>HelpAssistant账号为远程协助账号，允许别人的远程连接
+图形化界面：我的电脑 → 计算机管理 → 本地用户和组 → 用户/组
+修改密码：net user 用户名 *
+查看账号：net user
+查看账户权限：net user 账号名称（关注所属组）</code></pre></blockquote>
+<h4 id="6-注入进程提权"><a href="#6-注入进程提权" class="headerlink" title="6. 注入进程提权"></a>6. 注入进程提权</h4><ul>
+<li>隐蔽痕迹</li>
+<li><strong><code>🔺命令：pinjector.exe</code></strong><ul>
+<li><a href="http://www.tarasco.org/security/Process_Injector" target="_blank" rel="noopener">http://www.tarasco.org/security/Process_Injector</a></li>
+</ul>
+</li>
+<li><strong><code>🔺命令：pinjector.exe -p PID的值 cmd 指定端口</code></strong>  </li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/17/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%8C%E5%8D%81%E4%B9%9D)%EF%BC%9A%E5%90%8E%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E9%98%B6%E6%AE%B5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3002,326 +3258,6 @@ MS09-001，a windows Code execution from remote</code></pre></blockquote>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81%E5%85%AB)%EF%BC%9A%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F--TCP/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81%E5%85%AB)%EF%BC%9A%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F--TCP/" itemprop="url">Kali Linux笔记(十八)：端口扫描--TCP</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-10T08:13:38+08:00">
-                2019-12-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1.6k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  8 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-端口扫描（TCP）"><a href="#1-端口扫描（TCP）" class="headerlink" title="1. 端口扫描（TCP）"></a>1. 端口扫描（TCP）</h4><ul>
-<li><p>TCP端口扫描（SYN–SYN/ACK–ACK）</p>
-<ul>
-<li>基于连接的协议</li>
-<li>三次握手（ACK包连接）</li>
-<li>隐蔽扫描（隐藏与目标进程的会话）–SYN（开放 →SYN/ACK，不开放 → RST）</li>
-</ul>
-<ol>
-<li>不建立完整连接（SYN（开放 →SYN/ACK，不开放 → RST））</li>
-<li>应用日志不记录扫描行为–隐蔽（但审计网络层，还是可以发现）</li>
-</ol>
-<ul>
-<li>僵尸扫描（几乎不和目标进程尝试会话）</li>
-</ul>
-<ol>
-<li>极度隐蔽</li>
-<li>实施条件苛刻</li>
-<li>可伪造源地址（▲扫描者与目标主机必须可以实现地址伪造）</li>
-<li>选择僵尸机（▲必须要有，网络中闲置的机子，不同于僵尸网络的机子）<ul>
-<li>闲置系统</li>
-<li>系统使用递增的IPID：（1）不能为0 （2）不能为随机</li>
-</ul>
-</li>
-</ol>
-<ul>
-<li>全连接扫描（三次握手连接）</li>
-<li>所有的TCP扫描方式都是基于三次握手的变化来判断目标端口状态</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>IPID:IP报头里面的Identification字段
-1.僵尸扫描过程（端口开放）：
-（1）Scanner【SYN/ACK】 -- Zombie【RST IPID=X】
-（2）Scanner【SYN IPSRC=zombie】 -- target【SYN/ACK】 -- Zombie【RST IPID=x+1,(僵尸机需要足够空闲)】
-（3）Scanner【SYN/ACK】 -- Zombie【RST IPID=x+2】
-2.僵尸扫描进程（端口未开放）：
-（1）Scanner【SYN/ACK】 -- Zombie【RST IPID=X】
-（2）Scanner【SYN IPSRC=zombie】 -- target【RST】 -- Zombie
-（3）Scanner【SYN/ACK】 -- Zombie【RST IPID=x+1】</code></pre></blockquote>
-<h4 id="2-隐蔽端口扫描"><a href="#2-隐蔽端口扫描" class="headerlink" title="2. 隐蔽端口扫描"></a>2. 隐蔽端口扫描</h4><ul>
-<li>syn–syn/ack–rst（本机操作系统内核产生的）</li>
-<li>Scapy<ul>
-<li>sr1(IP(dst=”IP地址”)/TCP(dport=80,flags=”S”),timeout=1,verbose=0)</li>
-<li><strong><code>🔺命令：./syn_scan.py 目标IP地址 起始端口 结束端口</code></strong></li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line">import time</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=4:</span><br><span class="line">    print &quot;Usage - ./syn_scan.py [Target IP] [First IP] [Last IP] &quot;</span><br><span class="line">    print &quot;Example - ./syn_scan.py 192.168.100.1 1 200&quot;</span><br><span class="line">    print &quot;Example will perform a TCP SYN scan of the 192.168.100.0/24 range&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">ip=sys.argv[1]</span><br><span class="line">start=int(sys.argv[2])</span><br><span class="line">end=int(sys.argv[3])</span><br><span class="line"></span><br><span class="line">for port in range(start,end):</span><br><span class="line">    a=sr1(IP(dst=ip)/TCP(dport=port),timeout=1,verbose=0)</span><br><span class="line">    if a==None:</span><br><span class="line">      pass</span><br><span class="line">    else:</span><br><span class="line">      if int(a[TCP].flags)==18:</span><br><span class="line">        print port</span><br><span class="line">      else:</span><br><span class="line">        pass</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<pre><code>正常情况下：
-端口开放：syn--syn/ack
-端口未开放：syn--rst/ack</code></pre></blockquote>
-<h4 id="3-隐蔽端口扫描"><a href="#3-隐蔽端口扫描" class="headerlink" title="3. 隐蔽端口扫描"></a>3. 隐蔽端口扫描</h4><ul>
-<li><strong><code>🔺命令：nmap -sS IP地址 -p 80,21,25,110,443</code></strong></li>
-<li><strong><code>🔺命令：nmap -sS IP地址 -p 1-65535 --open</code></strong></li>
-<li><strong><code>🔺命令：nmap -sS IP地址 --open</code></strong></li>
-<li><strong><code>🔺命令：nmap -sS -iL iplist.txt -p 80,21,22,23</code></strong></li>
-</ul>
-<h4 id="4-隐蔽端口扫描"><a href="#4-隐蔽端口扫描" class="headerlink" title="4. 隐蔽端口扫描"></a>4. 隐蔽端口扫描</h4><ul>
-<li>hping3（发包习惯是顺序端口）</li>
-<li><strong><code>🔺命令：hping3 IP地址 --scan 80 -S</code></strong></li>
-<li><strong><code>🔺命令：hping3 IP地址 --scan 80,21,25,443 -S</code></strong>（syn包）</li>
-<li><strong><code>🔺命令：hping3 IP地址 --scan 0-65535 -S</code></strong></li>
-<li><strong><code>🔺命令：hping3 -c 10 -S --spoof（伪造源地址） IP地址 -p ++1（端口递增） IP地址</code></strong></li>
-</ul>
-<h4 id="5-全连接端口扫描"><a href="#5-全连接端口扫描" class="headerlink" title="5. 全连接端口扫描"></a>5. 全连接端口扫描</h4><ul>
-<li>Scapy（容易触发目标主机的报警系统）<ul>
-<li>syn扫描不需要raw packets</li>
-<li>内核认为syn/ack是非法包，直接发rst终断连接</li>
-<li>全连接扫描对scapy比较困难</li>
-</ul>
-</li>
-<li>sr1(IP(dst=”IP地址”)/TCP(dport=22,flags=”S”))</li>
-<li><strong><code>🔺命令：./tcp_scan1.py（代码内指定IP地址）</code></strong></li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy,runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import*</span><br><span class="line"></span><br><span class="line">response=sr1(IP(dst=&quot;IP地址&quot;)/TCP(dport=80,flags=&quot;S&quot;))</span><br><span class="line">reply=sr1(IP(dst=&quot;IP地址&quot;)/TCP(dport=80,flags=&quot;A&quot;,ack=(response[TCP].seq+1)))</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong><code>🔺命令：./tcp_scan2.py（代码内指定IP地址）</code></strong></li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy,runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import*</span><br><span class="line"></span><br><span class="line">SYN=IP(dst=&quot;IP地址&quot;)/TCP(dport=25,flags=&quot;S&quot;)</span><br><span class="line"></span><br><span class="line">print &quot;--SENT--&quot;</span><br><span class="line">SYN.display()</span><br><span class="line"></span><br><span class="line">print &quot;\n\n--RECEIVED--&quot;</span><br><span class="line">response=sr1(SYN,timeout=1,verbose=0)</span><br><span class="line">response.display()</span><br><span class="line"></span><br><span class="line">if int(response[TCP].flags)==18:</span><br><span class="line">    print &quot;\n\n--SENT--&quot;</span><br><span class="line">    A=IP(dst=&quot;IP地址&quot;)/TCP(dport=25,flags=&quot;A&quot;,ack=(response[TCP].seq+1))</span><br><span class="line">    A.display()</span><br><span class="line">    print &quot;\n\n--RECEIVED--&quot;</span><br><span class="line">    response2=sr1(A,timeout=1,verbose=0)</span><br><span class="line">    response2.display()</span><br><span class="line">else:</span><br><span class="line">    print &quot;SYN-ACK not returned&quot;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong><code>🔺命令：iptables -A OUTPUT -p tcp --tcp-flags RST RST -d 目标IP地址 -j DROP</code></strong></li>
-</ul>
-<blockquote>
-<pre><code>iptables是工作在底层的防火墙，在内核之前过滤数据
-iptables -L查看当前防火墙规则</code></pre></blockquote>
-<h4 id="6-全连接端口扫描"><a href="#6-全连接端口扫描" class="headerlink" title="6. 全连接端口扫描"></a>6. 全连接端口扫描</h4><ul>
-<li><strong><code>🔺命令：nmap IP地址 -sT -p 80</code></strong></li>
-<li><strong><code>🔺命令：nmap IP地址 -sT -p 80,21,25</code></strong></li>
-<li><strong><code>🔺命令：nmap IP地址 -sT -p 1-65535</code></strong></li>
-<li><strong><code>🔺命令：nmap -sT -iL iplist.txt -p 80</code></strong></li>
-<li>默认1000个常用端口</li>
-</ul>
-<h4 id="7-全连接端口扫描"><a href="#7-全连接端口扫描" class="headerlink" title="7. 全连接端口扫描"></a>7. 全连接端口扫描</h4><ul>
-<li>dmitry<ul>
-<li>功能简单，但使用简便</li>
-<li>默认150个常用端口</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：dmitry -p IP地址</code></strong></li>
-<li><strong><code>🔺命令：dmitry -p IP地址 -o output</code></strong></li>
-</ul>
-<h4 id="8-全连接端口扫描"><a href="#8-全连接端口扫描" class="headerlink" title="8. 全连接端口扫描"></a>8. 全连接端口扫描</h4><ul>
-<li><strong><code>🔺命令：nc -nv -w（连接的超时时间）1 -z IP地址 1-65535</code></strong>（倒序发送）</li>
-<li><strong><code>🔺命令：for x in $(seq 20 30);do nc -nv -w 1 -z IP地址 $x;done | grep open</code></strong></li>
-<li><strong><code>🔺命令：for x in $(seq 1 254);do nc -nv -w 1 -z 1.1.1.$x 80;done</code></strong></li>
-</ul>
-<h4 id="9-僵尸扫描"><a href="#9-僵尸扫描" class="headerlink" title="9. 僵尸扫描"></a>9. 僵尸扫描</h4><blockquote>
-<pre><code>早期的Window系统，包括XP,2003,98系统的IPID是递增的</code></pre></blockquote>
-<ul>
-<li>Scapy–zomebie.py<ul>
-<li>i=IP()</li>
-<li>t=TCP()</li>
-<li>rz=(i/t)</li>
-<li>rt=(i/t)</li>
-<li>rz[IP].dst=”zombie IP地址”</li>
-<li>rz[TCP].dport=445</li>
-<li>rz[TCP].flags=”SA”</li>
-<li>rt[IP].src=”zombie IP地址”</li>
-<li>rt[IP].dst=”target IP地址”</li>
-<li>rt[TCP].dport=22</li>
-<li>rt[TCP].flags=”S”</li>
-<li>az1=sr1(rz) / at=sr1(rt,timeout=1) / az2=sr1(rz)</li>
-<li>az1.display() / az2.display()</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：./zombie.py</code></strong></li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy,runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import*</span><br><span class="line"></span><br><span class="line">def ipid(zombie):</span><br><span class="line">    reply1=sr1(IP(dst=zombie)/TCP(flags=&quot;SA&quot;),timeout=2,verbose=0)</span><br><span class="line">    send(IP(dst=zombie)/TCP(flags=&quot;SA&quot;),verbose=0)</span><br><span class="line">    reply2=sr1(IP(dst=zombie)/TCP(flags=&quot;SA&quot;),timeout=2,verbose=0)</span><br><span class="line">    if reply2[IP].id==(reply1[IP].id+2):</span><br><span class="line">      print &quot;IPID sequence is incremental and target appears to be idle.ZOMBIE LOCATED&quot;</span><br><span class="line">      response=raw_input(&quot;DO you want to use this zombie to perfore scan?(Y or N):&quot;)</span><br><span class="line">      if response==&quot;Y&quot;:</span><br><span class="line">        target=raw_input(&quot;Enter the IP Address of the target system:&quot;)</span><br><span class="line">        zombiescant(target,zombie)</span><br><span class="line">    else:</span><br><span class="line">      print &quot;Either the IPID sequence is not incremental or the target is not idle.NOT A GOOD ZOMBIE&quot;</span><br><span class="line"></span><br><span class="line">def zombiescan(target,zombie):</span><br><span class="line">    print &quot;\nScanning target &quot;+target+&quot; with zombie &quot;+zombie</span><br><span class="line">    print &quot;\n-----------Open Ports On Target-------------\n &quot;</span><br><span class="line">    for port in range(1,100):</span><br><span class="line">      try:</span><br><span class="line">        start_val=sr1(IP(dst=zombie)/TCP(flags=&quot;SA&quot;,dport=port),timeout=2,verbose=0)</span><br><span class="line">        send(IP(src=zombie,dst=target)/TCP(flags=&quot;S&quot;,dport=port),verbose=0)</span><br><span class="line">        end_val=sr1(IP(dst=zombie)/TCP(flags=&quot;SA&quot;,dport=port),timeout=2,verbose=0)</span><br><span class="line">        if end_val[IP].id==(start_val[IP].id+2):</span><br><span class="line">          print port</span><br><span class="line">      except:</span><br><span class="line">        pass</span><br><span class="line"></span><br><span class="line">print &quot;----------------Zombie Scan Suite-----------\n&quot;</span><br><span class="line">print &quot;1 - Identify Zombie Host\n&quot;</span><br><span class="line">print &quot;2 - Perform Zombie Scan\n&quot;</span><br><span class="line">ans=raw_input(&quot;Select an Option (1 or 2):&quot;)</span><br><span class="line">if ans==&quot;1&quot;:</span><br><span class="line">    zombie=raw_input(&quot;Enter IP Address to test IPID sequence&quot;)</span><br><span class="line">    ipid(zombie)</span><br><span class="line">else:</span><br><span class="line">    if ans==&quot;2&quot;:</span><br><span class="line">      zombie=raw_input(&quot;Enter IP Address for zombie sysytem:&quot;)</span><br><span class="line">      target=raw_input(&quot;Enter IP Address for scan target:&quot;)</span><br><span class="line">      zombiescan(target,zombie)</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<pre><code>sr1 发包只收一个数据包
-send 发包不收数据包</code></pre></blockquote>
-<h4 id="10-僵尸扫描"><a href="#10-僵尸扫描" class="headerlink" title="10. 僵尸扫描"></a>10. 僵尸扫描</h4><ul>
-<li>发现僵尸机<ul>
-<li><strong><code>🔺命令：nmap -p445 IP地址 --script=ipidseq.nse</code></strong></li>
-</ul>
-</li>
-<li>扫描目标<ul>
-<li><strong><code>🔺命令：nmap target的IP地址 -sI（指定zombie） zomboe的IP地址 -Pn -p 0-100</code></strong></li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3376,7 +3312,7 @@ send 发包不收数据包</code></pre></blockquote>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">135</span>
+                  <span class="site-state-item-count">136</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3483,7 +3419,7 @@ send 发包不收数据包</code></pre></blockquote>
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">120.3k</span>
+    <span title="Site words total count">121.6k</span>
   
 </div>
 

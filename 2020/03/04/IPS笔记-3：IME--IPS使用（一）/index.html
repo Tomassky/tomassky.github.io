@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="安全,IPS," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. 常用的网络安全设备 防火墙 VPN（虚拟专用网络） IDS和IPS 杀毒软件 UTM（威胁管理）  2. IPS -&amp;gt; Sensor Setup Network Allow Password Recovery：这个选项默认是开启的。用于如果忘记IPS的登陆密码。可以在IPS启机过程当中使用密码恢复功能。把IPS的密码恢复成默认的cisco.注意。这个恢复。不会影响到IPS的一些相关配">
+<meta name="keywords" content="安全,IPS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IPS笔记-3：IME--IPS使用（一）">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;04&#x2F;IPS%E7%AC%94%E8%AE%B0-3%EF%BC%9AIME--IPS%E4%BD%BF%E7%94%A8%EF%BC%88%E4%B8%80%EF%BC%89&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="1. 常用的网络安全设备 防火墙 VPN（虚拟专用网络） IDS和IPS 杀毒软件 UTM（威胁管理）  2. IPS -&amp;gt; Sensor Setup Network Allow Password Recovery：这个选项默认是开启的。用于如果忘记IPS的登陆密码。可以在IPS启机过程当中使用密码恢复功能。把IPS的密码恢复成默认的cisco.注意。这个恢复。不会影响到IPS的一些相关配">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=5fb8bjFj4O7tMu-xFDNSOQMeiMHWI0B_MHamB1vqXPSvXTH_V_yHexY1s8y4a9ow36KvZm0ULxvHJhCXYnRh-Xjj9hIuPJUDlXbgG6HwGI0WQosfo4nYJLNk2RJdRrp3IyFKn74cAp1C7oFwPFMz6YBensQbGA&amp;file_name=&#x2F;IME--IPS--Network.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=b65cwhXGwT2-jtMFsySkuEqgCxKDTjh3X75OA2vJwaZlAi-lDvLz1dngVzOhH7xzfGoQioePy-wCuNsHocSGCE8bNigOpRareJq2BvGoM0U_6FmgDccQVMw__kYDdgP-9d-c4rgq4vLJyyC0SAcGIWyCgB6RNBIEq4fQ&amp;file_name=&#x2F;IME--IPS--Login%20Banner.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=efe0DL2G1Rvw31XFScqDaIJGsvdVlMDyiLgwPznt5gtTSvhsMhP9jMt1VJC9tedukElvDleDHw33jxvW2hIeUAw_7LXyLVaIkaVAGTNZ8bkivleWHB1zc6cXEvur4ZKGYmyAepkcfwF6LaS3RUtBBzDde2-q&amp;file_name=&#x2F;IME--IPS--Permit.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=b0b4FZUjmN4I6XdFXC5iii4s4OlX7lahD5QzkMFDU6xP-QV_p7oMvnF596nyXyibct-bWcJ2SuMR5YSlmmE_-pJBHrACW-9XvmjjYzI2BCj9YhQXXZ8vi6r7e7aW4iNWvmjLTfeJHHooFz3d79lBIc16Jg&amp;file_name=&#x2F;IME--IPS--Time.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=1950RuQ8tsxgROt-i8J_wp2n98_PwxGsUIrHH7dmvpjToFfSnWNKbU2kb0TbHa2loEfd3GkcZ9SyYXYS_SM7BsEgSoxVRWo3P9dLB0PG2aBrqByMrKpvrdYqKZbmsuEYeitZxg8vt59j7znrl53l3yIr4GMSqY6x-dT4R2w&amp;file_name=&#x2F;IME--IPS--Authentication.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=9751j67m67DKY95uLJCyyHeDctpiPRemBMU5hWWs5Q7dG7cEnfzvBxVl47WejjDDzj4kJ4shw928j5x_eXUJ-G9hJp95QV3Uq3OosLCRBWtqagB6JxXvBL-8UVkr1PGnOjnR-gr1P_3DiO3LTdydTZEVOavg&amp;file_name=&#x2F;IME--IPS--Bypass.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=af55XP_TtkDgpjNjArwaUVMF_gdCvXmZqMHxUEDk951a0GDoEB2uxzaUSgwAWiXK5nIDbFV6jfExlQrTYCSjmQB3Do661Ia08KN9jRZ3uIj-tmPXWo4Am0HjegVDQsTaSUCHjXLL1fWfV1A0RbBcXcRg-VvVMqXgkSEj&amp;file_name=&#x2F;IME--IPS--Sig%E7%89%B9%E5%BE%81%E7%A0%81.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=7d63FVQw9j3ITT1I1jb3JddgfhZij3TxbNDne4KKoJDG7Yo95mXS8NZivyQmr7zTnKU-mTg1mQkcC8NoS7MnJQWX9G58EIoz6U1jxrD4Ck2xWweuHNeXFp4Ldi0hTCwzq7lAevXMd9fHBZJobeL8es4V&amp;file_name=&#x2F;IME--IPS--VS1.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=8e3eoE5g0wFZF1iceBbqALpKY9BOusdi5VXl5_FYLPo7u6lPzhcyY2NrtyvKhkyMt5di_VLPrJgn1_48gWHqpujvE5gAdToTt6vqZ9xdCAYVDg9Z31L8mIZoBGarHAhfT6JEQm1gtzPUUYC_xQXiEmox4V4Dgcv5SkRy&amp;file_name=&#x2F;IME--IPS--Edit%20Actions.png">
+<meta property="og:updated_time" content="2020-03-04T13:39:42.938Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=5fb8bjFj4O7tMu-xFDNSOQMeiMHWI0B_MHamB1vqXPSvXTH_V_yHexY1s8y4a9ow36KvZm0ULxvHJhCXYnRh-Xjj9hIuPJUDlXbgG6HwGI0WQosfo4nYJLNk2RJdRrp3IyFKn74cAp1C7oFwPFMz6YBensQbGA&amp;file_name=&#x2F;IME--IPS--Network.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/04/IPS笔记-3：IME--IPS使用（一）/"/>
+
+
+
+
+
+  <title>IPS笔记-3：IME--IPS使用（一） | Tomas'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tomas'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/04/IPS%E7%AC%94%E8%AE%B0-3%EF%BC%9AIME--IPS%E4%BD%BF%E7%94%A8%EF%BC%88%E4%B8%80%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">IPS笔记-3：IME--IPS使用（一）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-04T21:42:08+08:00">
+                2020-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/IPS/" itemprop="url" rel="index">
+                    <span itemprop="name">IPS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.2k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<h4 id="1-常用的网络安全设备"><a href="#1-常用的网络安全设备" class="headerlink" title="1. 常用的网络安全设备"></a>1. 常用的网络安全设备</h4><ul>
+<li>防火墙</li>
+<li>VPN（虚拟专用网络）</li>
+<li>IDS和IPS</li>
+<li>杀毒软件</li>
+<li>UTM（威胁管理）</li>
+</ul>
+<h4 id="2-IPS-gt-Sensor-Setup"><a href="#2-IPS-gt-Sensor-Setup" class="headerlink" title="2. IPS -&gt; Sensor Setup"></a>2. IPS -&gt; Sensor Setup</h4><ul>
+<li>Network<ul>
+<li>Allow Password Recovery：这个选项默认是开启的。用于如果忘记IPS的登陆密码。可以在IPS启机过程当中使用密码恢复功能。把IPS的密码恢复成默认的cisco.注意。这个恢复。不会影响到IPS的一些相关配置。IPS默认是不开启telnet功能的。可以通过这个面板开启。</li>
+<li>LOGIN Banner：用于在登陆IPS的时候，弹出相关告警。</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=5fb8bjFj4O7tMu-xFDNSOQMeiMHWI0B_MHamB1vqXPSvXTH_V_yHexY1s8y4a9ow36KvZm0ULxvHJhCXYnRh-Xjj9hIuPJUDlXbgG6HwGI0WQosfo4nYJLNk2RJdRrp3IyFKn74cAp1C7oFwPFMz6YBensQbGA&file_name=/IME--IPS--Network.png" alt="IME--IPS--Network"></p>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=b65cwhXGwT2-jtMFsySkuEqgCxKDTjh3X75OA2vJwaZlAi-lDvLz1dngVzOhH7xzfGoQioePy-wCuNsHocSGCE8bNigOpRareJq2BvGoM0U_6FmgDccQVMw__kYDdgP-9d-c4rgq4vLJyyC0SAcGIWyCgB6RNBIEq4fQ&file_name=/IME--IPS--Login%20Banner.png" alt="IME--IPS--Login Banner"></p>
+<ul>
+<li>Allowed Host/Networks：用于限制哪个台设备，或者哪个网段。可以网管这台IPS。</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=efe0DL2G1Rvw31XFScqDaIJGsvdVlMDyiLgwPznt5gtTSvhsMhP9jMt1VJC9tedukElvDleDHw33jxvW2hIeUAw_7LXyLVaIkaVAGTNZ8bkivleWHB1zc6cXEvur4ZKGYmyAepkcfwF6LaS3RUtBBzDde2-q&file_name=/IME--IPS--Permit.png" alt="IME--IPS--Permit"></p>
+<ul>
+<li>Time</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=b0b4FZUjmN4I6XdFXC5iii4s4OlX7lahD5QzkMFDU6xP-QV_p7oMvnF596nyXyibct-bWcJ2SuMR5YSlmmE_-pJBHrACW-9XvmjjYzI2BCj9YhQXXZ8vi6r7e7aW4iNWvmjLTfeJHHooFz3d79lBIc16Jg&file_name=/IME--IPS--Time.png" alt="IME--IPS--Time"></p>
+<ul>
+<li>Authentication：用于管理IPS用户帐号密码，并为某个帐号授权相应权限</li>
+<li>权限等级<ul>
+<li>Administrator：管理员权限。对于IPS管理和配置来说。是最高权限。可以对IPS的基本网络，网络管理，接口管理，策略管理，日志读取进行配置</li>
+<li>Operator：操作者权限。可以对于IPS的策略，日志读取进行配置</li>
+<li>Viewer：查看者权限。紧紧只能对IPS的日志进行读取</li>
+<li>Service：IPS底层权限。IPS底层修改时使用（通过Console口连接）</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=1950RuQ8tsxgROt-i8J_wp2n98_PwxGsUIrHH7dmvpjToFfSnWNKbU2kb0TbHa2loEfd3GkcZ9SyYXYS_SM7BsEgSoxVRWo3P9dLB0PG2aBrqByMrKpvrdYqKZbmsuEYeitZxg8vt59j7znrl53l3yIr4GMSqY6x-dT4R2w&file_name=/IME--IPS--Authentication.png" alt="IME--IPS--Authentication"></p>
+<h4 id="3-IPS出入流量策略"><a href="#3-IPS出入流量策略" class="headerlink" title="3. IPS出入流量策略"></a>3. IPS出入流量策略</h4><ul>
+<li><p>Outbound流量</p>
+<ul>
+<li>IPS对于这种流量不做任何限制。也就是说。只要是路由存在的情况下。并且在IPS去往某个目的IP的过程中，没有策略拒绝这股流量的话。IPS可以抵达网络中任何一个IP主机。</li>
+<li>▲ IPS进行这种通信的时候。使用的是管理接口（M口）</li>
+</ul>
+</li>
+<li><p>Inbound流量允许</p>
+<ul>
+<li>已建立连接的流量（对IPS的一个回程报文，始发者是IPS）</li>
+<li>源自于NTP服务器的数据包</li>
+<li>Allowed Host所放行的流量。Allowed Host类似于ACL应用在VTY链路。添加条目的时候，可以针对一个主机或者一个子网</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-IPS-gt-Interface"><a href="#4-IPS-gt-Interface" class="headerlink" title="4. IPS -&gt; Interface"></a>4. IPS -&gt; Interface</h4><ul>
+<li>Bypass<ul>
+<li>用于修改</li>
+<li>三种模式<ul>
+<li>AUTO：自动模式。当IPS检测引擎发生故障的时候，对于流量的监控，自动关闭。直接放行流量（默认形式）</li>
+<li>ON：开启旁路模式。IPS对流量的监控直接关闭。对任何来到IPS的流量都不做检测匹配，直接放行</li>
+<li>OFF：关闭旁路模式。IPS对于流量的监控是必须的。如果发生检测引擎发送故障，而IPS又使用了这个模式，那么就会对网络造成一定的影响</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=9751j67m67DKY95uLJCyyHeDctpiPRemBMU5hWWs5Q7dG7cEnfzvBxVl47WejjDDzj4kJ4shw928j5x_eXUJ-G9hJp95QV3Uq3OosLCRBWtqagB6JxXvBL-8UVkr1PGnOjnR-gr1P_3DiO3LTdydTZEVOavg&file_name=/IME--IPS--Bypass.png" alt="IME--IPS--Bypass"></p>
+<h4 id="5-IPS-gt-Policies"><a href="#5-IPS-gt-Policies" class="headerlink" title="5. IPS -&gt; Policies"></a>5. IPS -&gt; Policies</h4><ul>
+<li>Signatures：签名。攻击特征码。IPS匹配攻击流量的关键配置。对于网络中，形形色色各种流量。都是通过Sig去配置匹配指定的一些特殊流量</li>
+<li>可以针对某一条sig进行配置：<br>动作，匹配参数，enable状态，退休状态。针对某条sig.进行克隆，编辑。删除。导出。等等一系列配置</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=af55XP_TtkDgpjNjArwaUVMF_gdCvXmZqMHxUEDk951a0GDoEB2uxzaUSgwAWiXK5nIDbFV6jfExlQrTYCSjmQB3Do661Ia08KN9jRZ3uIj-tmPXWo4Am0HjegVDQsTaSUCHjXLL1fWfV1A0RbBcXcRg-VvVMqXgkSEj&file_name=/IME--IPS--Sig%E7%89%B9%E5%BE%81%E7%A0%81.png" alt="IME--IPS--Sig特征码"></p>
+<ul>
+<li>VS：虚拟传感器。可以理解为一个虚拟的IPS。一个VS内，独立关联一个接口。独立的Sig攻击库，独立的规则，独立策略。多个VS之间，关联不同的接口。使用不同的策略。针对不同流量，实现不同的动作。VS之间相互不影响（从IPS软件版本6.X开始）<ul>
+<li>描述</li>
+<li>关联相关的接口</li>
+<li>关联相关的SIG攻击库</li>
+<li>关联相关的规则</li>
+<li>▲ 可以使用一个策略配置在不同的VS里面。唯独！接口不能够重复配置在其他的VS</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=7d63FVQw9j3ITT1I1jb3JddgfhZij3TxbNDne4KKoJDG7Yo95mXS8NZivyQmr7zTnKU-mTg1mQkcC8NoS7MnJQWX9G58EIoz6U1jxrD4Ck2xWweuHNeXFp4Ldi0hTCwzq7lAevXMd9fHBZJobeL8es4V&file_name=/IME--IPS--VS1.png" alt="IME--IPS--VS1"></p>
+<ul>
+<li>Edit Actions：编辑针对某个Sig被触发后所执行的动作<ul>
+<li>告警和日志行为<ul>
+<li>Produce Alert–产生告警</li>
+<li>Produce Verbose Alert–产生冗长告警。把触发这个Sig的数据抓包，并附在告警里</li>
+<li>Log Attacker Packets–Log攻击者。对触发这条Sig的数据报文的源IP地址，在后面的一定时间内（可修改）。对其进行抓包，停止后，可以通过IDM下载这个抓包文件。使用抓包攻击打开，进行数据的分析 —-单一攻击源</li>
+<li>Log Victim Packets–Log受害者。对触发这条Sig的数据报文的目的IP地址，在后面的一定时间内（可修改）对其进行抓包。停止后 —-多攻击源</li>
+<li>Log Pair Packets–Log pair。对触发这条Sig的数据报文的指定的源和目的地址IP地址，在后面的一定时间内（可修改）。对其进行抓包。停止后，可以通过IDM下载这个抓包文件。使用抓包工具打开，进行数据的分析</li>
+<li>Request SNMP Trap–SNMP Trap。需要指定SNMP服务器。把触发这条Sig的告警上传到指定服务器</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=8e3eoE5g0wFZF1iceBbqALpKY9BOusdi5VXl5_FYLPo7u6lPzhcyY2NrtyvKhkyMt5di_VLPrJgn1_48gWHqpujvE5gAdToTt6vqZ9xdCAYVDg9Z31L8mIZoBGarHAhfT6JEQm1gtzPUUYC_xQXiEmox4V4Dgcv5SkRy&file_name=/IME--IPS--Edit%20Actions.png" alt="IME--IPS--Edit Actions"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%AE%89%E5%85%A8/" rel="tag"># 安全</a>
+          
+            <a href="/tags/IPS/" rel="tag"># IPS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/04/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81%E5%85%AD)%EF%BC%9A%E5%8F%96%E8%AF%81%E5%B7%A5%E5%85%B7--Volatility/" rel="next" title="Kali Linux笔记(一百一十六)：取证工具--Volatility">
+                <i class="fa fa-chevron-left"></i> Kali Linux笔记(一百一十六)：取证工具--Volatility
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/photo.jpg"
+                alt="Tomas" />
+            
+              <p class="site-author-name" itemprop="name">Tomas</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">137</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Tomassky" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:tomassky7@gmail.com" target="_blank" title="Gmail邮箱">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>Gmail邮箱</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://ylsword-cheat.top" title="LengSword" target="_blank">LengSword</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://neigeshoufu.github.io/ljy.github.io" title="neigeshoufu" target="_blank">neigeshoufu</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-常用的网络安全设备"><span class="nav-number">1.</span> <span class="nav-text">1. 常用的网络安全设备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-IPS-gt-Sensor-Setup"><span class="nav-number">2.</span> <span class="nav-text">2. IPS -&gt; Sensor Setup</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-IPS出入流量策略"><span class="nav-number">3.</span> <span class="nav-text">3. IPS出入流量策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-IPS-gt-Interface"><span class="nav-number">4.</span> <span class="nav-text">4. IPS -&gt; Interface</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-IPS-gt-Policies"><span class="nav-number">5.</span> <span class="nav-text">5. IPS -&gt; Policies</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tomas</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">122.8k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

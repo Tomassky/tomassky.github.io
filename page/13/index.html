@@ -240,6 +240,275 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83)%EF%BC%9AWireshark/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83)%EF%BC%9AWireshark/" itemprop="url">Kali Linux笔记(二)：Wireshark</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-09T19:29:25+08:00">
+                2019-12-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  553 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-WIRESHARK"><a href="#1-WIRESHARK" class="headerlink" title="1. WIRESHARK"></a>1. WIRESHARK</h4><ul>
+<li>抓包嗅探协议分析</li>
+<li>安全专家必备的技能</li>
+<li>抓包引擎<ul>
+<li>Libpcap9–Linux</li>
+<li>Winpcap10–Windows</li>
+</ul>
+</li>
+<li>解码能力（衡量抓包软件能力强弱）</li>
+</ul>
+<h4 id="2-WIRESHARK-基本使用"><a href="#2-WIRESHARK-基本使用" class="headerlink" title="2. WIRESHARK-基本使用"></a>2. WIRESHARK-基本使用</h4><ul>
+<li>启动</li>
+<li>选择抓包网卡</li>
+<li>混杂模式</li>
+<li>实时抓包</li>
+<li>保存和分析捕获文件</li>
+<li>首选项（布局调整：Edit → Preferences）</li>
+</ul>
+<blockquote>
+<pre><code>混杂模式会抓以太网内所有的包，非混杂只抓取到达自己网卡的包（Enable promiscuous mode on all interfaces）
+抓包筛选器（Capture Filter），可自己设置（如：host ip地址）</code></pre></blockquote>
+<h4 id="3-WIRESHARK-筛选器"><a href="#3-WIRESHARK-筛选器" class="headerlink" title="3. WIRESHARK-筛选器"></a>3. WIRESHARK-筛选器</h4><ul>
+<li>过滤掉干扰的数据包</li>
+<li>抓包筛选器</li>
+<li>显示筛选器（右键 → Apply as Filter，可对任何数据）</li>
+</ul>
+<blockquote>
+<pre><code>Network → Capture Filters → Capture Engine → Dispaly Filters</code></pre></blockquote>
+<h4 id="4-数据包的分层结构"><a href="#4-数据包的分层结构" class="headerlink" title="4.  数据包的分层结构"></a>4.  数据包的分层结构</h4><ul>
+<li>ARP</li>
+<li>ICMP</li>
+<li>TCP-三次握手</li>
+<li>UDP</li>
+<li>DNS</li>
+<li>HTTP</li>
+<li>FTP</li>
+</ul>
+<blockquote>
+<pre><code>对于非官方端口解析：选中 → 右键 → Decode As → HTTP</code></pre></blockquote>
+<h4 id="5-WIRESHARK-TCP"><a href="#5-WIRESHARK-TCP" class="headerlink" title="5. WIRESHARK-TCP"></a>5. WIRESHARK-TCP</h4><ul>
+<li>数据流<ul>
+<li>http（明文传输）</li>
+<li>Smtp（明文传输）</li>
+<li>Pop3（明文传输）</li>
+<li>Ssl（密文传输，公钥证书是以明文传输的形式）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>完整的数据响应过程：选中 → 右键 → follow TCP/UDP stream</code></pre></blockquote>
+<h4 id="6-WIRESHARK-信息统计（Statistics、Analyze）"><a href="#6-WIRESHARK-信息统计（Statistics、Analyze）" class="headerlink" title="6. WIRESHARK-信息统计（Statistics、Analyze）"></a>6. WIRESHARK-信息统计（Statistics、Analyze）</h4><ul>
+<li>节点数–Summary摘要信息、Endpoints包的总数统计 ▲2019.11.26Summary改版为Capture File Properties</li>
+<li>协议分析–Protocol Hierarchy当前数据包的协议类型（DNS占比不大）</li>
+<li>包大小分布–Packet Lengths包的长度（小包占比大说明网络性能不好）</li>
+<li>会话连接–Conversations机器间的会话（若少量会话占用程序，说明僵尸网络在发包）</li>
+<li>解码方式–Decode AS解析成自定义协议</li>
+<li>专家系统–Expert info软件自带分析 ▲2019.11.26Expert info改版为Expert information</li>
+</ul>
+<h4 id="7-WIRESHARK-实践"><a href="#7-WIRESHARK-实践" class="headerlink" title="7. WIRESHARK-实践"></a>7. WIRESHARK-实践</h4><ul>
+<li><p>抓包对比nc、ncat加密与不加密的流量</p>
+<ul>
+<li>nc传输（明文传输）</li>
+</ul>
+<ol>
+<li>ARP</li>
+<li>TCP三次握手</li>
+<li>反向ARP</li>
+<li>开始TCP传输数据</li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<pre><code>follow TCP stream为明文传输</code></pre></blockquote>
+<ul>
+<li><p>抓包对比nc、ncat加密与不加密的流量  </p>
+<ul>
+<li>ncat传输（密文传输）</li>
+</ul>
+<ol>
+<li>ARP</li>
+<li>TCP三次握手</li>
+<li>反向ARP</li>
+<li>开始TCP传输数据</li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<pre><code>follow TCP stream为密文传输，一些Ncat特征为明文传输</code></pre></blockquote>
+<ul>
+<li>企业抓包部署方案（镜像端口 → 全流量，多块网卡捆绑，被动式扫描）<ul>
+<li>Sniffer</li>
+<li>Cace/riverbed（建立索引，易于大文件分析）</li>
+<li>Cascad pilot</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD)%EF%BC%9ANETCAT/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2670,174 +2939,11 @@ Java API用于JAVA虚拟机（JVM）</code></pre></blockquote>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/20/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/20/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-20T10:12:29+08:00">
-                2019-11-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  73 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/12/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span>
+    <a class="extend prev" rel="prev" href="/page/12/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/14/">Next</a>
   </nav>
 
 
@@ -2887,7 +2993,7 @@ Java API用于JAVA虚拟机（JVM）</code></pre></blockquote>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">130</span>
+                  <span class="site-state-item-count">131</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2994,7 +3100,7 @@ Java API用于JAVA虚拟机（JVM）</code></pre></blockquote>
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">115.9k</span>
+    <span title="Site words total count">116.5k</span>
   
 </div>
 

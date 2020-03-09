@@ -240,6 +240,347 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/24/%E7%AC%AC%E4%B8%89%E7%AB%A0%E3%80%81%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/24/%E7%AC%AC%E4%B8%89%E7%AB%A0%E3%80%81%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/" itemprop="url">第三章、页面置换算法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-24T16:36:19+08:00">
+                2019-12-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">Operating System</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.9k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  10 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="第三章、页面置换算法"><a href="#第三章、页面置换算法" class="headerlink" title="第三章、页面置换算法"></a>第三章、页面置换算法</h2><hr>
+<ol>
+<li><p>最优页面置换算法（OPT）</p>
+<ul>
+<li>基本思想：当一个缺页中断发生时，对于保存在内存当中的每一个逻辑页面，计算在它的下一次访问之前，还需等待多长时间，从中选择等待时间最长的那个，作为被置换的页面</li>
+<li>这只是一种理想情况。在实际系统中是无法实现的，因为操作系统无从知道每一个页面要等待多长时间以后才会再次访问</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>▲ 可用作其他算法的性能评价的依据（在一个模拟器上运行某个程序，并记录每一次的页面访问情况，在第二遍运行时即可使用最优算法）</code></pre></blockquote>
+<ol start="2">
+<li><p>先进先出算法（First-in-First-out，FIFO）</p>
+<ul>
+<li>基础思想：选择在内存中驻留时间最长的时间的页面并淘汰之。具体来说，系统维护着一个链表，记录了所有位于内存当中的逻辑页面。从链表的排列顺序来看，链首页面驻留的时间最长，链尾页面驻留时间最短。当发生一个缺页中断时，把链首页面淘汰出局，并把新的页面添加到链表的末尾</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>▲ 性能较差，调出的页面有可能时经常要访问的页面，并且有Belady现象。FIFO算法很少单独使用</code></pre></blockquote>
+<ol start="3">
+<li><p>最近最久未使用算法（Least Recently Used，LRU）</p>
+<ul>
+<li>基本思路：当一个缺页中断发生时，选择最久未使用的那个页面，并淘汰</li>
+<li>两种实现方式：<ul>
+<li>系统维护一个页面链表，最近刚刚使用过地页面作为首终点，最久未使用地页面作为尾结点。每一次访问内存时，找到相应地页面，把它从链表中摘下来，再移动到链表之首。每次缺页中断发生时，淘汰链表末尾地页面</li>
+<li>设置一个活动页面栈，当访问某页时，将此页号压入栈顶，然后，考察栈内是否有此页面相同地页号，若有则抽出。当需要淘汰一个页面时，总是选择栈底的底面，它就是最久未使用的</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>▲ 它是对最优页面置换算法的一个近似，其依据是程序的局部性原理，即在最近一小段时间（最近几条指令）内，如果某些页面被频繁地访问，那么在将来地一小段时间内，它们还可能会再一次被频繁地访问。反过来说，如果在过去某些页面长时间未被访问，那么在将来它们还可能会长时间地得不到访问</code></pre></blockquote>
+<ol start="4">
+<li><p>时钟页面置换算法（硬件实现访问位置0/1）(Reigsident bit，used bit，frame number)</p>
+<ul>
+<li>Clock页面置换算法，LRU的近似，用一个bit来模拟，贴近最优的LRU，对FIFO的一种改进</li>
+<li>基本思路：<ul>
+<li>需要用到页表项当中的访问位，当一个页面被装入内存时，把该位初始化为0。然后如果这个页面被访问（读/写），则把该位置为1</li>
+<li>把各个页面组织成环形链表（类似钟表面），把指针指向最老的页面（最先进来）</li>
+<li>当发生一个缺页中断时，考察指针所指向的最老页面，若它的访问位为0，立即淘汰；若访问位为1，则把该位置为0，然后指针往下移动一格。如此下去，直到找到被淘汰的页面，然后把指针移动到它的下一格</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>▲ 维持一个环形页面链表保存在内存中
+1.用一个时钟（或者使用/引用）位来标记一个页面是否经常被访问
+2.当一个页面被引用的时候，这个位被设置（为1）
+
+▲ 时钟头扫遍页面寻找一个带有user bit=0
+替换在一个周转内没有被引用的页面</code></pre></blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">func Clock_Replacement</span><br><span class="line">begin </span><br><span class="line">while  (victim page not found)  do</span><br><span class="line">    if  (used bit for current page=0)   then</span><br><span class="line">            replace current page(&amp;set used bit to 1)</span><br><span class="line">    else</span><br><span class="line">            reset used bit(to 0)</span><br><span class="line">   end if</span><br><span class="line">   advance clock pointer</span><br><span class="line">end while end Clock_Replacement</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li><p>二次机会法（Reigsident bit，used bit，dirty bit）</p>
+<ul>
+<li>这里有一个巨大的代价来替代”脏页“</li>
+<li>修改Clock算法，使它允许脏页总是在一次时钟头扫描中保留下来</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>Before clock sweep                 After clock sweep
+used    dirty                         used    dirty   
+0          0                          replace page
+0          1                          0          0
+1          0                          0          0
+1          1                          0          1
+▲ 注释：同时使用脏位和使用位来指导置换</code></pre></blockquote>
+<ol start="6">
+<li><p>最不常用算法（Least Frequently Used，LFU）</p>
+<ul>
+<li>基本思想：当一个缺页中断发生时，选择访问次数最少的那个页面，并淘汰之</li>
+<li>实现方法：对每个页面设置一个访问计算器，每当一个页面被访问时，该页面的访问计算器加1。在发生缺页中断时，淘汰计数值最小的那个页面。</li>
+<li>LRU和LFU的区别：<ul>
+<li>LRU考察的时多久未访问，时间越短越好</li>
+<li>LFU考察的时访问次数或频度，访问次数越多越好</li>
+</ul>
+</li>
+<li>问题：一个页面在进程开始时使用得很多，但以后就不使用了。实现也费时费力<ul>
+<li>解决方法：定期把次数寄存器右移一位</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>▲ Belady现象、FIFO、LRU和Clock的比较
+1.Belady现象：在采用FIFO算法时，有时会出现分配的物理页面数增加，缺页率反而提高的异常现象
+2.Belady现象的原因：FIFO算法的置换特征与进程访问内存的动态特征是矛盾的，与置换算法的目标是不一致的（即替换较少使用的页面），因此，被它置换出去的页面并不一定是进程不会访问的
+3.LRU、FIFO和Clock的比较
+(1)LRU算法和FIFO本质上都是先进先出的思路，只不过LRU是针对页面的最近访问时间来进行排序，所以需要在每一次页面访问的时候动态地调整各个页面之后的先后顺序（有一个页面的最近访问时间变了）；而FIFO是针对页面进入内存的时间来进行排序，这个时间是固定不变的，所以各页面之间的先后顺序是固定的。如果一个页面在进入内存后没有被访问，那么它的最近访问时间就是它进入内存的时间。换句话说，如果内存当中的所有页面都未曾访问，那么LRU算法退化为FIFO算法
+(2)LRU算法性能较好，但系统开销较大；FIFO算法系统开销较小，但可能会发生Belady现象。因此，折衷的办法就是Clock算法，在每一次页面访问时，它不必去动态地调整该页面在链表当中的顺序，而仅仅是做一个标记，然后等到发生缺页中断的时候，再把它移动到链表末尾。对于内存当中那些未被访问的页面，Clock算法的表先和LRU算法一样好；而对于那些曾经被访问的页面，它不能像LRU算法那样，记住它们的精确位置</code></pre></blockquote>
+<ol start="7">
+<li><p>工作集</p>
+<ul>
+<li>工作集：一个进程当前正在使用的逻辑页面集合，可以用一个二元函数W（t，▲）来表示<ul>
+<li>t是当前的执行时刻</li>
+<li>▲称为工作集窗口（working-set window），即一个定长的页面访问的时间窗口</li>
+<li>W（t，▲）=当前时刻t之前的▲时间窗口当中所有页面所组成的集合（随着t的变化，该集合也在不断地变化）</li>
+<li>|W（t，▲）|指工作集地的大小，即页面数目</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>▲ 工作集大小的变化：进程开始执行后，随着访问新页面逐步建立稳定的工作集。当内存访问的局部性区域的位置大致稳定时，工作集大小也大致稳定；局部性区域的位置改变时，工作集快速扩张和收缩过渡到下一个稳定值</code></pre></blockquote>
+<ol start="8">
+<li><p>常驻集</p>
+<ul>
+<li>常驻集是指在当前时刻，进程实际驻留在内存当中的页面集合<ul>
+<li>工作集是进程在运行过程中固有的性质，而常驻及取决于系统分配给进程的物理页面数目，以及所采用的页面置换算法；</li>
+<li>如果一个进程的整个工作集都在内存当中，即常驻集被包含于工作集，那么进程将很顺利地运行，而不会造成太多地缺页中断（直到工作集发生剧烈变动，从而过渡到另一个状态</li>
+<li>当进程常驻集的大小达到某个数目之后，再给它分配更多的物理页面，缺页率也不会明显下降</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>工作集页置换算法</p>
+<ul>
+<li>超出工作集就替换掉</li>
+</ul>
+</li>
+<li><p>缺页率页面置换算法</p>
+<ul>
+<li>可变分配策略：常驻集大小可变。例如：每个进程在刚开始运行的时候，先根据程序大小给它分配一定数目的物理页面，然后再进程运行过程中，再动态地调整常驻集的大小<ul>
+<li>可采用全局页面置换的方式，当发生一个缺页中断时，被置换的页面可以是在其他进程当中，各个并发进程竞争地使用物理页面</li>
+<li>优缺点：性能较好，但增加了系统开销</li>
+<li>具体实现：可以使用缺页率算法（PFF page of fault frequency）来动态调整常驻集的大小</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>▲ 缺页率：表示“缺页次数/内存访问次数”（比率）或“缺页的评级时间间隔的倒数”。</code></pre></blockquote>
+<ul>
+<li>影响缺页率的因素：<ul>
+<li>页面置换算法</li>
+<li>分配给进程的物理页面算法</li>
+<li>页面本身的大小</li>
+<li>程序的编写方法</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>▲ 一个交替的工作集计算明确的视图最小化页缺失
+1.当缺页率高的时候------增加工作集
+2.当缺页率低的时候------减少工作集</code></pre></blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">算法：</span><br><span class="line">     保持追踪缺失发生概率</span><br><span class="line">          1.当缺失发生时，从上次页缺失起计算这个时间记录这个使劲按，t（last）是上次的页缺失的时间</span><br><span class="line">          2.如果发生页缺失之间的时间是“大”，之后减少工作集</span><br><span class="line">          3.如果t（current）-t（last）&gt;T,之后从内存中移除所有在【t（last），t（current）】时间内没有被引用的页</span><br><span class="line">          4.如果这个发生页缺失的时间是“小”，之后增加工作集</span><br><span class="line">          5.如果t（current）-t（last）&lt;=T，之后增加缺失页到工作集中</span><br></pre></td></tr></table></figure>
+
+<ol start="11">
+<li><p>抖动问题（thrashing）</p>
+<ul>
+<li>如果分配给一个进程的物理页面太少，不能包含整个的工作集，集常驻集被包含于工作集，那么进程将会造成很多的缺页中断，需要频繁地在内存与外存之间替换页面，从而使进程的运行速度变得很慢，我们把这种状态称为“抖动”</li>
+<li>产生的原因：随着驻留内存的进程数目增加，分配给每个进程的物理页面数不断减小，缺页率不断上升。所以OS要选择一个适当的进程数目和进程需要的帧数，以便在并发水平和缺页率之间达到一个平衡</li>
+<li>抖动问题可能会被本地的页面置换改善<ul>
+<li>更好的规则为加载控制：调整MPL，所以：Better criteria for load control：Adjust MPL so that：</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<pre><code>▲ 平均缺页时间（MTBF）=页缺失服务时间（PFST）</code></pre></blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/22/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E5%9B%9B)%EF%BC%9A%E6%97%A0%E7%BA%BF%E6%A0%87%E5%87%86%E3%80%81%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%BB%A5%E5%8F%8A%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3295,261 +3636,11 @@ win32_bind    增加监听的进程，可以开启相应的端口
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81%E4%BA%94)%EF%BC%9A%E4%B8%BB%E6%9C%BA%E5%8F%91%E7%8E%B0--%E4%B8%89%E5%B1%82%E5%8F%91%E7%8E%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81%E4%BA%94)%EF%BC%9A%E4%B8%BB%E6%9C%BA%E5%8F%91%E7%8E%B0--%E4%B8%89%E5%B1%82%E5%8F%91%E7%8E%B0/" itemprop="url">Kali Linux笔记(十五)：主机发现--三层发现</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-10T08:13:38+08:00">
-                2019-12-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  880 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  4 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-发现-三层发现（ping）"><a href="#1-发现-三层发现（ping）" class="headerlink" title="1. 发现-三层发现（ping）"></a>1. 发现-三层发现（ping）</h4><ul>
-<li>优点<ul>
-<li>可路由</li>
-<li>速度比较快</li>
-</ul>
-</li>
-<li>缺点<ul>
-<li>速度比二层慢</li>
-<li>经常被边界防火墙过滤（目标系统的过滤机制）</li>
-</ul>
-</li>
-<li>IP、ICMP协议</li>
-</ul>
-<blockquote>
-<pre><code>ICMP协议，网络控制管理协议，路径发现，探测，根据相应结果来反应目标主机的状态
-ICMP协议，发送端的报文类型是询问报文，Type字段为8，接收端为0
-网络上默认禁止ICMP的探测数据包，所以导致扫描结果不准确，存在误报，漏报，错报</code></pre></blockquote>
-<ul>
-<li><strong><code>🔺命令：Ping IP地址 -c 2</code></strong></li>
-<li><strong><code>🔺命令：Ping -R（路由追踪） IP地址 / traceroute IP地址</code></strong></li>
-<li><strong><code>🔺命令：ping  IP地址 -c 1 | grep &quot;bytes from&quot; | awk &#39;{print $4}&#39;</code></strong></li>
-<li>脚本<ul>
-<li><strong><code>🔺命令：./pinger.sh IP网段</code></strong>  ▲2019.12.2 iplist文档中ip地址后面有：，还无法去除</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">if [ &quot;$#&quot; -ne 1 ];then</span><br><span class="line">    echo &quot;Usage - ./pinger.sh [/24 network address]&quot;</span><br><span class="line">    echo &quot;Example - ./pinger.sh 192.168.100.0&quot;</span><br><span class="line">    echo &quot;Example will perform an ICMP ping scan of the 192.168.100.0/24 network&quot;</span><br><span class="line">    exit</span><br><span class="line">fi</span><br><span class="line">prefix=$(echo $1 | cut -d &quot;.&quot; -f 1-3)</span><br><span class="line">for add in $(seq 1 254);do</span><br><span class="line">  ping -c 1 $prefix.$addr | grep &quot;bytes from&quot; | awk &apos;&#123;print $4&#125;&apos;  &amp;</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
-
-
-<blockquote>
-<pre><code>Linux/Unix数据包的TTL值默认为64
-ping -R 请求离主机比较远的网卡的IP地址（同个路由器）
-traceroute 请求离主机比较近的网卡的IP地址（同个路由器）</code></pre></blockquote>
-<h4 id="2-发现-三层发现（Scapy）"><a href="#2-发现-三层发现（Scapy）" class="headerlink" title="2. 发现-三层发现（Scapy）"></a>2. 发现-三层发现（Scapy）</h4><ul>
-<li>Scapy<ul>
-<li>OSI多层堆叠手工声称ICMP包-IP/ICMP包</li>
-<li>ip=IP()</li>
-<li>icmp=ICMP()</li>
-<li>ping=(ip/icmp)</li>
-<li>ping[IP].dst=”IP地址”</li>
-<li>a=sr1(ping)</li>
-<li>a.dispaly</li>
-<li>Ping不存在的地址：a=sr1(ip/icmp,timeout=1)</li>
-<li>a=sr1(IP(dst=”IP地址”)/ICMP(),timeout=1)  //一句话实现</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：./pinger1.py IP网段&gt;iplist.txt</code></strong></li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./pinger1.py [/24 network address]&quot;</span><br><span class="line">    print &quot;Example - ./pinger1.py 192.168.100.0&quot;</span><br><span class="line">    print &quot;Example will perform an ICMP ping scan of the 192.168.100.0/24 network&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">address=str(sys.argv[1])</span><br><span class="line">prefix=address.split(&quot;.&quot;)[0]+&quot;.&quot;+address.split(&quot;.&quot;)[1]+&quot;.&quot;+address.split(&quot;.&quot;)[2]+&quot;.&quot;</span><br><span class="line"></span><br><span class="line">for addr in range(1,254):</span><br><span class="line">     a=sr1(IP(dst=prefix+str(addr))/ICMP(),timeout=1,verbose=0)</span><br><span class="line">     if a==None:</span><br><span class="line">       pass</span><br><span class="line">     else:</span><br><span class="line">       print prefix+str(addr)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong><code>🔺命令：./pinger2.py iplist.txt</code></strong></li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./pinger2.py [iplist.txt]&quot;</span><br><span class="line">    print &quot;Example - ./pinger2.py iplist.txt&quot;</span><br><span class="line">    print &quot;Example will perform an ICMP ping scan of the 192.168.100.0/24 network&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">filename=str(sys.argv[1])</span><br><span class="line">file=open(filename,&quot;r&quot;)</span><br><span class="line"></span><br><span class="line">for addr in file:</span><br><span class="line">    a=sr1(IP(dst=addr.strip())/ICMP(),timeout=0.1,verbose=0)</span><br><span class="line">    if a==None:</span><br><span class="line">      pass</span><br><span class="line">    else:</span><br><span class="line">      print addr.strip()</span><br></pre></td></tr></table></figure>
-
-<h4 id="3-发现-三层发现（nmap）"><a href="#3-发现-三层发现（nmap）" class="headerlink" title="3. 发现-三层发现（nmap）"></a>3. 发现-三层发现（nmap）</h4><ul>
-<li><strong><code>🔺命令：nmap IP地址-254 -sn</code></strong>（同网段是发ARP包，不同网段是发ICMP包）</li>
-<li><strong><code>🔺命令：nmap -iL iplist.txt -sn</code></strong></li>
-</ul>
-<blockquote>
-<pre><code>namp -sn对于同网段是发ARP包和DNS包，不同网段是发ICMP包（请求字段为时间戳13和请求包8）、DNS包和TCP包 </code></pre></blockquote>
-<h4 id="4-发现-三层发现（fping）"><a href="#4-发现-三层发现（fping）" class="headerlink" title="4. 发现-三层发现（fping）"></a>4. 发现-三层发现（fping）</h4><ul>
-<li><strong><code>🔺命令：fping IP地址 -c 1</code></strong></li>
-<li><strong><code>🔺命令：fping -g 起始IP地址 最后IP地址（IP地址段）-c 1</code></strong></li>
-<li><strong><code>🔺命令：fping -g IP网段/24</code></strong>  ▲2019.12.2过滤输出格式不对</li>
-<li><strong><code>🔺命令：fping -f iplist.txt</code></strong></li>
-</ul>
-<h4 id="5-发现-三层发现（Hping）"><a href="#5-发现-三层发现（Hping）" class="headerlink" title="5. 发现-三层发现（Hping）"></a>5. 发现-三层发现（Hping）</h4><ul>
-<li>Hping（几乎可以完成所以IP、TCP协议包头的组合，也可对于基于TCP服务器进行压力测试）<ul>
-<li>能够发生几乎所有任意TCP/IP包</li>
-<li>功能强大但每次只能扫描一个目标</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：hping3 IP地址 --icmp -c 2</code></strong></li>
-<li><strong><code>🔺命令：for addr in $(seq 1 254); do hping3 1.1.1.$addr --icmp -c 1 &gt;&gt; handle.txt &amp; done</code></strong></li>
-<li><strong><code>🔺命令：cat handle.txt |  grep ^len</code></strong></li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/10/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/12/">Next</a>
+    <a class="extend prev" rel="prev" href="/page/10/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/12/">Next</a>
   </nav>
 
 
@@ -3599,7 +3690,7 @@ traceroute 请求离主机比较近的网卡的IP地址（同个路由器）</co
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">140</span>
+                  <span class="site-state-item-count">141</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3706,7 +3797,7 @@ traceroute 请求离主机比较近的网卡的IP地址（同个路由器）</co
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">125.2k</span>
+    <span title="Site words total count">125.7k</span>
   
 </div>
 

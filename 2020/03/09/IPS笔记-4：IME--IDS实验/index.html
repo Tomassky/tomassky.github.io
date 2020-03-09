@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="安全,IPS," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. IDS模拟实验 R1：Router C3700 R1：Router C3700 IDS：IPS-4240 SW：EtherSwitch router ▲ 2020.03.09 虚拟机IPS-4240的虚拟网卡VMware1和VMware2需要开启主机连接，且若在GNS3中无出现此两个网卡，可重启计算机，即可抓到这两个网卡    2. IDS：IPS-4240 改变外形：右键 -&amp;gt; C">
+<meta name="keywords" content="安全,IPS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IPS笔记-4：IME--IDS实验">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;09&#x2F;IPS%E7%AC%94%E8%AE%B0-4%EF%BC%9AIME--IDS%E5%AE%9E%E9%AA%8C&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="1. IDS模拟实验 R1：Router C3700 R1：Router C3700 IDS：IPS-4240 SW：EtherSwitch router ▲ 2020.03.09 虚拟机IPS-4240的虚拟网卡VMware1和VMware2需要开启主机连接，且若在GNS3中无出现此两个网卡，可重启计算机，即可抓到这两个网卡    2. IDS：IPS-4240 改变外形：右键 -&amp;gt; C">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=0bacrbnKkpYD4tlDbXA5W_Xym--5R1euodEwlnfaNxNJ71hf03r_munV6AlWxXFo235ZIxkzPuzSwMJ-Od4rn-ZSm4EkP47zyU_Bx1bEtN4FIbgLpHqs5WwmNawncH6dcxTxwdQkUfSHWwT7URIcjRWh8eqHbLJZERxTC41OWz7B&amp;file_name=&#x2F;IPS-4240%E5%BC%80%E5%90%AF%E7%9A%84%E4%B8%BB%E6%9C%BA%E8%BF%9E%E6%8E%A5.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=012dqgU0HW2O6T7_qgEJBSDpZ3XB7ZKt6E-XFbdECWkJrxO9ytxpQJVrz_uqMSGTI3c4vStJ1EmH8Pq9a4tbJhxxfupVhjtXmaUWbah0T7wGlKeaXOY0YeSdDvApTPZAvyCWsXahyyzZ9YBTwsoHLbCv9p7jmhub-XcO-elID3dW0A&amp;file_name=&#x2F;IDS%E6%9D%82%E5%90%88%E6%A8%A1%E5%BC%8F%E6%8A%A5%E8%AD%A6%E6%8B%93%E6%89%91%E5%9B%BE.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=e716udOnSAz4dkadkPZQTHK9g05PtIelg4zk2fzdIgJCz4HqqxWzbwhNNFKkaYNFeaNpTlD5z64oaidZmHSNAhCFbR3v5MLkFCtBZDO6NAjpoMIC0D_r9Nx0331xyekGaF4W9tvG3FCim7TO4aHsxYBCv0yQdVuyVPXjVEuvdXhT&amp;file_name=&#x2F;IME--IDS%E5%BC%80%E5%90%AFInterface%E6%8E%A5%E5%8F%A3.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=3a8dp_n3lcKNVEypw6Di4LaTAv_Avd0UCiFrF3-e_IlgFeOGUvsybKhV4TlPSucR_MTILfOLGoeneDxTQaSkoHMZRhmG_xy2D05Wg6fiJqeb7UUskmEe7-Nhjf3juDjVtcOm_i7xSbvxFws_nq-h6jt77Q97AZBJ26UP4zzcxeT2_4WOVNzeUtsHAQ&amp;file_name=&#x2F;IME--IDS%E7%BB%91%E5%AE%9A%E7%97%85%E6%AF%92%E7%89%B9%E5%BE%81%E8%AF%86%E5%88%AB%E5%BA%93Sig0.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=fdce1Ff0MCkc3-yj71iaYRdkeEJpfWm0jjJn_9Z8qjwqcJI5cnyP32AwgQAodnE2fkNMq_DwHM8OI40j881slIQQ1qcoISNHBs0kasDtTx95Fylgz-_mBDbApXMwoq8crtRBaDdwU_vCuNDCLHQoZmh27GmFiob8p0h8sVY7HbkapCT0A3i9DPKTpg&amp;file_name=&#x2F;IME--IDS%E9%85%8D%E7%BD%AE%E7%97%85%E6%AF%92%E7%89%B9%E5%BE%81%E8%AF%86%E5%88%AB%E5%BA%93Sig0.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=b1d2PvCljYmLqdGgLHVK2XIozxfcZ3CuWtHMFvegnsxhRgtIqu5VY31E81qdvqfjQmLFwjTcSYL6P5GS76JMLnLf-foEjb8v4X_sWyF2y0vPN5UkB3jie7VD-iqG7PrWOppk9ndS7cuO7blOPoiIegTOaZKysaPmfUrFTOL9RC0&amp;file_name=&#x2F;IME--IDS%E7%9B%91%E6%8E%A7IDS-ICMP%E4%BA%8B%E4%BB%B6.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=86be8gbeHXZQYLAno8Fl34UQyP-SwjMrOG5Dvm89FB7fEJo9c8lgeZR4eQbf-JbLk0TVIq4__qCGU3QNnR8aLpgvUN67H9tWAvivieaxn-I5XYQuyz4uVBiN12lmd9DwXSv719ztPNFaurjxFBbzMwW0W2GgThxhBRp0&amp;file_name=&#x2F;IME--IDS%E7%9B%91%E6%8E%A7IDS%E4%BA%8B%E4%BB%B6.png">
+<meta property="og:updated_time" content="2020-03-09T14:55:35.928Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=0bacrbnKkpYD4tlDbXA5W_Xym--5R1euodEwlnfaNxNJ71hf03r_munV6AlWxXFo235ZIxkzPuzSwMJ-Od4rn-ZSm4EkP47zyU_Bx1bEtN4FIbgLpHqs5WwmNawncH6dcxTxwdQkUfSHWwT7URIcjRWh8eqHbLJZERxTC41OWz7B&amp;file_name=&#x2F;IPS-4240%E5%BC%80%E5%90%AF%E7%9A%84%E4%B8%BB%E6%9C%BA%E8%BF%9E%E6%8E%A5.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/09/IPS笔记-4：IME--IDS实验/"/>
+
+
+
+
+
+  <title>IPS笔记-4：IME--IDS实验 | Tomas'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tomas'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/09/IPS%E7%AC%94%E8%AE%B0-4%EF%BC%9AIME--IDS%E5%AE%9E%E9%AA%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">IPS笔记-4：IME--IDS实验</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-09T22:56:39+08:00">
+                2020-03-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/IPS/" itemprop="url" rel="index">
+                    <span itemprop="name">IPS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  439 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<h4 id="1-IDS模拟实验"><a href="#1-IDS模拟实验" class="headerlink" title="1. IDS模拟实验"></a>1. IDS模拟实验</h4><ul>
+<li>R1：Router C3700</li>
+<li>R1：Router C3700</li>
+<li>IDS：IPS-4240</li>
+<li>SW：EtherSwitch router</li>
+<li>▲ 2020.03.09 虚拟机IPS-4240的虚拟网卡VMware1和VMware2需要开启主机连接，且若在GNS3中无出现此两个网卡，可重启计算机，即可抓到这两个网卡</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=0bacrbnKkpYD4tlDbXA5W_Xym--5R1euodEwlnfaNxNJ71hf03r_munV6AlWxXFo235ZIxkzPuzSwMJ-Od4rn-ZSm4EkP47zyU_Bx1bEtN4FIbgLpHqs5WwmNawncH6dcxTxwdQkUfSHWwT7URIcjRWh8eqHbLJZERxTC41OWz7B&file_name=/IPS-4240%E5%BC%80%E5%90%AF%E7%9A%84%E4%B8%BB%E6%9C%BA%E8%BF%9E%E6%8E%A5.png" alt="IPS-4240开启的主机连接"></p>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=012dqgU0HW2O6T7_qgEJBSDpZ3XB7ZKt6E-XFbdECWkJrxO9ytxpQJVrz_uqMSGTI3c4vStJ1EmH8Pq9a4tbJhxxfupVhjtXmaUWbah0T7wGlKeaXOY0YeSdDvApTPZAvyCWsXahyyzZ9YBTwsoHLbCv9p7jmhub-XcO-elID3dW0A&file_name=/IDS%E6%9D%82%E5%90%88%E6%A8%A1%E5%BC%8F%E6%8A%A5%E8%AD%A6%E6%8B%93%E6%89%91%E5%9B%BE.png" alt="IDS杂合模式报警拓扑图"></p>
+<h4 id="2-IDS：IPS-4240"><a href="#2-IDS：IPS-4240" class="headerlink" title="2. IDS：IPS-4240"></a>2. IDS：IPS-4240</h4><ul>
+<li>改变外形：右键 -&gt; Change Symbol -&gt; ids</li>
+<li>修改名字：右键 -&gt; Change the hostname -&gt; IDS</li>
+<li>增加监控网卡：Configure -&gt; NIO Ethernet -&gt; Add VMnet1</li>
+</ul>
+<h4 id="3-R1和R2"><a href="#3-R1和R2" class="headerlink" title="3. R1和R2"></a>3. R1和R2</h4><ul>
+<li>启动，降低系统资源消耗：右键 -&gt; Idle PC -&gt; 选取带*号的参数设备</li>
+<li>配置R1<ul>
+<li>conf t</li>
+<li>interface f0/1</li>
+<li>ip add 10.1.1.1 255.255.255.0</li>
+<li>no sh</li>
+</ul>
+</li>
+<li>配置R2<ul>
+<li>conf t</li>
+<li>interface f0/1</li>
+<li>ip add 10.1.1.2 255.255.255.0</li>
+<li>no sh</li>
+</ul>
+</li>
+<li>连通性：R1 -&gt; do ping 10.1.1.2 -&gt; R2是否联通</li>
+</ul>
+<h4 id="4-SW：EtherSwitch-router"><a href="#4-SW：EtherSwitch-router" class="headerlink" title="4. SW：EtherSwitch router"></a>4. SW：EtherSwitch router</h4><ul>
+<li>启动，降低系统资源消耗：右键 -&gt; Idle PC -&gt; 选取带*号的参数设备</li>
+<li>修改名字：右键 -&gt; Change the hostname -&gt; SW</li>
+<li>增加接口：右键 -&gt; Slots -&gt; 增加一个NM-16ESW</li>
+</ul>
+<h4 id="5-测试连通性"><a href="#5-测试连通性" class="headerlink" title="5. 测试连通性"></a>5. 测试连通性</h4><ul>
+<li>R1(f 1/0)-&gt; SW(f 1/1)</li>
+<li>R2(f 1/0)-&gt; SW(f 1/2)</li>
+<li>IDS -&gt; SW(f 1/15)</li>
+<li>连通性：R1 -&gt; ping 10.1.1.2 -&gt; R2是否连通</li>
+</ul>
+<h4 id="6-SPAN配置"><a href="#6-SPAN配置" class="headerlink" title="6. SPAN配置"></a>6. SPAN配置</h4><ul>
+<li>SW：EtherSwitch router<ul>
+<li>monitor session 1 source interface f1/1 rx  //R1</li>
+<li>monitor session 1 destination interface f1/15  //IDS</li>
+</ul>
+</li>
+</ul>
+<h4 id="7-入侵检测"><a href="#7-入侵检测" class="headerlink" title="7. 入侵检测"></a>7. 入侵检测</h4><ul>
+<li>▲ 所有的步骤都需要进行Apply</li>
+<li>IME启动IPS</li>
+<li>开启Interface接口<ul>
+<li>Configuration -&gt; Interface -&gt; GigabitEthernet 0/0 -&gt; Edit -&gt; enable</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=e716udOnSAz4dkadkPZQTHK9g05PtIelg4zk2fzdIgJCz4HqqxWzbwhNNFKkaYNFeaNpTlD5z64oaidZmHSNAhCFbR3v5MLkFCtBZDO6NAjpoMIC0D_r9Nx0331xyekGaF4W9tvG3FCim7TO4aHsxYBCv0yQdVuyVPXjVEuvdXhT&file_name=/IME--IDS%E5%BC%80%E5%90%AFInterface%E6%8E%A5%E5%8F%A3.png" alt="IME--IDS开启Interface接口"></p>
+<ul>
+<li>绑定病毒特征识别库Sig0<ul>
+<li>Configuration -&gt; Policies -&gt; vs0 -&gt; Edit -&gt; GigabitEthernet 0/0</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=3a8dp_n3lcKNVEypw6Di4LaTAv_Avd0UCiFrF3-e_IlgFeOGUvsybKhV4TlPSucR_MTILfOLGoeneDxTQaSkoHMZRhmG_xy2D05Wg6fiJqeb7UUskmEe7-Nhjf3juDjVtcOm_i7xSbvxFws_nq-h6jt77Q97AZBJ26UP4zzcxeT2_4WOVNzeUtsHAQ&file_name=/IME--IDS%E7%BB%91%E5%AE%9A%E7%97%85%E6%AF%92%E7%89%B9%E5%BE%81%E8%AF%86%E5%88%AB%E5%BA%93Sig0.png" alt="IME--IDS绑定病毒特征识别库Sig0"></p>
+<ul>
+<li>配置病毒特征识别库Sig0<ul>
+<li>Sig0 -&gt; OS -&gt; 2004(过滤) -&gt; Change status To -&gt; Active</li>
+<li>Sig0 -&gt; OS -&gt; 2004(过滤) -&gt; Enable</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=fdce1Ff0MCkc3-yj71iaYRdkeEJpfWm0jjJn_9Z8qjwqcJI5cnyP32AwgQAodnE2fkNMq_DwHM8OI40j881slIQQ1qcoISNHBs0kasDtTx95Fylgz-_mBDbApXMwoq8crtRBaDdwU_vCuNDCLHQoZmh27GmFiob8p0h8sVY7HbkapCT0A3i9DPKTpg&file_name=/IME--IDS%E9%85%8D%E7%BD%AE%E7%97%85%E6%AF%92%E7%89%B9%E5%BE%81%E8%AF%86%E5%88%AB%E5%BA%93Sig0.png" alt="IME--IDS配置病毒特征识别库Sig0"></p>
+<ul>
+<li>监控IDS-ICMP事件<ul>
+<li>Configuration -&gt; Sensor Monitoring -&gt; View</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=b1d2PvCljYmLqdGgLHVK2XIozxfcZ3CuWtHMFvegnsxhRgtIqu5VY31E81qdvqfjQmLFwjTcSYL6P5GS76JMLnLf-foEjb8v4X_sWyF2y0vPN5UkB3jie7VD-iqG7PrWOppk9ndS7cuO7blOPoiIegTOaZKysaPmfUrFTOL9RC0&file_name=/IME--IDS%E7%9B%91%E6%8E%A7IDS-ICMP%E4%BA%8B%E4%BB%B6.png" alt="IME--IDS监控IDS-ICMP事件"></p>
+<ul>
+<li>R1向R2发生ICMP Echo Requset的Ping包，查看IME–IPS的Event Viewer有无报警日志</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=86be8gbeHXZQYLAno8Fl34UQyP-SwjMrOG5Dvm89FB7fEJo9c8lgeZR4eQbf-JbLk0TVIq4__qCGU3QNnR8aLpgvUN67H9tWAvivieaxn-I5XYQuyz4uVBiN12lmd9DwXSv719ztPNFaurjxFBbzMwW0W2GgThxhBRp0&file_name=/IME--IDS%E7%9B%91%E6%8E%A7IDS%E4%BA%8B%E4%BB%B6.png" alt="IME--IDS监控IDS事件"> </p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%AE%89%E5%85%A8/" rel="tag"># 安全</a>
+          
+            <a href="/tags/IPS/" rel="tag"># IPS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/09/IPS%E7%AC%94%E8%AE%B0-3%EF%BC%9AIME--IPS%E4%BD%BF%E7%94%A8/" rel="next" title="IPS笔记-3：IME--IPS使用">
+                <i class="fa fa-chevron-left"></i> IPS笔记-3：IME--IPS使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/photo.jpg"
+                alt="Tomas" />
+            
+              <p class="site-author-name" itemprop="name">Tomas</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">142</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Tomassky" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:tomassky7@gmail.com" target="_blank" title="Gmail邮箱">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>Gmail邮箱</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://ylsword-cheat.top" title="LengSword" target="_blank">LengSword</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://neigeshoufu.github.io/ljy.github.io" title="neigeshoufu" target="_blank">neigeshoufu</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-IDS模拟实验"><span class="nav-number">1.</span> <span class="nav-text">1. IDS模拟实验</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-IDS：IPS-4240"><span class="nav-number">2.</span> <span class="nav-text">2. IDS：IPS-4240</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-R1和R2"><span class="nav-number">3.</span> <span class="nav-text">3. R1和R2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-SW：EtherSwitch-router"><span class="nav-number">4.</span> <span class="nav-text">4. SW：EtherSwitch router</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-测试连通性"><span class="nav-number">5.</span> <span class="nav-text">5. 测试连通性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-SPAN配置"><span class="nav-number">6.</span> <span class="nav-text">6. SPAN配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-入侵检测"><span class="nav-number">7.</span> <span class="nav-text">7. 入侵检测</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tomas</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">126.1k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

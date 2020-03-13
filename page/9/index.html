@@ -240,6 +240,397 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81)%EF%BC%9ADNS%E9%9A%A7%E9%81%93--iodine/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81)%EF%BC%9ADNS%E9%9A%A7%E9%81%93--iodine/" itemprop="url">Kali Linux笔记(七十)：DNS隧道--iodine</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-02T20:41:56+08:00">
+                2020-02-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.2k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-DNS协议隧道–iodine"><a href="#1-DNS协议隧道–iodine" class="headerlink" title="1. DNS协议隧道–iodine"></a>1. DNS协议隧道–iodine</h4><ul>
+<li>基于DNS查询的隧道工具</li>
+<li>与同类工具相比的优点<ul>
+<li>对下行数据不进行编码，因此性能优</li>
+<li>支持多平台：Linux、BSD、Mac OS、Windows</li>
+<li>最大16个并发连接</li>
+<li>强制密码支持</li>
+<li>支持同网段隧道IP（不同于服务器、客户端网段）</li>
+<li>支持多种DNS记录类型（自动协商使用的DNS记录类型）</li>
+<li>丰富的隧道质量检测措施</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-实验环境（Linux）"><a href="#2-实验环境（Linux）" class="headerlink" title="2. 实验环境（Linux）"></a>2. 实验环境（Linux）</h4><ul>
+<li>实验机子：Linux主机（bodhi）/防火墙（mono）/外网主机（Kali）</li>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+</ul>
+</li>
+<li>Window Server 2003（外网的DNS服务器）<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>配置一个静态的IP地址，设置DNS服务器为127.0.0.1（ipconfig查询所用IP地址）</li>
+<li>安装DNS服务器<ul>
+<li>安装DNS服务器（Win+R → appwiz.cpl → 更改或添加程序 → 网络服务 → 域名系统，可能需要光盘）   </li>
+<li>开始 → 管理工具 → DNS → 正向查询区域 → 右键 → 新建区域</li>
+<li>主要区域、区域名称（lab.com）</li>
+</ul>
+</li>
+<li>NS记录指向Kali<ul>
+<li>右键lab.com空白区域 → 新建主机 → 名称（w2k3）、IP（2003的IP地址）</li>
+<li>右键lab.com空白区域 → 新建主机 → 名称（Kali）、IP（Kali的IP地址）</li>
+</ul>
+</li>
+<li>创建区域lab.com，指派二级域test.lab.com<ul>
+<li>lab.com → 右键 → 新建委派 → test → 添加（kali的主机记录）→ 解析</li>
+<li><strong><code>🔺命令：ping kali.lab.com</code></strong>查看是否能进行正常通信</li>
+</ul>
+</li>
+<li>配置转发器（转发到外网的DNS服务器，不做迭代查询）<ul>
+<li>服务器图标 → 右键 → 属性 → 转发 → 添加物理网络的DNS服务器（ipconfig查询）</li>
+<li>nslookup解析新浪和百度的域名，查看是否能正常通信</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>安装squid<ul>
+<li><strong><code>🔺命令：apt-get install squid3</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Mono防火墙<ul>
+<li>第一个网卡为Hosy-only方式，第二个网卡为Bridge桥接方式，桥接到无线网络，检查</li>
+</ul>
+</li>
+<li>bodhi<ul>
+<li>插入bodhi-3.2.0-64.iso光盘，安装到硬盘，修改网络为Host-only方式，检查网络</li>
+<li>查看网管（netstat -nr，看是否为mono网关）</li>
+<li>浏览器登陆mono，修改之前TCP/UDP的规则，改为只允许UDP通过，保存修改</li>
+</ul>
+</li>
+<li>Window Server 2003（内网的DNS服务器）<ul>
+<li>网卡方式为Host-only方式，检查网络</li>
+<li>配置一个静态的IP地址，设置DNS服务器为127.0.0.1（ipconfig查询所用IP地址）</li>
+<li>安装DNS服务器<ul>
+<li>安装DNS服务器（Win+R → appwiz.cpl → 更改或添加程序 → 网络服务 → 域名系统，可能需要光盘）</li>
+<li>开始 → 管理工具 → DNS → 正向查询区域 → 右键 → 新建区域</li>
+<li>主要区域、区域名称（lab.com）</li>
+</ul>
+</li>
+<li>配置转发器（转发到外网的DNS服务器，不做迭代查询）<ul>
+<li>服务器图标 → 右键 → 属性 → 转发 → 外网的DNS服务器（Window Server 2003）</li>
+</ul>
+</li>
+<li>登陆防火墙查看规则（源和目的：Single host or alias，设置目的IP为Window Server 2003的IP地址）</li>
+<li>nslookup解析lab.com、test.lab.com、新浪、百度的域名，查看是否能正常通信</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：service squid start</code></strong></li>
+<li>开启SSH服务（擦除以前所作操作）</li>
+<li><strong><code>🔺命令：netstat -pantu</code></strong>（查看3128端口和22端口是否开放）</li>
+</ul>
+</li>
+<li>bodhi<ul>
+<li><strong><code>🔺命令：sudo vi /etc/resolv.conf</code></strong> → 修改为内网Window Server 2003的IP地址</li>
+<li><strong><code>🔺命令：dig -t ns lab.com</code></strong>（查看是否解析到w2k3.lab.com以及IP地址）</li>
+<li><strong><code>🔺命令：dig -t ns test.lab.com</code></strong>（查看是否正常解析）</li>
+<li>▲ 2020.2.1 dig无法正常解析，但nslookup可以正常解析，最后也能正常上网</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>运行服务器端：<strong><code>🔺命令：iodined -f -c 10.0.0.1（服务器隧道IP） test.lab.com</code></strong> <ul>
+<li>-f 前端显示（可选）</li>
+<li>-c 不检查客户端IP</li>
+<li>IP 服务器端隧道IP的地址</li>
+</ul>
+</li>
+<li>▲ 需要设置密码才能建立隧道，ifconfig查看是否多出一个网卡</li>
+</ul>
+</li>
+<li>bodhi<ul>
+<li>通过修改网卡方式为Bridge，桥接网络，进行下载iodine</li>
+<li>运行客户端：**`🔺命令：iodine -f test.lab.com（若指定IP，为局域网内DNS的IP地址）</li>
+<li>▲ 需要输入密码才能建立隧道（需同服务器端密码相同），ifconfig查看是否多出一个网卡，进行ping 服务器端的IP地址看能否相同</li>
+<li><strong><code>🔺命令：ssh root@10.0.0.1 -p 22</code></strong>进行尝试登陆，看能否能登陆成功</li>
+<li>设置浏览器代理，SOCKS proxy → 10.0.0.1:3128，进行网络访问尝试 ▲ 2020.2.2 可抓取到数据包，但无法上网，Kali的3128监听连接都是IPv6</li>
+<li><strong><code>🔺命令：ssh -CfNg -D 7001 root@10.0.0.1 -p 22</code></strong>进行嵌套SSH隧道</li>
+<li>在内网的Window Server 2003上修改Internet选项，设置代理服务器socks Proxy代理，访问网络尝试</li>
+</ul>
+</li>
+<li>隧道网络接口<ul>
+<li>不基于资源的通用隧道，如同本网段内两台相邻的主机</li>
+<li>服务器端和客户端生成隧道网络接口eth0</li>
+<li>隧道两端接口的IP地址应不同于客户端和服务器端网段</li>
+<li>基于此隧道可嵌套其他隧道技术</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-实验环境（Windows）"><a href="#2-实验环境（Windows）" class="headerlink" title="2. 实验环境（Windows）"></a>2. 实验环境（Windows）</h4><ul>
+<li>实验机子：Linux主机（bodhi）/防火墙（mono）/外网主机（Kali）</li>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+</ul>
+</li>
+<li>Window Server 2003（外网的DNS服务器）<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>配置一个静态的IP地址，设置DNS服务器为127.0.0.1（ipconfig查询所用IP地址）</li>
+<li>安装DNS服务器<ul>
+<li>安装DNS服务器（Win+R → appwiz.cpl → 更改或添加程序 → 网络服务 → 域名系统，可能需要光盘）   </li>
+<li>开始 → 管理工具 → DNS → 正向查询区域 → 右键 → 新建区域</li>
+<li>主要区域、区域名称（lab.com）</li>
+</ul>
+</li>
+<li>NS记录指向Kali<ul>
+<li>右键lab.com空白区域 → 新建主机 → 名称（w2k3）、IP（2003的IP地址）</li>
+<li>右键lab.com空白区域 → 新建主机 → 名称（Kali）、IP（Kali的IP地址）</li>
+</ul>
+</li>
+<li>创建区域lab.com，指派二级域test.lab.com<ul>
+<li>lab.com → 右键 → 新建委派 → test → 添加（kali的主机记录）→ 解析</li>
+<li><strong><code>🔺命令：ping kali.lab.com</code></strong>查看是否能进行正常通信</li>
+</ul>
+</li>
+<li>配置转发器（转发到外网的DNS服务器，不做迭代查询）<ul>
+<li>服务器图标 → 右键 → 属性 → 转发 → 添加物理网络的DNS服务器（ipconfig查询）</li>
+<li>nslookup解析新浪和百度的域名，查看是否能正常通信</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>安装squid<ul>
+<li><strong><code>🔺命令：apt-get install squid3</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Mono防火墙<ul>
+<li>第一个网卡为Hosy-only方式，第二个网卡为Bridge桥接方式，桥接到无线网络，检查</li>
+</ul>
+</li>
+<li>Window Server 2003（内网的DNS服务器）<ul>
+<li>网卡方式为Host-only方式，检查网络</li>
+<li>配置一个静态的IP地址，设置DNS服务器为127.0.0.1（ipconfig查询所用IP地址）</li>
+<li>安装DNS服务器<ul>
+<li>安装DNS服务器（Win+R → appwiz.cpl → 更改或添加程序 → 网络服务 → 域名系统，可能需要光盘）</li>
+<li>开始 → 管理工具 → DNS → 正向查询区域 → 右键 → 新建区域</li>
+<li>主要区域、区域名称（lab.com）</li>
+</ul>
+</li>
+<li>配置转发器（转发到外网的DNS服务器，不做迭代查询）<ul>
+<li>服务器图标 → 右键 → 属性 → 转发 → 外网的DNS服务器（Window Server 2003）</li>
+</ul>
+</li>
+<li>浏览器登陆mono，修改之前TCP/UDP的规则，改为只允许UDP通过，保存修改</li>
+<li>登陆防火墙查看规则（源和目的：Single host or alias，设置目的IP为Window Server 2003的IP地址）</li>
+<li>nslookup解析lab.com、test.lab.com、新浪、百度的域名，查看是否能正常通信</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：service squid start</code></strong></li>
+<li>开启SSH服务（擦除以前所作操作）</li>
+<li>**`🔺命令：netstat -pantu（查看3128端口和22端口是否开放）</li>
+<li>运行服务器端：<strong><code>🔺命令：iodined -f -c 10.0.0.1（服务器隧道IP） test.lab.com</code></strong> <ul>
+<li>-f 前端显示（可选）</li>
+<li>-c 不检查客户端IP</li>
+<li>IP 服务器端隧道IP的地址</li>
+</ul>
+</li>
+<li>▲ 需要设置密码才能建立隧道，ifconfig查看是否多出一个网卡</li>
+</ul>
+</li>
+<li>Window Server 2003（内网的DNS服务器）<ul>
+<li>安装TAP网卡驱动<ul>
+<li>▲ 需要进行翻墙下载网卡驱动 ▲ openvpn-install-2.3.11-I001-i686.exe</li>
+<li><a href="https://openvpn.net/index.php/open-source/downloads.html" target="_blank" rel="noopener">https://openvpn.net/index.php/open-source/downloads.html</a></li>
+<li>只安装TAP Virtual Ethernet Adapter和所有依赖包</li>
+</ul>
+</li>
+<li>Windows客户端<ul>
+<li>▲ 需要进行翻墙下载iodine ▲ iodine-0.7.0-windows.zip</li>
+<li><a href="http://code.kryo.se/iodine/" target="_blank" rel="noopener">http://code.kryo.se/iodine/</a> </li>
+<li><strong><code>🔺命令：iodine -f test.lab.com</code></strong></li>
+<li>▲ 需要输入密码才能建立隧道（需同服务器端密码相同），ifconfig查看是否多出一个网卡，进行ping 服务器端的IP地址看能否相同</li>
+</ul>
+</li>
+<li>建立动态SSH隧道（使用putty）▲ 2020.2.2 安装putty报Installation Directory must be on a local hard drive的错误，但连接不存在问题，可以上Kali上的Web服务<ul>
+<li>Connection → SSH → Tunnels</li>
+<li>Local ports accept connections from other hosts</li>
+<li>Source port（7001）、Desitination（Kali的虚拟IP）、Auto、Dynamic → Add</li>
+</ul>
+</li>
+<li>修改Internet选项，设置代理服务器socks Proxy代理127.0.0.1:7001，访问网络尝试</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%B9%9D)%EF%BC%9ADNS%E9%9A%A7%E9%81%93--dns2tcp/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3093,337 +3484,6 @@ Wordlist=$JOHN/password.lst</code></pre></blockquote>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/25/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%B9%9D)%EF%BC%9A%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3--%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E3%80%81%E5%AD%97%E5%85%B8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/25/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%B9%9D)%EF%BC%9A%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3--%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E3%80%81%E5%AD%97%E5%85%B8/" itemprop="url">Kali Linux笔记(五十九)：密码破解--身份认证、字典</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-25T23:13:29+08:00">
-                2020-01-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1.2k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  4 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-思路"><a href="#1-思路" class="headerlink" title="1. 思路"></a>1. 思路</h4><ul>
-<li>目标系统实施了强安全措施<ul>
-<li>安装了所有补丁</li>
-<li>无任何已知漏洞</li>
-<li>无应用层漏洞</li>
-<li>攻击面最小化（端口最小化，利用化）</li>
-</ul>
-</li>
-<li>社会工程学</li>
-<li>获取目标系统用户身份<ul>
-<li>非授权用户不受信，认证用户可以访问守信资源</li>
-<li>已有用户账号权限受限，需要提权</li>
-<li>不会触发系统报警（非上传木马，用正常管理员登陆）</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-身份认证方法"><a href="#2-身份认证方法" class="headerlink" title="2. 身份认证方法"></a>2. 身份认证方法</h4><ul>
-<li>证明你是你声称你是的那个人<ul>
-<li>你知道什么（账号密码、pin、passphrase）</li>
-<li>你有什么（令牌、token、key、证书、密宝、手机）</li>
-<li>你是谁（指纹、视网膜、虹膜、掌纹、声纹、面部识别）</li>
-<li>以上方法结合使用（多因素身份认证）</li>
-</ul>
-</li>
-<li>基于互联网的身份认证仍以账号密码为主要形式</li>
-</ul>
-<h4 id="3-密码破解方法"><a href="#3-密码破解方法" class="headerlink" title="3. 密码破解方法"></a>3. 密码破解方法</h4><ul>
-<li>人工猜解<ul>
-<li>垃圾桶工程</li>
-<li>被动信息收集</li>
-</ul>
-</li>
-<li>基于字典暴力破解（主流）</li>
-<li>键盘空间字符爆破</li>
-<li>字典<ul>
-<li>保存有用户和密码的文本文件</li>
-<li>/usr/share/wordlist</li>
-<li>/usr/share/wfuzz/wordlist</li>
-<li>/usr/share/seclists</li>
-<li>▲ rockyou.txt</li>
-</ul>
-</li>
-</ul>
-<h4 id="4-字典–Crunch"><a href="#4-字典–Crunch" class="headerlink" title="4. 字典–Crunch"></a>4. 字典–Crunch</h4><ul>
-<li>键盘空间字符爆破<ul>
-<li>全键盘空间字符</li>
-<li>部分键盘空间字符（基于规则）</li>
-<li>数字、小写字母、大写字母、符号、空格、瑞典字符、高位ASCII码</li>
-</ul>
-</li>
-<li>crunch <min-len><max-len>[<charset string>][options]<ul>
-<li><charset string>默认是小写字符</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：crunch 6 6 0123456789 -o START -d 2 -b 1mb / -c 100</code></strong><ul>
-<li>-b（按大小分割【kb/kib、mb/mib、gb/gib】）kb、mb、gb → 1000/kib、mib、gib → 1024</li>
-<li>-c（每个字典的行数）</li>
-<li>以上两个参数必须与-o START结合使用</li>
-<li>-d（同一字符连贯出现数量【11/aaa】）</li>
-</ul>
-</li>
-<li>字符集<ul>
-<li><strong><code>🔺命令：cat /usr/share/crunch/charset.lst</code></strong></li>
-<li><strong><code>🔺命令：crunch 4 4 -f /usr/share/crunch/charset.lst lalpha-sv -o 1.txt</code></strong></li>
-</ul>
-</li>
-<li>无重复字符集<ul>
-<li><strong><code>🔺命令：crunch 1 1 -p（指定字符作为生成字符） 1234567890 | more</code></strong></li>
-<li>必须是最后一个参数</li>
-<li>最大、最小字符长度失效，但必须存在</li>
-<li>与-s参数不兼容（-s指定起始字符串）</li>
-<li><strong><code>🔺命令：crunch 4 4 0123456789 -s 9900</code></strong></li>
-</ul>
-</li>
-<li>读取文件中每行内容作为基本字符生成字典<ul>
-<li><strong><code>🔺命令：crunch 1 1 -q</code></strong> read（文件中每段简单设置为一个字符，然后进行拼接调换）</li>
-<li>最小、最大字符长度失效，但必须存在</li>
-<li>每段在生成的字典文件中，每行只出现一次（4行文件=4<em>3</em>2*1=24行字典）</li>
-</ul>
-</li>
-<li>字典组成规则<ul>
-<li><strong><code>🔺命令：crunch 6 6 -t @,%%^^ | more</code></strong></li>
-<li>@：小写字母 lalpha</li>
-<li>,：大写字母 ualpha</li>
-<li>%：数字 numeric</li>
-<li>^：符号 symbols</li>
-</ul>
-</li>
-<li>输出文件压缩<ul>
-<li><strong><code>🔺命令：crunch 4 4 -t @,%^ -o 1.txt -z 7z</code></strong></li>
-<li>其他压缩格式：gzip、bzip2、lzma</li>
-<li>-7z压缩比率最大</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：crunch 4 4 -f /usr/share/crunch/charset.lsb mixalpha-numeric-all-space -o w.txt -t @d@@ -s cdab</code></strong>（@表示字符集所有组合，特殊情况）</li>
-<li><strong><code>🔺命令：crunch 4 5 -p dog cat bird</code></strong>（后面三个词语是为三个基本字符）</li>
-<li><strong><code>🔺命令：crunch 5 5 abc DEF + \!@# -t ,@^%,</code></strong> （从指定的字符中挑选）<ul>
-<li><ul>
-<li>占位符（表示所有）</li>
-</ul>
-</li>
-<li>\ 转义符（空格、符号）</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：crunch 5 5 -t ddd%% -p dog cat bird</code></strong><ul>
-<li>任何不同于-p 参数指定的值都是占位符</li>
-<li>d无效，不同于-p </li>
-</ul>
-</li>
-<li><strong><code>🔺命令：crunch 5 5 -d 2@ -t @@@%%</code></strong>（小写字母不能超过两个连续相同）</li>
-<li>组合应用（边生成边使用边丢弃）<ul>
-<li><strong><code>🔺命令：crunch 2 4 0123456789 | aircrack-ng a.cap -e MyESSID -w –</code></strong></li>
-<li><strong><code>🔺命令：crunch 10 10 12345 --stdout | airolib-ng testdb -import passwd -</code></strong></li>
-</ul>
-</li>
-</ul>
-<h4 id="5-字典–CUPP"><a href="#5-字典–CUPP" class="headerlink" title="5. 字典–CUPP"></a>5. 字典–CUPP</h4><ul>
-<li>按个人信息生成其专属的密码字典（适合破解个人信息的个人账号密码）</li>
-<li>CUPP：Common User Password Profiler<ul>
-<li><strong><code>🔺命令：git clone https://github.com/Mebus.cupp.git</code></strong></li>
-<li><strong><code>🔺命令：python cupp.py -i</code></strong></li>
-</ul>
-</li>
-</ul>
-<h4 id="6-字典–cewl"><a href="#6-字典–cewl" class="headerlink" title="6. 字典–cewl"></a>6. 字典–cewl</h4><ul>
-<li>通过收集网站信息生成字典</li>
-<li><strong><code>🔺命令：cewl 1.1.1.1（或域名） -m 3 -d 3 -e -c -v -w a.txt</code></strong><ul>
-<li>-m（最小单词长度）</li>
-<li>-d（爬网深度）</li>
-<li>-e（收集包含email地址信息）</li>
-<li>-c（每个单词出现次数）</li>
-<li>支持基本、摘要身份认证</li>
-<li>支持代理</li>
-</ul>
-</li>
-<li>用户密码变型<ul>
-<li>基于cewl得结果进行密码变型</li>
-<li>末尾增加数字串</li>
-<li>字母大小写变化</li>
-<li>字母与符号相互转换</li>
-<li>字母与数字相互转换</li>
-<li>P@$$w0ord</li>
-</ul>
-</li>
-</ul>
-<h4 id="7-字典–John-the-Ripper"><a href="#7-字典–John-the-Ripper" class="headerlink" title="7. 字典–John the Ripper"></a>7. 字典–John the Ripper</h4><ul>
-<li>使用John the Ripper配置文件实现密码动态变型</li>
-<li>/etc/john/john.conf<ul>
-<li>[List.Rules:Wordlist]</li>
-<li>$[0-9]$[0-9]$[0-9]</li>
-<li><strong><code>🔺命令：cat a.txt | head -n 10 | cut -d &quot;,&quot; -f 1 &gt;  p.lst</code></strong>（a.txt为cewl生成的文件）</li>
-<li><strong><code>🔺命令：john --wordlist=p.lst --rules --stdout &gt; m.txt</code></strong></li>
-<li><strong><code>🔺命令：wc -l m.txt</code></strong>（查看m.txt里面有多少条记录）<br>– [List.Rules:test] $[0-9]$[0-9]$[0-9]$[a-zA-Z] $[0-9]$[0-9]$[0-9]$[a-zA-Z]$[a-zA-Z]$[a-zA-Z]$[<code>~!@#$%^&amp;*()\-_=+]
-– **</code>🔺命令：john –wordlist=cewl.txt –rules=test –stdout &gt; m.txt<code>**
-– **</code>🔺命令：john –wordlist=ahm.lst –rules=test HASHFILE`**</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3478,7 +3538,7 @@ Wordlist=$JOHN/password.lst</code></pre></blockquote>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">156</span>
+                  <span class="site-state-item-count">157</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3585,7 +3645,7 @@ Wordlist=$JOHN/password.lst</code></pre></blockquote>
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">145.4k</span>
+    <span title="Site words total count">145.7k</span>
   
 </div>
 

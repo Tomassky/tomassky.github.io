@@ -240,6 +240,471 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-1%EF%BC%9A%E6%90%AD%E5%BB%BAwamp%E5%92%8C%E5%9F%9F%E5%90%8D%E6%9C%8D%E5%8A%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-1%EF%BC%9A%E6%90%AD%E5%BB%BAwamp%E5%92%8C%E5%9F%9F%E5%90%8D%E6%9C%8D%E5%8A%A1/" itemprop="url">PHP笔记-1：搭建wamp和域名服务</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T11:22:48+08:00">
+                2020-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-WAMP环境"><a href="#1-WAMP环境" class="headerlink" title="1. WAMP环境"></a>1. WAMP环境</h4><ul>
+<li>环境搭建路径不能为中文，可以集中在一个sever目录下</li>
+<li>Apache：httpd-2.4.41-o111c-x64-vc15-r2<ul>
+<li>2.4.41–版本号</li>
+<li>x64–对应系统平台</li>
+<li>vc15–编译平台</li>
+</ul>
+</li>
+<li>PHP：php-7.4.3-Win32-vc15-x64<ul>
+<li>x64–对应系统平台</li>
+<li>7.4.3–版本号</li>
+<li>vc15–编译平台</li>
+</ul>
+</li>
+<li>MySQL：mysql5.5<ul>
+<li>5.5–版本号</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=1fd0Lv37Cf-goxNcyJJptPFUNw8fmH_FXW9x-9fAql3dIn5YmpufyPJDpSnwzXG1_AhMzwD0dandBrwtrt3vwWxBMJNj9RHb4dHFbEVj4R0pdndltf-vCGAgv0wd4adi6MQJ8KlmHQ&file_name=/server%E7%9B%AE%E5%BD%95.png" alt="server目录"></p>
+<h4 id="2-安装Apache"><a href="#2-安装Apache" class="headerlink" title="2. 安装Apache"></a>2. 安装Apache</h4><ul>
+<li>Apache httpd：<a href="https://www.apachehaus.com/cgi-bin/download.plx" target="_blank" rel="noopener">https://www.apachehaus.com/cgi-bin/download.plx</a><ul>
+<li>根据系统版本选择对应的Apache httpd服务</li>
+<li>▲ 从Apache官网下载相应的源码，现在比较难以找到msi安装包</li>
+</ul>
+</li>
+<li>安装<ul>
+<li>▲ 目录路径不可为中文</li>
+<li>将文件解压到新建的server目录，命名为Apache</li>
+<li>测试服务：cmd -&gt; httpd.exe -t<ul>
+<li>新解压的Apache服务会报错误，需要Define SRVROOT，更改为Apache的绝对路径</li>
+<li>测试成功：Syntax OK</li>
+</ul>
+</li>
+<li>安装：cmd -&gt; httpd.exe -K install<ul>
+<li>若无报错信息，则可以在Apache Service Monitor启动Apache服务</li>
+</ul>
+</li>
+<li>查看使用的模块：cmd -&gt; httpd.exe -M<ul>
+<li><static>：静态加载，Apache启动就加载好，可以直接使用</li>
+<li><shared>：动态加载，在使用到的时候才会加载</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>目录说明<ul>
+<li>bin/cgi-bin：windows下的一些可执行文件</li>
+<li>conf：配置文件目录</li>
+<li>htdocs：Apache默认的主机地址（网站根目录）</li>
+<li>modules：Apache的功能化模块</li>
+</ul>
+</li>
+<li>配置站点<ul>
+<li>▲ 配置文件：httpd.conf -&gt; 自定义SRVROOT</li>
+<li>网站文件夹所在位置：DocumentRoot/ServerRoot “${SRVROOT}/htdocs”</li>
+<li>使用名字访问网站：ServerName localhost</li>
+<li>端口监听：Listen 80</li>
+</ul>
+</li>
+<li>⭐ 每次动到配置文件，可通过httpd.exe -t去测试是否配置编译错误</li>
+<li>▲ 凡是涉及到Apache配置文件的修改，都需要重启Apache才能生效</li>
+<li>▲ 实现DNS域名解析：修改hosts文件 -&gt; 127.0.0.1  localhost</li>
+<li>▲ 可在系统环境变量的PATH中加载httpd.exe的路径</li>
+<li>浏览器访问localhost，看是否能成功访问到</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=9c13EK3_jtY9Wq-R7_TotdtuEz36RIYtik9ntXcIoURjEKbBIP6gEuhDAHLO08rAuT0qMCVr9IXcq1I0TkgewDFg507u8UXEjBJ8JY5Pk2Hvjurn6TwM6du6fF4QF5vf5HTktErsm9gUDiv2_Q&file_name=/Apache%E5%AE%89%E8%A3%85%E6%88%90%E5%8A%9F.png" alt="Apache安装成功"></p>
+<h4 id="3-安装PHP"><a href="#3-安装PHP" class="headerlink" title="3. 安装PHP"></a>3. 安装PHP</h4><ul>
+<li>PHP：<a href="https://windows.php.net/download#php-7.4" target="_blank" rel="noopener">https://windows.php.net/download#php-7.4</a><ul>
+<li>根据系统版本选择对应的PHP服务</li>
+<li>根据Apache选择对应的编译环境</li>
+<li>选择Thread Safe线程安全的形式</li>
+</ul>
+</li>
+<li>安装<ul>
+<li>▲ 目录路径不可为中文</li>
+<li>将文件解压到新建的server目录，命名为PHP7.4.3</li>
+<li>可通过php.exe运行命令来指定要解析的PHP脚本 -&gt; php.exe  -f  PHP文件所在路径的index.php文件 -&gt; hello world</li>
+</ul>
+</li>
+<li>目录说明<ul>
+<li>ext：扩展包-&gt;PHP很多功能是通过加载扩展来实现</li>
+<li>php7apache2_4.dll：Apache支持包</li>
+<li>php.exe：PHP解释器</li>
+</ul>
+</li>
+<li>配置Apache加载PHP模块<ul>
+<li>▲ 配置Apache文件：httpd.conf</li>
+<li>Apache加载PHP模块：在Apache的主配置文件中加载对应的PHP提供的模块<ul>
+<li>LoadModule php7_module PHP所提供的模块链接所在路径</li>
+</ul>
+</li>
+<li>Apache分配工作给PHP模块：如果是PHP代码就交给PHP处理–文件后缀判断<ul>
+<li>AddType application/x-httpd-php .php</li>
+</ul>
+</li>
+<li>将PHP的配置文件加载到Apache配置文件中<ul>
+<li>PHPIniDir php.ini所在路径</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=269a169BAeEFWJTVioSFPTNw_icoBunovYJn6Ncdbffiyjx6rCwMFJYsDgnqAFhXv3lAlJ9Z6koTPv1ZjaRty9ZHgbp0RWLve8OznrauqOhCAoVnCqXK0F5FOtgmPa0_VkitTHUB_RavrkuqDlg4nnm46c0CCg&file_name=/%E9%85%8D%E7%BD%AEApache%E5%8A%A0%E8%BD%BDPHP%E6%A8%A1%E5%9D%97.png" alt="配置Apache加载PHP模块"></p>
+<ul>
+<li>配置文件<ul>
+<li>php.ini文件默认是不存在的，是以development存在，复制一份，修改命名为php.ini</li>
+</ul>
+</li>
+<li>测试<ul>
+<li>新建一个index.php文件</li>
+<li>浏览器访问localhost/index.php</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    phpinfo();</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=d431tk-BoKziFKOT7EiEY_u3ip6aFs1Ku0gJvG-k3G7wfQfi8ZIzMBIX_BjFCIiFQzPXCxgpVde77RCU1Q2TV4qw_-LC2rXLVb1RfLZLq0y436yZC44zQylcylbMjFq_s_ElyMpW_jCK1A&file_name=/PHP%E5%AE%89%E8%A3%85%E6%88%90%E5%8A%9F.png" alt="PHP安装成功"></p>
+<h4 id="4-MySQL安装"><a href="#4-MySQL安装" class="headerlink" title="4. MySQL安装"></a>4. MySQL安装</h4><ul>
+<li>MySQL：<a href="https://www.mysql.com/downloads/" target="_blank" rel="noopener">https://www.mysql.com/downloads/</a><ul>
+<li>根据系统版本选择对应的MySQL服务</li>
+<li>安装mysql一般安装5.x版本，7.x版本为一定程度的阉割版</li>
+</ul>
+</li>
+<li>安装<ul>
+<li>Custome：自定义安装（选择安装路径）<ul>
+<li>MySQL Server -&gt; server/mysql</li>
+<li>Server data files -&gt; server/mysql/data</li>
+</ul>
+</li>
+<li>Launch the MySQL Instance Configuration Wizard：配置<ul>
+<li>Please select a configuration -&gt; Detailed Configuration：详细配置</li>
+<li>Please select a server type -&gt; Developer Machine：开发环境</li>
+<li>Please select the database usage -&gt; Multifunctional Database：多功能</li>
+<li>Please set the approximate number of cocurrent connections to the server -&gt; Manual Setting(15):并发设置</li>
+<li>Please set the networking options<ul>
+<li>Enable TCP/IP Networking  -&gt; 允许TCP/IP协议访问<ul>
+<li>Prot Number -&gt; 3306</li>
+<li>Add firewall exception for this port -&gt; 防火墙通过</li>
+</ul>
+</li>
+<li>Enable Strict Mode -&gt; 使用严格模式</li>
+</ul>
+</li>
+<li>Please select the default set -&gt; Manual Selected Default Character Set / Collation:字符集设定 -&gt; utf8</li>
+<li>Please set the Windows options <ul>
+<li>Install As Windows Service：服务安装<ul>
+<li>Service Name：MySQL</li>
+<li>Launch the MySQL Server automatically：随系统启动</li>
+</ul>
+</li>
+<li>Include Bin Directory in Windows PATH：讲MySQL加到系统路径</li>
+</ul>
+</li>
+<li>Please set the security options<ul>
+<li>Modify security settings<ul>
+<li>New root password -&gt; root</li>
+<li>Confirm -&gt; root</li>
+<li>Enable root access from remote machines：允许远程访问</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=9330B2wcplMLe1UfnMIp0gEWp8Pqat6X_xjlUju_JpT6iX1BBPLrf_iMPBz62Inl5n276OSJuNa4322YaPFv9inDOnxB2ikZNE9JVpTs740hNq5kbAlYyuxjxs05JPH3J3_PlzZ1rDv02GD-&file_name=/mysql%E5%AE%89%E8%A3%85%E6%88%90%E5%8A%9F.png" alt="MySQL安装成功"></p>
+<ul>
+<li>目录说明<ul>
+<li>bin：执行文件夹<ul>
+<li>mysql.exe：访问MySQL服务器的客户端</li>
+<li>mysqld.exe：MySQL服务</li>
+<li>mysqldump.exe：MySQL的备份软件客户端</li>
+</ul>
+</li>
+<li>data：数据存储文件夹</li>
+<li>lib：核心文件夹</li>
+<li>my.ini：配置文件</li>
+</ul>
+</li>
+<li>测试mysql服务<ul>
+<li>cmd -&gt; mysql -u root -p</li>
+<li>参数<ul>
+<li>-h：主机地址</li>
+<li>-p：端口</li>
+<li>-u：用户名</li>
+<li>-p：密码</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>PHP连接MySQL数据库<ul>
+<li>▲ 配置php文件：php.ini</li>
+<li>PHP的扩展都是在ext文件夹中，需要制定扩展所在路径：extension_dir=”/server/php7.4.3/ext”</li>
+<li>开启sqli扩展：extension=mysqli</li>
+<li>开启pdo_mysql扩展：extension=pdo_mysql</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=6ad4UBwsp0VaGPauUj38dEs6QMkDTaPi1UdM69rIrMZ2Mdc5qnpEzGirgJ8AzhQyUy-HJSi469hNDm-oRFQQl6Eznrd7wV0INm-gyIakuUELSoh8BJw8Fs2bhmlZ8VfFehtyhd-HAbcB3z1W686Tpvso&file_name=/PHP%E8%BF%9E%E6%8E%A5MySQL%E6%95%B0%E6%8D%AE%E5%BA%93.png" alt="PHP连接MySQL数据库"></p>
+<ul>
+<li>测试PHP连接mysql<ul>
+<li>新建一个testmysql.php文件</li>
+<li>浏览器访问localhost/testmysql.py，查看是否出现OK！</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $link=mysqli_connect(&apos;localhost&apos;,&apos;root&apos;,&apos;root&apos;);</span><br><span class="line">    if(!$link) echo &quot;Error !&quot;;</span><br><span class="line">    else echo &quot;Ok!&quot;;</span><br><span class="line">    mysqli_close($link);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=95daHpqhpkMz807Ef74jjFH1CTtDr13aC9rf8WuK7zllkLmdk_BuTwZWeeBcrj7Xgy1xf2js_brzzyCR3TnxljPE8xlfYns2PNHS5PNektvr0RjmtZtFn-bAaxBvuN47FvJ8o1tSUIrxIg&file_name=/phpinfo--mysqli.png" alt="phpinfo--mysqli"></p>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=1c6dKD3Ab9xbyZjXa_AG72DIaQQYe6CmqvzbKsCtmjm9NxBF4eA6ChCnk9hNpDhNeQQQKv79PKYJWdcXD9iQo7vCQoGXk_nRjC6VyJ4FM6iD0T6fzuwvA2wO6zJ2yH5bNSU63JXEVIE3CVBvkw&file_name=/phpinfo--pdo_mysql.png" alt="phpinfo--pdo_mysql"></p>
+<h4 id="5-搭建域名"><a href="#5-搭建域名" class="headerlink" title="5. 搭建域名"></a>5. 搭建域名</h4><ul>
+<li>修改hosts文件 -&gt; 127.0.0.1  localhost</li>
+</ul>
+<h4 id="6-搭建虚拟主机"><a href="#6-搭建虚拟主机" class="headerlink" title="6. 搭建虚拟主机"></a>6. 搭建虚拟主机</h4><ul>
+<li>官方解释文档：<a href="http://httpd.apache.org/docs/current/vhosts/" target="_blank" rel="noopener">http://httpd.apache.org/docs/current/vhosts/</a></li>
+<li>配置虚拟主机方式<ul>
+<li>基于IP</li>
+<li>基于主机名</li>
+<li>基于端口</li>
+</ul>
+</li>
+<li>实验环境<ul>
+<li>在Apache下的htdocs目录中，新建两个目录，test1和test2<ul>
+<li>test1目录下1.php（<?php phpinfo(); ?>）</li>
+<li>test2目录下2.php（<?php echo "OKKKK" ?>）</li>
+<li>▲ 2020.03.05在查询资料的过程中，有遇到test目录可以建立在htdocs的情况，但实操发现不行</li>
+</ul>
+</li>
+<li>本地模拟外网域名，在hosts文件中配置两个测试域名<ul>
+<li>127.0.0.1 <a href="http://www.test1mzt.com" target="_blank" rel="noopener">www.test1mzt.com</a></li>
+<li>127.0.0.1 <a href="http://www.test2mzt.com" target="_blank" rel="noopener">www.test2mzt.com</a></li>
+</ul>
+</li>
+<li>修改配置（Apache24\conf\httpd.conf）<ul>
+<li>#Virtual hosts -&gt; Include conf/extra/httpd-vhosts.conf</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=f9819Fi-4PcKI0YudbnlT48lYcDy_qMMUy92yY9WsEcE5SScxDlquMdi-wo3fYOPsY9qB8tOez9MZw0r3DprEF1Lg_y6J4U__RBWsiX9Q8CTIJxxVPOhMNrGvMXCP08SCVDfq1fPKmQ7NN-DCs_esn-ZxEHZO9vn&file_name=/%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BAhosts%E6%96%87%E4%BB%B6%E8%AE%BE%E7%BD%AE.png" alt="虚拟主机hosts文件设置"></p>
+<h4 id="7-基于IP的虚拟主机"><a href="#7-基于IP的虚拟主机" class="headerlink" title="7. 基于IP的虚拟主机"></a>7. 基于IP的虚拟主机</h4><ul>
+<li>基于IP，一台服务器有多个网卡，每个IP绑定一个站点的方式</li>
+<li>▲ 基于IP的方式，写在VirtualHost的IP地址需要可被路由</li>
+<li>▲ 在下图，有多种访问方式访问test2下的2.php<ul>
+<li>127.0.0.2:80/2.php</li>
+<li><a href="http://www.test2mzt.com:80/2.php" target="_blank" rel="noopener">www.test2mzt.com:80/2.php</a></li>
+<li><a href="http://www.test2mzt.com/2.php" target="_blank" rel="noopener">www.test2mzt.com/2.php</a></li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=3236RsJaSb26hpgTMGGsqkENMMSBXP8rVkQ7CV6OQgfTJarm5prssdy1YDbRda-3ArNhlX3TBRJkZ5oJBs3fbkBR_CJhvs0QV0PZnYCd2q4iVCXoxVFnCGsrC83dc36VXdYMxB5OiM0HXqoZR3k8Rik_&file_name=/%E5%9F%BA%E4%BA%8EIP%E7%9A%84%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA.png" alt="基于IP的虚拟主机"></p>
+<h4 id="8-基于端口的虚拟主机"><a href="#8-基于端口的虚拟主机" class="headerlink" title="8. 基于端口的虚拟主机"></a>8. 基于端口的虚拟主机</h4><ul>
+<li>修改配置文件将原来的：Listen 80改为Listen 80 Listen 88</li>
+<li>▲ 基于端口的方式，需要在httpd.conf的配置文件中增加监听端口</li>
+<li>▲ 在下图，有多种访问方式访问test2下的2.php<ul>
+<li>127.0.0.1:88/2.php</li>
+<li><a href="http://www.test2mzt.com:88/2.php" target="_blank" rel="noopener">www.test2mzt.com:88/2.php</a></li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=82407qnvXDOhh5X1B2ldURHlgPLyHMHfdVsazYypjAhw_1Yv7Ik3vliWyu_-_GoGdgGwLPBc5Wq_h7dPjOHhGmrmEpWLUl5vXNukBfWV_zJcODPc3zpHLuXThfvCUg17E00b2EvNZwY_4mu6LGnt4MJeNoitug&file_name=/%E5%9F%BA%E4%BA%8E%E7%AB%AF%E5%8F%A3%E7%9A%84%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA.png" alt="基于端口的主机"></p>
+<h4 id="9-基于域名的虚拟主机"><a href="#9-基于域名的虚拟主机" class="headerlink" title="9. 基于域名的虚拟主机"></a>9. 基于域名的虚拟主机</h4><ul>
+<li>基于主机名也就是基于域名方式访问，每个IP多个站点</li>
+<li>▲ 基于域名的方式，需要在hosts文件中指定域名</li>
+<li>▲ 在下图，有多种访问方式访问test2下的2.php<ul>
+<li>127.0.0.1/2.php</li>
+<li><a href="http://www.test2mzt.com/2.php" target="_blank" rel="noopener">www.test2mzt.com/2.php</a></li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=007a0mWWcSF7tamxD3jfK_x1BYCQAG6O69lnaQTExA8oMQUsR9Kyb_kjXwYm0CLJm7fZ8Cf7Jcb1iDv7FBbKJBqWjDOiLsZz9U044rLPr1ZnW4M1ie_LSjUbmIga8Ej3nax0ZGX9JYWtF2PTfOMrz2ItI3Z4Aw&file_name=/%E5%9F%BA%E4%BA%8E%E5%9F%9F%E5%90%8D%E7%9A%84%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA.png" alt="基于域名的虚拟主机"></p>
+<h4 id="10-注意"><a href="#10-注意" class="headerlink" title="10. 注意"></a>10. 注意</h4><ul>
+<li><Directory>目录报错<ul>
+<li>▲ 2020.03.05 Apache启动报Invalid command ‘order’, perhaps misspelled or defined by a module not included的错误<ul>
+<li>Apache2.4以上，做了修改</li>
+<li>在LoadMoudle中，需要通过access_compat_module modules/mod_access_compat.so和actions_module modules/mod_actions.so模块，才能使用”Order、Deny、Allow”写配置文件</li>
+<li>若不通过access_compat_module modules/mod_access_compat.so更改，可以使用Apache Require命令</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>需要给当前设定的站点（目录）访问权限</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;Directory &apos;站点目录&apos;&gt;</span><br><span class="line">    #设定方式：代表匹配权限的顺序</span><br><span class="line">    Order Deny,Allow    //没有顺序关系：实际顺序有意义</span><br><span class="line">    #限定范围：按照顺序执行</span><br><span class="line">    Deny from 指定的范围</span><br><span class="line">    Allow from 指定范围/all</span><br><span class="line"></span><br><span class="line">    #列表显示（若无指定具体访问文件或访问文件夹）</span><br><span class="line">    Options Indexes FollowSymLinks</span><br><span class="line"></span><br><span class="line">    #指定默认访问文件</span><br><span class="line">    Directory Indexes FollowSymLinks</span><br><span class="line"></span><br><span class="line">    #指定默认访问文件</span><br><span class="line">    DirectoryIndex index.html index.php</span><br><span class="line">&lt;/Directory&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>▲ 一旦启用虚拟主机配置文件，那么默认的主机地址localhost就不再生效，如果想要生效就要为localhost增加单独的虚拟主机</li>
+<li>▲ 如果说网站中整个网站根目录允许访问，但是其中还有其他文件夹不允许访问：可以增加多个Directory标签，针对不同的文件夹</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/09/IPS%E7%AC%94%E8%AE%B0-4%EF%BC%9AIME--IDS%E5%AE%9E%E9%AA%8C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2715,293 +3180,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/04/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81%E4%B8%89)%EF%BC%9AArmitage/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/04/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81%E4%B8%89)%EF%BC%9AArmitage/" itemprop="url">Kali Linux笔记(一百一十三)：Armitage</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-04T11:45:28+08:00">
-                2020-03-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  673 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  2 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-Armitage图形化前端"><a href="#1-Armitage图形化前端" class="headerlink" title="1. Armitage图形化前端"></a>1. Armitage图形化前端</h4><ul>
-<li>开源免费图形前端<ul>
-<li>基于JAVA开发的界面</li>
-<li>作者自称是众多不会使用metasploit的安全专家之一（命令行）</li>
-<li>MSF基于命令行，缺少直观的GUI图形用户接口</li>
-</ul>
-</li>
-<li>Armitage只是调用MSF的漏洞利用能力<ul>
-<li>Armitage的每一个GUI操作都可以对应对应MSF中一条命令</li>
-</ul>
-</li>
-<li>红队团队合作模拟对抗<ul>
-<li>分为客户端（armitage）和服务器（msfrpcd）两部分</li>
-<li>/usr/share/armitage/teamserver ip password</li>
-<li>▲ 允许多个客户端连接一个服务器，监听55553</li>
-</ul>
-</li>
-<li>可脚本化</li>
-<li>启动方式<ul>
-<li><strong><code>🔺命令：service postgresql start</code></strong></li>
-<li>Teamserver<ul>
-<li>服务端：<strong><code>🔺命令：./teamserver 服务器IP 连接密码</code></strong></li>
-<li>客户端：<strong><code>🔺命令：armitage</code></strong></li>
-</ul>
-</li>
-<li>单机启动<br>  -<strong><code>🔺命令：Armitage</code></strong> <ul>
-<li>GUI启动</li>
-<li>127.0.0.1 55553</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-实验–Armitage"><a href="#2-实验–Armitage" class="headerlink" title="2. 实验–Armitage"></a>2. 实验–Armitage</h4><ul>
-<li>Kali<ul>
-<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
-</ul>
-</li>
-<li>Window XP SP3<ul>
-<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>单机使用：点击Armitage的图标（127.0.0.1 / 55553）</li>
-<li>界面使用</li>
-<li><strong><code>🔺命令：cd /usr/share/armitage</code></strong></li>
-<li><strong><code>🔺命令：./teamserver Kali的IP pass123</code></strong></li>
-<li>团队模式：点击Armitage的图标（Kali的IP  / 55553 / Tom）</li>
-<li>团队模式：点击Armitage的图标（Kali的IP  / 55553 / Jan）</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-Armitage图形化前端"><a href="#3-Armitage图形化前端" class="headerlink" title="3. Armitage图形化前端"></a>3. Armitage图形化前端</h4><ul>
-<li>发现主机（顶栏 → Hosts）<ul>
-<li>Add Hosts：手动添加IP地址</li>
-<li>Import Hosts：扫描结果导入XML文件（nmap、nessus openvas、appscan、nexpose、awvs）</li>
-<li>NMAP Scan/MSF Scan：直接扫描发现（nmap、msf）</li>
-<li>DNS Enumerate：DNS枚举发现</li>
-</ul>
-</li>
-<li>扫描端口及服务</li>
-<li>工作区workspace<ul>
-<li>个人视角的目标动态显示筛选，同一team的队员自定义工作区</li>
-<li>基于地址的工作区划分</li>
-<li>基于端口的工作区划分</li>
-<li>基于操作系统的工作区划分</li>
-<li>基于标签的工作区划分</li>
-</ul>
-</li>
-<li>生成Payload<ul>
-<li>reverse_tcp</li>
-<li>bind_hidden_tcp（只有在AHOST主动连接时，才监听4444端口）</li>
-<li>bind_tcp</li>
-</ul>
-</li>
-<li>主动获取目标<ul>
-<li>ms08_067</li>
-</ul>
-</li>
-<li>被动获得目标<ul>
-<li>Browser_autopwn2（伪造网站进行被动攻击）</li>
-</ul>
-</li>
-<li>Meterpreter shell 能力展示<ul>
-<li>空密码：aa63…. / 316c</li>
-<li>Poviting → ARP Scan（层级结构）</li>
-</ul>
-</li>
-<li>菜单功能<ul>
-<li>SOCKS4（用Kali做跳板机，通过建立的meterpreter隧道进行内网漫游）</li>
-<li>Script（可添加script脚本，比如Cortana脚本）</li>
-</ul>
-</li>
-<li>Cortana脚本<ul>
-<li>Veil-Evasionғ/use/share/veil-evasion/tools/cortana/veil_evasion.cna </li>
-<li><a href="https://github.com/rsmudge/cortana-scripts" target="_blank" rel="noopener">https://github.com/rsmudge/cortana-scripts</a></li>
-</ul>
-</li>
-<li>别无他法的的最后选择<ul>
-<li>Attacks<ul>
-<li>Find Attacks   # 自动分析匹配漏洞利用模块（智能分析分配模块的尝试）</li>
-<li>Hail Mary #上帝啊！赐于我力量吧！（端口进行所有模块的尝试，Great级别以上）</li>
-<li>洪水式漏洞利用代码执行，流量及特征明显，容易被发现</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Armitage现状<ul>
-<li>维护不及时，传言此项目已荒废</li>
-<li>仍然式目前唯一开源免费的metasploit图形前端</li>
-</ul>
-</li>
-<li>Cobalt Strike</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3056,7 +3234,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">151</span>
+                  <span class="site-state-item-count">152</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3163,7 +3341,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">135.4k</span>
+    <span title="Site words total count">136.4k</span>
   
 </div>
 

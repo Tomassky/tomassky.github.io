@@ -426,6 +426,253 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-21%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8EPHP%E6%93%8D%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-21%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8EPHP%E6%93%8D%E4%BD%9C/" itemprop="url">PHP笔记-21：数据库与PHP操作</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T12:59:39+08:00">
+                2020-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  719 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-MySQL命令符"><a href="#1-MySQL命令符" class="headerlink" title="1. MySQL命令符"></a>1. MySQL命令符</h4><ul>
+<li>Mysqladmin 日常管理命令总结 或 重置密码</li>
+<li>Mysql 用到操作数据库</li>
+<li>Mysqld 用来开启MYSQL 或者 关闭</li>
+<li>Mysqlimport 数据库导入</li>
+</ul>
+<h4 id="2-MySQL操作"><a href="#2-MySQL操作" class="headerlink" title="2. MySQL操作"></a>2. MySQL操作</h4><ul>
+<li>登录MYSQL    mysql  -h 192.168.1.100 -u root -p -P 123<ul>
+<li>-h 你的IP</li>
+<li>-U 你的用户名</li>
+<li>-p你的密码 可不填 但是后面要填</li>
+<li>-P （大写） 端口号</li>
+</ul>
+</li>
+<li>常规操作<ul>
+<li>查看所有数据库：Show databases</li>
+<li>选择数据库之后 查看当前数据库所有的表：show tables;</li>
+<li>创建数据库：Create database 数据库名;</li>
+<li>选择数据库：use 数据库名;</li>
+<li>创建表跟字段<ul>
+<li>Create table admin2(</li>
+<li>Username varchar(20) not null,</li>
+<li>Passworld text not null);</li>
+</ul>
+</li>
+<li>查看表结构：desc 表名</li>
+<li>添加数据<ul>
+<li>Insert into 表名 values (“”);</li>
+<li>Insert into 表名 (字段名) values (“”);</li>
+</ul>
+</li>
+<li>查询数据库<ul>
+<li>Select * from 表名;</li>
+</ul>
+</li>
+<li>修改数据<ul>
+<li>Update 表名 set 字段 = ‘’;</li>
+</ul>
+</li>
+<li>清空表数据<ul>
+<li>Delete from 表名</li>
+</ul>
+</li>
+<li>删除表<ul>
+<li>Drop table 表名;</li>
+</ul>
+</li>
+<li>备份数据库<ul>
+<li>命令行备份<ul>
+<li>select * from 表名 into outfile ‘/tmp/1.txt’</li>
+<li>▲ 可能报错，需要修改–secure-file-priv的路径，可绕过–通过日志绕过</li>
+</ul>
+</li>
+<li>界面备份<ul>
+<li>从mysql的数据库路径/data，拷走所有的表结构以及表数据</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>自增型<ul>
+<li>auto_increment</li>
+</ul>
+</li>
+<li>搜索关键字<ul>
+<li>select * from admin where username like “%%xindong”;</li>
+</ul>
+</li>
+<li>分页</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-PHP操作MySQL数据库"><a href="#3-PHP操作MySQL数据库" class="headerlink" title="3. PHP操作MySQL数据库"></a>3. PHP操作MySQL数据库</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $lin = mysqli_connect(&apos;127.0.0.1&apos;,&apos;root&apos;,&apos;root&apos;);</span><br><span class="line"></span><br><span class="line">    //数据库使用--mysqli_query</span><br><span class="line"></span><br><span class="line">    mysqli_query($lin,&quot;use php_mysql_demo&quot;);  //选择数据库</span><br><span class="line">    mysqli_query($lin,&quot;set names utf8&quot;);  //设置数据库编码</span><br><span class="line"></span><br><span class="line">    mysqli_query($lin,&quot;insert into admin values (&apos;xindong&apos;,&apos;123&apos;)&quot;);  //添加数据库记录</span><br><span class="line">    mysqli_query($lin,&quot;delete from admin where username = &apos;1111&apos;&quot;);  //删除数据库记录</span><br><span class="line">    mysqli_query($lin,&quot;update admin set username = &apos;1111&apos;&quot;);  //修改数据</span><br><span class="line"></span><br><span class="line">    //数据库查询使用--mysqli_fetch_array</span><br><span class="line">    /*</span><br><span class="line">    mysqli_fetch_array()包含两个内容，默认的，函数可以通过第二个参数来设定返回的类型</span><br><span class="line">    1. MYSQLI_ASSOC：返回关联数组</span><br><span class="line">    2. MYSQLI_NUM：返回索引数组</span><br><span class="line">    3. MYSQLI_BOTH：默认的，两种数值都返回</span><br><span class="line">    */</span><br><span class="line"></span><br><span class="line">    $list = mysqli_query($lin,&quot;select * from admin&quot;);</span><br><span class="line">    $list_data = mysqli_fetch_array($list,MYSQLI_ASSOC);</span><br><span class="line">    var_dump($list_data);  //打印单行数据，指针默认从顶部开始</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    //输出查询的整个数据库</span><br><span class="line">    $list1 = mysqli_query($lin,&quot;select * from admin&quot;);</span><br><span class="line">    $arr = array();</span><br><span class="line">    while($list1_data = mysqli_fetch_array($list1,MYSQLI_ASSOC))</span><br><span class="line">    &#123;</span><br><span class="line">        $arr[] = $list1_data;</span><br><span class="line">        //直接输出 var_dump($list1_data);</span><br><span class="line">    &#125;</span><br><span class="line">    var_dump($arr);  //打印整个数据</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">     /*</span><br><span class="line">    mysqli_errno()：出现错误的错误编号</span><br><span class="line">    mysqli_error()：错误信息</span><br><span class="line">    */</span><br><span class="line">    $lin1 = mysqli_connect(&apos;127.0.0.1&apos;,&apos;root&apos;,&apos;root&apos;);</span><br><span class="line">    $a = mysqli_query($lin,&quot;use demo11111&quot;);  //不存在的数据库</span><br><span class="line">    //mysqli_query($lin,&quot;set names utf8&quot;);</span><br><span class="line"></span><br><span class="line">    if(mysqli_errno($lin))</span><br><span class="line">    &#123;</span><br><span class="line">        echo &apos;&lt;/br&gt;&apos;;</span><br><span class="line">        echo mysqli_errno($lin);  //输出错误的编号</span><br><span class="line">        echo &apos;&lt;/br&gt;&apos;; </span><br><span class="line">        echo mysqli_error($lin);  //输出错误信息</span><br><span class="line">    &#125;</span><br><span class="line">    echo &apos;&lt;/br&gt;&apos;;</span><br><span class="line"></span><br><span class="line">    //数据库的行数</span><br><span class="line">    /*</span><br><span class="line">    mysqli_data_seek()：用来设置结果集指针的位置</span><br><span class="line">    mysqli_num_row()：取得结果集的长度（记录的个数）</span><br><span class="line">    */</span><br><span class="line">    $lin2 = mysqli_connect(&apos;127.0.0.1&apos;,&apos;root&apos;,&apos;root&apos;);</span><br><span class="line">    $b = mysqli_query($lin2,&quot;use php_mysql_demo&quot;); </span><br><span class="line"></span><br><span class="line">    $list2 = mysqli_query($lin2,&quot;select * from admin&quot;);</span><br><span class="line"></span><br><span class="line">    echo mysqli_num_rows($list2);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-20%EF%BC%9ACookie%E4%B8%8ESession/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2227,227 +2474,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-12%EF%BC%9A%E5%B8%B8%E7%94%A8%E7%B3%BB%E7%BB%9F%E5%87%BD%E6%95%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-12%EF%BC%9A%E5%B8%B8%E7%94%A8%E7%B3%BB%E7%BB%9F%E5%87%BD%E6%95%B0/" itemprop="url">PHP笔记-12：常用系统函数</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T12:32:12+08:00">
-                2020-03-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PHP/" itemprop="url" rel="index">
-                    <span itemprop="name">PHP</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  693 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  2 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-有关输出的函数"><a href="#1-有关输出的函数" class="headerlink" title="1. 有关输出的函数"></a>1. 有关输出的函数</h4><ul>
-<li>print()：类似于echo输出提供的内容，本质是一种结构（不是函数），返回1，可以不需要使用括号</li>
-<li>print_r()：类似于var_dump，但是比var_dump简单，不会输出数据的类型，只会输出值（数组打印使用比较多）</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //系统函数</span><br><span class="line"></span><br><span class="line">    //输出相关</span><br><span class="line">    echo print(&apos;hello world&lt;br/&gt;&apos;);</span><br><span class="line">    print &apos;hello world&lt;br/&gt;&apos;;</span><br><span class="line"></span><br><span class="line">    $a = &apos;hello world&lt;br/&gt;&apos;;</span><br><span class="line">    print_r($a);</span><br><span class="line"></span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h4 id="2-有关时间的函数"><a href="#2-有关时间的函数" class="headerlink" title="2. 有关时间的函数"></a>2. 有关时间的函数</h4><ul>
-<li>时间戳是自 1970 年 1 月 1 日（00:00:00 GMT）以来的秒数。它也被称为 Unix 时间戳（Unix Timestamp）</li>
-<li>时间戳转日期<ul>
-<li>Y：年（四位数）大写 </li>
-<li>m：月（两位数，首位不足补0）小写 </li>
-<li>d：日（两位数，首位不足补0）小写 </li>
-<li>H：小时 带有首位零的 24 小时小时格式 </li>
-<li>h：小时 带有首位零的 12 小时小时格式 </li>
-<li>i：带有首位零的分钟 </li>
-<li>s：带有首位零的秒（00 -59） </li>
-<li>a：小写的午前和午后（am 或 pm）</li>
-</ul>
-</li>
-<li>var_dump(date(‘Y-m-d H:i:s’, 1502204401));</li>
-<li>date()：按照指定格式对对应的时间戳（从1970年格林威治时间开始计算的秒数），如果没有指定特定的时间戳，那么就是默认解释当前时间戳</li>
-<li>time()：获取当前时间对应的时间戳</li>
-<li>microtime()：获取微秒级别的时间</li>
-<li>Strtotime()：按照规定格式的字符串转换成时间戳</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //时间函数</span><br><span class="line">    echo date(&apos;Y 年 m 月 d 日 H:i:s&apos;,12345678),&apos;&lt;br/&gt;&apos;;</span><br><span class="line">    echo time(),&apos;&lt;br/&gt;&apos;;</span><br><span class="line">    echo microtime(),&apos;&lt;br/&gt;&apos;;</span><br><span class="line"></span><br><span class="line">    echo strtotime(&apos;tomorrow 10 hours&apos;);</span><br><span class="line"></span><br><span class="line">    echo &apos;&lt;hr/&gt;&lt;pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h4 id="3-有关数学的函数"><a href="#3-有关数学的函数" class="headerlink" title="3. 有关数学的函数"></a>3. 有关数学的函数</h4><ul>
-<li>max()：指定参数中最大的值</li>
-<li>min()：比较两个数中较小的值</li>
-<li>rand()：得到一个随机数，指定区间的随机整数</li>
-<li>mt_rand()：与rand一样，只是底层结构不一样，效率比rand高</li>
-<li>round()：四舍五入</li>
-<li>ceil()：向上取整</li>
-<li>floor()：向下取整</li>
-<li>pow()：求指定数字的指定指数次结果：pow(2,8) == 2^8 == 256</li>
-<li>abs()：绝对值</li>
-<li>sqrt()：求平方根</li>
-</ul>
-<h4 id="4-有关函数的函数"><a href="#4-有关函数的函数" class="headerlink" title="4. 有关函数的函数"></a>4. 有关函数的函数</h4><ul>
-<li>function_exists()：判断指定的函数名字是否在内存中存在（帮助用户不去使用一个不存在的函数，让代码安全性更高）</li>
-<li>func_get_arg()：在自定义函数中去获取指定数值对应的参数</li>
-<li>func_get_args()：在自定义函数中获取所有的参数（数组）</li>
-<li>func_num_args()：获取当前自定义函数的参数数量</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //函数相关函数</span><br><span class="line">    function test($a,$b)&#123;</span><br><span class="line">        //获取指定参数</span><br><span class="line">        var_dump(func_get_arg(1));</span><br><span class="line"></span><br><span class="line">        //获取所有参数</span><br><span class="line">        var_dump(func_get_args());</span><br><span class="line"></span><br><span class="line">        //获取参数数量</span><br><span class="line">        var_dump(func_num_args());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //调用函数</span><br><span class="line">    function_exists(&apos;test&apos;) &amp;&amp; test(1,&apos;2&apos;,3,4);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2502,7 +2528,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">161</span>
+                  <span class="site-state-item-count">162</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2609,7 +2635,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">147.5k</span>
+    <span title="Site words total count">148.2k</span>
   
 </div>
 

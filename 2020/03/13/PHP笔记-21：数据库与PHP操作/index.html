@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="PHP基础," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. MySQL命令符 Mysqladmin 日常管理命令总结 或 重置密码 Mysql 用到操作数据库 Mysqld 用来开启MYSQL 或者 关闭 Mysqlimport 数据库导入  2. MySQL操作 登录MYSQL    mysql  -h 192.168.1.100 -u root -p -P 123 -h 你的IP -U 你的用户名 -p你的密码 可不填 但是后面要填 -P （大">
+<meta name="keywords" content="PHP基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP笔记-21：数据库与PHP操作">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;13&#x2F;PHP%E7%AC%94%E8%AE%B0-21%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8EPHP%E6%93%8D%E4%BD%9C&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="1. MySQL命令符 Mysqladmin 日常管理命令总结 或 重置密码 Mysql 用到操作数据库 Mysqld 用来开启MYSQL 或者 关闭 Mysqlimport 数据库导入  2. MySQL操作 登录MYSQL    mysql  -h 192.168.1.100 -u root -p -P 123 -h 你的IP -U 你的用户名 -p你的密码 可不填 但是后面要填 -P （大">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-03-13T04:15:23.002Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/13/PHP笔记-21：数据库与PHP操作/"/>
+
+
+
+
+
+  <title>PHP笔记-21：数据库与PHP操作 | Tomas'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tomas'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-21%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8EPHP%E6%93%8D%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">PHP笔记-21：数据库与PHP操作</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T12:59:39+08:00">
+                2020-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  719 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<h4 id="1-MySQL命令符"><a href="#1-MySQL命令符" class="headerlink" title="1. MySQL命令符"></a>1. MySQL命令符</h4><ul>
+<li>Mysqladmin 日常管理命令总结 或 重置密码</li>
+<li>Mysql 用到操作数据库</li>
+<li>Mysqld 用来开启MYSQL 或者 关闭</li>
+<li>Mysqlimport 数据库导入</li>
+</ul>
+<h4 id="2-MySQL操作"><a href="#2-MySQL操作" class="headerlink" title="2. MySQL操作"></a>2. MySQL操作</h4><ul>
+<li>登录MYSQL    mysql  -h 192.168.1.100 -u root -p -P 123<ul>
+<li>-h 你的IP</li>
+<li>-U 你的用户名</li>
+<li>-p你的密码 可不填 但是后面要填</li>
+<li>-P （大写） 端口号</li>
+</ul>
+</li>
+<li>常规操作<ul>
+<li>查看所有数据库：Show databases</li>
+<li>选择数据库之后 查看当前数据库所有的表：show tables;</li>
+<li>创建数据库：Create database 数据库名;</li>
+<li>选择数据库：use 数据库名;</li>
+<li>创建表跟字段<ul>
+<li>Create table admin2(</li>
+<li>Username varchar(20) not null,</li>
+<li>Passworld text not null);</li>
+</ul>
+</li>
+<li>查看表结构：desc 表名</li>
+<li>添加数据<ul>
+<li>Insert into 表名 values (“”);</li>
+<li>Insert into 表名 (字段名) values (“”);</li>
+</ul>
+</li>
+<li>查询数据库<ul>
+<li>Select * from 表名;</li>
+</ul>
+</li>
+<li>修改数据<ul>
+<li>Update 表名 set 字段 = ‘’;</li>
+</ul>
+</li>
+<li>清空表数据<ul>
+<li>Delete from 表名</li>
+</ul>
+</li>
+<li>删除表<ul>
+<li>Drop table 表名;</li>
+</ul>
+</li>
+<li>备份数据库<ul>
+<li>命令行备份<ul>
+<li>select * from 表名 into outfile ‘/tmp/1.txt’</li>
+<li>▲ 可能报错，需要修改–secure-file-priv的路径，可绕过–通过日志绕过</li>
+</ul>
+</li>
+<li>界面备份<ul>
+<li>从mysql的数据库路径/data，拷走所有的表结构以及表数据</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>自增型<ul>
+<li>auto_increment</li>
+</ul>
+</li>
+<li>搜索关键字<ul>
+<li>select * from admin where username like “%%xindong”;</li>
+</ul>
+</li>
+<li>分页</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-PHP操作MySQL数据库"><a href="#3-PHP操作MySQL数据库" class="headerlink" title="3. PHP操作MySQL数据库"></a>3. PHP操作MySQL数据库</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $lin = mysqli_connect(&apos;127.0.0.1&apos;,&apos;root&apos;,&apos;root&apos;);</span><br><span class="line"></span><br><span class="line">    //数据库使用--mysqli_query</span><br><span class="line"></span><br><span class="line">    mysqli_query($lin,&quot;use php_mysql_demo&quot;);  //选择数据库</span><br><span class="line">    mysqli_query($lin,&quot;set names utf8&quot;);  //设置数据库编码</span><br><span class="line"></span><br><span class="line">    mysqli_query($lin,&quot;insert into admin values (&apos;xindong&apos;,&apos;123&apos;)&quot;);  //添加数据库记录</span><br><span class="line">    mysqli_query($lin,&quot;delete from admin where username = &apos;1111&apos;&quot;);  //删除数据库记录</span><br><span class="line">    mysqli_query($lin,&quot;update admin set username = &apos;1111&apos;&quot;);  //修改数据</span><br><span class="line"></span><br><span class="line">    //数据库查询使用--mysqli_fetch_array</span><br><span class="line">    /*</span><br><span class="line">    mysqli_fetch_array()包含两个内容，默认的，函数可以通过第二个参数来设定返回的类型</span><br><span class="line">    1. MYSQLI_ASSOC：返回关联数组</span><br><span class="line">    2. MYSQLI_NUM：返回索引数组</span><br><span class="line">    3. MYSQLI_BOTH：默认的，两种数值都返回</span><br><span class="line">    */</span><br><span class="line"></span><br><span class="line">    $list = mysqli_query($lin,&quot;select * from admin&quot;);</span><br><span class="line">    $list_data = mysqli_fetch_array($list,MYSQLI_ASSOC);</span><br><span class="line">    var_dump($list_data);  //打印单行数据，指针默认从顶部开始</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    //输出查询的整个数据库</span><br><span class="line">    $list1 = mysqli_query($lin,&quot;select * from admin&quot;);</span><br><span class="line">    $arr = array();</span><br><span class="line">    while($list1_data = mysqli_fetch_array($list1,MYSQLI_ASSOC))</span><br><span class="line">    &#123;</span><br><span class="line">        $arr[] = $list1_data;</span><br><span class="line">        //直接输出 var_dump($list1_data);</span><br><span class="line">    &#125;</span><br><span class="line">    var_dump($arr);  //打印整个数据</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">     /*</span><br><span class="line">    mysqli_errno()：出现错误的错误编号</span><br><span class="line">    mysqli_error()：错误信息</span><br><span class="line">    */</span><br><span class="line">    $lin1 = mysqli_connect(&apos;127.0.0.1&apos;,&apos;root&apos;,&apos;root&apos;);</span><br><span class="line">    $a = mysqli_query($lin,&quot;use demo11111&quot;);  //不存在的数据库</span><br><span class="line">    //mysqli_query($lin,&quot;set names utf8&quot;);</span><br><span class="line"></span><br><span class="line">    if(mysqli_errno($lin))</span><br><span class="line">    &#123;</span><br><span class="line">        echo &apos;&lt;/br&gt;&apos;;</span><br><span class="line">        echo mysqli_errno($lin);  //输出错误的编号</span><br><span class="line">        echo &apos;&lt;/br&gt;&apos;; </span><br><span class="line">        echo mysqli_error($lin);  //输出错误信息</span><br><span class="line">    &#125;</span><br><span class="line">    echo &apos;&lt;/br&gt;&apos;;</span><br><span class="line"></span><br><span class="line">    //数据库的行数</span><br><span class="line">    /*</span><br><span class="line">    mysqli_data_seek()：用来设置结果集指针的位置</span><br><span class="line">    mysqli_num_row()：取得结果集的长度（记录的个数）</span><br><span class="line">    */</span><br><span class="line">    $lin2 = mysqli_connect(&apos;127.0.0.1&apos;,&apos;root&apos;,&apos;root&apos;);</span><br><span class="line">    $b = mysqli_query($lin2,&quot;use php_mysql_demo&quot;); </span><br><span class="line"></span><br><span class="line">    $list2 = mysqli_query($lin2,&quot;select * from admin&quot;);</span><br><span class="line"></span><br><span class="line">    echo mysqli_num_rows($list2);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/PHP%E5%9F%BA%E7%A1%80/" rel="tag"># PHP基础</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-20%EF%BC%9ACookie%E4%B8%8ESession/" rel="next" title="PHP笔记-20：Cookie与Session">
+                <i class="fa fa-chevron-left"></i> PHP笔记-20：Cookie与Session
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/photo.jpg"
+                alt="Tomas" />
+            
+              <p class="site-author-name" itemprop="name">Tomas</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">162</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Tomassky" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:tomassky7@gmail.com" target="_blank" title="Gmail邮箱">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>Gmail邮箱</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://ylsword-cheat.top" title="LengSword" target="_blank">LengSword</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://neigeshoufu.github.io/ljy.github.io" title="neigeshoufu" target="_blank">neigeshoufu</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-MySQL命令符"><span class="nav-number">1.</span> <span class="nav-text">1. MySQL命令符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-MySQL操作"><span class="nav-number">2.</span> <span class="nav-text">2. MySQL操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-PHP操作MySQL数据库"><span class="nav-number">3.</span> <span class="nav-text">3. PHP操作MySQL数据库</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tomas</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">148.2k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

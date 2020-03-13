@@ -240,6 +240,264 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-10%EF%BC%9A%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-10%EF%BC%9A%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" itemprop="url">PHP笔记-10：文件包含</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T12:25:41+08:00">
+                2020-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  967 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-文件包含形式"><a href="#1-文件包含形式" class="headerlink" title="1. 文件包含形式"></a>1. 文件包含形式</h4><ul>
+<li>四种文件包含形式<ul>
+<li>Include：包含文件</li>
+<li>Include_once：系统会自动判断文件包含过程中，是否已经包含过（一个文件最多被包含一次）</li>
+<li>Require：与include相同</li>
+<li>Require_once：以include_once相同</li>
+</ul>
+</li>
+<li>向上包含<ul>
+<li>先包含文件，后使用文件中的内容  </li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//include1.php</span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //被包含文件</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //定义数据</span><br><span class="line">    $a = 1;</span><br><span class="line">    define(&apos;PI&apos;,3.14);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">//include2.php</span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //包含文件：使用数据</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //包含文件</span><br><span class="line">    include &apos;include1.php&apos;; //包含当前文件include2.php所在文件夹下的include1.php</span><br><span class="line"></span><br><span class="line">    echo $a,PI;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //再次加载</span><br><span class="line">    //include &apos;include1.php&apos;;</span><br><span class="line"></span><br><span class="line">    //include_once</span><br><span class="line">    //include_once &apos;include1.php&apos;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>向下包含<ul>
+<li>先准备内容，然后包含另外的文件，在另外的文件中，使用当前的内容</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//include3.php</span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //定义数据</span><br><span class="line"></span><br><span class="line">    $a = 10;</span><br><span class="line">    const PI = 3.14;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //包含文件：为了显示以上数据</span><br><span class="line">    include_once &apos;include4.php&apos;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//include4.php</span><br><span class="line">&lt;table&gt;</span><br><span class="line">    &lt;tr&gt;</span><br><span class="line">        &lt;td&gt;&lt;?php echo $a;?&gt;&lt;/td&gt;</span><br><span class="line">        &lt;td&gt;&lt;?php echo PI;?&gt;&lt;/td&gt;</span><br><span class="line">    &lt;/tr&gt;</span><br><span class="line">&lt;/table&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-区别"><a href="#2-区别" class="headerlink" title="2. 区别"></a>2. 区别</h4><ul>
+<li>Include和include_once<ul>
+<li>Include系统会碰到一次，执行一次；如果对统一个文件进行多次加载，那么系统会执行多次；</li>
+<li>Include_once：系统碰到多次，也只会执行一次。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">//include2.php</span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //包含文件：使用数据</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //包含文件</span><br><span class="line">    include &apos;include1.php&apos;; //包含当前文件include2.php所在文件夹下的include1.php</span><br><span class="line"></span><br><span class="line">    echo $a,PI;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //再次加载</span><br><span class="line">    //include &apos;include1.php&apos;;</span><br><span class="line"></span><br><span class="line">    //include_once</span><br><span class="line">    //include_once &apos;include1.php&apos;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Require和include<ul>
+<li>本质都是包含文件，唯一的区别在于包含不到文件的时候，报错的形式不一样</li>
+<li>Include的错误级别比较轻：不会阻止代码执行</li>
+<li>Require要求较高：如果包含出错代码不再执行（require后面的代码）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">//include5.php</span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //require和include的区别</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //include包含文件</span><br><span class="line">    //include &apos;a.php&apos;;</span><br><span class="line"></span><br><span class="line">    //require包含文件</span><br><span class="line">    require &apos;a.php&apos;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    echo &apos;hello world&apos;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-文件加载原理"><a href="#3-文件加载原理" class="headerlink" title="3. 文件加载原理"></a>3. 文件加载原理</h4><ul>
+<li>PHP代码的执行流程<ul>
+<li>读取代码文件（PHP程序）</li>
+<li>编译：将PHP代码转换成字节码（生成opcode）</li>
+<li>zendengine来解析opcode，按照字节码去进行逻辑运算</li>
+<li>转换成对应的HTML代码</li>
+</ul>
+</li>
+<li>文件加载原理<ul>
+<li>在文件加载（include或者require）的时候，系统会自动的将被包含文件中的代码相当于嵌入到当前文件中</li>
+<li>加载位置：在哪加载，对应的文件中的代码嵌入的位置就是对应的include位置</li>
+<li>在PHP中被包含的文件是单独进行编译的</li>
+</ul>
+</li>
+<li>▲ PHP文件在编译的过程中如果出现了语法错误，那么会失败（不会执行）；但是如果被包含文件有错误的时候，系统会在执行到包含include这条语句的时候才会报错</li>
+</ul>
+<h4 id="4-文件加载路径"><a href="#4-文件加载路径" class="headerlink" title="4. 文件加载路径"></a>4. 文件加载路径</h4><ul>
+<li>文件在加载的时候需要指定文件路径才能保证PHP正确的找到对应的文件</li>
+<li>绝对路径：从磁盘的根目录开始（本地绝对路径）<ul>
+<li>Windows：盘符C:/路径/PHP文件</li>
+<li>Linux：/路径/PHP文件</li>
+</ul>
+</li>
+<li>相对路径：从当前文件所在目录开始的路径<ul>
+<li>.|./：表示当前文件夹</li>
+<li>../：上级目录（当前文件夹的上一层文件夹）</li>
+</ul>
+</li>
+<li>效率对比<ul>
+<li>绝对路径相对效率偏低，但是相对安全（路径不会出问题）</li>
+<li>相对路径相对效率高些，但是容易出错（相对路径会发生改变）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    //PHP文件加载路径</span><br><span class="line"></span><br><span class="line">    //相对路径加载</span><br><span class="line">    //include_once &apos;include1.php&apos;;  //默认当前文件本身</span><br><span class="line"></span><br><span class="line">    //include_once &apos;./include1.php&apos;;    </span><br><span class="line"></span><br><span class="line">    //复杂相对路径</span><br><span class="line">    //include_once &apos;../htdocs/include1.php&apos;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //绝对路径</span><br><span class="line">    include_once &apos;D:/server/Apache24/htdocs/include1.php&apos;;</span><br><span class="line"></span><br><span class="line">    echo $a;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-文件嵌套包含"><a href="#5-文件嵌套包含" class="headerlink" title="5. 文件嵌套包含"></a>5. 文件嵌套包含</h4><ul>
+<li>一个文件包含另外一个文件，同时被包含的文件又包含了另外一个文件</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-9%EF%BC%9A%E5%BE%AA%E7%8E%AF%E7%BB%93%E6%9E%84/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2567,264 +2825,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/09/IPS%E7%AC%94%E8%AE%B0-4%EF%BC%9AIME--IDS%E5%AE%9E%E9%AA%8C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/09/IPS%E7%AC%94%E8%AE%B0-4%EF%BC%9AIME--IDS%E5%AE%9E%E9%AA%8C/" itemprop="url">IPS笔记-4：IME--IDS实验</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-09T22:56:39+08:00">
-                2020-03-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/IPS/" itemprop="url" rel="index">
-                    <span itemprop="name">IPS</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  439 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  2 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-IDS模拟实验"><a href="#1-IDS模拟实验" class="headerlink" title="1. IDS模拟实验"></a>1. IDS模拟实验</h4><ul>
-<li>R1：Router C3700</li>
-<li>R1：Router C3700</li>
-<li>IDS：IPS-4240</li>
-<li>SW：EtherSwitch router</li>
-<li>▲ 2020.03.09 虚拟机IPS-4240的虚拟网卡VMware1和VMware2需要开启主机连接，且若在GNS3中无出现此两个网卡，可重启计算机，即可抓到这两个网卡</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=0bacrbnKkpYD4tlDbXA5W_Xym--5R1euodEwlnfaNxNJ71hf03r_munV6AlWxXFo235ZIxkzPuzSwMJ-Od4rn-ZSm4EkP47zyU_Bx1bEtN4FIbgLpHqs5WwmNawncH6dcxTxwdQkUfSHWwT7URIcjRWh8eqHbLJZERxTC41OWz7B&file_name=/IPS-4240%E5%BC%80%E5%90%AF%E7%9A%84%E4%B8%BB%E6%9C%BA%E8%BF%9E%E6%8E%A5.png" alt="IPS-4240开启的主机连接"></p>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=012dqgU0HW2O6T7_qgEJBSDpZ3XB7ZKt6E-XFbdECWkJrxO9ytxpQJVrz_uqMSGTI3c4vStJ1EmH8Pq9a4tbJhxxfupVhjtXmaUWbah0T7wGlKeaXOY0YeSdDvApTPZAvyCWsXahyyzZ9YBTwsoHLbCv9p7jmhub-XcO-elID3dW0A&file_name=/IDS%E6%9D%82%E5%90%88%E6%A8%A1%E5%BC%8F%E6%8A%A5%E8%AD%A6%E6%8B%93%E6%89%91%E5%9B%BE.png" alt="IDS杂合模式报警拓扑图"></p>
-<h4 id="2-IDS：IPS-4240"><a href="#2-IDS：IPS-4240" class="headerlink" title="2. IDS：IPS-4240"></a>2. IDS：IPS-4240</h4><ul>
-<li>改变外形：右键 -&gt; Change Symbol -&gt; ids</li>
-<li>修改名字：右键 -&gt; Change the hostname -&gt; IDS</li>
-<li>增加监控网卡：Configure -&gt; NIO Ethernet -&gt; Add VMnet1</li>
-</ul>
-<h4 id="3-R1和R2"><a href="#3-R1和R2" class="headerlink" title="3. R1和R2"></a>3. R1和R2</h4><ul>
-<li>启动，降低系统资源消耗：右键 -&gt; Idle PC -&gt; 选取带*号的参数设备</li>
-<li>配置R1<ul>
-<li>conf t</li>
-<li>interface f0/1</li>
-<li>ip add 10.1.1.1 255.255.255.0</li>
-<li>no sh</li>
-</ul>
-</li>
-<li>配置R2<ul>
-<li>conf t</li>
-<li>interface f0/1</li>
-<li>ip add 10.1.1.2 255.255.255.0</li>
-<li>no sh</li>
-</ul>
-</li>
-<li>连通性：R1 -&gt; do ping 10.1.1.2 -&gt; R2是否联通</li>
-</ul>
-<h4 id="4-SW：EtherSwitch-router"><a href="#4-SW：EtherSwitch-router" class="headerlink" title="4. SW：EtherSwitch router"></a>4. SW：EtherSwitch router</h4><ul>
-<li>启动，降低系统资源消耗：右键 -&gt; Idle PC -&gt; 选取带*号的参数设备</li>
-<li>修改名字：右键 -&gt; Change the hostname -&gt; SW</li>
-<li>增加接口：右键 -&gt; Slots -&gt; 增加一个NM-16ESW</li>
-</ul>
-<h4 id="5-测试连通性"><a href="#5-测试连通性" class="headerlink" title="5. 测试连通性"></a>5. 测试连通性</h4><ul>
-<li>R1(f 1/0)-&gt; SW(f 1/1)</li>
-<li>R2(f 1/0)-&gt; SW(f 1/2)</li>
-<li>IDS -&gt; SW(f 1/15)</li>
-<li>连通性：R1 -&gt; ping 10.1.1.2 -&gt; R2是否连通</li>
-</ul>
-<h4 id="6-SPAN配置"><a href="#6-SPAN配置" class="headerlink" title="6. SPAN配置"></a>6. SPAN配置</h4><ul>
-<li>SW：EtherSwitch router<ul>
-<li>monitor session 1 source interface f1/1 rx  //R1</li>
-<li>monitor session 1 destination interface f1/15  //IDS</li>
-</ul>
-</li>
-</ul>
-<h4 id="7-入侵检测"><a href="#7-入侵检测" class="headerlink" title="7. 入侵检测"></a>7. 入侵检测</h4><ul>
-<li>▲ 所有的步骤都需要进行Apply</li>
-<li>IME启动IPS</li>
-<li>开启Interface接口<ul>
-<li>Configuration -&gt; Interface -&gt; GigabitEthernet 0/0 -&gt; Edit -&gt; enable</li>
-</ul>
-</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=e716udOnSAz4dkadkPZQTHK9g05PtIelg4zk2fzdIgJCz4HqqxWzbwhNNFKkaYNFeaNpTlD5z64oaidZmHSNAhCFbR3v5MLkFCtBZDO6NAjpoMIC0D_r9Nx0331xyekGaF4W9tvG3FCim7TO4aHsxYBCv0yQdVuyVPXjVEuvdXhT&file_name=/IME--IDS%E5%BC%80%E5%90%AFInterface%E6%8E%A5%E5%8F%A3.png" alt="IME--IDS开启Interface接口"></p>
-<ul>
-<li>绑定病毒特征识别库Sig0<ul>
-<li>Configuration -&gt; Policies -&gt; vs0 -&gt; Edit -&gt; GigabitEthernet 0/0</li>
-</ul>
-</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=3a8dp_n3lcKNVEypw6Di4LaTAv_Avd0UCiFrF3-e_IlgFeOGUvsybKhV4TlPSucR_MTILfOLGoeneDxTQaSkoHMZRhmG_xy2D05Wg6fiJqeb7UUskmEe7-Nhjf3juDjVtcOm_i7xSbvxFws_nq-h6jt77Q97AZBJ26UP4zzcxeT2_4WOVNzeUtsHAQ&file_name=/IME--IDS%E7%BB%91%E5%AE%9A%E7%97%85%E6%AF%92%E7%89%B9%E5%BE%81%E8%AF%86%E5%88%AB%E5%BA%93Sig0.png" alt="IME--IDS绑定病毒特征识别库Sig0"></p>
-<ul>
-<li>配置病毒特征识别库Sig0<ul>
-<li>Sig0 -&gt; OS -&gt; 2004(过滤) -&gt; Change status To -&gt; Active</li>
-<li>Sig0 -&gt; OS -&gt; 2004(过滤) -&gt; Enable</li>
-</ul>
-</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=fdce1Ff0MCkc3-yj71iaYRdkeEJpfWm0jjJn_9Z8qjwqcJI5cnyP32AwgQAodnE2fkNMq_DwHM8OI40j881slIQQ1qcoISNHBs0kasDtTx95Fylgz-_mBDbApXMwoq8crtRBaDdwU_vCuNDCLHQoZmh27GmFiob8p0h8sVY7HbkapCT0A3i9DPKTpg&file_name=/IME--IDS%E9%85%8D%E7%BD%AE%E7%97%85%E6%AF%92%E7%89%B9%E5%BE%81%E8%AF%86%E5%88%AB%E5%BA%93Sig0.png" alt="IME--IDS配置病毒特征识别库Sig0"></p>
-<ul>
-<li>监控IDS-ICMP事件<ul>
-<li>Configuration -&gt; Sensor Monitoring -&gt; View</li>
-</ul>
-</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=b1d2PvCljYmLqdGgLHVK2XIozxfcZ3CuWtHMFvegnsxhRgtIqu5VY31E81qdvqfjQmLFwjTcSYL6P5GS76JMLnLf-foEjb8v4X_sWyF2y0vPN5UkB3jie7VD-iqG7PrWOppk9ndS7cuO7blOPoiIegTOaZKysaPmfUrFTOL9RC0&file_name=/IME--IDS%E7%9B%91%E6%8E%A7IDS-ICMP%E4%BA%8B%E4%BB%B6.png" alt="IME--IDS监控IDS-ICMP事件"></p>
-<ul>
-<li>R1向R2发生ICMP Echo Requset的Ping包，查看IME–IPS的Event Viewer有无报警日志</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=86be8gbeHXZQYLAno8Fl34UQyP-SwjMrOG5Dvm89FB7fEJo9c8lgeZR4eQbf-JbLk0TVIq4__qCGU3QNnR8aLpgvUN67H9tWAvivieaxn-I5XYQuyz4uVBiN12lmd9DwXSv719ztPNFaurjxFBbzMwW0W2GgThxhBRp0&file_name=/IME--IDS%E7%9B%91%E6%8E%A7IDS%E4%BA%8B%E4%BB%B6.png" alt="IME--IDS监控IDS事件"> </p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2879,7 +2879,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">159</span>
+                  <span class="site-state-item-count">160</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2986,7 +2986,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">146.6k</span>
+    <span title="Site words total count">147k</span>
   
 </div>
 

@@ -240,6 +240,641 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/22/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E5%9B%9B)%EF%BC%9A%E6%97%A0%E7%BA%BF%E6%A0%87%E5%87%86%E3%80%81%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%BB%A5%E5%8F%8A%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/22/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E5%9B%9B)%EF%BC%9A%E6%97%A0%E7%BA%BF%E6%A0%87%E5%87%86%E3%80%81%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%BB%A5%E5%8F%8A%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/" itemprop="url">Kali Linux笔记(三十四)：无线标准、基本概念以及运行模式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-22T23:08:26+08:00">
+                2019-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.8k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  12 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-无线渗透（WLAN，蓝牙等几米范围内）"><a href="#1-无线渗透（WLAN，蓝牙等几米范围内）" class="headerlink" title="1. 无线渗透（WLAN，蓝牙等几米范围内）"></a>1. 无线渗透（WLAN，蓝牙等几米范围内）</h4><ul>
+<li>与其他章节独立，涵盖面广，可独立成课</li>
+<li>无线技术变化快 难度大</li>
+<li>既新鲜刺激又亚历山大<ul>
+<li>我们不会研究很深</li>
+</ul>
+</li>
+<li>一半理论 一半实践<ul>
+<li>理论是本章最有价值的部分（aircrack-ng suite作者写的一本书）</li>
+</ul>
+</li>
+<li>无线技术是本课程难度最大的一章<ul>
+<li>协议结构</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-无线技术特点（802-11标准）"><a href="#2-无线技术特点（802-11标准）" class="headerlink" title="2. 无线技术特点（802.11标准）"></a>2. 无线技术特点（802.11标准）</h4><ul>
+<li>行业迅猛发展</li>
+<li>互联网的重要入口</li>
+<li>边界模糊</li>
+<li>安全实施缺失而且困难</li>
+<li>对技术不了解而造成配置不当</li>
+<li>企业网络私自接入AP破坏网络边界</li>
+</ul>
+<h4 id="3-IEEE"><a href="#3-IEEE" class="headerlink" title="3. IEEE"></a>3. IEEE</h4><ul>
+<li>Institute of Electrical and Electronics Engineers<ul>
+<li>由通信航天生物电气电子等方面的科学家组成，目的是制定标准，指导行业技术的发展，目前成员近40万人</li>
+</ul>
+</li>
+<li>IEEE分为不同的技术委员会（Committes），其中802委员会负责lan、man标准的制定<ul>
+<li>以太网</li>
+<li>令牌环网</li>
+<li>无线局域网</li>
+<li>网桥</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Working Group</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">IEEE 802.1</td>
+<td align="center">Bridging(networking) and Network Management</td>
+</tr>
+<tr>
+<td align="center">IEEE 802.2</td>
+<td align="center">LLC</td>
+</tr>
+<tr>
+<td align="center">IEEE 802.3</td>
+<td align="center">Ethernet（以太网）</td>
+</tr>
+<tr>
+<td align="center">IEEE 802.4</td>
+<td align="center">Token Bus</td>
+</tr>
+<tr>
+<td align="center">IEEE 802.5</td>
+<td align="center">Defines the MAC Layer for a Taken Ring（令牌环网）</td>
+</tr>
+<tr>
+<td align="center">IEEE 802.6</td>
+<td align="center">MANs（成域网）</td>
+</tr>
+<tr>
+<td align="center">IEEE 802.7</td>
+<td align="center">Broadband LAN Using Coaxial Cable（同轴电缆的宽带局域网）</td>
+</tr>
+<tr>
+<td align="center">IEEE 802.8</td>
+<td align="center">Fiber Optic TAG（光纤网）</td>
+</tr>
+<tr>
+<td align="center">IEEE 802.9</td>
+<td align="center">Integrated Services LAN（集成服务的局域网）</td>
+</tr>
+<tr>
+<td align="center">IEEE 802.10</td>
+<td align="center">Interoperable LAN Security</td>
+</tr>
+<tr>
+<td align="center">IEEE 802.11 a/b/g/n</td>
+<td align="center">Wireless LAN(WLAN) and Mesh(Wi-Fi Certification)</td>
+</tr>
+<tr>
+<td align="center">IEEE 802.12</td>
+<td align="center">100BaseVG</td>
+</tr>
+<tr>
+<td align="center">IEEE 802.13</td>
+<td align="center">Unusef</td>
+</tr>
+<tr>
+<td align="center">IEEE 802.14</td>
+<td align="center">Cable Modems</td>
+</tr>
+<tr>
+<td align="center">IEEE 802.15</td>
+<td align="center">Wireless PAN（无线个人局域网络）</td>
+</tr>
+</tbody></table>
+<h4 id="4-无线（802-11标准）"><a href="#4-无线（802-11标准）" class="headerlink" title="4. 无线（802.11标准）"></a>4. 无线（802.11标准）</h4><ul>
+<li>应用层</li>
+<li>表示层</li>
+<li>会话层</li>
+<li>传输层</li>
+<li>网络层</li>
+<li><strong>数据链路层</strong><ul>
+<li><strong>逻辑链路控制子层LLC</strong></li>
+<li><strong>媒体访问控制子层MAC</strong></li>
+</ul>
+</li>
+<li><strong>物理层</strong></li>
+</ul>
+<h4 id="5-IEEE-802-11标准"><a href="#5-IEEE-802-11标准" class="headerlink" title="5. IEEE 802.11标准"></a>5. IEEE 802.11标准</h4><ul>
+<li>802委员会下第11组负责开发无线局域网标准</li>
+<li>IEEE 802.11 The Original WLAN Standard–1Mibt/s and 2Mbit/w，2.4GHz RF and IR</li>
+<li>IEEE 802.11a 54Mbit/s，5GHz</li>
+<li>IEEE 802.11b 802.11 Enhancements to Support 5.5Mbit/s and 11Mbit/s</li>
+<li>IEEE 802.11c Bridge Operation Procedures</li>
+<li>IEEE 802.11d International（Country to Country）Roaming Extensions</li>
+<li>IEEE 802.11e Quality of Service（QoS），Including Packet Bursting</li>
+<li><strong>IEEE 802.11F Inter-Access Point Protocol</strong></li>
+<li>IEEE 802.11g 54Mbit/s，2.4GHz</li>
+<li>IEEE 802.11h Spectrum Managed 802.11a（5GHz）for European Compatibility</li>
+<li>IEEE 802.11i Enhanced Security</li>
+<li>IEEE 802.11j Extensions for Japan</li>
+<li>IEEE 802.11k Radio Resource Measurement Enhancements</li>
+<li>IEEE 802.11n Higher Throughput Using Multiple Input,Multiple Output（MIMO）Antennas</li>
+<li>IEEE 802.11p Wireless Access for the Vehicular Environment（WAVE）</li>
+<li>IEEE 802.11r Fast BSS Transition（FT）</li>
+<li>IEEE 802.11s Mesh Networking，Extended Service Set（ESS）</li>
+<li><strong>IEEE 802.11T Wireless Performance Prediction（WPP）</strong></li>
+<li>IEEE 802.11u Internetworking with Non-802 Networks（i.e.:Cellular）</li>
+<li>IEEE 802.11v Wireless Network Management</li>
+<li>IEEE 802.11w Protected Management Frames</li>
+<li>IEEE 802.11y 3650-3700 MHz Operation in the US</li>
+<li>IEEE 802.11z Direct Link Setup（DLS）Extensions</li>
+<li>IEEE 802.11mb Maintenance of the Standard</li>
+<li>IEEE 802.11aa Robust Streaming of Audio Video Transport Streams</li>
+<li>IEEE 802.11ac Very High Throughput &lt; 6GHz</li>
+<li>IEEE 802.11ad Very High Throughput，60GHz</li>
+<li>IEEE 802.11ae QoS Management</li>
+<li>IEEE 802.11af TV Whitespace</li>
+<li>IEEE 802.11ah Sub 1 GHz</li>
+<li>IEEE 802.11ai Fast Initial Link Setup</li>
+</ul>
+<h4 id="6-日常使用"><a href="#6-日常使用" class="headerlink" title="6. 日常使用"></a>6. 日常使用</h4><ul>
+<li>802.11 – The original WLAN standard</li>
+<li>802.11a – Up to 54 Mbit/s on 5GHz</li>
+<li>802.11b – 5.5Mbit/s and 11Mbit/s on 2.4GHz</li>
+<li>802.11g – Up to 54Mbit/s on 2.4GHz.Backward compatible with 802.11b</li>
+<li>802.11i – Provides enhanced security</li>
+<li>802.11n – Provides higher throughput with Multiple Input/Multiple Output（MIMO）</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Protocal</th>
+<th align="center">Release Data</th>
+<th align="center">Frequencise</th>
+<th align="center">Rates</th>
+<th align="center">Modulation</th>
+<th align="center">Channel Width</th>
+<th align="center">Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Legacy</td>
+<td align="center">1997</td>
+<td align="center">2.4-25GHz</td>
+<td align="center">1 or 2Mibt</td>
+<td align="center">FHSS/DSSS</td>
+<td align="center">1MHz/20MHZ</td>
+<td align="center">No implementations were made for IR（红外线）</td>
+</tr>
+<tr>
+<td align="center">802.11b(wifi)</td>
+<td align="center">1999</td>
+<td align="center">2.4-2.5GHz</td>
+<td align="center">1,2,5.5,11Mbit</td>
+<td align="center">DSSS</td>
+<td align="center">22MHz</td>
+<td align="center">Proprietary extension:up to 33Mbit</td>
+</tr>
+<tr>
+<td align="center">802.11a</td>
+<td align="center">1999</td>
+<td align="center">5.15-5.25/5.25-5.35/5.725-5.875GHz</td>
+<td align="center">6,9,12,18,24,36,48,54Mbit</td>
+<td align="center">OFDM</td>
+<td align="center">20MHz</td>
+<td align="center">Proprietary extension: up to 108Mbit</td>
+</tr>
+<tr>
+<td align="center">802.11g</td>
+<td align="center">2003</td>
+<td align="center">2.4-2.5GHz</td>
+<td align="center">Same as 802.11a and 802.11b</td>
+<td align="center">DSSS/OFDM</td>
+<td align="center">20MHz/22MHz</td>
+<td align="center">Propritary extension:180Mbit/125Mbit</td>
+</tr>
+<tr>
+<td align="center">802.11n</td>
+<td align="center">2009</td>
+<td align="center">2.4 and /or 5GHz</td>
+<td align="center">Up to 600Mbit</td>
+<td align="center">DSSS/OFDM</td>
+<td align="center">20/20 or 40 MHz</td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<h4 id="7-802-11"><a href="#7-802-11" class="headerlink" title="7. 802.11"></a>7. 802.11</h4><ul>
+<li>发布于1997年</li>
+<li>速率1Mbps或2Mbps</li>
+<li>红外线传输介质（未实现，传输之间不能有障碍物）</li>
+<li>无线射频信号编码（调制）（radio frequencies，民用2.4-5）<ul>
+<li>Direct-Sequence Spread-Spectrum（DSSS）–直序扩频</li>
+<li>Frequency Hopping Spread-Spectrum（FHSS）–跳频扩频</li>
+</ul>
+</li>
+<li>媒体访问方式–CSMA/CA（载波侦听多路访问冲突避免） c=b+log2（1+s/n）<ul>
+<li>根据算法侦听一定时长</li>
+<li>发生数据前发包声明</li>
+</ul>
+</li>
+<li>Request to Send/Clear to Send（RTS/CTS）</li>
+</ul>
+<h4 id="8-80211b"><a href="#8-80211b" class="headerlink" title="8. 80211b"></a>8. 80211b</h4><ul>
+<li>Complementart Code Keying（CCK）–补充代码键<ul>
+<li>5.5 and 11Mbit/s</li>
+<li>2.4GHz band（2.4GHz-2.485GHz）</li>
+<li>14个重叠的信道channels</li>
+<li>只有三个完全不重叠的信道</li>
+</ul>
+</li>
+<li>美国 1 to 11（2.412GHz–2.462GHz）</li>
+<li>欧洲 1 to 13（2.412GHz–2.472GHz）</li>
+<li>日本 1 to 14（2.412GHz–2.484GHz）</li>
+</ul>
+<blockquote>
+<pre><code>No Overlap
+1、6、11
+2、7、12
+3、8、13
+左右偏移11个单位，同一空间内的AP选择的信道尽量不冲突</code></pre></blockquote>
+<h4 id="9-802-11a"><a href="#9-802-11a" class="headerlink" title="9. 802.11a"></a>9. 802.11a</h4><ul>
+<li>与802.11b几乎同时发布<ul>
+<li>因设备价格问题一直没有得到广泛使用</li>
+</ul>
+</li>
+<li>使用5GHz带宽<ul>
+<li>2.4GHz带宽干扰源多（微波（特别明显）、蓝牙、无绳电话）</li>
+<li>5GHz频率有更多带宽空间，可容纳更多不重叠的信道</li>
+<li>Orthogonal Frequency-Division Multiplexing（OFDM）信号调制方法（正交频分复用技术）</li>
+</ul>
+</li>
+<li>更高速率54Mbps，每个信道20MHz带宽</li>
+<li>变频<ul>
+<li>5.15-5.35GHz室内</li>
+<li>5.7-5.8GHz室外</li>
+</ul>
+</li>
+</ul>
+<h4 id="10-802-11g"><a href="#10-802-11g" class="headerlink" title="10. 802.11g"></a>10. 802.11g</h4><ul>
+<li>2.4GHz频率</li>
+<li>Orthogonal Frequency-Division Multiplexing（OFDM）信号调制方法</li>
+<li>与802.11a速率相同</li>
+<li>可全局降速 向后兼容802.11b，并切换为CCK信号调制方法</li>
+<li>每个信道20/22MHz带宽</li>
+</ul>
+<h4 id="11-802-11n"><a href="#11-802-11n" class="headerlink" title="11. 802.11n"></a>11. 802.11n</h4><ul>
+<li>2.4或5GHz频率<ul>
+<li>300Mbps 最高600Mbps</li>
+<li>Multiple-Input Multiple-Output（MIMO）多进多出通信技术</li>
+<li>多天线，多无线电波，独立收发信号（4条天线）</li>
+<li>可以使用40MHz信道带宽使数据传输速率翻倍</li>
+</ul>
+</li>
+<li>全802.11n设备网络中，可以使用新报文格式，使速率达到最大</li>
+<li>每个信道20/40MHz带宽</li>
+</ul>
+<h4 id="12-无线网络运行模式"><a href="#12-无线网络运行模式" class="headerlink" title="12. 无线网络运行模式"></a>12. 无线网络运行模式</h4><ul>
+<li>无线网络架构</li>
+<li>Infrastructure（基础架构）<ul>
+<li>AP维护SSID</li>
+</ul>
+</li>
+<li>Ad-Hoc<ul>
+<li>STA 维护SSID</li>
+</ul>
+</li>
+<li>Service Set Identifier（SSID，服务级标识符）<ul>
+<li>AP每秒约10次通过Beacon帧广播SSID（Beacon数据包）</li>
+<li>客户端连接到无线网络也会宣告SSID</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>有些AP的隐藏是通过不发送Beacon包来形成的</code></pre></blockquote>
+<h4 id="13-Infrastruture（基础架构，不存在STA之间的直接通信，需要把信息发给AP）"><a href="#13-Infrastruture（基础架构，不存在STA之间的直接通信，需要把信息发给AP）" class="headerlink" title="13. Infrastruture（基础架构，不存在STA之间的直接通信，需要把信息发给AP）"></a>13. Infrastruture（基础架构，不存在STA之间的直接通信，需要把信息发给AP）</h4><ul>
+<li>至少包含一个AP和一个STATION，形成一个Basic Service Set（BSS基本服务集）</li>
+<li>AP连接到有线网络，称为Distribution System（DS）</li>
+<li>连接到同一个DS的多个AP形成一个Entended Service Set（ESS扩展服务集）</li>
+</ul>
+<blockquote>
+<pre><code>BSS的ID：终端设备连接的网卡AP的MAC地址
+ESS的ID：多个AP的SSID保持一致，统一的名字</code></pre></blockquote>
+<h4 id="14-AD-HOC（可以用进行STA之间的直接通信）"><a href="#14-AD-HOC（可以用进行STA之间的直接通信）" class="headerlink" title="14. AD-HOC（可以用进行STA之间的直接通信）"></a>14. AD-HOC（可以用进行STA之间的直接通信）</h4><ul>
+<li>也被称为Independent Basic Service Set（IBSS独立的基本服务集）</li>
+<li>有至少2个STAs直接通信组成</li>
+<li>也称为peer to peer模式（点到点模式）</li>
+<li>其中一个STA负责AP的工作<ul>
+<li>通过beacon广播SSID</li>
+<li>对其他STAs进行身份验证</li>
+</ul>
+</li>
+</ul>
+<h4 id="15-WIRELESS-DISTRIBUTION-SYSTEM（WDS）"><a href="#15-WIRELESS-DISTRIBUTION-SYSTEM（WDS）" class="headerlink" title="15. WIRELESS DISTRIBUTION SYSTEM（WDS）"></a>15. WIRELESS DISTRIBUTION SYSTEM（WDS）</h4><ul>
+<li>与有线DS类视，只是通过无线连接的多个AP组成的网络（没有有线）<ul>
+<li>Bridging（桥接）– 只有AP间彼此通信（终端只能连接一个AP）</li>
+<li>Repeating（中继）– 允许所有AP和STA进行通信（终端可连接多个AP）</li>
+</ul>
+</li>
+</ul>
+<h4 id="16-MONITOR-MODE（无线网络的混杂模式）"><a href="#16-MONITOR-MODE（无线网络的混杂模式）" class="headerlink" title="16. MONITOR MODE（无线网络的混杂模式）"></a>16. MONITOR MODE（无线网络的混杂模式）</h4><ul>
+<li>Monitor不是一种真的无线模式<ul>
+<li>但是对无线渗透至关重要</li>
+<li>允许无线网卡没有任何筛选的抓包</li>
+<li>与有线网络的混杂模式可以类比</li>
+<li>适合的网卡和驱动不但可以monitor，更可以Injection</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>默认情况下，会过滤掉802.11包头，需要开启Monitor Mode，才能抓到无线的内容</code></pre></blockquote>
+<h4 id="17-无线网卡准备"><a href="#17-无线网卡准备" class="headerlink" title="17. 无线网卡准备"></a>17. 无线网卡准备</h4><ul>
+<li>物理机运行Kali</li>
+<li>虚拟机运行Kali<ul>
+<li>外置USB无线网卡（把USB网卡映射给虚拟机）</li>
+<li>TL-WAN722N（个人建议）</li>
+<li><strong><code>🔺命令：dmesg -T</code></strong>（时间）（显示操作系统硬件级别的变化）</li>
+<li><strong><code>🔺命令：iwconfig</code></strong>（查看无线网卡）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>无线渗透网卡芯片选择：ATHEROS</code></pre></blockquote>
+<h4 id="18-选择无线网卡"><a href="#18-选择无线网卡" class="headerlink" title="18. 选择无线网卡"></a>18. 选择无线网卡</h4><ul>
+<li>这是个痛苦和受挫的过程</li>
+<li>无线网卡的芯片型号是成败的关键</li>
+<li>台式机<ul>
+<li>USBW无线网卡（不支持扩展天线）</li>
+<li>PCMCIA（16bit 已停产 802.11b）</li>
+<li>Cardbus（32bit PCMCIA 8.0标准）</li>
+<li>Express Cards（小的PCI接口）</li>
+<li>MiniPCI</li>
+<li>MiniPCI Express</li>
+<li>PCI接口卡（可外接天线）</li>
+</ul>
+</li>
+<li>发生功率：远程连接（官方出厂限制为20dbm，可外接天线提高范围）</li>
+<li>接受灵敏性：适当降低灵敏度，接受效果更佳</li>
+<li>经验但不是铁律<ul>
+<li>Atheros或Realtek芯片</li>
+<li>没有神器</li>
+<li>兼容aircrack-ng suite（官网查看兼容的网卡）</li>
+</ul>
+</li>
+<li><a href="http://www.aircrack-ng.org/doku.php?id=compatibility_drivers#list_of_compatible_adapters" target="_blank" rel="noopener">http://www.aircrack-ng.org/doku.php?id=compatibility_drivers#list_of_compatible_adapters</a></li>
+<li>无线渗透网卡没有所谓的标准，但是Aircrack-ng suite作者给出建议</li>
+<li>Alfa Network AWUS036H<ul>
+<li>Realtek 8187芯片</li>
+<li>1000mW发生功率</li>
+<li>天线：RP-SMA（可扩展）</li>
+</ul>
+</li>
+</ul>
+<h4 id="19-无线技术概念"><a href="#19-无线技术概念" class="headerlink" title="19. 无线技术概念"></a>19. 无线技术概念</h4><ul>
+<li>分贝dB<ul>
+<li>测量无线信号强度</li>
+</ul>
+</li>
+<li>B：向Alexander Graham Bell致敬<ul>
+<li>今天大部分声学设备的发明者和理论奠基人</li>
+</ul>
+</li>
+<li>dB：表示2个信号之间的差异比率，用于描述设备的信号强度，是一个相对值</li>
+<li>dBm：功率值与1mW进行比较的dB值结果</li>
+</ul>
+<blockquote>
+<pre><code>dB power = 10*log(signal/reference)
+10*log(100mW/1mW)=20dBm</code></pre></blockquote>
+<ul>
+<li>每增加3dB，功率增加约1倍</li>
+<li>每增加10dB，功率值增加10倍</li>
+<li>dBi：全向天线辐射强度（向所有方向，增益）</li>
+<li>dBd：定向天线辐射强度（向固定发向，增大）</li>
+</ul>
+<h4 id="20-dBi"><a href="#20-dBi" class="headerlink" title="20. dBi"></a>20. dBi</h4><ul>
+<li>全向天线的信号功率增益</li>
+<li>增益是指定功率强度增加了多少dB</li>
+<li>300mW的无线路由器，添加了一个9dBi的天线后功率如何变化<ul>
+<li>假设2dBi的电缆和接头耗损</li>
+<li>24.8dBi+9dBi-2dBi=31.8dBi</li>
+<li>换算为mW功率</li>
+<li>10的（31.8dBi/10）次方=10的3.18次方=1513mW</li>
+</ul>
+</li>
+<li>dBm功率相加等于mW功率相乘</li>
+</ul>
+<h4 id="21-dBd"><a href="#21-dBd" class="headerlink" title="21. dBd"></a>21. dBd</h4><ul>
+<li>dBd是定向天香的增益值</li>
+<li>全向天线在所有方向上收发信号，定向天线在指定方向的范围内收发信号</li>
+<li>天线增益越大信号传输距离越远</li>
+<li>既然有mW来表示功率为什么还要引入dB这个单位？<ul>
+<li>接收信号时无线信号转变为高频电子脉冲，反之发射信号时高频电子脉冲转换为无线电波，这些过程功率往往要产生上万倍的变化，使用W，mW来计算非常不便，而dBm通过对功率的对数计算，使用一个较小的数值既可以比较直观的表达的功率的变化，因此无线和声学系统都采用了dB这个单位</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>定向天线好处：1.传输范围比较集中，传的更远;2.更安全，防止被破解</code></pre></blockquote>
+<h4 id="22-全向天线"><a href="#22-全向天线" class="headerlink" title="22. 全向天线"></a>22. 全向天线</h4><ul>
+<li>全向天线波形图<ul>
+<li>甜甜圈</li>
+</ul>
+</li>
+<li>天线选择的误区<ul>
+<li>增益越高越好（国家严格限制无线通信带宽，打击伪基站）</li>
+<li>高功耗</li>
+<li>对周围环境的信号干扰</li>
+</ul>
+</li>
+<li>增益过高的全向天线会变成定向天线</li>
+</ul>
+<blockquote>
+<pre><code>5dBi与9dBi全向对比：越往上，范围越奇怪（特别是Vertical方向）</code></pre></blockquote>
+<h4 id="23-定向天线"><a href="#23-定向天线" class="headerlink" title="23. 定向天线"></a>23. 定向天线</h4><ul>
+<li><strong>双四边形</strong><ul>
+<li>定向发送信号</li>
+<li>功率相同时，比全向天线传输距离更远（方向正确的情况下）</li>
+</ul>
+</li>
+<li><strong>八木天线：引向发射天线</strong></li>
+<li><strong>平面天线</strong></li>
+<li><strong>扇形天线</strong><ul>
+<li>常用于移动电话网络</li>
+<li>3到4个扇形天线联合使用可实现全向信号覆盖</li>
+<li>90度扇形天线</li>
+</ul>
+</li>
+<li><strong>120度扇形天线</strong></li>
+<li><strong>网状天线</strong><ul>
+<li>射束带宽更加集中，功率更强，最远距离更远</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/22/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B8%80)%EF%BC%9A%E5%88%A9%E7%94%A8%E6%BC%8F%E6%B4%9E%E6%8F%90%E6%9D%83/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2910,293 +3545,6 @@ traceroute 请求离主机比较近的网卡的IP地址（同个路由器）</co
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81%E5%9B%9B)%EF%BC%9A%E4%B8%BB%E6%9C%BA%E5%8F%91%E7%8E%B0--%E4%BA%8C%E5%B1%82%E5%8F%91%E7%8E%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81%E5%9B%9B)%EF%BC%9A%E4%B8%BB%E6%9C%BA%E5%8F%91%E7%8E%B0--%E4%BA%8C%E5%B1%82%E5%8F%91%E7%8E%B0/" itemprop="url">Kali Linux笔记(十四)：主机发现--二层发现</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-10T08:13:38+08:00">
-                2019-12-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1.2k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  5 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-主动信息收集"><a href="#1-主动信息收集" class="headerlink" title="1. 主动信息收集"></a>1. 主动信息收集</h4><ul>
-<li>直接与目标系统交互通信</li>
-<li>无法避免留下访问的痕迹（可能被封杀，强的流量分析，强的代码审计）</li>
-<li>使用受控的第三方电脑进行探测<ul>
-<li>使用代理或已被控制的主机</li>
-<li>做好被封杀的准本</li>
-<li>使用噪声迷惑目标，淹没真实的探测流量（伪造IP发送大量垃圾信息）</li>
-</ul>
-</li>
-<li>扫描（IP层 → 端口层 → 服务级别的扫描）<ul>
-<li>发送不同的探测，根据结果判断目标状态</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-发现（IP层-→-端口层-→-服务级别的扫描）"><a href="#2-发现（IP层-→-端口层-→-服务级别的扫描）" class="headerlink" title="2. 发现（IP层 → 端口层 → 服务级别的扫描）"></a>2. 发现（IP层 → 端口层 → 服务级别的扫描）</h4><ul>
-<li>识别活着的主机<ul>
-<li>潜在的被攻击目标（存在的漏洞来进行利用）</li>
-</ul>
-</li>
-<li>输出一个IP地址列表（在线IP地址）</li>
-<li>2、3、4层发现</li>
-</ul>
-<h4 id="3-发现-二层发现（arping）"><a href="#3-发现-二层发现（arping）" class="headerlink" title="3. 发现-二层发现（arping）"></a>3. 发现-二层发现（arping）</h4><ul>
-<li>优点：扫描速度快、可靠</li>
-<li>缺点：不可路由（只可发现本网段的主机发现）</li>
-<li>Arp协议<ul>
-<li>抓包</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>OSI模型
-Layer1 Physical
-Layer2 Data Link       ARP
-Layer3 Network         IPv4,IPv6,ICMP,and IPSec
-Layer4 Transport       TCP and UDP
-Layer5 Session         NetBIOS,PPTP,RPC,and SOCKS
-Layer6 Presentation    ASCII,JPEG,PDF,PNG,and DOCX
-Layer7 Application     HTTP,FTP,and Telnet</code></pre></blockquote>
-<ul>
-<li><strong><code>🔺命令：arping</code></strong></li>
-<li><strong><code>🔺命令：arping IP地址 -c 1</code></strong>（发送一个ARP包）</li>
-<li><strong><code>🔺命令：arping IP地址 -d</code></strong>（发现重复IP地址拥有一个MAC地址，可以发现arp地址欺骗）</li>
-<li><strong><code>🔺命令：arping -c 1 Ip地址 | grep &quot;bytes from&quot; | cut -d &quot; &quot; -f 5 | cut -d &quot;(&quot; -f 2 | cut -d &quot;)&quot; -f 1</code></strong></li>
-<li>脚本 ▲2019.12.2新版ifconfig命令显示不同，对相应脚本进行修改<ul>
-<li><strong><code>🔺命令：./arping1.sh eth0 &gt;iplist.txt</code></strong>（检查网内”存活”的计算机）</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#！/bin/bash</span><br><span class="line">if [ &quot;$#&quot; -ne 1 ];then</span><br><span class="line">    echo &quot;USAGE - ./arping.sh [interface]&quot;</span><br><span class="line">    echo &quot;Example - ./arping.sh eth0&quot;</span><br><span class="line">    echo &quot;Example will perform an ARP scan of the local subnet to which eth0 is assigned&quot;</span><br><span class="line">    exit</span><br><span class="line">fi</span><br><span class="line">interface=$1</span><br><span class="line">prefix=$(ifconfig $interface | grep &quot;inet&quot; | egrep -v &quot;inet6&quot; | cut -d &quot;.&quot; -f 1-3 | awk &apos;&#123;print $2&#125;&apos;)</span><br><span class="line">for addr in $(seq 1 254);do</span><br><span class="line">    arping -c 1 $prefix.$addr | grep &quot;bytes from&quot; | cut -d &quot; &quot; -f 5 | cut -d &quot;(&quot; -f 2 | cut -d &quot;)&quot; -f 1</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>脚本 <ul>
-<li><strong><code>🔺命令：./arping2.sh iplist.txt</code></strong>（重新检查”存活”的主机）</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#！/bin/bash</span><br><span class="line">if [ &quot;$#&quot; -ne 1 ];then</span><br><span class="line">    echo &quot;USAGE - ./arping.sh [iplist.txt]&quot;</span><br><span class="line">    echo &quot;Example - ./arping.sh iplist.txt&quot;</span><br><span class="line">    echo &quot;Example will perform an ARP scan of the local subnet to which eth0 is assigned&quot;</span><br><span class="line">fi</span><br><span class="line">file=$1</span><br><span class="line">for addr in $(cat $file); do</span><br><span class="line">    arping -c 1 $addr | grep &quot;bytes from&quot; | cut -d &quot; &quot; -f 5 | cut -d &quot;(&quot; -f 2 | cut -d &quot;)&quot; -f 1</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
-
-<h4 id="4-发现-二层发现（Netdiscover）"><a href="#4-发现-二层发现（Netdiscover）" class="headerlink" title="4. 发现-二层发现（Netdiscover）"></a>4. 发现-二层发现（Netdiscover）</h4><ul>
-<li>Netdiscover（支持CIDR地址段显示）▲2019.12.2可抓到包，但界面不显示<ul>
-<li>专门用于二层发现</li>
-<li>可用于无线和交换网络环境</li>
-<li>主动和被动探测</li>
-</ul>
-</li>
-<li>主动<ul>
-<li><strong><code>🔺命令：netdiscover -i eth0 -r IP地址/24</code></strong></li>
-<li><strong><code>🔺命令：netdiscover -l iplist.txt</code></strong></li>
-</ul>
-</li>
-<li>被动（把网卡制成混杂模式进行监听）<ul>
-<li><strong><code>🔺命令：netdiscover -p</code></strong></li>
-<li>主动arp容易触发报警</li>
-</ul>
-</li>
-</ul>
-<h4 id="5-发现-二层发现（Scapy）"><a href="#5-发现-二层发现（Scapy）" class="headerlink" title="5. 发现-二层发现（Scapy）"></a>5. 发现-二层发现（Scapy）</h4><ul>
-<li>Scapy<ul>
-<li>作为Python库进行调用</li>
-<li>也可以作为单独的工具使用</li>
-<li>抓包、分析、创建、修改、注入网络流量</li>
-</ul>
-</li>
-<li>apt-get install python3-gnuplot（报错可安装）▲2019.12.2依然会报错，但不影响使用</li>
-<li>Scapy<ul>
-<li>arp=ARP（）</li>
-<li>arp.pdst=”IP地址”（进行赋值）</li>
-<li>answer=sr1(arp)（发生数据包）</li>
-<li>answer.display() （显示数据包的结构，分层）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>ARP().dispaly()（定制一个ARP的数据包，只需要添加属性字段，ARP的包头结构）
-sr1()（发送数据包）</code></pre></blockquote>
-<ul>
-<li>python脚本（用Scapy写的python脚本）<ul>
-<li><strong><code>🔺命令：./Arp1.py 接口</code></strong> ▲2019.12.1 strip()函数报错</li>
-<li><strong><code>🔺命令：./Arp2.py iplist.txt</code></strong></li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./Arp1.py [interface]&quot;</span><br><span class="line">    print &quot;Example - ./Arp1.py eth0&quot;</span><br><span class="line">    print &quot;Example will perform an ARP scan of the local subnet to which eth0 is assigned&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">interface=str(sys.argv[1])</span><br><span class="line"></span><br><span class="line">ip=subprocess.check_output(&quot;ifconfig &quot;+interface+&quot; | grep &quot;inet&quot; | egrep -v &quot;inet6&quot; | cut -d &quot;.&quot; -f 1-3 | awk &apos;&#123;print $2&#125;&apos;&quot;,shell=True).strip()</span><br><span class="line">prefix=ip.split(&quot;.&quot;)[0]+&quot;.&quot;+ip.split(&quot;.&quot;)[1]+&quot;.&quot;+ip.split(&quot;.&quot;)[2]+&quot;.&quot;</span><br><span class="line">for addr in range(0,254):</span><br><span class="line">    answer=sr1(ARP(pdst=addr.strip()),timeout=0.1,verbose=1)</span><br><span class="line">    if answer==None:</span><br><span class="line">      pass</span><br><span class="line">    else:</span><br><span class="line">      print prefix+str(addr)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">import subprocess</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=2:</span><br><span class="line">    print &quot;Usage - ./Arp2.py [iplist.txt]&quot;</span><br><span class="line">    print &quot;Example - ./Arp2.py iplist.txt&quot;</span><br><span class="line">    print &quot;Example will perform an ARP scan of the local subnet to which eth0 is assigned&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">filename=str(sys.argv[1])</span><br><span class="line">file=open(filename,&quot;r&quot;)</span><br><span class="line"></span><br><span class="line">for addr in file:</span><br><span class="line">    answer=sr1(ARP(pdst=addr.strip()),timeout=0.1,verbose=1)</span><br><span class="line">    if answer==None:</span><br><span class="line">      pass</span><br><span class="line">    else:</span><br><span class="line">      print addr.strip()</span><br></pre></td></tr></table></figure>
-
-<h4 id="6-发现-二层发现（nmap）"><a href="#6-发现-二层发现（nmap）" class="headerlink" title="6. 发现-二层发现（nmap）"></a>6. 发现-二层发现（nmap）</h4><ul>
-<li><strong><code>🔺命令：nmap IP地址-254（IP地址/24） -sn</code></strong> </li>
-<li><strong><code>🔺命令：namp -iL（调用地址列表的文本文件） iplist.txt -sn | grep ^Namp</code></strong></li>
-</ul>
-<blockquote>
-<pre><code>强大的NMAP软件，需要非常熟练
-nmap的-sn参数，除了会ARP发现之外，还会进行DNS的反向域名解析</code></pre></blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3251,7 +3599,7 @@ nmap的-sn参数，除了会ARP发现之外，还会进行DNS的反向域名解�
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">159</span>
+                  <span class="site-state-item-count">160</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3358,7 +3706,7 @@ nmap的-sn参数，除了会ARP发现之外，还会进行DNS的反向域名解�
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">146.6k</span>
+    <span title="Site words total count">147k</span>
   
 </div>
 

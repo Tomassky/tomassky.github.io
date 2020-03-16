@@ -240,6 +240,311 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-13%EF%BC%9A%E5%AD%97%E7%AC%A6%E4%B8%B2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-13%EF%BC%9A%E5%AD%97%E7%AC%A6%E4%B8%B2/" itemprop="url">PHP笔记-13：字符串</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T12:34:40+08:00">
+                2020-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.8k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  7 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-字符串表示"><a href="#1-字符串表示" class="headerlink" title="1. 字符串表示"></a>1. 字符串表示</h4><ul>
+<li>引号方式：比较适合定义那些比较短（不超过一行）或者没有结构要求的字符串<ul>
+<li>单引号字符串：使用单引号包裹</li>
+<li>双引号字符串：使用双引号包裹</li>
+</ul>
+</li>
+<li>如果有结构要求，或者内容超过一行，可以使用以下两种结构定义<ul>
+<li>nowdoc字符串：没有单引号的单引号字符串</li>
+<li>heredoc字符串：没哟双引号的双引号字符串</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //字符串</span><br><span class="line">    $i = &apos;123&apos;;</span><br><span class="line"></span><br><span class="line">    $demo = &quot;&lt;p&gt;000&lt;/p&gt; &lt;p&gt;$i&lt;/p&gt;&quot;;</span><br><span class="line">    echo $demo; //输出 000 123</span><br><span class="line">    $demo = &apos;&lt;p&gt;000&lt;/p&gt; &lt;p&gt;$i&lt;/p&gt;&apos;;</span><br><span class="line">    echo $demo; //输出 000 $i</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    //PHP字符串：定义</span><br><span class="line">    header(&apos;Content-type:text/html;charset=utf-8&apos;);</span><br><span class="line"></span><br><span class="line">    //引号定义</span><br><span class="line">    $str1 = &apos;hello&apos;;</span><br><span class="line">    $str2 = &quot;hello&quot;;</span><br><span class="line">    var_dump($str1,$str2);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //结构化定义</span><br><span class="line">    //heredoc结构</span><br><span class="line">    $str3 = &lt;&lt;&lt;EOD</span><br><span class="line">        hello</span><br><span class="line">            world</span><br><span class="line">EOD;</span><br><span class="line"></span><br><span class="line">    //nowdoc结构</span><br><span class="line">    $str4 = &lt;&lt;&lt;&apos;EOD&apos;</span><br><span class="line">        hello</span><br><span class="line">            world</span><br><span class="line">EOD;</span><br><span class="line"></span><br><span class="line">    var_dump($str3,$str4);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-字符串转义"><a href="#2-字符串转义" class="headerlink" title="2. 字符串转义"></a>2. 字符串转义</h4><ul>
+<li>在计算机通用协议中，有一些特定的方式定义的字母，系统会特定处理，通常这种方式都是使用反斜杠+字母（单词）的特性，如\r\n：回车换行</li>
+<li>转义符号<ul>
+<li>&#39;：在单引号字符串中显示单引号</li>
+<li>&quot;：在双引号字符串中显示双引号</li>
+<li>\r：代表回车</li>
+<li>\n：代表新一行</li>
+<li>\t：类似tab键，输出4个空格</li>
+<li>$：在PHP中使用$符号作为变量符号，因此需要特定识别</li>
+</ul>
+</li>
+<li>单引号和双引号的区别<ul>
+<li>其中单引号中能够识别&#39;，而双引号中就不能识别&#39;</li>
+<li>双引号中因为能够识别$符号，所以双引号中可以解析变量，而单引号不可以</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //定义字符串识别转义符号</span><br><span class="line">    $str1 = &apos;abc\r\ndef\t\&apos;\&quot;\$fg&apos;;</span><br><span class="line">    $str2 = &quot;abc\r\ndef\t\&apos;\&quot;\$fg&quot;;</span><br><span class="line"></span><br><span class="line">    echo $str1,&apos;&lt;br/&gt;&apos;,$str2;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>双引号中变量识别的规则<ul>
+<li>变量本身系统能够与后面的内容区分：应该保证变量的独立性，不要让系统难以区分</li>
+<li>使用变量专业标识符（区分），给变量加上一组大括号{}</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $a = &apos;hello&apos;;</span><br><span class="line">    //变量识别</span><br><span class="line">    $str1 = &apos;abce $a dfg&apos;;</span><br><span class="line">    $str2 = &quot;abce $a dfg&quot;;  </span><br><span class="line">    $str3 = &quot;abce$adfg&quot;;    </span><br><span class="line">    $str4 = &quot;abce&#123;$a&#125;dfg&quot;;  </span><br><span class="line">    echo $str1,&apos;&lt;br/&gt;&apos;,$str2,&apos;&lt;br/&gt;&apos;,$str3,&apos;&lt;br/&gt;&apos;,$str4;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>结构化定义字符串变量的规则<ul>
+<li>上边界符后面不能跟任何内容</li>
+<li>下边界符必须顶格：最左边</li>
+<li>下边界同样后面只能跟分号，不能跟任何内容</li>
+<li>结构化定义字符串的内部（边界符之间）的所有内容都是字符串本身</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $str1 = &lt;&lt;&lt;EOD</span><br><span class="line">    //这是弹出内容</span><br><span class="line">        &lt;script&gt;</span><br><span class="line">            alert(&apos;xss&apos;); //js弹出字符串必须要有引号</span><br><span class="line">        &lt;/script&gt;</span><br><span class="line">EOD;</span><br><span class="line"></span><br><span class="line">    echo $str1;  //发送弹框</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-字符串长度问题"><a href="#3-字符串长度问题" class="headerlink" title="3. 字符串长度问题"></a>3. 字符串长度问题</h4><ul>
+<li><a href="http://www.w3school.com.cn/php/php_ref_string.asp" target="_blank" rel="noopener">http://www.w3school.com.cn/php/php_ref_string.asp</a></li>
+<li>strlen()：得到字符串的长度（字节为单位）</li>
+<li>多字节字符串的长度问题：包含中文的长度<ul>
+<li>多字节字符串扩展模块：mbstring扩展 -&gt; php.ini -&gt; extension=mbstring</li>
+</ul>
+</li>
+<li>区别：strlen只是针对标准交换码ASCII，mtstring会针对不同的字符集</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">     //字符串长度</span><br><span class="line">    header(&apos;Content-type:text/html;charset=utf-8&apos;);</span><br><span class="line"></span><br><span class="line">    //定义字符串</span><br><span class="line">    $str1 = &apos;abcefjdoifaoi&apos;;</span><br><span class="line">    $str2 = &apos;你好中国123&apos;;</span><br><span class="line"></span><br><span class="line">    echo strlen($str1),&apos;&lt;br/&gt;&apos;,strlen($str2);  //输出为 13 15</span><br><span class="line"></span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;;</span><br><span class="line">    //使用mbstring扩展</span><br><span class="line">    echo mb_strlen($str1),&apos;&lt;br/&gt;&apos;,mb_strlen($str2),&apos;&lt;br/&gt;&apos;,mb_strlen($str2,&apos;utf-8&apos;);  //输出为 13 7 7</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-字符串相关函数"><a href="#4-字符串相关函数" class="headerlink" title="4. 字符串相关函数"></a>4. 字符串相关函数</h4><ul>
+<li>转换函数<ul>
+<li>implode(连接方式,数组)：将数组中的元素按照某个规则连接成一个字符串</li>
+<li>explode(分割字符,目标字符串)：将字符串按照某个格式进行分割，变成数组</li>
+<li>str_split(字符串,字符长度)：按照指定长度拆分字符串得到数组</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $arr1 = array(&apos;aliyun&apos;,&apos;wuyidaxue&apos;,&apos;top&apos; );</span><br><span class="line"></span><br><span class="line">    $arr2 = implode(&apos;.&apos;, $arr1);  //输出为 aliyun.wuyidaxue.top</span><br><span class="line">    echo $arr2.&quot;&lt;/br&gt;&quot;;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    $arr3 = explode(&apos;.&apos;, $arr2);</span><br><span class="line">    var_dump($arr3);  //输出为 array(3) &#123; [0]=&gt; string(6) &quot;aliyun&quot; [1]=&gt; string(9) &quot;wuyidaxue&quot; [2]=&gt; string(3) &quot;top&quot; &#125; </span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    $arr4 = str_split($arr2,7);</span><br><span class="line">    var_dump($arr4);  //输出为 array(3) &#123; [0]=&gt; string(7) &quot;aliyun.&quot; [1]=&gt; string(7) &quot;wuyidax&quot; [2]=&gt; string(6) &quot;ue.top&quot; &#125; </span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>截取函数<ul>
+<li>trim(字符串[,指定字符])：本身默认是用来去除字符串两边的空格（中间不行），但是也可以指定要去除的内容，是按照指定的内容循环去除两边有的内容：直到碰到一个不是目标字符为止</li>
+<li>ltrim()：去除左边的</li>
+<li>rtrim()：去除右边的</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //截取函数</span><br><span class="line"></span><br><span class="line">    $str = &apos; abcd e f &apos;;</span><br><span class="line"></span><br><span class="line">    var_dump(trim($str));  //输出为 string(8) &quot;abcd e f&quot; </span><br><span class="line">    echo &quot;&lt;br/&gt;&quot;;</span><br><span class="line">    var_dump(ltrim($str));  //输出为 string(9) &quot;abcd e f &quot; </span><br><span class="line">    echo &quot;&lt;br/&gt;&quot;;</span><br><span class="line">    var_dump(rtrim($str));  //输出为 string(9) &quot; abcd e f&quot; </span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>截取函数<ul>
+<li>substr(字符串,起始位置从0开始[,长度])：指定位置开始截取字符串，可以截取指定长度（不指定到最后）</li>
+<li>strstr(字符串,匹配字符)：从指定位置开始，截取到最后（可以用来去文件后缀名）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //截取函数</span><br><span class="line"></span><br><span class="line">    $str = &apos; abcd e f &apos;;</span><br><span class="line"></span><br><span class="line">    //字符串截取</span><br><span class="line">    echo substr($str,1,3),&apos;&lt;br/&gt;&apos;;  //输出为 abc</span><br><span class="line">    echo strstr($str,&apos;c&apos;);  //输出为 cd e f </span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>大小转换函数<ul>
+<li>strtolower：全部小写</li>
+<li>strtoupper：全部大写</li>
+<li>ucfirst：首字母大写</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //大小写转换函数</span><br><span class="line"></span><br><span class="line">    $str = &apos;abcd e f &apos;;</span><br><span class="line"></span><br><span class="line">    //字符串大小写</span><br><span class="line">    echo strtoupper($str),&apos;&lt;br/&gt;&apos;;  //输出为 ABCD E F </span><br><span class="line">    echo ucfirst($str);  //输出为 Abcd e f </span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查找函数<ul>
+<li>strpos(字符串，匹配字符)：判断字符在目标字符串中出现的位置（首次）</li>
+<li>strrpos(字符串，匹配字符)：判断字符在目标字符串中最后出现的位置</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //查找函数</span><br><span class="line"></span><br><span class="line">    $str = &apos;123a234a3b2a&apos;;</span><br><span class="line"></span><br><span class="line">    //查找位置</span><br><span class="line">    echo strpos($str,&apos;a&apos;),&apos;&lt;br/&gt;&apos;;  //输出为 3</span><br><span class="line">    echo strrpos($str,&apos;a&apos;);  //输出为 11</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>替换函数<ul>
+<li>str_replace(匹配目标,替换的内容,字符串本身)：将目标字符串中部分字符串进行替换</li>
+</ul>
+</li>
+<li>格式函数<ul>
+<li>printf/sprintf(输出字符串有占位符,顺序占位内容..)：格式化输出数据</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $age = 50;</span><br><span class="line">    $name = &apos;TOM&apos;;</span><br><span class="line">    $str = &apos;123a234a3b2a&apos;;</span><br><span class="line"></span><br><span class="line">    //格式化输出</span><br><span class="line">    echo sprintf(&quot;你好，今年我%d岁,我叫%s&quot;,$age,$name);  //输出为 你好，今年我50岁,我叫TOM  //同C语言的格式</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    //字符串替换</span><br><span class="line">    echo str_replace(&apos;a&apos;,&apos;b&apos;,$str);  //输出为 123b234b3b2b</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>其他<ul>
+<li>str_repeat()：重复某个字符串N次</li>
+<li>str_shuffle()：随机打乱字符串</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //其他字符串函数</span><br><span class="line">    $str = &apos;abcdefg&apos;;</span><br><span class="line"></span><br><span class="line">    echo str_repeat($str,5),&apos;&lt;br/&gt;&apos;;  //输出为 abcdefgabcdefgabcdefgabcdefgabcdefg</span><br><span class="line">    echo str_shuffle($str);  //输出为 decgbaf</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-12%EF%BC%9A%E5%B8%B8%E7%94%A8%E7%B3%BB%E7%BB%9F%E5%87%BD%E6%95%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2459,251 +2764,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-3%EF%BC%9A%E5%8F%98%E9%87%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-3%EF%BC%9A%E5%8F%98%E9%87%8F/" itemprop="url">PHP笔记-3：变量</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T11:42:29+08:00">
-                2020-03-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PHP/" itemprop="url" rel="index">
-                    <span itemprop="name">PHP</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  956 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-变量"><a href="#1-变量" class="headerlink" title="1. 变量"></a>1. 变量</h4><ul>
-<li>▲ 变量是用来存储数据的；</li>
-<li>变量的使用<ul>
-<li>定义：在系统中增加对应的变量名字（内存）</li>
-<li>赋值：可以将数据赋值给变量名（可以在定义的同时完成）</li>
-<li>可以通过变量名访问存储的数据</li>
-<li>可以将变量从内存中删除 -&gt; unset()</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">  //变量</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  //定义变量：在PHP中不需要任何关键字定义变量（赋值）</span><br><span class="line">  $var1;    //定义变量</span><br><span class="line">  $var2 = 1;  //定义同时赋值</span><br><span class="line"></span><br><span class="line">  //访问变量</span><br><span class="line">  echo $var2; //通过var2变量名字找到存储的内容1，然后输出</span><br><span class="line">    echo &apos;&lt;/br&gt;&apos;;</span><br><span class="line"></span><br><span class="line">  //修改变量</span><br><span class="line">  $var2 = 2;</span><br><span class="line">  echo &apos;&lt;/br&gt;&apos;;,$var2;</span><br><span class="line"></span><br><span class="line">  //删除变量：使用unset(变量名字)</span><br><span class="line">  unset($var2);</span><br><span class="line">    //echo $var2;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>变量命名规则<ul>
-<li>变量名字必须以”$”符号开始</li>
-<li>名字由字母、数字和下划线”_”构成，但是不能以数字开头</li>
-<li>本身还允许中文变量（不建议）</li>
-<li>变量名称对大小写敏感</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">  //变量命名规则</span><br><span class="line">  $var_1;$var_var_1;$_var1; //正确格式</span><br><span class="line">      //$1var;  // 错误格式</span><br><span class="line"></span><br><span class="line">  $中国 = &apos;China&apos;;</span><br><span class="line">  echo $中国;</span><br><span class="line">    echo &apos;&lt;/br&gt;&apos;;</span><br><span class="line"></span><br><span class="line">    //变量名称对大小写敏感</span><br><span class="line">    </span><br><span class="line">  $name = &apos;mzt&apos;;</span><br><span class="line">  define(&apos;NAME&apos;, $name);</span><br><span class="line"></span><br><span class="line">  echo NAME;</span><br><span class="line">    //echo name;  //会发生报错报错</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h4 id="2-预定义变量"><a href="#2-预定义变量" class="headerlink" title="2. 预定义变量"></a>2. 预定义变量</h4><ul>
-<li>预定义变量：提前定义的变量，系统定义的变量，存储许多需要用到的数据（预定义变量都是数组）<ul>
-<li>$_GET：获取所有表单以get方式提交的数据</li>
-<li>$_POST：POST提交的数据都会保存在此</li>
-<li>$_REQUEST：GET和POST提交的都会保存</li>
-<li>$GLOBALS：PHP中所有的全局变量</li>
-<li>$_SERVER：服务器信息</li>
-<li>$_SESSION：session会话数据</li>
-<li>$_COOKIE：cookie会话数据</li>
-<li>$_ENV：环境信息</li>
-<li>$_FILES：用户上传的文件信息</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    </span><br><span class="line">    //GLOBALS预定义变量</span><br><span class="line">    </span><br><span class="line">    function test()&#123;</span><br><span class="line">      $a = &quot;b&quot;;</span><br><span class="line">      echo &apos;$a in global scope：&apos;.$GLOBALS[&quot;a&quot;].&quot;\n&quot;;</span><br><span class="line">      echo &apos;$a in current scope：&apos;.$a.&quot;\n&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    $a = &quot;c&quot;;</span><br><span class="line">    test(); //输出有两个，1为$a in global scope：b，2为$a in current scope：c</span><br><span class="line">    echo &apos;&lt;/br&gt;&apos;;</span><br><span class="line"></span><br><span class="line">    //$_SERVER预定义变量</span><br><span class="line"></span><br><span class="line">    echo $_SERVER[&apos;SERVER_NAME&apos;];  //输出为 127.0.0.1</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">  </span><br><span class="line">    //$_GET预定义变量，在后续内容有讲到</span><br><span class="line"></span><br><span class="line">    //$_POST预定义变量，在后续内容有讲到</span><br><span class="line">   </span><br><span class="line">    //$_SESSION预定义变量，在后续内容有讲到</span><br><span class="line"></span><br><span class="line">    //$_ENV预定义变量，在后续内容有讲到</span><br><span class="line"></span><br><span class="line">    //$_FILES预定义变量，在后续内容有讲到</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h4 id="3-可变变量"><a href="#3-可变变量" class="headerlink" title="3. 可变变量"></a>3. 可变变量</h4><ul>
-<li>如果一个变量保存的值刚好是另外一个变量的名字，那么可以直接通过访问一个变量得到另外一个变量的值<ul>
-<li>在变量前面再多加一个$符号</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">  //可变变量</span><br><span class="line"></span><br><span class="line">  //定义两个变量</span><br><span class="line">  $a = &apos;b&apos;;</span><br><span class="line">  $b = &apos;bb&apos;;</span><br><span class="line"></span><br><span class="line">  echo $$a;  //输出为 bb</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>变量传值<ul>
-<li>将一个变量赋值给另外一个变量：变量传值</li>
-<li>变量传递两种方式<ul>
-<li>值传递：将变量保存的值赋值一份，然后将新的值给另外一个变量保存（两个变量没有关系）</li>
-<li>引用传递：将变量保存的值所在的内存地址，传递给另外一个变量：两个变量指向同一块内存空间（两个变量是同一个值）</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>内存分区<ul>
-<li>栈区：程序可以操作的内存部分（不存数据，运行程序代码），少但是快</li>
-<li>代码段：存储程序的内存部分（不执行）</li>
-<li>数据段：存储普通数据（全局区和静态区）</li>
-<li>堆区：存储复杂数据，大但是效率低</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">  //PHP变量传值</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  //值传递</span><br><span class="line">  $a = 10;</span><br><span class="line">  $b = $a;</span><br><span class="line">  $b = 5;</span><br><span class="line">  echo $a,$b,&apos;&lt;br/&gt;&apos;;  //输出为 10,5</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  //引用传递</span><br><span class="line">  $c = 10;</span><br><span class="line">  $d = &amp;$c;</span><br><span class="line">  $c = 5;</span><br><span class="line">  echo $c,$d,&apos;&lt;br/&gt;&apos;;  //输出为 5,5</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>变量传值分析图（图片来自网络）</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=0fb4JIv7vIPei6KwfKC9zXlYyWnktkK4ATkUpvSQKVzeBcXCNv80TQS-xr4Pe4ECZQINWyFSksUvIelFCtrE9Vs-5JOedbgGmcFsbHet8SJlXcRKabnVsNKVtvH1qzFxwqylVg&file_name=/%E5%80%BC%E4%BC%A0%E9%80%92.png" alt="值传递"></p>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=637frMH3kkWXQTDUGqsjfmzs9FJp9yJ8HEB0skDob-vjH6Xrxhbj-ZdX7Jrb6nvpju1UK-Vl4oRL4zY0K9sZPQOqqXiKfJLurW4FHLCkEnCB3pCGAI9Y7Dz_BGl0dBCJmRtZgXi6Mg&file_name=/%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92.png" alt="引用传递"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2758,7 +2818,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">162</span>
+                  <span class="site-state-item-count">163</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2865,7 +2925,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">148.2k</span>
+    <span title="Site words total count">148.9k</span>
   
 </div>
 

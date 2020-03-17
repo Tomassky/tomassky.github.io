@@ -1752,7 +1752,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  308 字
+                  450 字
                 </span>
               
 
@@ -1768,7 +1768,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1 分钟
+                  2 分钟
                 </span>
               
             </div>
@@ -1798,9 +1798,16 @@
 </ul>
 </li>
 <li>读文件<ul>
-<li>Fgets($find) //读第一行文件</li>
+<li>Fgets($find) //读第一行文件<ul>
+<li>▲ 文件指针必须是有效的，必须指向由 fopen() 或 fsockopen() 成功打开的文件(并还未由 fclose() 关闭)。</li>
+<li>▲ fget()可以被用来模拟get/post请求，结合fopen()和fsockopen()两个函数</li>
+</ul>
+</li>
 <li>Fread($find,获取字节) //指定获取内容</li>
-<li>Filesize($find) // 获取文件字节</li>
+<li>Filesize($find) //获取文件字节<ul>
+<li>▲ $find 必须为路径</li>
+</ul>
+</li>
 <li>Fclose($find) //关闭资源</li>
 </ul>
 </li>
@@ -1810,8 +1817,12 @@
 <li>Fclose(find);  //关闭资源</li>
 </ul>
 </li>
+<li>文件指针feof()<ul>
+<li>▲ 文件指针必须是有效的，必须指向由 fopen()或fsockopen()成功打开的文件（并还未由 fclose()关闭）</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //读文件</span><br><span class="line">    $f = fopen(&quot;./1.txt&quot;, &quot;a+&quot;);</span><br><span class="line"></span><br><span class="line">    echo Fgets($f);  //读第一行文件</span><br><span class="line">    echo Fgets($f);  //读第二行文件</span><br><span class="line">    echo Fread($f,2);  //获取文件前两个字符</span><br><span class="line"></span><br><span class="line">    echo Filesize($f);  //获取屋内按总的字符数</span><br><span class="line">    echo Fread($f,Filesize($f));</span><br><span class="line"></span><br><span class="line">    Fclose($f);  //关闭文件</span><br><span class="line">    echo Fread($f,2);  //无法读取到文件</span><br><span class="line"></span><br><span class="line">    //读写文件</span><br><span class="line">    $f = fopen(&quot;./1.txt&quot;, &quot;a+&quot;);</span><br><span class="line"></span><br><span class="line">    Fwrite($f,&apos;aaaaaa&apos;)  //在文件最后添加aaaaaa</span><br><span class="line">    Fclose($f);</span><br><span class="line"></span><br><span class="line">    $f = fopen(&quot;./1.txt&quot;, &quot;w&quot;);</span><br><span class="line"></span><br><span class="line">    Fwrite($f,&apos;aaaaaa&apos;)  //删除文件，并在文件开头添加aaaaaa</span><br><span class="line">    Fclose($f);</span><br><span class="line"></span><br><span class="line">    //路径拼接</span><br><span class="line"></span><br><span class="line">    $lujing = $_SERVER[&apos;DOCUMENT_ROOT&apos;].&quot;/&quot;;</span><br><span class="line"></span><br><span class="line">    $f = fopen($lujing.&quot;123.txt&quot;,&quot;a.txt&quot;);</span><br><span class="line"></span><br><span class="line">    Fwrite($f,&apos;aaaaaa\r\n&apos;);  //写入成功</span><br><span class="line"></span><br><span class="line">    //命令读取文件</span><br><span class="line"></span><br><span class="line">    echo `dir`;  //读取系统路径</span><br><span class="line"></span><br><span class="line">    echo `type d:\\1.txt`;  //读取1.txt文件中的内容</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //读文件</span><br><span class="line">    $f = fopen(&quot;./1.txt&quot;, &quot;a+&quot;);</span><br><span class="line"></span><br><span class="line">    echo Fgets($f);  //读第一行文件</span><br><span class="line">    echo Fgets($f);  //读第二行文件</span><br><span class="line">    echo Fread($f,2);  //获取文件前两个字符</span><br><span class="line"></span><br><span class="line">    echo Filesize($f);  //获取屋内按总的字符数</span><br><span class="line">    echo Fread($f,Filesize(&apos;./1.html&apos;));  //输出1.html中的所有内容</span><br><span class="line"></span><br><span class="line">    Fclose($f);  //关闭文件</span><br><span class="line">    echo Fread($f,2);  //无法读取到文件</span><br><span class="line"></span><br><span class="line">    //读写文件</span><br><span class="line">    $f = fopen(&quot;./1.txt&quot;, &quot;a+&quot;);</span><br><span class="line"></span><br><span class="line">    Fwrite($f,&apos;aaaaaa&apos;)  //在文件最后添加aaaaaa</span><br><span class="line">    Fclose($f);</span><br><span class="line"></span><br><span class="line">    $f = fopen(&quot;./1.txt&quot;, &quot;w&quot;);</span><br><span class="line"></span><br><span class="line">    Fwrite($f,&apos;aaaaaa&apos;)  //删除文件，并在文件开头添加aaaaaa</span><br><span class="line">    Fclose($f);</span><br><span class="line"></span><br><span class="line">    //路径拼接</span><br><span class="line"></span><br><span class="line">    $lujing = $_SERVER[&apos;DOCUMENT_ROOT&apos;].&quot;/&quot;;</span><br><span class="line"></span><br><span class="line">    $f = fopen($lujing.&quot;123.txt&quot;,&quot;a.txt&quot;);</span><br><span class="line"></span><br><span class="line">    Fwrite($f,&apos;aaaaaa\r\n&apos;);  //写入成功</span><br><span class="line"></span><br><span class="line">    //命令读取文件</span><br><span class="line"></span><br><span class="line">    echo `dir`;  //读取系统路径</span><br><span class="line"></span><br><span class="line">    echo `type d:\\1.txt`;  //读取1.txt文件中的内容</span><br><span class="line"></span><br><span class="line">    //文件指针</span><br><span class="line"></span><br><span class="line">    $f = fopen(&quot;./1.txt&quot;, &quot;r+&quot;);</span><br><span class="line">    while(!feof($f))</span><br><span class="line">    &#123;</span><br><span class="line">        $result.= fgets($f,128);</span><br><span class="line">    &#125;</span><br><span class="line">    echo $result;  //输出1.txt的所有内容</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
 
           
         
@@ -2532,7 +2543,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">148.9k</span>
+    <span title="Site words total count">149k</span>
   
 </div>
 

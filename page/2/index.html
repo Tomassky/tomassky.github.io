@@ -240,6 +240,210 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-16%EF%BC%9A%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-16%EF%BC%9A%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/" itemprop="url">PHP笔记-16：文件操作</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T12:45:36+08:00">
+                2020-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  450 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-文件操作"><a href="#1-文件操作" class="headerlink" title="1. 文件操作"></a>1. 文件操作</h4><ul>
+<li>fopen() 的第一个参数包含被打开的文件名，第二个参数规定打开文件的模式。<ul>
+<li>$myfile = fopen(“webdictionary.txt”, “r”) or die(“Unable to open file!”);</li>
+</ul>
+</li>
+<li>读文件<ul>
+<li>Fgets($find) //读第一行文件<ul>
+<li>▲ 文件指针必须是有效的，必须指向由 fopen() 或 fsockopen() 成功打开的文件(并还未由 fclose() 关闭)。</li>
+<li>▲ fget()可以被用来模拟get/post请求，结合fopen()和fsockopen()两个函数</li>
+</ul>
+</li>
+<li>Fread($find,获取字节) //指定获取内容</li>
+<li>Filesize($find) //获取文件字节<ul>
+<li>▲ $find 必须为路径</li>
+</ul>
+</li>
+<li>Fclose($find) //关闭资源</li>
+</ul>
+</li>
+<li>修改或添加文件内容<ul>
+<li>Fopen(./1.xx,”a+”);</li>
+<li>Fwrite(“文件”,”内容”);</li>
+<li>Fclose(find);  //关闭资源</li>
+</ul>
+</li>
+<li>文件指针feof()<ul>
+<li>▲ 文件指针必须是有效的，必须指向由 fopen()或fsockopen()成功打开的文件（并还未由 fclose()关闭）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //读文件</span><br><span class="line">    $f = fopen(&quot;./1.txt&quot;, &quot;a+&quot;);</span><br><span class="line"></span><br><span class="line">    echo Fgets($f);  //读第一行文件</span><br><span class="line">    echo Fgets($f);  //读第二行文件</span><br><span class="line">    echo Fread($f,2);  //获取文件前两个字符</span><br><span class="line"></span><br><span class="line">    echo Filesize($f);  //获取屋内按总的字符数</span><br><span class="line">    echo Fread($f,Filesize(&apos;./1.html&apos;));  //输出1.html中的所有内容</span><br><span class="line"></span><br><span class="line">    Fclose($f);  //关闭文件</span><br><span class="line">    echo Fread($f,2);  //无法读取到文件</span><br><span class="line"></span><br><span class="line">    //读写文件</span><br><span class="line">    $f = fopen(&quot;./1.txt&quot;, &quot;a+&quot;);</span><br><span class="line"></span><br><span class="line">    Fwrite($f,&apos;aaaaaa&apos;)  //在文件最后添加aaaaaa</span><br><span class="line">    Fclose($f);</span><br><span class="line"></span><br><span class="line">    $f = fopen(&quot;./1.txt&quot;, &quot;w&quot;);</span><br><span class="line"></span><br><span class="line">    Fwrite($f,&apos;aaaaaa&apos;)  //删除文件，并在文件开头添加aaaaaa</span><br><span class="line">    Fclose($f);</span><br><span class="line"></span><br><span class="line">    //路径拼接</span><br><span class="line"></span><br><span class="line">    $lujing = $_SERVER[&apos;DOCUMENT_ROOT&apos;].&quot;/&quot;;</span><br><span class="line"></span><br><span class="line">    $f = fopen($lujing.&quot;123.txt&quot;,&quot;a.txt&quot;);</span><br><span class="line"></span><br><span class="line">    Fwrite($f,&apos;aaaaaa\r\n&apos;);  //写入成功</span><br><span class="line"></span><br><span class="line">    //命令读取文件</span><br><span class="line"></span><br><span class="line">    echo `dir`;  //读取系统路径</span><br><span class="line"></span><br><span class="line">    echo `type d:\\1.txt`;  //读取1.txt文件中的内容</span><br><span class="line"></span><br><span class="line">    //文件指针</span><br><span class="line"></span><br><span class="line">    $f = fopen(&quot;./1.txt&quot;, &quot;r+&quot;);</span><br><span class="line">    while(!feof($f))</span><br><span class="line">    &#123;</span><br><span class="line">        $result.= fgets($f,128);</span><br><span class="line">    &#125;</span><br><span class="line">    echo $result;  //输出1.txt的所有内容</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-15%EF%BC%9A%E6%95%B0%E7%BB%84%E7%9A%84%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2499,294 +2703,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-6%EF%BC%9A%E8%BF%90%E7%AE%97%E7%AC%A6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-6%EF%BC%9A%E8%BF%90%E7%AE%97%E7%AC%A6/" itemprop="url">PHP笔记-6：运算符</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T12:11:55+08:00">
-                2020-03-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PHP/" itemprop="url" rel="index">
-                    <span itemprop="name">PHP</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1.7k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  6 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-运算符"><a href="#1-运算符" class="headerlink" title="1. 运算符"></a>1. 运算符</h4><ul>
-<li>Operator，是一种将数据进行运算的特殊符号，在PHP中一共有十种运算符之多</li>
-</ul>
-<h4 id="2-赋值运算符"><a href="#2-赋值运算符" class="headerlink" title="2. 赋值运算符"></a>2. 赋值运算符</h4><ul>
-<li>符号是”=”，表示将右边的结果（可以是变量、数据、常量和其它运算出来的结果），保存到内存的某个位置，然后将位置的内存地址赋值给左侧的变量（常量）</li>
-</ul>
-<h4 id="3-算术运算符"><a href="#3-算术运算符" class="headerlink" title="3. 算术运算符"></a>3. 算术运算符</h4><ul>
-<li>算术运算符<ul>
-<li>+：执行数据累加</li>
-<li>-：数据相减</li>
-<li>*：两个数相乘</li>
-<li>/：正斜杠代替，表示两个数相除</li>
-<li>%：取余（模）运算，两个数（整数）相除，保留余数</li>
-</ul>
-</li>
-<li>▲ 在进行除法运算或者取余运算的时候，对应的除数（第二个数）不能为0</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //运算符</span><br><span class="line"></span><br><span class="line">    //算术运算符</span><br><span class="line">    $a = $b = 10;       //连贯赋值运算：两个不同变量</span><br><span class="line">    $c = 0;</span><br><span class="line"></span><br><span class="line">    //var_dump($a / 0); //错误：被除数不能为0</span><br><span class="line"></span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h4 id="4-比较运算符"><a href="#4-比较运算符" class="headerlink" title="4. 比较运算符"></a>4. 比较运算符</h4><ul>
-<li>比较两个数据的大小，或者两个内容是否相同，返回的结果都是布尔类型：满足返回true，不满足返回false</li>
-<li>比较运算符<ul>
-<li>/&gt;：左边大于右边，返回结果true（<strong>正斜杠为转义字符</strong>）</li>
-<li>/&gt;=：左边大于等于右边（<strong>正斜杠为转义字符</strong>）</li>
-<li>&lt;：左边小于右边</li>
-<li>&lt;=：左边小于或者等于右边</li>
-<li>==：左边的与右边的相同（大小相同）</li>
-<li>!=：左边的与右边的不同（大小不同）</li>
-<li>===：全等于，左边与右边相同：大小以及数据的类型都要相同</li>
-<li>!==：不全等于，只有大小或者类型不同</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //比较运算符</span><br><span class="line">    $a = &apos;123&apos;; //字符串</span><br><span class="line">    $b = 123;   //整型</span><br><span class="line"></span><br><span class="line">    //判断相等</span><br><span class="line">    var_dump($a == $b);  //输出为 bool(true)</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    //全等判断</span><br><span class="line">    var_dump($a === $b);  //输出为 bool(false)</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h4 id="5-逻辑运算符"><a href="#5-逻辑运算符" class="headerlink" title="5. 逻辑运算符"></a>5. 逻辑运算符</h4><ul>
-<li>针对不同的结果进行匹配。满足条件返回true，不满足返回false</li>
-<li>逻辑运算符<ul>
-<li>&amp;&amp;：逻辑与，左边的条件与右边的条件同时成立（两边结果都为true）</li>
-<li>||：逻辑或，左边的条件或者右边的条件只要有一个满足即可</li>
-<li>！：逻辑非，对已有条件进行取反，本身为true，取反结果就是false</li>
-</ul>
-</li>
-<li>▲ 逻辑与和逻辑或又称之为短路运算：如果第一个表达式结果已经满足条件了，那么就不会运行逻辑运算符后面的表达式：在书写代码的时候，尽量将出现概率最高的（能够直接判断出结果）的表达式放到第一位</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $a = &apos;weekend&apos;;</span><br><span class="line">    $b = &apos;goods&apos;;</span><br><span class="line">    //逻辑与</span><br><span class="line">    var_dump($a == &apos;weekend&apos; &amp;&amp; $b == &apos;good&apos;);  //输出为 bool(false)</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    //逻辑或</span><br><span class="line">    var_dump($a == &apos;weekend&apos; || $b == &apos;good&apos;);  //输出为 bool(true)</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    //逻辑非</span><br><span class="line">    var_dump($b == &apos;good&apos;);  //输出为 bool(false)</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">    var_dump(!($b == &apos;good&apos;));  //输出为 bool(true)</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h4 id="6-连接运算符"><a href="#6-连接运算符" class="headerlink" title="6. 连接运算符"></a>6. 连接运算符</h4><ul>
-<li>PHP中将多个字符串拼接的一种符号</li>
-<li>连接运算符<ul>
-<li>.：将两个字符串连接到一起</li>
-<li>.= ：复合运算，将左边的内容与右边的内容连接起来，然后重新赋值给左边变量</li>
-</ul>
-</li>
-<li>▲ A .= b  =====  A = A . b</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //连接运算符</span><br><span class="line">    $a = &apos;hello &apos;;</span><br><span class="line">    $b = 123;</span><br><span class="line"></span><br><span class="line">    echo $a . $b;   //将a变量和b变量连接起来 //输出为 hello 123</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    $a .= $b; //$a = $a . $b;</span><br><span class="line">    echo $a;   //输出为 hello 123</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h4 id="7-错误抑制符"><a href="#7-错误抑制符" class="headerlink" title="7. 错误抑制符"></a>7. 错误抑制符</h4><ul>
-<li>在PHP中有一些错误可以提前预知，但是这些错误可能无法避免，但是又不希望报错给用户看，可以使用错误抑制符处理</li>
-<li>错误抑制符<ul>
-<li>@：在可能出错的表达式前面使用@符号即可</li>
-</ul>
-</li>
-<li>▲ 错误抑制符通常在生产环境（上线）会用到，在开发的时候不会用</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //错误抑制符</span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;;</span><br><span class="line">    $a = 10;</span><br><span class="line">    $b = 0;</span><br><span class="line"></span><br><span class="line">    //$a % $b;</span><br><span class="line">    @($a % $b);  //▲ 2020.03.11 还是能输出报错</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h4 id="8-三目运算符"><a href="#8-三目运算符" class="headerlink" title="8. 三目运算符"></a>8. 三目运算符</h4><ul>
-<li>有三个表达式参与的运算（简单的的分支结构缩写）</li>
-<li>语法格式：表达式1 ? 表达式2 ：表达式3；<ul>
-<li>运算：如果表达式1成立，那么执行表达式2，否则执行表达式3</li>
-</ul>
-</li>
-<li>▲ 如果表达式本身比较复杂，建议使用括号包起来。</li>
-<li>▲ 三目运算可以进行复合三目运算</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    // empty 如果没有值则为真，如果有值则为假</span><br><span class="line">    // isset 如果有值则为真，如果没有值则为假</span><br><span class="line"></span><br><span class="line">    if(isset($_GET[&apos;name&apos;]))</span><br><span class="line">    &#123;</span><br><span class="line">        echo $_GET[&apos;name&apos;];  //无值不报错</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //三元运算符</span><br><span class="line"></span><br><span class="line">    $a = empty($_GET[&apos;name&apos;])? &quot;1&quot;: $_GET[&apos;name&apos;];</span><br><span class="line">    echo $a;  //输出为1</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    //NULL的判断</span><br><span class="line">    </span><br><span class="line">    $bb = NULL;</span><br><span class="line">    $a = isset($bb)? &quot;11&quot; : &quot;123456&quot;;</span><br><span class="line">    echo $a;  //输出为123456</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    $a = empty($bb)? &quot;11&quot; : &quot;123456&quot;;</span><br><span class="line">    echo $a;  //输出为11</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h4 id="9-自操作运算符"><a href="#9-自操作运算符" class="headerlink" title="9. 自操作运算符"></a>9. 自操作运算符</h4><ul>
-<li>自己操作自己的运算符</li>
-<li>自操作运算符<ul>
-<li>++：在原来的值上+1</li>
-<li>–：在原来的值上-1</li>
-</ul>
-</li>
-<li>自操作运算符前置后置<ul>
-<li>前置或者后置如果本身只有自操作，不参与其他运算，那么效果是一样的</li>
-<li>如果自操作同时还参与别的运算<ul>
-<li>后置自操作：先保存自己的值留下来，然后改变自己，自己给别人的值是原来的值</li>
-<li>前置自操作：先把自己改变，然后把改变后的值给别人</li>
-</ul>
-</li>
-<li>▲ $b = $a++; //$a++会导致$a = $a + 1; $a = 2;，上面的$b = 1</li>
-<li>▲ $c =++$a;      //++$a会导致$a = $a + 1; $a = 2;，$c = 2;</li>
-</ul>
-</li>
-<li>衍生符号<ul>
-<li>+=：左边的结果与右边结果相加，然后赋值给左边</li>
-<li>-=：左边的减去右边的结果，然后复制给左边</li>
-<li>*=：乘法操作</li>
-<li>/=：除法操作</li>
-<li>%=：模操作</li>
-</ul>
-</li>
-<li>▲ 右边是一个整体 $a += $b; -&gt; $a = $a + ($b)</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //自操作符</span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;;</span><br><span class="line"></span><br><span class="line">    $a = $b = 1;</span><br><span class="line"></span><br><span class="line">    $a++;</span><br><span class="line">    ++$b;               //独立操作，不参与其他运算</span><br><span class="line">    echo $a,$b;  //输出为 2，2</span><br><span class="line"></span><br><span class="line">    echo &apos;&lt;br/&gt;&apos;;</span><br><span class="line">    echo $a++,++$b;     //$a和$b不只是独立运算，还参与了输出操作，输出为2，3</span><br><span class="line"></span><br><span class="line">    echo $a,$b;  //输出为 3，3</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    $a = 10;</span><br><span class="line">    $b = 5;</span><br><span class="line"></span><br><span class="line">    $a += $b;           //$a = $a + $b = 15;</span><br><span class="line">    $a -= $b - 1;       //$a = $a - ($b - 1);       //15 - 5 + 1 = 11</span><br><span class="line">    echo &apos;&lt;br/&gt;&apos;,$a,$b;  //输出位 11，5</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h4 id="10-运算符优先级"><a href="#10-运算符优先级" class="headerlink" title="10. 运算符优先级"></a>10. 运算符优先级</h4><ul>
-<li>在多种运算符同时存在的时候，如何结合运算</li>
-<li>运算符优先级，图片来自网络</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=a28cQpDqyeXhhwnZR07-881wNr_kFh_E9VEUtgjVKIUXVzeZNIaAL6gXHk72tnKvxvG-z68pgHOpHnlTr2M2E0F5ZL5k10bPX7_naCm5bvBZC2k2GfkNavhTZiBBzwDu01mXRGUdV5sD92TlIw&file_name=/%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BC%98%E5%85%88%E7%BA%A7.png" alt="运算符优先级"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    </span><br><span class="line">    if(2==2 and 2==1 || 3==3)</span><br><span class="line">    &#123;</span><br><span class="line">        echo 1;</span><br><span class="line">    &#125;</span><br><span class="line">    //输出为1</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2841,7 +2757,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">165</span>
+                  <span class="site-state-item-count">166</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2948,7 +2864,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">149.9k</span>
+    <span title="Site words total count">150.5k</span>
   
 </div>
 

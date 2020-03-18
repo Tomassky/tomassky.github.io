@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="操作系统," />
+  <meta name="keywords" content="PHP基础," />
 
 
 
@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="第二章  各大设置  DISK:存放OS，Bootloader BIOS（basic input output system）：基本I&#x2F;O处理系统 Bootloader：加载OS，放在硬盘的第一个主引导扇区     （加电，一个高电平给CPU，CPU默认各引脚状态会将ROM里面的的BIOS及其相关设置放到内存，然后执行BIOS程序）  2.开机  POST（加电自检），寻找显卡和执行BIOS 将B">
-<meta name="keywords" content="操作系统">
+<meta name="description" content="stream_context_create()函数  官方手册：https:&#x2F;&#x2F;www.php.net&#x2F;manual&#x2F;zh&#x2F;function.stream-context-create.php 创建并返回一个文本数据流并应用各种选项，可用于fopen(),file_get_contents()等过程的超时设置、代理服务器、请求方式、头信息设置的特殊过程   http_build_query()">
+<meta name="keywords" content="PHP基础">
 <meta property="og:type" content="article">
-<meta property="og:title" content="第二章">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;20&#x2F;%E7%AC%AC%E4%BA%8C%E7%AB%A0&#x2F;index.html">
+<meta property="og:title" content="PHP学习-2：file_get_contents模拟GET-POST请求">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;18&#x2F;PHP%E5%AD%A6%E4%B9%A0-2%EF%BC%9Afile_get_contents%E6%A8%A1%E6%8B%9FGET-POST%E8%AF%B7%E6%B1%82&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="第二章  各大设置  DISK:存放OS，Bootloader BIOS（basic input output system）：基本I&#x2F;O处理系统 Bootloader：加载OS，放在硬盘的第一个主引导扇区     （加电，一个高电平给CPU，CPU默认各引脚状态会将ROM里面的的BIOS及其相关设置放到内存，然后执行BIOS程序）  2.开机  POST（加电自检），寻找显卡和执行BIOS 将B">
+<meta property="og:description" content="stream_context_create()函数  官方手册：https:&#x2F;&#x2F;www.php.net&#x2F;manual&#x2F;zh&#x2F;function.stream-context-create.php 创建并返回一个文本数据流并应用各种选项，可用于fopen(),file_get_contents()等过程的超时设置、代理服务器、请求方式、头信息设置的特殊过程   http_build_query()">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-02-20T12:22:53.371Z">
+<meta property="og:updated_time" content="2020-03-18T12:40:19.281Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/11/20/第二章/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/03/18/PHP学习-2：file_get_contents模拟GET-POST请求/"/>
 
 
 
 
 
-  <title>第二章 | Tomas'Blog</title>
+  <title>PHP学习-2：file_get_contents模拟GET-POST请求 | Tomas'Blog</title>
   
 
 
@@ -243,7 +243,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/20/%E7%AC%AC%E4%BA%8C%E7%AB%A0/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/18/PHP%E5%AD%A6%E4%B9%A0-2%EF%BC%9Afile_get_contents%E6%A8%A1%E6%8B%9FGET-POST%E8%AF%B7%E6%B1%82/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -260,7 +260,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">第二章</h1>
+          <h1 class="post-title" itemprop="name headline">PHP学习-2：file_get_contents模拟GET-POST请求</h1>
         
 
         <div class="post-meta">
@@ -272,8 +272,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-20T20:40:46+08:00">
-                2019-11-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-18T20:48:34+08:00">
+                2020-03-18
               </time>
             
 
@@ -295,8 +295,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">Operating System</span>
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
                   </a>
                 </span>
 
@@ -326,7 +326,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  732 字
+                  460 字
                 </span>
               
 
@@ -363,94 +363,50 @@
       
 
       
-        <h2 id="第二章"><a href="#第二章" class="headerlink" title="第二章"></a>第二章</h2><hr>
+        <hr>
 <ol>
-<li><p><strong>各大设置</strong></p>
+<li><p>stream_context_create()函数</p>
 <ul>
-<li>DISK:存放OS，Bootloader</li>
-<li>BIOS（basic input output system）：基本I/O处理系统</li>
-<li>Bootloader：加载OS，放在硬盘的第一个主引导扇区</li>
+<li>官方手册：<a href="https://www.php.net/manual/zh/function.stream-context-create.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/function.stream-context-create.php</a></li>
+<li>创建并返回一个文本数据流并应用各种选项，可用于fopen(),file_get_contents()等过程的超时设置、代理服务器、请求方式、头信息设置的特殊过程</li>
 </ul>
+</li>
+<li><p>http_build_query()函数</p>
+<ul>
+<li>官方手册：<a href="https://www.php.net/manual/zh/function.http-build-query" target="_blank" rel="noopener">https://www.php.net/manual/zh/function.http-build-query</a></li>
+<li>将数组转换 url-encoded 之后的请求字符串</li>
+<li>▲ 博客介绍使用：<a href="https://www.cnblogs.com/zhja/archive/2012/11/10/2764174.html" target="_blank" rel="noopener">https://www.cnblogs.com/zhja/archive/2012/11/10/2764174.html</a></li>
+</ul>
+</li>
+<li><p>file_get_contents()函数</p>
+<ul>
+<li>官方手册：<a href="https://www.php.net/manual/zh/function.file-get-contents" target="_blank" rel="noopener">https://www.php.net/manual/zh/function.file-get-contents</a></li>
+<li>将整个文件读入一个字符串</li>
+<li>▲ 2020.03.15 只支持HTTP代理 </li>
+<li>▲ 2020.03.15 对https的链接抓取会报错</li>
+</ul>
+</li>
+<li><p>模拟GET请求</p>
 </li>
 </ol>
-<blockquote>
-<p>（加电，一个高电平给CPU，CPU默认各引脚状态会将ROM里面的的BIOS及其相关设置放到内存，然后执行BIOS程序）</p>
-</blockquote>
-<p>2.<strong>开机</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $url = &apos;http://www.wyu.cn/&apos;;  //要抓取的url</span><br><span class="line">    $html = file_get_contents($url);  //抓取url</span><br><span class="line">    print_r($html);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>模拟POST请求</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $data = array(</span><br><span class="line">        &apos;name&apos; =&gt; &apos;mzt&apos;,</span><br><span class="line">        &apos;number&apos; =&gt; &apos;7&apos;</span><br><span class="line">    );  //要发送的post数据</span><br><span class="line">    $url = &apos;http://www.wyu.cn/&apos;;  //要抓取的url</span><br><span class="line"></span><br><span class="line">    $post_data = http_build_query($data);  //url-encode编码要post的数据</span><br><span class="line"></span><br><span class="line">    $options = array(</span><br><span class="line">        &apos;http&apos; =&gt; array(</span><br><span class="line">            &apos;method&apos; =&gt; &apos;POST&apos;,  //POST请求的方法</span><br><span class="line">            &apos;request_fulluri&apos;=&gt; true,</span><br><span class="line">            &apos;header&apos; =&gt; array(&quot;Accept-language: en&quot;,</span><br><span class="line">                &quot;Content-type: application/x-www-form-urlencoded&quot;,</span><br><span class="line">                &quot;user_agent: Opera/9.80 (Windows NT 6.1; U; en) Presto/2.8.131 Version/11.11&quot;,</span><br><span class="line">                &quot;cookie: aaa=aaa&quot;),  //POST请求的头部，Content-type固定，其他可改</span><br><span class="line">            //&apos;proxy&apos; =&gt; &apos;tcp://127.0.0.1:22716&apos;,  //只支持HTTP代理</span><br><span class="line">            &apos;content&apos; =&gt; $post_data,  //POST的主体，也即POST的数据</span><br><span class="line">            &apos;timeout&apos; =&gt; 5)  //超时时间</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    $options = stream_context_create($options);  //对要传输的数据进行流式处理</span><br><span class="line">    $html = file_get_contents($url,false,$options);  //POST情况下第三个参数要设置</span><br><span class="line">    echo $html;</span><br><span class="line">    </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li>POST（加电自检），寻找显卡和执行BIOS</li>
-<li>将Bootloader从硬盘引导扇区（512字节）加载到地址（0x7c00）</li>
-<li>BIOS:跳转到CS:IP=地址（0x7c00）</li>
-<li>Bootloader:将操作系统的代码和数据从硬盘加载到内存，跳转到操作系统的起始地址</li>
-</ul>
-<p>3.<strong>interface：系统调用、异常、中断</strong></p>
-<ul>
-<li>系统调用（来源于应用程序system call）：应用程序主动向操作系统发出服务请求</li>
-<li>异常（来源于不良的应用程序exception）：非法指令或者其他坏的处理状态（如：内存出错）</li>
-<li>中断（来源于外设interrupt）：来自不同的硬件设备的计时器和网络的中断</li>
-</ul>
-<blockquote>
-<p>只有内核可以执行特权指令</p>
-</blockquote>
-<p>  -三者的区别</p>
-<pre><code>1.源头
-- 中断：外设
-- 异常：应用程序意想不到的行为
-- 系统调用：应用程序请求操作系统提供服务 
-2.处理时间
-- 中断：异步（不受控制）
-- 异常：同步
-- 系统调用：异步或同步
-3.响应
-- 中断：持续，对用户应用程序是透明
-- 异常：杀死或者重新执行意想不到的应用程序指令
-- 系统调用：等待和持续</code></pre><p>4.<strong>中断（对应用程序透明）</strong></p>
-<ul>
-<li>硬件（设置中断标记【CPU初始化】<ul>
-<li>将内部、外部事件设置中断标记</li>
-<li>中断事件的ID</li>
-</ul>
-</li>
-<li>软件<ul>
-<li>保存当前处理状态（保存现场）</li>
-<li>中断服务程序处理</li>
-<li>清理中断标记</li>
-<li>恢复之前保存的处理状态</li>
+<li>测试数据是否POST成功<ul>
+<li>test.php</li>
 </ul>
 </li>
 </ul>
-<p>5.<strong>异常</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $data = $_POST;</span><br><span class="line">    echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">    print_r( $data );</span><br><span class="line">    echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li>保存现场</li>
-<li>异常处理 <ul>
-<li>杀死产生了异常的程序</li>
-<li>重新执行异常指令</li>
-</ul>
-</li>
-<li>恢复现场</li>
-</ul>
-<p>6.<strong>系统调用</strong></p>
-<blockquote>
-<pre><code>应用程序调用printf（）时，会触发系统调用write（）
-程序访问主要是通过高层次的API接口而不是直接进行系统调用  
-Win32 API用于Windows
-POSIX API应用于POSIX-based systems（包括UNIX,Linux,Mac OS X的所有版本)
-Java API用于JAVA虚拟机（JVM）</code></pre></blockquote>
-<blockquote>
-<pre><code>用户态和内核态
-函数调用：一个相同堆栈空间实现
-系统调用：两个不同的堆栈空间实现</code></pre></blockquote>
-<p>7.<strong>跨越操作系统边界的开销</strong></p>
-<ul>
-<li>在执行时间上的开销超过程序调用</li>
-<li>开销<ul>
-<li>建立中断/异常/系统调用号与对应服务例程映射关系的初始化开销</li>
-<li>建立内核堆栈</li>
-<li>验证参数</li>
-<li>内核态映射到用户态的地址空间，更新页面映射权限，内存拷贝（不是指针传递，需从内核态拷贝到用户态</li>
-<li>内核态独立地址空间TLsB</li>
-</ul>
-</li>
+<li>修改url为test.php的路径</li>
+<li>查看是否有输出结果</li>
 </ul>
 
       
@@ -469,7 +425,7 @@ Java API用于JAVA虚拟机（JVM）</code></pre></blockquote>
       
         <div class="post-tags">
           
-            <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag"># 操作系统</a>
+            <a href="/tags/PHP%E5%9F%BA%E7%A1%80/" rel="tag"># PHP基础</a>
           
         </div>
       
@@ -482,8 +438,8 @@ Java API用于JAVA虚拟机（JVM）</code></pre></blockquote>
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/11/20/%E7%AC%AC%E4%B8%80%E7%AB%A0/" rel="next" title="第一章">
-                <i class="fa fa-chevron-left"></i> 第一章
+              <a href="/2020/03/18/PHP%E5%AD%A6%E4%B9%A0-1%EF%BC%9Aredis%E6%89%A9%E5%B1%95%E3%80%81curl%E6%89%A9%E5%B1%95%E5%92%8Copenssl%E6%89%A9%E5%B1%95/" rel="next" title="PHP学习-1：redis扩展、curl扩展和openssl扩展">
+                <i class="fa fa-chevron-left"></i> PHP学习-1：redis扩展、curl扩展和openssl扩展
               </a>
             
           </div>
@@ -491,10 +447,6 @@ Java API用于JAVA虚拟机（JVM）</code></pre></blockquote>
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/11/22/%E7%AC%AC%E4%B8%89%E7%AB%A0%E3%80%81%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%BD%A2%E5%BC%8F/" rel="prev" title="第三章、内存分配与形式">
-                第三章、内存分配与形式 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -546,17 +498,8 @@ Java API用于JAVA虚拟机（JVM）</code></pre></blockquote>
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -654,22 +597,6 @@ Java API用于JAVA虚拟机（JVM）</code></pre></blockquote>
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第二章"><span class="nav-number">1.</span> <span class="nav-text">第二章</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

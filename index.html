@@ -426,6 +426,204 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/18/PHP%E5%AD%A6%E4%B9%A0-5%EF%BC%9Afsockopeb%E6%A8%A1%E6%8B%9FGET-POST%E8%AF%B7%E6%B1%82/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/18/PHP%E5%AD%A6%E4%B9%A0-5%EF%BC%9Afsockopeb%E6%A8%A1%E6%8B%9FGET-POST%E8%AF%B7%E6%B1%82/" itemprop="url">PHP学习-5：fsockopeb模拟GET-POST请求</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-18T21:02:10+08:00">
+                2020-03-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  667 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<ol>
+<li><p>fsockopen()函数</p>
+<ul>
+<li>打开一个网络连接或者一个Unix套接字连接</li>
+<li>官方手册：<a href="https://www.php.net/manual/zh/function.fsockopen.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/function.fsockopen.php</a></li>
+<li>▲ 2020.03.16 能定制任意的连接，但作为网络抓取的成果是不理想的。若要做网络抓取，需要写完整的http请求并定制回送的http请求</li>
+<li>▲ 2020.03.16 存在waf，很难发送正常的数据</li>
+</ul>
+</li>
+<li><p>parse_url()函数</p>
+<ul>
+<li>解析一个 URL 并返回一个关联数组，包含在 URL 中出现的各种组成部分</li>
+<li>官方手册：<a href="https://www.php.net/manual/zh/function.parse-url.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/function.parse-url.php</a></li>
+<li>▲ 2020.03.16 此函数对其他url中未有的参数不会进行默认设置</li>
+</ul>
+</li>
+<li><p>模拟GET请求</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $url = array(&apos;host&apos; =&gt; &apos;www.wyu.cn&apos;, &apos;port&apos; =&gt; &apos;80&apos;,&apos;path&apos; =&gt; &apos;&apos;,&apos;query&apos;=&gt; &apos;/&apos; ,&apos;cookie&apos; =&gt; &apos;/&apos;);  //请求的url数组</span><br><span class="line">    $fp = fsockopen($url[&apos;host&apos;],$url[&apos;port&apos;],$errno,$errstr,10);  //打开一个sock连接</span><br><span class="line">    $fp = fsockopen(&quot;ssl://&quot;.$url[&apos;host&apos;],$url[&apos;port&apos;],$errno,$errstr,10);</span><br><span class="line">    //对https连接的支持</span><br><span class="line"></span><br><span class="line">    if(!$fp)</span><br><span class="line">    &#123;</span><br><span class="line">        echo &quot;$errstr ($errno)&lt;/br&gt;\n&quot;;  //如果文件指针不存在，就输出报错</span><br><span class="line">    &#125;else</span><br><span class="line">    &#123;</span><br><span class="line">        $out = &quot;GET /$url[path] HTTP/1.1\r\n&quot;;</span><br><span class="line">        $out.= &quot;Host: 61.160.224.50:80\r\n&quot;;</span><br><span class="line">        $out.= &quot;User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:28.0) Gecko/20100101 Firefox/28.0\r\n&quot;;</span><br><span class="line">        $out.= &quot;Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n&quot;;</span><br><span class="line">        $out.= &quot;Connection: keep-alive\r\n\r\n&quot;;</span><br><span class="line">        fwrite($fp,$out);  //将http的头写入文件指针</span><br><span class="line">        while(!feof($fp))  //feof()判断文件指针是否到文件底部</span><br><span class="line">        &#123;</span><br><span class="line">            echo fgets($fp,1024);  //取出拿到的数据放在字符串中</span><br><span class="line">        &#125;</span><br><span class="line">        fclose($fp);  //关闭文件指针</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>模拟POST请求</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $url = &apos;http://www.wyu.cn&apos;;  //要抓取的url</span><br><span class="line">    $url_info = parse_url($url);  //对url进行字段解析</span><br><span class="line"></span><br><span class="line">    $fp = fsockopen($url_info[&apos;host&apos;],80,$errno,$errstr,10);  ////打开一个sock连接</span><br><span class="line"></span><br><span class="line">    $data = array(</span><br><span class="line">        &apos;name&apos; =&gt; &apos;mzt&apos;,</span><br><span class="line">        &apos;number&apos; =&gt; &apos;7&apos;</span><br><span class="line">    );  //要发送的post数据</span><br><span class="line"></span><br><span class="line">    $post_data = http_build_query($data);  //url-encode编码要post的数据</span><br><span class="line"></span><br><span class="line">    if(!$fp)</span><br><span class="line">    &#123;</span><br><span class="line">        echo &quot;$errstr ($errno)&lt;/br&gt;\n&quot;;  //如果文件指针不存在，就输出报错</span><br><span class="line">    &#125;else</span><br><span class="line">    &#123;</span><br><span class="line">        $out = &quot;POST &quot;.$url_info[&apos;path&apos;].&quot; HTTP/1.1\r\n&quot;;</span><br><span class="line">        $out.= &quot;Host: &quot;.$url_info[&apos;host&apos;].&quot;\r\n&quot;;</span><br><span class="line">        $out.= &quot;Content-type: application/x-www-form-urlencodedn&quot;;</span><br><span class="line">        $out.= &quot;User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:28.0) Gecko/20100101 Firefox/28.0\r\n&quot;;</span><br><span class="line">        $out.= &quot;Connection: keep-alive\r\n\r\n&quot;;</span><br><span class="line">        $out.= &quot;$post_data\r\n&quot;;</span><br><span class="line">        fwrite($fp,$out);  //将http的头写入文件指针</span><br><span class="line">        while(!feof($fp))  //feof()判断文件指针是否到文件底部</span><br><span class="line">        &#123;</span><br><span class="line">            echo fgets($fp,1024);  //取出拿到的数据放在字符串中</span><br><span class="line">        &#125;</span><br><span class="line">        fclose($fp);  //关闭文件指针</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/18/PHP%E5%AD%A6%E4%B9%A0-4%EF%BC%9Afopen%E6%A8%A1%E6%8B%9FGET%E8%AF%B7%E6%B1%82/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2117,202 +2315,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-18%EF%BC%9A%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-18%EF%BC%9A%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" itemprop="url">PHP笔记-18：文件上传</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T12:51:34+08:00">
-                2020-03-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PHP/" itemprop="url" rel="index">
-                    <span itemprop="name">PHP</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  413 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-文件上传"><a href="#1-文件上传" class="headerlink" title="1. 文件上传"></a>1. 文件上传</h4><ul>
-<li>表单的enctype属性规定在发送到服务器之前应该如何对表单数据进行编码<ul>
-<li>application/x-www-form-urlencoded -&gt; 在发送前编码所有字符（默认）</li>
-<li>multipart/form-data -&gt; 不对字符编码，在使用包含文件上传控件的表单时，必须使用该值</li>
-<li>text/plain  -&gt; 空格转为”+”加号，但不对特殊字符编码</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-配置php-ini"><a href="#2-配置php-ini" class="headerlink" title="2. 配置php.ini"></a>2. 配置php.ini</h4><ul>
-<li>file_upload = on  //是否允许文件上传，默认开启，即允许上传文件</li>
-<li>upload_tmp_dir =   //文件上传到服务器后产生的临时文件路径，如果没有指定临时文件路径，那么使用系统的临时目录，一般会修改配置文件，指定临时目录</li>
-<li>upload_max_filesize = 2M  //允许上传的单个文件的最大值</li>
-<li>max_file_uploads = 20  //一次上传文件允许的最大数目</li>
-</ul>
-<h4 id="3-新建一个文件上传"><a href="#3-新建一个文件上传" class="headerlink" title="3. 新建一个文件上传"></a>3. 新建一个文件上传</h4><ul>
-<li>1.html</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html;charset=UTF-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;Document&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;form actiion=&quot;&quot; method=&quot;post&quot; enctype=&quot;,ultipart/form-data&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;p&gt;</span><br><span class="line">    上传:&lt;input type=&quot;file&quot; name=&quot;file&quot; /&gt;</span><br><span class="line">    &lt;/p&gt;</span><br><span class="line"></span><br><span class="line">    &lt;p&gt;</span><br><span class="line">    &lt;input type=&quot;submit&quot; value=&quot;提交&quot; /&gt;</span><br><span class="line">    &lt;/p&gt;</span><br><span class="line">    &lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>demo.php</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    var_dump($_FILES);  //输出一个二维数组</span><br><span class="line"></span><br><span class="line">    include_once &apos;./1.html&apos;;</span><br><span class="line"></span><br><span class="line">    //上传文件</span><br><span class="line"></span><br><span class="line">    $f = empty($_FILES)?&quot;&quot; : $_FILES[&quot;file2&quot;][&quot;tmp_name&quot;];</span><br><span class="line"></span><br><span class="line">    switch($_FILES[&quot;file2&quot;][&quot;error&quot;])</span><br><span class="line">    &#123;</span><br><span class="line">        case 0:</span><br><span class="line">        @move_upload_file($f,&quot;./111.jpg&quot;);</span><br><span class="line">        break;</span><br><span class="line"></span><br><span class="line">        default:</span><br><span class="line">            # code...</span><br><span class="line">            break;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    //变化</span><br><span class="line">    时间戳 -&gt; time().&quot;.jpg&quot;</span><br><span class="line">    后缀截取 -&gt; $filechar = $_FILES[&apos;file2&apos;][&apos;name&apos;] -&gt; 字符串处理</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2367,7 +2369,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">167</span>
+                  <span class="site-state-item-count">168</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2474,7 +2476,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">150.6k</span>
+    <span title="Site words total count">151.3k</span>
   
 </div>
 

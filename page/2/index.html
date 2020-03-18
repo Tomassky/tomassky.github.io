@@ -240,6 +240,202 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-18%EF%BC%9A%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-18%EF%BC%9A%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" itemprop="url">PHP笔记-18：文件上传</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T12:51:34+08:00">
+                2020-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  413 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-文件上传"><a href="#1-文件上传" class="headerlink" title="1. 文件上传"></a>1. 文件上传</h4><ul>
+<li>表单的enctype属性规定在发送到服务器之前应该如何对表单数据进行编码<ul>
+<li>application/x-www-form-urlencoded -&gt; 在发送前编码所有字符（默认）</li>
+<li>multipart/form-data -&gt; 不对字符编码，在使用包含文件上传控件的表单时，必须使用该值</li>
+<li>text/plain  -&gt; 空格转为”+”加号，但不对特殊字符编码</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-配置php-ini"><a href="#2-配置php-ini" class="headerlink" title="2. 配置php.ini"></a>2. 配置php.ini</h4><ul>
+<li>file_upload = on  //是否允许文件上传，默认开启，即允许上传文件</li>
+<li>upload_tmp_dir =   //文件上传到服务器后产生的临时文件路径，如果没有指定临时文件路径，那么使用系统的临时目录，一般会修改配置文件，指定临时目录</li>
+<li>upload_max_filesize = 2M  //允许上传的单个文件的最大值</li>
+<li>max_file_uploads = 20  //一次上传文件允许的最大数目</li>
+</ul>
+<h4 id="3-新建一个文件上传"><a href="#3-新建一个文件上传" class="headerlink" title="3. 新建一个文件上传"></a>3. 新建一个文件上传</h4><ul>
+<li>1.html</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html;charset=UTF-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;Document&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;form actiion=&quot;&quot; method=&quot;post&quot; enctype=&quot;,ultipart/form-data&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;p&gt;</span><br><span class="line">    上传:&lt;input type=&quot;file&quot; name=&quot;file&quot; /&gt;</span><br><span class="line">    &lt;/p&gt;</span><br><span class="line"></span><br><span class="line">    &lt;p&gt;</span><br><span class="line">    &lt;input type=&quot;submit&quot; value=&quot;提交&quot; /&gt;</span><br><span class="line">    &lt;/p&gt;</span><br><span class="line">    &lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>demo.php</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    var_dump($_FILES);  //输出一个二维数组</span><br><span class="line"></span><br><span class="line">    include_once &apos;./1.html&apos;;</span><br><span class="line"></span><br><span class="line">    //上传文件</span><br><span class="line"></span><br><span class="line">    $f = empty($_FILES)?&quot;&quot; : $_FILES[&quot;file2&quot;][&quot;tmp_name&quot;];</span><br><span class="line"></span><br><span class="line">    switch($_FILES[&quot;file2&quot;][&quot;error&quot;])</span><br><span class="line">    &#123;</span><br><span class="line">        case 0:</span><br><span class="line">        @move_upload_file($f,&quot;./111.jpg&quot;);</span><br><span class="line">        break;</span><br><span class="line"></span><br><span class="line">        default:</span><br><span class="line">            # code...</span><br><span class="line">            break;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    //变化</span><br><span class="line">    时间戳 -&gt; time().&quot;.jpg&quot;</span><br><span class="line">    后缀截取 -&gt; $filechar = $_FILES[&apos;file2&apos;][&apos;name&apos;] -&gt; 字符串处理</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-17%EF%BC%9AGET%E8%B7%9FPOST%E8%AF%B7%E6%B1%82/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2493,195 +2689,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-8%EF%BC%9A%E5%88%86%E6%94%AF%E7%BB%93%E6%9E%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-8%EF%BC%9A%E5%88%86%E6%94%AF%E7%BB%93%E6%9E%84/" itemprop="url">PHP笔记-8：分支结构</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T12:16:33+08:00">
-                2020-03-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PHP/" itemprop="url" rel="index">
-                    <span itemprop="name">PHP</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  539 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  2 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-分支结构"><a href="#1-分支结构" class="headerlink" title="1. 分支结构"></a>1. 分支结构</h4><ul>
-<li>在PHP中，分支结构主要有两种：if分支和switch分支</li>
-</ul>
-<h4 id="2-if分支"><a href="#2-if分支" class="headerlink" title="2. if分支"></a>2. if分支</h4><ul>
-<li>如果的意思，给定一个条件，同时为该条件设置多种（两种）情况，然后通过条件判断来实现具体的执行段</li>
-<li>▲ 如果条件特别多才会采用复合if形式</li>
-<li>▲ 如果条件比较单一（同一个条件），会采用elseif复合方式</li>
-<li>▲ 如果判断条件不一致，建议使用嵌套语法（不宜有太多层嵌套：影响代码美观）</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //分支结构：if分支</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //最简if</span><br><span class="line">    $day = &apos;weekenday&apos;;</span><br><span class="line"></span><br><span class="line">    //如果是星期天就出去玩</span><br><span class="line">    if($day == &apos;sunday&apos;)&#123;</span><br><span class="line">        echo &apos;go out&apos;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //基本if判断</span><br><span class="line">    //如果是星期天就出去玩，否则上班</span><br><span class="line">    if($day == &apos;sunday&apos;)&#123;</span><br><span class="line">        echo &apos;go out play&apos;;</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        //不满足条件</span><br><span class="line">        echo &apos;work&apos;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //复合if结构</span><br><span class="line">    //如果是星期天就出去玩，否则不能，但是如果是周六，那么可以在家玩</span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;;</span><br><span class="line">    $day = &apos;satday&apos;;</span><br><span class="line">    if($day == &apos;sunday&apos;)&#123;</span><br><span class="line">        echo &apos;go out&apos;;</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        //包含全部不满足情况</span><br><span class="line">        //重新进行判断</span><br><span class="line">        if($day == &apos;satday&apos;)&#123;</span><br><span class="line">            echo &apos;play at home&apos;;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            echo &apos;work&apos;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;;</span><br><span class="line">    if($day == &apos;sunday&apos;)&#123;</span><br><span class="line">        echo &apos;go out&apos;;</span><br><span class="line">    &#125;elseif($day == &apos;satday&apos;)&#123;</span><br><span class="line">        echo &apos;play at home&apos;;</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        echo &apos;work&apos;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h4 id="3-switch分支"><a href="#3-switch分支" class="headerlink" title="3. switch分支"></a>3. switch分支</h4><ul>
-<li>有一组情形存在，同过一条件，通常有多个值，但是每一个值都会有对应不同的代码要执行</li>
-<li>▲ 在switch中，如果条件匹配成功，那么系统就不会再次匹配条件，会自动顺序执行向下的所有代码（case代码除外），需要中断执行：break表示中断switch（结束）</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //分支结构：switch分支</span><br><span class="line"></span><br><span class="line">    //根据日期做不同的事情</span><br><span class="line">    $day = 1;</span><br><span class="line"></span><br><span class="line">    //从1到5做不同的事情</span><br><span class="line">    switch($day)&#123;</span><br><span class="line">        //$day条件一定是个具体的值</span><br><span class="line">        case 1: //$day == 1</span><br><span class="line">            echo &apos;1&apos;;</span><br><span class="line">            //break;</span><br><span class="line">        case 2:</span><br><span class="line">            echo &apos;2&apos;;</span><br><span class="line">            break;</span><br><span class="line">        case 3:</span><br><span class="line">            echo &apos;3&apos;;</span><br><span class="line">            break;</span><br><span class="line">        case 4:</span><br><span class="line">            echo &apos;4&apos;;</span><br><span class="line">            break;</span><br><span class="line">        case 5:</span><br><span class="line">            echo &apos;5&apos;;</span><br><span class="line">            break;</span><br><span class="line">        default:</span><br><span class="line">            echo &apos;error&apos;;</span><br><span class="line">            break;  </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2736,7 +2743,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">167</span>
+                  <span class="site-state-item-count">168</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2843,7 +2850,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">150.6k</span>
+    <span title="Site words total count">151.3k</span>
   
 </div>
 

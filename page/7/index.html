@@ -240,6 +240,260 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/20/Git%E7%AC%94%E8%AE%B0-4%EF%BC%9AGit%E7%9A%84%E5%90%88%E5%B9%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/20/Git%E7%AC%94%E8%AE%B0-4%EF%BC%9AGit%E7%9A%84%E5%90%88%E5%B9%B6/" itemprop="url">Git笔记-4：Git的合并</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-20T16:24:49+08:00">
+                2020-02-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Git/" itemprop="url" rel="index">
+                    <span itemprop="name">Git</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  409 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-Git的合并"><a href="#1-Git的合并" class="headerlink" title="1. Git的合并"></a>1. Git的合并</h4><ul>
+<li>▲ 可以在Stackoverflow上看git log多样格式</li>
+<li>▲ rebase的黄金法则：绝对不要在公共分支使用rebase</li>
+<li>查看日志：git log<ul>
+<li>–oneline：一行的提交信息</li>
+<li>–oneline -3：只取前面3行</li>
+</ul>
+</li>
+<li>查看添加的内容：<strong><code>🔺命令：git show 哈希值</code></strong></li>
+<li>查看提交方式：<strong><code>🔺命令：git merge --help</code></strong><ul>
+<li>–ff（fast-forward）：默认不产生一次commit</li>
+<li>–no-ff：产生一个commit</li>
+</ul>
+</li>
+<li>移动分支，并将master分支的提交并入：<strong><code>🔺命令：git rebase</code></strong></li>
+<li>查看版本分支报错情况：<strong><code>🔺命令：git mergetool</code></strong><ul>
+<li>通过工具修改后，会生成一个x.txt.orig，保存冲突的现场</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>   merge和rebase<br>   merge：两个分支的修改提交，默认不提交，关注点在合并操作上<br>   rebase：将当前分支做的修改，复制在目标分支的最后一次中，关注点在开发的过程上 </p>
+</blockquote>
+<h4 id="2-Git-tutorial-Repository"><a href="#2-Git-tutorial-Repository" class="headerlink" title="2. Git-tutorial Repository"></a>2. Git-tutorial Repository</h4><ul>
+<li>cd git-tutorial</li>
+<li>git branch -d f1</li>
+<li>git push origin :f1</li>
+<li>git log</li>
+<li>q</li>
+<li>git log –oneline</li>
+<li>git log –oneline -3</li>
+<li>git show d156c23</li>
+<li>vi ~/.config → dog = log –all –decorate –oneline –graph</li>
+<li>git dog</li>
+<li>git checkout -b f1</li>
+<li>touch fa.txt</li>
+<li>git add fa.txt</li>
+<li>git commit -m “add fa”</li>
+<li>git dog</li>
+<li>git checkout master</li>
+<li>git merge f1</li>
+<li>git dog</li>
+<li>git checkout f1</li>
+<li>touch fb.txt</li>
+<li>git commit -m “add fb”</li>
+<li>git checkout f1</li>
+<li>git merge f1 –no-ff</li>
+<li>git dog</li>
+<li>git push</li>
+<li>git push origin f1</li>
+<li>远程修改master中的a.txt</li>
+<li>git pull</li>
+<li>git checkout f1</li>
+<li>git merge master</li>
+<li>git dog</li>
+<li>git checkout master</li>
+<li>touch m1.txt</li>
+<li>git add m1.txt</li>
+<li>git commit -m “add m1”</li>
+<li>git checkout f1</li>
+<li>git dog</li>
+<li>git rebase</li>
+<li>git dog</li>
+<li>git checkout -b f2</li>
+<li>vim a.txt</li>
+<li>this is b.txt</li>
+<li>git add a.txt</li>
+<li>git commit -m “update a.txt”</li>
+<li>git checkout f1</li>
+<li>vi a.txt</li>
+<li>this is c.txt</li>
+<li>git add a.txt</li>
+<li>git commit -m “update c.txt”</li>
+<li>git checkout f2</li>
+<li>git merge f1</li>
+<li>cat a.txt</li>
+<li>git mergetool</li>
+<li>rm a.txt.orig</li>
+<li>git commit -m “update a.txt”</li>
+<li>git dog</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/20/Git%E7%AC%94%E8%AE%B0-3%EF%BC%9AGit%E7%9A%84%E5%88%86%E6%94%AF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2465,223 +2719,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%BA%8C)%EF%BC%9A%E5%85%8D%E6%9D%80%E6%8A%80%E6%9C%AF--%E7%B2%BE%E7%A1%AE%E5%AE%9A%E4%BD%8D%E6%9F%A5%E6%9D%80%E5%AD%97%E7%AC%A6%E4%B8%B2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%BA%8C)%EF%BC%9A%E5%85%8D%E6%9D%80%E6%8A%80%E6%9C%AF--%E7%B2%BE%E7%A1%AE%E5%AE%9A%E4%BD%8D%E6%9F%A5%E6%9D%80%E5%AD%97%E7%AC%A6%E4%B8%B2/" itemprop="url">Kali Linux笔记(九十二)：免杀技术--精确定位查杀字符串</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-13T21:05:58+08:00">
-                2020-02-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  255 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-精确定位查杀字符串"><a href="#1-精确定位查杀字符串" class="headerlink" title="1. 精确定位查杀字符串"></a>1. 精确定位查杀字符串</h4><ul>
-<li>传统防病毒查杀原理<ul>
-<li>查找文件体中特殊字符串，匹配则查杀</li>
-</ul>
-</li>
-<li>找到触发AV查杀的精确字符串，并将其修改<ul>
-<li>找到执行程序分片成很多小片段</li>
-<li>将包含MZ头的第一个片段与后续片段一次组合后交给AV查杀</li>
-<li>重复以上步骤，最终精确定位</li>
-<li>Evade（window程序）、hexeditor（十六进制编辑器）、ghex（图形化界面）<ul>
-<li><strong><code>🔺命令：wine evade.exe</code></strong></li>
-<li><strong><code>🔺命令：open a file → Select Output</code></strong></li>
-<li><strong><code>🔺命令：hexeditor TestFile_10000.exe</code></strong></li>
-</ul>
-</li>
-<li>▲ 2020.2.13无找到evade此工具</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-shellter"><a href="#2-shellter" class="headerlink" title="2. shellter"></a>2. shellter</h4><ul>
-<li>代码混淆</li>
-<li>定制的编码方式</li>
-<li>多态编码</li>
-<li>集成部分msf payload</li>
-<li>目前只支持32位PE程序</li>
-<li>使用正常的exe文件作为模板，将payload代码加入模板内<ul>
-<li>模板程序的功能将失效</li>
-</ul>
-</li>
-<li>▲ 2020.2.13需分片工具分好的PE Target</li>
-</ul>
-<h4 id="3-实验"><a href="#3-实验" class="headerlink" title="3. 实验"></a>3. 实验</h4><ul>
-<li>shellter<ul>
-<li>Auto<ul>
-<li>PE Target</li>
-<li>L（列表）/C（定制）/H（帮助）</li>
-</ul>
-</li>
-<li>Manaual</li>
-<li>Help</li>
-</ul>
-</li>
-<li>查看两个shell的免杀效果（查杀网站）</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2736,7 +2773,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">168</span>
+                  <span class="site-state-item-count">169</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2843,7 +2880,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">151.3k</span>
+    <span title="Site words total count">152k</span>
   
 </div>
 

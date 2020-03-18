@@ -240,6 +240,223 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%BA%8C)%EF%BC%9A%E5%85%8D%E6%9D%80%E6%8A%80%E6%9C%AF--%E7%B2%BE%E7%A1%AE%E5%AE%9A%E4%BD%8D%E6%9F%A5%E6%9D%80%E5%AD%97%E7%AC%A6%E4%B8%B2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%BA%8C)%EF%BC%9A%E5%85%8D%E6%9D%80%E6%8A%80%E6%9C%AF--%E7%B2%BE%E7%A1%AE%E5%AE%9A%E4%BD%8D%E6%9F%A5%E6%9D%80%E5%AD%97%E7%AC%A6%E4%B8%B2/" itemprop="url">Kali Linux笔记(九十二)：免杀技术--精确定位查杀字符串</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-13T21:05:58+08:00">
+                2020-02-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  255 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-精确定位查杀字符串"><a href="#1-精确定位查杀字符串" class="headerlink" title="1. 精确定位查杀字符串"></a>1. 精确定位查杀字符串</h4><ul>
+<li>传统防病毒查杀原理<ul>
+<li>查找文件体中特殊字符串，匹配则查杀</li>
+</ul>
+</li>
+<li>找到触发AV查杀的精确字符串，并将其修改<ul>
+<li>找到执行程序分片成很多小片段</li>
+<li>将包含MZ头的第一个片段与后续片段一次组合后交给AV查杀</li>
+<li>重复以上步骤，最终精确定位</li>
+<li>Evade（window程序）、hexeditor（十六进制编辑器）、ghex（图形化界面）<ul>
+<li><strong><code>🔺命令：wine evade.exe</code></strong></li>
+<li><strong><code>🔺命令：open a file → Select Output</code></strong></li>
+<li><strong><code>🔺命令：hexeditor TestFile_10000.exe</code></strong></li>
+</ul>
+</li>
+<li>▲ 2020.2.13无找到evade此工具</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-shellter"><a href="#2-shellter" class="headerlink" title="2. shellter"></a>2. shellter</h4><ul>
+<li>代码混淆</li>
+<li>定制的编码方式</li>
+<li>多态编码</li>
+<li>集成部分msf payload</li>
+<li>目前只支持32位PE程序</li>
+<li>使用正常的exe文件作为模板，将payload代码加入模板内<ul>
+<li>模板程序的功能将失效</li>
+</ul>
+</li>
+<li>▲ 2020.2.13需分片工具分好的PE Target</li>
+</ul>
+<h4 id="3-实验"><a href="#3-实验" class="headerlink" title="3. 实验"></a>3. 实验</h4><ul>
+<li>shellter<ul>
+<li>Auto<ul>
+<li>PE Target</li>
+<li>L（列表）/C（定制）/H（帮助）</li>
+</ul>
+</li>
+<li>Manaual</li>
+<li>Help</li>
+</ul>
+</li>
+<li>查看两个shell的免杀效果（查杀网站）</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%B8%80)%EF%BC%9A%E5%85%8D%E6%9D%80%E6%8A%80%E6%9C%AF--%E8%87%AA%E7%BC%96%E5%86%99shell/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2675,207 +2892,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%BA%8C)%EF%BC%9ATearDrop/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%BA%8C)%EF%BC%9ATearDrop/" itemprop="url">Kali Linux笔记(八十二)：TearDrop</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-09T21:40:17+08:00">
-                2020-02-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  189 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-TearDrop"><a href="#1-TearDrop" class="headerlink" title="1. TearDrop"></a>1. TearDrop</h4><ul>
-<li>主要针对早期微软操作系统（95、98、3.X、nt）<ul>
-<li>近些年有人发现对2.x版本的android系统、6.0 IOS系统攻击有效</li>
-</ul>
-</li>
-<li>原理很有趣<ul>
-<li>使用IP分段偏移值实现分段覆盖，接收端处理分段覆盖时可被拒绝服务</li>
-</ul>
-</li>
-<li>攻击效果<ul>
-<li>被攻击者蓝屏、重启、卡死</li>
-</ul>
-</li>
-<li>IP分段偏移值的数据包，以Window10下的 <strong><code>🔺命令：ping -l 4000 192.168.0.1</code></strong></li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=5beaT96bXY67_uk8iPr3eeNUo8c-ubeqogWbcVYV0ScJt8l_7DMBRvGvSpu8wDWEVsiKNRuqex7ftpNRsHsTylKf_EIjEujiAtp4ofZ2V-U4iE5qYOi8GRmxsj3405FuRX8&file_name=/IP%E5%88%86%E6%AE%B5%E5%81%8F%E7%A7%BB%E5%80%BC.PNG" alt="IP分段偏移值"></p>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=9f1a_3-CquCwJa5Si72D1v2mG529ISUXcQ0T5PzGpYdOuECyfnIJzivtCnyhAkjEygfrStj-QOFYdFtBi6Dg3gtdtFD_ed7l0HyLCABC1hXK_TWtw2AfAPc&file_name=/TearDrop.PNG" alt="TearDrop攻击"></p>
-<ul>
-<li>Ping大包，比较正常分段与teardrop攻击流量的区别</li>
-<li>针对早期windows系统SMB协议的攻击<ul>
-<li><strong><code>🔺命令：./teardrop_smb.py</code></strong></li>
-<li>针对Android、IOS系统的攻击</li>
-<li><strong><code>🔺命令：./teardrop_android_ios.py</code></strong></li>
-<li>攻击向量并不确定，要是具体协议分析</li>
-<li>▲ 2020.2.9搜索不到两个python文件</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2930,7 +2946,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">168</span>
+                  <span class="site-state-item-count">169</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3037,7 +3053,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">151.3k</span>
+    <span title="Site words total count">152k</span>
   
 </div>
 

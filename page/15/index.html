@@ -240,6 +240,222 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81%E4%B8%83)%EF%BC%9A%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F--UDP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81%E4%B8%83)%EF%BC%9A%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F--UDP/" itemprop="url">Kali Linux笔记(十七)：端口扫描--UDP</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-10T08:13:38+08:00">
+                2019-12-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  367 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-端口扫描（UDP）"><a href="#1-端口扫描（UDP）" class="headerlink" title="1. 端口扫描（UDP）"></a>1. 端口扫描（UDP）</h4><ul>
+<li>端口对应网络服务及应用端程序</li>
+<li>服务端程序的漏洞通过端口攻入</li>
+<li>发现开放的端口</li>
+<li>更具体的攻击面</li>
+<li>UDP端口<ul>
+<li>假设ICMP port-unreachable 响应代表端口关闭（没有响应，即为端口开放）</li>
+<li>目标系统不响应ICMP port-unreachable时，可能产生误判</li>
+</ul>
+</li>
+<li>完整的UDP应用层请求<ul>
+<li>准确性高</li>
+<li>耗时巨大</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-端口扫描（Scapy-UDP）"><a href="#2-端口扫描（Scapy-UDP）" class="headerlink" title="2. 端口扫描（Scapy-UDP）"></a>2. 端口扫描（Scapy-UDP）</h4><ul>
+<li>Scapy UDP Scan<ul>
+<li>端口关闭：ICMP port-unreachable</li>
+<li>端口开放：没有回包</li>
+<li>了解每一种基于UDP的应用包结构很有帮助</li>
+<li>与三层相同的技术</li>
+<li>误判</li>
+</ul>
+</li>
+<li>Scapy<ul>
+<li>sr1(IP(dst=”IP地址”)/UDP(dport=53),timeout=1,verbose=1)</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：./udp_scan.py IP地址 起始端口 结束端口</code></strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line">from scapy.all import *</span><br><span class="line">import time</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">if len(sys.argv)!=4:</span><br><span class="line">    print &quot;Usage - ./udp_scan.py [Target IP] [First IP] [Last IP] &quot;</span><br><span class="line">    print &quot;Example - ./udp_scan.py 192.168.100.1 1 200&quot;</span><br><span class="line">    print &quot;Example will perform a TCP ACK scan of the 192.168.100.0/24 range&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">ip=sys.argv[1]</span><br><span class="line">start=int(sys.argv[2])</span><br><span class="line">end=int(sys.argv[3])</span><br><span class="line"></span><br><span class="line">for port in range(start end):</span><br><span class="line">    a=sr1(IP(dst=ip)/UDP(dport=port),timeout=5,verbose=0)</span><br><span class="line">    time.sleep(1)</span><br><span class="line">    if a==None:</span><br><span class="line">      print port</span><br><span class="line">    else:</span><br><span class="line">      pass</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-端口扫描（Nmap-UDP）"><a href="#3-端口扫描（Nmap-UDP）" class="headerlink" title="3. 端口扫描（Nmap-UDP）"></a>3. 端口扫描（Nmap-UDP）</h4><ul>
+<li>Nmap</li>
+<li><strong><code>🔺命令：nmap -sU（端口扫描） IP地址</code></strong><ul>
+<li>默认的1000个参数（不指定端口的情况下）</li>
+<li>ICMP host-unreachable</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：nmap IP地址 -sU -p（指定端口） 53</code></strong></li>
+<li><strong><code>🔺命令：nmap -iL iplist.txt -sU -p（指定端口范围） 1-200</code></strong></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%8D%81%E5%85%AD)%EF%BC%9A%E4%B8%BB%E6%9C%BA%E5%8F%91%E7%8E%B0--%E5%9B%9B%E5%B1%82%E5%8F%91%E7%8E%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2899,243 +3115,6 @@ AkamaiGHost</code></pre></blockquote>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80)%EF%BC%9A%E6%B8%97%E9%80%8F%E7%8E%AF%E5%A2%83%E4%BB%8B%E7%BB%8D/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80)%EF%BC%9A%E6%B8%97%E9%80%8F%E7%8E%AF%E5%A2%83%E4%BB%8B%E7%BB%8D/" itemprop="url">Kali Linux笔记(一)：渗透环境介绍</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-09T19:29:25+08:00">
-                2019-12-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  636 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  2 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-安全问题的根源"><a href="#1-安全问题的根源" class="headerlink" title="1. 安全问题的根源"></a>1. 安全问题的根源</h4><ul>
-<li>分层（固守层面，在一个固定的圈子里）<ul>
-<li>软件工程师，软件开发</li>
-<li>数据库管理师，数据库管理以及数据库管理软件的安装与实现</li>
-<li>运维</li>
-</ul>
-</li>
-<li>只追求功能的实现</li>
-<li>最大的危险还是人</li>
-</ul>
-<h4 id="2-安全目标"><a href="#2-安全目标" class="headerlink" title="2. 安全目标"></a>2. 安全目标</h4><ul>
-<li>先于攻击者发现和防止漏洞出现<ul>
-<li>攻击型安全（攻击手段探测漏洞，主动）</li>
-<li>防护型安全（投入巨大，周期很大，安全层度脆碎）</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-渗透测试"><a href="#3-渗透测试" class="headerlink" title="3.渗透测试"></a>3.渗透测试</h4><ul>
-<li>尝试挫败安全防御机制，发现系统安全弱点</li>
-<li>从攻击者的角度思考，测量安全防护有效性</li>
-<li>证明安全问题的存在，而非破坏（深入了解漏洞价值）</li>
-<li>道德约束</li>
-<li>法律</li>
-</ul>
-<h4 id="4-渗透测试标准"><a href="#4-渗透测试标准" class="headerlink" title="4.渗透测试标准"></a>4.渗透测试标准</h4><ul>
-<li>PETS（<a href="http://www.pentest-standard.org）" target="_blank" rel="noopener">http://www.pentest-standard.org）</a></li>
-<li>前期交互交互阶段（渗透测试范围，每次一个子系统的渗透测试，子系统可以为一个应用系统，要进行简单的信息交互）</li>
-<li>情报收集阶段（目标系统，邮箱地址，联系人，DNS，ip，公司动态等，对目标系统进行主动的探测，端口探测，主机探测）</li>
-<li>威胁建模阶段（轮廓性认识确定一条两条效率最高的途径）</li>
-<li>漏洞分析阶段（软件版本是否存在漏洞，软件逆向，形成针对性代码）</li>
-<li>渗透攻击阶段（阶段不一定顺利）</li>
-<li>后渗透测试阶段（拿到服务器后，进一步的渗透，获取有价值的信息，很重要，危害大）</li>
-<li>渗透测试报告</li>
-</ul>
-<h4 id="5-渗透测试标准"><a href="#5-渗透测试标准" class="headerlink" title="5.渗透测试标准"></a>5.渗透测试标准</h4><ul>
-<li>渗透测试范围</li>
-<li>获得授权</li>
-<li>渗透测试方法<ul>
-<li>是否允许社会工程学</li>
-<li>是否允许拒绝服务攻击</li>
-</ul>
-</li>
-</ul>
-<h4 id="6-渗透测试误区"><a href="#6-渗透测试误区" class="headerlink" title="6.渗透测试误区"></a>6.渗透测试误区</h4><ul>
-<li>扫描器就是一切<ul>
-<li>忽视业务逻辑重的逻辑（普通员工有获取经历级别的信息的权限）</li>
-</ul>
-</li>
-</ul>
-<h4 id="7-KALI-Linux介绍"><a href="#7-KALI-Linux介绍" class="headerlink" title="7.KALI Linux介绍"></a>7.KALI Linux介绍</h4><ul>
-<li>基于Debian的Linux发行版本</li>
-<li>前身是BackTrack，2013年3月发布</li>
-<li>用于渗透测试和安全审计</li>
-<li>包含600+安全工具</li>
-<li>FHS标准目录结构（/etc，/bin，/dev，/var等,BT改版的主要原因）</li>
-<li>定制内核</li>
-<li>支持ARM和手机平台（for ARM树莓派CD卡烧录）</li>
-<li>开源免费</li>
-</ul>
-<h4 id="8-KALI-Linux策略"><a href="#8-KALI-Linux策略" class="headerlink" title="8.KALI Linux策略"></a>8.KALI Linux策略</h4><ul>
-<li>Root策略（大量渗透测试需要root权限，不同于其他Linux平台）</li>
-<li>网络服务策略（网络服务默认是关闭的，无自动启动脚本）</li>
-<li>更新升级策略（同Debian漏洞升级一样）</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3190,7 +3169,7 @@ AkamaiGHost</code></pre></blockquote>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">168</span>
+                  <span class="site-state-item-count">169</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3297,7 +3276,7 @@ AkamaiGHost</code></pre></blockquote>
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">151.3k</span>
+    <span title="Site words total count">152k</span>
   
 </div>
 

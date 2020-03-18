@@ -240,6 +240,276 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/21/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%B8%89)%EF%BC%9ACSRF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/21/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%B8%89)%EF%BC%9ACSRF/" itemprop="url">Kali Linux笔记(五十三)：CSRF</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-21T20:40:16+08:00">
+                2020-01-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.1k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-CSRF"><a href="#1-CSRF" class="headerlink" title="1. CSRF"></a>1. CSRF</h4><ul>
+<li>Cross-site request forgery</li>
+<li>与XSS经常混淆</li>
+<li>从信任的角度来区分<ul>
+<li>XSS：利用用户对站点的信任</li>
+<li>CSRF：利用站点对已经身份认证的信任</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐CSRF过程
+1.客户端向服务器发送请求，获得身份认证Token
+2.Hacker向客户端发送一个伪造定制页面，诱使客户端点击页面
+3.客户端点击页面，页面通过客户端的Token提交数据指令给服务器端
+4.服务器端未进行对请求来源的验证，只验证Session是否合法性
+▲ 二次认证，随机数机制，验证码机制一定程度上可以防控CSRF漏洞</code></pre></blockquote>
+<ul>
+<li>结合社工在身份认证会话过程中实现攻击<ul>
+<li>修改账号密码、个人信息（email、收获地址）</li>
+<li>发送伪造的业务请求（网银、购物、投票）</li>
+<li>关注他人社交账号，推送博文</li>
+<li>▲ 在用户非自愿、不知情的情况下提交请求</li>
+</ul>
+</li>
+<li>业务逻辑漏洞<ul>
+<li>对关键操作缺少确认机制</li>
+<li>自动扫描程序无法发现此类漏洞</li>
+</ul>
+</li>
+<li>漏洞利用条件<ul>
+<li>被害用户已经完成身份认证</li>
+<li>新请求的提交不需要重新身份认证或确认机制</li>
+<li>攻击者必须了解Web Application请求的参数构造</li>
+<li>诱使用户触发攻击的指令（社工）</li>
+</ul>
+</li>
+<li>▲ 自动扫描程序的检测方法<ul>
+<li>在请求和响应过程中检查是否存在anti-CSRF token名（随机数验证）</li>
+<li>检查服务器是否验证anti-CSRF token的名值（服务器端是否验证token正确性）</li>
+<li>检查token中是否可编辑的字符串</li>
+<li>检查referer头是否可以伪造</li>
+</ul>
+</li>
+<li>对策<ul>
+<li>Captcha（验证码机制）</li>
+<li>anti-CSRF token（使用最广）</li>
+<li>Referer头</li>
+<li>降低会话超时时间</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-CSRF–漏洞利用方法"><a href="#2-CSRF–漏洞利用方法" class="headerlink" title="2. CSRF–漏洞利用方法"></a>2. CSRF–漏洞利用方法</h4><ul>
+<li>CSRF → Get方法<ul>
+<li>Kali开启apach服务</li>
+<li><strong><code>🔺命令：cd /var/www/html</code></strong> <strong><code>🔺命令：vi csrf-get.html</code></strong></li>
+<li><code>&lt;a href=&quot;Burpsuit抓取的地址/URL地址抓取&quot;&gt;csrf&lt;/a&gt;</code></li>
+<li>window上访问csrf-get.html</li>
+</ul>
+</li>
+<li>CSRF → Post方法<ul>
+<li>View Source查看页面的源代码</li>
+<li>保存表单form的内容存成一个页面，csrf-post.html</li>
+<li>诱使用户点击</li>
+</ul>
+</li>
+<li>Burpsuit → 右键请求 → Engagement tools → Generate CSRF Poc ▲ 2020.1.21只有Burpsuite Professional版本才有此功能<ul>
+<li>Burpsuit自动生成CSRF生成的一个页面</li>
+<li><strong><code>🔺命令：cd /var/www/html</code></strong> <strong><code>🔺命令：vi csrf-post-burp.html</code></strong></li>
+<li>window上访问csrf-post-burp.html</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-CSRF–DVWA"><a href="#3-CSRF–DVWA" class="headerlink" title="3. CSRF–DVWA"></a>3. CSRF–DVWA</h4><ul>
+<li>Dvwa中的CSRF（Low）<ul>
+<li>多种绕过方式</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"> &lt;?php</span><br><span class="line">                </span><br><span class="line">    if (isset($_GET[&apos;Change&apos;])) &#123;</span><br><span class="line">    </span><br><span class="line">        // Turn requests into variables</span><br><span class="line">        $pass_new = $_GET[&apos;password_new&apos;];</span><br><span class="line">        $pass_conf = $_GET[&apos;password_conf&apos;];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        if (($pass_new == $pass_conf))&#123;</span><br><span class="line">            $pass_new = mysql_real_escape_string($pass_new);</span><br><span class="line">            $pass_new = md5($pass_new);</span><br><span class="line"></span><br><span class="line">            $insert=&quot;UPDATE `users` SET password = &apos;$pass_new&apos; WHERE user = &apos;admin&apos;;&quot;;</span><br><span class="line">            $result=mysql_query($insert) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line">                        </span><br><span class="line">            echo &quot;&lt;pre&gt; Password Changed &lt;/pre&gt;&quot;;        </span><br><span class="line">            mysql_close();</span><br><span class="line">        &#125;</span><br><span class="line">    </span><br><span class="line">        else&#123;        </span><br><span class="line">            echo &quot;&lt;pre&gt; Passwords did not match. &lt;/pre&gt;&quot;;            </span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Dvwa中的CSRF（Medium）<ul>
+<li>eregi()函数，取HTTP_REFERER进行比较判断</li>
+<li>绕过方法：Burpsuite抓包截断进行修改HTTP头的Referer参数</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"> &lt;?php</span><br><span class="line">            </span><br><span class="line">    if (isset($_GET[&apos;Change&apos;])) &#123;</span><br><span class="line">    </span><br><span class="line">        // Checks the http referer header</span><br><span class="line">        if ( eregi ( &quot;127.0.0.1&quot;, $_SERVER[&apos;HTTP_REFERER&apos;] ) )&#123;</span><br><span class="line">    </span><br><span class="line">            // Turn requests into variables</span><br><span class="line">            $pass_new = $_GET[&apos;password_new&apos;];</span><br><span class="line">            $pass_conf = $_GET[&apos;password_conf&apos;];</span><br><span class="line"></span><br><span class="line">            if ($pass_new == $pass_conf)&#123;</span><br><span class="line">                $pass_new = mysql_real_escape_string($pass_new);</span><br><span class="line">                $pass_new = md5($pass_new);</span><br><span class="line"></span><br><span class="line">                $insert=&quot;UPDATE `users` SET password = &apos;$pass_new&apos; WHERE user = &apos;admin&apos;;&quot;;</span><br><span class="line">                $result=mysql_query($insert) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line">                        </span><br><span class="line">                echo &quot;&lt;pre&gt; Password Changed &lt;/pre&gt;&quot;;        </span><br><span class="line">                mysql_close();</span><br><span class="line">            &#125;</span><br><span class="line">    </span><br><span class="line">            else&#123;        </span><br><span class="line">                echo &quot;&lt;pre&gt; Passwords did not match. &lt;/pre&gt;&quot;;            </span><br><span class="line">            &#125;    </span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Dvwa中的CSRF（High）<ul>
+<li>表单加入当前密码认证（二次认证）</li>
+<li>基本无绕过方式</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"> &lt;?php</span><br><span class="line">            </span><br><span class="line">    if (isset($_GET[&apos;Change&apos;])) &#123;</span><br><span class="line">    </span><br><span class="line">        // Turn requests into variables</span><br><span class="line">        $pass_curr = $_GET[&apos;password_current&apos;];</span><br><span class="line">        $pass_new = $_GET[&apos;password_new&apos;];</span><br><span class="line">        $pass_conf = $_GET[&apos;password_conf&apos;];</span><br><span class="line"></span><br><span class="line">        // Sanitise current password input</span><br><span class="line">        $pass_curr = stripslashes( $pass_curr );</span><br><span class="line">        $pass_curr = mysql_real_escape_string( $pass_curr );</span><br><span class="line">        $pass_curr = md5( $pass_curr );</span><br><span class="line">        </span><br><span class="line">        // Check that the current password is correct</span><br><span class="line">        $qry = &quot;SELECT password FROM `users` WHERE user=&apos;admin&apos; AND password=&apos;$pass_curr&apos;;&quot;;</span><br><span class="line">        $result = mysql_query($qry) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line"></span><br><span class="line">        if (($pass_new == $pass_conf) &amp;&amp; ( $result &amp;&amp; mysql_num_rows( $result ) == 1 ))&#123;</span><br><span class="line">            $pass_new = mysql_real_escape_string($pass_new);</span><br><span class="line">            $pass_new = md5($pass_new);</span><br><span class="line"></span><br><span class="line">            $insert=&quot;UPDATE `users` SET password = &apos;$pass_new&apos; WHERE user = &apos;admin&apos;;&quot;;</span><br><span class="line">            $result=mysql_query($insert) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line">                        </span><br><span class="line">            echo &quot;&lt;pre&gt; Password Changed &lt;/pre&gt;&quot;;        </span><br><span class="line">            mysql_close();</span><br><span class="line">        &#125;</span><br><span class="line">    </span><br><span class="line">        else&#123;        </span><br><span class="line">            echo &quot;&lt;pre&gt; Passwords did not match or current password incorrect. &lt;/pre&gt;&quot;;            </span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/15/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%B8%80)%EF%BC%9ASQLMAP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3196,255 +3466,6 @@ Auto-modified request 修改后的请求</code></pre></blockquote>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/29/Kali%20linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%80)%EF%BC%9AArachni/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/29/Kali%20linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%80)%EF%BC%9AArachni/" itemprop="url">Kali Linux笔记(四十一)：Arachni</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-29T10:51:56+08:00">
-                2019-12-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  473 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  2 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-Arachni-▲-2019-12-29-软件扫描出问题"><a href="#1-Arachni-▲-2019-12-29-软件扫描出问题" class="headerlink" title="1. Arachni  ▲ 2019.12.29 软件扫描出问题"></a>1. Arachni  ▲ 2019.12.29 软件扫描出问题</h4><ul>
-<li>Kali 自带了旧的arachni阉割版</li>
-<li>安装<ul>
-<li><a href="http://www.arachni-scanner.com/download/#Linux" target="_blank" rel="noopener">http://www.arachni-scanner.com/download/#Linux</a></li>
-<li><strong><code>🔺命令：tar xvf arachni.tar.gz</code></strong></li>
-<li><a href="http://localhost:9292/" target="_blank" rel="noopener">http://localhost:9292/</a> （<a href="mailto:admin@admin.admin" target="_blank" rel="noopener">admin@admin.admin</a>/administrator）</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-Arachni"><a href="#2-Arachni" class="headerlink" title="2. Arachni"></a>2. Arachni</h4><ul>
-<li>Profile<ul>
-<li>Import</li>
-<li>Export</li>
-<li>New</li>
-</ul>
-</li>
-<li>Dispatcher<ul>
-<li><strong><code>🔺命令：./arachni_rpcd --address=127.0.0.1 --port=1111 --nickname=test1</code></strong></li>
-</ul>
-</li>
-<li>Grid<ul>
-<li><strong><code>🔺命令：./arachni_rpcd --nickname=test2 --address=127.0.0.1 --neighbour=127.0.0.1:1111</code></strong></li>
-</ul>
-</li>
-<li>Scan</li>
-</ul>
-<h4 id="3-Arachni-→-Scan"><a href="#3-Arachni-→-Scan" class="headerlink" title="3. Arachni → Scan"></a>3. Arachni → Scan</h4><ul>
-<li>new scan<ul>
-<li>IP地址、配置文件、描述、共享</li>
-<li>Advanced options（Distribution/Scheduling）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>▲ 一般的扫描器，要么是直连，要么是通过代理扫描，Arachni不一样，进行分布式扫描，进行负载均衡，每次扫描会生成多个Dispatcher，作为Remote，同一时间不同dispatcher可以扫描不同站点
-Direct：直接对目标主机进行扫描
-Remote：只有一个Dispatcher
-Grid：分布式，多个Dispatcher，网格类型</code></pre></blockquote>
-<h4 id="4-Arachni-→-Users"><a href="#4-Arachni-→-Users" class="headerlink" title="4. Arachni → Users"></a>4. Arachni → Users</h4><ul>
-<li>集成两个账号（Regular user/Administrator）</li>
-<li>可以新建一个新的账号</li>
-</ul>
-<h4 id="5-Arachni-→-Dispatched"><a href="#5-Arachni-→-Dispatched" class="headerlink" title="5. Arachni → Dispatched"></a>5. Arachni → Dispatched</h4><ul>
-<li>控制台创建一个新的Dispatched（<strong><code>🔺命令：./arachni_rpcd --address=127.0.0.1 --port=1111 --nickname=test1</code></strong>）</li>
-<li>Web界面链接一个存在的Dispatched</li>
-</ul>
-<blockquote>
-<pre><code>▲ Dispatched可以工作在远端服务器，也可以工作在本地服务器上</code></pre></blockquote>
-<h4 id="6-Arachni-→-Scan"><a href="#6-Arachni-→-Scan" class="headerlink" title="6. Arachni → Scan"></a>6. Arachni → Scan</h4><ul>
-<li>通过Web界面链接一个Dispatched</li>
-<li>定义一个Scan，可以选择Remote/Guid</li>
-<li>在控制台对一个Dispatched加入一个新的Dispatched（<strong><code>🔺命令：./arachni_rpcd --nickname=test2 --address=127.0.0.1 --neighbour=127.0.0.1:1111</code></strong>）</li>
-</ul>
-<blockquote>
-<pre><code>▲ ?-s：大部分情况下，可以通过这一个命令，查看PHP源代码
-▲ 在指定加入组的Dispatched时，可以采用链式的形式，不要同时指向同一个Dipatched</code></pre></blockquote>
-<h4 id="7-Arachni-→-Profile"><a href="#7-Arachni-→-Profile" class="headerlink" title="7. Arachni → Profile"></a>7. Arachni → Profile</h4><ul>
-<li>Profiles Name<ul>
-<li>SQL injection</li>
-<li>Cross-Site Scripting（XSS）</li>
-<li>Default</li>
-</ul>
-</li>
-<li>Import</li>
-<li>New Profiles<ul>
-<li>Scope（扫描范围）</li>
-<li>Audit（扫描项目）</li>
-<li>Input（提交数据选项）（预设输入，建议修改，审计日志很容易发现）</li>
-<li>HTTP（HTTP选项）</li>
-<li>Platform fingerprinting（平台系统选择）</li>
-<li>Ckecks（扫描功能，主动模块和被动模块）</li>
-<li>Plugins（插件，发出提示等）（WAF_Detector）</li>
-<li>Session check（判断是否登陆成功）</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3499,7 +3520,7 @@ Grid：分布式，多个Dispatcher，网格类型</code></pre></blockquote>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">168</span>
+                  <span class="site-state-item-count">169</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3606,7 +3627,7 @@ Grid：分布式，多个Dispatcher，网格类型</code></pre></blockquote>
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">151.3k</span>
+    <span title="Site words total count">152k</span>
   
 </div>
 

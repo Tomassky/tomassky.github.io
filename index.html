@@ -434,6 +434,400 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/27/XSS%E9%9D%B6%E5%9C%BA--DVWA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/27/XSS%E9%9D%B6%E5%9C%BA--DVWA/" itemprop="url">XSS靶场--DVWA</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-27T11:55:31+08:00">
+                2020-03-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.3k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  11 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li><p>Reflected–XSS(Low)</p>
+<ul>
+<li>插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12查看源代码进行审查，发现无过滤</li>
+<li>插入弹窗尝试：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>⭐ 成功弹窗</li>
+<li>源码分析<ul>
+<li>没有任何过滤，接收到立即输出</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">header (&quot;X-XSS-Protection: 0&quot;);</span><br><span class="line"></span><br><span class="line">// Is there any input?</span><br><span class="line">if( array_key_exists( &quot;name&quot;, $_GET ) &amp;&amp; $_GET[ &apos;name&apos; ] != NULL ) &#123;</span><br><span class="line">    // Feedback for end user</span><br><span class="line">    echo &apos;&lt;pre&gt;Hello &apos; . $_GET[ &apos;name&apos; ] . &apos;&lt;/pre&gt;&apos;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>Stored–XSS(Low)</p>
+<ul>
+<li>Name插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code>，发现有限制长度，F12修改maxlength属性</li>
+<li>Message插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12查看源代码进行审查，发现无过滤</li>
+<li>Name和Message插入弹窗尝试：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>⭐ 成功弹窗</li>
+<li>源码分析<ul>
+<li>连接数据库</li>
+<li>messgae有stripslashes() 函数，清理从数据库中或者HTML取回的数据，基本上算不上过滤</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">?php</span><br><span class="line"></span><br><span class="line">if( isset( $_POST[ &apos;btnSign&apos; ] ) ) &#123;</span><br><span class="line">    // Get input</span><br><span class="line">    $message = trim( $_POST[ &apos;mtxMessage&apos; ] );</span><br><span class="line">    $name    = trim( $_POST[ &apos;txtName&apos; ] );</span><br><span class="line"></span><br><span class="line">    // Sanitize message input</span><br><span class="line">    $message = stripslashes( $message );</span><br><span class="line">    $message = ((isset($GLOBALS[&quot;___mysqli_ston&quot;]) &amp;&amp; is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_real_escape_string($GLOBALS[&quot;___mysqli_ston&quot;],  $message ) : ((trigger_error(&quot;[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.&quot;, E_USER_ERROR)) ? &quot;&quot; : &quot;&quot;));</span><br><span class="line"></span><br><span class="line">    // Sanitize name input</span><br><span class="line">    $name = ((isset($GLOBALS[&quot;___mysqli_ston&quot;]) &amp;&amp; is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_real_escape_string($GLOBALS[&quot;___mysqli_ston&quot;],  $name ) : ((trigger_error(&quot;[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.&quot;, E_USER_ERROR)) ? &quot;&quot; : &quot;&quot;));</span><br><span class="line"></span><br><span class="line">    // Update database</span><br><span class="line">    $query  = &quot;INSERT INTO guestbook ( comment, name ) VALUES ( &apos;$message&apos;, &apos;$name&apos; );&quot;;</span><br><span class="line">    $result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;],  $query ) or die( &apos;&lt;pre&gt;&apos; . ((is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)) . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line"></span><br><span class="line">    //mysql_close();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><p>DOM-XSS(Low)</p>
+<ul>
+<li>Select English，发现是通过url提交</li>
+<li>在default之后插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12查看页面元素进行审查，发现无过滤</li>
+<li>在default之后插入弹窗尝试：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>⭐ 成功弹窗</li>
+<li>源码分析<ul>
+<li>这个更直接，没有任何防护</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line"># No protections, anything goes</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li><p>Reflected–XSS(Medium)</p>
+<ul>
+<li>插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12查看源代码进行审查，发现无过滤</li>
+<li>插入弹窗尝试：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>F12查看源代码进行审查，发现对<code>&lt;script&gt;</code>标签进行过滤</li>
+</ul>
+</li>
+</ol>
+<p><img src="" alt="Reflected--XSS(Medium)--过滤"></p>
+<ul>
+<li>绕过方法<ul>
+<li>重复标签：<code>&lt;sc&lt;script&gt;ript&gt;alert(1)&lt;/script&gt;</code></li>
+</ul>
+</li>
+<li>⭐ 成功弹窗</li>
+<li>源码分析<ul>
+<li>可以看到用到了str_replace()函数对<code>&lt;script&gt;</code>标签的过滤，无其他过滤</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">header (&quot;X-XSS-Protection: 0&quot;);</span><br><span class="line"></span><br><span class="line">// Is there any input?</span><br><span class="line">if( array_key_exists( &quot;name&quot;, $_GET ) &amp;&amp; $_GET[ &apos;name&apos; ] != NULL ) &#123;</span><br><span class="line">    // Get input</span><br><span class="line">    $name = str_replace( &apos;&lt;script&gt;&apos;, &apos;&apos;, $_GET[ &apos;name&apos; ] );</span><br><span class="line"></span><br><span class="line">    // Feedback for end user</span><br><span class="line">    echo &quot;&lt;pre&gt;Hello $&#123;name&#125;&lt;/pre&gt;&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li><p>Stored–XSS(Medium)</p>
+<ul>
+<li>Name插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code>，发现有限制长度，F12修改maxlength属性</li>
+<li>Message插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12查看源代码进行审查，发现对Name无过滤，对Message进行了过滤</li>
+</ul>
+</li>
+</ol>
+<p><img src="" alt="Stored--XSS(Medium)--过滤1"></p>
+<ul>
+<li>Name和Message插入弹窗尝试：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>F12查看源代码进行审查，发现Name对<code>&lt;script&gt;</code>标签进行过滤，Message对<code>&lt;script&gt;&lt;/script&gt;</code>进行了过滤</li>
+</ul>
+<p><img src="" alt="Stored--XSS(Medium)--过滤2"> </p>
+<ul>
+<li>Name绕过方法<ul>
+<li>大小写混合：<code>&lt;SCript&gt;alert(1)&lt;/script&gt;</code></li>
+<li>▲ HTML字符实体编码无法绕过</li>
+</ul>
+</li>
+<li>Message无法绕过</li>
+<li>⭐ 成功弹窗</li>
+<li>源码分析<ul>
+<li>message使用了addslashes()函数，在每个特殊字符前加反斜杠（\）</li>
+<li>message使用了strip_tags()函数，剥去字符串中的 HTML、XML以及PHP的标签</li>
+<li>message使用了htmlspecialchars()函数过滤到极致，但这里的htmlspecialchars()函数是默认参数，不对单引号进行过滤</li>
+<li>name用到了str_replace()函数对<code>&lt;script&gt;</code>标签的过滤，无其他过滤</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"> &lt;?php</span><br><span class="line"></span><br><span class="line">if( isset( $_POST[ &apos;btnSign&apos; ] ) ) &#123;</span><br><span class="line">    // Get input</span><br><span class="line">    $message = trim( $_POST[ &apos;mtxMessage&apos; ] );</span><br><span class="line">    $name    = trim( $_POST[ &apos;txtName&apos; ] );</span><br><span class="line"></span><br><span class="line">    // Sanitize message input</span><br><span class="line">    $message = strip_tags( addslashes( $message ) );</span><br><span class="line">    $message = ((isset($GLOBALS[&quot;___mysqli_ston&quot;]) &amp;&amp; is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_real_escape_string($GLOBALS[&quot;___mysqli_ston&quot;],  $message ) : ((trigger_error(&quot;[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.&quot;, E_USER_ERROR)) ? &quot;&quot; : &quot;&quot;));</span><br><span class="line">    $message = htmlspecialchars( $message );</span><br><span class="line"></span><br><span class="line">    // Sanitize name input</span><br><span class="line">    $name = str_replace( &apos;&lt;script&gt;&apos;, &apos;&apos;, $name );</span><br><span class="line">    $name = ((isset($GLOBALS[&quot;___mysqli_ston&quot;]) &amp;&amp; is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_real_escape_string($GLOBALS[&quot;___mysqli_ston&quot;],  $name ) : ((trigger_error(&quot;[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.&quot;, E_USER_ERROR)) ? &quot;&quot; : &quot;&quot;));</span><br><span class="line"></span><br><span class="line">    // Update database</span><br><span class="line">    $query  = &quot;INSERT INTO guestbook ( comment, name ) VALUES ( &apos;$message&apos;, &apos;$name&apos; );&quot;;</span><br><span class="line">    $result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;],  $query ) or die( &apos;&lt;pre&gt;&apos; . ((is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)) . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line"></span><br><span class="line">    //mysql_close();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li><p>DOM–XSS(Medium)</p>
+<ul>
+<li>Select English，发现是通过url提交</li>
+<li>在default之后插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12查看页面元素进行审查，发现无过滤</li>
+<li>在default之后插入弹窗尝试：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>会弹出default=English</li>
+</ul>
+</li>
+</ol>
+<p><img src="" alt="DOM--XSS(Medium)--过滤-1"></p>
+<ul>
+<li>▲ 闭合标签：<code>&quot;&gt;&lt;/option&gt;&lt;/select&gt;&lt;script&gt;alert(1)&lt;/script&gt;</code>也不行，会对<code>&lt;script&gt;标签</code>进行编码</li>
+</ul>
+<p><img src="" alt="DOM--XSS--Medium--过滤-2"></p>
+<ul>
+<li>绕过方法<ul>
+<li>换JavaScript事件<ul>
+<li><code>&quot;&gt;&lt;/option&gt;&lt;/select&gt;&lt;img src=x onerror=alert(1)&gt;</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>⭐ 成功弹窗</li>
+<li>源码分析<ul>
+<li>stripos()函数查找字符串在另一字符串中第一次出现的位置，本函数处于循环中，意味着每一个<code>&lt;script</code>都会被替换，且不区分大小写</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">// Is there any input?</span><br><span class="line">if ( array_key_exists( &quot;default&quot;, $_GET ) &amp;&amp; !is_null ($_GET[ &apos;default&apos; ]) ) &#123;</span><br><span class="line">    $default = $_GET[&apos;default&apos;];</span><br><span class="line">    </span><br><span class="line">    # Do not allow script tags</span><br><span class="line">    if (stripos ($default, &quot;&lt;script&quot;) !== false) &#123;</span><br><span class="line">        header (&quot;location: ?default=English&quot;);</span><br><span class="line">        exit;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li><p>Reflected–XSS(High)</p>
+<ul>
+<li>插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12查看源代码进行审查，发现无过滤</li>
+<li>插入弹窗尝试：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>F12查看源代码进行审查，发现对<code>&lt;script&gt;&lt;/script</code>标签进行过滤</li>
+</ul>
+</li>
+</ol>
+<p><img src="" alt="Reflected--XSS(High)--过滤"></p>
+<ul>
+<li>绕过方法<ul>
+<li>img标签：<code>&lt;img src=x onerror=alert(1)&gt;</code></li>
+</ul>
+</li>
+<li>⭐ 成功弹窗</li>
+<li>源码分析<ul>
+<li>正则匹配，因为处于循环中，只要是<code>&lt;script</code>字符都会被过滤，同stripos()函数</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"> &lt;?php</span><br><span class="line"></span><br><span class="line">header (&quot;X-XSS-Protection: 0&quot;);</span><br><span class="line"></span><br><span class="line">// Is there any input?</span><br><span class="line">if( array_key_exists( &quot;name&quot;, $_GET ) &amp;&amp; $_GET[ &apos;name&apos; ] != NULL ) &#123;</span><br><span class="line">    // Get input</span><br><span class="line">    $name = preg_replace( &apos;/&lt;(.*)s(.*)c(.*)r(.*)i(.*)p(.*)t/i&apos;, &apos;&apos;, $_GET[ &apos;name&apos; ] );</span><br><span class="line"></span><br><span class="line">    // Feedback for end user</span><br><span class="line">    echo &quot;&lt;pre&gt;Hello $&#123;name&#125;&lt;/pre&gt;&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="8">
+<li><p>Stored–XSS(High)</p>
+<ul>
+<li>Name插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code>，发现有限制长度，F12修改maxlength属性</li>
+<li>Message插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12查看源代码进行审查，发现对Name无过滤，对Message进行了过滤</li>
+</ul>
+</li>
+</ol>
+<p><img src="" alt="Stored--XSS(High)--过滤1"></p>
+<ul>
+<li>Name和Message插入弹窗尝试：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>F12查看源代码进行审查，发现Name对<code>&lt;script&gt;&lt;/script</code>标签进行过滤，Message对<code>&lt;script&gt;&lt;/script&gt;</code>进行了过滤</li>
+</ul>
+<p><img src="/images/dvwa/DOM--XSS-Medium--%E8%BF%87%E6%BB%A4-2.png" alt="Stored--XSS(High)--过滤2"></p>
+<ul>
+<li>绕过方法<ul>
+<li>img标签：<code>&lt;img src=x onclick=alert(1)&gt;</code></li>
+</ul>
+</li>
+<li>⭐ 成功弹窗</li>
+<li>源码分析<ul>
+<li>message使用了addslashes()函数，在每个特殊字符前加反斜杠（\）</li>
+<li>message使用了strip_tags()函数，剥去字符串中的 HTML、XML以及PHP的标签</li>
+<li>message使用了htmlspecialchars()函数过滤到极致，但这里的htmlspecialchars()函数是默认参数，不对单引号进行过滤</li>
+<li>name正则匹配，因为处于循环中，只要是<code>&lt;script</code>字符都会被过滤，同stripos()函数</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"> &lt;?php</span><br><span class="line"></span><br><span class="line">if( isset( $_POST[ &apos;btnSign&apos; ] ) ) &#123;</span><br><span class="line">    // Get input</span><br><span class="line">    $message = trim( $_POST[ &apos;mtxMessage&apos; ] );</span><br><span class="line">    $name    = trim( $_POST[ &apos;txtName&apos; ] );</span><br><span class="line"></span><br><span class="line">    // Sanitize message input</span><br><span class="line">    $message = strip_tags( addslashes( $message ) );</span><br><span class="line">    $message = ((isset($GLOBALS[&quot;___mysqli_ston&quot;]) &amp;&amp; is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_real_escape_string($GLOBALS[&quot;___mysqli_ston&quot;],  $message ) : ((trigger_error(&quot;[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.&quot;, E_USER_ERROR)) ? &quot;&quot; : &quot;&quot;));</span><br><span class="line">    $message = htmlspecialchars( $message );</span><br><span class="line"></span><br><span class="line">    // Sanitize name input</span><br><span class="line">    $name = preg_replace( &apos;/&lt;(.*)s(.*)c(.*)r(.*)i(.*)p(.*)t/i&apos;, &apos;&apos;, $name );</span><br><span class="line">    $name = ((isset($GLOBALS[&quot;___mysqli_ston&quot;]) &amp;&amp; is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_real_escape_string($GLOBALS[&quot;___mysqli_ston&quot;],  $name ) : ((trigger_error(&quot;[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.&quot;, E_USER_ERROR)) ? &quot;&quot; : &quot;&quot;));</span><br><span class="line"></span><br><span class="line">    // Update database</span><br><span class="line">    $query  = &quot;INSERT INTO guestbook ( comment, name ) VALUES ( &apos;$message&apos;, &apos;$name&apos; );&quot;;</span><br><span class="line">    $result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;],  $query ) or die( &apos;&lt;pre&gt;&apos; . ((is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)) . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line"></span><br><span class="line">    //mysql_close();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="9">
+<li><p>DOM–XSS(High)</p>
+<ul>
+<li>Select English，发现是通过url提交</li>
+<li>在default之后插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12查看页面元素进行审查，发现无过滤</li>
+<li>在default之后插入弹窗尝试：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>会弹出default=English</li>
+</ul>
+</li>
+</ol>
+<p><img src="" alt="DOM--XSS(High)--过滤"></p>
+<ul>
+<li>绕过方法<ul>
+<li><code>#&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+</ul>
+</li>
+<li>⭐ 成功弹窗</li>
+<li>源码分析<ul>
+<li>任何一个字符加#就可以任何绕过，此思路有点神奇</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"> &lt;?php</span><br><span class="line"></span><br><span class="line">// Is there any input?</span><br><span class="line">if ( array_key_exists( &quot;default&quot;, $_GET ) &amp;&amp; !is_null ($_GET[ &apos;default&apos; ]) ) &#123;</span><br><span class="line"></span><br><span class="line">    # White list the allowable languages</span><br><span class="line">    switch ($_GET[&apos;default&apos;]) &#123;</span><br><span class="line">        case &quot;French&quot;:</span><br><span class="line">        case &quot;English&quot;:</span><br><span class="line">        case &quot;German&quot;:</span><br><span class="line">        case &quot;Spanish&quot;:</span><br><span class="line">            # ok</span><br><span class="line">            break;</span><br><span class="line">        default:</span><br><span class="line">            header (&quot;location: ?default=English&quot;);</span><br><span class="line">            exit;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="10">
+<li><p>关于DVWA靶场</p>
+<ul>
+<li>DVWA靶场还是相对容易的，跟封神台相比，差好多级别</li>
+<li>Impossible级别的目前还没人能够成功注入</li>
+<li>靶场常用语句<ul>
+<li>特殊字符：<code>&#39;&quot;&lt;&gt;666</code></li>
+<li>弹窗：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>大小写：<code>&lt;sCrIpt&gt;alert(1)&lt;/ScrIpt&gt;</code></li>
+<li>重复标签：<code>&lt;sc&lt;script&gt;ript&gt;alert(1)&lt;/scr&lt;/script&gt;ipt&gt;</code></li>
+<li>重复script：<code>&lt;scrscriptipt&gt;alert(1)&lt;/scrscriptipt&gt;</code></li>
+<li>HTML实体编码：<code>&amp;#x3C;&amp;#x73;&amp;#x63;&amp;#x72;&amp;#x69;&amp;#x70;&amp;#x74;&amp;#x3E;&amp;#x61;&amp;#x6C;&amp;#x65;&amp;#x72;&amp;#x74;&amp;#x28;&amp;#x31;&amp;#x29;&amp;#x3C;&amp;#x2F;&amp;#x73;&amp;#x63;&amp;#x72;&amp;#x69;&amp;#x70;&amp;#x74;&amp;#x3E;</code></li>
+<li>onclick事件：<code>&lt;img src=x onclick=alert(1)&gt;</code></li>
+<li>onload事件：<code>&lt;img src=x onload=alert(1)&gt;</code></li>
+<li>onerror事件：<code>&lt;img src=x onerror=alert(1)&gt;</code></li>
+<li>href属性：<code>&lt;a href=&quot;javascript:alert(1)&quot;&gt;</code></li>
+<li>src属性：<code>&lt;img src=&quot;javascript:alert(1)&quot;&gt;</code></li>
+<li>⭐ 闭合标签+注释\</li>
+<li>▲ 更多的，在XSS讲解中，一般无外乎上面常用的语句与闭合标签的结合</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/18/PHP%E5%AD%A6%E4%B9%A0-7%EF%BC%9Aphp%E5%B0%86%E6%95%B0%E7%BB%84%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6%E7%9A%84%E6%96%B9%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2090,258 +2484,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-21%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8EPHP%E6%93%8D%E4%BD%9C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-21%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8EPHP%E6%93%8D%E4%BD%9C/" itemprop="url">PHP笔记-21：数据库与PHP操作</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T12:59:39+08:00">
-                2020-03-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PHP/" itemprop="url" rel="index">
-                    <span itemprop="name">PHP</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  719 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-MySQL命令符"><a href="#1-MySQL命令符" class="headerlink" title="1. MySQL命令符"></a>1. MySQL命令符</h4><ul>
-<li>Mysqladmin 日常管理命令总结 或 重置密码</li>
-<li>Mysql 用到操作数据库</li>
-<li>Mysqld 用来开启MYSQL 或者 关闭</li>
-<li>Mysqlimport 数据库导入</li>
-</ul>
-<h4 id="2-MySQL操作"><a href="#2-MySQL操作" class="headerlink" title="2. MySQL操作"></a>2. MySQL操作</h4><ul>
-<li>登录MYSQL    mysql  -h 192.168.1.100 -u root -p -P 123<ul>
-<li>-h 你的IP</li>
-<li>-U 你的用户名</li>
-<li>-p你的密码 可不填 但是后面要填</li>
-<li>-P （大写） 端口号</li>
-</ul>
-</li>
-<li>常规操作<ul>
-<li>查看所有数据库：Show databases</li>
-<li>选择数据库之后 查看当前数据库所有的表：show tables;</li>
-<li>创建数据库：Create database 数据库名;</li>
-<li>选择数据库：use 数据库名;</li>
-<li>创建表跟字段<ul>
-<li>Create table admin2(</li>
-<li>Username varchar(20) not null,</li>
-<li>Passworld text not null);</li>
-</ul>
-</li>
-<li>查看表结构：desc 表名</li>
-<li>添加数据<ul>
-<li>Insert into 表名 values (“”);</li>
-<li>Insert into 表名 (字段名) values (“”);</li>
-</ul>
-</li>
-<li>查询数据库<ul>
-<li>Select * from 表名;</li>
-</ul>
-</li>
-<li>修改数据<ul>
-<li>Update 表名 set 字段 = ‘’;</li>
-</ul>
-</li>
-<li>清空表数据<ul>
-<li>Delete from 表名</li>
-</ul>
-</li>
-<li>删除表<ul>
-<li>Drop table 表名;</li>
-</ul>
-</li>
-<li>备份数据库<ul>
-<li>命令行备份<ul>
-<li>select * from 表名 into outfile ‘/tmp/1.txt’</li>
-<li>▲ 可能报错，需要修改–secure-file-priv的路径，可绕过–通过日志绕过</li>
-</ul>
-</li>
-<li>界面备份<ul>
-<li>从mysql的数据库路径/data，拷走所有的表结构以及表数据</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>自增型<ul>
-<li>auto_increment</li>
-</ul>
-</li>
-<li>搜索关键字<ul>
-<li>select * from admin where username like “%%xindong”;</li>
-</ul>
-</li>
-<li>分页</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-PHP操作MySQL数据库"><a href="#3-PHP操作MySQL数据库" class="headerlink" title="3. PHP操作MySQL数据库"></a>3. PHP操作MySQL数据库</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $lin = mysqli_connect(&apos;127.0.0.1&apos;,&apos;root&apos;,&apos;root&apos;);</span><br><span class="line"></span><br><span class="line">    //数据库使用--mysqli_query</span><br><span class="line"></span><br><span class="line">    mysqli_query($lin,&quot;use php_mysql_demo&quot;);  //选择数据库</span><br><span class="line">    mysqli_query($lin,&quot;set names utf8&quot;);  //设置数据库编码</span><br><span class="line"></span><br><span class="line">    mysqli_query($lin,&quot;insert into admin values (&apos;xindong&apos;,&apos;123&apos;)&quot;);  //添加数据库记录</span><br><span class="line">    mysqli_query($lin,&quot;delete from admin where username = &apos;1111&apos;&quot;);  //删除数据库记录</span><br><span class="line">    mysqli_query($lin,&quot;update admin set username = &apos;1111&apos;&quot;);  //修改数据</span><br><span class="line"></span><br><span class="line">    //数据库查询使用--mysqli_fetch_array</span><br><span class="line">    /*</span><br><span class="line">    mysqli_fetch_array()包含两个内容，默认的，函数可以通过第二个参数来设定返回的类型</span><br><span class="line">    1. MYSQLI_ASSOC：返回关联数组</span><br><span class="line">    2. MYSQLI_NUM：返回索引数组</span><br><span class="line">    3. MYSQLI_BOTH：默认的，两种数值都返回</span><br><span class="line">    */</span><br><span class="line"></span><br><span class="line">    $list = mysqli_query($lin,&quot;select * from admin&quot;);</span><br><span class="line">    $list_data = mysqli_fetch_array($list,MYSQLI_ASSOC);</span><br><span class="line">    var_dump($list_data);  //打印单行数据，指针默认从顶部开始</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    //输出查询的整个数据库</span><br><span class="line">    $list1 = mysqli_query($lin,&quot;select * from admin&quot;);</span><br><span class="line">    $arr = array();</span><br><span class="line">    while($list1_data = mysqli_fetch_array($list1,MYSQLI_ASSOC))</span><br><span class="line">    &#123;</span><br><span class="line">        $arr[] = $list1_data;</span><br><span class="line">        //直接输出 var_dump($list1_data);</span><br><span class="line">    &#125;</span><br><span class="line">    var_dump($arr);  //打印整个数据</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">     /*</span><br><span class="line">    mysqli_errno()：出现错误的错误编号</span><br><span class="line">    mysqli_error()：错误信息</span><br><span class="line">    */</span><br><span class="line">    $lin1 = mysqli_connect(&apos;127.0.0.1&apos;,&apos;root&apos;,&apos;root&apos;);</span><br><span class="line">    $a = mysqli_query($lin,&quot;use demo11111&quot;);  //不存在的数据库</span><br><span class="line">    //mysqli_query($lin,&quot;set names utf8&quot;);</span><br><span class="line"></span><br><span class="line">    if(mysqli_errno($lin))</span><br><span class="line">    &#123;</span><br><span class="line">        echo &apos;&lt;/br&gt;&apos;;</span><br><span class="line">        echo mysqli_errno($lin);  //输出错误的编号</span><br><span class="line">        echo &apos;&lt;/br&gt;&apos;; </span><br><span class="line">        echo mysqli_error($lin);  //输出错误信息</span><br><span class="line">    &#125;</span><br><span class="line">    echo &apos;&lt;/br&gt;&apos;;</span><br><span class="line"></span><br><span class="line">    //数据库的行数</span><br><span class="line">    /*</span><br><span class="line">    mysqli_data_seek()：用来设置结果集指针的位置</span><br><span class="line">    mysqli_num_row()：取得结果集的长度（记录的个数）</span><br><span class="line">    */</span><br><span class="line">    $lin2 = mysqli_connect(&apos;127.0.0.1&apos;,&apos;root&apos;,&apos;root&apos;);</span><br><span class="line">    $b = mysqli_query($lin2,&quot;use php_mysql_demo&quot;); </span><br><span class="line"></span><br><span class="line">    $list2 = mysqli_query($lin2,&quot;select * from admin&quot;);</span><br><span class="line"></span><br><span class="line">    echo mysqli_num_rows($list2);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/2/">Next</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/2/">Next</a>
   </nav>
 
 
@@ -2391,7 +2538,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">170</span>
+                  <span class="site-state-item-count">171</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2498,7 +2645,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">152.4k</span>
+    <span title="Site words total count">154.7k</span>
   
 </div>
 

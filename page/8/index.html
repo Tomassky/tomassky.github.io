@@ -240,6 +240,232 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/17/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%BA%94)%EF%BC%9AVeil-Evasion/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/17/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%BA%94)%EF%BC%9AVeil-Evasion/" itemprop="url">Kali Linux笔记(九十五)：Veil-Evasion</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-17T21:22:15+08:00">
+                2020-02-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  326 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-Veil-evasion"><a href="#1-Veil-evasion" class="headerlink" title="1. Veil-evasion"></a>1. Veil-evasion</h4><ul>
+<li>▲ 无病毒体的文件：向window的注册表写入病毒体/向硬件写入病毒体</li>
+<li>属于Veil-framework框架的一部分</li>
+<li>由python语言编写</li>
+<li>用于自动生成免杀payload<ul>
+<li>集成msf payload，支持自定义payload</li>
+<li>集成各种注入技术（系统进程）</li>
+<li>集成各种第三方工具<ul>
+<li>Hypersion、PEScrambler、BackDoor Factory</li>
+</ul>
+</li>
+<li>集成各种开发打包运行环境<ul>
+<li>Python：pyinstaller/py2exe</li>
+<li>C#：mono for.NET</li>
+<li>C：mingw32<ul>
+<li>▲ 2020.2.17 安装依赖包的时候发生错误，从Github上下载也存在错误</li>
+<li>▲ Veil-evasion改名集成于Veil-Framework</li>
+<li>▲ 从Github下载的包，在PyInstaller生成EXE文件时无法生成文件</li>
+<li>▲ Github地址：<a href="https://github.com/Veil-Framework/Veil" target="_blank" rel="noopener">https://github.com/Veil-Framework/Veil</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-Veil-evasion–Kali"><a href="#2-Veil-evasion–Kali" class="headerlink" title="2. Veil-evasion–Kali"></a>2. Veil-evasion–Kali</h4><ul>
+<li><strong><code>🔺命令：apt-get install veil-evasion</code></strong>（安装Veil-evasion）</li>
+<li><strong><code>🔺命令：veil-evasion yes</code></strong>（安装脚本安装）<ul>
+<li>python</li>
+<li>pywin32</li>
+<li>pycrypto</li>
+<li>Ruby（三个选项勾选）</li>
+<li>Go</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：update</code></strong>（升级）</li>
+<li><strong><code>🔺命令：list</code></strong>（集成的pyloads，生成的shellcode默认放在/var/lib/veil-evasion/output）<ul>
+<li><strong><code>🔺命令：35</code></strong>（python/shell_inject/aes_encrypt，未加密USE_PYHERION → N）</li>
+<li><strong><code>🔺命令：35</code></strong>（python/shell_inject/aes_encrypt，加密USE_PYHERION → Y）</li>
+<li>查看两个shell的免杀效果（查杀网站）</li>
+</ul>
+</li>
+<li>▲ /var/lib/veil-evasion/output/handles（可运行在msf上的配置文件）</li>
+<li><strong><code>🔺命令：msfconsole -r</code></strong> 具体配置文件路径<ul>
+<li><strong><code>🔺命令：jobs</code></strong>（查看运行的任务）</li>
+<li><strong><code>🔺命令：sessions</code></strong>（查看运行的session）<ul>
+<li><strong><code>🔺命令：session -i 1</code></strong>（进行交互shell）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/15/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E5%9B%9B)%EF%BC%9ABDFProxy/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2746,240 +2972,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%BA%94)%EF%BC%9ADoS--NTP%E6%94%BE%E5%A4%A7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%BA%94)%EF%BC%9ADoS--NTP%E6%94%BE%E5%A4%A7/" itemprop="url">Kali Linux笔记(八十五)：DoS--NTP放大</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-10T22:47:15+08:00">
-                2020-02-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  365 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-NTP放大攻击"><a href="#1-NTP放大攻击" class="headerlink" title="1. NTP放大攻击"></a>1. NTP放大攻击</h4><ul>
-<li>网络时间协议<ul>
-<li>Network Time Protocol </li>
-<li>保证网络设备时间同步</li>
-<li>电子设备互相干扰导致时钟差异越来越大</li>
-<li>服务端口UDP 123</li>
-<li>▲ SSL证书的时间戳</li>
-<li>▲ 影响应用正常运行、日志审计不可信</li>
-</ul>
-</li>
-<li>攻击原理<ul>
-<li>NTP服务提monlist（MON_GETLIST）查询功能<ul>
-<li>监控NTP服务器的状态</li>
-</ul>
-</li>
-<li>客户端查询时，NTP服务器返回最后同步时间的600个客户端IP<ul>
-<li>每6个IP一个数据包，最多100个数据包（放大约100倍）</li>
-</ul>
-</li>
-<li>放大效果看monlist的地址列表</li>
-</ul>
-</li>
-<li>攻击对策<ul>
-<li>升级到ntpd 4.2.7p26及以上的版本（默认关闭monlist查询）</li>
-<li>收到关闭monlist查询功能</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-实验"><a href="#2-实验" class="headerlink" title="2. 实验"></a>2. 实验</h4><ul>
-<li>Bodhi（被攻击者）<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
-<li><strong><code>🔺命令：sudo apt-get install ntp</code></strong></li>
-<li><strong><code>🔺命令：netstat -pantu | grep 123</code></strong>（查看ntp服务是否开启）</li>
-</ul>
-</li>
-<li>Kali（攻击者）<ul>
-<li>发现NTP服务：<strong><code>🔺命令：nmap -sU -p123 Bodhi的IP</code></strong></li>
-<li>发现漏洞<ul>
-<li><strong><code>🔺命令：ntpdc -n -c monlist Bodhi的IP</code></strong>（timeout）</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Bodhi（被攻击者）<ul>
-<li><strong><code>🔺命令：vi /etc/ntp.conf</code></strong> <ul>
-<li>#restrict -4 default kod nomodify notrap nopeer noquery </li>
-<li>#restrict -6 default kod nomodify notrap nopeer noquery</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：service ntp stop/start</code></strong></li>
-</ul>
-</li>
-<li>Kali（攻击者）<ul>
-<li><strong><code>🔺命令：ntpdc -n -c monlist Bodhi的IP</code></strong>（可查询到monlist地址表）</li>
-<li><strong><code>🔺命令：ntpq -c rv Bodhi的IP</code></strong>（查询Bodhi的系统信息）</li>
-<li><strong><code>🔺命令：ntpdc -c sysinfo Bodhi的IP</code></strong>（查询Bodhi的sysinfo）</li>
-<li>▲ 2020.2.10 无法查到monlist地址表，但能查到Bodhi得系统信息</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3034,7 +3026,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">169</span>
+                  <span class="site-state-item-count">170</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3141,7 +3133,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">160.9k</span>
+    <span title="Site words total count">163.4k</span>
   
 </div>
 

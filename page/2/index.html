@@ -240,6 +240,217 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/18/PHP%E5%AD%A6%E4%B9%A0-3%EF%BC%9Acurl%E6%A8%A1%E6%8B%9FGET-POST%E8%AF%B7%E6%B1%82/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/18/PHP%E5%AD%A6%E4%B9%A0-3%EF%BC%9Acurl%E6%A8%A1%E6%8B%9FGET-POST%E8%AF%B7%E6%B1%82/" itemprop="url">PHP学习-3：curl模拟GET-POST请求</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-18T20:52:38+08:00">
+                2020-03-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  592 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<ol>
+<li><p>curl</p>
+<ul>
+<li>▲ 网上吹嘘curl库的强大，今天用来入门模拟一下GET和POST请求</li>
+<li>官方手册：<a href="https://www.php.net/manual/zh/ref.curl.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/ref.curl.php</a></li>
+<li>curl功能库简介：<a href="https://www.jb51.net/article/26751.htm" target="_blank" rel="noopener">https://www.jb51.net/article/26751.htm</a></li>
+<li>curl基础流程<ul>
+<li>curl_init()</li>
+<li>curl_setopt()</li>
+<li>curl_exec()</li>
+<li>curl_close()</li>
+</ul>
+</li>
+<li>▲ 支持多种代理模式（HTTP/FTP/SOCKS4/SOCKS5）</li>
+</ul>
+</li>
+<li><p>file_put_contents()函数</p>
+<ul>
+<li>要写入的数据。类型可以是 string，array 或者是 stream 资源</li>
+<li>官方手册：<a href="https://www.php.net/manual/zh/function.file-put-contents.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/function.file-put-contents.php</a></li>
+<li>▲ 可结合curl，将流数据，数组或者字符串写入文件</li>
+</ul>
+</li>
+<li><p>curl模拟GET请求</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    header(&apos;Content-type:text/html;charset=utf-8&apos;);</span><br><span class="line">    $header = array();  //头部数组</span><br><span class="line">    $header[] = &apos;Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&apos;;</span><br><span class="line">    $header[] = &apos;Cache-Control: no-cache&apos;;</span><br><span class="line">    $header[] = &apos;User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:28.0) Gecko/20100101 Firefox/28.0&apos;;</span><br><span class="line">    $url = &apos;https://www.douban.com&apos;;  //要抓取的url</span><br><span class="line">    $ch = curl_init();  //curl初始化</span><br><span class="line">    $timeout = 15;  //超时时间</span><br><span class="line">    curl_setopt ($ch, CURLOPT_URL, $url);  //设置url</span><br><span class="line">    curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);  //设置显示还是写入字符串，1为显示</span><br><span class="line">    curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);  //设置超时时间</span><br><span class="line">    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);  //关闭SSL点对点验证</span><br><span class="line">    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);  //关闭SSL端对端验证</span><br><span class="line">    curl_setopt($ch, CURLOPT_HTTPHEADER, $header);  //设置请求头</span><br><span class="line">    curl_setopt($ch,　CURLOPT_PROXYTYPE,CURLPROXY_SOCKS5);  //设置代理方式</span><br><span class="line">    curl_setopt($ch, CURLOPT_PROXY, &quot;127.0.0.1:1080&quot;);  //设置代理的服务器</span><br><span class="line">    $file_contents = curl_exec($ch);  //发送curl请求</span><br><span class="line">    curl_close($ch);  //关闭curl请求</span><br><span class="line">    //$file_contents = json_decode($file_contents);  //若接收数据为json数据，解码</span><br><span class="line">    mb_convert_encoding($file_contents,&apos;utf-8&apos;);  //转换字符编码</span><br><span class="line">    $f = fopen(&quot;./1.html&quot;, &quot;a+&quot;);  //打开文件，模式为可写可读</span><br><span class="line">    Fwrite($f,$file_contents);  //写入文件</span><br><span class="line">    Fclose($f);  //关闭文件</span><br><span class="line">    print_r($file_contents);  //输出抓取的信息到屏幕上</span><br><span class="line">    </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li><p>curl模拟POST请求</p>
+<ul>
+<li>test.php</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    var_dump($_POST);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $post_data = array(</span><br><span class="line">        &apos;name&apos; =&gt; &apos;mzt&apos;,</span><br><span class="line">        &apos;age&apos; =&gt; &apos;21&apos; );  //post数据</span><br><span class="line">    $post_data = http_build_query($post_data);  //url-encode编码数据</span><br><span class="line">    $post_data = json_encode($post_data);  //json编码数据</span><br><span class="line">    $url = &apos;http://localhost/test.php&apos;;  //要抓取的url</span><br><span class="line">    $ch = curl_init();  //curl初始化</span><br><span class="line">    $timeout = 5;  //超时时间</span><br><span class="line">    curl_setopt ($ch, CURLOPT_URL, $url);  //设置url</span><br><span class="line">    curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);  //设置显示还是写入字符串，1为显示</span><br><span class="line">    curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);  //设置超时时间</span><br><span class="line">    curl_setopt($ch, CURLOPT_POST, 1);  //设置发送的方式为post</span><br><span class="line">    curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);  //设置post的数据</span><br><span class="line">    //curl_setopt($ch, CURLOPT_HTTPHEADER, array(&apos;Content-Type:application/json&apos;));  //json编码设置</span><br><span class="line">    $file_contents = curl_exec($ch);  //发送curl请求</span><br><span class="line">    curl_close($ch);  //关闭curl请求</span><br><span class="line">    mb_convert_encoding($file_contents,&apos;utf-8&apos;);  //转换字符</span><br><span class="line">    print_r($file_contents);  //输出抓取的信息到屏幕</span><br><span class="line">    </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/18/PHP%E5%AD%A6%E4%B9%A0-2%EF%BC%9Afile_get_contents%E6%A8%A1%E6%8B%9FGET-POST%E8%AF%B7%E6%B1%82/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2128,241 +2339,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-15%EF%BC%9A%E6%95%B0%E7%BB%84%E7%9A%84%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-15%EF%BC%9A%E6%95%B0%E7%BB%84%E7%9A%84%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0/" itemprop="url">PHP笔记-15：数组的相关函数</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T12:40:06+08:00">
-                2020-03-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PHP/" itemprop="url" rel="index">
-                    <span itemprop="name">PHP</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  980 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  4 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-排序函数"><a href="#1-排序函数" class="headerlink" title="1. 排序函数"></a>1. 排序函数</h4><ul>
-<li>排序函数：对数组元素进行排序，都是按照ASCII码进行比较，可以进行英文比较</li>
-<li>下标重排<ul>
-<li>sort()：顺序排序</li>
-<li>rsort()：逆序排序</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //排序函数</span><br><span class="line">    $arr = array(3,1,5,2,0);</span><br><span class="line">    print_r($arr);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    sort($arr);</span><br><span class="line">    print_r($arr);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    rsort($arr);</span><br><span class="line">    print_r($arr);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>下标保留<ul>
-<li>asort()：顺序排序</li>
-<li>arsort()：逆序排序</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //排序函数</span><br><span class="line">    $arr = array(3,1,5,2,0);</span><br><span class="line">    print_r($arr);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    asort($arr);</span><br><span class="line">    print_r($arr);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    arsort($arr);</span><br><span class="line">    print_r($arr);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>按照键名（下标）<ul>
-<li>ksort()：顺序排序</li>
-<li>krsort()：逆序排序</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //排序函数</span><br><span class="line">    $arr = array(3,1,5,2,0);</span><br><span class="line">    print_r($arr);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    ksort($arr);</span><br><span class="line">    print_r($arr);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    krsort($arr);</span><br><span class="line">    print_r($arr);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>shuffle()：随机打乱数组元素，数组下标会重排</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //排序函数</span><br><span class="line">    $arr = array(3,1,5,2,0);</span><br><span class="line">    print_r($arr);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    shuffle($arr);</span><br><span class="line">    print_r($arr);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    shuffle($arr);</span><br><span class="line">    print_r($arr);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h4 id="2-指针函数"><a href="#2-指针函数" class="headerlink" title="2. 指针函数"></a>2. 指针函数</h4><ul>
-<li>reset()：重置指针，将数组指针回到首位</li>
-<li>end()：重置指针，将数组指针指导最后一个元素</li>
-<li>next()：指针下移，取得下一个元素的值</li>
-<li>prev()：指针上移，取得上一个元素的值</li>
-<li>current()：获取当前指针对应的元素值</li>
-<li>key()：获取当前指针对应的下标值</li>
-<li>▲ next和prev会移动指针，有可能导致指针移动到最前或者最后（离开数组），导致数组不能使用，通过next和prev不能回到真确的指针位置。只能通过end或者reset进行指针重置</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //指针函数</span><br><span class="line">    $arr = array(3,1,5,2,0);</span><br><span class="line"></span><br><span class="line">    echo current($arr),&apos;&lt;br/&gt;&apos;;  //输出为 3</span><br><span class="line">    echo key($arr),&apos;&lt;br/&gt;&apos;;  //输出为 0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    echo next($arr),next($arr),&apos;&lt;br/&gt;&apos;;  //输出为 1，5</span><br><span class="line">    echo prev($arr),&apos;&lt;br/&gt;&apos;;  //输出为 1</span><br><span class="line"></span><br><span class="line">    echo end($arr),&apos;&lt;br/&gt;&apos;;  //输出为 0</span><br><span class="line">    echo reset($arr),&apos;&lt;br/&gt;&apos;;  //输出为 3</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h4 id="3-其他函数"><a href="#3-其他函数" class="headerlink" title="3. 其他函数"></a>3. 其他函数</h4><ul>
-<li>栈操作：压栈，先进去后出来（FILO）/ 队列操作：排队，先进去的先出去（FIFO）<ul>
-<li>array_push()：往数组中加入一个元素（数组后面）</li>
-<li>array_pop()：从数组中取出一个元素（数组后面）</li>
-<li>array_shift()：从数组中取出一个元素（数组前面）</li>
-<li>array_unshift()：从数组中加入一个元素（数组前面）</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //其他函数</span><br><span class="line"></span><br><span class="line">    //模拟数据结构：栈和队列</span><br><span class="line">    $arr = array();</span><br><span class="line"></span><br><span class="line">    //栈：先压栈后出栈：都是从一端出来</span><br><span class="line">    //前面：array_shift/array_unshift</span><br><span class="line">    //后面：array_push/array_pop</span><br><span class="line">    //压栈</span><br><span class="line">    array_push($arr,3);</span><br><span class="line">    array_push($arr,2);</span><br><span class="line">    array_push($arr,1);</span><br><span class="line">    print_r($arr);  //输出为 Array ( [0] =&gt; 3 [1] =&gt; 2 [2] =&gt; 1 ) </span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">    //出栈</span><br><span class="line">    echo array_pop($arr),array_pop($arr),array_pop($arr),&apos;&lt;br/&gt;&apos;; 输出为 123</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //队列：先排队，先出来，一端进，另外一端出</span><br><span class="line">    //后进前出：array_push/array_shift</span><br><span class="line">    //前进后出：array_unshift/array_pop</span><br><span class="line">    $arr = array();</span><br><span class="line"></span><br><span class="line">    //入队</span><br><span class="line">    array_unshift($arr,3);</span><br><span class="line">    array_unshift($arr,2);</span><br><span class="line">    array_unshift($arr,1);</span><br><span class="line">    print_r($arr);  //输出为 Array ( [0] =&gt; 1 [1] =&gt; 2 [2] =&gt; 3 ) </span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">    //出队</span><br><span class="line">    echo array_pop($arr),array_pop($arr),array_pop($arr),&apos;&lt;br/&gt;&apos;;  //输出为 321</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>count()：统计数组中元素的数量</li>
-<li>array_reverse()：数组元素反过来</li>
-<li>in_array()：判断一个元素在数组中是否存在</li>
-<li>array_keys()：获取一个数组的所有下标，返回一个索引数组</li>
-<li>array_values()：获取一个数组的所有值，返回一个索引数组</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $arr = array(1,2,3,6,5);</span><br><span class="line">    echo count($arr);  //输出为 5</span><br><span class="line">    print_r(array_reverse($arr));  //输出为 Array ( [0] =&gt; 5 [1] =&gt; 6 [2] =&gt; 3 [3] =&gt; 2 [4] =&gt; 1 ) </span><br><span class="line"></span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    var_dump(in_array(6,$arr));  //输出为 bool(true) </span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">    var_dump(in_array(100,$arr));  //输出为 bool(false) </span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    print_r(array_keys($arr));  //输出为 Array ( [0] =&gt; 0 [1] =&gt; 1 [2] =&gt; 2 [3] =&gt; 3 [4] =&gt; 4 ) </span><br><span class="line"></span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">    print_r(array_values($arr));  //输出为 Array ( [0] =&gt; 1 [1] =&gt; 2 [2] =&gt; 3 [3] =&gt; 6 [4] =&gt; 5 ) </span><br><span class="line">    </span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2417,7 +2393,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">172</span>
+                  <span class="site-state-item-count">173</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2524,7 +2500,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">171.9k</span>
+    <span title="Site words total count">172.8k</span>
   
 </div>
 

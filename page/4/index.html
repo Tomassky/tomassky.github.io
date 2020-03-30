@@ -240,6 +240,482 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-4%EF%BC%9A%E5%B8%B8%E9%87%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-4%EF%BC%9A%E5%B8%B8%E9%87%8F/" itemprop="url">PHP笔记-4：常量</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T11:50:40+08:00">
+                2020-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  769 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-常量"><a href="#1-常量" class="headerlink" title="1. 常量"></a>1. 常量</h4><ul>
+<li>常量与变量一样，都是用来保存数据的。<ul>
+<li>常量：const/constant，是一种在程序运行当中，不可改变的量（数据）</li>
+<li>常量一旦定义，通常数据不可改变（用户级别）</li>
+</ul>
+</li>
+<li>常量定义方式<ul>
+<li>使用定义常量的函数：define(‘常量名’,常量值);<ul>
+<li>首个参数定义常量的名称</li>
+<li>第二个参数定义常量的值</li>
+<li>可选的第三个参数规定常量名是否对大小写不敏感。默认是false</li>
+</ul>
+</li>
+<li>const 常量名 = 值;（PHP5.3版本之后才有）</li>
+<li>▲ define和const定义的常量是有区别：在于访问权限区别</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">  //PHP常量</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  //使用函数定义常量：define</span><br><span class="line">  define(&apos;PI&apos;,3.14);</span><br><span class="line">  echo PI;</span><br><span class="line">  echo &apos;&lt;/br&gt;&apos;;</span><br><span class="line"></span><br><span class="line">  $a = 1;</span><br><span class="line">  define(&apos;A&apos;,$a);</span><br><span class="line">  echo A;</span><br><span class="line">  echo &apos;&lt;/br&gt;&apos;;</span><br><span class="line"></span><br><span class="line">  /*  // False -&gt; 区分大小写/True -&gt; 区分大小写</span><br><span class="line">    define(&apos;NAME&apos;,&apos;11&apos;);  // echo NAME -&gt; 输出 11</span><br><span class="line">    define(&apos;NAME&apos;,&apos;11&apos;,Fales);  // echo name -&gt; 输出错误</span><br><span class="line">    define(&apos;NAME&apos;,&apos;11&apos;,True);  // echo name -&gt; 输出 11</span><br><span class="line">  */</span><br><span class="line"></span><br><span class="line">  //使用const关键字定义</span><br><span class="line">  const PII = 3;</span><br><span class="line">  echo PII;</span><br><span class="line">  echo &apos;&lt;/br&gt;&apos;;</span><br><span class="line"></span><br><span class="line">  //定义特殊常量</span><br><span class="line">  define(&apos;-_-&apos;,&apos;smile&apos;);</span><br><span class="line">  //const -_- = &apos;smile&apos;;  //错误  </span><br><span class="line"></span><br><span class="line">  //echo -_-;       //特殊符号不能直接使用</span><br><span class="line">  echo constant(&apos;-_-&apos;);</span><br><span class="line">  echo &apos;&lt;/br&gt;&apos;;   </span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>常量名字的命名规则<ul>
+<li>常量不需要使用“$”符号，一旦使用系统就会认为是变量</li>
+<li>常量的名字组成由字母、数字和下划线组成，不能以数字开头</li>
+<li>常量的名字通常是以大写字母为主（与变量以示区别）</li>
+<li>常量命名的规则比变量要松散，可以使用一些特殊字符，该方式只能使用define定义</li>
+</ul>
+</li>
+<li>常量的使用形式<ul>
+<li>常量的使用与变量一样：不可改变值（在定义的时候必须赋值）</li>
+<li>有的时候还需要使用另外一种形式来访问（针对的是特殊名字的常量），需要用到另外一个访问常量的函数：constant(‘常量名’)</li>
+</ul>
+</li>
+</ul>
+<ol start="2">
+<li><p>系统常量</p>
+<ul>
+<li>系统帮助用户定义的常量，用户可以直接使用</li>
+<li>常用的系统常量<ul>
+<li>PHP_VERSION：PHP版本号</li>
+<li>PHP_INT_SIZE：整形大小</li>
+<li>PHP_INT_MAX：整形能表示的最大值（PHP中整形是允许出现负数：带符号）</li>
+</ul>
+</li>
+<li>魔术常量<ul>
+<li>魔术常量的值通常会跟着环境变化，但是用户改变不了</li>
+<li><strong>DIR</strong>：当前被执行的脚本所在电脑的绝对路径</li>
+<li><strong>FILE</strong>：当前被执行的脚本所在的电脑的绝对路径（带自己文件的名字）</li>
+<li><strong>LINE</strong>：当前所属的行数</li>
+<li><strong>NAMESPACE</strong>：当前所属的命名空间</li>
+<li><strong>CLASS</strong>：当前所属的类</li>
+<li><strong>METHOD</strong>：当前所属的方法</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    //系统常量</span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;,PHP_VERSION,&apos;&lt;br/&gt;&apos;,PHP_INT_SIZE,&apos;&lt;br/&gt;&apos;,PHP_INT_MAX;</span><br><span class="line"></span><br><span class="line">    //魔术常量</span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;;</span><br><span class="line">    echo __DIR__,&apos;&lt;br/&gt;&apos;,__FILE__,&apos;&lt;br/&gt;&apos;,__LINE__,&apos;&lt;br/&gt;&apos;;</span><br><span class="line">    echo __LINE__;</span><br><span class="line"></span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;;</span><br><span class="line">    echo __NAMESPACE__;  //后续会讲到</span><br><span class="line">    echo __CLASS__;  //后续会讲到</span><br><span class="line"></span><br><span class="line">    function demo()</span><br><span class="line">    &#123;</span><br><span class="line">        echo __METHOD__;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    demo();</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-3%EF%BC%9A%E5%8F%98%E9%87%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-3%EF%BC%9A%E5%8F%98%E9%87%8F/" itemprop="url">PHP笔记-3：变量</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T11:42:29+08:00">
+                2020-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  956 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-变量"><a href="#1-变量" class="headerlink" title="1. 变量"></a>1. 变量</h4><ul>
+<li>▲ 变量是用来存储数据的；</li>
+<li>变量的使用<ul>
+<li>定义：在系统中增加对应的变量名字（内存）</li>
+<li>赋值：可以将数据赋值给变量名（可以在定义的同时完成）</li>
+<li>可以通过变量名访问存储的数据</li>
+<li>可以将变量从内存中删除 -&gt; unset()</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">  //变量</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  //定义变量：在PHP中不需要任何关键字定义变量（赋值）</span><br><span class="line">  $var1;    //定义变量</span><br><span class="line">  $var2 = 1;  //定义同时赋值</span><br><span class="line"></span><br><span class="line">  //访问变量</span><br><span class="line">  echo $var2; //通过var2变量名字找到存储的内容1，然后输出</span><br><span class="line">    echo &apos;&lt;/br&gt;&apos;;</span><br><span class="line"></span><br><span class="line">  //修改变量</span><br><span class="line">  $var2 = 2;</span><br><span class="line">  echo &apos;&lt;/br&gt;&apos;;,$var2;</span><br><span class="line"></span><br><span class="line">  //删除变量：使用unset(变量名字)</span><br><span class="line">  unset($var2);</span><br><span class="line">    //echo $var2;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>变量命名规则<ul>
+<li>变量名字必须以”$”符号开始</li>
+<li>名字由字母、数字和下划线”_”构成，但是不能以数字开头</li>
+<li>本身还允许中文变量（不建议）</li>
+<li>变量名称对大小写敏感</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">  //变量命名规则</span><br><span class="line">  $var_1;$var_var_1;$_var1; //正确格式</span><br><span class="line">      //$1var;  // 错误格式</span><br><span class="line"></span><br><span class="line">  $中国 = &apos;China&apos;;</span><br><span class="line">  echo $中国;</span><br><span class="line">    echo &apos;&lt;/br&gt;&apos;;</span><br><span class="line"></span><br><span class="line">    //变量名称对大小写敏感</span><br><span class="line">    </span><br><span class="line">  $name = &apos;mzt&apos;;</span><br><span class="line">  define(&apos;NAME&apos;, $name);</span><br><span class="line"></span><br><span class="line">  echo NAME;</span><br><span class="line">    //echo name;  //会发生报错报错</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-预定义变量"><a href="#2-预定义变量" class="headerlink" title="2. 预定义变量"></a>2. 预定义变量</h4><ul>
+<li>预定义变量：提前定义的变量，系统定义的变量，存储许多需要用到的数据（预定义变量都是数组）<ul>
+<li>$_GET：获取所有表单以get方式提交的数据</li>
+<li>$_POST：POST提交的数据都会保存在此</li>
+<li>$_REQUEST：GET和POST提交的都会保存</li>
+<li>$GLOBALS：PHP中所有的全局变量</li>
+<li>$_SERVER：服务器信息</li>
+<li>$_SESSION：session会话数据</li>
+<li>$_COOKIE：cookie会话数据</li>
+<li>$_ENV：环境信息</li>
+<li>$_FILES：用户上传的文件信息</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    </span><br><span class="line">    //GLOBALS预定义变量</span><br><span class="line">    </span><br><span class="line">    function test()&#123;</span><br><span class="line">      $a = &quot;b&quot;;</span><br><span class="line">      echo &apos;$a in global scope：&apos;.$GLOBALS[&quot;a&quot;].&quot;\n&quot;;</span><br><span class="line">      echo &apos;$a in current scope：&apos;.$a.&quot;\n&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    $a = &quot;c&quot;;</span><br><span class="line">    test(); //输出有两个，1为$a in global scope：b，2为$a in current scope：c</span><br><span class="line">    echo &apos;&lt;/br&gt;&apos;;</span><br><span class="line"></span><br><span class="line">    //$_SERVER预定义变量</span><br><span class="line"></span><br><span class="line">    echo $_SERVER[&apos;SERVER_NAME&apos;];  //输出为 127.0.0.1</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">  </span><br><span class="line">    //$_GET预定义变量，在后续内容有讲到</span><br><span class="line"></span><br><span class="line">    //$_POST预定义变量，在后续内容有讲到</span><br><span class="line">   </span><br><span class="line">    //$_SESSION预定义变量，在后续内容有讲到</span><br><span class="line"></span><br><span class="line">    //$_ENV预定义变量，在后续内容有讲到</span><br><span class="line"></span><br><span class="line">    //$_FILES预定义变量，在后续内容有讲到</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-可变变量"><a href="#3-可变变量" class="headerlink" title="3. 可变变量"></a>3. 可变变量</h4><ul>
+<li>如果一个变量保存的值刚好是另外一个变量的名字，那么可以直接通过访问一个变量得到另外一个变量的值<ul>
+<li>在变量前面再多加一个$符号</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">  //可变变量</span><br><span class="line"></span><br><span class="line">  //定义两个变量</span><br><span class="line">  $a = &apos;b&apos;;</span><br><span class="line">  $b = &apos;bb&apos;;</span><br><span class="line"></span><br><span class="line">  echo $$a;  //输出为 bb</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>变量传值<ul>
+<li>将一个变量赋值给另外一个变量：变量传值</li>
+<li>变量传递两种方式<ul>
+<li>值传递：将变量保存的值赋值一份，然后将新的值给另外一个变量保存（两个变量没有关系）</li>
+<li>引用传递：将变量保存的值所在的内存地址，传递给另外一个变量：两个变量指向同一块内存空间（两个变量是同一个值）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>内存分区<ul>
+<li>栈区：程序可以操作的内存部分（不存数据，运行程序代码），少但是快</li>
+<li>代码段：存储程序的内存部分（不执行）</li>
+<li>数据段：存储普通数据（全局区和静态区）</li>
+<li>堆区：存储复杂数据，大但是效率低</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">  //PHP变量传值</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  //值传递</span><br><span class="line">  $a = 10;</span><br><span class="line">  $b = $a;</span><br><span class="line">  $b = 5;</span><br><span class="line">  echo $a,$b,&apos;&lt;br/&gt;&apos;;  //输出为 10,5</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  //引用传递</span><br><span class="line">  $c = 10;</span><br><span class="line">  $d = &amp;$c;</span><br><span class="line">  $c = 5;</span><br><span class="line">  echo $c,$d,&apos;&lt;br/&gt;&apos;;  //输出为 5,5</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>变量传值分析图（图片来自网络）</li>
+</ul>
+<p><img src="/images/php/php-notepad/%E5%80%BC%E4%BC%A0%E9%80%92.png" alt="值传递"></p>
+<p><img src="/images/php/php-notepad/%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92.png" alt="引用传递"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-2%EF%BC%9A%E6%B3%A8%E9%87%8A%E4%B8%8E%E6%A0%87%E8%AE%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2587,598 +3063,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/04/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81%E4%BA%94)%EF%BC%9A%E5%8F%96%E8%AF%81%E7%A7%91%E5%AD%A6%E3%80%81%E5%88%86%E7%B1%BB%E3%80%81%E5%8E%9F%E5%88%99%E3%80%81%E6%96%B9%E6%B3%95%E3%80%81%E5%B7%A5%E5%85%B7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/04/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81%E4%BA%94)%EF%BC%9A%E5%8F%96%E8%AF%81%E7%A7%91%E5%AD%A6%E3%80%81%E5%88%86%E7%B1%BB%E3%80%81%E5%8E%9F%E5%88%99%E3%80%81%E6%96%B9%E6%B3%95%E3%80%81%E5%B7%A5%E5%85%B7/" itemprop="url">Kali Linux笔记(一百一十五)：取证科学、分类、原则、方法、工具</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-04T11:52:55+08:00">
-                2020-03-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  993 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-取证科学简介"><a href="#1-取证科学简介" class="headerlink" title="1. 取证科学简介"></a>1. 取证科学简介</h4><ul>
-<li>Forensic investigations</li>
-<li>法庭取证调查</li>
-<li>事件响应调查<ul>
-<li>黑客攻击、渗透测试痕迹</li>
-</ul>
-</li>
-</ul>
-<p>![CSI：CRIME SCENE INVESTIGATION](/images/kali/kali-notepad/CSI：CRIME SCENE INVESTIGATION.png)</p>
-<h4 id="2-取证科学"><a href="#2-取证科学" class="headerlink" title="2. 取证科学"></a>2. 取证科学</h4><ul>
-<li>什么是Forensic科学<ul>
-<li>法医的、用于法庭的、辩论学、法医学</li>
-<li>为了侦破案件还原事实真相，收集法庭证据的一系列科学方法<ul>
-<li>参考本地区法律要求</li>
-<li>实践操作通用原则</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>CSI：物理取证<ul>
-<li>指纹、DNA、弹道、血迹</li>
-<li>物理取证的理论基础是物质交换原则</li>
-</ul>
-</li>
-<li>本章关注：数字取证 / 计算机取证 / 电子取证<ul>
-<li>智能设备、计算机、手机平板、IoT、有线及无线通信（Wireshark抓包分析）、数据存储</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-通用原则"><a href="#3-通用原则" class="headerlink" title="3. 通用原则"></a>3. 通用原则</h4><ul>
-<li>维护证据完整性<ul>
-<li>数字取证比物理取证幸运的多，可以有无限数量的拷贝进行分析<ul>
-<li>▲ 对iphone手机芯片的复制，可以实现理论上的暴力破解</li>
-</ul>
-</li>
-<li>数字HASH值验证数据完整性</li>
-</ul>
-</li>
-<li>维护监管链<ul>
-<li>物理证物保存在证物袋中，每次取出使用严格记录，避免破坏污染</li>
-<li>数字证物原始版本写保护，使用拷贝进行分析</li>
-</ul>
-</li>
-<li>标准的操作步骤<ul>
-<li>证物使用严格按照规范流程，即使事后证明流程有误（免责）</li>
-</ul>
-</li>
-<li>取证分析全部过程记录文档</li>
-<li>数字取证者的座右铭<ul>
-<li>不要破坏数据现场（看似简单，实际几乎无法实现）<ul>
-<li>系统命令可能被植入木马，整个计算机都不可信 → 使用干净U盘的操作系统命令</li>
-<li>使用干净U盘的操作系统命令可能也会占用内存资源，破坏现场</li>
-<li>▲ 虚拟机一定程度上通过控制台可实现不破坏数据现场</li>
-</ul>
-</li>
-<li>寄存器、CPU缓存、I/O设备缓存等易失性数据几乎无法获取</li>
-<li>系统内存是主要的易失性存储介质取证对象，不修改无法获取其中数据<ul>
-<li>程序、操作系统指令会对内存进行修改</li>
-</ul>
-</li>
-<li>非易失性存储介质通常使用完整镜像拷贝保存<ul>
-<li>不同于文件拷贝，从磁道层面的复制（01代码的复制，可能包含已删除的文件）</li>
-</ul>
-</li>
-<li>正常关机还是直接拔掉电源（数据丢失破坏）<ul>
-<li>拔电源：存在于内存中的数据无法保存到硬盘</li>
-<li>正常关机：木马程序可能进行数据擦除破坏</li>
-<li>▲ 建议拔电源，Ext4日志型文件型系统直接拔电源，不会丢失日志</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>证据搜索<ul>
-<li>数据（数据提炼）</li>
-<li>信息（信息收集）</li>
-<li>证据（得出入侵的证据 → 法庭的呈堂证供/技术分析）</li>
-</ul>
-</li>
-<li>作为安全从业者<ul>
-<li>通过取证还原黑客入侵的轨迹</li>
-<li>作为渗透测试和黑客攻击区分标准<ul>
-<li>世纪佳缘事件</li>
-<li>印象笔记渗透测试事件</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="4-取证方法"><a href="#4-取证方法" class="headerlink" title="4. 取证方法"></a>4. 取证方法</h4><ul>
-<li>活取证（服务器未关机，可对内存和硬盘取证）<ul>
-<li>抓取文件metadata、创建时间线、命令历史、分析日志文件、哈希摘要、转存内存信息</li>
-<li>使用未受感染的干净程序执行取证</li>
-<li>U盘 / 网络存储收集到的数据</li>
-<li>▲ 新建用户取证</li>
-</ul>
-</li>
-<li>死取证（服务器关机、可对硬盘取证）<ul>
-<li>关机后制作硬盘镜像、分析镜像（MBR、GPT、LVM）<ul>
-<li>硬盘格式<ul>
-<li>大块MBR</li>
-<li>全局分区表GPT</li>
-<li>逻辑卷LVM</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="5-取证工具–Dumpit"><a href="#5-取证工具–Dumpit" class="headerlink" title="5. 取证工具–Dumpit"></a>5. 取证工具–Dumpit</h4><ul>
-<li>不考虑法律因素、法庭证据、监管链、文档记录等取证环节</li>
-<li>只介绍Kali当中部分取证工具的使用方法</li>
-<li>内存dump工具<ul>
-<li>Dumpit：<a href="http://www.moonsols.com/wp-content/uploads/downloads/2011/07/DumpIt.zip" target="_blank" rel="noopener">http://www.moonsols.com/wp-content/uploads/downloads/2011/07/DumpIt.zip</a><ul>
-<li>▲ 2020.03.04 此连接失效，改为后续链接：<a href="http://www.secist.com/archives/2076.html" target="_blank" rel="noopener">http://www.secist.com/archives/2076.html</a></li>
-</ul>
-</li>
-<li>内存文件与内存大小接近或者稍微大一点，raw格式</li>
-</ul>
-</li>
-<li>实验<ul>
-<li>Window 7</li>
-</ul>
-</li>
-</ul>
-<p><img src="/images/kali/kali-notepad/kodex/index.php?user/publicLink&fid=2638rdSKJV3HVd-tYIUJnkoRfqNDQSyiuMX3yluETjB9O1Ve6zMIW2fFmrDkG0M3vtkS580i71YLHOwz3PrU-Gb7Af2x256yinj9RuvNRJ54sAwdNjtm&file_name=/Dumpit.png" alt="Dumpit"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/04/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81%E5%9B%9B)%EF%BC%9A%E7%A4%BE%E4%BC%9A%E5%B7%A5%E7%A8%8B%E5%AD%A6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/04/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81%E5%9B%9B)%EF%BC%9A%E7%A4%BE%E4%BC%9A%E5%B7%A5%E7%A8%8B%E5%AD%A6/" itemprop="url">Kali Linux笔记(一百一十四)：社会工程学</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-04T11:47:34+08:00">
-                2020-03-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  702 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  2 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-新闻插播"><a href="#1-新闻插播" class="headerlink" title="1. 新闻插播"></a>1. 新闻插播</h4><ul>
-<li>Metasploit被发现两个远程代码执行漏洞<ul>
-<li>问题都出在WEB组件方面</li>
-<li>MSF不受影响</li>
-</ul>
-</li>
-<li>安全面前软软平等<ul>
-<li>没有没有漏洞的软件</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-社会工程学"><a href="#2-社会工程学" class="headerlink" title="2. 社会工程学"></a>2. 社会工程学</h4><ul>
-<li>为什么在这说社会工程学（Social Engineering）<ul>
-<li>Metasploit可以很好的配合到社会工程学攻击的各个阶段</li>
-<li>Setoolkit工具包大量依赖Metasploit</li>
-<li>基于浏览器等客户端软件漏洞实现对客户端计算机的攻击</li>
-</ul>
-</li>
-</ul>
-<p>![THE ART OF DECEPTION](/images/kali/kali-notepad/THE ART OF DECEPTION.jpg)</p>
-<p><img src="/images/kali/kali-notepad/%E5%85%A5%E4%BE%B5%E7%9A%84%E8%89%BA%E6%9C%AF.png" alt="入侵的艺术"></p>
-<ul>
-<li>社会工程学<ul>
-<li>社会：人式社会化的动物（人与人之间的关系，群体利益决定结构架构）</li>
-<li>工程：依据标准的步骤完成任务达成目标的一套方法</li>
-<li>通过人的交流，使用欺骗伪装等手段绕过安全机制实现入侵的非技术手段</li>
-</ul>
-</li>
-<li>社会工程学攻击的四个阶段<ul>
-<li>研究：信息收集（WEB、媒体、垃圾桶、物理），确定并研究目标人</li>
-<li>钩子：与目标建立第一次交谈（Hook、下套）</li>
-<li>下手：与目标建立信任并获取信息</li>
-<li>退场：不引起目标怀疑的离开攻击现场</li>
-</ul>
-</li>
-<li>类型<ul>
-<li>基于人的社工<ul>
-<li>搭载</li>
-<li>伪造身份</li>
-<li>偷听 / 窃肩</li>
-<li>▲ 反社工</li>
-<li>垃圾桶工程</li>
-</ul>
-</li>
-<li>基于计算机的社工<ul>
-<li>弹出窗口</li>
-<li>内部网络攻击</li>
-<li>钓鱼邮件</li>
-<li>419尼日利亚骗局</li>
-<li>短信诈骗</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-Social-Engineer-Toolkit（SET）"><a href="#3-Social-Engineer-Toolkit（SET）" class="headerlink" title="3. Social-Engineer Toolkit（SET）"></a>3. Social-Engineer Toolkit（SET）</h4><ul>
-<li>Socia-Engineering Attacks<ul>
-<li>Spear Phishing Attack Vectors<ul>
-<li>Perform a Mass Email Attack（多个Email地址发送）</li>
-<li>▲ Create a FileFormat Payload（Payload-Email发送）<ul>
-<li>PAYLOADS</li>
-</ul>
-</li>
-<li>Create a Social-Engineering Template（模板Email发送）</li>
-</ul>
-</li>
-<li>Website Attack Vectors（Web攻击向量）<ul>
-<li>Java Applet Attack Method</li>
-<li>Metasploit Browser Exploit Attack Method</li>
-<li>Credential Harvester Attack Method<ul>
-<li>Web Templates</li>
-<li>Site Cloner（克隆站点，apache_dir/harvester_data.txt）<ul>
-<li>Kali的IP</li>
-<li>URL地址</li>
-<li>▲ 第一次网址为伪造，第二次网址为正确的网址</li>
-</ul>
-</li>
-<li>Custom Import</li>
-</ul>
-</li>
-<li>Tabnabbing Attack Method</li>
-<li>Web Jacking Attack Method</li>
-<li>Multi-Attack Web Method</li>
-<li>Full Screen Attack Method</li>
-<li>HTA Attack Method</li>
-</ul>
-</li>
-<li>Infectius Media Generator（感染媒体，USB/CD/DVD → autorun.inf）</li>
-<li>Create a Payload and Listener（MSF监听功能，/root/.set/payload.exe，调用MSF控制窗口进行侦听）</li>
-<li>Mass Mailer Attack（大量钓鱼邮件）</li>
-<li>Arduio-Based Attack Vector（Arduio嵌入开发）</li>
-<li>Wireless Access Point Attack Vector（伪造无线AP）<ul>
-<li>安装DHCP服务</li>
-<li>手段配置</li>
-</ul>
-</li>
-<li>QRCode Generator Attack Vector（生成一个二维码，绑定一个Payload）<ul>
-<li>漏洞利用URL地址（/root/.set/reports/qcode_attack.png）</li>
-</ul>
-</li>
-<li>Powsershell Attack Vectors（Powershell脚本）</li>
-<li>SMS SPoofing Attack Vector（欺骗短信，但需要提前到指定网站注册购买短信服务）</li>
-<li>Third Party Modules（第三方模块，可添加）</li>
-</ul>
-</li>
-<li>⭐ 站点克隆 1 2 3 2<ul>
-<li><a href="https://login.taobao.com/member/login.jhtml" target="_blank" rel="noopener">https://login.taobao.com/member/login.jhtml</a> </li>
-<li><a href="http://admin.smeshx.gov.cn/login.php" target="_blank" rel="noopener">http://admin.smeshx.gov.cn/login.php</a></li>
-</ul>
-</li>
-<li>⭐ 发送钓鱼软件 1 1 2</li>
-<li>⭐ WEB站点攻击 1 2 1 2</li>
-<li>▲ 2020.03.04 Github地址：<a href="https://github.com/trustedsec/social-engineer-toolkit" target="_blank" rel="noopener">https://github.com/trustedsec/social-engineer-toolkit</a></li>
-<li>▲ 2020.03.04 此项目依旧在维护更新，且呈现一种框架性的趋势</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/5/">Next</a>
+    <a class="extend prev" rel="prev" href="/page/3/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/5/">Next</a>
   </nav>
 
 
@@ -3228,7 +3117,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">170</span>
+                  <span class="site-state-item-count">172</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3335,7 +3224,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">163.4k</span>
+    <span title="Site words total count">171.9k</span>
   
 </div>
 

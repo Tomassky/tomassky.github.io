@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="XSS," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. 反射型XSS(get) 插入特殊字段尝试&amp;#39;&amp;quot;&amp;lt;&amp;gt;6666 F12查看源代码进行审查，发现无过滤和转义 插入弹窗尝试：&amp;lt;script&amp;gt;alert(1)&amp;lt;&#x2F;script&amp;gt; 输入框限制了输入长度，F12审查元素修改maxlength属性   ⭐ 成功弹窗 ▲ get形式的参数，可以在url地址栏中查看 源码分析 没有任何过滤，输入弹窗即可">
+<meta name="keywords" content="XSS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="XSS靶场--pikachu">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;30&#x2F;XSS%E9%9D%B6%E5%9C%BA--pikachu&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="1. 反射型XSS(get) 插入特殊字段尝试&amp;#39;&amp;quot;&amp;lt;&amp;gt;6666 F12查看源代码进行审查，发现无过滤和转义 插入弹窗尝试：&amp;lt;script&amp;gt;alert(1)&amp;lt;&#x2F;script&amp;gt; 输入框限制了输入长度，F12审查元素修改maxlength属性   ⭐ 成功弹窗 ▲ get形式的参数，可以在url地址栏中查看 源码分析 没有任何过滤，输入弹窗即可">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;xss&#x2F;pikachu&#x2F;DOM--XSS-%E8%BF%87%E6%BB%A4.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;xss&#x2F;pikachu&#x2F;DOM--XSS-%E5%88%86%E6%9E%90js%E6%96%87%E4%BB%B6.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;xss&#x2F;pikachu&#x2F;DOM--XSSX-%E5%88%86%E6%9E%90js%E6%96%87%E4%BB%B6.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;xss&#x2F;pikachu&#x2F;%E7%9B%B2%E6%89%93--XSS-%E7%94%A8%E6%88%B7%E5%8F%8D%E9%A6%88.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;xss&#x2F;pikachu&#x2F;%E8%BF%87%E6%BB%A4--XSS-%E8%BF%87%E6%BB%A4.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;xss&#x2F;pikachu&#x2F;htmlspecialchars--XSS-%E8%BF%87%E6%BB%A4.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;xss&#x2F;pikachu&#x2F;href--XSS-%E8%BF%87%E6%BB%A4-1.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;xss&#x2F;pikachu&#x2F;href--XSS-%E8%BF%87%E6%BB%A4-2.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;xss&#x2F;pikachu&#x2F;js--XSS-%E8%BF%87%E6%BB%A4-1.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;xss&#x2F;pikachu&#x2F;js--XSS-%E8%BF%87%E6%BB%A4-2.png">
+<meta property="og:updated_time" content="2020-03-30T14:42:07.727Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;xss&#x2F;pikachu&#x2F;DOM--XSS-%E8%BF%87%E6%BB%A4.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/30/XSS靶场--pikachu/"/>
+
+
+
+
+
+  <title>XSS靶场--pikachu | Tomas'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tomas'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/30/XSS%E9%9D%B6%E5%9C%BA--pikachu/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">XSS靶场--pikachu</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-30T22:44:12+08:00">
+                2020-03-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XSS/" itemprop="url" rel="index">
+                    <span itemprop="name">XSS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.6k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  6 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<h4 id="1-反射型XSS-get"><a href="#1-反射型XSS-get" class="headerlink" title="1. 反射型XSS(get)"></a>1. 反射型XSS(get)</h4><ul>
+<li>插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12查看源代码进行审查，发现无过滤和转义</li>
+<li>插入弹窗尝试：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code><ul>
+<li>输入框限制了输入长度，F12审查元素修改maxlength属性</li>
+</ul>
+</li>
+<li>⭐ 成功弹窗</li>
+<li>▲ get形式的参数，可以在url地址栏中查看</li>
+<li>源码分析<ul>
+<li>没有任何过滤，输入弹窗即可</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-反射型XSS-post"><a href="#2-反射型XSS-post" class="headerlink" title="2. 反射型XSS(post)"></a>2. 反射型XSS(post)</h4><ul>
+<li>需要登陆用户进去<ul>
+<li>用户：admin / 密码：123456</li>
+</ul>
+</li>
+<li>插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12查看源代码进行审查，发现无过滤和转义</li>
+<li>插入弹窗尝试：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>⭐ 成功弹窗</li>
+<li>▲ post形式的参数，只能通过数据包的拦截来查看，是写在body里面的，以表单形式提交</li>
+<li>源码分析<ul>
+<li>没有任何过滤，但需要登陆</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-存储型XSS"><a href="#3-存储型XSS" class="headerlink" title="3. 存储型XSS"></a>3. 存储型XSS</h4><ul>
+<li>插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12查看源代码进行审查，发现无过滤和转义</li>
+<li>插入弹窗尝试：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>⭐ 成功弹窗</li>
+<li>▲ 存储型XSS会把数据存储在数据库，每次一访问页面，都会显示出来</li>
+<li>源码分析<ul>
+<li>没有任何过滤，将post拿到的数据进行拼接，连接数据库</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-DOM型XSS"><a href="#4-DOM型XSS" class="headerlink" title="4. DOM型XSS"></a>4. DOM型XSS</h4><ul>
+<li>插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12审查元素进行审查，发现对<code>&lt;script&gt;&lt;/script</code>字段进行过滤，又看到是a标签</li>
+</ul>
+<p><img src="/images/xss/pikachu/DOM--XSS-%E8%BF%87%E6%BB%A4.png" alt="DOM--XSS-过滤"></p>
+<ul>
+<li>绕过方法<ul>
+<li>onclick事件：<code>q&quot; onclick=&quot;alert(1)&quot;&gt;</code></li>
+</ul>
+</li>
+<li>⭐ 成功弹窗</li>
+<li>▲ 这里踩坑了，因为是onclick事件，所以需要出现可以点击的标签</li>
+<li>▲ 婷婷哈大佬提示到，可以看源代码分析js文件，确实是有这么一个好东西</li>
+<li>源码分析<ul>
+<li>没有过滤，但需要分析js文件才能知道怎么构造</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/xss/pikachu/DOM--XSS-%E5%88%86%E6%9E%90js%E6%96%87%E4%BB%B6.png" alt="DOM--XSS-分析js文件"></p>
+<h4 id="5-DOM型XSS-X"><a href="#5-DOM型XSS-X" class="headerlink" title="5. DOM型XSS-X"></a>5. DOM型XSS-X</h4><ul>
+<li>插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12审查元素进行审查，发现过滤情况有点不明确</li>
+<li>F12查看源代码，定位javascript代码的地方，发现了url的构造方法</li>
+</ul>
+<p><img src="/images/xss/pikachu/DOM--XSSX-%E5%88%86%E6%9E%90js%E6%96%87%E4%BB%B6.png" alt="DOM--XSSX-分析js文件"></p>
+<ul>
+<li>绕过方法<ul>
+<li>闭合标签：<code>&#39;&quot; onclick=alert(1)&gt;</code></li>
+</ul>
+</li>
+<li>⭐ 成功弹窗</li>
+<li>源码分析<ul>
+<li>没有过滤，但需要分析js文件才能知道怎么构造</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-XSS之盲打"><a href="#6-XSS之盲打" class="headerlink" title="6. XSS之盲打"></a>6. XSS之盲打</h4><ul>
+<li>content和name插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12查看源代码进行审查，发现无过滤和转义</li>
+<li>content和name插入弹窗尝试：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>在提示下登陆后台/xssblind/admin_login.php</li>
+<li>⭐ 成功弹窗</li>
+<li>▲ xss盲打，顾名思义，一般是打到登陆留言后台</li>
+<li>源码分析<ul>
+<li>xss盲打，没有任何过滤，打出来效果很难去验证，可以乱插截取cookie的字符串</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/xss/pikachu/%E7%9B%B2%E6%89%93--XSS-%E7%94%A8%E6%88%B7%E5%8F%8D%E9%A6%88.png" alt="盲打--XSS-用户反馈"></p>
+<h4 id="7-XSS之过滤"><a href="#7-XSS之过滤" class="headerlink" title="7. XSS之过滤"></a>7. XSS之过滤</h4><ul>
+<li>插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12查看源代码进行审查，发现无过滤和转义</li>
+<li>插入弹窗尝试：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>F12源代码进行审查，发现对<code>&lt;script&gt;&lt;/script</code>字段进行过滤</li>
+</ul>
+<p><img src="/images/xss/pikachu/%E8%BF%87%E6%BB%A4--XSS-%E8%BF%87%E6%BB%A4.png" alt="过滤--XSS-过滤"></p>
+<ul>
+<li>绕过方法<ul>
+<li>img标签：<code>&lt;img src=0 onerror=alert(1)&gt;</code></li>
+</ul>
+</li>
+<li>⭐ 成功弹窗</li>
+<li>▲ 过滤的函数有很多，过滤一般强度要大</li>
+<li>源码分析<ul>
+<li>会使用正则对<code>&lt;script</code>进行替换为空,也就是过滤掉</li>
+</ul>
+</li>
+</ul>
+<h4 id="8-XSS之htmlspecialchars"><a href="#8-XSS之htmlspecialchars" class="headerlink" title="8. XSS之htmlspecialchars"></a>8. XSS之htmlspecialchars</h4><ul>
+<li>插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12查看源代码进行审查，发现出现了转义，但对单引号无转义</li>
+</ul>
+<p><img src="/images/xss/pikachu/htmlspecialchars--XSS-%E8%BF%87%E6%BB%A4.png" alt="htmlspecialchars--XSS-过滤"></p>
+<ul>
+<li>绕过方法<ul>
+<li><code>&#39;q onclick=&#39;alert(1)</code></li>
+</ul>
+</li>
+<li>⭐ 成功弹窗</li>
+<li>▲ htmlspecialchars()函数默认是不对单引号进行过滤，需要指定第二个参数的值</li>
+<li>源码分析<ul>
+<li>使用了htmlspecialchars进行处理，htmlspecialchars默认不对单引号处理</li>
+</ul>
+</li>
+</ul>
+<h4 id="9-XSS之href输出"><a href="#9-XSS之href输出" class="headerlink" title="9. XSS之href输出"></a>9. XSS之href输出</h4><ul>
+<li>插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12查看源代码进行审查，发现出现了转义，但对单引号无转义</li>
+</ul>
+<p><img src="/images/xss/pikachu/href--XSS-%E8%BF%87%E6%BB%A4-1.png" alt="href--XSS-过滤-1"></p>
+<ul>
+<li>构造单引号的payload也不行</li>
+</ul>
+<p><img src="/images/xss/pikachu/href--XSS-%E8%BF%87%E6%BB%A4-2.png" alt="href--XSS-过滤-2"></p>
+<ul>
+<li>绕过方法<ul>
+<li>javascript协议：<code>javascript:alert(1)</code></li>
+</ul>
+</li>
+<li>⭐ 成功弹窗</li>
+<li>▲ href和scr属性都可以接收javascript发来的东西</li>
+<li>源码分析<ul>
+<li>出在a标签的href属性里面，可以使用javascript协议来执行js</li>
+<li>防御:只允许http，https，其次在进行htmlspecialchars处理</li>
+</ul>
+</li>
+</ul>
+<h4 id="10-XSS之js输出"><a href="#10-XSS之js输出" class="headerlink" title="10. XSS之js输出"></a>10. XSS之js输出</h4><ul>
+<li>插入特殊字段尝试<code>&#39;&quot;&lt;&gt;6666</code></li>
+<li>F12查看源代码进行审查，发现无过滤和转义，是直接输入一个javascript中的</li>
+</ul>
+<p><img src="/images/xss/pikachu/js--XSS-%E8%BF%87%E6%BB%A4-1.png" alt="js--XSS-过滤-1"></p>
+<ul>
+<li>插入弹窗尝试：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>发觉对<code>&lt;script&gt;</code>标签进行了闭合</li>
+</ul>
+<p><img src="/images/xss/pikachu/js--XSS-%E8%BF%87%E6%BB%A4-2.png" alt="js--XSS-过滤-2"></p>
+<ul>
+<li>绕过方法<ul>
+<li>构造闭合：<code>&lt;/script&gt;&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+</ul>
+</li>
+<li>⭐ 成功弹窗</li>
+<li>源码分析<ul>
+<li>输入动态的生成到了js中，形成xss</li>
+<li>javascript里面是不会对tag和字符实体进行解释的,所以需要进行js转义</li>
+<li>修复<ul>
+<li>这里如果进行html的实体编码,虽然可以解决XSS的问题,但是实体编码后的内容,在JS里面不会进行翻译,这样会导致前端的功能无法使用。</li>
+<li>所以在JS的输出点应该使用\对特殊字符进行转义</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="11-关于pikachu靶场"><a href="#11-关于pikachu靶场" class="headerlink" title="11. 关于pikachu靶场"></a>11. 关于pikachu靶场</h4><ul>
+<li>靶场的分的很细，也有一定的提示，而且比较全，我觉得这方面是胜于dvwa的</li>
+<li>婷婷哈大佬的靶场练习：<a href="https://www.cnblogs.com/199904-04/p/12362590.html" target="_blank" rel="noopener">https://www.cnblogs.com/199904-04/p/12362590.html</a><ul>
+<li>写得比我细致很多</li>
+</ul>
+</li>
+<li>▲ 通过这个靶场，我学到了DOM型XSS也要看源代码，看是怎么生成HTML代码的</li>
+<li>▲ 因源码过多，已经放在Github上的仓库</li>
+<li>靶场常用语句<ul>
+<li>特殊字符：<code>&#39;&quot;&lt;&gt;666</code></li>
+<li>弹窗：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>大小写：<code>&lt;sCrIpt&gt;alert(1)&lt;/ScrIpt&gt;</code></li>
+<li>重复标签：<code>&lt;sc&lt;script&gt;ript&gt;alert(1)&lt;/scr&lt;/script&gt;ipt&gt;</code></li>
+<li>重复script：<code>&lt;scrscriptipt&gt;alert(1)&lt;/scrscriptipt&gt;</code></li>
+<li>HTML实体编码：<code>&amp;#x3C;&amp;#x73;&amp;#x63;&amp;#x72;&amp;#x69;&amp;#x70;&amp;#x74;&amp;#x3E;&amp;#x61;&amp;#x6C;&amp;#x65;&amp;#x72;&amp;#x74;&amp;#x28;&amp;#x31;&amp;#x29;&amp;#x3C;&amp;#x2F;&amp;#x73;&amp;#x63;&amp;#x72;&amp;#x69;&amp;#x70;&amp;#x74;&amp;#x3E;</code></li>
+<li>onclick事件：<code>&lt;img src=x onclick=alert(1)&gt;</code></li>
+<li>onload事件：<code>&lt;img src=x onload=alert(1)&gt;</code></li>
+<li>onerror事件：<code>&lt;img src=x onerror=alert(1)&gt;</code></li>
+<li>href属性：<code>&lt;a href=&quot;javascript:alert(1)&quot;&gt;</code></li>
+<li>src属性：<code>&lt;img src=&quot;javascript:alert(1)&quot;&gt;</code></li>
+<li>⭐ 闭合标签+注释\</li>
+<li>▲ 更多的，在XSS讲解中，一般无外乎上面常用的语句与闭合标签的结合</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/XSS/" rel="tag"># XSS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/30/XSS%E9%9D%B6%E5%9C%BA--dvwa/" rel="next" title="XSS靶场--dvwa">
+                <i class="fa fa-chevron-left"></i> XSS靶场--dvwa
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/30/XSS%E9%9D%B6%E5%9C%BA--xss-labs/" rel="prev" title="XSS靶场--xss-labs">
+                XSS靶场--xss-labs <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/photo.jpg"
+                alt="Tomas" />
+            
+              <p class="site-author-name" itemprop="name">Tomas</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">172</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Tomassky" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:tomassky7@gmail.com" target="_blank" title="Gmail邮箱">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>Gmail邮箱</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://ylsword-cheat.top" title="LengSword" target="_blank">LengSword</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://neigeshoufu.github.io/ljy.github.io" title="neigeshoufu" target="_blank">neigeshoufu</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-反射型XSS-get"><span class="nav-number">1.</span> <span class="nav-text">1. 反射型XSS(get)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-反射型XSS-post"><span class="nav-number">2.</span> <span class="nav-text">2. 反射型XSS(post)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-存储型XSS"><span class="nav-number">3.</span> <span class="nav-text">3. 存储型XSS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-DOM型XSS"><span class="nav-number">4.</span> <span class="nav-text">4. DOM型XSS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-DOM型XSS-X"><span class="nav-number">5.</span> <span class="nav-text">5. DOM型XSS-X</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-XSS之盲打"><span class="nav-number">6.</span> <span class="nav-text">6. XSS之盲打</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-XSS之过滤"><span class="nav-number">7.</span> <span class="nav-text">7. XSS之过滤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-XSS之htmlspecialchars"><span class="nav-number">8.</span> <span class="nav-text">8. XSS之htmlspecialchars</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-XSS之href输出"><span class="nav-number">9.</span> <span class="nav-text">9. XSS之href输出</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#10-XSS之js输出"><span class="nav-number">10.</span> <span class="nav-text">10. XSS之js输出</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#11-关于pikachu靶场"><span class="nav-number">11.</span> <span class="nav-text">11. 关于pikachu靶场</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tomas</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">171.9k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

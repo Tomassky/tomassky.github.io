@@ -240,6 +240,340 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-11%EF%BC%9A%E5%87%BD%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-11%EF%BC%9A%E5%87%BD%E6%95%B0/" itemprop="url">PHP笔记-11：函数</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T12:28:08+08:00">
+                2020-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3.5k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  13 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-函数的基本概念"><a href="#1-函数的基本概念" class="headerlink" title="1. 函数的基本概念"></a>1. 函数的基本概念</h4><ul>
+<li>function，是一种语法结构，将实现某一个功能的代码块（多行代码）封装到一个结构中，从而实现代码的重复利用（复用）</li>
+</ul>
+<h4 id="2-函数的使用"><a href="#2-函数的使用" class="headerlink" title="2. 函数的使用"></a>2. 函数的使用</h4><ul>
+<li>定义函数的目的：是为了实现代码的重复利用，一个功能一个函数（简单明了）</li>
+<li>函数的使用：通过访问函数的名字+()；<ul>
+<li>如果函数在定义的过程中有参数，那么在调用的时候就必须传入对应的参数：函数是一种结构不会自动运行，必须通过调用才会执行</li>
+</ul>
+</li>
+<li>函数是在代码执行阶段，碰到函数名字的时候才会调用，不是在编译阶段</li>
+<li>函数执行的内存分析<ul>
+<li>读取代码进入到代码段（编译：将代码变成字节码存储到内存）</li>
+<li>根据代码逐行执行</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //函数</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //调用函数</span><br><span class="line">    display();</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //定义函数</span><br><span class="line">    function display()&#123;</span><br><span class="line">        //函数体</span><br><span class="line">        echo &apos;hello world&apos;;     //存在返回值，输出为&apos;hello world&apos;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //调用函数</span><br><span class="line">    display();  //存在返回值，输出为&apos;hello world&apos;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-函数命名规范"><a href="#3-函数命名规范" class="headerlink" title="3. 函数命名规范"></a>3. 函数命名规范</h4><ul>
+<li>命名规范：由字母、数字和下划线组成，但是不能以数字开头<ul>
+<li>驼峰法：除了左边第一个单词外，后面所有的单词首字母都大写：showParentInfo()</li>
+<li>下划线法：单词之间通过下划线连接，单词都是小写：show_parent_info()</li>
+</ul>
+</li>
+<li>▲ 函数作为一种常用的结构，一般遵循以下规则：函数通常名字代表着函数的功能，而有些功能会比较复杂，可能一个单词不足以表达，需要多个组合</li>
+<li>▲ 函数名字：在一个脚本周期中，不允许出现同名函数</li>
+</ul>
+<h4 id="4-参数详解"><a href="#4-参数详解" class="headerlink" title="4. 参数详解"></a>4. 参数详解</h4><ul>
+<li>形参：形式参数，不具有实际意义的参数，是在函数定义时使用的参数</li>
+<li>实参：实际参数，具有实际数据意义的参数，是在函数调用时使用的参数</li>
+<li>▲ 形参是实参的载体：实参在调用时通常是需要传入到函数内部参与计算（运算），那么需要在函数内部去找到实际数据所在的位置才能找到数据本身：需要实际调用的时候，将数据以实参的形式传递给形参：给形参赋值，从而使得函数内部可以用到外部数据</li>
+<li>▲ 注意<ul>
+<li>在PHP中允许实参多余形参（个数）：函数内部不用而已</li>
+<li>在PHP中理论上形参个数没有限制（实际开发不会太多）</li>
+<li>实参不能少于形参个数</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //定义函数</span><br><span class="line">    function add($arg1,$arg2)&#123;      //形参可以有多个，使用逗号分隔即可</span><br><span class="line">        //函数体：可以直接使用形参运算</span><br><span class="line">        echo $arg1 + $arg2;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //调用函数</span><br><span class="line">    $num1 = 10;</span><br><span class="line"></span><br><span class="line">    add($num1,20);   //传入的实参，可以是变量或者其他有值的表达式，输出为 30</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>默认值：default value，指的是形参的默认值，在函数定义的时候，就给形参进行一个初始赋值，如果实际调用传入的参数（实参）没有提供，那么形参就会使用定义时的值来进入函数内部参与运算</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //调用函数</span><br><span class="line">    $num1 = 10;</span><br><span class="line"></span><br><span class="line">    //函数的默认值</span><br><span class="line">    function jian($num1 = 0,$num2 = 0)&#123;   </span><br><span class="line">        //当前的$num1是形参，在编译时不执行，即便执行也是在jian函数内部，不会与外部的$num1变量冲突</span><br><span class="line">        echo $num1 - $num2;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //调用：默认值如果存在，可以不用传入</span><br><span class="line">    jian($num1);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">    echo $num1;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>引用传递<ul>
+<li>实参在调用时会将值赋值给形参，那么实际上使用的方式就是一种简单的值传递：将实参（如果是变量或者常量或者其他表达式）的结果（值）取出来赋值给形参：形参与外部实际传入的参数本身没有任何关联关系：只是结果一样</li>
+<li>有的时候，希望在函数内部拿到的外部数据，能够在函数内部改变，那么就需要明确告知函数（定义时），函数才会在调用的时候去主动获取外部数据的内存地址。以上这种定义形式参数的方式叫作引用传值</li>
+<li>▲ 在调用的时候，必须给引用传值的参数位置传入实际参数，而且参数本身必须是变量。（变量才有指向的数据的内存地址）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //引用传值</span><br><span class="line">    function display($a,&amp;$b)&#123;</span><br><span class="line">        //修改形参的值</span><br><span class="line">        $a = $a * $a;</span><br><span class="line">        $b = $b * $b;</span><br><span class="line"></span><br><span class="line">        echo $a,&apos;&lt;br&gt;&apos;,$b,&apos;&lt;br/&gt;&apos;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //定义变量</span><br><span class="line">    $a = 10;</span><br><span class="line">    $b = 5;</span><br><span class="line"></span><br><span class="line">    //调用函数</span><br><span class="line">    display($a,$b);  //输出为 100，25</span><br><span class="line"></span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;,$a,&apos;&lt;br/&gt;&apos;,$b;  //输出为 10，25</span><br><span class="line"></span><br><span class="line">    //错误调用：引用传值直接传入数据本身而不是变量</span><br><span class="line">    //display(10,5);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-函数返回值"><a href="#5-函数返回值" class="headerlink" title="5. 函数返回值"></a>5. 函数返回值</h4><ul>
+<li>return，指的是将函数实现的结果，通过return关键字，返回给函数外部（函数调用处）在PHP中所有的函数都有返回值。（如果没有明确return使用，那么系统默认返回NULL）</li>
+<li>▲ 函数的返回值可以是任意数据类型</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //函数返回值</span><br><span class="line"></span><br><span class="line">    //定义函数</span><br><span class="line">    function display()&#123;</span><br><span class="line">        //输出</span><br><span class="line">        echo __FUNCTION__;  //输出当前函数名字</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //var_dump(display());</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Ruturn关键字<ul>
+<li>return在函数内部存在的价值：返回当前函数的结果（当前函数运行结束）</li>
+<li>return还可以在文件中直接使用（不在函数里面）：代表文件将结果return后面跟的内容，转交给包含当前文件的位置。（通常在系统配置文件中使用较多），在文件中也代表中终止文件后面的代码：return之后的内容不会执行。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //加法运算</span><br><span class="line">    function add($num1,$num2)&#123;</span><br><span class="line">        return $num1 + $num2;   //返回结果</span><br><span class="line"></span><br><span class="line">    //输出</span><br><span class="line">    echo $num1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $res = add(10,20);        //外部定义变量接收函数运行结果</span><br><span class="line"></span><br><span class="line">    echo $res;</span><br><span class="line"></span><br><span class="line">    //将结果提交给另外包含的文件</span><br><span class="line">    return &apos;hello world&apos;;</span><br><span class="line"></span><br><span class="line">    echo $res;            //不再执行：上面return结束了</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//return -&gt; include</span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">  //包含有return关键字的文件</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    $res = include_once &apos;function3.php&apos;;</span><br><span class="line">    var_dump($res);  //</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="6-作用域"><a href="#6-作用域" class="headerlink" title="6. 作用域"></a>6. 作用域</h4><ul>
+<li>变量（常量）能够被访问的区域</li>
+<li>全局变量：就是用户普通定义的变量（函数外部定义）<ul>
+<li>所属全局空间：在PHP中只允许在全局空间使用：理论上函数内部不可方法</li>
+<li>脚本周期：直到脚本运行结束（最后一行代码执行完）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //PHP中作用域</span><br><span class="line"></span><br><span class="line">    //默认的代码空间：全局空间</span><br><span class="line">    $global = &apos;global area&apos;;  //最终会被系统纳入到超全局变量中：$GLOBALS[&apos;global&apos;] = global area;</span><br><span class="line"></span><br><span class="line">    function display()&#123;</span><br><span class="line"></span><br><span class="line">        //访问全局变量</span><br><span class="line">        echo $global;   //不能访问</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    //调用函数</span><br><span class="line">    display();  //访问报错</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>局部变量：就是在函数内部定义的变量<ul>
+<li>所属当前函数空间：在PHP中只允许在当前函数自己内部使用</li>
+<li>函数周期：函数执行结束（函数是在栈区中开辟独立内存空间运行）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //局部变量（函数内部定义）</span><br><span class="line">    function display()&#123;</span><br><span class="line">        //所有的形参都可以理解为局部变量</span><br><span class="line">        $inner = __FUNCTION__;        //局部变量</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    //调用函数</span><br><span class="line">    display();</span><br><span class="line">    //全局空间访问局部变量</span><br><span class="line">    echo $inner;   //不能访问</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>超全局变量：系统定义的变量（预定义变量：$_SERVER、$_POST等）<ul>
+<li>所属超全局空间：没有访问限制（函数内外都可以访问）</li>
+<li>超全局变量会将全局变量自动纳入到$GLOBALS里面，而$GLOBALS没有作用域限制，所以能够帮助局部去访问全局变量：但是必须使用数组方式</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //默认的代码空间：全局空间</span><br><span class="line">    $global = &apos;global area&apos;;  //最终会被系统纳入到超全局变量中：$GLOBALS[&apos;global&apos;] = global area;</span><br><span class="line"></span><br><span class="line">    function display()&#123;</span><br><span class="line"></span><br><span class="line">        //访问全局变量</span><br><span class="line">        echo $global;           //不能访问</span><br><span class="line"></span><br><span class="line">        //访问全局变量</span><br><span class="line">        //var_dump($GLOBALS);</span><br><span class="line">        echo $GLOBALS[&apos;global&apos;];</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //调用函数</span><br><span class="line">    display();  //报错+输出 global area</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>global关键字：实现全局访问局部，同时局部也可以访问全局（▲同$GLOBALS，但有区别，$GLOBALS不可调用一个外部不存在的变量)<ul>
+<li>▲ 一种在函数里面定义变量的一种方式</li>
+<li>如果使用global定义的变量名在外部存在（全局变量），那么系统在函数内部定义的变量直接指向外部全局变量所指向的内存空间（同一个变量）</li>
+<li>如果使用global定义的变量名在外部不存在（全局变量），系统会自动在全局空间（外部）定义一个与局部变量同名的全局变量</li>
+<li>本质形式：在函数的内部和外部，对一个同名变量（全局和局部）使用同一块内存地址保存数据，从而实现共同拥有</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //默认的代码空间：全局空间</span><br><span class="line">    $global = &apos;global area&apos;;  //最终会被系统纳入到超全局变量中：$GLOBALS[&apos;global&apos;] = global area;</span><br><span class="line"></span><br><span class="line">    function display()&#123;</span><br><span class="line"></span><br><span class="line">        //定义变量：使用全局变量</span><br><span class="line">        global $global;           //全局空间存在</span><br><span class="line">        echo $global;</span><br><span class="line"></span><br><span class="line">        //定义变量：全局不存在</span><br><span class="line">        global $local;</span><br><span class="line">        $local = &apos;inner&apos;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //调用函数</span><br><span class="line">    display();</span><br><span class="line"></span><br><span class="line">    //访问&quot;局部&quot;变量</span><br><span class="line">    echo $local;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-静态变量"><a href="#7-静态变量" class="headerlink" title="7. 静态变量"></a>7. 静态变量</h4><ul>
+<li>在函数内部定义的变量，使用static关键字修饰，用来实现跨函数共享数据的变量，函数运行结束所有局部变量都会清空，如果重新运行一下函数，所有的局部变量又会重新初始化<ul>
+<li>静态变量的作用是为了跨函数共享数据（同一个函数被多次调用）</li>
+<li>系统在进行编译的时候会对static这一行进行初始化 -&gt; 为静态变量赋值</li>
+<li>▲ 函数多次调用时，会u自动跳过static关键字这一行</li>
+</ul>
+</li>
+<li>使用方向<ul>
+<li>为了统计：当前函数被调用的次数</li>
+<li>为了统筹函数多次调用得到的不同结果</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"> </span><br><span class="line">    //静态变量</span><br><span class="line"></span><br><span class="line">    //定义函数</span><br><span class="line">    function display()&#123;</span><br><span class="line">        //定义变量</span><br><span class="line">        $local = 1;           //局部变量</span><br><span class="line"></span><br><span class="line">        //定义静态变量</span><br><span class="line">        static $count = 1;        //静态变量</span><br><span class="line"></span><br><span class="line">        echo $local++,$count++,&apos;&lt;br/&gt;&apos;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //调用</span><br><span class="line">    display();</span><br><span class="line">    display();</span><br><span class="line">    display();</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="8-可变函数"><a href="#8-可变函数" class="headerlink" title="8. 可变函数"></a>8. 可变函数</h4><ul>
+<li>当前有一个变量所保存到值，刚好是函数的名字，那么就可以使用变量+()来充当函数名使用<ul>
+<li>可变函数在系统使用的过程中还是比较多的，尤其是使用很多系统函数的时候：需要用户在外部定义一个自定义函数，但是需要传入到系统函数内部使用</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //PHP可变函数</span><br><span class="line"></span><br><span class="line">    //定义函数</span><br><span class="line">    function display()&#123;</span><br><span class="line">        echo __LINE__, __FUNCTION__;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //定义变量</span><br><span class="line">    $func = &apos;display&apos;;</span><br><span class="line"></span><br><span class="line">    //可变函数</span><br><span class="line">    $func();</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    //定义系统函数（假设）</span><br><span class="line">    function sys_function($arg1,$arg2)&#123;</span><br><span class="line">        //给指定的函数（第一个参数），求对应的第二个参数值的4次方</span><br><span class="line">        //为实际用户输入的数值进行处理</span><br><span class="line"></span><br><span class="line">        return $arg1($arg2);  //user_function(10)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //定义一个用户函数：求一个数的四次方</span><br><span class="line">    function user_function($num)&#123;</span><br><span class="line">        return $num * $num * $num * $num;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //求10的4次方</span><br><span class="line">    echo sys_function(&apos;user_function&apos;,10);  //输出为 10000</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="9-匿名函数"><a href="#9-匿名函数" class="headerlink" title="9. 匿名函数"></a>9. 匿名函数</h4><ul>
+<li>没有名字的函数<ul>
+<li>▲ 变量保存匿名函数，本质得到的是一个对象（Closure）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //匿名函数</span><br><span class="line"></span><br><span class="line">    //定义基本匿名函数</span><br><span class="line">    $func = function()&#123;</span><br><span class="line">        //函数体</span><br><span class="line">        echo &apos;hello world&apos;;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    //调用匿名函数：可变函数</span><br><span class="line">    $func();</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    //查看变量内容</span><br><span class="line">    var_dump($func);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="10-闭包"><a href="#10-闭包" class="headerlink" title="10. 闭包"></a>10. 闭包</h4><ul>
+<li>closure， 一词来源于以下两者的结合：要执行的代码块（由于自由变量被包含在代码块中，这些自由变量以及它们引用的对象没有被释放）和为自由变量提供绑定的计算环境（作用域）</li>
+<li>▲ 简单理解：函数内部有一些局部变量（要执行的代码块）在函数执行之后没有被释放，是因为在函数内部还有对应的函数在引用（函数的内部函数：匿名函数）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //闭包函数</span><br><span class="line">    function display()&#123;</span><br><span class="line">        //定义变量：局部变量</span><br><span class="line">        $name = __FUNCTION__;</span><br><span class="line"></span><br><span class="line">        //定义匿名函数</span><br><span class="line">        $innerfunction = function() use($name)&#123;   //use就是将外部变量（局部）保留给内部使用（闭包）</span><br><span class="line"></span><br><span class="line">            //函数内部的函数</span><br><span class="line">            //echo $name;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        //调用函数</span><br><span class="line">        $innerfunction();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    display();</span><br><span class="line"></span><br><span class="line">    //闭包函数</span><br><span class="line">    function display1()&#123;</span><br><span class="line">        //定义变量：局部变量</span><br><span class="line">        $name = __FUNCTION__;</span><br><span class="line"></span><br><span class="line">        //定义匿名函数</span><br><span class="line">        $innerfunction = function() use($name)&#123;  //use就是将外部变量（局部）保留给内部使用（闭包）</span><br><span class="line"></span><br><span class="line">        //函数内部的函数</span><br><span class="line">        echo $name;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        //返回内部匿名函数</span><br><span class="line">        return $innerfunction;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $closure = display1();  </span><br><span class="line"></span><br><span class="line">    //display1函数运行结束：理论上局部变量$name应该已经被释放</span><br><span class="line">    $closure();</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="11-伪类型"><a href="#11-伪类型" class="headerlink" title="11. 伪类型"></a>11. 伪类型</h4><ul>
+<li>假类型，实际上在PHP中不存在的类型。但是通过伪类型可以帮助程序员去更好的查看操作手册从而更方便学习<ul>
+<li>Mixed：混合的，可以是多种PHP中的数据类型</li>
+<li>Number：数值的，可以是任意数值类型（整形和浮点型）</li>
+</ul>
+</li>
+<li>PHP伪类型，图片来自网络</li>
+</ul>
+<p><img src="/images/php/php-notepad/PHP%E4%BC%AA%E7%B1%BB%E5%9E%8B.png" alt="PHP伪类型"></p>
+<h4 id="12-引用函数"><a href="#12-引用函数" class="headerlink" title="12. 引用函数"></a>12. 引用函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //静态变量做局部变量</span><br><span class="line">    function &amp;demo1()</span><br><span class="line">    &#123;</span><br><span class="line">        static $i = 0;</span><br><span class="line">        $i++;</span><br><span class="line">        return $i;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $b = &amp;demo1();  //$b和$i的内存共用(与return的变量共用)</span><br><span class="line">    echo $b;  //输出为1</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    $b = 100;</span><br><span class="line">    $t = demo1();</span><br><span class="line">    echo $t;  //输出为101</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //临时变量做局部变量</span><br><span class="line">    function &amp;demo2()</span><br><span class="line">    &#123;</span><br><span class="line">        $j = 1;</span><br><span class="line">        return $j;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $c = &amp;demo2();</span><br><span class="line">    echo $c;  //输出为1</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    $c = 100;</span><br><span class="line">    $t = demo2();</span><br><span class="line">    echo $c;  //输出为100</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">   </span><br><span class="line">    //三个变量共用一个内存地址(与return的变量共用)</span><br><span class="line">    function &amp;demo($a,$b,$c)</span><br><span class="line">    &#123;</span><br><span class="line">        static $i = 0;</span><br><span class="line">        $i++;</span><br><span class="line">        return $i;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $x = &amp;demo(100,200,300);</span><br><span class="line">    echo $x;  //输出为1</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    $xx = &amp;demo(1000,2000,3000);</span><br><span class="line">    echo $xx;  //输出为2</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    $xxx = &amp;demo(10000,20000,30000);</span><br><span class="line">    echo $xxx;  //输出为3</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    $xx = 400;</span><br><span class="line">    echo demo(11,22,33);  //输出为401;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-10%EF%BC%9A%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2360,471 +2694,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-1%EF%BC%9A%E6%90%AD%E5%BB%BAwamp%E5%92%8C%E5%9F%9F%E5%90%8D%E6%9C%8D%E5%8A%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-1%EF%BC%9A%E6%90%AD%E5%BB%BAwamp%E5%92%8C%E5%9F%9F%E5%90%8D%E6%9C%8D%E5%8A%A1/" itemprop="url">PHP笔记-1：搭建wamp和域名服务</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T11:22:48+08:00">
-                2020-03-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PHP/" itemprop="url" rel="index">
-                    <span itemprop="name">PHP</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  8 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-WAMP环境"><a href="#1-WAMP环境" class="headerlink" title="1. WAMP环境"></a>1. WAMP环境</h4><ul>
-<li>环境搭建路径不能为中文，可以集中在一个sever目录下</li>
-<li>Apache：httpd-2.4.41-o111c-x64-vc15-r2<ul>
-<li>2.4.41–版本号</li>
-<li>x64–对应系统平台</li>
-<li>vc15–编译平台</li>
-</ul>
-</li>
-<li>PHP：php-7.4.3-Win32-vc15-x64<ul>
-<li>x64–对应系统平台</li>
-<li>7.4.3–版本号</li>
-<li>vc15–编译平台</li>
-</ul>
-</li>
-<li>MySQL：mysql5.5<ul>
-<li>5.5–版本号</li>
-</ul>
-</li>
-</ul>
-<p><img src="/images/php/php-notepad/kodex/server%E7%9B%AE%E5%BD%95.png" alt="server目录"></p>
-<h4 id="2-安装Apache"><a href="#2-安装Apache" class="headerlink" title="2. 安装Apache"></a>2. 安装Apache</h4><ul>
-<li>Apache httpd：<a href="https://www.apachehaus.com/cgi-bin/download.plx" target="_blank" rel="noopener">https://www.apachehaus.com/cgi-bin/download.plx</a><ul>
-<li>根据系统版本选择对应的Apache httpd服务</li>
-<li>▲ 从Apache官网下载相应的源码，现在比较难以找到msi安装包</li>
-</ul>
-</li>
-<li>安装<ul>
-<li>▲ 目录路径不可为中文</li>
-<li>将文件解压到新建的server目录，命名为Apache</li>
-<li>测试服务：cmd -&gt; httpd.exe -t<ul>
-<li>新解压的Apache服务会报错误，需要Define SRVROOT，更改为Apache的绝对路径</li>
-<li>测试成功：Syntax OK</li>
-</ul>
-</li>
-<li>安装：cmd -&gt; httpd.exe -K install<ul>
-<li>若无报错信息，则可以在Apache Service Monitor启动Apache服务</li>
-</ul>
-</li>
-<li>查看使用的模块：cmd -&gt; httpd.exe -M<ul>
-<li><static>：静态加载，Apache启动就加载好，可以直接使用</li>
-<li><shared>：动态加载，在使用到的时候才会加载</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>目录说明<ul>
-<li>bin/cgi-bin：windows下的一些可执行文件</li>
-<li>conf：配置文件目录</li>
-<li>htdocs：Apache默认的主机地址（网站根目录）</li>
-<li>modules：Apache的功能化模块</li>
-</ul>
-</li>
-<li>配置站点<ul>
-<li>▲ 配置文件：httpd.conf -&gt; 自定义SRVROOT</li>
-<li>网站文件夹所在位置：DocumentRoot/ServerRoot “${SRVROOT}/htdocs”</li>
-<li>使用名字访问网站：ServerName localhost</li>
-<li>端口监听：Listen 80</li>
-</ul>
-</li>
-<li>⭐ 每次动到配置文件，可通过httpd.exe -t去测试是否配置编译错误</li>
-<li>▲ 凡是涉及到Apache配置文件的修改，都需要重启Apache才能生效</li>
-<li>▲ 实现DNS域名解析：修改hosts文件 -&gt; 127.0.0.1  localhost</li>
-<li>▲ 可在系统环境变量的PATH中加载httpd.exe的路径</li>
-<li>浏览器访问localhost，看是否能成功访问到</li>
-</ul>
-<p><img src="/images/php/php-notepad/Apache%E5%AE%89%E8%A3%85%E6%88%90%E5%8A%9F.png" alt="Apache安装成功"></p>
-<h4 id="3-安装PHP"><a href="#3-安装PHP" class="headerlink" title="3. 安装PHP"></a>3. 安装PHP</h4><ul>
-<li>PHP：<a href="https://windows.php.net/download#php-7.4" target="_blank" rel="noopener">https://windows.php.net/download#php-7.4</a><ul>
-<li>根据系统版本选择对应的PHP服务</li>
-<li>根据Apache选择对应的编译环境</li>
-<li>选择Thread Safe线程安全的形式</li>
-</ul>
-</li>
-<li>安装<ul>
-<li>▲ 目录路径不可为中文</li>
-<li>将文件解压到新建的server目录，命名为PHP7.4.3</li>
-<li>可通过php.exe运行命令来指定要解析的PHP脚本 -&gt; php.exe  -f  PHP文件所在路径的index.php文件 -&gt; hello world</li>
-</ul>
-</li>
-<li>目录说明<ul>
-<li>ext：扩展包-&gt;PHP很多功能是通过加载扩展来实现</li>
-<li>php7apache2_4.dll：Apache支持包</li>
-<li>php.exe：PHP解释器</li>
-</ul>
-</li>
-<li>配置Apache加载PHP模块<ul>
-<li>▲ 配置Apache文件：httpd.conf</li>
-<li>Apache加载PHP模块：在Apache的主配置文件中加载对应的PHP提供的模块<ul>
-<li>LoadModule php7_module PHP所提供的模块链接所在路径</li>
-</ul>
-</li>
-<li>Apache分配工作给PHP模块：如果是PHP代码就交给PHP处理–文件后缀判断<ul>
-<li>AddType application/x-httpd-php .php</li>
-</ul>
-</li>
-<li>将PHP的配置文件加载到Apache配置文件中<ul>
-<li>PHPIniDir php.ini所在路径</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p><img src="/images/php/php-notepad/%E9%85%8D%E7%BD%AEApache%E5%8A%A0%E8%BD%BDPHP%E6%A8%A1%E5%9D%97.png" alt="配置Apache加载PHP模块"></p>
-<ul>
-<li>配置文件<ul>
-<li>php.ini文件默认是不存在的，是以development存在，复制一份，修改命名为php.ini</li>
-</ul>
-</li>
-<li>测试<ul>
-<li>新建一个index.php文件</li>
-<li>浏览器访问localhost/index.php</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    phpinfo();</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/php/php-notepad/PHP%E5%AE%89%E8%A3%85%E6%88%90%E5%8A%9F.png" alt="PHP安装成功"></p>
-<h4 id="4-MySQL安装"><a href="#4-MySQL安装" class="headerlink" title="4. MySQL安装"></a>4. MySQL安装</h4><ul>
-<li>MySQL：<a href="https://www.mysql.com/downloads/" target="_blank" rel="noopener">https://www.mysql.com/downloads/</a><ul>
-<li>根据系统版本选择对应的MySQL服务</li>
-<li>安装mysql一般安装5.x版本，7.x版本为一定程度的阉割版</li>
-</ul>
-</li>
-<li>安装<ul>
-<li>Custome：自定义安装（选择安装路径）<ul>
-<li>MySQL Server -&gt; server/mysql</li>
-<li>Server data files -&gt; server/mysql/data</li>
-</ul>
-</li>
-<li>Launch the MySQL Instance Configuration Wizard：配置<ul>
-<li>Please select a configuration -&gt; Detailed Configuration：详细配置</li>
-<li>Please select a server type -&gt; Developer Machine：开发环境</li>
-<li>Please select the database usage -&gt; Multifunctional Database：多功能</li>
-<li>Please set the approximate number of cocurrent connections to the server -&gt; Manual Setting(15):并发设置</li>
-<li>Please set the networking options<ul>
-<li>Enable TCP/IP Networking  -&gt; 允许TCP/IP协议访问<ul>
-<li>Prot Number -&gt; 3306</li>
-<li>Add firewall exception for this port -&gt; 防火墙通过</li>
-</ul>
-</li>
-<li>Enable Strict Mode -&gt; 使用严格模式</li>
-</ul>
-</li>
-<li>Please select the default set -&gt; Manual Selected Default Character Set / Collation:字符集设定 -&gt; utf8</li>
-<li>Please set the Windows options <ul>
-<li>Install As Windows Service：服务安装<ul>
-<li>Service Name：MySQL</li>
-<li>Launch the MySQL Server automatically：随系统启动</li>
-</ul>
-</li>
-<li>Include Bin Directory in Windows PATH：讲MySQL加到系统路径</li>
-</ul>
-</li>
-<li>Please set the security options<ul>
-<li>Modify security settings<ul>
-<li>New root password -&gt; root</li>
-<li>Confirm -&gt; root</li>
-<li>Enable root access from remote machines：允许远程访问</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p><img src="/images/php/php-notepad/MySQL%E5%AE%89%E8%A3%85%E6%88%90%E5%8A%9F.png" alt="MySQL安装成功"></p>
-<ul>
-<li>目录说明<ul>
-<li>bin：执行文件夹<ul>
-<li>mysql.exe：访问MySQL服务器的客户端</li>
-<li>mysqld.exe：MySQL服务</li>
-<li>mysqldump.exe：MySQL的备份软件客户端</li>
-</ul>
-</li>
-<li>data：数据存储文件夹</li>
-<li>lib：核心文件夹</li>
-<li>my.ini：配置文件</li>
-</ul>
-</li>
-<li>测试mysql服务<ul>
-<li>cmd -&gt; mysql -u root -p</li>
-<li>参数<ul>
-<li>-h：主机地址</li>
-<li>-p：端口</li>
-<li>-u：用户名</li>
-<li>-p：密码</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>PHP连接MySQL数据库<ul>
-<li>▲ 配置php文件：php.ini</li>
-<li>PHP的扩展都是在ext文件夹中，需要制定扩展所在路径：extension_dir=”/server/php7.4.3/ext”</li>
-<li>开启sqli扩展：extension=mysqli</li>
-<li>开启pdo_mysql扩展：extension=pdo_mysql</li>
-</ul>
-</li>
-</ul>
-<p><img src="/images/php/php-notepad/PHP%E8%BF%9E%E6%8E%A5MySQL%E6%95%B0%E6%8D%AE%E5%BA%93.png" alt="PHP连接MySQL数据库"></p>
-<ul>
-<li>测试PHP连接mysql<ul>
-<li>新建一个testmysql.php文件</li>
-<li>浏览器访问localhost/testmysql.py，查看是否出现OK！</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $link=mysqli_connect(&apos;localhost&apos;,&apos;root&apos;,&apos;root&apos;);</span><br><span class="line">    if(!$link) echo &quot;Error !&quot;;</span><br><span class="line">    else echo &quot;Ok!&quot;;</span><br><span class="line">    mysqli_close($link);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/php/php-notepad/phpinfo--mysqli.png" alt="phpinfo--mysqli"></p>
-<p><img src="/images/php/php-notepad/phpinfo--pdo_mysql.png" alt="phpinfo--pdo_mysql"></p>
-<h4 id="5-搭建域名"><a href="#5-搭建域名" class="headerlink" title="5. 搭建域名"></a>5. 搭建域名</h4><ul>
-<li>修改hosts文件 -&gt; 127.0.0.1  localhost</li>
-</ul>
-<h4 id="6-搭建虚拟主机"><a href="#6-搭建虚拟主机" class="headerlink" title="6. 搭建虚拟主机"></a>6. 搭建虚拟主机</h4><ul>
-<li>官方解释文档：<a href="http://httpd.apache.org/docs/current/vhosts/" target="_blank" rel="noopener">http://httpd.apache.org/docs/current/vhosts/</a></li>
-<li>配置虚拟主机方式<ul>
-<li>基于IP</li>
-<li>基于主机名</li>
-<li>基于端口</li>
-</ul>
-</li>
-<li>实验环境<ul>
-<li>在Apache下的htdocs目录中，新建两个目录，test1和test2<ul>
-<li>test1目录下1.php（<?php phpinfo(); ?>）</li>
-<li>test2目录下2.php（<?php echo "OKKKK" ?>）</li>
-<li>▲ 2020.03.05在查询资料的过程中，有遇到test目录可以建立在htdocs的情况，但实操发现不行</li>
-</ul>
-</li>
-<li>本地模拟外网域名，在hosts文件中配置两个测试域名<ul>
-<li>127.0.0.1 <a href="http://www.test1mzt.com" target="_blank" rel="noopener">www.test1mzt.com</a></li>
-<li>127.0.0.1 <a href="http://www.test2mzt.com" target="_blank" rel="noopener">www.test2mzt.com</a></li>
-</ul>
-</li>
-<li>修改配置（Apache24\conf\httpd.conf）<ul>
-<li>#Virtual hosts -&gt; Include conf/extra/httpd-vhosts.conf</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p><img src="/images/php/php-notepad/%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BAhosts%E6%96%87%E4%BB%B6%E8%AE%BE%E7%BD%AE.png" alt="虚拟主机hosts文件设置"></p>
-<h4 id="7-基于IP的虚拟主机"><a href="#7-基于IP的虚拟主机" class="headerlink" title="7. 基于IP的虚拟主机"></a>7. 基于IP的虚拟主机</h4><ul>
-<li>基于IP，一台服务器有多个网卡，每个IP绑定一个站点的方式</li>
-<li>▲ 基于IP的方式，写在VirtualHost的IP地址需要可被路由</li>
-<li>▲ 在下图，有多种访问方式访问test2下的2.php<ul>
-<li>127.0.0.2:80/2.php</li>
-<li><a href="http://www.test2mzt.com:80/2.php" target="_blank" rel="noopener">www.test2mzt.com:80/2.php</a></li>
-<li><a href="http://www.test2mzt.com/2.php" target="_blank" rel="noopener">www.test2mzt.com/2.php</a></li>
-</ul>
-</li>
-</ul>
-<p><img src="/images/php/php-notepad/%E5%9F%BA%E4%BA%8EIP%E7%9A%84%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA.png" alt="基于IP的虚拟主机"></p>
-<h4 id="8-基于端口的虚拟主机"><a href="#8-基于端口的虚拟主机" class="headerlink" title="8. 基于端口的虚拟主机"></a>8. 基于端口的虚拟主机</h4><ul>
-<li>修改配置文件将原来的：Listen 80改为Listen 80 Listen 88</li>
-<li>▲ 基于端口的方式，需要在httpd.conf的配置文件中增加监听端口</li>
-<li>▲ 在下图，有多种访问方式访问test2下的2.php<ul>
-<li>127.0.0.1:88/2.php</li>
-<li><a href="http://www.test2mzt.com:88/2.php" target="_blank" rel="noopener">www.test2mzt.com:88/2.php</a></li>
-</ul>
-</li>
-</ul>
-<p><img src="/images/php/php-notepad/%E5%9F%BA%E4%BA%8E%E7%AB%AF%E5%8F%A3%E7%9A%84%E4%B8%BB%E6%9C%BA.png" alt="基于端口的主机"></p>
-<h4 id="9-基于域名的虚拟主机"><a href="#9-基于域名的虚拟主机" class="headerlink" title="9. 基于域名的虚拟主机"></a>9. 基于域名的虚拟主机</h4><ul>
-<li>基于主机名也就是基于域名方式访问，每个IP多个站点</li>
-<li>▲ 基于域名的方式，需要在hosts文件中指定域名</li>
-<li>▲ 在下图，有多种访问方式访问test2下的2.php<ul>
-<li>127.0.0.1/2.php</li>
-<li><a href="http://www.test2mzt.com/2.php" target="_blank" rel="noopener">www.test2mzt.com/2.php</a></li>
-</ul>
-</li>
-</ul>
-<p><img src="/images/php/php-notepad/%E5%9F%BA%E4%BA%8E%E5%9F%9F%E5%90%8D%E7%9A%84%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA.png" alt="基于域名的虚拟主机"></p>
-<h4 id="10-注意"><a href="#10-注意" class="headerlink" title="10. 注意"></a>10. 注意</h4><ul>
-<li><Directory>目录报错<ul>
-<li>▲ 2020.03.05 Apache启动报Invalid command ‘order’, perhaps misspelled or defined by a module not included的错误<ul>
-<li>Apache2.4以上，做了修改</li>
-<li>在LoadMoudle中，需要通过access_compat_module modules/mod_access_compat.so和actions_module modules/mod_actions.so模块，才能使用”Order、Deny、Allow”写配置文件</li>
-<li>若不通过access_compat_module modules/mod_access_compat.so更改，可以使用Apache Require命令</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>需要给当前设定的站点（目录）访问权限</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;Directory &apos;站点目录&apos;&gt;</span><br><span class="line">    #设定方式：代表匹配权限的顺序</span><br><span class="line">    Order Deny,Allow    //没有顺序关系：实际顺序有意义</span><br><span class="line">    #限定范围：按照顺序执行</span><br><span class="line">    Deny from 指定的范围</span><br><span class="line">    Allow from 指定范围/all</span><br><span class="line"></span><br><span class="line">    #列表显示（若无指定具体访问文件或访问文件夹）</span><br><span class="line">    Options Indexes FollowSymLinks</span><br><span class="line"></span><br><span class="line">    #指定默认访问文件</span><br><span class="line">    Directory Indexes FollowSymLinks</span><br><span class="line"></span><br><span class="line">    #指定默认访问文件</span><br><span class="line">    DirectoryIndex index.html index.php</span><br><span class="line">&lt;/Directory&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>▲ 一旦启用虚拟主机配置文件，那么默认的主机地址localhost就不再生效，如果想要生效就要为localhost增加单独的虚拟主机</li>
-<li>▲ 如果说网站中整个网站根目录允许访问，但是其中还有其他文件夹不允许访问：可以增加多个Directory标签，针对不同的文件夹</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2879,7 +2748,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">168</span>
+                  <span class="site-state-item-count">169</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2890,7 +2759,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -2901,7 +2770,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -2986,7 +2855,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">152.4k</span>
+    <span title="Site words total count">160.9k</span>
   
 </div>
 

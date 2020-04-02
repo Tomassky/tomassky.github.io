@@ -2009,21 +2009,21 @@
 <li>发现可以修改个人信息，既然是get的请求，那我bp抓包一下并修改</li>
 <li>发觉数据都可以进行修改，还带了Cookie</li>
 </ul>
-<p><img src="/images/csrf/dvwa/csrf-get-data.png" alt="csrf-get-data"></p>
-<p><img src="/images/csrf/dvwa/csrf-get-change.png" alt="csrf-get-change"></p>
+<p><img src="/images/csrf/pikachu/csrf-get-data.png" alt="csrf-get-data"></p>
+<p><img src="/images/csrf/pikachu/csrf-get-change.png" alt="csrf-get-change"></p>
 <h4 id="2-CSRF-post"><a href="#2-CSRF-post" class="headerlink" title="2. CSRF(post)"></a>2. CSRF(post)</h4><ul>
 <li>登陆进来，一样的账户，一样的界面，但不一样的，是抓包发现的，是post数据</li>
 <li>一样的修改数据，一样的带了Cookie</li>
 <li>▲ bp的proxy会返回200OK，Repeater会返回302，但是都修改成功</li>
 </ul>
-<p><img src="/images/csrf/dvwa/csrf-post-data.png" alt="csrf-post-data"></p>
-<p><img src="/images/csrf/dvwa/csrf-post-change.png" alt="csrf-post-change"></p>
+<p><img src="/images/csrf/pikachu/csrf-post-data.png" alt="csrf-post-data"></p>
+<p><img src="/images/csrf/pikachu/csrf-post-change.png" alt="csrf-post-change"></p>
 <h4 id="3-CSRF-Token"><a href="#3-CSRF-Token" class="headerlink" title="3. CSRF Token"></a>3. CSRF Token</h4><ul>
 <li>登陆进来，一样的账户，一样的界面，又再一次抓包，发现这次是多了token</li>
 <li>▲ 每次刷新，Token都不一样</li>
 <li>只有在点击修改个人信息的时候，会去访问一个token_get_edit.php的页面，才会获得一个Token，且隐藏在一个hidden的表单中，这是可以利用的就是token_get_edit.php的页面</li>
 </ul>
-<p><img src="/images/csrf/dvwa/csrf-token.png" alt="csrf-token"></p>
+<p><img src="/images/csrf/pikachu/csrf-token.png" alt="csrf-token"></p>
 <ul>
 <li>攻击思路<ul>
 <li>同样找一个有XSS漏洞的页面，插入一个iframe：<code>&lt;iframe src=&quot;../csrf&quot;&gt;</code>，可能需要修改maxlength的长度</li>
@@ -2031,11 +2031,11 @@
 </ul>
 </li>
 </ul>
-<p><img src="/images/csrf/dvwa/csrf-iframe.png" alt="csrf-iframe"></p>
+<p><img src="/images/csrf/pikachu/csrf-iframe.png" alt="csrf-iframe"></p>
 <ul>
 <li>构造一个url：<a href="http://192.168.0.108/pikachu/vul/csrf/csrftoken/token_get_edit.php?sex=boy&amp;phonenum=18626545453&amp;add=china&amp;email=vince%40pikachu.cn&amp;token=698085e82ed2acb762985707895&amp;submit=submit#" target="_blank" rel="noopener">http://192.168.0.108/pikachu/vul/csrf/csrftoken/token_get_edit.php?sex=boy&amp;phonenum=18626545453&amp;add=china&amp;email=vince%40pikachu.cn&amp;token=698085e82ed2acb762985707895&amp;submit=submit#</a></li>
 </ul>
-<p><img src="/images/csrf/dvwa/csrf-token-pikachu.png" alt="csrf-token-pikachu"></p>
+<p><img src="/images/csrf/pikachu/csrf-token-pikachu.png" alt="csrf-token-pikachu"></p>
 <ul>
 <li>成功修改</li>
 <li>同样的，也能引用婷婷哈大佬的js代码文件去进行CSRF攻击</li>

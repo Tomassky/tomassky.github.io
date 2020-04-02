@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Web安全,XSS," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. 常见的防XSS对策 参数所在位置及相应的转义方法     位置 说明 最低限度的转义内容    元素内容 能解释Tag和字符实体结束边界符为”&amp;lt;” “&amp;lt;”和”&amp;amp;”使用字符实体转义   属性值（双引号中的内容） 能解释字符实体结束边界符为双引号 属性值使用双引号括起来，”&amp;lt;”和”&amp;amp;”和”””使用字符实体转义   属性值（URL） 同上 检测URL格式正确后按">
+<meta name="keywords" content="Web安全,XSS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="XSS--防护策略与代码">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;04&#x2F;02&#x2F;XSS--%E9%98%B2%E6%8A%A4%E7%AD%96%E7%95%A5%E4%B8%8E%E4%BB%A3%E7%A0%81&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="1. 常见的防XSS对策 参数所在位置及相应的转义方法     位置 说明 最低限度的转义内容    元素内容 能解释Tag和字符实体结束边界符为”&amp;lt;” “&amp;lt;”和”&amp;amp;”使用字符实体转义   属性值（双引号中的内容） 能解释字符实体结束边界符为双引号 属性值使用双引号括起来，”&amp;lt;”和”&amp;amp;”和”””使用字符实体转义   属性值（URL） 同上 检测URL格式正确后按">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-04-02T08:00:46.509Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/04/02/XSS--防护策略与代码/"/>
+
+
+
+
+
+  <title>XSS--防护策略与代码 | Tomas'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tomas'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/02/XSS--%E9%98%B2%E6%8A%A4%E7%AD%96%E7%95%A5%E4%B8%8E%E4%BB%A3%E7%A0%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">XSS--防护策略与代码</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-02T16:01:27+08:00">
+                2020-04-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XSS/" itemprop="url" rel="index">
+                    <span itemprop="name">XSS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<h4 id="1-常见的防XSS对策"><a href="#1-常见的防XSS对策" class="headerlink" title="1. 常见的防XSS对策"></a>1. 常见的防XSS对策</h4><ul>
+<li>参数所在位置及相应的转义方法</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">位置</th>
+<th align="center">说明</th>
+<th align="center">最低限度的转义内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">元素内容</td>
+<td align="center">能解释Tag和字符实体</br>结束边界符为”&lt;”</td>
+<td align="center">“&lt;”和”&amp;”使用字符实体转义</td>
+</tr>
+<tr>
+<td align="center">属性值（双引号中的内容）</td>
+<td align="center">能解释字符实体</br>结束边界符为双引号</td>
+<td align="center">属性值使用双引号括起来，”&lt;”和”&amp;”和”””使用字符实体转义</td>
+</tr>
+<tr>
+<td align="center">属性值（URL）</td>
+<td align="center">同上</td>
+<td align="center">检测URL格式正确后按照属性值的规则转义</td>
+</tr>
+<tr>
+<td align="center">事件绑定函数</td>
+<td align="center">同上</td>
+<td align="center">转义JavaScript后按照属性值得规则转义</td>
+</tr>
+<tr>
+<td align="center">script元素中的字符串字面量</td>
+<td align="center">不能解释Tag和字符实体</br>结束边界符为”&lt;”</td>
+<td align="center">转义JavaScript应避免出现”&lt;/“</td>
+</tr>
+</tbody></table>
+<ul>
+<li>htmlspecialchars()函数</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">转换前</th>
+<th align="center">转换后</th>
+<th align="center">ENT_NOQUOTES</th>
+<th align="center">ENT_COMPAT</th>
+<th align="center">ENT_QUOTES</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">&lt;</td>
+<td align="center"><code>&amp;lt;</code></td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td align="center">&gt;</td>
+<td align="center"><code>&amp;gt;</code></td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td align="center">&amp;</td>
+<td align="center"><code>&amp;amp;</code></td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td align="center">“</td>
+<td align="center"><code>&amp;quot;</code></td>
+<td align="center">×</td>
+<td align="center">√</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td align="center">‘</td>
+<td align="center"><code>&amp;#39;</code></td>
+<td align="center">×</td>
+<td align="center">×</td>
+<td align="center">√</td>
+</tr>
+</tbody></table>
+<ul>
+<li>JavaScript字符串字面量应被转义的字符</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">字符</th>
+<th align="center">转义后</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">|\</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">‘</td>
+<td align="center">&#39;</td>
+</tr>
+<tr>
+<td align="center">“</td>
+<td align="center">&quot;</td>
+</tr>
+<tr>
+<td align="center">换行</td>
+<td align="center">\n</td>
+</tr>
+</tbody></table>
+<ul>
+<li>指定响应的字符编码<ul>
+<li>如果Web应用与浏览器各自设想的字符编码不一致，也会成为XSS的原因</li>
+<li>header(‘Content-Type: text/html; charset=UTF-8’);</li>
+</ul>
+</li>
+<li>输入校验<ul>
+<li>通过检验输入值的有效性，当输入不符合条件时就显示错误消息并促使用户重新输入，有时也能够防御XSS攻击</li>
+</ul>
+</li>
+<li>给Cookie添加HttpOnly属性<ul>
+<li>Cookie中有名为HttpOnly的属性，该属性能禁止JavaScript读取Cookie值</li>
+<li>php.ini中进行设置：session.cookie_httponly = on</li>
+</ul>
+</li>
+<li>关闭TRACE方法<ul>
+<li>跨站追踪（Cross-Site Tracing，简称XST）攻击的防范策略。XST是指利用JavaScript发送HTTP的TRACE方法来窃取Cookie值或Basic认证密码的攻击手段</li>
+<li>实际上，现在的主流浏览器都已经能够自己防御XST</li>
+<li>关闭TRACE方法，在httpd.conf的设置 TraceEnable Off</li>
+</ul>
+</li>
+<li>生成URL时的对策<ul>
+<li>当URL由程序动态生成时，需要对其进行校验，仅允许http和https协议</li>
+<li>URL需满足下列的两个条件中的一个<ul>
+<li>以http:或https:开头的绝对URL</li>
+<li>以/开头的相对URL</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function check_url($url)&#123;</span><br><span class="line">    if(preg_match(&apos;/\Ahttp:/&apos;,$url)||preg_match(&apos;/\Ahttps:/&apos;,$url)|preg_match(&apos;#\A/#&apos;,$url))&#123;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>校验链接网址<ul>
+<li>检查链接的目标URL，如果指向外部网站就报错</li>
+<li>当链接目标为外部URL时，显示一个警告页面以提醒用户可能存在的分享</li>
+</ul>
+</li>
+<li>对JavaScript字符串字面量动态生成进行Unicode转义<ul>
+<li>JavaScript能将Unicode代码点U+XXXX字符转义为\uXXXX的功能</li>
+<li>escape_js_string函数，但前提是字符编码为UTF-8，除了字母和数字以外，减号（-）和点好（.）也不进行转义</li>
+<li>unicode_escape函数的功能将输入字符串全部以\uXXXX的UNICODE形式进行转义</li>
+<li>在mb_convert_encoding中将输入字符串的字符编码转换为UTF-16</li>
+<li>在bin2hex中将对象字符串转换为十六进制</li>
+<li>使用正则表达式，每4个字节插入一个\u</li>
+<li>在pre_replace_callback函数中，将字母和数字以外的字符串全部传给unicode_escape函数处理</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">   // 将字符串全部转换为 /uXXXX形式</span><br><span class="line">   function unicode_escape($match)&#123;</span><br><span class="line">      $u16 = mb_convert_encoding($matches[0],&apos;UTF-16&apos;);</span><br><span class="line">      return preg_replace(&apos;/[0-9a-f]&#123;4&#125;&apos;,&apos;\u$0&apos;,bin2hex($u16));</span><br><span class="line">   &#125;</span><br><span class="line">   // 将除了字母、数字、逗号和点号外的字符转义为\uXXXX形式</span><br><span class="line">   function escape_js_string($s)&#123;</span><br><span class="line">      return preg_replace_callback(&apos;/[^-\.0-9a-zA-Z]+/u&apos;,&apos;unicode_escape&apos;,$s);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在JavaScript中引用定义在script元素外的参数的方法<ul>
+<li>在script元素外部定义参数后再在JavaScript中引用该参数也可以，不过需要利用hidden参数</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;input type=&quot;hidden&quot; id=&quot;familyname&quot; value=&quot;&lt;?php echo htmlspecialchars($familyname,ENT_COMPAR,&apos;UTF-8&apos;);?&gt;&quot;&gt;</span><br><span class="line">.....</span><br><span class="line">&lt;script type=&quot;text/javascript&quot;&gt;</span><br><span class="line">var familyname = documen.getElementById(&apos;familyname&apos;).value;</span><br><span class="line">.....</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用JQuery的JavaScript库来对JavaScript字符串字面量动态生成进行转义<ul>
+<li>使用span元素确定字符串的显示位置，然后向id指定的DOM插入文本文字，这时可以使用text方法自动进行转义操作</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">&lt;script src=&quot;jquery-1.4.4.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">你好&lt;span id=&quot;name&quot;&gt;&lt;/span&gt;</span><br><span class="line">&lt;script type=&quot;text/javascript&quot;&gt;</span><br><span class="line">if(document.URL.match(/name\=([^&amp;]*)/))&#123;</span><br><span class="line">    var name = unescape(RegExp.$1);</span><br><span class="line">    $(&apos;#name&apos;).text(name);</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>允许HTML标签或CSS的对策<ul>
+<li>使用地点：常见于开发博客系统或SNS网站</li>
+<li>一旦允许输入HTML标签，就有可能出现JavaScript的执行</li>
+<li>在CSS中使用expression功能也能执行JavaScript<ul>
+<li>IE8的标准中就禁用了expression功能执行JavaScript，但在其他模式中还可以使用</li>
+</ul>
+</li>
+<li>为了避免JavaScript的执行，可以采取解析用户输入的HTML，仅允许可以显示的元素的方法，可以通过解析HTML文本语法结构的第三方程序库，如PHP的HTML Purifier</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-常见的防XSS代码"><a href="#2-常见的防XSS代码" class="headerlink" title="2. 常见的防XSS代码"></a>2. 常见的防XSS代码</h4><ul>
+<li><code>preg_replace(&quot;/script/&quot;,&quot;&quot;,$x)</code> -&gt; 正则匹配替换，区分大小写</li>
+<li><code>preg_replace(&quot;/script/i&quot;,&quot;&quot;,$x)</code> -&gt; 正则匹配替换，不区分大小写</li>
+<li><code>preg_replace( &#39;/&lt;(.*)s(.*)c(.*)r(.*)i(.*)p(.*)t/i&#39;, &#39;&#39;, $_GET[ &#39;name&#39; ] )</code> -&gt; 正则匹配替换</li>
+<li>htmlspecialchars()函数 -&gt; 默认的第二个参数不对单引号进行转义</li>
+<li>strtolower()函数 -&gt; 将字符串转为小写</li>
+<li>strpos()函数 -&gt; 找寻字符串<ul>
+<li><code>strpos($str,&#39;http://&#39;)</code></li>
+<li><code>strpos($str,&#39;https://&#39;)</code></li>
+</ul>
+</li>
+<li>str_replace()函数 -&gt; 第一个参数为被替换的内容，第二个参数为替换的内容<ul>
+<li><code>str_replace(&quot;&lt;script&quot;,&quot;&lt;scr_ipt&quot;,$str)</code></li>
+<li><code>str_replace(&quot;on&quot;,&quot;o_n&quot;,$str)</code></li>
+<li><code>str_replace(&quot;src&quot;,&quot;sr_c&quot;,$str)</code></li>
+<li><code>str_replace(&quot;data&quot;,&quot;da_ta&quot;,$str)</code></li>
+<li><code>str_replace(&quot;href&quot;,&quot;hr_ef&quot;,$str)</code></li>
+<li><code>str_replace(&quot;data&quot;,&quot;da_ta&quot;,$str)</code></li>
+<li><code>str_replace(&quot;script&quot;,&quot;&quot;,$str)</code></li>
+<li><code>str_replace(&quot;on&quot;,&quot;&quot;,$str)</code></li>
+<li><code>str_replace(&quot;src&quot;,&quot;&quot;,$str)</code></li>
+<li><code>str_replace(&quot;data&quot;,&quot;&quot;,$str)</code></li>
+<li><code>str_replace(&quot;href&quot;,&quot;&quot;,$str)</code></li>
+<li><code>str_replace(&#39;&quot;&#39;,&#39;&amp;quot&#39;,$str)</code></li>
+<li><code>str_replace(&quot;script&quot;,&quot;&amp;nbsp;&quot;,$str)</code></li>
+<li><code>str_replace(&quot; &quot;,&quot;&amp;nbsp;&quot;,$str)</code></li>
+<li><code>str_replace(&quot;/&quot;,&quot;&amp;nbsp;&quot;,$str)</code></li>
+<li><code>str_replace(&quot; &quot;,&quot;&amp;nbsp;&quot;,$str)</code></li>
+<li><code>str_replace(&quot;&gt;&quot;,&quot;&quot;,$str)</code></li>
+<li><code>str_replace(&quot;&lt;&quot;,&quot;&quot;,$str)</code></li>
+</ul>
+</li>
+<li>hidden表单形式</li>
+<li>addslashes()函数 -&gt; 在每个特殊字符前加反斜杠（\）</li>
+<li>strip_tags()函数 -&gt; 剥去字符串中的 HTML、XML以及PHP的标签</li>
+<li>stripos()函数 -&gt; 查找字符串在另一字符串中第一次出现的位置，本函数处于循环中，意味着每一个<code>&lt;script</code>都会被替换，且不区分大小写</li>
+<li>stripcslashes() -&gt; 去掉反斜杠</li>
+<li>htmlentities() -&gt; 转义html实体</li>
+<li>html_entity_decode() -&gt; 反转义html实体</li>
+<li>htmlspecialchars_decode() -&gt; 将特殊的 HTML 实体转换回普通字符</li>
+<li>▲ 白嫖一下bmjoker写的数据过滤类（PHP）<ul>
+<li><a href="https://www.cnblogs.com/bmjoker/p/8806899.html" target="_blank" rel="noopener">https://www.cnblogs.com/bmjoker/p/8806899.html</a></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">class XSS</span><br><span class="line">&#123;</span><br><span class="line">    /**</span><br><span class="line">    * @desc 过滤数据</span><br><span class="line">    *</span><br><span class="line">    * @param $data string|array 输入数据</span><br><span class="line">    * @param $low  bool      是否采用更为严格的过滤</span><br><span class="line">    *</span><br><span class="line">    * @return 返回过滤的数据</span><br><span class="line">    */</span><br><span class="line">    public function clean_xss($data, $low = False)</span><br><span class="line">    &#123;</span><br><span class="line">        #字符串过滤</span><br><span class="line">       if (! is_array ( $data ))</span><br><span class="line">       &#123;</span><br><span class="line">           $data = trim ( $data );              #字符两边的处理</span><br><span class="line">           $data = strip_tags ( $data );        #从字符串中去除 HTML 和 PHP 标记</span><br><span class="line">           $data = htmlspecialchars ( $data );  #特殊字符转换为HTML实体</span><br><span class="line">           if ($low)</span><br><span class="line">           &#123;</span><br><span class="line">               return $data;</span><br><span class="line">           &#125;</span><br><span class="line">           #匹配换空格</span><br><span class="line">           $data = str_replace ( array (&apos;&quot;&apos;, &quot;\\&quot;, &quot;&apos;&quot;, &quot;/&quot;, &quot;..&quot;, &quot;../&quot;, &quot;./&quot;, &quot;//&quot; ), &apos;&apos;, $data );</span><br><span class="line">           $no = &apos;/%0[0-8bcef]/&apos;;</span><br><span class="line">           $data = preg_replace ( $no, &apos;&apos;, $data );</span><br><span class="line">           $no = &apos;/%1[0-9a-f]/&apos;;</span><br><span class="line">           $data = preg_replace ( $no, &apos;&apos;, $data );</span><br><span class="line">           $no = &apos;/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/S&apos;;</span><br><span class="line">           $data = preg_replace ( $no, &apos;&apos;, $data );</span><br><span class="line">           return $data;</span><br><span class="line">       &#125;</span><br><span class="line">       #数组过滤</span><br><span class="line">       $arr=array();</span><br><span class="line">       foreach ($data as $k =&gt; $v)</span><br><span class="line">       &#123;</span><br><span class="line">           $temp=$this-&gt;clean_xss($v);</span><br><span class="line">           $arr[$k]=$temp;</span><br><span class="line">       &#125;</span><br><span class="line">       return $arr;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line">#测试测试</span><br><span class="line">session_start();</span><br><span class="line">$_SESSION[&apos;xss&apos;]=&apos;xssss&apos;;</span><br><span class="line">$xss=new XSS();</span><br><span class="line">#测试字符串</span><br><span class="line">$str = &quot;&lt;script&gt;alert(document.cookie)&lt;/script&gt;&quot;;</span><br><span class="line">echo $str;</span><br><span class="line">$str2=$xss-&gt;clean_xss($str);</span><br><span class="line">echo $str2;</span><br><span class="line">echo &quot;&lt;hr/&gt;&quot;;</span><br><span class="line">#测试数组</span><br><span class="line">$arr=array(&quot;&lt;script&gt;alert(document.cookie)&lt;/script&gt;&quot;,&quot;&lt;script&gt;alert(document.cookie)&lt;/script&gt;&quot;,&quot;&lt;script&gt;alert(document.cookie)&lt;/script&gt;&quot;);</span><br><span class="line">echo &quot;&lt;pre&gt;&quot;;</span><br><span class="line">print_r($arr);</span><br><span class="line">echo &quot;&lt;/pre&gt;&quot;;</span><br><span class="line">$arr2=$xss-&gt;clean_xss($arr);</span><br><span class="line">echo &quot;&lt;pre&gt;&quot;;</span><br><span class="line">print_r($arr2);</span><br><span class="line">echo &quot;&lt;/pre&gt;&quot;;die;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Web%E5%AE%89%E5%85%A8/" rel="tag"># Web安全</a>
+          
+            <a href="/tags/XSS/" rel="tag"># XSS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/02/XSS%E9%9D%B6%E5%9C%BA--WooYun.tencent/" rel="next" title="XSS靶场--Wooyun.tencent">
+                <i class="fa fa-chevron-left"></i> XSS靶场--Wooyun.tencent
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/04/02/XSS--%E6%A6%82%E8%A6%81/" rel="prev" title="XSS--概要">
+                XSS--概要 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/photo.jpg"
+                alt="Tomas" />
+            
+              <p class="site-author-name" itemprop="name">Tomas</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">181</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Tomassky" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:tomassky7@gmail.com" target="_blank" title="Gmail邮箱">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>Gmail邮箱</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://ylsword-cheat.top" title="LengSword" target="_blank">LengSword</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://neigeshoufu.github.io/ljy.github.io" title="neigeshoufu" target="_blank">neigeshoufu</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-常见的防XSS对策"><span class="nav-number">1.</span> <span class="nav-text">1. 常见的防XSS对策</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-常见的防XSS代码"><span class="nav-number">2.</span> <span class="nav-text">2. 常见的防XSS代码</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tomas</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">176.3k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

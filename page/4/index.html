@@ -240,6 +240,738 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-16%EF%BC%9A%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-16%EF%BC%9A%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/" itemprop="url">PHP笔记-16：文件操作</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T12:45:36+08:00">
+                2020-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  478 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-文件操作"><a href="#1-文件操作" class="headerlink" title="1. 文件操作"></a>1. 文件操作</h4><ul>
+<li>fopen() 的第一个参数包含被打开的文件名，第二个参数规定打开文件的模式。<ul>
+<li>$myfile = fopen(“webdictionary.txt”, “r”) or die(“Unable to open file!”);</li>
+</ul>
+</li>
+<li>读文件<ul>
+<li>Fgets($find) //读第一行文件<ul>
+<li>▲ 文件指针必须是有效的，必须指向由 fopen()或fsockopen()成功打开的文件(并还未由 fclose() 关闭)。</li>
+<li>▲ fget()可以被用来模拟get/post请求，结合fopen()和fsockopen()两个函数</li>
+</ul>
+</li>
+<li>Fread($find,获取字节) //指定获取内容</li>
+<li>Filesize($find) //获取文件字节<ul>
+<li>▲ $find 必须为路径</li>
+</ul>
+</li>
+<li>Fclose($find) //关闭资源</li>
+</ul>
+</li>
+<li>修改或添加文件内容<ul>
+<li>Fopen(./1.xx,”a+”);</li>
+<li>Fwrite(“文件”,”内容”);<ul>
+<li>▲ 只能将字符串string写进文件，无法将数组写进</li>
+<li>▲ 写进数组可借用file_put_contents()函数</li>
+</ul>
+</li>
+<li>Fclose(find);  //关闭资源</li>
+</ul>
+</li>
+<li>文件指针feof()<ul>
+<li>▲ 文件指针必须是有效的，必须指向由 fopen()或fsockopen()成功打开的文件（并还未由 fclose()关闭）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //读文件</span><br><span class="line">    $f = fopen(&quot;./1.txt&quot;, &quot;a+&quot;);</span><br><span class="line"></span><br><span class="line">    echo Fgets($f);  //读第一行文件</span><br><span class="line">    echo Fgets($f);  //读第二行文件</span><br><span class="line">    echo Fread($f,2);  //获取文件前两个字符</span><br><span class="line"></span><br><span class="line">    echo Filesize($f);  //获取屋内按总的字符数</span><br><span class="line">    echo Fread($f,Filesize(&apos;./1.html&apos;));  //输出1.html中的所有内容</span><br><span class="line"></span><br><span class="line">    Fclose($f);  //关闭文件</span><br><span class="line">    echo Fread($f,2);  //无法读取到文件</span><br><span class="line"></span><br><span class="line">    //读写文件</span><br><span class="line">    $f = fopen(&quot;./1.txt&quot;, &quot;a+&quot;);</span><br><span class="line"></span><br><span class="line">    Fwrite($f,&apos;aaaaaa&apos;)  //在文件最后添加aaaaaa</span><br><span class="line">    Fclose($f);</span><br><span class="line"></span><br><span class="line">    $f = fopen(&quot;./1.txt&quot;, &quot;w&quot;);</span><br><span class="line"></span><br><span class="line">    Fwrite($f,&apos;aaaaaa&apos;)  //删除文件，并在文件开头添加aaaaaa</span><br><span class="line">    Fclose($f);</span><br><span class="line"></span><br><span class="line">    //路径拼接</span><br><span class="line"></span><br><span class="line">    $lujing = $_SERVER[&apos;DOCUMENT_ROOT&apos;].&quot;/&quot;;</span><br><span class="line"></span><br><span class="line">    $f = fopen($lujing.&quot;123.txt&quot;,&quot;a.txt&quot;);</span><br><span class="line"></span><br><span class="line">    Fwrite($f,&apos;aaaaaa\r\n&apos;);  //写入成功</span><br><span class="line"></span><br><span class="line">    //命令读取文件</span><br><span class="line"></span><br><span class="line">    echo `dir`;  //读取系统路径</span><br><span class="line"></span><br><span class="line">    echo `type d:\\1.txt`;  //读取1.txt文件中的内容</span><br><span class="line"></span><br><span class="line">    //文件指针</span><br><span class="line"></span><br><span class="line">    $f = fopen(&quot;./1.txt&quot;, &quot;r+&quot;);</span><br><span class="line">    while(!feof($f))</span><br><span class="line">    &#123;</span><br><span class="line">        $result.= fgets($f,128);</span><br><span class="line">    &#125;</span><br><span class="line">    echo $result;  //输出1.txt的所有内容</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-15%EF%BC%9A%E6%95%B0%E7%BB%84%E7%9A%84%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-15%EF%BC%9A%E6%95%B0%E7%BB%84%E7%9A%84%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0/" itemprop="url">PHP笔记-15：数组的相关函数</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T12:40:06+08:00">
+                2020-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  980 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-排序函数"><a href="#1-排序函数" class="headerlink" title="1. 排序函数"></a>1. 排序函数</h4><ul>
+<li>排序函数：对数组元素进行排序，都是按照ASCII码进行比较，可以进行英文比较</li>
+<li>下标重排<ul>
+<li>sort()：顺序排序</li>
+<li>rsort()：逆序排序</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //排序函数</span><br><span class="line">    $arr = array(3,1,5,2,0);</span><br><span class="line">    print_r($arr);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    sort($arr);</span><br><span class="line">    print_r($arr);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    rsort($arr);</span><br><span class="line">    print_r($arr);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>下标保留<ul>
+<li>asort()：顺序排序</li>
+<li>arsort()：逆序排序</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //排序函数</span><br><span class="line">    $arr = array(3,1,5,2,0);</span><br><span class="line">    print_r($arr);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    asort($arr);</span><br><span class="line">    print_r($arr);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    arsort($arr);</span><br><span class="line">    print_r($arr);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>按照键名（下标）<ul>
+<li>ksort()：顺序排序</li>
+<li>krsort()：逆序排序</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //排序函数</span><br><span class="line">    $arr = array(3,1,5,2,0);</span><br><span class="line">    print_r($arr);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    ksort($arr);</span><br><span class="line">    print_r($arr);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    krsort($arr);</span><br><span class="line">    print_r($arr);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>shuffle()：随机打乱数组元素，数组下标会重排</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //排序函数</span><br><span class="line">    $arr = array(3,1,5,2,0);</span><br><span class="line">    print_r($arr);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    shuffle($arr);</span><br><span class="line">    print_r($arr);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    shuffle($arr);</span><br><span class="line">    print_r($arr);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-指针函数"><a href="#2-指针函数" class="headerlink" title="2. 指针函数"></a>2. 指针函数</h4><ul>
+<li>reset()：重置指针，将数组指针回到首位</li>
+<li>end()：重置指针，将数组指针指导最后一个元素</li>
+<li>next()：指针下移，取得下一个元素的值</li>
+<li>prev()：指针上移，取得上一个元素的值</li>
+<li>current()：获取当前指针对应的元素值</li>
+<li>key()：获取当前指针对应的下标值</li>
+<li>▲ next和prev会移动指针，有可能导致指针移动到最前或者最后（离开数组），导致数组不能使用，通过next和prev不能回到真确的指针位置。只能通过end或者reset进行指针重置</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //指针函数</span><br><span class="line">    $arr = array(3,1,5,2,0);</span><br><span class="line"></span><br><span class="line">    echo current($arr),&apos;&lt;br/&gt;&apos;;  //输出为 3</span><br><span class="line">    echo key($arr),&apos;&lt;br/&gt;&apos;;  //输出为 0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    echo next($arr),next($arr),&apos;&lt;br/&gt;&apos;;  //输出为 1，5</span><br><span class="line">    echo prev($arr),&apos;&lt;br/&gt;&apos;;  //输出为 1</span><br><span class="line"></span><br><span class="line">    echo end($arr),&apos;&lt;br/&gt;&apos;;  //输出为 0</span><br><span class="line">    echo reset($arr),&apos;&lt;br/&gt;&apos;;  //输出为 3</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-其他函数"><a href="#3-其他函数" class="headerlink" title="3. 其他函数"></a>3. 其他函数</h4><ul>
+<li>栈操作：压栈，先进去后出来（FILO）/ 队列操作：排队，先进去的先出去（FIFO）<ul>
+<li>array_push()：往数组中加入一个元素（数组后面）</li>
+<li>array_pop()：从数组中取出一个元素（数组后面）</li>
+<li>array_shift()：从数组中取出一个元素（数组前面）</li>
+<li>array_unshift()：从数组中加入一个元素（数组前面）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //其他函数</span><br><span class="line"></span><br><span class="line">    //模拟数据结构：栈和队列</span><br><span class="line">    $arr = array();</span><br><span class="line"></span><br><span class="line">    //栈：先压栈后出栈：都是从一端出来</span><br><span class="line">    //前面：array_shift/array_unshift</span><br><span class="line">    //后面：array_push/array_pop</span><br><span class="line">    //压栈</span><br><span class="line">    array_push($arr,3);</span><br><span class="line">    array_push($arr,2);</span><br><span class="line">    array_push($arr,1);</span><br><span class="line">    print_r($arr);  //输出为 Array ( [0] =&gt; 3 [1] =&gt; 2 [2] =&gt; 1 ) </span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">    //出栈</span><br><span class="line">    echo array_pop($arr),array_pop($arr),array_pop($arr),&apos;&lt;br/&gt;&apos;; 输出为 123</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //队列：先排队，先出来，一端进，另外一端出</span><br><span class="line">    //后进前出：array_push/array_shift</span><br><span class="line">    //前进后出：array_unshift/array_pop</span><br><span class="line">    $arr = array();</span><br><span class="line"></span><br><span class="line">    //入队</span><br><span class="line">    array_unshift($arr,3);</span><br><span class="line">    array_unshift($arr,2);</span><br><span class="line">    array_unshift($arr,1);</span><br><span class="line">    print_r($arr);  //输出为 Array ( [0] =&gt; 1 [1] =&gt; 2 [2] =&gt; 3 ) </span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">    //出队</span><br><span class="line">    echo array_pop($arr),array_pop($arr),array_pop($arr),&apos;&lt;br/&gt;&apos;;  //输出为 321</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>count()：统计数组中元素的数量</li>
+<li>array_reverse()：数组元素反过来</li>
+<li>in_array()：判断一个元素在数组中是否存在</li>
+<li>array_keys()：获取一个数组的所有下标，返回一个索引数组</li>
+<li>array_values()：获取一个数组的所有值，返回一个索引数组</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $arr = array(1,2,3,6,5);</span><br><span class="line">    echo count($arr);  //输出为 5</span><br><span class="line">    print_r(array_reverse($arr));  //输出为 Array ( [0] =&gt; 5 [1] =&gt; 6 [2] =&gt; 3 [3] =&gt; 2 [4] =&gt; 1 ) </span><br><span class="line"></span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    var_dump(in_array(6,$arr));  //输出为 bool(true) </span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">    var_dump(in_array(100,$arr));  //输出为 bool(false) </span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    print_r(array_keys($arr));  //输出为 Array ( [0] =&gt; 0 [1] =&gt; 1 [2] =&gt; 2 [3] =&gt; 3 [4] =&gt; 4 ) </span><br><span class="line"></span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">    print_r(array_values($arr));  //输出为 Array ( [0] =&gt; 1 [1] =&gt; 2 [2] =&gt; 3 [3] =&gt; 6 [4] =&gt; 5 ) </span><br><span class="line">    </span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-14%EF%BC%9A%E6%95%B0%E7%BB%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-14%EF%BC%9A%E6%95%B0%E7%BB%84/" itemprop="url">PHP笔记-14：数组</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T12:37:58+08:00">
+                2020-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.6k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  11 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-数组的概念"><a href="#1-数组的概念" class="headerlink" title="1. 数组的概念"></a>1. 数组的概念</h4><ul>
+<li>array，数据的组合，指将一组数据（多个）存储到一个指定的容器中，用变量指向该容器，然后可以通过变量一次性得到该容器中的所有数据</li>
+</ul>
+<h4 id="2-数组定义语法"><a href="#2-数组定义语法" class="headerlink" title="2. 数组定义语法"></a>2. 数组定义语法</h4><ul>
+<li>使用array关键字</li>
+<li>可以使用中括号来包裹数据</li>
+<li>隐形定义数组：给变量增加一个中括号，系统自动变成数组</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //PHP数组</span><br><span class="line"></span><br><span class="line">    //定义数组：array</span><br><span class="line">    $arr1 = array(&apos;1&apos;,2,&apos;hello&apos;);</span><br><span class="line">    var_dump($arr1);  //输出为 array(3) &#123; [0]=&gt; string(1) &quot;1&quot; [1]=&gt; int(2) [2]=&gt; string(5) &quot;hello&quot; &#125; </span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    //定义数组：[]</span><br><span class="line">    $arr2 = [&apos;1&apos;,2,&apos;hello&apos;];</span><br><span class="line">    var_dump($arr2);  //输出为 array(3) &#123; [0]=&gt; string(1) &quot;1&quot; [1]=&gt; int(2) [2]=&gt; string(5) &quot;hello&quot; &#125; </span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    //隐形数组：</span><br><span class="line">    $arr3[] = 1;</span><br><span class="line">    $arr3[10] = 100;</span><br><span class="line">    $arr3[] = &apos;1&apos;;</span><br><span class="line">    $arr3[&apos;key&apos;] = &apos;key&apos;;</span><br><span class="line">    $arr3[1] = &apos;value&apos;;</span><br><span class="line">    var_dump($arr3);  //输出为 array(5) &#123; [0]=&gt; int(1) [10]=&gt; int(100) [11]=&gt; string(1) &quot;1&quot; [&quot;key&quot;]=&gt; string(3) &quot;key&quot; [1]=&gt; string(5) &quot;value&quot; &#125; </span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-数组特点"><a href="#3-数组特点" class="headerlink" title="3. 数组特点"></a>3. 数组特点</h4><ul>
+<li>可以整数下标或者字符串下标<ul>
+<li>如果数组下标都为整数：索引数组</li>
+<li>如果数组下标都为字符串：关联数组</li>
+</ul>
+</li>
+<li>不同下标可以混合存在：混合数组</li>
+<li>数组元素的顺序以放入顺序为准，跟下标无关</li>
+<li>数字下标的自增长特性：从0开始自动增长，如果中间手动出现较大的，那么后面的自增长元素从最大的值+1开始</li>
+<li>特殊值下标的自动转换<ul>
+<li>布尔值：true和false</li>
+<li>空：NULL</li>
+</ul>
+</li>
+<li>PHP中数组元素没有类型限制</li>
+<li>PHP中数组元素没有长度限制</li>
+<li>▲ PHP中的数组是很大的数据，所以存储位置是堆区，为当前数组分配一块连续的内存</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //索引数组</span><br><span class="line">    $arr = array(0 =&gt; &apos;心东&apos;,1 =&gt; &apos;21&apos;,2 =&gt; &apos;网络安全&apos;,3 =&gt; &apos;睡觉吃饭&apos;);</span><br><span class="line"></span><br><span class="line">    $arr[4] = &apos;php开发&apos;;</span><br><span class="line">    </span><br><span class="line">    echo $arr[4];  //输出为php开发</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">    print_r($arr);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    //关联数组</span><br><span class="line">    $arr1 = array(&apos;mingzi&apos; =&gt; &apos;心东&apos;,&apos;nianling&apos; =&gt; &apos;21&apos;,&apos;zhiye&apos; =&gt; &apos;网络安全&apos;,&apos;aihao&apos; =&gt; &apos;吃饭睡觉&apos;);</span><br><span class="line"></span><br><span class="line">    //增加</span><br><span class="line">    $arr1[&apos;demo&apos;] = &apos;123456&apos;;</span><br><span class="line">    echo $arr1[&apos;demo&apos;];  //输出为123456</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">    //修改</span><br><span class="line">    $arr1[&apos;mingzi&apos;] = &apos;mzt&apos;;</span><br><span class="line">    echo $arr1[&apos;mingzi&apos;];  //输出为mzt</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">    print_r($arr1);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    //混合数组</span><br><span class="line">    $arr2 = array(1 =&gt; &apos;心东&apos;,&apos;nianling&apos; =&gt; &apos;21&apos;,2 =&gt; &apos;网络安全&apos;,&apos;aihao&apos; =&gt; &apos;吃饭睡觉&apos;);</span><br><span class="line"></span><br><span class="line">    echo $arr2[1];  //输出为心东</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">    echo $arr2[&apos;nianling&apos;];  //输出为21</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">    print_r($arr2);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //隐形数组：</span><br><span class="line">    $arr3[] = 1;</span><br><span class="line">    $arr3[10] = 100;</span><br><span class="line">    $arr3[] = &apos;1&apos;;</span><br><span class="line">    $arr3[&apos;key&apos;] = &apos;key&apos;;</span><br><span class="line">    $arr3[1] = &apos;value&apos;;</span><br><span class="line">    var_dump($arr3);  //输出为 array(5) &#123; [0]=&gt; int(1) [10]=&gt; int(100) [11]=&gt; string(1) &quot;1&quot; [&quot;key&quot;]=&gt; string(3) &quot;key&quot; [1]=&gt; string(5) &quot;value&quot; &#125; </span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //特殊下标转换</span><br><span class="line">    $arr4[false] = false;</span><br><span class="line">    $arr4[true] = true;</span><br><span class="line">    $arr4[NULL] = NULL;</span><br><span class="line">    var_dump($arr4);  //输出为 array(3) &#123; [0]=&gt; bool(false) [1]=&gt; bool(true) [&quot;&quot;]=&gt; NULL &#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-多维数组"><a href="#4-多维数组" class="headerlink" title="4. 多维数组"></a>4. 多维数组</h4><ul>
+<li>二维数组：数组中所有的元素都是一维数组</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //多维数组</span><br><span class="line"></span><br><span class="line">    //定义二维数组</span><br><span class="line">    $info = array(</span><br><span class="line">        array(&apos;name&apos; =&gt; &apos;Jim&apos;,&apos;age&apos; =&gt; 30),</span><br><span class="line">        array(&apos;name&apos; =&gt; &apos;Tom&apos;,&apos;age&apos; =&gt; 28),</span><br><span class="line">        array(&apos;name&apos; =&gt; &apos;Lily&apos;,&apos;age&apos; =&gt; 20)             </span><br><span class="line">        //最后一个元素，后面可以跟逗号不影响</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">    print_r($info);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>多维数组<ul>
+<li>在第二维的数组元素中可以继续是数组，在PHP中没有维度限制</li>
+<li>▲ PHP本质并没有二维数组</li>
+<li>▲ 不建议使用超过三维以上的数组，会增加访问的复杂度，降低访问效率</li>
+</ul>
+</li>
+<li>异形数组（不规则数组）<ul>
+<li>数组中的元素不规则，有普通基本变量也有数组</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-数组遍历"><a href="#5-数组遍历" class="headerlink" title="5. 数组遍历"></a>5. 数组遍历</h4><ul>
+<li>普通数组数据的访问都是通过数组元素的下标来实现访问，如果说数组中所有的数据都需要依次输出出来，就需要我们使用到一些简化的规则来实现自动获取下标以及输出数组元素<ul>
+<li>访问一维元素：$arr[一维下标]</li>
+<li>访问二维元素：$arr[一维下标][二维下标]</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //索引数组循环</span><br><span class="line">    $arr = array(0 =&gt; &apos;心东&apos;,1 =&gt; &apos;21&apos;,2 =&gt; &apos;网络安全&apos;,3 =&gt; &apos;睡觉吃饭&apos;);</span><br><span class="line"></span><br><span class="line">    for($i=0;$i&lt;count($arr);$i++)</span><br><span class="line">    &#123;</span><br><span class="line">        echo $arr[$i];  //输出索引数组</span><br><span class="line">    &#125;</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;   </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //关联数组循环</span><br><span class="line">    $arr1 = array(&apos;mingzi&apos; =&gt; &apos;心东&apos;,&apos;nianling&apos; =&gt; &apos;21&apos;,&apos;zhiye&apos; =&gt; &apos;网络安全&apos;,&apos;aihao&apos; =&gt; &apos;吃饭睡觉&apos;);</span><br><span class="line"></span><br><span class="line">    foreach($arr1 as $key =&gt; $value)</span><br><span class="line">    &#123;</span><br><span class="line">        echo &apos;键名:&apos;.$key.&apos;值&apos;.$value.&apos;&lt;/br&gt;&apos;;</span><br><span class="line">        echo $arr1[$key].&quot;&lt;/br&gt;&quot;;  //输出关联数组</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //索引数组和关联数组都可以通过这样的方式去遍历</span><br><span class="line">    foreach($arr as $value)</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        echo $value.&quot;&lt;/br&gt;&quot;;  //输出值</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="6-Foreach遍历"><a href="#6-Foreach遍历" class="headerlink" title="6. Foreach遍历"></a>6. Foreach遍历</h4><ul>
+<li>原理：本质是数组的内部有一颗指针，默认是指向数组元素的第一个元素，foreach就是利用指针去获取数据，同时移动指针</li>
+<li>遍历过程<ul>
+<li>foreach会重置指针：让指针指向第一个元素</li>
+<li>进入foreach循环：通过指针取得当前第一个元素，然后将下标取出放到对应的下标变量$key中（如果存在），将值取出来放到对应的值变量$value中（指针下移）</li>
+<li>进入到循环内部（循环体），开始执行</li>
+<li>重复2和3，直到在2的时候遇到指针取不到内容（指针指向数组最后）</li>
+</ul>
+</li>
+<li>▲▲ 如果是关联数组（字母下标），就需要下标，如果是数字下标就直接访问值</li>
+<li>▲▲ 在进行数据存储定义的时候，通常二维数组不会两个维度的key下标都为数字，一般是一维为数字（无意义），二维为字符串（数据库表字段），所以在进行遍历的时候，通常是只需要针对一维进行遍历，取得二维数组元素，然后二维数组元素通过下标去访问</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //PHP数组遍历：foreach</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //定义一维数组</span><br><span class="line">    $arr = array(1,2,3,4,5,6,7,8,9,10);</span><br><span class="line"></span><br><span class="line">    //foreach循环一维数组</span><br><span class="line">    foreach($arr as $v)&#123;</span><br><span class="line">        //$v随意命名</span><br><span class="line">        echo $v,&apos;&lt;br/&gt;&apos;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //foreach循环一维数组</span><br><span class="line">    foreach($arr as $k =&gt; $v)&#123;</span><br><span class="line">        //$v随意命名</span><br><span class="line">        echo &apos;key:&apos;,$k,&apos; == value:&apos;,$v,&apos;&lt;br/&gt;&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    //通过foreach遍历二维元素 -&gt; 常规形式</span><br><span class="line"></span><br><span class="line">    $arr1 = array(</span><br><span class="line">        0 =&gt; array(&apos;name&apos; =&gt; &apos;Tom&apos;,&apos;age&apos; =&gt; 30),</span><br><span class="line">        1 =&gt; array(&apos;name&apos; =&gt; &apos;Jim&apos;,&apos;age&apos; =&gt; 28)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    foreach($arr1 as $value)&#123;</span><br><span class="line">        //1、可以继续遍历：增加foreach遍历$value</span><br><span class="line">        //2、可以使用下标访问</span><br><span class="line">        echo &apos;name is : &apos; ,$value[&apos;name&apos;],&apos; and age is : &apos;,$value[&apos;age&apos;],&apos;&lt;br/&gt;&apos;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //通过foreach遍历二维元素 -&gt; 非常规形式</span><br><span class="line"></span><br><span class="line">    $arr = array(&apos;123&apos;,&apos;456&apos;,array(&apos;ttt&apos;,4444));</span><br><span class="line">    foreach($arr as $key =&gt; $value)</span><br><span class="line">    &#123;</span><br><span class="line">        if(is_array($value))</span><br><span class="line">        &#123;</span><br><span class="line">            foreach($value as $k1 =&gt; $v1)</span><br><span class="line">            &#123;</span><br><span class="line">                echo &quot;二维数组&quot;.$v1.&quot;&lt;/br&gt;&quot;;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;else</span><br><span class="line">        &#123;</span><br><span class="line">            echo $value.&quot;&lt;/br&gt;&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-For循环遍历数组"><a href="#7-For循环遍历数组" class="headerlink" title="7. For循环遍历数组"></a>7. For循环遍历数组</h4><ul>
+<li>基于已知边界条件（起始和结束）然后有条件的变化（规律）</li>
+<li>条件<ul>
+<li>获取数组长度：count(数组)得到数组元素的长度</li>
+<li>要求数组元素的下标是规律的数字</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //for循环遍历数组</span><br><span class="line"></span><br><span class="line">    //数组特点：索引数组，下标规律</span><br><span class="line"></span><br><span class="line">    $arr = array(1,2,3,4,5,6,7,10);</span><br><span class="line"></span><br><span class="line">    for($i = 0,$len = count($arr); $i &lt; $len; $i++)&#123;</span><br><span class="line">        echo &apos;key is : &apos;,$i,&apos; and value is : &apos; , $arr[$i],&apos;&lt;br/&gt;&apos;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="8-While配合each和list遍历数组"><a href="#8-While配合each和list遍历数组" class="headerlink" title="8. While配合each和list遍历数组"></a>8. While配合each和list遍历数组</h4><ul>
+<li>each函数的使用：each能够从一个数组中获取当前数组指针所指向的元素的下标和值，拿到之后将数组指针下移，同时将拿到的元素下标和值以一个四个元素的数组返回<ul>
+<li>0下标 -&gt; 取得元素的下标值</li>
+<li>1下标 -&gt; 取得元素的值</li>
+<li>Key下标 -&gt; 取得元素的下标值</li>
+<li>Value下标 -&gt; 取得元素的值</li>
+</ul>
+</li>
+<li>▲ 如果each取不到结果（数组指针移动到最后），返回false</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //while配合each和list遍历数组</span><br><span class="line"></span><br><span class="line">    $arr = array(1,&apos;name&apos; =&gt; &apos;Tom&apos;,3,&apos;age&apos; =&gt; 30);</span><br><span class="line"></span><br><span class="line">    echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">    //each函数指针操作</span><br><span class="line">    print_r(each($arr));</span><br><span class="line">    print_r(each($arr));</span><br><span class="line">    print_r(each($arr));</span><br><span class="line">    print_r(each($arr));</span><br><span class="line">    var_dump(each($arr));</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>List函数使用：list是一种结构，不是一种函数（没有返回值），是list提供一堆变量去从一个数组中取得元素值，然后依次存放到对应的变量当中</li>
+<li>▲ list必须从索引数组中去获取数据，而且必须从0开始</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //list结构</span><br><span class="line">    $arr = array(1,2 =&gt; 1);</span><br><span class="line"></span><br><span class="line">    list($first) = $arr;</span><br><span class="line">    var_dump($first);  //输出为int(1)</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    list($first,$second) = $arr;      //错误：second变量对应的下标为元素下标1的，但是数组没有</span><br><span class="line">    var_dump($first,$second); </span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>list和each配合<ul>
+<li>each一定有两个元素就是0和1下标元素</li>
+<li>▲ List(变量1,变量2) = each(数组);  //是一种赋值运算，但是可以得到false结果（each取不到正确的结果），整个表达式为false</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //while循环</span><br><span class="line">    $arr = array(1,&apos;name&apos; =&gt; &apos;Tom&apos;,3,&apos;age&apos; =&gt; 30);</span><br><span class="line"></span><br><span class="line">    while(list($key,$value) = each($arr))&#123;</span><br><span class="line">        //list搭配each</span><br><span class="line">        //list($key,$value) = each($arr);</span><br><span class="line"></span><br><span class="line">        //输出</span><br><span class="line">        echo &apos;key is :&apos; . $key . &apos; value is :&apos; . $value . &apos;&lt;br/&gt;&apos;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="9-数组的比较"><a href="#9-数组的比较" class="headerlink" title="9. 数组的比较"></a>9. 数组的比较</h4><ul>
+<li>数组的比较主要是比较数组的长度，数组元素的值</li>
+<li>==和===<ul>
+<li>==：要求数组长度一致，数组元素的值相等，下标也要相等</li>
+<li>===：数组长度一致，值和类型完全一致，出现的顺序也必须相同</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //数组比较</span><br><span class="line"></span><br><span class="line">    $arr1 = array(1,2,3);</span><br><span class="line">    $arr2 = array(3,2,1);</span><br><span class="line">    $arr3 = array(2 =&gt; 3,1 =&gt; 2,0 =&gt; 1);</span><br><span class="line"></span><br><span class="line">    //==比较</span><br><span class="line">    var_dump($arr1==$arr2);  //输出为bool(false)</span><br><span class="line">    var_dump($arr1==$arr3);  //输出为bool(true)</span><br><span class="line"></span><br><span class="line">    //===比较</span><br><span class="line">    var_dump($arr1===$arr3);  //输出为bool(false) </span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-13%EF%BC%9A%E5%AD%97%E7%AC%A6%E4%B8%B2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1975,795 +2707,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-6%EF%BC%9A%E8%BF%90%E7%AE%97%E7%AC%A6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-6%EF%BC%9A%E8%BF%90%E7%AE%97%E7%AC%A6/" itemprop="url">PHP笔记-6：运算符</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T12:11:55+08:00">
-                2020-03-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PHP/" itemprop="url" rel="index">
-                    <span itemprop="name">PHP</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1.7k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  6 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-运算符"><a href="#1-运算符" class="headerlink" title="1. 运算符"></a>1. 运算符</h4><ul>
-<li>Operator，是一种将数据进行运算的特殊符号，在PHP中一共有十种运算符之多</li>
-</ul>
-<h4 id="2-赋值运算符"><a href="#2-赋值运算符" class="headerlink" title="2. 赋值运算符"></a>2. 赋值运算符</h4><ul>
-<li>符号是”=”，表示将右边的结果（可以是变量、数据、常量和其它运算出来的结果），保存到内存的某个位置，然后将位置的内存地址赋值给左侧的变量（常量）</li>
-</ul>
-<h4 id="3-算术运算符"><a href="#3-算术运算符" class="headerlink" title="3. 算术运算符"></a>3. 算术运算符</h4><ul>
-<li>算术运算符<ul>
-<li>+：执行数据累加</li>
-<li>-：数据相减</li>
-<li>*：两个数相乘</li>
-<li>/：正斜杠代替，表示两个数相除</li>
-<li>%：取余（模）运算，两个数（整数）相除，保留余数</li>
-</ul>
-</li>
-<li>▲ 在进行除法运算或者取余运算的时候，对应的除数（第二个数）不能为0</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //运算符</span><br><span class="line"></span><br><span class="line">    //算术运算符</span><br><span class="line">    $a = $b = 10;       //连贯赋值运算：两个不同变量</span><br><span class="line">    $c = 0;</span><br><span class="line"></span><br><span class="line">    //var_dump($a / 0); //错误：被除数不能为0</span><br><span class="line"></span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h4 id="4-比较运算符"><a href="#4-比较运算符" class="headerlink" title="4. 比较运算符"></a>4. 比较运算符</h4><ul>
-<li>比较两个数据的大小，或者两个内容是否相同，返回的结果都是布尔类型：满足返回true，不满足返回false</li>
-<li>比较运算符<ul>
-<li>/&gt;：左边大于右边，返回结果true（<strong>正斜杠为转义字符</strong>）</li>
-<li>/&gt;=：左边大于等于右边（<strong>正斜杠为转义字符</strong>）</li>
-<li>&lt;：左边小于右边</li>
-<li>&lt;=：左边小于或者等于右边</li>
-<li>==：左边的与右边的相同（大小相同）</li>
-<li>!=：左边的与右边的不同（大小不同）</li>
-<li>===：全等于，左边与右边相同：大小以及数据的类型都要相同</li>
-<li>!==：不全等于，只有大小或者类型不同</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //比较运算符</span><br><span class="line">    $a = &apos;123&apos;; //字符串</span><br><span class="line">    $b = 123;   //整型</span><br><span class="line"></span><br><span class="line">    //判断相等</span><br><span class="line">    var_dump($a == $b);  //输出为 bool(true)</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    //全等判断</span><br><span class="line">    var_dump($a === $b);  //输出为 bool(false)</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h4 id="5-逻辑运算符"><a href="#5-逻辑运算符" class="headerlink" title="5. 逻辑运算符"></a>5. 逻辑运算符</h4><ul>
-<li>针对不同的结果进行匹配。满足条件返回true，不满足返回false</li>
-<li>逻辑运算符<ul>
-<li>&amp;&amp;：逻辑与，左边的条件与右边的条件同时成立（两边结果都为true）</li>
-<li>||：逻辑或，左边的条件或者右边的条件只要有一个满足即可</li>
-<li>！：逻辑非，对已有条件进行取反，本身为true，取反结果就是false</li>
-</ul>
-</li>
-<li>▲ 逻辑与和逻辑或又称之为短路运算：如果第一个表达式结果已经满足条件了，那么就不会运行逻辑运算符后面的表达式：在书写代码的时候，尽量将出现概率最高的（能够直接判断出结果）的表达式放到第一位</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $a = &apos;weekend&apos;;</span><br><span class="line">    $b = &apos;goods&apos;;</span><br><span class="line">    //逻辑与</span><br><span class="line">    var_dump($a == &apos;weekend&apos; &amp;&amp; $b == &apos;good&apos;);  //输出为 bool(false)</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    //逻辑或</span><br><span class="line">    var_dump($a == &apos;weekend&apos; || $b == &apos;good&apos;);  //输出为 bool(true)</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    //逻辑非</span><br><span class="line">    var_dump($b == &apos;good&apos;);  //输出为 bool(false)</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">    var_dump(!($b == &apos;good&apos;));  //输出为 bool(true)</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h4 id="6-连接运算符"><a href="#6-连接运算符" class="headerlink" title="6. 连接运算符"></a>6. 连接运算符</h4><ul>
-<li>PHP中将多个字符串拼接的一种符号</li>
-<li>连接运算符<ul>
-<li>.：将两个字符串连接到一起</li>
-<li>.= ：复合运算，将左边的内容与右边的内容连接起来，然后重新赋值给左边变量</li>
-</ul>
-</li>
-<li>▲ A .= b  =====  A = A . b</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //连接运算符</span><br><span class="line">    $a = &apos;hello &apos;;</span><br><span class="line">    $b = 123;</span><br><span class="line"></span><br><span class="line">    echo $a . $b;   //将a变量和b变量连接起来 //输出为 hello 123</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    $a .= $b; //$a = $a . $b;</span><br><span class="line">    echo $a;   //输出为 hello 123</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h4 id="7-错误抑制符"><a href="#7-错误抑制符" class="headerlink" title="7. 错误抑制符"></a>7. 错误抑制符</h4><ul>
-<li>在PHP中有一些错误可以提前预知，但是这些错误可能无法避免，但是又不希望报错给用户看，可以使用错误抑制符处理</li>
-<li>错误抑制符<ul>
-<li>@：在可能出错的表达式前面使用@符号即可</li>
-</ul>
-</li>
-<li>▲ 错误抑制符通常在生产环境（上线）会用到，在开发的时候不会用</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //错误抑制符</span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;;</span><br><span class="line">    $a = 10;</span><br><span class="line">    $b = 0;</span><br><span class="line"></span><br><span class="line">    //$a % $b;</span><br><span class="line">    @($a % $b);  //▲ 2020.03.11 还是能输出报错</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h4 id="8-三目运算符"><a href="#8-三目运算符" class="headerlink" title="8. 三目运算符"></a>8. 三目运算符</h4><ul>
-<li>有三个表达式参与的运算（简单的的分支结构缩写）</li>
-<li>语法格式：表达式1 ? 表达式2 ：表达式3；<ul>
-<li>运算：如果表达式1成立，那么执行表达式2，否则执行表达式3</li>
-</ul>
-</li>
-<li>▲ 如果表达式本身比较复杂，建议使用括号包起来。</li>
-<li>▲ 三目运算可以进行复合三目运算</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    // empty 如果没有值则为真，如果有值则为假</span><br><span class="line">    // isset 如果有值则为真，如果没有值则为假</span><br><span class="line"></span><br><span class="line">    if(isset($_GET[&apos;name&apos;]))</span><br><span class="line">    &#123;</span><br><span class="line">        echo $_GET[&apos;name&apos;];  //无值不报错</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //三元运算符</span><br><span class="line"></span><br><span class="line">    $a = empty($_GET[&apos;name&apos;])? &quot;1&quot;: $_GET[&apos;name&apos;];</span><br><span class="line">    echo $a;  //输出为1</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    //NULL的判断</span><br><span class="line">    </span><br><span class="line">    $bb = NULL;</span><br><span class="line">    $a = isset($bb)? &quot;11&quot; : &quot;123456&quot;;</span><br><span class="line">    echo $a;  //输出为123456</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    $a = empty($bb)? &quot;11&quot; : &quot;123456&quot;;</span><br><span class="line">    echo $a;  //输出为11</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h4 id="9-自操作运算符"><a href="#9-自操作运算符" class="headerlink" title="9. 自操作运算符"></a>9. 自操作运算符</h4><ul>
-<li>自己操作自己的运算符</li>
-<li>自操作运算符<ul>
-<li>++：在原来的值上+1</li>
-<li>–：在原来的值上-1</li>
-</ul>
-</li>
-<li>自操作运算符前置后置<ul>
-<li>前置或者后置如果本身只有自操作，不参与其他运算，那么效果是一样的</li>
-<li>如果自操作同时还参与别的运算<ul>
-<li>后置自操作：先保存自己的值留下来，然后改变自己，自己给别人的值是原来的值</li>
-<li>前置自操作：先把自己改变，然后把改变后的值给别人</li>
-</ul>
-</li>
-<li>▲ $b = $a++; //$a++会导致$a = $a + 1; $a = 2;，上面的$b = 1</li>
-<li>▲ $c =++$a;      //++$a会导致$a = $a + 1; $a = 2;，$c = 2;</li>
-</ul>
-</li>
-<li>衍生符号<ul>
-<li>+=：左边的结果与右边结果相加，然后赋值给左边</li>
-<li>-=：左边的减去右边的结果，然后复制给左边</li>
-<li>*=：乘法操作</li>
-<li>/=：除法操作</li>
-<li>%=：模操作</li>
-</ul>
-</li>
-<li>▲ 右边是一个整体 $a += $b; -&gt; $a = $a + ($b)</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //自操作符</span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;;</span><br><span class="line"></span><br><span class="line">    $a = $b = 1;</span><br><span class="line"></span><br><span class="line">    $a++;</span><br><span class="line">    ++$b;               //独立操作，不参与其他运算</span><br><span class="line">    echo $a,$b;  //输出为 2，2</span><br><span class="line"></span><br><span class="line">    echo &apos;&lt;br/&gt;&apos;;</span><br><span class="line">    echo $a++,++$b;     //$a和$b不只是独立运算，还参与了输出操作，输出为2，3</span><br><span class="line"></span><br><span class="line">    echo $a,$b;  //输出为 3，3</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    $a = 10;</span><br><span class="line">    $b = 5;</span><br><span class="line"></span><br><span class="line">    $a += $b;           //$a = $a + $b = 15;</span><br><span class="line">    $a -= $b - 1;       //$a = $a - ($b - 1);       //15 - 5 + 1 = 11</span><br><span class="line">    echo &apos;&lt;br/&gt;&apos;,$a,$b;  //输出位 11，5</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h4 id="10-运算符优先级"><a href="#10-运算符优先级" class="headerlink" title="10. 运算符优先级"></a>10. 运算符优先级</h4><ul>
-<li>在多种运算符同时存在的时候，如何结合运算</li>
-<li>运算符优先级，图片来自网络</li>
-</ul>
-<p><img src="/images/php/php-notepad/%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BC%98%E5%85%88%E7%BA%A7.png" alt="运算符优先级"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    </span><br><span class="line">    if(2==2 and 2==1 || 3==3)</span><br><span class="line">    &#123;</span><br><span class="line">        echo 1;</span><br><span class="line">    &#125;</span><br><span class="line">    //输出为1</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-5%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-5%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" itemprop="url">PHP笔记-5：数据类型</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T12:09:06+08:00">
-                2020-03-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PHP/" itemprop="url" rel="index">
-                    <span itemprop="name">PHP</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1.5k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  6 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-数据类型"><a href="#1-数据类型" class="headerlink" title="1. 数据类型"></a>1. 数据类型</h4><ul>
-<li>▲ 数据类型：data type，在PHP中指的是存储的数据本身的类型，而不是变量的类型。PHP是一种弱类型语言，变量本身没有数据类型。</li>
-<li>简单（基本）数据类型：4个小类<ul>
-<li>整型：int/integer，系统分配4个字节存储，表示整数类型（有前提）</li>
-<li>浮点型：float/double，系统分配8个字节存储，表示小数或者整型存不下的整数</li>
-<li>字符串型：string，系统根据实际长度分配，表示字符串（引号）</li>
-<li>布尔类型：bool/boolean，表示布尔类型，只有两个值：true和false</li>
-</ul>
-</li>
-<li>复合数据类型：2个小类<ul>
-<li>对象类型：object，存放对象（面向对象）</li>
-<li>数组类型：array，存储多个数据（一次性）</li>
-</ul>
-</li>
-<li>特殊数据类型：2个小类<ul>
-<li>资源类型：resource，存放资源数据（PHP外部数据，如数据库、文件）</li>
-<li>空类型：NULL，只有一个值就是NULL（不能运算）</li>
-</ul>
-</li>
-<li>类型转换<ul>
-<li>自动转换：系统根据需求自己判定，自己转换（用的比较多，效率偏低）</li>
-<li>强制（手动）转换：认为根据需要的目标类型转换<ul>
-<li>强制转换规则：在变量之前增加一个括号()，然后在里面写上对应类型：int/integer….其中NULL类型用到unset()</li>
-</ul>
-</li>
-<li>其他类型转数值的说明<ul>
-<li>布尔true为1，false为0</li>
-<li>字符串转数值有自己的规则<ul>
-<li>以字母开头的字符串，永远为0</li>
-<li>以数字开头的字符串，取到碰到字符串为止（不会同时包含两个小数点）</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //数据类型</span><br><span class="line"></span><br><span class="line">    $a = &apos;abc1.1.1&apos;;</span><br><span class="line">    $b = &apos;1.1.1abc&apos;;</span><br><span class="line"></span><br><span class="line">    //自动转换</span><br><span class="line">    echo $a + $b;  //输出为 1.1  $a -&gt; 0,$b -&gt; 1.1</span><br><span class="line"></span><br><span class="line">    //强制转换</span><br><span class="line">    echo &apos;&lt;br/&gt;&apos;,(float)$a,(float)$b;  //输出为 01.1  $a -&gt; 0,$b -&gt; 1.1</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>类型判断<ul>
-<li>通过一组类型判断函数，来判断变量，最终返回这个变量所保存数据的数据类型（相同结果为true，失败为false）：是一组以is_开头后面跟类型名字的函数：is_XXX(变量名)</li>
-<li>Bool类型不能用echo来查看，可以使用var_dump结构查看</li>
-<li>Var_dump(变量1,变量2…)</li>
-<li>Gettype(变量名)：获取类型，得到的是该类型对应的字符串</li>
-<li>Settype(变量名,类型)：设定数据类型 -&gt; 与强制转换不同<ul>
-<li>强制转换(类型)变量名，是对数据值复制的内容进行处理（不会处理实际存储的内容）</li>
-<li>settype会直接改变数据本身</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //判断数据类型</span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;;</span><br><span class="line">    var_dump(is_int($a));       //输出为 bool(false)</span><br><span class="line">    var_dump(is_string($a));      //输出为 bool(true)</span><br><span class="line"></span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;;</span><br><span class="line">    echo gettype($a),&apos;&lt;br/&gt;&apos;;  //输出为 string</span><br><span class="line"></span><br><span class="line">    //设置类型</span><br><span class="line">    var_dump(settype($b,&apos;int&apos;));  //输出为 bool(true)</span><br><span class="line">    echo gettype($b),$b;   //输出为 integet1</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h4 id="2-整型"><a href="#2-整型" class="headerlink" title="2. 整型"></a>2. 整型</h4><ul>
-<li>保存整数数值（范围限制），4个字节存储数据，最大就是32位：42亿多。但是在PHP中默认是有符号类型（区分正负数）</li>
-<li>进制转换函数<ul>
-<li>Decbin()：十进制转二进制</li>
-<li>Decoct()：十进制转八进制</li>
-<li>Dechex()：十进制转十六进制</li>
-<li>Bindec()：二进制转十进制</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //简单数据类型：整型、浮点型和布尔型</span><br><span class="line"></span><br><span class="line">    //定义4种整型数据</span><br><span class="line"></span><br><span class="line">    $a1 = 110;</span><br><span class="line">    $a2 = 0b110;</span><br><span class="line">    $a3 = 0110;</span><br><span class="line">    $a4 = 0x110;</span><br><span class="line"></span><br><span class="line">    echo $a1,&apos;~&apos;,$a2,&apos;~&apos;,$a3,&apos;~&apos;,$a4,&apos;&lt;hr/&gt;&apos;; //输出为110~6~72~272,默认的PHP输出数值都会自动转换成10进制输出</span><br><span class="line"></span><br><span class="line">    /*</span><br><span class="line">    十进制转二进制</span><br><span class="line">    10 ---》8 + 2 ---》2^3 + 2^1 ---》从二进制右侧开始，按照对应的指数次位置补1，没有的补0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    从最后侧开始：00000000 00000000 00000000 00001010  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    二进制转十进制</span><br><span class="line">    01101011 ==&gt;从右侧开始 1*2^0 + 1*2^1 + 0*2^2 + 1*2^3 + 0*2^4 + 1*2^5 + 1*2^6 + 0*2^7</span><br><span class="line">    == 1 + 2 + 0 + 8 + 0 + 32 + 64 + 0 == 107</span><br><span class="line">  </span><br><span class="line">    */</span><br><span class="line"></span><br><span class="line">    //利用进制函数运算</span><br><span class="line">    var_dump(decbin(107));  //十进制转二进制,输出为 string(7) &quot;1101011&quot;</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">    var_dump(dechex(107));  //十进制转十六进制,输出为 string(2) &quot;6b&quot; </span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">    var_dump(decoct(107));  //十进制转八进制,输出为 string(3) &quot;153&quot; </span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">    var_dump(bindec(1101011));  //二进制转十进制,输出为 int(107)</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h4 id="3-浮点型"><a href="#3-浮点型" class="headerlink" title="3. 浮点型"></a>3. 浮点型</h4><ul>
-<li>小数以及超过整型所能存储范围的整数（不保证精度），精度范围大概在15个有效数字左右</li>
-<li>浮点型定义有两种方式<ul>
-<li>$f = 1.23;</li>
-<li>$f = 1.23e10;  //科学计数法，其中e表示底10</li>
-</ul>
-</li>
-<li>▲ 尽量不用用浮点数做精确判断：浮点数保存的数据不够精确，而且在计算机中凡是小数基本上存的都不准确</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //浮点数</span><br><span class="line">    $f1 = 1.23;</span><br><span class="line">    $f2 = 1.23e10; </span><br><span class="line">    $f3 = PHP_INT_MAX + 1;    //整型超过自身存储的大小之后会用浮点型存储</span><br><span class="line"></span><br><span class="line">    var_dump($f1,$f2,$f3);  //输出为 float(1.23) float(12300000000) float(9.2233720368548E+18) </span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    //浮点数判断</span><br><span class="line">    $f4 = 0.7;</span><br><span class="line">    $f5 = 2.1;</span><br><span class="line">    $f6 = $f5 / 3;</span><br><span class="line"></span><br><span class="line">    echo $f6;  //输出为 0.7</span><br><span class="line">    var_dump($f4 == $f6);  //输出为 bool(false)</span><br><span class="line"></span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h4 id="4-布尔型"><a href="#4-布尔型" class="headerlink" title="4. 布尔型"></a>4. 布尔型</h4><ul>
-<li>两个值true和false，通常是用于判断比较</li>
-<li>在进行某些数据判断的时候，需要特别注意类型转换<ul>
-<li>Empty()：判断数据的值是否为”空”，不是NULL，如果为空返回true，不为空返回false</li>
-<li>Isset()：判断数据存储的变量本身是否存在，存在变量返回true，不存在返回false<ul>
-<li>▲ 不能直接传输参数，只能传入变量</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    /布尔类型</span><br><span class="line">    $b1 = true;</span><br><span class="line">    $b2 = FALSE;</span><br><span class="line"></span><br><span class="line">    var_dump(empty(0));  //输出为 bool(true) </span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    //var_dump(isset(0));  //报错</span><br><span class="line">    var_dump(isset($b2));  //输出为 bool(true) </span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    var_dump($b1,$b2);  //输出为 bool(true) bool(false) </span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>PHP函数判断图，来源于网络</li>
-</ul>
-<p><img src="/images/php/php-notepad/PHP%E5%87%BD%E6%95%B0%E5%88%A4%E6%96%AD%E5%9B%BE.png" alt="PHP函数判断图"></p>
-<h4 id="5-字符串"><a href="#5-字符串" class="headerlink" title="5. 字符串"></a>5. 字符串</h4><h4 id="6-对象"><a href="#6-对象" class="headerlink" title="6. 对象"></a>6. 对象</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//对象</span><br><span class="line">    class demo</span><br><span class="line">    &#123;</span><br><span class="line">        function __construct($a)</span><br><span class="line">        &#123;</span><br><span class="line">            echo $a;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $xx = new demo(11);</span><br><span class="line">    var_dump($xx);  // 输出11object(demo)#1(0)[]</span><br></pre></td></tr></table></figure>
-
-<h4 id="7-NULL"><a href="#7-NULL" class="headerlink" title="7. NULL"></a>7. NULL</h4>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-4%EF%BC%9A%E5%B8%B8%E9%87%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-4%EF%BC%9A%E5%B8%B8%E9%87%8F/" itemprop="url">PHP笔记-4：常量</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T11:50:40+08:00">
-                2020-03-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PHP/" itemprop="url" rel="index">
-                    <span itemprop="name">PHP</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  769 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-常量"><a href="#1-常量" class="headerlink" title="1. 常量"></a>1. 常量</h4><ul>
-<li>常量与变量一样，都是用来保存数据的。<ul>
-<li>常量：const/constant，是一种在程序运行当中，不可改变的量（数据）</li>
-<li>常量一旦定义，通常数据不可改变（用户级别）</li>
-</ul>
-</li>
-<li>常量定义方式<ul>
-<li>使用定义常量的函数：define(‘常量名’,常量值);<ul>
-<li>首个参数定义常量的名称</li>
-<li>第二个参数定义常量的值</li>
-<li>可选的第三个参数规定常量名是否对大小写不敏感。默认是false</li>
-</ul>
-</li>
-<li>const 常量名 = 值;（PHP5.3版本之后才有）</li>
-<li>▲ define和const定义的常量是有区别：在于访问权限区别</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">  //PHP常量</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  //使用函数定义常量：define</span><br><span class="line">  define(&apos;PI&apos;,3.14);</span><br><span class="line">  echo PI;</span><br><span class="line">  echo &apos;&lt;/br&gt;&apos;;</span><br><span class="line"></span><br><span class="line">  $a = 1;</span><br><span class="line">  define(&apos;A&apos;,$a);</span><br><span class="line">  echo A;</span><br><span class="line">  echo &apos;&lt;/br&gt;&apos;;</span><br><span class="line"></span><br><span class="line">  /*  // False -&gt; 区分大小写/True -&gt; 区分大小写</span><br><span class="line">    define(&apos;NAME&apos;,&apos;11&apos;);  // echo NAME -&gt; 输出 11</span><br><span class="line">    define(&apos;NAME&apos;,&apos;11&apos;,Fales);  // echo name -&gt; 输出错误</span><br><span class="line">    define(&apos;NAME&apos;,&apos;11&apos;,True);  // echo name -&gt; 输出 11</span><br><span class="line">  */</span><br><span class="line"></span><br><span class="line">  //使用const关键字定义</span><br><span class="line">  const PII = 3;</span><br><span class="line">  echo PII;</span><br><span class="line">  echo &apos;&lt;/br&gt;&apos;;</span><br><span class="line"></span><br><span class="line">  //定义特殊常量</span><br><span class="line">  define(&apos;-_-&apos;,&apos;smile&apos;);</span><br><span class="line">  //const -_- = &apos;smile&apos;;  //错误  </span><br><span class="line"></span><br><span class="line">  //echo -_-;       //特殊符号不能直接使用</span><br><span class="line">  echo constant(&apos;-_-&apos;);</span><br><span class="line">  echo &apos;&lt;/br&gt;&apos;;   </span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>常量名字的命名规则<ul>
-<li>常量不需要使用“$”符号，一旦使用系统就会认为是变量</li>
-<li>常量的名字组成由字母、数字和下划线组成，不能以数字开头</li>
-<li>常量的名字通常是以大写字母为主（与变量以示区别）</li>
-<li>常量命名的规则比变量要松散，可以使用一些特殊字符，该方式只能使用define定义</li>
-</ul>
-</li>
-<li>常量的使用形式<ul>
-<li>常量的使用与变量一样：不可改变值（在定义的时候必须赋值）</li>
-<li>有的时候还需要使用另外一种形式来访问（针对的是特殊名字的常量），需要用到另外一个访问常量的函数：constant(‘常量名’)</li>
-</ul>
-</li>
-</ul>
-<ol start="2">
-<li><p>系统常量</p>
-<ul>
-<li>系统帮助用户定义的常量，用户可以直接使用</li>
-<li>常用的系统常量<ul>
-<li>PHP_VERSION：PHP版本号</li>
-<li>PHP_INT_SIZE：整形大小</li>
-<li>PHP_INT_MAX：整形能表示的最大值（PHP中整形是允许出现负数：带符号）</li>
-</ul>
-</li>
-<li>魔术常量<ul>
-<li>魔术常量的值通常会跟着环境变化，但是用户改变不了</li>
-<li><strong>DIR</strong>：当前被执行的脚本所在电脑的绝对路径</li>
-<li><strong>FILE</strong>：当前被执行的脚本所在的电脑的绝对路径（带自己文件的名字）</li>
-<li><strong>LINE</strong>：当前所属的行数</li>
-<li><strong>NAMESPACE</strong>：当前所属的命名空间</li>
-<li><strong>CLASS</strong>：当前所属的类</li>
-<li><strong>METHOD</strong>：当前所属的方法</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    //系统常量</span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;,PHP_VERSION,&apos;&lt;br/&gt;&apos;,PHP_INT_SIZE,&apos;&lt;br/&gt;&apos;,PHP_INT_MAX;</span><br><span class="line"></span><br><span class="line">    //魔术常量</span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;;</span><br><span class="line">    echo __DIR__,&apos;&lt;br/&gt;&apos;,__FILE__,&apos;&lt;br/&gt;&apos;,__LINE__,&apos;&lt;br/&gt;&apos;;</span><br><span class="line">    echo __LINE__;</span><br><span class="line"></span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;;</span><br><span class="line">    echo __NAMESPACE__;  //后续会讲到</span><br><span class="line">    echo __CLASS__;  //后续会讲到</span><br><span class="line"></span><br><span class="line">    function demo()</span><br><span class="line">    &#123;</span><br><span class="line">        echo __METHOD__;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    demo();</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2818,7 +2761,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">181</span>
+                  <span class="site-state-item-count">184</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2829,7 +2772,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -2840,7 +2783,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -2925,7 +2868,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">176.3k</span>
+    <span title="Site words total count">179.7k</span>
   
 </div>
 

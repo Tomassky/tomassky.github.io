@@ -139,60 +139,6 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2020/04/02/XSS--%E6%89%8B%E5%B7%A5%E6%8C%96%E6%8E%98/">
-        <p class="h4 index-header">XSS--手工挖掘</p>
-      </a>
-
-      <a href="/2020/04/02/XSS--%E6%89%8B%E5%B7%A5%E6%8C%96%E6%8E%98/">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">
-1. 寻找思路
-反射型是：输入–输出 / 存储型是：输入–进入数据库*–取出数据库–输出。
-寻找思路差别
-反射型是：绝大部分情况下，输入在哪里，输出就在哪里
-存储型是：输入在A处进入数据库， 而输出则可能出现在其它任何用到数据的地方。
-反射型是：输入大部分位于地址栏或来自DOM的某些属性，也会偶尔有数据在请求中（POST类型）
-存储型是：输入大部分来自POST/GET请求，常见于一些保存操作中
-
-
-⭐ 寻找存储型：输出的位置不一定出现在输入的位置（逆向思维）
-先找到输出点，然后猜测此处输出是否会被过滤
-如果觉得可能没过滤，我们再找到这个输出是在哪里输入的
-接着开始测试输入，看输出的效果
-如果</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-02&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/XSS/">XSS</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Web%E5%AE%89%E5%85%A8/">Web安全</a>&nbsp;
-          
-            <a href="/tags/XSS/">XSS</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
       <a href="/2020/04/02/XSS--%E5%85%B6%E4%BB%96XSS%E6%80%9D%E8%B7%AF/">
         <p class="h4 index-header">XSS--其他XSS思路</p>
       </a>
@@ -692,6 +638,65 @@ F12查看源代码，没有过滤和转义
 &lt;!DOCTYPE html&gt;&lt;!--STATUS OK--&gt;&lt;html&gt;
 &lt;head&gt;
 &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/htm</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-03-30&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/XSS/">XSS</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/XSS/">XSS</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/03/30/XSS%E9%9D%B6%E5%9C%BA--pikachu/">
+        <p class="h4 index-header">XSS靶场--pikachu</p>
+      </a>
+
+      <a href="/2020/03/30/XSS%E9%9D%B6%E5%9C%BA--pikachu/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">
+1. 反射型XSS(get)
+插入特殊字段尝试&#39;&quot;&lt;&gt;6666
+F12查看源代码进行审查，发现无过滤和转义
+插入弹窗尝试：&lt;script&gt;alert(1)&lt;/script&gt;
+输入框限制了输入长度，F12审查元素修改maxlength属性
+
+
+⭐ 成功弹窗
+▲ get形式的参数，可以在url地址栏中查看
+源码分析
+没有任何过滤，输入弹窗即可
+
+
+
+2. 反射型XSS(post)
+需要登陆用户进去
+用户：admin / 密码：123456
+
+
+插入特殊字段尝试&#39;&quot;&lt;&gt;6666
+F12查看源代码进行审查，发现无过滤</div>
         </div>
       </a>
 

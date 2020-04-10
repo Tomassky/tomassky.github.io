@@ -1,371 +1,175 @@
 <!DOCTYPE html>
+<html lang="zh-CN">
 
 
 
-  
 
 
-<html class="theme-next mist use-motion" lang="zh-Hans">
 <head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-<meta name="theme-color" content="#222">
-
-
-
-
-
-
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/default.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="Tomas">
+  <meta name="keywords" content="">
+  <title>PHP笔记-11：函数 - Tomas&#39;Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css" />
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
 
 
+  <link  rel="stylesheet" href="/lib/prettify/tomorrow.min.css" />
+
+<link  rel="stylesheet" href="/css/main.css" />
 
 
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
 
 
-
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=" rel="stylesheet" type="text/css" />
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=">
-
-
-  <link rel="mask-icon" href="/images/logo.svg?v=" color="#222">
-
-
-
-
-
-  <meta name="keywords" content="PHP基础," />
-
-
-
-
-
-
-
-
-
-
-<meta name="description" content="1. 函数的基本概念 function，是一种语法结构，将实现某一个功能的代码块（多行代码）封装到一个结构中，从而实现代码的重复利用（复用）  2. 函数的使用 定义函数的目的：是为了实现代码的重复利用，一个功能一个函数（简单明了） 函数的使用：通过访问函数的名字+()； 如果函数在定义的过程中有参数，那么在调用的时候就必须传入对应的参数：函数是一种结构不会自动运行，必须通过调用才会执行   函">
-<meta name="keywords" content="PHP基础">
-<meta property="og:type" content="article">
-<meta property="og:title" content="PHP笔记-11：函数">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;13&#x2F;PHP%E7%AC%94%E8%AE%B0-11%EF%BC%9A%E5%87%BD%E6%95%B0&#x2F;index.html">
-<meta property="og:site_name" content="Tomas&#39;Blog">
-<meta property="og:description" content="1. 函数的基本概念 function，是一种语法结构，将实现某一个功能的代码块（多行代码）封装到一个结构中，从而实现代码的重复利用（复用）  2. 函数的使用 定义函数的目的：是为了实现代码的重复利用，一个功能一个函数（简单明了） 函数的使用：通过访问函数的名字+()； 如果函数在定义的过程中有参数，那么在调用的时候就必须传入对应的参数：函数是一种结构不会自动运行，必须通过调用才会执行   函">
-<meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;php&#x2F;php-notepad&#x2F;PHP%E4%BC%AA%E7%B1%BB%E5%9E%8B.png">
-<meta property="og:updated_time" content="2020-03-27T04:33:21.457Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;php&#x2F;php-notepad&#x2F;PHP%E4%BC%AA%E7%B1%BB%E5%9E%8B.png">
-
-
-
-<script type="text/javascript" id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Mist',
-    version: '',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: true,
-    tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    duoshuo: {
-      userId: '0',
-      author: '博主'
-    },
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
-
-
-
-  <link rel="canonical" href="http://yoursite.com/2020/03/13/PHP笔记-11：函数/"/>
-
-
-
-
-
-  <title>PHP笔记-11：函数 | Tomas'Blog</title>
-  
-
-
-
-
-
-
+<!-- 自定义样式保持在最底部 -->
 
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
-  
-  
-    
-  
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Tomas'Blog</strong>&nbsp;</a>
 
-  <div class="container sidebar-position-left page-post-detail">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Tomas'Blog</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-      
-        <p class="site-subtitle">一个相当程序员的白帽子</p>
-      
-  </div>
-
-  <div class="site-nav-toggle">
-    <button>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
     </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
   </div>
-</div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu">
-      
-        
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-            首页
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
-            
-            标签
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories/" rel="section">
-            
-            分类
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
-            
-            归档
-          </a>
-        </li>
-      
-
-      
-    </ul>
-  
-
-  
 </nav>
 
-
-
- </div>
-    </header>
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/PHP%E7%AC%94%E8%AE%B0-11%EF%BC%9A%E5%87%BD%E6%95%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tomas">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/photo.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tomas'Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">PHP笔记-11：函数</h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-13T12:28:08+08:00">
-                2020-03-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PHP/" itemprop="url" rel="index">
-                    <span itemprop="name">PHP</span>
-                  </a>
-                </span>
-
-                
-                
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
               
             </span>
-          
 
-          
             
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
               
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期五, 三月 13日 2020, 12:28 中午
+                </p>
+              
+
+              <p class="mt-1">
                 
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    3.5k 字
+                  </span>
                 
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  3.5k 字
-                </span>
-              
 
-              
-                <span class="post-meta-divider">|</span>
-              
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      13 分钟
+                  </span>
+                
 
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
                 
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  <span id="busuanzi_container_page_pv" class="post-meta" style="display: none">
+                    <i class="far fa-eye" aria-hidden="true"></i>
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>
                 
-                <span title="阅读时长">
-                  13 分钟
-                </span>
-              
-            </div>
-          
+              </p>
+            
+          </div>
 
           
-
         </div>
-      </header>
-    
+      </div>
+    </div>
+  </header>
 
+  <main>
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
-      
-        <hr>
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+              <p
+                class="note note-warning">本文最后更新于：星期五, 三月 27日 2020, 12:33 下午</p>
+            
+            <div class="markdown-body">
+              <hr>
 <h4 id="1-函数的基本概念"><a href="#1-函数的基本概念" class="headerlink" title="1. 函数的基本概念"></a>1. 函数的基本概念</h4><ul>
 <li>function，是一种语法结构，将实现某一个功能的代码块（多行代码）封装到一个结构中，从而实现代码的重复利用（复用）</li>
 </ul>
@@ -382,9 +186,27 @@
 </ul>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //函数</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //调用函数</span><br><span class="line">    display();</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //定义函数</span><br><span class="line">    function display()&#123;</span><br><span class="line">        //函数体</span><br><span class="line">        echo &apos;hello world&apos;;     //存在返回值，输出为&apos;hello world&apos;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //调用函数</span><br><span class="line">    display();  //存在返回值，输出为&apos;hello world&apos;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;?php
 
-<h4 id="3-函数命名规范"><a href="#3-函数命名规范" class="headerlink" title="3. 函数命名规范"></a>3. 函数命名规范</h4><ul>
+    //函数
+
+
+    //调用函数
+    display();
+    echo &quot;&lt;/br&gt;&quot;;
+
+
+    //定义函数
+    function display(){
+        //函数体
+        echo &#39;hello world&#39;;     //存在返回值，输出为&#39;hello world&#39;
+    }
+
+
+    //调用函数
+    display();  //存在返回值，输出为&#39;hello world&#39;
+
+?&gt;</code></pre><h4 id="3-函数命名规范"><a href="#3-函数命名规范" class="headerlink" title="3. 函数命名规范"></a>3. 函数命名规范</h4><ul>
 <li>命名规范：由字母、数字和下划线组成，但是不能以数字开头<ul>
 <li>驼峰法：除了左边第一个单词外，后面所有的单词首字母都大写：showParentInfo()</li>
 <li>下划线法：单词之间通过下划线连接，单词都是小写：show_parent_info()</li>
@@ -404,14 +226,38 @@
 </ul>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //定义函数</span><br><span class="line">    function add($arg1,$arg2)&#123;      //形参可以有多个，使用逗号分隔即可</span><br><span class="line">        //函数体：可以直接使用形参运算</span><br><span class="line">        echo $arg1 + $arg2;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //调用函数</span><br><span class="line">    $num1 = 10;</span><br><span class="line"></span><br><span class="line">    add($num1,20);   //传入的实参，可以是变量或者其他有值的表达式，输出为 30</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;?php
 
-<ul>
+    //定义函数
+    function add($arg1,$arg2){      //形参可以有多个，使用逗号分隔即可
+        //函数体：可以直接使用形参运算
+        echo $arg1 + $arg2;
+    }
+
+    //调用函数
+    $num1 = 10;
+
+    add($num1,20);   //传入的实参，可以是变量或者其他有值的表达式，输出为 30
+?&gt;</code></pre><ul>
 <li>默认值：default value，指的是形参的默认值，在函数定义的时候，就给形参进行一个初始赋值，如果实际调用传入的参数（实参）没有提供，那么形参就会使用定义时的值来进入函数内部参与运算</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //调用函数</span><br><span class="line">    $num1 = 10;</span><br><span class="line"></span><br><span class="line">    //函数的默认值</span><br><span class="line">    function jian($num1 = 0,$num2 = 0)&#123;   </span><br><span class="line">        //当前的$num1是形参，在编译时不执行，即便执行也是在jian函数内部，不会与外部的$num1变量冲突</span><br><span class="line">        echo $num1 - $num2;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //调用：默认值如果存在，可以不用传入</span><br><span class="line">    jian($num1);</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">    echo $num1;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;?php
 
-<ul>
+    //调用函数
+    $num1 = 10;
+
+    //函数的默认值
+    function jian($num1 = 0,$num2 = 0){   
+        //当前的$num1是形参，在编译时不执行，即便执行也是在jian函数内部，不会与外部的$num1变量冲突
+        echo $num1 - $num2;
+    }
+
+    //调用：默认值如果存在，可以不用传入
+    jian($num1);
+    echo &quot;&lt;/br&gt;&quot;;
+    echo $num1;
+
+?&gt;</code></pre><ul>
 <li>引用传递<ul>
 <li>实参在调用时会将值赋值给形参，那么实际上使用的方式就是一种简单的值传递：将实参（如果是变量或者常量或者其他表达式）的结果（值）取出来赋值给形参：形参与外部实际传入的参数本身没有任何关联关系：只是结果一样</li>
 <li>有的时候，希望在函数内部拿到的外部数据，能够在函数内部改变，那么就需要明确告知函数（定义时），函数才会在调用的时候去主动获取外部数据的内存地址。以上这种定义形式参数的方式叫作引用传值</li>
@@ -419,26 +265,83 @@
 </ul>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //引用传值</span><br><span class="line">    function display($a,&amp;$b)&#123;</span><br><span class="line">        //修改形参的值</span><br><span class="line">        $a = $a * $a;</span><br><span class="line">        $b = $b * $b;</span><br><span class="line"></span><br><span class="line">        echo $a,&apos;&lt;br&gt;&apos;,$b,&apos;&lt;br/&gt;&apos;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //定义变量</span><br><span class="line">    $a = 10;</span><br><span class="line">    $b = 5;</span><br><span class="line"></span><br><span class="line">    //调用函数</span><br><span class="line">    display($a,$b);  //输出为 100，25</span><br><span class="line"></span><br><span class="line">    echo &apos;&lt;hr/&gt;&apos;,$a,&apos;&lt;br/&gt;&apos;,$b;  //输出为 10，25</span><br><span class="line"></span><br><span class="line">    //错误调用：引用传值直接传入数据本身而不是变量</span><br><span class="line">    //display(10,5);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;?php
 
-<h4 id="5-函数返回值"><a href="#5-函数返回值" class="headerlink" title="5. 函数返回值"></a>5. 函数返回值</h4><ul>
+
+    //引用传值
+    function display($a,&amp;$b){
+        //修改形参的值
+        $a = $a * $a;
+        $b = $b * $b;
+
+        echo $a,&#39;&lt;br&gt;&#39;,$b,&#39;&lt;br/&gt;&#39;;
+    }
+
+    //定义变量
+    $a = 10;
+    $b = 5;
+
+    //调用函数
+    display($a,$b);  //输出为 100，25
+
+    echo &#39;&lt;hr/&gt;&#39;,$a,&#39;&lt;br/&gt;&#39;,$b;  //输出为 10，25
+
+    //错误调用：引用传值直接传入数据本身而不是变量
+    //display(10,5);
+
+?&gt;</code></pre><h4 id="5-函数返回值"><a href="#5-函数返回值" class="headerlink" title="5. 函数返回值"></a>5. 函数返回值</h4><ul>
 <li>return，指的是将函数实现的结果，通过return关键字，返回给函数外部（函数调用处）在PHP中所有的函数都有返回值。（如果没有明确return使用，那么系统默认返回NULL）</li>
 <li>▲ 函数的返回值可以是任意数据类型</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //函数返回值</span><br><span class="line"></span><br><span class="line">    //定义函数</span><br><span class="line">    function display()&#123;</span><br><span class="line">        //输出</span><br><span class="line">        echo __FUNCTION__;  //输出当前函数名字</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //var_dump(display());</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;?php
 
-<ul>
+    //函数返回值
+
+    //定义函数
+    function display(){
+        //输出
+        echo __FUNCTION__;  //输出当前函数名字
+    }
+
+    //var_dump(display());
+
+?&gt;</code></pre><ul>
 <li>Ruturn关键字<ul>
 <li>return在函数内部存在的价值：返回当前函数的结果（当前函数运行结束）</li>
 <li>return还可以在文件中直接使用（不在函数里面）：代表文件将结果return后面跟的内容，转交给包含当前文件的位置。（通常在系统配置文件中使用较多），在文件中也代表中终止文件后面的代码：return之后的内容不会执行。</li>
 </ul>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //加法运算</span><br><span class="line">    function add($num1,$num2)&#123;</span><br><span class="line">        return $num1 + $num2;   //返回结果</span><br><span class="line"></span><br><span class="line">    //输出</span><br><span class="line">    echo $num1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $res = add(10,20);        //外部定义变量接收函数运行结果</span><br><span class="line"></span><br><span class="line">    echo $res;</span><br><span class="line"></span><br><span class="line">    //将结果提交给另外包含的文件</span><br><span class="line">    return &apos;hello world&apos;;</span><br><span class="line"></span><br><span class="line">    echo $res;            //不再执行：上面return结束了</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;?php
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//return -&gt; include</span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">  //包含有return关键字的文件</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    $res = include_once &apos;function3.php&apos;;</span><br><span class="line">    var_dump($res);  //</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+    //加法运算
+    function add($num1,$num2){
+        return $num1 + $num2;   //返回结果
 
-<h4 id="6-作用域"><a href="#6-作用域" class="headerlink" title="6. 作用域"></a>6. 作用域</h4><ul>
+    //输出
+    echo $num1;
+    }
+
+    $res = add(10,20);        //外部定义变量接收函数运行结果
+
+    echo $res;
+
+    //将结果提交给另外包含的文件
+    return &#39;hello world&#39;;
+
+    echo $res;            //不再执行：上面return结束了
+
+?&gt;</code></pre><pre><code>//return -&gt; include
+&lt;?php
+
+
+  //包含有return关键字的文件
+
+
+    $res = include_once &#39;function3.php&#39;;
+    var_dump($res);  //
+
+?&gt;</code></pre><h4 id="6-作用域"><a href="#6-作用域" class="headerlink" title="6. 作用域"></a>6. 作用域</h4><ul>
 <li>变量（常量）能够被访问的区域</li>
 <li>全局变量：就是用户普通定义的变量（函数外部定义）<ul>
 <li>所属全局空间：在PHP中只允许在全局空间使用：理论上函数内部不可方法</li>
@@ -446,27 +349,68 @@
 </ul>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //PHP中作用域</span><br><span class="line"></span><br><span class="line">    //默认的代码空间：全局空间</span><br><span class="line">    $global = &apos;global area&apos;;  //最终会被系统纳入到超全局变量中：$GLOBALS[&apos;global&apos;] = global area;</span><br><span class="line"></span><br><span class="line">    function display()&#123;</span><br><span class="line"></span><br><span class="line">        //访问全局变量</span><br><span class="line">        echo $global;   //不能访问</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    //调用函数</span><br><span class="line">    display();  //访问报错</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;?php
 
-<ul>
+    //PHP中作用域
+
+    //默认的代码空间：全局空间
+    $global = &#39;global area&#39;;  //最终会被系统纳入到超全局变量中：$GLOBALS[&#39;global&#39;] = global area;
+
+    function display(){
+
+        //访问全局变量
+        echo $global;   //不能访问
+    }
+
+    //调用函数
+    display();  //访问报错
+?&gt;</code></pre><ul>
 <li>局部变量：就是在函数内部定义的变量<ul>
 <li>所属当前函数空间：在PHP中只允许在当前函数自己内部使用</li>
 <li>函数周期：函数执行结束（函数是在栈区中开辟独立内存空间运行）</li>
 </ul>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //局部变量（函数内部定义）</span><br><span class="line">    function display()&#123;</span><br><span class="line">        //所有的形参都可以理解为局部变量</span><br><span class="line">        $inner = __FUNCTION__;        //局部变量</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    //调用函数</span><br><span class="line">    display();</span><br><span class="line">    //全局空间访问局部变量</span><br><span class="line">    echo $inner;   //不能访问</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;?php
 
-<ul>
+    //局部变量（函数内部定义）
+    function display(){
+        //所有的形参都可以理解为局部变量
+        $inner = __FUNCTION__;        //局部变量
+    }
+
+    //调用函数
+    display();
+    //全局空间访问局部变量
+    echo $inner;   //不能访问
+
+?&gt;</code></pre><ul>
 <li>超全局变量：系统定义的变量（预定义变量：$_SERVER、$_POST等）<ul>
 <li>所属超全局空间：没有访问限制（函数内外都可以访问）</li>
 <li>超全局变量会将全局变量自动纳入到$GLOBALS里面，而$GLOBALS没有作用域限制，所以能够帮助局部去访问全局变量：但是必须使用数组方式</li>
 </ul>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //默认的代码空间：全局空间</span><br><span class="line">    $global = &apos;global area&apos;;  //最终会被系统纳入到超全局变量中：$GLOBALS[&apos;global&apos;] = global area;</span><br><span class="line"></span><br><span class="line">    function display()&#123;</span><br><span class="line"></span><br><span class="line">        //访问全局变量</span><br><span class="line">        echo $global;           //不能访问</span><br><span class="line"></span><br><span class="line">        //访问全局变量</span><br><span class="line">        //var_dump($GLOBALS);</span><br><span class="line">        echo $GLOBALS[&apos;global&apos;];</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //调用函数</span><br><span class="line">    display();  //报错+输出 global area</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;?php
 
-<ul>
+    //默认的代码空间：全局空间
+    $global = &#39;global area&#39;;  //最终会被系统纳入到超全局变量中：$GLOBALS[&#39;global&#39;] = global area;
+
+    function display(){
+
+        //访问全局变量
+        echo $global;           //不能访问
+
+        //访问全局变量
+        //var_dump($GLOBALS);
+        echo $GLOBALS[&#39;global&#39;];
+
+    }
+
+    //调用函数
+    display();  //报错+输出 global area
+
+?&gt;</code></pre><ul>
 <li>global关键字：实现全局访问局部，同时局部也可以访问全局（▲同$GLOBALS，但有区别，$GLOBALS不可调用一个外部不存在的变量)<ul>
 <li>▲ 一种在函数里面定义变量的一种方式</li>
 <li>如果使用global定义的变量名在外部存在（全局变量），那么系统在函数内部定义的变量直接指向外部全局变量所指向的内存空间（同一个变量）</li>
@@ -475,9 +419,29 @@
 </ul>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //默认的代码空间：全局空间</span><br><span class="line">    $global = &apos;global area&apos;;  //最终会被系统纳入到超全局变量中：$GLOBALS[&apos;global&apos;] = global area;</span><br><span class="line"></span><br><span class="line">    function display()&#123;</span><br><span class="line"></span><br><span class="line">        //定义变量：使用全局变量</span><br><span class="line">        global $global;           //全局空间存在</span><br><span class="line">        echo $global;</span><br><span class="line"></span><br><span class="line">        //定义变量：全局不存在</span><br><span class="line">        global $local;</span><br><span class="line">        $local = &apos;inner&apos;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //调用函数</span><br><span class="line">    display();</span><br><span class="line"></span><br><span class="line">    //访问&quot;局部&quot;变量</span><br><span class="line">    echo $local;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;?php
 
-<h4 id="7-静态变量"><a href="#7-静态变量" class="headerlink" title="7. 静态变量"></a>7. 静态变量</h4><ul>
+    //默认的代码空间：全局空间
+    $global = &#39;global area&#39;;  //最终会被系统纳入到超全局变量中：$GLOBALS[&#39;global&#39;] = global area;
+
+    function display(){
+
+        //定义变量：使用全局变量
+        global $global;           //全局空间存在
+        echo $global;
+
+        //定义变量：全局不存在
+        global $local;
+        $local = &#39;inner&#39;;
+    }
+
+    //调用函数
+    display();
+
+    //访问&quot;局部&quot;变量
+    echo $local;
+
+?&gt;</code></pre><h4 id="7-静态变量"><a href="#7-静态变量" class="headerlink" title="7. 静态变量"></a>7. 静态变量</h4><ul>
 <li>在函数内部定义的变量，使用static关键字修饰，用来实现跨函数共享数据的变量，函数运行结束所有局部变量都会清空，如果重新运行一下函数，所有的局部变量又会重新初始化<ul>
 <li>静态变量的作用是为了跨函数共享数据（同一个函数被多次调用）</li>
 <li>系统在进行编译的时候会对static这一行进行初始化 -&gt; 为静态变量赋值</li>
@@ -490,31 +454,133 @@
 </ul>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"> </span><br><span class="line">    //静态变量</span><br><span class="line"></span><br><span class="line">    //定义函数</span><br><span class="line">    function display()&#123;</span><br><span class="line">        //定义变量</span><br><span class="line">        $local = 1;           //局部变量</span><br><span class="line"></span><br><span class="line">        //定义静态变量</span><br><span class="line">        static $count = 1;        //静态变量</span><br><span class="line"></span><br><span class="line">        echo $local++,$count++,&apos;&lt;br/&gt;&apos;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //调用</span><br><span class="line">    display();</span><br><span class="line">    display();</span><br><span class="line">    display();</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;?php
 
-<h4 id="8-可变函数"><a href="#8-可变函数" class="headerlink" title="8. 可变函数"></a>8. 可变函数</h4><ul>
+    //静态变量
+
+    //定义函数
+    function display(){
+        //定义变量
+        $local = 1;           //局部变量
+
+        //定义静态变量
+        static $count = 1;        //静态变量
+
+        echo $local++,$count++,&#39;&lt;br/&gt;&#39;;
+    }
+
+    //调用
+    display();
+    display();
+    display();
+
+?&gt;</code></pre><h4 id="8-可变函数"><a href="#8-可变函数" class="headerlink" title="8. 可变函数"></a>8. 可变函数</h4><ul>
 <li>当前有一个变量所保存到值，刚好是函数的名字，那么就可以使用变量+()来充当函数名使用<ul>
 <li>可变函数在系统使用的过程中还是比较多的，尤其是使用很多系统函数的时候：需要用户在外部定义一个自定义函数，但是需要传入到系统函数内部使用</li>
 </ul>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //PHP可变函数</span><br><span class="line"></span><br><span class="line">    //定义函数</span><br><span class="line">    function display()&#123;</span><br><span class="line">        echo __LINE__, __FUNCTION__;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //定义变量</span><br><span class="line">    $func = &apos;display&apos;;</span><br><span class="line"></span><br><span class="line">    //可变函数</span><br><span class="line">    $func();</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    //定义系统函数（假设）</span><br><span class="line">    function sys_function($arg1,$arg2)&#123;</span><br><span class="line">        //给指定的函数（第一个参数），求对应的第二个参数值的4次方</span><br><span class="line">        //为实际用户输入的数值进行处理</span><br><span class="line"></span><br><span class="line">        return $arg1($arg2);  //user_function(10)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //定义一个用户函数：求一个数的四次方</span><br><span class="line">    function user_function($num)&#123;</span><br><span class="line">        return $num * $num * $num * $num;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //求10的4次方</span><br><span class="line">    echo sys_function(&apos;user_function&apos;,10);  //输出为 10000</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;?php
 
-<h4 id="9-匿名函数"><a href="#9-匿名函数" class="headerlink" title="9. 匿名函数"></a>9. 匿名函数</h4><ul>
+    //PHP可变函数
+
+    //定义函数
+    function display(){
+        echo __LINE__, __FUNCTION__;
+    }
+
+    //定义变量
+    $func = &#39;display&#39;;
+
+    //可变函数
+    $func();
+    echo &quot;&lt;/br&gt;&quot;;
+
+    //定义系统函数（假设）
+    function sys_function($arg1,$arg2){
+        //给指定的函数（第一个参数），求对应的第二个参数值的4次方
+        //为实际用户输入的数值进行处理
+
+        return $arg1($arg2);  //user_function(10)
+    }
+
+    //定义一个用户函数：求一个数的四次方
+    function user_function($num){
+        return $num * $num * $num * $num;
+    }
+
+    //求10的4次方
+    echo sys_function(&#39;user_function&#39;,10);  //输出为 10000
+
+?&gt;</code></pre><h4 id="9-匿名函数"><a href="#9-匿名函数" class="headerlink" title="9. 匿名函数"></a>9. 匿名函数</h4><ul>
 <li>没有名字的函数<ul>
 <li>▲ 变量保存匿名函数，本质得到的是一个对象（Closure）</li>
 </ul>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //匿名函数</span><br><span class="line"></span><br><span class="line">    //定义基本匿名函数</span><br><span class="line">    $func = function()&#123;</span><br><span class="line">        //函数体</span><br><span class="line">        echo &apos;hello world&apos;;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    //调用匿名函数：可变函数</span><br><span class="line">    $func();</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    //查看变量内容</span><br><span class="line">    var_dump($func);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;?php
 
-<h4 id="10-闭包"><a href="#10-闭包" class="headerlink" title="10. 闭包"></a>10. 闭包</h4><ul>
+    //匿名函数
+
+    //定义基本匿名函数
+    $func = function(){
+        //函数体
+        echo &#39;hello world&#39;;
+    };
+
+    //调用匿名函数：可变函数
+    $func();
+    echo &quot;&lt;/br&gt;&quot;;
+
+    //查看变量内容
+    var_dump($func);
+
+?&gt;</code></pre><h4 id="10-闭包"><a href="#10-闭包" class="headerlink" title="10. 闭包"></a>10. 闭包</h4><ul>
 <li>closure， 一词来源于以下两者的结合：要执行的代码块（由于自由变量被包含在代码块中，这些自由变量以及它们引用的对象没有被释放）和为自由变量提供绑定的计算环境（作用域）</li>
 <li>▲ 简单理解：函数内部有一些局部变量（要执行的代码块）在函数执行之后没有被释放，是因为在函数内部还有对应的函数在引用（函数的内部函数：匿名函数）</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //闭包函数</span><br><span class="line">    function display()&#123;</span><br><span class="line">        //定义变量：局部变量</span><br><span class="line">        $name = __FUNCTION__;</span><br><span class="line"></span><br><span class="line">        //定义匿名函数</span><br><span class="line">        $innerfunction = function() use($name)&#123;   //use就是将外部变量（局部）保留给内部使用（闭包）</span><br><span class="line"></span><br><span class="line">            //函数内部的函数</span><br><span class="line">            //echo $name;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        //调用函数</span><br><span class="line">        $innerfunction();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    display();</span><br><span class="line"></span><br><span class="line">    //闭包函数</span><br><span class="line">    function display1()&#123;</span><br><span class="line">        //定义变量：局部变量</span><br><span class="line">        $name = __FUNCTION__;</span><br><span class="line"></span><br><span class="line">        //定义匿名函数</span><br><span class="line">        $innerfunction = function() use($name)&#123;  //use就是将外部变量（局部）保留给内部使用（闭包）</span><br><span class="line"></span><br><span class="line">        //函数内部的函数</span><br><span class="line">        echo $name;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        //返回内部匿名函数</span><br><span class="line">        return $innerfunction;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $closure = display1();  </span><br><span class="line"></span><br><span class="line">    //display1函数运行结束：理论上局部变量$name应该已经被释放</span><br><span class="line">    $closure();</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;?php
 
-<h4 id="11-伪类型"><a href="#11-伪类型" class="headerlink" title="11. 伪类型"></a>11. 伪类型</h4><ul>
+    //闭包函数
+    function display(){
+        //定义变量：局部变量
+        $name = __FUNCTION__;
+
+        //定义匿名函数
+        $innerfunction = function() use($name){   //use就是将外部变量（局部）保留给内部使用（闭包）
+
+            //函数内部的函数
+            //echo $name;
+        };
+
+        //调用函数
+        $innerfunction();
+    }
+
+    display();
+
+    //闭包函数
+    function display1(){
+        //定义变量：局部变量
+        $name = __FUNCTION__;
+
+        //定义匿名函数
+        $innerfunction = function() use($name){  //use就是将外部变量（局部）保留给内部使用（闭包）
+
+        //函数内部的函数
+        echo $name;
+        };
+
+        //返回内部匿名函数
+        return $innerfunction;
+    }
+
+    $closure = display1();  
+
+    //display1函数运行结束：理论上局部变量$name应该已经被释放
+    $closure();
+
+?&gt;</code></pre><h4 id="11-伪类型"><a href="#11-伪类型" class="headerlink" title="11. 伪类型"></a>11. 伪类型</h4><ul>
 <li>假类型，实际上在PHP中不存在的类型。但是通过伪类型可以帮助程序员去更好的查看操作手册从而更方便学习<ul>
 <li>Mixed：混合的，可以是多种PHP中的数据类型</li>
 <li>Number：数值的，可以是任意数值类型（整形和浮点型）</li>
@@ -522,436 +588,362 @@
 </li>
 <li>PHP伪类型，图片来自网络</li>
 </ul>
-<p><img src="/images/php/php-notepad/PHP%E4%BC%AA%E7%B1%BB%E5%9E%8B.png" alt="PHP伪类型"></p>
-<h4 id="12-引用函数"><a href="#12-引用函数" class="headerlink" title="12. 引用函数"></a>12. 引用函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //静态变量做局部变量</span><br><span class="line">    function &amp;demo1()</span><br><span class="line">    &#123;</span><br><span class="line">        static $i = 0;</span><br><span class="line">        $i++;</span><br><span class="line">        return $i;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $b = &amp;demo1();  //$b和$i的内存共用(与return的变量共用)</span><br><span class="line">    echo $b;  //输出为1</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    $b = 100;</span><br><span class="line">    $t = demo1();</span><br><span class="line">    echo $t;  //输出为101</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //临时变量做局部变量</span><br><span class="line">    function &amp;demo2()</span><br><span class="line">    &#123;</span><br><span class="line">        $j = 1;</span><br><span class="line">        return $j;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $c = &amp;demo2();</span><br><span class="line">    echo $c;  //输出为1</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    $c = 100;</span><br><span class="line">    $t = demo2();</span><br><span class="line">    echo $c;  //输出为100</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/php/php-notepad/PHP%E4%BC%AA%E7%B1%BB%E5%9E%8B.png" srcset="/img/loading.gif" alt="PHP伪类型"></p>
+<h4 id="12-引用函数"><a href="#12-引用函数" class="headerlink" title="12. 引用函数"></a>12. 引用函数</h4><pre><code>&lt;?php
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">   </span><br><span class="line">    //三个变量共用一个内存地址(与return的变量共用)</span><br><span class="line">    function &amp;demo($a,$b,$c)</span><br><span class="line">    &#123;</span><br><span class="line">        static $i = 0;</span><br><span class="line">        $i++;</span><br><span class="line">        return $i;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $x = &amp;demo(100,200,300);</span><br><span class="line">    echo $x;  //输出为1</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    $xx = &amp;demo(1000,2000,3000);</span><br><span class="line">    echo $xx;  //输出为2</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    $xxx = &amp;demo(10000,20000,30000);</span><br><span class="line">    echo $xxx;  //输出为3</span><br><span class="line">    echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    $xx = 400;</span><br><span class="line">    echo demo(11,22,33);  //输出为401;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+    //静态变量做局部变量
+    function &amp;demo1()
+    {
+        static $i = 0;
+        $i++;
+        return $i;
+    }
 
+    $b = &amp;demo1();  //$b和$i的内存共用(与return的变量共用)
+    echo $b;  //输出为1
+    echo &quot;&lt;/br&gt;&quot;;
 
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/PHP%E5%9F%BA%E7%A1%80/" rel="tag"># PHP基础</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-10%EF%BC%9A%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" rel="next" title="PHP笔记-10：文件包含">
-                <i class="fa fa-chevron-left"></i> PHP笔记-10：文件包含
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-12%EF%BC%9A%E5%B8%B8%E7%94%A8%E7%B3%BB%E7%BB%9F%E5%87%BD%E6%95%B0/" rel="prev" title="PHP笔记-12：常用系统函数">
-                PHP笔记-12：常用系统函数 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
+    $b = 100;
+    $t = demo1();
+    echo $t;  //输出为101
+    echo &quot;&lt;/br&gt;&quot;;
 
 
+    //临时变量做局部变量
+    function &amp;demo2()
+    {
+        $j = 1;
+        return $j;
+    }
 
-    <div class="post-spread">
-      
-    </div>
-  </div>
+    $c = &amp;demo2();
+    echo $c;  //输出为1
+    echo &quot;&lt;/br&gt;&quot;;
 
+    $c = 100;
+    $t = demo2();
+    echo $c;  //输出为100
 
-          </div>
-          
+?&gt; </code></pre><pre><code>&lt;?php
 
+    //三个变量共用一个内存地址(与return的变量共用)
+    function &amp;demo($a,$b,$c)
+    {
+        static $i = 0;
+        $i++;
+        return $i;
+    }
 
-          
+    $x = &amp;demo(100,200,300);
+    echo $x;  //输出为1
+    echo &quot;&lt;/br&gt;&quot;;
 
-  
+    $xx = &amp;demo(1000,2000,3000);
+    echo $xx;  //输出为2
+    echo &quot;&lt;/br&gt;&quot;;
 
+    $xxx = &amp;demo(10000,20000,30000);
+    echo $xxx;  //输出为3
+    echo &quot;&lt;/br&gt;&quot;;
 
-
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside id="sidebar" class="sidebar">
-    
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
-
-      <section class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-            
-              <img class="site-author-image" itemprop="image"
-                src="/images/photo.png"
-                alt="Tomas" />
-            
-              <p class="site-author-name" itemprop="name">Tomas</p>
-              <p class="site-description motion-element" itemprop="description"></p>
-          </div>
-
-          <nav class="site-state motion-element">
-
-            
-              <div class="site-state-item site-state-posts">
-              
-                <a href="/archives/">
-              
-                  <span class="site-state-item-count">189</span>
-                  <span class="site-state-item-name">日志</span>
-                </a>
-              </div>
-            
-
-            
-              
-              
-              <div class="site-state-item site-state-categories">
-                <a href="/categories/index.html">
-                  <span class="site-state-item-count">8</span>
-                  <span class="site-state-item-name">分类</span>
-                </a>
-              </div>
-            
-
-            
-              
-              
-              <div class="site-state-item site-state-tags">
-                <a href="/tags/index.html">
-                  <span class="site-state-item-count">11</span>
-                  <span class="site-state-item-name">标签</span>
-                </a>
-              </div>
-            
-
-          </nav>
-
-          
-
-          
-            <div class="links-of-author motion-element">
+    $xx = 400;
+    echo demo(11,22,33);  //输出为401;
+?&gt;
+</code></pre>
+            </div>
+            <hr>
+            <div>
+              <p>
                 
-                  <span class="links-of-author-item">
-                    <a href="https://github.com/Tomassky" target="_blank" title="GitHub">
-                      
-                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/PHP/">PHP</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/PHP%E5%9F%BA%E7%A1%80/">PHP基础</a>
+                    
                   </span>
                 
-                  <span class="links-of-author-item">
-                    <a href="mailto:tomassky7@gmail.com" target="_blank" title="Gmail邮箱">
-                      
-                        <i class="fa fa-fw fa-envelope"></i>Gmail邮箱</a>
-                  </span>
-                
-            </div>
-          
-
-          
-          
-            <div class="cc-license motion-element" itemprop="license">
-              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
-                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
-              </a>
-            </div>
-          
-
-          
-          
-            <div class="links-of-blogroll motion-element links-of-blogroll-block">
-              <div class="links-of-blogroll-title">
-                <i class="fa  fa-fw fa-link"></i>
-                Links
-              </div>
-              <ul class="links-of-blogroll-list">
-                
-                  <li class="links-of-blogroll-item">
-                    <a href="https://ylsword-cheat.top" title="LengSword" target="_blank">LengSword</a>
-                  </li>
-                
-                  <li class="links-of-blogroll-item">
-                    <a href="https://neigeshoufu.github.io/ljy.github.io" title="neigeshoufu" target="_blank">neigeshoufu</a>
-                  </li>
-                
-              </ul>
-            </div>
-          
-
-          
-
-        </div>
-      </section>
-
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
+              </p>
               
-            
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-12%EF%BC%9A%E5%B8%B8%E7%94%A8%E7%B3%BB%E7%BB%9F%E5%87%BD%E6%95%B0/">
+                        <i class="fa fa-chevron-left"></i>
+                        <span class="hidden-mobile">PHP笔记-12：常用系统函数</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/03/13/PHP%E7%AC%94%E8%AE%B0-10%EF%BC%9A%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/">
+                        <span class="hidden-mobile">PHP笔记-10：文件包含</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="fa fa-chevron-right"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
 
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-函数的基本概念"><span class="nav-text">1. 函数的基本概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-函数的使用"><span class="nav-text">2. 函数的使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-函数命名规范"><span class="nav-text">3. 函数命名规范</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-参数详解"><span class="nav-text">4. 参数详解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-函数返回值"><span class="nav-text">5. 函数返回值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-作用域"><span class="nav-text">6. 作用域</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-静态变量"><span class="nav-text">7. 静态变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-可变函数"><span class="nav-text">8. 可变函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-匿名函数"><span class="nav-text">9. 匿名函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#10-闭包"><span class="nav-text">10. 闭包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#11-伪类型"><span class="nav-text">11. 伪类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#12-引用函数"><span class="nav-text">12. 引用函数</span></a></li></ol></div>
-            
-
+              
           </div>
-        </section>
-      <!--/noindex-->
-      
-
-      
-
-    </div>
-  </aside>
-
-
-        
+        </div>
       </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2020</span>
-  <span class="with-love">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Tomas</span>
-
-  
-    <span class="post-meta-divider">|</span>
-    <span class="post-meta-item-icon">
-      <i class="fa fa-area-chart"></i>
-    </span>
+    </div>
     
-      <span class="post-meta-item-text">Site words total count&#58;</span>
-    
-    <span title="Site words total count">184.3k</span>
-  
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
 </div>
 
-
-
-
-
-
-
-
-
-        
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
       </div>
     
+  </div>
+</div>
 
-    
+<!-- Custom -->
 
+  <div class="col-lg-7 mx-auto nopadding-md">
+    <div class="container custom post-content mx-auto">
+      <h3>你好，Tomas，生命仍在继续......</h3>
+    </div>
   </div>
 
-  
 
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
+    
+  </main>
 
   
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
   
 
   
-  
-    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-  
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v="></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v="></script>
-
-
-
-  
-  
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
-<script type="text/javascript" src="/js/src/post-details.js?v="></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v="></script>
-
-
-
-  
-
-
-  
-
-
-
-
-	
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
   
 
   
 
   
 
-  
-  
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
 
   
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var toc = $('#toc');
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+      var tocLimMax = 2 * boardTop + boardCtn.height();
 
-  
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
 
-  
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = boardCtn.css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
+  </script>
+
+
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "PHP笔记-11：函数&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
 
 </body>
 </html>

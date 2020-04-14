@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>Git笔记-7：实现Github免密推送</title>
+    <link href="/2020/04/14/Git%E7%AC%94%E8%AE%B0-7%EF%BC%9A%E5%AE%9E%E7%8E%B0Github%E5%85%8D%E5%AF%86%E6%8E%A8%E9%80%81/"/>
+    <url>/2020/04/14/Git%E7%AC%94%E8%AE%B0-7%EF%BC%9A%E5%AE%9E%E7%8E%B0Github%E5%85%8D%E5%AF%86%E6%8E%A8%E9%80%81/</url>
+    
+    <content type="html"><![CDATA[<h4 id="1-Git传输的协议"><a href="#1-Git传输的协议" class="headerlink" title="1. Git传输的协议"></a>1. Git传输的协议</h4><ul><li>local协议</li><li>HTTP(S)协议：需要输入账号密码</li><li>SSH协议：不需要输入账号密码</li><li>Git协议</li><li><a href="https://help.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent" target="_blank" rel="noopener">Git免密推送</a></li></ul><h4 id="2-SSH协议登陆"><a href="#2-SSH协议登陆" class="headerlink" title="2. SSH协议登陆"></a>2. SSH协议登陆</h4><ul><li>在个人界面的Settings处</li><li>SSH and GPG keys</li><li>generating SSH keys</li><li>Generating a new SSH key and adding it to the ssh-agent</li><li>Windows<ul><li>ssh-keygen -t rsa -b 4096 -C “<a href="mailto:643008933@qq.com" target="_blank" rel="noopener">643008933@qq.com</a>“<ul><li>Enter a file in which to save the key (/c/Users/you/.ssh/id_rsa):[Press enter]</li><li>Enter passphrase (empty for no passphrase): [Type a passphrase]</li><li>Enter same passphrase again: [Type passphrase again]</li></ul></li><li>eval $(ssh-agent -s)</li><li>ssh-add ~/.ssh/id_rsa</li><li>cat ~/.ssh/id_rsa.public</li><li>复制公钥到New SSH Key</li></ul></li><li>git clone with SSH</li><li>touch a.txt</li><li>git add a.txt</li><li>git commit -m “add a.txt”</li><li>git push（看是否需要账号密码登陆）</li><li>▲ 2020.04.14 使用SSH协议登陆<ul><li>git remote -v：查看git clone方式，如果是origin <a href="https://github.com......开头就说明需要调整" target="_blank" rel="noopener">https://github.com......开头就说明需要调整</a></li><li>git remote rm origin：移除原来的git源</li><li>git remote add origin <a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a>:xxx.git：添加新的git源头（地址修改为要调整的）</li><li>git remote -v：再查看git方式，如果是origin <a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a>….就开头就说明OK了，重新commit或者push就不用每次都输入账号密码了</li></ul></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>Git</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Git</tag>
+      
+      <tag>Github</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>CSRF--概要</title>
     <link href="/2020/04/02/CSRF--%E6%A6%82%E8%A6%81/"/>
     <url>/2020/04/02/CSRF--%E6%A6%82%E8%A6%81/</url>
@@ -1966,33 +1993,6 @@
     <url>/2020/02/20/Git%E7%AC%94%E8%AE%B0-8%EF%BC%9AGit%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81/</url>
     
     <content type="html"><![CDATA[<hr><h4 id="1-Git的工作流"><a href="#1-Git的工作流" class="headerlink" title="1. Git的工作流"></a>1. Git的工作流</h4><ul><li><a href="https://github.com/xirong/my-git/blob/master/git-workflow-tutorial.md" target="_blank" rel="noopener">Git工作流指南</a></li><li>集中式工作流</li><li>功能分支工作流</li><li>Gitflow工作流</li><li>Forking工作流</li></ul>]]></content>
-    
-    
-    <categories>
-      
-      <category>Git</category>
-      
-    </categories>
-    
-    
-    <tags>
-      
-      <tag>Git</tag>
-      
-      <tag>Github</tag>
-      
-    </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>Git笔记-7：实现Github免密推送</title>
-    <link href="/2020/02/20/Git%E7%AC%94%E8%AE%B0-7%EF%BC%9A%E5%AE%9E%E7%8E%B0Github%E5%85%8D%E5%AF%86%E6%8E%A8%E9%80%81/"/>
-    <url>/2020/02/20/Git%E7%AC%94%E8%AE%B0-7%EF%BC%9A%E5%AE%9E%E7%8E%B0Github%E5%85%8D%E5%AF%86%E6%8E%A8%E9%80%81/</url>
-    
-    <content type="html"><![CDATA[<h4 id="1-Git传输的协议"><a href="#1-Git传输的协议" class="headerlink" title="1. Git传输的协议"></a>1. Git传输的协议</h4><ul><li>local协议</li><li>HTTP(S)协议：需要输入账号密码</li><li>SSH协议：不需要输入账号密码</li><li>Git协议</li><li><a href="https://help.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent" target="_blank" rel="noopener">Git免密推送</a></li></ul><h4 id="2-SSH协议登陆"><a href="#2-SSH协议登陆" class="headerlink" title="2. SSH协议登陆"></a>2. SSH协议登陆</h4><ul><li>在个人界面的Settings处</li><li>SSH and GPG keys</li><li>generating SSH keys</li><li>Generating a new SSH key and adding it to the ssh-agent</li><li>Windows<ul><li>ssh-keygen -t rsa -b 4096 -C “<a href="mailto:643008933@qq.com" target="_blank" rel="noopener">643008933@qq.com</a>“<ul><li>Enter a file in which to save the key (/c/Users/you/.ssh/id_rsa):[Press enter]</li><li>Enter passphrase (empty for no passphrase): [Type a passphrase]</li><li>Enter same passphrase again: [Type passphrase again]</li></ul></li><li>eval $(ssh-agent -s)</li><li>ssh-add ~/.ssh/id_rsa</li><li>cat ~/.ssh/id_rsa.public</li><li>复制公钥到New SSH Key</li></ul></li><li>git clone with SSH</li><li>touch a.txt</li><li>git add a.txt</li><li>git commit -m “add a.txt”</li><li>git push（看是否需要账号密码登陆）</li></ul>]]></content>
     
     
     <categories>

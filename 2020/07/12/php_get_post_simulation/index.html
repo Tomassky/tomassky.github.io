@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="php模拟get/post请求"/>
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Tomas'Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://yoursite.com/2020/07/12/php_get_post_simulation/"/>
+
+
+<meta name="description" content="php模拟get&#x2F;post请求 curl file_put_contents()函数 curl模拟GET请求 curl模拟POST请求   file_get_contents stream_context_create()函数 http_build_query()函数 file_get_contents()函数 模拟GET请求 模拟POST请求   fopen stream_get_meta_d">
+<meta property="og:type" content="article">
+<meta property="og:title" content="php模拟get&#x2F;post请求">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;07&#x2F;12&#x2F;php_get_post_simulation&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="php模拟get&#x2F;post请求 curl file_put_contents()函数 curl模拟GET请求 curl模拟POST请求   file_get_contents stream_context_create()函数 http_build_query()函数 file_get_contents()函数 模拟GET请求 模拟POST请求   fopen stream_get_meta_d">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-07-12T08:26:08.295Z">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> php模拟get/post请求 - Tomas'Blog </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">Tomas'Blog</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          php模拟get/post请求
+        
+      </h1>
+
+      <time class="post-time">
+          7月 12 2020
+      </time>
+    </header>
+    
+            <div class="post-content">
+            <hr>
+<h2 id="php模拟get-post请求"><a href="#php模拟get-post请求" class="headerlink" title="php模拟get/post请求"></a>php模拟get/post请求</h2><ul>
+<li>curl<ul>
+<li>file_put_contents()函数</li>
+<li>curl模拟GET请求</li>
+<li>curl模拟POST请求</li>
+</ul>
+</li>
+<li>file_get_contents<ul>
+<li>stream_context_create()函数</li>
+<li>http_build_query()函数</li>
+<li>file_get_contents()函数</li>
+<li>模拟GET请求</li>
+<li>模拟POST请求</li>
+</ul>
+</li>
+<li>fopen<ul>
+<li>stream_get_meta_data()函数</li>
+<li>模拟GET请求</li>
+</ul>
+</li>
+<li>fsockopen<ul>
+<li>fsockopen()函数</li>
+<li>parse_url()函数</li>
+<li>模拟GET请求</li>
+<li>模拟POST请求</li>
+</ul>
+</li>
+</ul>
+<h3 id="0X00-curl"><a href="#0X00-curl" class="headerlink" title="0X00 curl"></a>0X00 curl</h3><ul>
+<li>▲ 网上吹嘘curl库的强大，今天用来入门模拟一下GET和POST请求</li>
+<li>官方手册：<a href="https://www.php.net/manual/zh/ref.curl.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/ref.curl.php</a></li>
+<li>curl功能库简介：<a href="https://www.jb51.net/article/26751.htm" target="_blank" rel="noopener">https://www.jb51.net/article/26751.htm</a></li>
+<li>curl基础流程<ul>
+<li>curl_init()</li>
+<li>curl_setopt()</li>
+<li>curl_exec()</li>
+<li>curl_close()</li>
+</ul>
+</li>
+<li>▲ 支持多种代理模式（HTTP/FTP/SOCKS4/SOCKS5）</li>
+</ul>
+<h5 id="file-put-contents-函数"><a href="#file-put-contents-函数" class="headerlink" title="file_put_contents()函数"></a>file_put_contents()函数</h5><ul>
+<li>要写入的数据。类型可以是 string，array 或者是 stream 资源</li>
+<li>官方手册：<a href="https://www.php.net/manual/zh/function.file-put-contents.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/function.file-put-contents.php</a></li>
+<li>▲ 可结合curl，将流数据，数组或者字符串写入文件</li>
+</ul>
+<h5 id="curl模拟GET请求"><a href="#curl模拟GET请求" class="headerlink" title="curl模拟GET请求"></a>curl模拟GET请求</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    header(&apos;Content-type:text/html;charset=utf-8&apos;);</span><br><span class="line">    $header = array();  //头部数组</span><br><span class="line">    $header[] = &apos;Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&apos;;</span><br><span class="line">    $header[] = &apos;Cache-Control: no-cache&apos;;</span><br><span class="line">    $header[] = &apos;User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:28.0) Gecko/20100101 Firefox/28.0&apos;;</span><br><span class="line">    $url = &apos;https://www.douban.com&apos;;  //要抓取的url</span><br><span class="line">    $ch = curl_init();  //curl初始化</span><br><span class="line">    $timeout = 15;  //超时时间</span><br><span class="line">    curl_setopt ($ch, CURLOPT_URL, $url);  //设置url</span><br><span class="line">    curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);  //设置显示还是写入字符串，1为显示</span><br><span class="line">    curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);  //设置超时时间</span><br><span class="line">    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);  //关闭SSL点对点验证</span><br><span class="line">    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);  //关闭SSL端对端验证</span><br><span class="line">    curl_setopt($ch, CURLOPT_HTTPHEADER, $header);  //设置请求头</span><br><span class="line">    curl_setopt($ch,　CURLOPT_PROXYTYPE,CURLPROXY_SOCKS5);  //设置代理方式</span><br><span class="line">    curl_setopt($ch, CURLOPT_PROXY, &quot;127.0.0.1:1080&quot;);  //设置代理的服务器</span><br><span class="line">    $file_contents = curl_exec($ch);  //发送curl请求</span><br><span class="line">    curl_close($ch);  //关闭curl请求</span><br><span class="line">    //$file_contents = json_decode($file_contents);  //若接收数据为json数据，解码</span><br><span class="line">    mb_convert_encoding($file_contents,&apos;utf-8&apos;);  //转换字符编码</span><br><span class="line">    $f = fopen(&quot;./1.html&quot;, &quot;a+&quot;);  //打开文件，模式为可写可读</span><br><span class="line">    Fwrite($f,$file_contents);  //写入文件</span><br><span class="line">    Fclose($f);  //关闭文件</span><br><span class="line">    print_r($file_contents);  //输出抓取的信息到屏幕上</span><br><span class="line">    </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="curl模拟POST请求"><a href="#curl模拟POST请求" class="headerlink" title="curl模拟POST请求"></a>curl模拟POST请求</h5><ul>
+<li>test.php</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    var_dump($_POST);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $post_data = array(</span><br><span class="line">        &apos;name&apos; =&gt; &apos;mzt&apos;,</span><br><span class="line">        &apos;age&apos; =&gt; &apos;21&apos; );  //post数据</span><br><span class="line">    $post_data = http_build_query($post_data);  //url-encode编码数据</span><br><span class="line">    $post_data = json_encode($post_data);  //json编码数据</span><br><span class="line">    $url = &apos;http://localhost/test.php&apos;;  //要抓取的url</span><br><span class="line">    $ch = curl_init();  //curl初始化</span><br><span class="line">    $timeout = 5;  //超时时间</span><br><span class="line">    curl_setopt ($ch, CURLOPT_URL, $url);  //设置url</span><br><span class="line">    curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);  //设置显示还是写入字符串，1为显示</span><br><span class="line">    curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);  //设置超时时间</span><br><span class="line">    curl_setopt($ch, CURLOPT_POST, 1);  //设置发送的方式为post</span><br><span class="line">    curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);  //设置post的数据</span><br><span class="line">    //curl_setopt($ch, CURLOPT_HTTPHEADER, array(&apos;Content-Type:application/json&apos;));  //json编码设置</span><br><span class="line">    $file_contents = curl_exec($ch);  //发送curl请求</span><br><span class="line">    curl_close($ch);  //关闭curl请求</span><br><span class="line">    mb_convert_encoding($file_contents,&apos;utf-8&apos;);  //转换字符</span><br><span class="line">    print_r($file_contents);  //输出抓取的信息到屏幕</span><br><span class="line">    </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="0X01-file-get-contents"><a href="#0X01-file-get-contents" class="headerlink" title="0X01 file_get_contents"></a>0X01 file_get_contents</h3><h5 id="stream-context-create-函数"><a href="#stream-context-create-函数" class="headerlink" title="stream_context_create()函数"></a>stream_context_create()函数</h5><ul>
+<li>官方手册：<a href="https://www.php.net/manual/zh/function.stream-context-create.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/function.stream-context-create.php</a></li>
+<li>创建并返回一个文本数据流并应用各种选项，可用于fopen(),file_get_contents()等过程的超时设置、代理服务器、请求方式、头信息设置的特殊过程</li>
+</ul>
+<h5 id="http-build-query-函数"><a href="#http-build-query-函数" class="headerlink" title="http_build_query()函数"></a>http_build_query()函数</h5><ul>
+<li>官方手册：<a href="https://www.php.net/manual/zh/function.http-build-query" target="_blank" rel="noopener">https://www.php.net/manual/zh/function.http-build-query</a></li>
+<li>将数组转换 url-encoded 之后的请求字符串</li>
+<li>▲ 博客介绍使用：<a href="https://www.cnblogs.com/zhja/archive/2012/11/10/2764174.html" target="_blank" rel="noopener">https://www.cnblogs.com/zhja/archive/2012/11/10/2764174.html</a></li>
+</ul>
+<h5 id="file-get-contents-函数"><a href="#file-get-contents-函数" class="headerlink" title="file_get_contents()函数"></a>file_get_contents()函数</h5><ul>
+<li>官方手册：<a href="https://www.php.net/manual/zh/function.file-get-contents" target="_blank" rel="noopener">https://www.php.net/manual/zh/function.file-get-contents</a></li>
+<li>将整个文件读入一个字符串</li>
+<li>▲ 2020.03.15 只支持HTTP代理 </li>
+<li>▲ 2020.03.15 对https的链接抓取会报错</li>
+</ul>
+<h5 id="模拟GET请求"><a href="#模拟GET请求" class="headerlink" title="模拟GET请求"></a>模拟GET请求</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $url = &apos;http://www.wyu.cn/&apos;;  //要抓取的url</span><br><span class="line">    $html = file_get_contents($url);  //抓取url</span><br><span class="line">    print_r($html);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="模拟POST请求"><a href="#模拟POST请求" class="headerlink" title="模拟POST请求"></a>模拟POST请求</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $data = array(</span><br><span class="line">        &apos;name&apos; =&gt; &apos;mzt&apos;,</span><br><span class="line">        &apos;number&apos; =&gt; &apos;7&apos;</span><br><span class="line">    );  //要发送的post数据</span><br><span class="line">    $url = &apos;http://www.wyu.cn/&apos;;  //要抓取的url</span><br><span class="line"></span><br><span class="line">    $post_data = http_build_query($data);  //url-encode编码要post的数据</span><br><span class="line"></span><br><span class="line">    $options = array(</span><br><span class="line">        &apos;http&apos; =&gt; array(</span><br><span class="line">            &apos;method&apos; =&gt; &apos;POST&apos;,  //POST请求的方法</span><br><span class="line">            &apos;request_fulluri&apos;=&gt; true,</span><br><span class="line">            &apos;header&apos; =&gt; array(&quot;Accept-language: en&quot;,</span><br><span class="line">                &quot;Content-type: application/x-www-form-urlencoded&quot;,</span><br><span class="line">                &quot;user_agent: Opera/9.80 (Windows NT 6.1; U; en) Presto/2.8.131 Version/11.11&quot;,</span><br><span class="line">                &quot;cookie: aaa=aaa&quot;),  //POST请求的头部，Content-type固定，其他可改</span><br><span class="line">            //&apos;proxy&apos; =&gt; &apos;tcp://127.0.0.1:22716&apos;,  //只支持HTTP代理</span><br><span class="line">            &apos;content&apos; =&gt; $post_data,  //POST的主体，也即POST的数据</span><br><span class="line">            &apos;timeout&apos; =&gt; 5)  //超时时间</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    $options = stream_context_create($options);  //对要传输的数据进行流式处理</span><br><span class="line">    $html = file_get_contents($url,false,$options);  //POST情况下第三个参数要设置</span><br><span class="line">    echo $html;</span><br><span class="line">    </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>测试数据是否POST成功<ul>
+<li>test.php</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $data = $_POST;</span><br><span class="line">    echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">    print_r( $data );</span><br><span class="line">    echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>修改url为test.php的路径</li>
+<li>查看是否有输出结果</li>
+</ul>
+<h3 id="0X02-fopen"><a href="#0X02-fopen" class="headerlink" title="0X02 fopen"></a>0X02 fopen</h3><h5 id="stream-get-meta-data-函数"><a href="#stream-get-meta-data-函数" class="headerlink" title="stream_get_meta_data()函数"></a>stream_get_meta_data()函数</h5><ul>
+<li>官方手册：<a href="https://www.php.net/manual/zh/function.stream-get-meta-data" target="_blank" rel="noopener">https://www.php.net/manual/zh/function.stream-get-meta-data</a></li>
+<li>从封装协议文件指针中取得报头／元数据</li>
+<li>▲ 需是从 fopen()，fsockopen() 和 pfsockopen() 建立的流，返回的是一个数组</li>
+</ul>
+<h5 id="模拟GET请求-1"><a href="#模拟GET请求-1" class="headerlink" title="模拟GET请求"></a>模拟GET请求</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $url = &apos;http://www.wyu.cn/&apos;;  //要抓取的url</span><br><span class="line">    $fp = fopen($url, &apos;r&apos;);  //以fopen的形式打开url</span><br><span class="line">    stream_get_meta_data($fp);  //转换数据为流</span><br><span class="line">    $result = &apos;&apos;;</span><br><span class="line">    while(!feof($fp))  //feof()判断文件指针是否到文件底部</span><br><span class="line">    &#123;</span><br><span class="line">        $result .= fgets($fp, 1024);  //取出拿到的数据放在字符串中</span><br><span class="line">    &#125;</span><br><span class="line">    echo $result;  //输出</span><br><span class="line">    fclose($fp);  //关闭文件指针</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="0X03-fsockopen"><a href="#0X03-fsockopen" class="headerlink" title="0X03 fsockopen"></a>0X03 fsockopen</h3><h5 id="fsockopen-函数"><a href="#fsockopen-函数" class="headerlink" title="fsockopen()函数"></a>fsockopen()函数</h5><ul>
+<li>打开一个网络连接或者一个Unix套接字连接</li>
+<li>官方手册：<a href="https://www.php.net/manual/zh/function.fsockopen.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/function.fsockopen.php</a></li>
+<li>▲ 2020.03.16 能定制任意的连接，但作为网络抓取的成果是不理想的。若要做网络抓取，需要写完整的http请求并定制回送的http请求</li>
+<li>▲ 2020.03.16 存在waf，很难发送正常的数据</li>
+</ul>
+<h5 id="parse-url-函数"><a href="#parse-url-函数" class="headerlink" title="parse_url()函数"></a>parse_url()函数</h5><ul>
+<li>解析一个URL并返回一个关联数组，包含在 URL 中出现的各种组成部分</li>
+<li>官方手册：<a href="https://www.php.net/manual/zh/function.parse-url.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/function.parse-url.php</a></li>
+<li>▲ 2020.03.16 此函数对其他url中未有的参数不会进行默认设置</li>
+</ul>
+<h5 id="模拟GET请求-2"><a href="#模拟GET请求-2" class="headerlink" title="模拟GET请求"></a>模拟GET请求</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $url = array(&apos;host&apos; =&gt; &apos;www.wyu.cn&apos;, &apos;port&apos; =&gt; &apos;80&apos;,&apos;path&apos; =&gt; &apos;&apos;,&apos;query&apos;=&gt; &apos;/&apos; ,&apos;cookie&apos; =&gt; &apos;/&apos;);  //请求的url数组</span><br><span class="line">    $fp = fsockopen($url[&apos;host&apos;],$url[&apos;port&apos;],$errno,$errstr,10);  //打开一个sock连接</span><br><span class="line">    $fp = fsockopen(&quot;ssl://&quot;.$url[&apos;host&apos;],$url[&apos;port&apos;],$errno,$errstr,10);</span><br><span class="line">    //对https连接的支持</span><br><span class="line"></span><br><span class="line">    if(!$fp)</span><br><span class="line">    &#123;</span><br><span class="line">        echo &quot;$errstr ($errno)&lt;/br&gt;\n&quot;;  //如果文件指针不存在，就输出报错</span><br><span class="line">    &#125;else</span><br><span class="line">    &#123;</span><br><span class="line">        $out = &quot;GET /$url[path] HTTP/1.1\r\n&quot;;</span><br><span class="line">        $out.= &quot;Host: 61.160.224.50:80\r\n&quot;;</span><br><span class="line">        $out.= &quot;User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:28.0) Gecko/20100101 Firefox/28.0\r\n&quot;;</span><br><span class="line">        $out.= &quot;Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n&quot;;</span><br><span class="line">        $out.= &quot;Connection: keep-alive\r\n\r\n&quot;;</span><br><span class="line">        fwrite($fp,$out);  //将http的头写入文件指针</span><br><span class="line">        while(!feof($fp))  //feof()判断文件指针是否到文件底部</span><br><span class="line">        &#123;</span><br><span class="line">            echo fgets($fp,1024);  //取出拿到的数据放在字符串中</span><br><span class="line">        &#125;</span><br><span class="line">        fclose($fp);  //关闭文件指针</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="模拟POST请求-1"><a href="#模拟POST请求-1" class="headerlink" title="模拟POST请求"></a>模拟POST请求</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $url = &apos;http://www.wyu.cn&apos;;  //要抓取的url</span><br><span class="line">    $url_info = parse_url($url);  //对url进行字段解析</span><br><span class="line"></span><br><span class="line">    $fp = fsockopen($url_info[&apos;host&apos;],80,$errno,$errstr,10);  ////打开一个sock连接</span><br><span class="line"></span><br><span class="line">    $data = array(</span><br><span class="line">        &apos;name&apos; =&gt; &apos;mzt&apos;,</span><br><span class="line">        &apos;number&apos; =&gt; &apos;7&apos;</span><br><span class="line">    );  //要发送的post数据</span><br><span class="line"></span><br><span class="line">    $post_data = http_build_query($data);  //url-encode编码要post的数据</span><br><span class="line"></span><br><span class="line">    if(!$fp)</span><br><span class="line">    &#123;</span><br><span class="line">        echo &quot;$errstr ($errno)&lt;/br&gt;\n&quot;;  //如果文件指针不存在，就输出报错</span><br><span class="line">    &#125;else</span><br><span class="line">    &#123;</span><br><span class="line">        $out = &quot;POST &quot;.$url_info[&apos;path&apos;].&quot; HTTP/1.1\r\n&quot;;</span><br><span class="line">        $out.= &quot;Host: &quot;.$url_info[&apos;host&apos;].&quot;\r\n&quot;;</span><br><span class="line">        $out.= &quot;Content-type: application/x-www-form-urlencodedn&quot;;</span><br><span class="line">        $out.= &quot;User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:28.0) Gecko/20100101 Firefox/28.0\r\n&quot;;</span><br><span class="line">        $out.= &quot;Connection: keep-alive\r\n\r\n&quot;;</span><br><span class="line">        $out.= &quot;$post_data\r\n&quot;;</span><br><span class="line">        fwrite($fp,$out);  //将http的头写入文件指针</span><br><span class="line">        while(!feof($fp))  //feof()判断文件指针是否到文件底部</span><br><span class="line">        &#123;</span><br><span class="line">            echo fgets($fp,1024);  //取出拿到的数据放在字符串中</span><br><span class="line">        &#125;</span><br><span class="line">        fclose($fp);  //关闭文件指针</span><br><span class="line">    &#125;  </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2020/07/12/php_serialize_unserialize/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">php序列化</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2020/07/12/php_extension/">
+        <span class="next-text nav-default">php的扩展</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2019 -
+    
+    2020
+    <span class="footer-author">Tomas.</span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>

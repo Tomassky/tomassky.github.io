@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="php session"/>
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Tomas'Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://yoursite.com/2020/07/12/php_session/"/>
+
+
+<meta name="description" content="php session 什么是php session session php session 来自官方的解释   php session的存储机制 php处理器   php session在php.ini中主要存在的配置项  0X00 什么是php sessionsession session一般称为”会话控制”，简单来说就是是一种客户与网站&#x2F;服务器更为安全的对话方式 一旦开启了session会">
+<meta property="og:type" content="article">
+<meta property="og:title" content="php session">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;07&#x2F;12&#x2F;php_session&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="php session 什么是php session session php session 来自官方的解释   php session的存储机制 php处理器   php session在php.ini中主要存在的配置项  0X00 什么是php sessionsession session一般称为”会话控制”，简单来说就是是一种客户与网站&#x2F;服务器更为安全的对话方式 一旦开启了session会">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;php&#x2F;cookie&amp;session&amp;token&#x2F;process.png">
+<meta property="og:updated_time" content="2020-07-12T09:00:56.386Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;php&#x2F;cookie&amp;session&amp;token&#x2F;process.png">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> php session - Tomas'Blog </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">Tomas'Blog</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          php session
+        
+      </h1>
+
+      <time class="post-time">
+          7月 12 2020
+      </time>
+    </header>
+    
+            <div class="post-content">
+            <hr>
+<h2 id="php-session"><a href="#php-session" class="headerlink" title="php session"></a>php session</h2><ul>
+<li>什么是php session<ul>
+<li>session</li>
+<li>php session</li>
+<li>来自官方的解释</li>
+</ul>
+</li>
+<li>php session的存储机制<ul>
+<li>php处理器</li>
+</ul>
+</li>
+<li>php session在php.ini中主要存在的配置项</li>
+</ul>
+<h3 id="0X00-什么是php-session"><a href="#0X00-什么是php-session" class="headerlink" title="0X00 什么是php session"></a>0X00 什么是php session</h3><h5 id="session"><a href="#session" class="headerlink" title="session"></a>session</h5><ul>
+<li>session一般称为”会话控制”，简单来说就是是一种客户与网站/服务器更为安全的对话方式</li>
+<li>一旦开启了session会话，便可以在网站的任何页面使用或保持这个会话，从而让访问者与网站之间建立了一种”对话”机制</li>
+<li>不同语言的会话机制可能有所不同，这里仅讨论php session机制</li>
+</ul>
+<h5 id="php-session-1"><a href="#php-session-1" class="headerlink" title="php session"></a>php session</h5><ul>
+<li>php session可以看做是一个特殊的变量，且该变量是用于存储关于用户会话的信息，或者更改用户会话的设置</li>
+<li>需要注意的是，php session变量存储单一用户的信息，并且对于应用程序中的所有页面都是可用的，且其对应的具体session值会存储于服务器端，这也是与cookie的主要区别，所以seesion的安全性相对较高</li>
+</ul>
+<h5 id="来自官方的解释"><a href="#来自官方的解释" class="headerlink" title="来自官方的解释"></a>来自官方的解释</h5><ul>
+<li><p>通过为每个独立用户分配唯一的会话ID，可以实现针对不同用户分别存储数据的功能。 会话通常被用来在多个页面请求之间保存及共享信息。一般来说，会话ID通过cookie的方式发送到浏览器，并且在服务器端也是通过会话ID来取回会话中的数据。如果请求中不包含会话ID信息，那么 PHP就会创建一个新的会话，并为新创建的会话分配新的ID</p>
+</li>
+<li><p>会话的工作流程很简单。当开始一个会话时，PHP会尝试从请求中查找会话ID（通常通过会话 cookie）， 如果请求中不包含会话ID信息，PHP就会创建一个新的会话（php_session_create_id）。会话开始之后，PHP就会将会话中的数据设置到<code>$_SESSION</code>变量中（在http response中通过set-cookie头部发送给客户端保存）。当PHP停止的时候，它会自动读取<code>$_SESSION</code>中的内容，并将其进行序列化， 然后发送给会话保存管理器来进行保存</p>
+</li>
+<li><p>默认情况下，PHP使用内置的文件会话保存管理器（files）来完成会话的保存。也可以通过配置项<code>session.save_handler</code>来修改所要采用的会话保存管理器。对于文件会话保存管理器，会将会话数据保存到配置项<code>session.save_path</code>所指定的位置 </p>
+</li>
+<li><p>可以通过调用函数<code>session_start()</code>来手动开始一个会话。 如果配置项<code>session.auto_start</code>设置为1， 那么请求开始的时候，会话会自动开始</p>
+</li>
+<li><p>PHP脚本执行完毕之后，会话会自动关闭。 同时，也可以通过调用函数<code>session_write_close()</code>来手动关闭会话</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">session_start();</span><br><span class="line">if (!isset($_SESSION[&apos;username&apos;])) &#123;</span><br><span class="line">  $_SESSION[&apos;username&apos;] = &apos;xianzhi&apos; ;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/php/cookie&session&token/process.png" alt="process"></p>
+<h3 id="0X01-php-session的存储机制"><a href="#0X01-php-session的存储机制" class="headerlink" title="0X01 php session的存储机制"></a>0X01 php session的存储机制</h3><ul>
+<li>php session的存储机制是由session.serialize_handler来定义引擎的，默认是以文件的方式存储，且存储的文件是由sess_sessionid来决定文件名的</li>
+<li>session.serialize_handler定义的引擎有三种<ul>
+<li>自PHP 5.5.4起可以使用php_serialize</li>
+<li>上述三种处理器中，php_serialize在内部简单地直接使用serialize/unserialize函数，并且不会有php和php_binary所具有的限制。使用较旧的序列化处理器导致$_SESSION的索引既不能是数字也不能包含特殊字符(| 和 !)</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">处理器名称</th>
+<th align="center">存储格式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">php</td>
+<td align="center">键名</td>
+</tr>
+<tr>
+<td align="center">php_binary</td>
+<td align="center">键名的长度对应的ASCII字符+键名+经过serialize()函数序列化处理的值</td>
+</tr>
+<tr>
+<td align="center">php_serialize</td>
+<td align="center">经过serialize()函数序列化处理的数据</td>
+</tr>
+</tbody></table>
+<h5 id="php处理器"><a href="#php处理器" class="headerlink" title="php处理器"></a>php处理器</h5><ul>
+<li>session.serialize_handler等于php时候的序列化结果<ul>
+<li>session为$_SESSION[‘session’]的键名，|后为传入GET参数经过序列化后的值</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    error_reporting(0);</span><br><span class="line">    ini_set(&apos;session.serialize_handler&apos;,&apos;php&apos;);</span><br><span class="line">    session_start();</span><br><span class="line">    $_SESSION[&apos;username&apos;] = &apos;xianzhi&apos; ;  //username|s:7:&quot;xianzhi&quot;;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>session.serialize_handler等于php_binary时候的序列化结果<ul>
+<li>#为键名长度对应的ASCII的值，sessionsessionsessionsessionsessions为键名，s:7:”xianzhi”;为传入GET参数经过序列化后的值</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    error_reporting(0);</span><br><span class="line">    ini_set(&apos;session.serialize_handler&apos;,&apos;php_binary&apos;);</span><br><span class="line">    session_start();</span><br><span class="line">    $_SESSION[&apos;sessionsessionsessionsessionsessions&apos;] = &apos;xianzhi&apos; ;   //#sessionsessionsessionsessionsessions:7:&quot;xianzhi&quot;;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>session.serialize_handler等于php_serialize时候的序列化结果<ul>
+<li>a:1表示$_SESSION数组中有1个元素，花括号里面内容即为传入GET参数经过序列化后的值</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    error_reporting(0);</span><br><span class="line">    ini_set(&apos;session.serialize_handler&apos;,&apos;php_serialize&apos;);</span><br><span class="line">    session_start();</span><br><span class="line">    $_SESSION[&apos;username&apos;] = &apos;xianzhi&apos; ;  //a:1:&#123;s:8:&quot;username&quot;;s:7:&quot;xianzhi&quot;;&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="0X02-php-session在php-ini中主要存在的配置项"><a href="#0X02-php-session在php-ini中主要存在的配置项" class="headerlink" title="0X02 php session在php.ini中主要存在的配置项"></a>0X02 php session在php.ini中主要存在的配置项</h3><ul>
+<li><p>session.gc_divisor：php session垃圾回收机制相关配置</p>
+</li>
+<li><p>session.sid_bits_per_character：指定编码的会话ID字符中的位数</p>
+</li>
+<li><p>session.save_path=””：该配置主要设置session的存储路径</p>
+</li>
+<li><p>session.save_handler=””：该配置主要设定用户自定义存储函数，如果想使用PHP内置session存储机制之外的可以使用这个函数</p>
+</li>
+<li><p>session.use_strict_mode：严格会话模式，严格会话模式不接受未初始化的会话ID并重新生成会话ID</p>
+</li>
+<li><p>session.use_cookies：指定是否在客户端用cookie来存放会话ID，默认启用</p>
+</li>
+<li><p>session.cookie_secure：指定是否仅通过安全连接发送cookie，默认关闭</p>
+</li>
+<li><p>session.use_only_cookies：指定是否在客户端仅仅使用cookie来存放会话ID，启用的话，可以防止有关通过URL传递会话ID的攻击</p>
+</li>
+<li><p>session.name：指定会话名以用做cookie的名字，只能由字母数字组成，默认为PHPSESSID</p>
+</li>
+<li><p>session.auto_start：指定会话模块是否在请求开始时启动一个会话，默认值为0，不启动</p>
+</li>
+<li><p>session.cookie_lifetime：指定了发送到浏览器的cookie的生命周期，单位为秒，值为0 表示”直到关闭浏览器”默认为0</p>
+</li>
+<li><p>session.cookie_path：指定要设置会话cookie 的路径，默认为 /</p>
+</li>
+<li><p>session.cookie_domain：指定要设置会话cookie 的域名，默认为无，表示根据 cookie 规范产生cookie的主机名</p>
+</li>
+<li><p>session.cookie_httponly：将Cookie标记为只能通过HTTP协议访问，即无法通过脚本语言（例如JavaScript）访问Cookie，此设置可以有效地帮助通过XSS攻击减少身份盗用</p>
+</li>
+<li><p>session.serialize_handler：定义用来序列化/反序列化的处理器名字，默认使用php，还有其他引擎，且不同引擎的对应的session的存储方式不相同，具体可见下文所述</p>
+</li>
+<li><p>session.gc_probability：该配置项与session.gc_divisor合起来用来管理garbagecollection，即垃圾回收进程启动的概率</p>
+</li>
+<li><p>session.gc_divisor：该配置项与session.gc_probability合起来定义了在每个会话初始化时启动垃圾回收进程的概率</p>
+</li>
+<li><p>session.gc_maxlifetime：指定过了多少秒之后数据就会被视为“垃圾”并被清除，垃圾搜集可能会在session启动的时候开始（取决于session.gc_probability和session.gc_divisor）</p>
+</li>
+<li><p>session.referer_check：包含有用来检查每个HTTPReferer的子串。如果客户端发送了Referer信息但是在其中并未找到该子串，则嵌入的会话 ID 会被标记为无效。默认为空字符串</p>
+</li>
+<li><p>session.cache_limiter：指定会话页面所使用的缓冲控制方法（none/nocache/private/private_no_expire/public）默认为nocache</p>
+</li>
+<li><p>session.cache_expire：以分钟数指定缓冲的会话页面的存活期，此设定对nocache缓冲控制方法无效。默认为 180</p>
+</li>
+<li><p>session.use_trans_sid：指定是否启用透明SID支持。默认禁用</p>
+</li>
+<li><p>session.sid_length：配置会话ID字符串的长度。会话ID的长度可以在22到256之间。默认值为32</p>
+</li>
+<li><p>session.trans_sid_tags：指定启用透明sid支持时重写哪些HTML标签以包括会话ID</p>
+</li>
+<li><p>session.trans_sid_hosts：指定启用透明sid支持时重写的主机，以包括会话ID</p>
+</li>
+<li><p>session.sid_bits_per_character：配置编码的会话ID字符中的位数</p>
+</li>
+<li><p>session.upload_progress.enabled：启用上传进度跟踪，并填充$_SESSION变量， 默认启用</p>
+</li>
+<li><p>session.upload_progress.cleanup：读取所有POST数据（即完成上传）后，立即清理进度信息，默认启用</p>
+</li>
+<li><p>session.upload_progress.prefix：配置<code>$ _SESSION</code>中用于上传进度键的前缀，默认为upload_progress_</p>
+</li>
+<li><p>session.upload_progress.name：<code>$ _SESSION</code>中用于存储进度信息的键的名称，默认为PHP_SESSION_UPLOAD_PROGRESS</p>
+</li>
+<li><p>session.upload_progress.freq：定义应该多长时间更新一次上传进度信息</p>
+</li>
+<li><p>session.upload_progress.min_freq：更新之间的最小延迟</p>
+</li>
+<li><p>session.lazy_write：配置会话数据在更改时是否被重写，默认启用</p>
+</li>
+</ul>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2020/07/12/php_write_array_to_file/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">php将数组写入文件的方法</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2020/07/12/php_serialize_unserialize/">
+        <span class="next-text nav-default">php序列化</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2019 -
+    
+    2020
+    <span class="footer-author">Tomas.</span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>

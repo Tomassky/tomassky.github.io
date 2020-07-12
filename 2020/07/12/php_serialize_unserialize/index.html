@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="php序列化"/>
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Tomas'Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://yoursite.com/2020/07/12/php_serialize_unserialize/"/>
+
+
+<meta name="description" content="php序列化    ▲ 对象的序列化利于对象的保存和传输，也可以让多个文件共享对象    php序列化的函数为serialize，反序列化的函数为unserialize  序列化 php序列化是为了在程序运行的过程中对对象进行转储而产生的。序列化可以将对象转换成字符串，但仅保留对象里的成员变量，不保留函数方法 例子 O代表是对象，表示改对象名称有4个字符，”Test”表示改对象的名称，3表示改对">
+<meta property="og:type" content="article">
+<meta property="og:title" content="php序列化">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;07&#x2F;12&#x2F;php_serialize_unserialize&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="php序列化    ▲ 对象的序列化利于对象的保存和传输，也可以让多个文件共享对象    php序列化的函数为serialize，反序列化的函数为unserialize  序列化 php序列化是为了在程序运行的过程中对对象进行转储而产生的。序列化可以将对象转换成字符串，但仅保留对象里的成员变量，不保留函数方法 例子 O代表是对象，表示改对象名称有4个字符，”Test”表示改对象的名称，3表示改对">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-07-12T09:02:26.494Z">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> php序列化 - Tomas'Blog </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">Tomas'Blog</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          php序列化
+        
+      </h1>
+
+      <time class="post-time">
+          7月 12 2020
+      </time>
+    </header>
+    
+            <div class="post-content">
+            <hr>
+<h3 id="php序列化"><a href="#php序列化" class="headerlink" title="php序列化"></a>php序列化</h3><blockquote>
+<p>   ▲ 对象的序列化利于对象的保存和传输，也可以让多个文件共享对象</p>
+<p>   php序列化的函数为serialize，反序列化的函数为unserialize</p>
+</blockquote>
+<h5 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h5><ul>
+<li>php序列化是为了在程序运行的过程中对对象进行转储而产生的。序列化可以将对象转换成字符串，但仅保留对象里的成员变量，不保留函数方法</li>
+<li>例子<ul>
+<li>O代表是对象，表示改对象名称有4个字符，”Test”表示改对象的名称，3表示改对象里有3个成员</li>
+<li>变量的序列化<ul>
+<li>public属性序列化后为本身</li>
+<li>protected属性序列化后示方式是在变量名前加个%00*%00</li>
+<li>private属性序列化后示方式是在变量名前加个%00类名%00</li>
+</ul>
+</li>
+<li>括号里面的值根据分号来分开看，分号左边的是变量名，分号右边的是变量的值</li>
+<li>▲ 序列化不保存方法</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    class Test&#123;</span><br><span class="line">        public $a = &apos;This is A&apos;;</span><br><span class="line">        protected $b = &apos;This is B&apos;;</span><br><span class="line">        private $c = &apos;This is C&apos;;</span><br><span class="line">        publice function test1()&#123;</span><br><span class="line">            return &apos;this is test1&apos;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $test = new Test();</span><br><span class="line">    $sTest = serialize($test);</span><br><span class="line">    var_dump($sTest);  </span><br><span class="line">    // 输出为string(96) &quot;O:4:&quot;Test&quot;:3:&#123;s:1:&quot;a&quot;;s:9:&quot;This is A&quot;;s:4:&quot;*b&quot;;s:9:&quot;This is B&quot;;s:7:&quot;Testc&quot;;s:9:&quot;This is C&quot;;&#125;&quot;</span><br><span class="line"></span><br><span class="line">    解释</span><br><span class="line">    O 代表对象 因为我们序列化的是一个对象 序列化数组则用A来表示</span><br><span class="line">    4 代表类名字占三个字符 </span><br><span class="line">    Test 类名</span><br><span class="line">    3 代表三个属性</span><br><span class="line">    s 代表字符串</span><br><span class="line">    1 代表属性名长度</span><br><span class="line">    a 属性名</span><br><span class="line">    s:9:&quot;This is A&quot; 字符串 属性值长度 属性值</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+
+<h5 id="反序列化"><a href="#反序列化" class="headerlink" title="反序列化"></a>反序列化</h5><ul>
+<li>例子</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    class Test&#123;</span><br><span class="line">        public $a = &apos;This is A&apos;;</span><br><span class="line">        protected $b = &apos;This is B&apos;;</span><br><span class="line">        private $c = &apos;This is C&apos;;</span><br><span class="line">        publice function test1()&#123;</span><br><span class="line">            return &apos;this is test1&apos;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $test = new Test();</span><br><span class="line">    $sTest = serialize($test);   </span><br><span class="line">    $uTest = unserialize($sTest);</span><br><span class="line">    var_dump($uTest);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //输出，还原成一个数组</span><br><span class="line">    object(Test)#2 (3) &#123;</span><br><span class="line">      [&quot;a&quot;]=&gt;</span><br><span class="line">      string(9) &quot;This is A&quot;</span><br><span class="line">      [&quot;b&quot;:protected]=&gt;</span><br><span class="line">      string(9) &quot;This is B&quot;</span><br><span class="line">      [&quot;c&quot;:&quot;Test&quot;:private]=&gt;</span><br><span class="line">      string(9) &quot;This is C&quot;</span><br><span class="line">    &#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="魔术方法"><a href="#魔术方法" class="headerlink" title="魔术方法"></a>魔术方法</h5><ul>
+<li>官网地址：<a href="https://www.php.net/manual/zh/language.oop5.magic.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/language.oop5.magic.php</a></li>
+<li>__construct()当一个对象创建时被调用</li>
+<li>__destruct()当一个对象销毁时被调用</li>
+<li>__toString()当一个对象被当作一个字符串使用<ul>
+<li>▲ __toString()则必须返回一个字符串</li>
+</ul>
+</li>
+<li>__sleep()在对象被序列化之前运行<ul>
+<li>▲ __sleep()期望能return一个数组</li>
+</ul>
+</li>
+<li>__wakeup()在对象被反序列化之后被调用</li>
+<li>__get()读取不可访问属性的值时被调用</li>
+<li>__invoke()当尝试以调用函数的方式调用一个对象时被调用</li>
+</ul>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2020/07/12/php_session/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">php session</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2020/07/12/php_get_post_simulation/">
+        <span class="next-text nav-default">php模拟get/post请求</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2019 -
+    
+    2020
+    <span class="footer-author">Tomas.</span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>

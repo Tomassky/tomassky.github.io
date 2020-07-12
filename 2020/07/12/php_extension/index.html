@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="php的扩展"/>
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Tomas'Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://yoursite.com/2020/07/12/php_extension/"/>
+
+
+<meta name="description" content="php的扩展 CURL扩展 openssl扩展 Redis以及扩展 Redis For Winodow Redis For Linux Redis操作手册    0X00 CURL扩展 ▲ 2020.03.15 网上看到了很多关于Window环境开启curl的方法，但都存在一定问题 php开启扩展（php.ini） extension=curl   ▲ curl加载：找到对应php目录下libs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="php的扩展">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;07&#x2F;12&#x2F;php_extension&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="php的扩展 CURL扩展 openssl扩展 Redis以及扩展 Redis For Winodow Redis For Linux Redis操作手册    0X00 CURL扩展 ▲ 2020.03.15 网上看到了很多关于Window环境开启curl的方法，但都存在一定问题 php开启扩展（php.ini） extension=curl   ▲ curl加载：找到对应php目录下libs">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;php&#x2F;php_extension&#x2F;curl_install.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;php&#x2F;php_extension&#x2F;openssl_install.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;php&#x2F;php_extension&#x2F;redis_for_window.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;php&#x2F;php_extension&#x2F;redis_for_linux.png">
+<meta property="og:updated_time" content="2020-07-12T08:23:46.592Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;php&#x2F;php_extension&#x2F;curl_install.png">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> php的扩展 - Tomas'Blog </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">Tomas'Blog</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          php的扩展
+        
+      </h1>
+
+      <time class="post-time">
+          7月 12 2020
+      </time>
+    </header>
+    
+            <div class="post-content">
+            <hr>
+<h2 id="php的扩展"><a href="#php的扩展" class="headerlink" title="php的扩展"></a>php的扩展</h2><ul>
+<li>CURL扩展</li>
+<li>openssl扩展</li>
+<li>Redis以及扩展<ul>
+<li>Redis For Winodow</li>
+<li>Redis For Linux</li>
+<li>Redis操作手册</li>
+</ul>
+</li>
+</ul>
+<h3 id="0X00-CURL扩展"><a href="#0X00-CURL扩展" class="headerlink" title="0X00 CURL扩展"></a>0X00 CURL扩展</h3><ul>
+<li>▲ 2020.03.15 网上看到了很多关于Window环境开启curl的方法，但都存在一定问题</li>
+<li>php开启扩展（php.ini）<ul>
+<li>extension=curl</li>
+</ul>
+</li>
+<li>▲ curl加载：找到对应php目录下libssh2.dll文件，复制到对应apache的bin文件夹下</li>
+<li>重启Apache，查看phpinfo，是否有Curl</li>
+<li>php_curl_test.php</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">     var_dump(curl_init());  //输出为 resource(2) of type (curl) </span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/php/php_extension/curl_install.png" alt="CURL_install"></p>
+<h3 id="0x01-openssl扩展"><a href="#0x01-openssl扩展" class="headerlink" title="0x01 openssl扩展"></a>0x01 openssl扩展</h3><ul>
+<li>▲ 对于现在大多数网站来说，都是https模式，爬虫需要开启openssl扩展建立连接</li>
+<li>php开启扩展（php.ini文件）<ul>
+<li>extension=php_openssl</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/php/php_extension/openssl_install.png" alt="openssl_install"></p>
+<h3 id="0X02-Redis以及扩展"><a href="#0X02-Redis以及扩展" class="headerlink" title="0X02 Redis以及扩展"></a>0X02 Redis以及扩展</h3><h5 id="Redis-For-Winodow"><a href="#Redis-For-Winodow" class="headerlink" title="Redis For Winodow"></a>Redis For Winodow</h5><ul>
+<li>▲ 2020.03.15 Redis for Window官方已经停止维护</li>
+<li>▲ Redis默认端口为6379，默认密码为空密码</li>
+<li>Redis废弃函数替换：<a href="https://blog.csdn.net/xchenhao/article/details/97251618" target="_blank" rel="noopener">https://blog.csdn.net/xchenhao/article/details/97251618</a></li>
+<li>Redis -&gt; Github的维护仓库：<a href="https://github.com/microsoftarchive/redis/releases" target="_blank" rel="noopener">https://github.com/microsoftarchive/redis/releases</a></li>
+<li>Redis官方文档 -&gt; for window <a href="https://www.redis.com.cn/redis-installation" target="_blank" rel="noopener">https://www.redis.com.cn/redis-installation</a></li>
+<li>Redis扩展 -&gt; pecl的维护仓库：<a href="http://pecl.php.net/package/redis" target="_blank" rel="noopener">http://pecl.php.net/package/redis</a></li>
+<li>Pecl仓库下载 -&gt; <a href="https://windows.php.net/downloads/pecl/" target="_blank" rel="noopener">https://windows.php.net/downloads/pecl/</a></li>
+<li>下载Redis.msi安装文件，下载Redis扩展（对应PHP版本）</li>
+<li>拷贝redis的扩展php_redis.dll -&gt; php/ext</li>
+<li>php开启扩展（php.ini文件）<ul>
+<li>extension=php_redis.dll</li>
+</ul>
+</li>
+<li>重启Apache，查看phpinfo，是否有Redis</li>
+<li>window_php_redis_test.php</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">     $redis = new Redis();                   //redis对象</span><br><span class="line">     $redis-&gt;connect(&quot;127.0.0.1&quot;,&quot;6379&quot;); //连接redis服务器</span><br><span class="line">     $redis-&gt;set(&quot;test&quot;,&quot;Hello World&quot;);      //set字符串值</span><br><span class="line">     echo $redis-&gt;get(&quot;test&quot;);               //获取值</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/php/php_extension/redis_for_window.png" alt="redis_for_windows"></p>
+<h5 id="Redis-For-Linux"><a href="#Redis-For-Linux" class="headerlink" title="Redis For Linux"></a>Redis For Linux</h5><ul>
+<li>Redis安装：<a href="https://redis.io/" target="_blank" rel="noopener">https://redis.io/</a> （自安装灵活性较大）</li>
+<li>php的redis扩展：<a href="https://github.com/phpredis/phpredis/releases" target="_blank" rel="noopener">https://github.com/phpredis/phpredis/releases</a></li>
+<li>安装redis扩展</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">tar xzf phpredis-xxx.tar.gz</span><br><span class="line">cd phpredis </span><br><span class="line">sudo phpize </span><br><span class="line">sudo ./configure </span><br><span class="line">sudo make </span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>将modules文件夹的内容复制并粘贴到PHP扩展目录中，并在php.ini中添加以下行<ul>
+<li><code>extension = redis.so</code> </li>
+</ul>
+</li>
+<li>linux_php_redis_test.php</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $redis = new Redis(); </span><br><span class="line">    $redis-&gt;connect(&apos;127.0.0.1&apos;, 6379); </span><br><span class="line">    echo &quot;Server is running: &quot;.$redis-&gt;ping();</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/php/php_extension/redis_for_linux.png" alt="redis_for_linux"></p>
+<h5 id="Redis操作手册"><a href="#Redis操作手册" class="headerlink" title="Redis操作手册"></a>Redis操作手册</h5><ul>
+<li>phpredis：<a href="https://github.com/phpredis/phpredis" target="_blank" rel="noopener">https://github.com/phpredis/phpredis</a></li>
+</ul>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2020/07/12/php_get_post_simulation/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">php模拟get/post请求</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2020/07/12/wamp_dns/">
+        <span class="next-text nav-default">搭建wamp和域名服务</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2019 -
+    
+    2020
+    <span class="footer-author">Tomas.</span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>

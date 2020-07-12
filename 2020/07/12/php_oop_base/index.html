@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="php面向对象基础"/>
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Tomas'Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://yoursite.com/2020/07/12/php_oop_base/"/>
+
+
+<meta name="description" content="面向对象 &#x2F;www&#x2F;class&#x2F;DB.class.php  12345678910111213141516171819202122232425262728293031&amp;lt;?php    class DB    &amp;#123;        public $host;        public $username;        public $password;        public">
+<meta property="og:type" content="article">
+<meta property="og:title" content="php面向对象基础">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;07&#x2F;12&#x2F;php_oop_base&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="面向对象 &#x2F;www&#x2F;class&#x2F;DB.class.php  12345678910111213141516171819202122232425262728293031&amp;lt;?php    class DB    &amp;#123;        public $host;        public $username;        public $password;        public">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-07-12T09:02:14.592Z">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> php面向对象基础 - Tomas'Blog </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">Tomas'Blog</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          php面向对象基础
+        
+      </h1>
+
+      <time class="post-time">
+          7月 12 2020
+      </time>
+    </header>
+    
+            <div class="post-content">
+            <hr>
+<h3 id="面向对象"><a href="#面向对象" class="headerlink" title="面向对象"></a>面向对象</h3><ul>
+<li>/www/class/DB.class.php</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    class DB</span><br><span class="line">    &#123;</span><br><span class="line">        public $host;</span><br><span class="line">        public $username;</span><br><span class="line">        public $password;</span><br><span class="line">        public $database;</span><br><span class="line"></span><br><span class="line">        //初始化数据库</span><br><span class="line">        function __construct($host=&apos;&apos;,$username=&apos;&apos;,$password=&apos;&apos;,$database=&apos;&apos;)</span><br><span class="line">        &#123;</span><br><span class="line">            $this-&gt;host = empty($host)? $GLOBALS[&apos;con&apos;][&apos;host&apos;] : $host;</span><br><span class="line">            $this-&gt;username = empty($username)? $GLOBALS[&apos;con&apos;][&apos;username&apos;] : $username;</span><br><span class="line">            $this-&gt;password = empty($password)? $GLOBALS[&apos;con&apos;][&apos;password&apos;] : $password;</span><br><span class="line">            $this-&gt;database = empty($database)? $GLOBALS[&apos;con&apos;][&apos;database&apos;] : $database;</span><br><span class="line">            $lin = mysqli_connect($this-&gt;host,$this-&gt;username,$this-&gt;password);</span><br><span class="line">            $this-&gt;use_database($lin);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        //使用数据库</span><br><span class="line">        public function use_database($lin=&apos;&apos;)&#123;</span><br><span class="line">            mysqli_query($lin,&quot;use php_mysql_demo&quot;);</span><br><span class="line">            $list = mysqli_query($lin,&quot;select * from admin&quot;);</span><br><span class="line">            $list_data = mysqli_fetch_array($list,MYSQLI_ASSOC);  //数据的存储</span><br><span class="line">            var_dump($list_data);  //打印数据库的第一行数据</span><br><span class="line">            echo &quot;&lt;/br&gt;&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>/www/init.php</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    define(&apos;DIR_dang&apos;,$_SERVER[&apos;DOCUMENT_ROOT&apos;].&quot;/&quot;);  //取得系统路径的绝对路径</span><br><span class="line"></span><br><span class="line">    include_once DIR_dang.&apos;function.php&apos;;  //function.php的绝对路径</span><br><span class="line"></span><br><span class="line">    $con = include_once DIR_dang.&apos;conn.php&apos;;  //conn.php的绝对路径</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>/www/conn.php</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //数据库默认参数</span><br><span class="line">    return array(</span><br><span class="line">        &quot;host&quot; =&gt; &apos;127.0.0.1&apos;,</span><br><span class="line">        &quot;username&quot; =&gt; &apos;root&apos;,</span><br><span class="line">        &quot;password&quot; =&gt; &apos;root&apos;,</span><br><span class="line">        &quot;database&quot; =&gt; &apos;admin&apos;</span><br><span class="line">    )</span><br><span class="line">    </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>/www/function.php</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">     </span><br><span class="line">    //function __autoload($class)</span><br><span class="line">        //&#123;</span><br><span class="line">            //默认从/includes去加载</span><br><span class="line">            //if(is_file(&quot;./class/$class.class.php&quot;))</span><br><span class="line">            //&#123;</span><br><span class="line">                //加载</span><br><span class="line">                //include_once &quot;./class/$class.class.php&quot;;</span><br><span class="line">            //&#125;</span><br><span class="line">        //&#125;</span><br><span class="line">    //__autoload方法已经被spl_autoload_register()所替代</span><br><span class="line">    function my_autoload($class)</span><br><span class="line">    &#123;</span><br><span class="line">        include &apos;./class/&apos;.$class.&apos;.class.php&apos;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    spl_autoload_register(&apos;my_autoload&apos;);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>/www/index.php</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    include_once &apos;./init.php&apos;;  //包含function.php和conn.php，并加载</span><br><span class="line"></span><br><span class="line">    //var_dump($GLOBALS[&apos;con&apos;][&apos;host&apos;]);  //测试$GLOBALS参数</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    $mysql = new DB();  //创建一个对象</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2020/07/12/php_file_about/">
+        <span class="next-text nav-default">php文件相关操作</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2019 -
+    
+    2020
+    <span class="footer-author">Tomas.</span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>

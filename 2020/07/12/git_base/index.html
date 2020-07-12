@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="Git基础"/>
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Tomas'Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://yoursite.com/2020/07/12/git_base/"/>
+
+
+<meta name="description" content="Git基础 什么是Git Git中的数据库   Git的基本操作 安装Git Git的基本命令 Git-tutorial Repository   Git的分支 Git分支操作 Git-tutorial Repository   Git的合并 Git-tutorial Repository   Git的回滚撤销 Git-tutorial Repository   gitignore&#x2F;fork同步">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git基础">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;07&#x2F;12&#x2F;git_base&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="Git基础 什么是Git Git中的数据库   Git的基本操作 安装Git Git的基本命令 Git-tutorial Repository   Git的分支 Git分支操作 Git-tutorial Repository   Git的合并 Git-tutorial Repository   Git的回滚撤销 Git-tutorial Repository   gitignore&#x2F;fork同步">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;git&#x2F;1-Git-Server-and-Computer.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;git&#x2F;1-Git--Snaphost.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;git&#x2F;1-Git--%E5%AE%8C%E6%95%B4%E6%80%A7.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;git&#x2F;1-Git%E4%BB%93%E5%BA%93-1.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;git&#x2F;1-Git%E4%BB%93%E5%BA%93-2.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;git&#x2F;3-Git%E5%88%86%E6%94%AF-1.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;git&#x2F;3-Git%E5%88%86%E6%94%AF-2.PNG">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;git&#x2F;3-Git%E5%88%86%E6%94%AF-3.PNG">
+<meta property="og:updated_time" content="2020-07-12T08:28:09.618Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;git&#x2F;1-Git-Server-and-Computer.PNG">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> Git基础 - Tomas'Blog </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">Tomas'Blog</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Git基础
+        
+      </h1>
+
+      <time class="post-time">
+          7月 12 2020
+      </time>
+    </header>
+    
+            <div class="post-content">
+            <hr>
+<h2 id="Git基础"><a href="#Git基础" class="headerlink" title="Git基础"></a>Git基础</h2><ul>
+<li>什么是Git<ul>
+<li>Git中的数据库</li>
+</ul>
+</li>
+<li>Git的基本操作<ul>
+<li>安装Git</li>
+<li>Git的基本命令</li>
+<li>Git-tutorial Repository</li>
+</ul>
+</li>
+<li>Git的分支<ul>
+<li>Git分支操作</li>
+<li>Git-tutorial Repository</li>
+</ul>
+</li>
+<li>Git的合并<ul>
+<li>Git-tutorial Repository</li>
+</ul>
+</li>
+<li>Git的回滚撤销<ul>
+<li>Git-tutorial Repository</li>
+</ul>
+</li>
+<li>gitignore/fork同步<ul>
+<li>Git-tutorial Repository</li>
+</ul>
+</li>
+<li>Git的免密传送<ul>
+<li>Git传输的协议</li>
+<li>SSH协议登陆</li>
+</ul>
+</li>
+<li>Git的工作流</li>
+<li>常用工具</li>
+</ul>
+<h3 id="0X00-什么是Git"><a href="#0X00-什么是Git" class="headerlink" title="0X00 什么是Git"></a>0X00 什么是Git</h3><ul>
+<li>分布式版本管理系统<ul>
+<li>最初是为了管理Linux的系统内核</li>
+<li>同FTP相同的功能</li>
+<li>非线性管文件</li>
+<li>速度快</li>
+<li>对待数据更像一个快照流</li>
+<li>可以在无网络的情况下进行提交到本地服务器，在有网络的情况下提交给远端的服务器</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/git/1-Git-Server-and-Computer.PNG" alt="1-Git-Server and Computer"></p>
+<ul>
+<li>方式：直接记录快照而非方式，每次修改需要一次Commit</li>
+<li>保证完整性：计算校验和（哈希算法），Git存取的是哈希值</li>
+</ul>
+<p><img src="/images/git/1-Git--Snaphost.PNG" alt="1-Git--Snaphost"></p>
+<p><img src="/images/git/1-Git--%E5%AE%8C%E6%95%B4%E6%80%A7.PNG" alt="1-Git--完整性"></p>
+<h5 id="Git中的数据库"><a href="#Git中的数据库" class="headerlink" title="Git中的数据库"></a>Git中的数据库</h5><ul>
+<li>Git仓库–.git directory：保存项目数据，元数据的地方，git自己维护的文件夹</li>
+<li>工作目录–Working Directory：内容自Git仓库，对当前项目某一版本独立提取出来的内容</li>
+<li>暂存区–Staging Area：保存下次提交的文件目录，也算是一个索引</li>
+<li>三个概念<ul>
+<li>已提交：Git目录中保存着的特定版本文件</li>
+<li>已暂存：做了修改并放在暂存区</li>
+<li>已修改：做了修改但还没有放到暂存区</li>
+</ul>
+</li>
+<li>远程仓库–Remote：多人操作的仓库</li>
+</ul>
+<p><img src="/images/git/1-Git%E4%BB%93%E5%BA%93-1.PNG" alt="1-Git仓库-1"></p>
+<p><img src="/images/git/1-Git%E4%BB%93%E5%BA%93-2.PNG" alt="1-Git仓库-2"></p>
+<h3 id="0X01-Git的基本操作"><a href="#0X01-Git的基本操作" class="headerlink" title="0X01 Git的基本操作"></a>0X01 Git的基本操作</h3><h5 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h5><ul>
+<li>下载git OXS版本（一般为内置/brew install git安装）</li>
+<li>下载git WindowS版本（Git网页下载Git）</li>
+<li>下载git Linux版本（apt-get install git-all/yum -y install git）</li>
+</ul>
+<h5 id="Git的基本命令"><a href="#Git的基本命令" class="headerlink" title="Git的基本命令"></a>Git的基本命令</h5><ul>
+<li>▲ 提交到远程仓库需要在Github上创建一个仓库</li>
+<li>Git的版本<ul>
+<li><strong><code>🔺命令：git version</code></strong></li>
+</ul>
+</li>
+<li>Git的用户信息<ul>
+<li>名字：<strong><code>🔺命令：git config --global user.name &quot;tomas&quot;</code></strong></li>
+<li>邮箱：<strong><code>🔺命令：git config --global user.email &quot;643008933@qq.com&quot;</code></strong></li>
+<li>配置文件：~/.gitconfig（可设置代理，配置信息）</li>
+</ul>
+</li>
+<li>Git的基本命令<ul>
+<li>初始化：<strong><code>🔺命令：git init</code></strong></li>
+<li>仓库状态：<strong><code>🔺命令：git status</code></strong></li>
+<li>添加文件到暂存区管理：<strong><code>🔺命令：git add 文件名</code></strong><ul>
+<li>-A，所有文件</li>
+</ul>
+</li>
+<li>从暂存区删除文件：<strong><code>🔺命令：git rm --cacahe 文件名</code></strong></li>
+<li>查看文件：<strong><code>🔺命令：..git → cat index</code></strong></li>
+<li>提交：<strong><code>🔺命令：git commit -m &quot;文件名&quot;</code></strong><ul>
+<li>-m：描述提交的内容</li>
+</ul>
+</li>
+<li>建立连接：<strong><code>🔺命令：git remote add origin https://.....</code></strong></li>
+<li>查看远端信息：<strong><code>🔺命令：git remote -v</code></strong></li>
+<li>提交本地文件到远端服务器：<strong><code>🔺命令：git push origin master -u</code></strong><ul>
+<li>origin：远端仓库名称</li>
+<li>master：本地仓库名称</li>
+<li>-u：后续不需要输入名称</li>
+<li>:master ：删除远端的分支</li>
+<li>master:m1 ：更改远端分支名称为m1</li>
+</ul>
+</li>
+<li>克隆远程仓库到本地：<strong><code>🔺命令：git clone https://..... git-demo</code></strong><ul>
+<li>git-demo：为拉取到本地仓库的名称</li>
+</ul>
+</li>
+<li>拉取远端仓库修改数据到本地：<strong><code>🔺命令：git pull origin master</code></strong><ul>
+<li>origin：远端仓库名称</li>
+<li>master：本地仓库名称</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="Git-tutorial-Repository"><a href="#Git-tutorial-Repository" class="headerlink" title="Git-tutorial Repository"></a>Git-tutorial Repository</h5><ul>
+<li>mkdir git-tutorial</li>
+<li>cd git-tutorial</li>
+<li>git init</li>
+<li>ll</li>
+<li>touch README.md</li>
+<li>git status</li>
+<li>git add README.md</li>
+<li>git status</li>
+<li>git rm –cacahe README.md</li>
+<li>git status</li>
+<li>git add README.md -A</li>
+<li>git status</li>
+<li>git commit -m “README.md”</li>
+<li>git remote add origin <a href="https://github.com/" target="_blank" rel="noopener">https://github.com/</a>..</li>
+<li>git remote -v</li>
+<li>git push origin master -u</li>
+<li>查看Github是否有新建一个仓库并有README.md</li>
+<li>cd ..</li>
+<li>git clone https://… git-demo</li>
+<li>vim README.md</li>
+<li>Hello world → wq</li>
+<li>git status</li>
+<li>git add README.md</li>
+<li>git commit -m “modify README.md”</li>
+<li>cd ..</li>
+<li>cd git-tutorial</li>
+<li>git pull origin master</li>
+<li>查看Github建立的仓库中的README.md是否有内容</li>
+</ul>
+<h3 id="0X02-Git的分支"><a href="#0X02-Git的分支" class="headerlink" title="0X02 Git的分支"></a>0X02 Git的分支</h3><ul>
+<li>版本发布、功能增加、错误修改</li>
+</ul>
+<p><img src="/images/git/3-Git%E5%88%86%E6%94%AF-1.PNG" alt="3-Git分支-1"></p>
+<p><img src="/images/git/3-Git%E5%88%86%E6%94%AF-2.PNG" alt="3-Git分支-2"></p>
+<ul>
+<li>分支发布合并</li>
+</ul>
+<p><img src="/images/git/3-Git%E5%88%86%E6%94%AF-3.PNG" alt="3-Git分支-3"></p>
+<h5 id="Git分支操作"><a href="#Git分支操作" class="headerlink" title="Git分支操作"></a>Git分支操作</h5><ul>
+<li>创建分支：<strong><code>🔺命令：git branch 分支名</code></strong><ul>
+<li>基于某个分支创建的分支，会复制其内容</li>
+</ul>
+</li>
+<li>查看分支：<strong><code>🔺命令：git branch</code></strong></li>
+<li>跳转分支：<strong><code>🔺命令：git checkout 分支名</code></strong>   </li>
+<li>创建分支并跳转：<strong><code>🔺命令：git checkout -b 分支名</code></strong></li>
+<li>删除分支：<strong><code>🔺命令：git branch -d 分支名</code></strong><ul>
+<li>▲ 无合并到master的分支无法删除，或者使用-D参数`**</li>
+</ul>
+</li>
+<li>合并分支：<strong><code>🔺命令：git merge 分支名</code></strong></li>
+</ul>
+<h5 id="Git-tutorial-Repository-1"><a href="#Git-tutorial-Repository-1" class="headerlink" title="Git-tutorial Repository"></a>Git-tutorial Repository</h5><ul>
+<li>cd git-tutorial</li>
+<li>git branch feature1</li>
+<li>git branch</li>
+<li>git checkout feature1</li>
+<li>touch a.txt</li>
+<li>vim a.txt</li>
+<li>this is a.txt → wq</li>
+<li>git add a.txt</li>
+<li>git commit -m “a.txt”</li>
+<li>git branch feature2</li>
+<li>git checkout feature2</li>
+<li>git checkout -b feature3</li>
+<li>git branch</li>
+<li>git branch -d feature2</li>
+<li>touch b.txt</li>
+<li>vim b.txt</li>
+<li>this is b.txt → wq</li>
+<li>git add b.txt</li>
+<li>git commit -m “b.txt”</li>
+<li>git checkout master</li>
+<li>git branch -d feature3</li>
+<li>git merge feature3</li>
+<li>git push</li>
+<li>查看Github仓库是否有a.txt和b.txt，但无其他分支</li>
+<li>git branch feature1</li>
+<li>git push origin feature1</li>
+<li>查看Github仓库是否有feature1分支</li>
+<li>git push origin :feature1</li>
+<li>查看Github仓库是否无feature1分支</li>
+<li>git push origin feature1:f1</li>
+<li>查看Github仓库的feature1是否更改为f1</li>
+</ul>
+<h3 id="0X03-Git的合并"><a href="#0X03-Git的合并" class="headerlink" title="0X03 Git的合并"></a>0X03 Git的合并</h3><ul>
+<li>▲ 可以在Stackoverflow上看git log多样格式</li>
+<li>▲ rebase的黄金法则：绝对不要在公共分支使用rebase</li>
+<li>查看日志：git log<ul>
+<li>–oneline：一行的提交信息</li>
+<li>–oneline -3：只取前面3行</li>
+</ul>
+</li>
+<li>查看添加的内容：<strong><code>🔺命令：git show 哈希值</code></strong></li>
+<li>查看提交方式：<strong><code>🔺命令：git merge --help</code></strong><ul>
+<li>–ff（fast-forward）：默认不产生一次commit</li>
+<li>–no-ff：产生一个commit</li>
+</ul>
+</li>
+<li>移动分支，并将master分支的提交并入：<strong><code>🔺命令：git rebase</code></strong></li>
+<li>查看版本分支报错情况：<strong><code>🔺命令：git mergetool</code></strong><ul>
+<li>通过工具修改后，会生成一个x.txt.orig，保存冲突的现场</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>   merge和rebase<br>   merge：两个分支的修改提交，默认不提交，关注点在合并操作上<br>   rebase：将当前分支做的修改，复制在目标分支的最后一次中，关注点在开发的过程上 </p>
+</blockquote>
+<h5 id="Git-tutorial-Repository-2"><a href="#Git-tutorial-Repository-2" class="headerlink" title="Git-tutorial Repository"></a>Git-tutorial Repository</h5><ul>
+<li>cd git-tutorial</li>
+<li>git branch -d f1</li>
+<li>git push origin :f1</li>
+<li>git log</li>
+<li>q</li>
+<li>git log –oneline</li>
+<li>git log –oneline -3</li>
+<li>git show d156c23</li>
+<li>vi ~/.config → dog = log –all –decorate –oneline –graph</li>
+<li>git dog</li>
+<li>git checkout -b f1</li>
+<li>touch fa.txt</li>
+<li>git add fa.txt</li>
+<li>git commit -m “add fa”</li>
+<li>git dog</li>
+<li>git checkout master</li>
+<li>git merge f1</li>
+<li>git dog</li>
+<li>git checkout f1</li>
+<li>touch fb.txt</li>
+<li>git commit -m “add fb”</li>
+<li>git checkout f1</li>
+<li>git merge f1 –no-ff</li>
+<li>git dog</li>
+<li>git push</li>
+<li>git push origin f1</li>
+<li>远程修改master中的a.txt</li>
+<li>git pull</li>
+<li>git checkout f1</li>
+<li>git merge master</li>
+<li>git dog</li>
+<li>git checkout master</li>
+<li>touch m1.txt</li>
+<li>git add m1.txt</li>
+<li>git commit -m “add m1”</li>
+<li>git checkout f1</li>
+<li>git dog</li>
+<li>git rebase</li>
+<li>git dog</li>
+<li>git checkout -b f2</li>
+<li>vim a.txt</li>
+<li>this is b.txt</li>
+<li>git add a.txt</li>
+<li>git commit -m “update a.txt”</li>
+<li>git checkout f1</li>
+<li>vi a.txt</li>
+<li>this is c.txt</li>
+<li>git add a.txt</li>
+<li>git commit -m “update c.txt”</li>
+<li>git checkout f2</li>
+<li>git merge f1</li>
+<li>cat a.txt</li>
+<li>git mergetool</li>
+<li>rm a.txt.orig</li>
+<li>git commit -m “update a.txt”</li>
+<li>git dog</li>
+</ul>
+<h3 id="0X04-Git的回滚撤销"><a href="#0X04-Git的回滚撤销" class="headerlink" title="0X04 Git的回滚撤销"></a>0X04 Git的回滚撤销</h3><ul>
+<li>返回前一次的记录：<strong><code>🔺命令：git reset master^/~5/hash值id</code></strong><ul>
+<li>^：每一个^符号标识[前一次]，如^^^表示回退三次</li>
+<li><del>：回退次数加在后面，如</del>5</li>
+<li>hash值id：回退到id号的版本</li>
+<li>–mix：把暂存区的文件丢弃，但不会动到工作目录的文件（默认方式）</li>
+<li>–soft：工作目录跟暂存区的文件都不会被丢弃</li>
+<li>–hard：不管是工作目录以及暂存区的文件都会丢弃</li>
+</ul>
+</li>
+<li>所有的日志文件：<strong><code>🔺命令：git reflog</code></strong></li>
+<li>撤销某次操作：<strong><code>🔺命令：git revert</code></strong><ul>
+<li>此次操作之前和之后的commit和history都会保留，并且把这次撤销作为一次最新的提交</li>
+</ul>
+</li>
+<li>▲ 在公用分支上应用revert，在私用分支上用reset</li>
+</ul>
+<blockquote>
+<pre><code>reset和revert
+revert：用一次新的commit来回滚之前的commit
+reset：只是将旧的commit指针移动，并无删除旧的commit</code></pre></blockquote>
+<h5 id="Git-tutorial-Repository-3"><a href="#Git-tutorial-Repository-3" class="headerlink" title="Git-tutorial Repository"></a>Git-tutorial Repository</h5><ul>
+<li>cd git-tutorial</li>
+<li>touch hello.java</li>
+<li>git add hello.java</li>
+<li>git commit -m “hellp.java”</li>
+<li>git dog</li>
+<li>git reset master^</li>
+<li>git status</li>
+<li>ll</li>
+<li>git add hello.java</li>
+<li>git commit -m “add Hello.java”</li>
+<li>git dog</li>
+<li>git reset cd0309f</li>
+<li>git status</li>
+<li>git reset –hard 7d37397</li>
+<li>git status</li>
+<li>ll</li>
+<li>touch c.txt</li>
+<li>git add c.txt</li>
+<li>git commit -m “add c.txt”</li>
+<li>git dog</li>
+<li>git reset –soft 7d37397</li>
+<li>git status</li>
+<li>git reflog</li>
+<li>git reset –hard 00bd027</li>
+<li>ll</li>
+<li>git rest –hard HEAD</li>
+<li>git dog</li>
+<li>git revert</li>
+<li>git log</li>
+<li>git revert hash值id（Commit的ID）</li>
+<li>git dog</li>
+</ul>
+<h3 id="0X05-gitignore-fork同步"><a href="#0X05-gitignore-fork同步" class="headerlink" title="0X05 gitignore/fork同步"></a>0X05 gitignore/fork同步</h3><ul>
+<li>创建一个.gitignore文件，保存要忽略的内容<ul>
+<li>忽略系统生成的文件，如IDE的配置</li>
+<li>忽略编译生成的中间文件、可执行文件等</li>
+<li>忽略敏感的配置文件和本地不想提交的脚本</li>
+</ul>
+</li>
+<li>常用参数<ul>
+<li>配置文件：.settings/</li>
+<li>脚本文件：*.sh</li>
+<li>上次所有txt文件：!*.txt</li>
+<li>某个目录：/a/*.class</li>
+</ul>
+</li>
+<li>gitignore网站：<a href="https://www.gitignore.io" target="_blank" rel="noopener">https://www.gitignore.io</a></li>
+<li>查看远程的版本信息：<strong><code>🔺命令：git remote -v</code></strong></li>
+<li>增加一个远程仓库上传流：<strong><code>🔺命令：git remote add upstream https://...</code></strong></li>
+<li>更新远程仓库的版本：<strong><code>🔺命令：git fetch upstream 分支名</code></strong><ul>
+<li>分支名默认省略，则为master分支</li>
+<li>▲ pull = fetch + merge</li>
+</ul>
+</li>
+<li>查看远程原始仓库的分支：<strong><code>🔺命令：git branch -r</code></strong></li>
+</ul>
+<h5 id="Git-tutorial-Repository-4"><a href="#Git-tutorial-Repository-4" class="headerlink" title="Git-tutorial Repository"></a>Git-tutorial Repository</h5><ul>
+<li>cd git-tutorial</li>
+<li>git add -A .</li>
+<li>git commit -m “add gitignore”</li>
+<li>git push -f</li>
+<li>git clone https://……awesome</li>
+<li>cd awesome</li>
+<li>git remote -v</li>
+<li>git remote add upstream https://…</li>
+<li>git remote -v</li>
+<li>git fetch upstream </li>
+<li>git branch -r</li>
+<li>git rebase upstream/master<ul>
+<li>merge关注的是提交的历史，将两次操作合并，但无提交数据，rebase则足够</li>
+</ul>
+</li>
+<li>git push</li>
+<li>git log</li>
+</ul>
+<h3 id="0X06-Git的免密传送"><a href="#0X06-Git的免密传送" class="headerlink" title="0X06 Git的免密传送"></a>0X06 Git的免密传送</h3><h5 id="Git传输的协议"><a href="#Git传输的协议" class="headerlink" title="Git传输的协议"></a>Git传输的协议</h5><ul>
+<li>local协议</li>
+<li>HTTP(S)协议：需要输入账号密码</li>
+<li>SSH协议：不需要输入账号密码</li>
+<li>Git协议</li>
+<li><a href="https://help.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent" target="_blank" rel="noopener">Git免密推送</a></li>
+</ul>
+<h5 id="SSH协议登陆"><a href="#SSH协议登陆" class="headerlink" title="SSH协议登陆"></a>SSH协议登陆</h5><ul>
+<li>在个人界面的Settings处</li>
+<li>SSH and GPG keys</li>
+<li>generating SSH keys</li>
+<li>Generating a new SSH key and adding it to the ssh-agent</li>
+<li>Windows<ul>
+<li>ssh-keygen -t rsa -b 4096 -C “<a href="mailto:643008933@qq.com" target="_blank" rel="noopener">643008933@qq.com</a>“<ul>
+<li>Enter a file in which to save the key (/c/Users/you/.ssh/id_rsa):[Press enter]</li>
+<li>Enter passphrase (empty for no passphrase): [Type a passphrase]</li>
+<li>Enter same passphrase again: [Type passphrase again]</li>
+</ul>
+</li>
+<li>eval $(ssh-agent -s)</li>
+<li>ssh-add ~/.ssh/id_rsa</li>
+<li>cat ~/.ssh/id_rsa.public</li>
+<li>复制公钥到New SSH Key</li>
+</ul>
+</li>
+<li>git clone with SSH</li>
+<li>touch a.txt</li>
+<li>git add a.txt</li>
+<li>git commit -m “add a.txt”</li>
+<li>git push（看是否需要账号密码登陆）</li>
+<li>▲ 2020.04.14 使用SSH协议登陆<ul>
+<li>git remote -v：查看git clone方式，如果是origin <a href="https://github.com......开头就说明需要调整" target="_blank" rel="noopener">https://github.com......开头就说明需要调整</a></li>
+<li>git remote rm origin：移除原来的git源</li>
+<li>git remote add origin <a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a>:xxx.git：添加新的git源头（地址修改为要调整的）</li>
+<li>git remote -v：再查看git方式，如果是origin <a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a>….就开头就说明OK了，重新commit或者push就不用每次都输入账号密码了</li>
+</ul>
+</li>
+</ul>
+<h3 id="0X07-Git的工作流"><a href="#0X07-Git的工作流" class="headerlink" title="0X07 Git的工作流"></a>0X07 Git的工作流</h3><ul>
+<li><a href="https://github.com/xirong/my-git/blob/master/git-workflow-tutorial.md" target="_blank" rel="noopener">Git工作流指南</a></li>
+<li>集中式工作流</li>
+<li>功能分支工作流</li>
+<li>Gitflow工作流</li>
+<li>Forking工作流</li>
+</ul>
+<h3 id="0X08-常用工具"><a href="#0X08-常用工具" class="headerlink" title="0X08 常用工具"></a>0X08 常用工具</h3><ul>
+<li>sourcetree</li>
+<li>vscode</li>
+<li>git图标：<a href="https://gitmoji.surge.sh" target="_blank" rel="noopener">https://gitmoji.surge.sh</a></li>
+</ul>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2020/07/12/ips_base/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">IPS基础</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2019 -
+    
+    2020
+    <span class="footer-author">Tomas.</span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>

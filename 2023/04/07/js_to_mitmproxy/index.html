@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="从一次前端js加密再到mitm中间人脚本"/>
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Tomas'Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://yoursite.com/2023/04/07/js_to_mitmproxy/"/>
+
+
+<meta name="description" content="从一次前端 js 加密再到 mitm 中间人脚本0X00 前端 JS 加密的加解密1、前因 在一次渗透测试中，项目经理给了一批小程序的资产，在挖洞的过程中，发现了一个流量加密的点，因为以前看过很多文章通过分析 js 文件来实现加解密数据，自己也想来实战一下通过分析 js 文件来实现加解密 谢公子的文章：浅析绕过 js 加密 酒仙桥六号部队的文章：前端加密加签之 sqlmap 自动化测试   在 B">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从一次前端js加密再到mitm中间人脚本">
+<meta property="og:url" content="http://yoursite.com/2023/04/07/js_to_mitmproxy/index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="从一次前端 js 加密再到 mitm 中间人脚本0X00 前端 JS 加密的加解密1、前因 在一次渗透测试中，项目经理给了一批小程序的资产，在挖洞的过程中，发现了一个流量加密的点，因为以前看过很多文章通过分析 js 文件来实现加解密数据，自己也想来实战一下通过分析 js 文件来实现加解密 谢公子的文章：浅析绕过 js 加密 酒仙桥六号部队的文章：前端加密加签之 sqlmap 自动化测试   在 B">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/images/js/image-20201207132142502.png">
+<meta property="og:image" content="http://yoursite.com/images/js/image-20201207132433238.png">
+<meta property="og:image" content="http://yoursite.com/images/js/image-20201207132822003.png">
+<meta property="og:image" content="http://yoursite.com/images/js/image-20201207133009652.png">
+<meta property="og:image" content="http://yoursite.com/images/js/image-20201207133237727.png">
+<meta property="og:image" content="http://yoursite.com/images/js/image-20201207133443596.png">
+<meta property="og:image" content="http://yoursite.com/images/js/image-20201207133615515.png">
+<meta property="og:image" content="http://yoursite.com/images/js/image-20201207134041254.png">
+<meta property="og:image" content="http://yoursite.com/images/js/image-20201207134147765.png">
+<meta property="og:image" content="http://yoursite.com/images/js/image-20201207134453778.png">
+<meta property="og:image" content="http://yoursite.com/images/js/image-20201207141754540.png">
+<meta property="og:image" content="http://yoursite.com/images/js/image-20201207141849011.png">
+<meta property="og:image" content="http://yoursite.com/images/js/image-20201207142451440.png">
+<meta property="og:image" content="http://yoursite.com/images/js/image-20201207142919931.png">
+<meta property="og:image" content="http://yoursite.com/images/js/image-20201208001317260.png">
+<meta property="og:image" content="http://yoursite.com/images/js/image-20201208100558530.png">
+<meta property="og:image" content="http://yoursite.com/images/js/image-20201208100941327.png">
+<meta property="og:image" content="http://yoursite.com/images/js/image-20201208101410378.png">
+<meta property="og:image" content="http://yoursite.com/images/js/image-20201208103439259.png">
+<meta property="og:image" content="http://yoursite.com/images/js/image-20201208103721232.png">
+<meta property="og:image" content="http://yoursite.com/images/js/image-20201208104630280.png">
+<meta property="article:published_time" content="2023-04-07T09:14:35.869Z">
+<meta property="article:modified_time" content="2023-04-08T05:41:20.923Z">
+<meta property="article:author" content="Tomas">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/images/js/image-20201207132142502.png">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> 从一次前端js加密再到mitm中间人脚本 - Tomas'Blog </title>
+  <meta name="generator" content="Hexo 4.2.1"></head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">Tomas'Blog</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/friends">
+                            
+                            
+                                Friend
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          从一次前端js加密再到mitm中间人脚本
+        
+      </h1>
+
+      <time class="post-time">
+          4月 07 2023
+      </time>
+    </header>
+    
+            <div class="post-content">
+            <h2 id="从一次前端-js-加密再到-mitm-中间人脚本"><a href="#从一次前端-js-加密再到-mitm-中间人脚本" class="headerlink" title="从一次前端 js 加密再到 mitm 中间人脚本"></a>从一次前端 js 加密再到 mitm 中间人脚本</h2><h3 id="0X00-前端-JS-加密的加解密"><a href="#0X00-前端-JS-加密的加解密" class="headerlink" title="0X00 前端 JS 加密的加解密"></a>0X00 前端 JS 加密的加解密</h3><h4 id="1、前因"><a href="#1、前因" class="headerlink" title="1、前因"></a>1、前因</h4><ul>
+<li>在一次渗透测试中，项目经理给了一批小程序的资产，在挖洞的过程中，发现了一个流量加密的点，因为以前看过很多文章通过分析 js 文件来实现加解密数据，自己也想来实战一下通过分析 js 文件来实现加解密<ul>
+<li>谢公子的文章：<a href="https://mp.weixin.qq.com/s?__biz=MzI2NDQyNzg1OA==&mid=2247486046&idx=1&sn=e529bd2e2e781cb3def94225e2e3e863&chksm=eaad8a63ddda0375efd13f4df685d26bffe6ab29cee006ee2a43943cad2de80c98a4923864e0&mpshare=1&scene=1&srcid=1207cJo0qLHhjril5xmW6Kvi&sharer_sharetime=1607352511438&sharer_shareid=13de7cf246df94cfb693d05988b76aac&key=41897554b8f6847ed8cfccee66c19bd9540ee8deb6d245378561f9771d6c0900ac6656056db1cb710da3a96f9fff53e26778ebca5b8bdb9ed6cde840a767cac7d2c83546be85abe9675edd1755fa3a01fb4960bd5f16eaacfb30dc2be9abcf93a03af13a0391a107b76ddabf5c4f1c5e71804bb6df28018ae76fda9721aabe85&ascene=1&uin=MjYzNzU1MTExOQ%3D%3D&devicetype=Windows+10+x64&version=6300002f&lang=zh_CN&exportkey=A3p7YMO5z2%2B7s6erXBDQ8iY%3D&pass_ticket=j3w8TlVmPs9N80MO5TFJBD7B5UBteDVgYV%2F8ZHp9b5yGtAXAvTP9pPL5H0yBeKHA&wx_header=0" target="_blank" rel="noopener">浅析绕过 js 加密</a></li>
+<li>酒仙桥六号部队的文章：<a href="https://mp.weixin.qq.com/s?__biz=MzAwMzYxNzc1OA==&mid=2247487489&idx=1&sn=742d096897ec68aa56b5ca6f1487ff8a&chksm=9b3936b0ac4ebfa6c7bdccff3bb2925060890124909d677be38e739a1b53266c2f85b66d2d69&mpshare=1&scene=1&srcid=1207OrxzaeK9ckVL9857JMtf&sharer_sharetime=1607352591412&sharer_shareid=13de7cf246df94cfb693d05988b76aac&key=ed33fadcd7748f6a66b9261cd211185fb382047b4897da09ba209d7f06af9e1aff0c86d9b3e1c874d0393a538cc27daf36d40279ea1b7f6b5be038c57e6562f57fc9bb2d40284a7759ce3ac613af175a719706f1f9afa135276b87ef4abac0923702de4150cf27dcedfa5119e07ccfeb7b551b9f1b52600024ebf9d60b1e67b9&ascene=1&uin=MjYzNzU1MTExOQ%3D%3D&devicetype=Windows+10+x64&version=6300002f&lang=zh_CN&exportkey=AzOgolmxO3RY7b1N0n5f2RE%3D&pass_ticket=j3w8TlVmPs9N80MO5TFJBD7B5UBteDVgYV%2F8ZHp9b5yGtAXAvTP9pPL5H0yBeKHA&wx_header=0" target="_blank" rel="noopener">前端加密加签之 sqlmap 自动化测试</a></li>
+</ul>
+</li>
+<li>在 Burpsuite 中可以发现数据包中 POST 的 body 字段和响应包的 body 字段数据都是加密的，想到公司大佬的一句话“只要是前端加密，我都能给你解密”</li>
+</ul>
+<p><img src="/images/js/image-20201207132142502.png" alt="image-20201207132142502"></p>
+<h4 id="2、拖下小程序源码"><a href="#2、拖下小程序源码" class="headerlink" title="2、拖下小程序源码"></a>2、拖下小程序源码</h4><ul>
+<li>思路过程：adb 连接模拟器 -&gt; 找到小程序的源码包 wxapkg -&gt; 使用 adb pull 进行拉取到本地 -&gt; 通过 unpack 工具来解出源码，具体的小程序脱包教程以及工具文章，感兴趣的大哥可以从雷神众测上查看<a href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzI0NzEwOTM0MA==&action=getalbum&album_id=1368680445315235841&scene=173&from_msgid=2652476342&from_itemidx=1&count=3#wechat_redirect" target="_blank" rel="noopener">Poc Sir</a>的文章<ul>
+<li>xuedingmiaojun 大佬的不带 GUI 界面：<a href="https://github.com/xuedingmiaojun/wxappUnpacker" target="_blank" rel="noopener">wxappUnpacker</a></li>
+<li>xuedingmiaojun 大佬的带 GUI 界面：<a href="https://github.com/xuedingmiaojun/mp-unpack" target="_blank" rel="noopener">mp-unpack</a>（实测此工具能较完善解析 wxapkg 包）</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/js/image-20201207132433238.png" alt="image-20201207132433238"></p>
+<p><img src="/images/js/image-20201207132822003.png" alt="image-20201207132822003"></p>
+<h4 id="3、快速分析源码"><a href="#3、快速分析源码" class="headerlink" title="3、快速分析源码"></a>3、快速分析源码</h4><ul>
+<li>使用 Sublime 打开压缩包的文件，来进行源码的查看</li>
+</ul>
+<p><img src="/images/js/image-20201207133009652.png" alt="image-20201207133009652"></p>
+<ul>
+<li>从刚才抓取的 Burpsuite 的数据包中的请求连接，全局匹配对应的句子，发现了在/pages/myInfo 目录下的 A.api.js 文件进行了 POST 请求</li>
+</ul>
+<p><img src="/images/js/image-20201207133237727.png" alt="image-20201207133237727"></p>
+<ul>
+<li>跟进对应的 js 文件，发现通过 t.request 方法来发送一个 POST 请求</li>
+</ul>
+<p><img src="/images/js/image-20201207133443596.png" alt="image-20201207133443596"></p>
+<ul>
+<li>跟进 t.request 方法，发现是导入/utils 目录下的 request 模块</li>
+</ul>
+<p><img src="/images/js/image-20201207133615515.png" alt="image-20201207133615515"></p>
+<ul>
+<li>跟进 request.js 文件，发现默认导出为 a，a 又通过函数 p 来进行赋值，在这个过程中，又通过引入 o.default 来进行传参</li>
+</ul>
+<p><img src="/images/js/image-20201207134041254.png" alt="image-20201207134041254"></p>
+<ul>
+<li>跟进 o.default，发现是通过导入/miniprogram_npm/wx-weapp-tool/index 下的 index 模块来实现的</li>
+</ul>
+<p><img src="/images/js/image-20201207134147765.png" alt="image-20201207134147765"></p>
+<ul>
+<li>跟进 index.js 文件，发现默认导出为 y，y 又通过 g 去赋值，搜索包含 g 的参数或者函数，发现 g 函数，g 函数中有对 o 的处理，通过 c.default.encrypt 来进行加密</li>
+</ul>
+<p><img src="/images/js/image-20201207134453778.png" alt="image-20201207134453778"></p>
+<ul>
+<li>搜索 c 的相关函数或者其他变量，发现是导入 d2jk-share-templates 目录下的 aes 模块</li>
+</ul>
+<p><img src="/images/js/image-20201207141754540.png" alt="image-20201207141754540"></p>
+<ul>
+<li>跟进 aes.js 文件，发现此文件就是最后的加密函数，以及加解密方法为 AES 加密结合 Base64 加密，可以通过导入 crypto-js 库来实现</li>
+</ul>
+<p><img src="/images/js/image-20201207141849011.png" alt="image-20201207141849011"></p>
+<ul>
+<li>将此文件进行导出，重新定义为 ase.js 文件，在终端进行加解密尝试，发现解密成功</li>
+</ul>
+<p><img src="/images/js/image-20201207142451440.png" alt="image-20201207142451440"></p>
+<ul>
+<li>对响应包的内容进行解密，发现了身份证以及手机号</li>
+</ul>
+<p><img src="/images/js/image-20201207142919931.png" alt="image-20201207142919931"></p>
+<ul>
+<li>在 lo 出数据后，发现通过黏贴密文，再输入 key 的方式效率实在是太低了，准备打算写一个自动化的中间人脚本来实现此过程</li>
+</ul>
+<h3 id="0X01-mitm-中间人脚本编写"><a href="#0X01-mitm-中间人脚本编写" class="headerlink" title="0X01 mitm 中间人脚本编写"></a>0X01 mitm 中间人脚本编写</h3><h4 id="1、需求前提"><a href="#1、需求前提" class="headerlink" title="1、需求前提"></a>1、需求前提</h4><ul>
+<li>实现原理图</li>
+</ul>
+<p><img src="/images/js/image-20201208001317260.png" alt="image-20201208001317260"></p>
+<ul>
+<li><p>所需工具</p>
+<ul>
+<li>python 3.6</li>
+<li>mitmproxy 5.0.1</li>
+<li>Burpsuite</li>
+</ul>
+</li>
+<li><p>参考文章推荐</p>
+<ul>
+<li><a href="https://www.freebuf.com/articles/web/243370.html" target="_blank" rel="noopener">Burpsuite+Mitmproxy+Python 解决 Web 渗透测试过程中遇到的自定义 JS 加密防护</a></li>
+<li><a href="https://www.cnblogs.com/linlang781/p/8868496.html" target="_blank" rel="noopener">python 调用 JS 方法</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="2、实现过程"><a href="#2、实现过程" class="headerlink" title="2、实现过程"></a>2、实现过程</h4><ul>
+<li>js 文件的模板函数导出，方便外部的调用</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports.enc = <span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(i.encrypt(data, i.key))</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">module</span>.exports.dec = <span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(i.decrypt(data, i.key))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>加解密函数的编写<ul>
+<li>cmd 为要执行的命令，使用 node 的-e 参数，require 调用模块以及模块里面的参数</li>
+<li>pipeline 获得 os.popen 后的内容</li>
+<li>最后返回 result</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">enc</span><span class="params">(data)</span>:</span></span><br><span class="line">    cmd = <span class="string">'node -e "require(\\"./ase.js\\").enc(\'%s\')"'</span> % (data)</span><br><span class="line">    pipeline = os.popen(cmd)</span><br><span class="line">    result = pipeline.read()</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dec</span><span class="params">(data)</span>:</span></span><br><span class="line">    cmd = <span class="string">'node -e "require(\\"./ase.js\\").dec(\'%s\')"'</span> % (data)</span><br><span class="line">    pipeline = os.popen(cmd)</span><br><span class="line">    result = pipeline.read()</span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>mitm 第一层代理的编写</p>
+<ul>
+<li><p>需要接受来自客户端的加密请求，可以通过<code>mitmdump -p 8081</code>去监听端口，客户端设置 8081 端口进行代理流量</p>
+</li>
+<li><p>接收来自客户端的加密数据，进行解密，然后发送给 Burpsuite</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">request</span><span class="params">(self, flow: http.HTTPFlow)</span>:</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">enc</span><span class="params">(data)</span>:</span></span><br><span class="line">            cmd = <span class="string">'node -e "require(\\"./ase.js\\").enc(\'%s\')"'</span> % (data)</span><br><span class="line">            pipeline = os.popen(cmd)</span><br><span class="line">            result = pipeline.read()</span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">dec</span><span class="params">(data)</span>:</span></span><br><span class="line">            cmd = <span class="string">'node -e "require(\\"./ase.js\\").dec(\'%s\')"'</span> % (data)</span><br><span class="line">            pipeline = os.popen(cmd)</span><br><span class="line">            result = pipeline.read()</span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">        req_data = flow.request.get_text()</span><br><span class="line">        <span class="keyword">if</span>  req_data:</span><br><span class="line">            print(<span class="string">"req:"</span>+req_data)</span><br><span class="line">            print(<span class="string">"解密:"</span>+dec(req_data))</span><br><span class="line">            flow.request.set_text(dec(req_data))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>发送来自 Burpsuite 的解密数据，进行加密，然后发送给客户端</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">response</span><span class="params">(self, flow: http.HTTPFlow)</span>:</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">enc</span><span class="params">(data)</span>:</span></span><br><span class="line">            cmd = <span class="string">'node -e "require(\\"./ase.js\\").enc(\'%s\')"'</span> % (data)</span><br><span class="line">            print(cmd)</span><br><span class="line">            pipeline = os.popen(cmd)</span><br><span class="line">            result = pipeline.buffer.read().decode(encoding=<span class="string">"utf-8"</span>) <span class="comment"># 因为中文编码问题会报错，这里需要进行utf-8编码</span></span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">dec</span><span class="params">(data)</span>:</span></span><br><span class="line">            cmd = <span class="string">'node -e "require(\\"./ase.js\\").dec(\'%s\')"'</span> % (data)</span><br><span class="line">            pipeline = os.popen(cmd)</span><br><span class="line">            result = pipeline.buffer.read().decode(encoding=<span class="string">"utf-8"</span>) <span class="comment"># 因为中文编码问题会报错，这里需要进行utf-8编码</span></span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">        resp_data = flow.response.get_text()</span><br><span class="line">        <span class="keyword">if</span> resp_data:</span><br><span class="line">            print(resp_data.strip(<span class="string">'\n'</span>))</span><br><span class="line">            flow.response.set_text(dec(resp_data.strip(<span class="string">'\n'</span>)))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>设置上游代理为 Burpsuite，进行数据包的转发<code>mitmdump -p 8081 -m upstream:http://127.0.0.1:8080 -s min.py -k</code></p>
+<ul>
+<li>-m 为指定上游代理模块，这里为 Burpsuite 监听的端口</li>
+<li>-k 为忽略证书的错误，同时也需要在客户端中安装 mitm 的证书（安装 mitm 的证书在设置代理的情况下访问<a href="https://mitm.it下载即可）" target="_blank" rel="noopener">https://mitm.it下载即可）</a></li>
+<li>-s 为指定使用的脚本</li>
+</ul>
+<p><img src="/images/js/image-20201208100558530.png" alt="image-20201208100558530"></p>
+</li>
+<li><p>发现已经可以正常的对请求报进行解密</p>
+</li>
+</ul>
+<p><img src="/images/js/image-20201208100941327.png" alt="image-20201208100941327"></p>
+</li>
+<li><p>Burpsuite 的设置</p>
+<ul>
+<li>监听 8080 端口，接收来自 mitm 第一层代理的数据</li>
+<li>设置上层代理为 mitm 第三层代理，进行数据包的转发</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/js/image-20201208101410378.png" alt="image-20201208101410378"></p>
+<ul>
+<li><p>mitm 第三层代理的编写</p>
+<ul>
+<li>接收来自 Burpsuite 的解密后的数据，可以通过<code>mitmdump -p 8088</code>去监听端口</li>
+<li>接收来自 Burpsuite 的解密数据，进行加密，然后发送给服务端</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">request</span><span class="params">(self, flow: http.HTTPFlow)</span>:</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">enc</span><span class="params">(data)</span>:</span></span><br><span class="line">            cmd = <span class="string">'node -e "require(\\"./ase.js\\").enc(\'%s\')"'</span> % (data.strip(<span class="string">'\n'</span>))</span><br><span class="line">            print(cmd)</span><br><span class="line">            pipeline = os.popen(cmd)</span><br><span class="line">            result = pipeline.buffer.read().decode(encoding=<span class="string">"utf-8"</span>)<span class="comment"># 因为中文编码问题会报错，这里需要进行utf-8编码</span></span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">dec</span><span class="params">(data)</span>:</span></span><br><span class="line">            cmd = <span class="string">'node -e "require(\\"./ase.js\\").dec(\'%s\')"'</span> % (data)</span><br><span class="line">            pipeline = os.popen(cmd)</span><br><span class="line">            result = pipeline.buffer.read().decode(encoding=<span class="string">"utf-8"</span>)<span class="comment"># 因为中文编码问题会报错，这里需要进行utf-8编码</span></span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">        req_data = flow.request.get_text()</span><br><span class="line">        <span class="keyword">if</span>  req_data:</span><br><span class="line">            print(req_data)</span><br><span class="line">            print(<span class="string">"sdasdasdasa"</span>)</span><br><span class="line">            req_data = req_data.replace(<span class="string">'"'</span>,<span class="string">'\\"'</span>)</span><br><span class="line">            print(<span class="string">"req:"</span>+req_data)</span><br><span class="line">            print(<span class="string">"加密:"</span>+enc(req_data))</span><br><span class="line">            flow.request.set_text(enc(req_data))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>发送来自服务端的加密数据，进行解密，然后发送给 Burpsuite</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">response</span><span class="params">(self, flow: http.HTTPFlow)</span>:</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">enc</span><span class="params">(data)</span>:</span></span><br><span class="line">            cmd = <span class="string">'node -e "require(\\"./ase.js\\").enc(\'%s\')"'</span> % (data)</span><br><span class="line">            print(cmd)</span><br><span class="line">            pipeline = os.popen(cmd)</span><br><span class="line">            result = pipeline.buffer.read().decode(encoding=<span class="string">"utf-8"</span>)<span class="comment"># 因为中文编码问题会报错，这里需要进行utf-8编码</span></span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">dec</span><span class="params">(data)</span>:</span></span><br><span class="line">            cmd = <span class="string">'node -e "require(\\"./ase.js\\").dec(\'%s\')"'</span> % (data)</span><br><span class="line">            pipeline = os.popen(cmd)</span><br><span class="line">            result = pipeline.buffer.read().decode(encoding=<span class="string">"utf-8"</span>)<span class="comment"># 因为中文编码问题会报错，这里需要进行utf-8编码</span></span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">        resp_data = flow.response.get_text()</span><br><span class="line">        <span class="keyword">if</span> resp_data:</span><br><span class="line">            print(<span class="string">"req:"</span>+resp_data)</span><br><span class="line">            print(<span class="string">"解密:"</span>+dec(resp_data))</span><br><span class="line">            print(resp_data.strip(<span class="string">'\n'</span>))</span><br><span class="line">            flow.response.set_text(dec(resp_data.strip(<span class="string">'\n'</span>)))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>设置转发给服务器，进行数据包的转发<code>mitmdump -p 8088 -s min.py -k</code></li>
+</ul>
+<p><img src="/images/js/image-20201208103439259.png" alt="image-20201208103439259"></p>
+<ul>
+<li>使用 Burpsuite 的 Repeater 模块进行测试，发现已经可以正常加解密了</li>
+</ul>
+<p><img src="/images/js/image-20201208103721232.png" alt="image-20201208103721232"></p>
+<p><img src="/images/js/image-20201208104630280.png" alt="image-20201208104630280"></p>
+</li>
+</ul>
+<h3 id="0X02-总结"><a href="#0X02-总结" class="headerlink" title="0X02 总结"></a>0X02 总结</h3><p>​ 这次的过程中也存在着很多问题，请各位路过的大哥大姐大佬等不吝指导，后续想集成一个 Burpsuite 插件，可以自定义需要加解密的目标地址方便渗透测试加解密，只需要导入加密的 js 文件即可，各个论坛网站上也有各个大佬开发的插件脚本，想后续继续深入学习</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+
+        
+        
+  <nav class="post-nav">
+    
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2019 -
+    
+    2023
+    <span class="footer-author">Tomas.</span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>

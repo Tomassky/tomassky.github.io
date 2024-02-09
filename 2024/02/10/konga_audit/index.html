@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="汇总一下konga的代码审计流程"/>
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Tomas'Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://yoursite.com/2024/02/10/konga_audit/"/>
+
+
+<meta name="description" content="▶️ 代码是javascript写的，基于Sails进行部署开发，所以也是我第一次意义上的审计javascript后端项目 项目地址：GitHub - pantsel&#x2F;konga: More than just another GUI to Kong Admin API 先上一下历史ISSUE以及PR中提到的问题1、privilege escalation: Fix priviledged esc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="汇总一下konga的代码审计流程">
+<meta property="og:url" content="http://yoursite.com/2024/02/10/konga_audit/index.html">
+<meta property="og:site_name" content="Tomas&#39;Blog">
+<meta property="og:description" content="▶️ 代码是javascript写的，基于Sails进行部署开发，所以也是我第一次意义上的审计javascript后端项目 项目地址：GitHub - pantsel&#x2F;konga: More than just another GUI to Kong Admin API 先上一下历史ISSUE以及PR中提到的问题1、privilege escalation: Fix priviledged esc">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111.png">
+<meta property="og:image" content="http://yoursite.com/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-1.png">
+<meta property="og:image" content="http://yoursite.com/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-2.png">
+<meta property="og:image" content="http://yoursite.com/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-3.png">
+<meta property="og:image" content="http://yoursite.com/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-4.png">
+<meta property="og:image" content="http://yoursite.com/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-6.png">
+<meta property="og:image" content="http://yoursite.com/images/konga_auditsources/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-26.png">
+<meta property="og:image" content="http://yoursite.com/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-5.png">
+<meta property="og:image" content="http://yoursite.com/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-27.png">
+<meta property="og:image" content="http://yoursite.com/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-8.png">
+<meta property="og:image" content="http://yoursite.com/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-9.png">
+<meta property="og:image" content="http://yoursite.com/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-10.png">
+<meta property="og:image" content="http://yoursite.com/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-11.png">
+<meta property="og:image" content="http://yoursite.com/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-12.png">
+<meta property="og:image" content="http://yoursite.com/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-20.png">
+<meta property="og:image" content="http://yoursite.com/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-19.png">
+<meta property="og:image" content="http://yoursite.com/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-21.png">
+<meta property="og:image" content="http://yoursite.com/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-15.png">
+<meta property="og:image" content="http://yoursite.com/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-16.png">
+<meta property="og:image" content="http://yoursite.com/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-17.png">
+<meta property="og:image" content="http://yoursite.com/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-18.png">
+<meta property="og:image" content="http://yoursite.com/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-25.png">
+<meta property="og:image" content="http://yoursite.com/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-22.png">
+<meta property="og:image" content="http://yoursite.com/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-23.png">
+<meta property="og:image" content="http://yoursite.com/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-24.png">
+<meta property="article:published_time" content="2024-02-09T17:15:55.020Z">
+<meta property="article:modified_time" content="2024-02-09T17:16:30.774Z">
+<meta property="article:author" content="Tomas">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111.png">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> 汇总一下konga的代码审计流程 - Tomas'Blog </title>
+  <meta name="generator" content="Hexo 4.2.1"></head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">Tomas'Blog</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/friends">
+                            
+                            
+                                Friend
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          汇总一下konga的代码审计流程
+        
+      </h1>
+
+      <time class="post-time">
+          2月 10 2024
+      </time>
+    </header>
+    
+            <div class="post-content">
+            <p>▶️ 代码是javascript写的，基于Sails进行部署开发，所以也是我第一次意义上的审计javascript后端项目</p>
+<p>项目地址：<a href="https://github.com/pantsel/konga" target="_blank" rel="noopener">GitHub - pantsel/konga: More than just another GUI to Kong Admin API</a></p>
+<h5 id="先上一下历史ISSUE以及PR中提到的问题"><a href="#先上一下历史ISSUE以及PR中提到的问题" class="headerlink" title="先上一下历史ISSUE以及PR中提到的问题"></a>先上一下历史ISSUE以及PR中提到的问题</h5><p>1、privilege escalation: <a href="https://github.com/pantsel/konga/commit/af43bee30f69cd6628d53c37a48724686af2849b" target="_blank" rel="noopener">Fix priviledged escalation · pantsel/konga@af43bee · GitHub</a></p>
+<p>2、xss vuln: <a href="https://github.com/pantsel/konga/commit/16e36e8bc855b2cd01e34bab4f0e001fd477d22d" target="_blank" rel="noopener">Merge branch ‘fix/xss-vuln’ into next · pantsel/konga@16e36e8 · GitHub</a></p>
+<p>3、multiple registed: <a href="https://github.com/pantsel/konga/commit/37fce1c72b5edefff10ef61aaeb3c860708ca114" target="_blank" rel="noopener">Prevent admin users to be registered multiple times via the /register… · pantsel/konga@37fce1c · GitHub</a></p>
+<p>上述三个为公开的漏洞，但是没有CVE编码，外网公开的还有一个Secret的问题，但是其实出现的概率很多，只有没有设置TOKEN_SECRET的时候才会出现密钥泄漏，最后导致可自定义构造JWT进行任意用户登陆，但是感觉用处也比较少</p>
+<h5 id="后台nodemailer组件-配置修改-gt-RCE"><a href="#后台nodemailer组件-配置修改-gt-RCE" class="headerlink" title="后台nodemailer组件+配置修改-&gt;RCE"></a>后台nodemailer组件+配置修改-&gt;RCE</h5><p>这一步有点运气，主要是看到dependency-check那边报了组件问题nodemailer在send()函数存在可命令执行的地方，前提是需要覆盖两个参数或者进行原型污染</p>
+<p>可以参考来自这篇文章：<a href="https://bycsec.top/2021/03/06/D%5E3CTF-8-bit-pub/" target="_blank" rel="noopener">D^3CTF 8-bit-pub - byc_404’s blog</a></p>
+<p>问题主要是以下代码处：lib/sendmail-transport/index.js，在SendmailTransport类中的send()方法，在发送之前会调用<code>this._spoawn(this.path, args)</code>，其中<code>const spawn = require(&#39;child_process&#39;).spawn;</code>，所以会进行命令执行</p>
+<p><img src="/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111.png" alt=""></p>
+<p>this.path以及args是在初始化(new SendmailTransport)的时候进行赋值，也就是说，只要控制了this.path以及args，就可以达成命令执行</p>
+<p><img src="/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-1.png" alt=""></p>
+<p>可以来看下konga中怎么实现的，有三个关键的文件如下，这三个文件都会调用到邮件来进行发送，三个文件的导出函数都一样，所以这里用其中的一个来讲即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">konga-0.13.0&#x2F;api&#x2F;events&#x2F;node-health-checks.js</span><br><span class="line">konga-0.13.0&#x2F;api&#x2F;events&#x2F;api-health-checks.js</span><br><span class="line">konga-0.13.0&#x2F;api&#x2F;events&#x2F;user-events.js</span><br></pre></td></tr></table></figure>
+
+<p>其中关注点为导出函数createTransporter以及notify</p>
+<p><img src="/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-2.png" alt=""><br>createTransporter为创建一个transport，也就是邮件发送的方式，其中transport为可控，也就是我们传进去的参数</p>
+<p><img src="/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-3.png" alt=""></p>
+<p>可以看到下面的图，当options.sendmail为true的时候，会new一个SendmailTransport，我们这里可以构造transport.settings其中一个参数的值为：<code>sendmail:true</code>，即可以进入到SendmailTransport的构造方法</p>
+<p><img src="/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-4.png" alt=""></p>
+<p>其实我们也不难发现，options参数，也就是transport.settings参数也会被带入到SendmailTransport中，也就以为着参数中存在path以及args即可以造成RCE，此处完整payload如下</p>
+<p><code>&quot;settings&quot;:{&quot;sendmail&quot;:&quot;true&quot;,&quot;path&quot;:&quot;/bin/bash&quot;,&quot;args&quot;:[&quot;-c&quot;,&quot;echo 1 &gt; /tmp/44.txt&quot;]}</code></p>
+<p>当创建好了SendmailTransport的时候，就需要用到发送的函数，在konga中是notify，在notify中会直接调用sendmail函数，也就是在发送邮件的时候会造成RCE</p>
+<p><img src="/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-6.png" alt=""></p>
+<p>mailer.sendMail()会继续调用到this.transporter.send()，而this.transporter.send()为SendmailTransport.send()</p>
+<p><img src="/images/konga_auditsources/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-26.png" alt=""></p>
+<p>数据包为如下：</p>
+<p><img src="/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-5.png" alt=""></p>
+<p>当default_transport为smtp或者mailgun的时候，即可以造成RCE，这里有一个比较可惜的一个点，这个default_transport的设置需要管理员，不然普通用户通过api的接口也可以实现RCE</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">这里发送邮件有三种方式，当一个node或者api下线或者掉线的时候会发送邮件(node及时发生，api需要经过15分钟)，或者当一个用户singup的时候，也会发送邮件，其中api下线或者掉线都可以通过普通用户权限来实现</span><br></pre></td></tr></table></figure>
+
+<p>最后给以下完整的流程</p>
+<p>先开启其中一个</p>
+<p><img src="/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-27.png" alt=""></p>
+<p><img src="/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-8.png" alt=""></p>
+<p>接着配置邮件</p>
+<p><img src="/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-9.png" alt=""></p>
+<p>可以抓到包，替换一下payload，替换的是data字段</p>
+<p><img src="/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-10.png" alt=""></p>
+<p><img src="/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-11.png" alt=""></p>
+<p>数据库也被成功写入</p>
+<p><img src="/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-12.png" alt=""></p>
+<p>设置api或者node下线或者掉线又或者用户注册的时候，即可以实现RCE</p>
+<p>下图为成功进行用户注册</p>
+<p><img src="/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-20.png" alt=""></p>
+<p>成功写入文件</p>
+<p><img src="/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-19.png" alt=""></p>
+<p><img src="/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-21.png" alt=""></p>
+<p>这里要提一下，之前有人提过nodemailer的这个问题，不过是注入邮件，来自如下链接：<a href="https://security.snyk.io/vuln/SNYK-JS-NODEMAILER-1038834" target="_blank" rel="noopener">Command Injection in nodemailer | CVE-2020-7769 | Snyk</a></p>
+<p><img src="/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-15.png" alt=""></p>
+<p>官方的修复手法是添加校验发送地址以及接收地址是否存在，所以我更愿意觉得这个spawn()是nodemailer的一个特性，最新一版依旧可以利用</p>
+<p><img src="/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-16.png" alt=""></p>
+<p>▶️ 思考：是否可以通过原型污染的方式来覆盖<code>settings[0].data.default_transport</code>的方式来实现低权限用户RCE？</p>
+<h5 id="signup接口的crash服务"><a href="#signup接口的crash服务" class="headerlink" title="signup接口的crash服务"></a>signup接口的crash服务</h5><p>漏洞原理很简单，也是无意间测试出来的，路径：konga-0.13.0/api/controllers/AuthController.js</p>
+<p>在注册的时候会对protocol进行赋值</p>
+<p><img src="/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-17.png" alt=""></p>
+<p>而protocol的参数又是必须的，路径：konga-0.13.0/api/models/Passport.js</p>
+<p><img src="/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-18.png" alt=""></p>
+<p>所以会导致当注册的时候不存在参数passports.protocol的时候，会直接带出异常，又因为是在赋值的是时候抛出的异常，还没进入到create()函数中，所以没有进行异常处理，最后导致服务crash掉，直接引用GPT的解释</p>
+<p><img src="/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-25.png" alt=""></p>
+<p>正常的注册包</p>
+<p><img src="/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-22.png" alt=""></p>
+<p>删除参数后的注册包</p>
+<p><img src="/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-23.png" alt=""></p>
+<p><img src="/images/konga_audit/%E6%B1%87%E6%80%BB%E4%B8%80%E4%B8%8Bkonga%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%BF%87%E7%A8%8B-20240111-24.png" alt=""></p>
+<h5 id="贴一下konga和kong的部署"><a href="#贴一下konga和kong的部署" class="headerlink" title="贴一下konga和kong的部署"></a>贴一下konga和kong的部署</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name kong-database \</span><br><span class="line">  -p 5432:5432 \</span><br><span class="line">  -e &quot;POSTGRES_USER&#x3D;kong&quot; \</span><br><span class="line">  -e &quot;POSTGRES_DB&#x3D;kong&quot; \</span><br><span class="line">  -e &quot;POSTGRES_PASSWORD&#x3D;kongpass&quot; \</span><br><span class="line">  postgres:9.6</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">docker run --rm \</span><br><span class="line"> -e &quot;KONG_DATABASE&#x3D;postgres&quot; \</span><br><span class="line"> -e &quot;KONG_PG_HOST&#x3D;10.211.55.115&quot; \</span><br><span class="line"> -e &quot;KONG_PG_USER&#x3D;kong&quot; \</span><br><span class="line"> -e &quot;KONG_PG_PASSWORD&#x3D;kongpass&quot; \</span><br><span class="line">rjshrjndrn&#x2F;kong:0.14.1 kong migrations up</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">docker run -d --name kong \</span><br><span class="line"> -e &quot;KONG_DATABASE&#x3D;postgres&quot; \</span><br><span class="line"> -e &quot;KONG_PG_HOST&#x3D;10.211.55.115&quot; \</span><br><span class="line"> -e &quot;KONG_PG_USER&#x3D;kong&quot; \</span><br><span class="line"> -e &quot;KONG_PG_PASSWORD&#x3D;kongpass&quot; \</span><br><span class="line"> -e &quot;KONG_PROXY_ACCESS_LOG&#x3D;&#x2F;dev&#x2F;stdout&quot; \</span><br><span class="line"> -e &quot;KONG_ADMIN_ACCESS_LOG&#x3D;&#x2F;dev&#x2F;stdout&quot; \</span><br><span class="line"> -e &quot;KONG_PROXY_ERROR_LOG&#x3D;&#x2F;dev&#x2F;stderr&quot; \</span><br><span class="line"> -e &quot;KONG_ADMIN_ERROR_LOG&#x3D;&#x2F;dev&#x2F;stderr&quot; \</span><br><span class="line"> -e &quot;KONG_ADMIN_LISTEN&#x3D;0.0.0.0:8001&quot; \</span><br><span class="line"> -e &quot;KONG_ADMIN_GUI_URL&#x3D;http:&#x2F;&#x2F;localhost:8002&quot; \</span><br><span class="line"> -e KONG_LICENSE_DATA \</span><br><span class="line"> -p 8000:8000 \</span><br><span class="line"> -p 8443:8443 \</span><br><span class="line"> -p 8001:8001 \</span><br><span class="line"> -p 8444:8444 \</span><br><span class="line"> -p 8002:8002 \</span><br><span class="line"> -p 8445:8445 \</span><br><span class="line"> -p 8003:8003 \</span><br><span class="line"> -p 8004:8004 \</span><br><span class="line"> rjshrjndrn&#x2F;kong:0.14.1</span><br><span class="line"></span><br><span class="line">curl -i -X GET --url http:&#x2F;&#x2F;10.211.55.115:8001&#x2F;services</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">sudo docker pull pantsel&#x2F;konga:0.13.0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">docker run --rm pantsel&#x2F;konga:0.13.0 -c prepare -a postgres -u postgres:&#x2F;&#x2F;kong:kongpass@10.211.55.115:5432&#x2F;konga</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">docker run -p 1337:1337 --name konga \</span><br><span class="line"> -e &quot;TOKEN_SECRET&#x3D;@Aa@123456&quot; \</span><br><span class="line"> -e &quot;DB_ADAPTER&#x3D;postgres&quot; \</span><br><span class="line"> -e &quot;DB_HOST&#x3D;10.211.55.115&quot; \</span><br><span class="line"> -e &quot;DB_PORT&#x3D;5432&quot; \</span><br><span class="line"> -e &quot;DB_USER&#x3D;kong&quot; \</span><br><span class="line"> -e &quot;DB_PASSWORD&#x3D;kongpass&quot; \</span><br><span class="line"> -e &quot;DB_DATABASE&#x3D;konga&quot; \</span><br><span class="line"> -e &quot;NODE_ENV&#x3D;production&quot; \</span><br><span class="line"> pantsel&#x2F;konga:0.13.0</span><br></pre></td></tr></table></figure>
+
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2024/02/10/2023_final/">
+        <span class="next-text nav-default">2023年年度总结</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2019 -
+    
+    2024
+    <span class="footer-author">Tomas.</span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>
